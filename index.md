@@ -1,8 +1,6 @@
 ## 欢迎来到CloudFS
 
-You can use the [editor on GitHub](https://github.com/cloud-fs/cloud-fs.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+CloudFS(Cloud File System)是基于公众云盘服务的本地文件系统，你可以像访问本地磁盘一样访问你的云盘。
 
 ### CloudFS介绍
 
