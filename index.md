@@ -16,6 +16,13 @@ CloudFS(Cloud File System)是基于公众云盘服务的本地文件系统，你
   其它网盘支持陆续添加中
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 [下载CloudFS](http://download.cloudfs.co)
+
+### CloudFS下载
+#### Windows版
+支持Windows 7 Servicepack 1以上系统。
+#### MacOS版
+#### Linux版
+
 ```markdown
 Syntax highlighted code block
 
