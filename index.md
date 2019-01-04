@@ -18,10 +18,12 @@ Markdown is a lightweight and easy-to-use syntax for styling your writing. It in
 [下载CloudFS](http://download.cloudfs.co)
 
 ### CloudFS下载
-#### Windows版
+#### [Windows版](http://download.cloudfs.co/)
 支持Windows 7 Servicepack 1以上系统。
 #### MacOS版
+即将推出，敬请期待
 #### Linux版
+即将推出，敬请期待
 
 ```markdown
 Syntax highlighted code block
