@@ -1,9 +1,19 @@
 ## 欢迎来到CloudFS
 
-CloudFS(Cloud File System)是基于公众云盘服务的本地文件系统，你可以像访问本地磁盘一样访问你的云盘。
+CloudFS(Cloud File System)是基于公众云盘服务的本地文件系统，你可以完全像访问本地磁盘一样访问你的云盘。
 
-### CloudFS介绍
+### CloudFS使用条件
 
+使用CloudFS需要具备以下使用条件：
+- 百兆以上宽带互联网接入
+- 拥有以下云盘之一的账户
+  1. 115 VIP用户
+  2. 百度网盘白金用户
+  3. 天翼云盘黄金用户以上
+  4. 沃家云盘白金用户
+  5. 和彩云VIP用户
+  6. OneDrive
+  其它网盘支持陆续添加中
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 [下载CloudFS](http://download.cloudfs.co)
 ```markdown
