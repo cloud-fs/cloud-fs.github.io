@@ -7,7 +7,7 @@ CloudFS(Cloud File System)是基于公众云盘服务的本地文件系统，你
 CloudFS的工作原理是利用高速互联接入，实时访问保存在云盘的文件，使用CloudFS需要具备以下使用条件：
 - 百兆以上宽带互联网接入
 - 不限速的云盘服务，目前支持以下云盘：
-  1. [115网盘](https://www.115.com)VIP用户
+  1. [115网盘](https://www.115.com)VIP会员
   2. [百度网盘](https://pan.baidu.com)超级会员
   3. [天翼云盘](https://cloud.189.cn)黄金用户
   4. [沃家云盘](https://www.wocloud.com.cn)白金用户
