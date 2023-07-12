@@ -1,0 +1,15 @@
+"本地缓存和排队上传的写文件机制"特性解决了在挂载的云盘上进行随机写操作时的限制。由于云盘普遍采用对象存储，不支持随机写文件。因此，CloudDrive采用了本地缓存和排队上传的机制。
+
+当在挂载文件上进行写操作时，由于不能直接进行随机写入，写操作会被缓存到本地的临时文件夹中。在写文件操作结束并关闭文件时，上传进程将启动。上传完成后，本地缓存会被清除。
+
+在上传过程中，仍然能够正确读写到云盘的文件。然而，考虑到上传带宽的限制，同时进行上传的文件数量被限制在一定数量以确保尽快完成文件上传。超出限制的部分将会排队等待。该机制保证了应用程序能够在挂载的目录上正确进行随机读写文件的操作。同时，它能及时清理已完成的文件，释放本地缓存空间。
+
+这一特性为应用程序在挂载的云盘上进行随机读写文件提供了可靠和高效的方式。它有效管理上传过程，并优化了本地缓存空间的使用。
+
+The "Local Cache and Queued Uploads File Writing Mechanism" feature addresses the limitations of random file writing on mounted cloud drives due to the widespread use of object storage, which does not support random file writing. To overcome this limitation, CloudDrive utilizes a local cache and queued uploads mechanism.
+
+When a write operation is performed on a mounted file, it is cached in a local temporary folder since direct random file writing to the cloud drive is not supported. The upload process starts once the write operation is completed and the file is closed. After the upload is finished, the local cache is cleared.
+
+During the upload process, the files being written to the cloud drive can still be correctly read and written. However, considering that the upload bandwidth is generally limited, the number of concurrent file uploads is restricted to ensure that files are uploaded as quickly as possible. Any excess file uploads beyond the limit will be queued. This mechanism ensures the correctness of random file read and write operations by applications in the mounted directory. It also promptly cleans up completed files, freeing up local cache space.
+
+This feature provides a reliable and efficient way for applications to perform random file read and write operations on the mounted cloud drive while effectively managing the upload process and optimizing the use of local cache space.

@@ -1,0 +1,52 @@
+/* Add your custom styles for the Pricing page here */
+
+/* Pricing Cards */
+.card {
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-body {
+    text-align: center;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .card-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  ul.list-unstyled {
+    padding-left: 0;
+  }
+  
+  ul.list-unstyled li {
+    margin-bottom: 10px;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0062cc;
+    border-color: #0062cc;
+  }
+  
+  .btn-block {
+    display: block;
+    width: 100%;
+  }
+  
+  .footer {
+    background-color: #f8f9fa;
+  }
+  
+  .footer p {
+    margin-bottom: 0;
+  }
+  
