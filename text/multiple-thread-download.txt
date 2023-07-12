@@ -1,0 +1,9 @@
+CloudDrive的"精准恰当的多线程下载及速度控制"功能为用户提供了极大的便利性和效率。在CloudDrive上，用户的应用程序可以在不需要事先将文件下载到本地的情况下直接打开挂载的网盘文件。这意味着，当应用程序需要访问文件内容时，CloudDrive会根据应用程序的访问需求实时从网络上下载所需的内容。
+
+此外，这一下载过程是多线程的，能尽最大可能地满足应用程序对读取速度的要求，从而大大提高了用户的工作效率。同时，下载速度也被精确地控制着，以刚刚好满足读取速度的要求，不会占用大量网络带宽。这一功能不仅为用户节省了大量的网络资源，同时也减少了网络拥堵，提高了网络的使用效率。
+
+Here is the English version:
+
+The "Precise and Appropriate Multithreaded Download and Speed Control" feature of CloudDrive provides users with great convenience and efficiency. On CloudDrive, users' applications can directly open the mounted cloud drive files without needing to download the files to local first. This means that when an application needs to access the content of a file, CloudDrive will download the required content from the network in real-time based on the access requirements of the application.
+
+In addition, this download process is multithreaded, which can maximize the application's requirements for reading speed, thus greatly improving users' work efficiency. At the same time, the download speed is also precisely controlled to just meet the requirements for reading speed, without occupying a lot of network bandwidth. This feature not only saves a lot of network resources for users but also reduces network congestion and improves the efficiency of network use.

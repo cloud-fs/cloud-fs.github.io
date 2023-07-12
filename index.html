@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudDrive - Home</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/site.js"></script>
+  <link rel="stylesheet" href="css/download.css">
+</head>
+<style>
+  .navbar-collapse {
+    background-color: rgba(234, 242, 248, 0.9);
+    padding: 10px;
+  }
+</style>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="img/clouddrive-h.png" height="80">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">主页</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="features.html">功能</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="pricing.html">会员</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="help.html">帮助</a>
+            </li>
+          </ul>
+          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="container mt-4">
+    <h1 class="hero-title">CloudDrive - 解锁云存储的无限可能</h1>
+    <p class="tagline">CloudDrive是一个强大的多云盘管理工具，为用户提供包含云盘本地挂载的一站式的多云盘解决方案。</p>
+
+    <!-- add a brief introduction content here with h2 title-->
+    <h2>CloudDrive是什么？</h2>
+    <div style="color: #333; padding: 20px;">
+  <p style="font-size: 24px; margin-bottom: 20px;">
+    <ul>
+      <li>CloudDrive是一个全方位的云存储管理平台，旨在无缝集成多个云存储服务，将它们统一整合到一个界面中。</li>
+      <li>使用CloudDrive，您可以轻松管理和访问所有云存储服务，无需在不同的应用程序和界面之间来回切换。</li>
+      <li>CloudDrive最引人注目的特点是其能够将多个云存储服务挂载为本地磁盘，直接访问文件而无需预先下载。想象一下，您可以将云存储服务当作本地文件系统的一部分来使用，带来的便利性不言而喻。</li>
+      <li>但这还不是全部 - CloudDrive还提供了高级功能，如快速的云端文件传输、实时的云文件通知和应用级别的权限控制。无论您是高级用户还是普通云存储用户，CloudDrive都能以卓越的效率和易用性让您充分发挥云存储资源的潜力。</li>
+    </ul>
+    <p>尽享云存储管理的未来，请选择<strong>CloudDrive</strong>。</p>
+  </p>
+</div>
+    <h2>CloudDrive的主要特性</h2>
+    <div class="row">
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#local-mount'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-laptop-file fa-4x mb-3"></i>
+            <h5 class="card-title">云盘本地挂载</h5>
+            <p class="card-text">将多个云盘挂载到本地驱动器，就像它们是计算机文件系统的一部分。告别从云端下载文件的麻烦。</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#unified-unified-web-management'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-people-roof fa-4x mb-3"></i>
+            <h5 class="card-title">统一的多云盘管理</h5>
+            <p class="card-text">在一个地方管理所有云盘账户。轻松组织文件，同步文件夹，并跨不同云服务进行高级搜索。</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#one-login'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-sign-in-alt fa-4x mb-3"></i>
+            <h5 class="card-title">一次登录，到处使用</h5>
+            <p class="card-text">在一个地方登录所有的云盘账户，并在任何设备上使用，无需每次都要登录不同的账户。</p>
+            <p class="card-text">云盘账户同步机制是安全的。</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#webdav'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-cloud-upload-alt fa-4x mb-3"></i>
+            <h5 class="card-title">WebDAV服务</h5>
+            <p class="card-text">CloudDrive作为一个WebDAV服务器，可以向其他WebDAV客户端提供WebDAV服务。</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#inter-cloud-copy'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-people-carry fa-4x mb-3"></i>
+            <h5 class="card-title">跨云盘文件快速复制</h5>
+            <p class="card-text">在云盘之间快速直接地传输文件，无需中间下载。通过 CloudDrive 的优化文件传输功能节省时间和带宽。</p>
+            <div class="pro-logo">Pro</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#file-notification'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-bell fa-4x mb-3"></i>
+            <h5 class="card-title">文件变更通知</h5>
+            <p class="card-text">接收关于云文件变更的实时通知。与文件系统监视器应用无缝集成，实现无缝协作。</p>
+            <div class="pro-logo">Pro</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#file-access-control'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-lock fa-4x mb-3"></i>
+            <h5 class="card-title">应用级权限控制</h5>
+            <p class="card-text">精细控制文件的访问权限。在程序级别定义和管理访问权限，确保安全共享和协作。</p>
+            <div class="pro-logo">Pro</div>
+          </div>
+        </div>
+      </div>
+      <!-- add 云盘服务商友好 feature card-->
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#service-vendor-friendly'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-handshake fa-4x mb-3"></i>
+            <h5 class="card-title">云盘服务商友好</h5>
+            <p class="card-text">使用CloudDrive，不再做网盘吸血鬼</p>
+            <p class="card-text">我们保证用户体验流畅，同时最大程度地减少网盘运营商的资源占用。</p>
+          </div>
+        </div>
+      </div>
+      <!-- add 多云盘备份 feature card-->
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#multicloud-backup'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-cloud-upload-alt fa-4x mb-3"></i>
+            <h5 class="card-title">多云盘备份<span style="font-size: 14px;">（即将推出）</span></h5>
+            <p class="card-text">将本地磁盘同时备份到多个云盘。</p>
+            <p class="card-text">自动检测文件变化，自动增量备份。</p>
+            <p class="card-text">多云备份，数据无忧。</p>
+            <div class="pro-logo">Pro</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='#using-clouddrive'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-globe fa-4x mb-3"></i>
+            <h5 class="card-title">在任何设备上运行</h5>
+            <!-- list operating systems and archs CloudDrive supported-->
+            <p class="card-text">电脑：Windows, Linux, macOS</p>
+            <p class="card-text">NAS：Synology, QNAP...</p>
+            <p class="card-text">电视手机：Android, LibreElec, CoreElec</p>
+            <p class="card-text">路由器：OpenWRT路由器</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <h2 id="using-clouddrive">使用CloudDrive</h2>
+    <div class="row">
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='download.html'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-laptop fa-4x mb-3"></i>
+            <h5 class="card-title">电脑</h5>
+            <!-- FILEPATH: c:\Develop\rust\clouddrive\website\index.html -->
+            <p class="card-text">下载并安装CloudDrive的最新版本，您可以在计算机上拥有统一的云存储管理中心，并且将你的云盘扩展成你电脑的本地硬盘。</p>
+            <p class="card-text">CloudDrive目前支持Windows x64、Linux、macOS，支持x86_64、arm64、armv7等架构的电脑</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='download.html'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-server fa-4x mb-3"></i>
+            <h5 class="card-title">NAS</h5>
+            <p class="card-text">在你的NAS上安装最新版本的CloudDrive，可以把你的NAS变成统一的云盘管理中心，将你的云盘扩展成你NAS的磁盘</p>
+            <p>
+              CloudDrive目前支持Synology、Unraid、Qnap等主流NAS平台，支持x86_64、arm64、armv7等架构的NAS，可直接安装、通过docker安装，Synology和Qnap还可以直接安装第三方提供的CloudDrive插件
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- add a new card for 手机-->
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='download.html'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <!-- FILEPATH: c:\Develop\rust\clouddrive\website\index.html -->
+            <i class="fas fa-mobile-alt fa-4x mb-3"></i>
+            <h5 class="card-title">手机</h5>
+            <p class="card-text">
+              CloudDrive可以在Android手机上运行，将您的云盘扩展到本地存储。使用CloudDrive，您可以将多个云盘整合到一个统一的存储空间中，用户安装的所有app都直接访问本地挂载的云盘文件。
+            </p>
+            <p class="card-text">CloudDrive支持Android 7.0及以上版本，需要root权限才能在安卓系统上使用本地挂载功能。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='download.html'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-tv fa-4x mb-3"></i>
+            <h5 class="card-title">电视</h5>
+            <p class="card-text">
+              CloudDrive可以在电视或机顶盒上运行，将您的云盘扩展到本地存储。使用CloudDrive，您可以将多个云盘整合到一个统一的存储空间中，并通过机顶盒内置的播放器直接调用本地挂载的云盘文件进行播放。
+            </p>
+            <p class="card-text">
+              CloudDrive支持LibreElec、CoreElec等基于Linux系统，以及基于Android系统的电视或机顶盒（需要root权限才能在安卓系统上使用本地挂载功能）。</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='download.html'">
+        <div class="card feature-card">
+          <div class="card-body">
+            <i class="fas fa-wifi fa-4x mb-3"></i>
+            <h5 class="card-title">路由器</h5>
+            <p class="card-text">CloudDrive可以在OpenWRT路由器上运行，将路由器变成一个以您的云盘为内容的NAS。您可以通过简单的配置将它们整合到一个统一的存储空间中。</p>
+            <p class="card-text">CloudDrive支持x86_64、arm64、armv7架构的OpenWRT路由器，可以直接下载运行，或者通过docker运行</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container text-center" style="margin-bottom: 20px;">
+    <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;" href="download.html">下载CloudDrive</a>
+  </div>
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 CloudDrive. All rights reserved.</p>
+      <p><a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021040687号-1</a></p>
+    </div>
+  </footer>
+</body>
+
+</html>

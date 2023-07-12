@@ -1,0 +1,13 @@
+CloudDrive的"文件访问监控和权限控制"功能为用户提供了详细的文件系统访问监控，这是普通文件系统所不能比拟的。CloudDrive可以实时显示当前哪个进程正在访问哪个文件，包括显示访问进程的路径和文件的路径，以及访问网盘文件时的下载速度。这样，用户可以非常方便地了解到每一个进程的文件访问情况，以及访问的性能状况。
+
+而且，CloudDrive还提供了权限控制功能，用户可以设定哪些进程可以访问挂载的文件系统，哪些进程不能访问。被加入黑名单的进程将无法打开CloudDrive挂载的文件。这为用户提供了极高的安全性，有效防止了恶意进程访问用户的文件。
+
+通过这一功能，用户可以更好地管理和保护自己的文件，避免数据泄露和不必要的麻烦。无论是对于个人用户还是企业用户，CloudDrive的这一功能都极具价值。
+
+Here is the English version:
+
+The "File Access Monitoring and Permission Control" feature of CloudDrive provides users with detailed file system access monitoring, which is unmatched by ordinary file systems. CloudDrive can display in real-time which process is accessing which file, including the path of the access process and the file, as well as the download speed when accessing the cloud drive file. In this way, users can easily understand the file access situation of each process and the performance of access.
+
+Moreover, CloudDrive also provides permission control features. Users can set which processes can access the mounted file system and which cannot. Processes added to the blacklist will not be able to open files mounted by CloudDrive. This provides users with high security, effectively preventing malicious processes from accessing users' files.
+
+With this feature, users can better manage and protect their files to avoid data leakage and unnecessary trouble. Whether for individual users or enterprise users, this feature of CloudDrive is of great value.

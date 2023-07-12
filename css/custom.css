@@ -1,0 +1,14 @@
+.navbar {
+    background-color: #007bff;
+}
+
+.navbar .nav-link {
+    color: #fff;
+}
+
+.footer {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Define more custom styles as needed */

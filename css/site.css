@@ -1,0 +1,115 @@
+body {
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background-color: #ffffff;
+}
+
+.navbar {
+    background-color: #eaf2f8;
+    height: 80px;
+}
+
+.navbar-nav {
+    margin-left: auto;
+}
+
+
+
+.content {
+    padding-top: 80px;
+    /* Adjust the value to fit the height of the navbar */
+}
+
+h1,
+h2,
+h5 {
+    color: #343a40;
+}
+
+p,
+.card-text {
+    color: #6c757d;
+}
+
+footer {
+    background-color: #ffffff;
+    color: #343a40;
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer p {
+    margin-bottom: 0;
+}
+
+.feature-card {
+    border: none;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+}
+
+.feature-card i {
+    color: #2184bf;
+}
+
+.pro-logo {
+    background-color: #2184bf;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    position: absolute;
+    top: 20px;
+    right: 100px;
+}
+
+@import url('https://fonts.googleapis.com/css?family=FontName&display=swap');
+
+.hero-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin-top: 100px;
+    text-align: center;
+    color: #2184bf;
+    font-family: 'FontName', sans-serif;
+    /* Replace 'FontName' with the desired elegant Chinese font */
+}
+
+.tagline {
+    font-size: 24px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.custom-download-button {
+    background-color: #2184bf;
+}
+
+.icon-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.badge {
+    position: absolute;
+    top: -10px;
+    right: -20px;
+    background-color: #ff9900;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-radius: 50%;
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>文件变更通知与本地挂载</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .card {
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    .card-header {
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 8px 8px 0 0;
+    }
+    .card-body {
+      padding: 20px;
+    }
+    .icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    h3 {
+      color: #333;
+      font-size: 18px;
+    }
+    p {
+      margin-bottom: 10px;
+    }
+    .expanded {
+      display: none;
+    }
+    .expand-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .expand-btn:hover {
+      background-color: #0056b3;
+    }
+    .expand-icon:before {
+      content: '\f067';
+    }
+    .collapse-icon:before {
+      content: '\f068';
+    }
+  </style>
+  <script>
+    function toggleCard(cardId) {
+      const card = document.getElementById(cardId);
+      const expandBtn = card.querySelector('.expand-btn');
+      const expandedContent = card.querySelector('.expanded-content');
+
+      if (expandBtn.classList.contains('collapsed')) {
+        expandBtn.classList.remove('collapsed');
+        expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+        expandedContent.style.display = 'block';
+      } else {
+        expandBtn.classList.add('collapsed');
+        expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+        expandedContent.style.display = 'none';
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-6">
+        <div id="card1" class="card">
+          <div class="card-header">
+            <h2 class="text-center"><i class="fas fa-bell"></i> 文件变更通知</h2>
+          </div>
+          <div class="card-body">
+            <div class="text-center">
+              <i class="fas fa-file-alt icon"></i>
+            </div>
+            <h3 class="text-center">实时了解文件变更</h3>
+            <p class="brief">
+              CloudDrive的文件变更通知功能会及时通知您有关文件的任何变更。无论是创建新文件、重命名现有文件、删除文件还是修改文件内容，您都将收到实时通知，让您随时了解文件的变动情况。
+            </p>
+            <div class="expanded-content">
+              <p>
+                通过这个功能，您可以轻松追踪和监控文件活动，确保您始终了解云盘中的最新变更。它为您提供了一种无缝的方式来掌控和有效管理您的文件。
+              </p>
+              <p>
+                无论您是与他人协作、处理重要项目还是简单整理文件，文件变更通知功能都能帮助您保持井然有序且始终掌握最新信息。告别手动检查变更的繁琐工作，让CloudDrive在文件变更时即时通知您。
+              </p>
+            </div>
+            <button class="expand-btn" onclick="toggleCard('card1')"><i class="fas fa-chevron-down"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div id="card2" class="card">
+          <div class="card-header">
+            <h2 class="text-center"><i class="fas fa-hdd"></i> 本地挂载</h2>
+          </div>
+          <div class="card-body">
+            <div class="text-center">
+              <i class="fas fa-cloud-upload-alt icon"></i>
+            </div>
+            <h3 class="text-center">方便的本地挂载</h3>
+            <p class="brief">
+              CloudDrive提供便捷的本地挂载功能，让您直接在本地访问云盘中的文件。这一功能使您能够在本地文件资源管理器或应用程序中以类似访问本地磁盘的方式浏览、打开和编辑云盘文件。
+            </p>
+            <div class="expanded-content">
+              <p>
+                本地挂载功能实现了高效的文件访问和管理，满足您跨设备同步数据的需求。无论您是在家中的电脑上编辑文件，还是在外出时使用笔记本电脑访问文件，您都可以轻松在不同设备上进行文件修改和访问。
+              </p>
+              <p>
+                这种便捷性使您能够快速响应工作和生活中的需求，确保文件的及时更新和一致性。无需事先下载文件到本地，本地挂载功能让您以直接访问本地文件的方式与云盘文件进行交互，提供了极大的方便性和效率。
+              </p>
+            </div>
+            <button class="expand-btn" onclick="toggleCard('card2')"><i class="fas fa-chevron-down"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

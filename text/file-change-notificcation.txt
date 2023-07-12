@@ -1,0 +1,15 @@
+当然，以下是关于文件变更通知的原理以及CloudDrive的特性描述：
+
+文件变更通知是操作系统提供的一种机制，当文件系统中的文件或目录发生变化时，操作系统会生成一个事件通知。这些变化可能包括文件的创建、删除、移动、重命名，以及文件内容的修改等。应用程序可以订阅这些事件，以便在文件或目录发生变化时及时得到通知，从而可以执行相应的处理。
+
+CloudDrive的"文件变更通知"功能，就是利用了这一机制，使得挂载的云盘文件系统可以支持文件变更通知。当挂载的文件系统发生文件改变时（如创建文件，删除文件，重命名文件、修改文件等），支持FileSystemWatcher或者FileNotify的第三方应用程序就会及时收到操作系统的通知。例如，Emby、Jellyfin、Plex等媒体管理程序就可以利用这个特性来监视媒体文件夹的变化。
+
+不仅如此，CloudDrive还在这一机制的基础上做了进一步的扩展。不仅支持通过挂载文件系统产生的文件变化，还支持通过Web界面修改文件，通过WebDAV Server修改文件，或者通过CloudDrive导入离线文件下载产生的文件变化。这些所有的文件变动，CloudDrive都会生成正确的文件变更通知，确保了第三方应用程序可以实时获取文件的最新状态。
+
+Here is the English version:
+
+File change notifications are a mechanism provided by the operating system. When a file or directory in the file system changes, the operating system generates an event notification. These changes may include file creation, deletion, movement, renaming, and content modification, etc. Applications can subscribe to these events, so they can receive notifications in a timely manner when files or directories change and can perform corresponding processing.
+
+CloudDrive's "File Change Notification" feature utilizes this mechanism, allowing the mounted cloud drive file system to support file change notifications. When changes occur in the mounted file system (such as creating files, deleting files, renaming files, modifying files, etc.), third-party applications that support FileSystemWatcher or FileNotify will receive timely notifications from the operating system. For example, media management programs such as Emby, Jellyfin, Plex can use this feature to monitor changes in media folders.
+
+Moreover, CloudDrive further extends this mechanism. It not only supports file changes generated through the mounted file system but also supports file changes generated through the Web interface, modifying files through the WebDAV Server, or importing offline file downloads through CloudDrive. All these file changes, CloudDrive will generate correct file change notifications to ensure that third-party applications can get the latest status of the file in real time.

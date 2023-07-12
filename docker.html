@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudDrive - Home</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/site.js"></script>
+  <link rel="stylesheet" href="css/download.css">
+</head>
+<style>
+  .navbar-collapse {
+    background-color: rgba(234, 242, 248, 0.9);
+    padding: 10px;
+  }
+
+  pre {
+    background-color: #f2f2f2;
+  }
+</style>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="img/clouddrive-h.png" height="80">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">主页</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="features.html">功能</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="pricing.html">会员</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="help.html">帮助</a>
+            </li>
+          </ul>
+          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <body>
+
+    <!-- Page Content -->
+    <div class="container mt-4">
+      <h1 class="hero-title">CloudDrive - Docker版本安装指南</h1>
+      <div class="alert alert-warning" role="alert">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>注意：</strong>如遇到Docker镜像无法更新到最新版本的情况，请尝试禁止使用Docker镜像服务器。
+      </div>
+      <!-- Supported Architectures -->
+      <h2>支持的架构</h2>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th scope="col">架构</th>
+            <th scope="col">Tag</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>x86-64</td>
+            <td>amd64</td>
+          </tr>
+          <tr>
+            <td>arm64</td>
+            <td>arm64</td>
+          </tr>
+          <tr>
+            <td>armv7</td>
+            <td>arm32</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Before run -->
+      <h2>运行前准备</h2>
+      <p>Clouddrive 使用 fuse3 来挂载云存储服务，使用fuse3在Docker容器中挂载云存储服务时，需要在主机系统上启用共享挂载。这可以通过在Docker服务配置中设置MountFlags选项或在主机系统上使用mount
+        --make-shared命令来实现。这是因为FUSE3需要共享挂载才能正常工作，如果没有共享挂载，挂载将会失败并显示“权限被拒绝”的错误。通过启用共享挂载，FUSE3挂载可以在Docker容器和主机系统之间共享，从而实现对云存储服务的无缝访问。
+      </p>
+
+      <p>为了在 Docker 容器中启用 fuse 并将挂载分享给主机，需要在主机上设置以下选项之一：</p>
+
+      <h5>选项 1：当Docker是以systemd service运行时，在 Docker 服务中启用 MountFlags</h5>
+      <pre><code class="language-bash">sudo mkdir -p /etc/systemd/system/docker.service.d/
+sudo cat &lt;&lt;EOF &gt; /etc/systemd/system/docker.service.d/clear_mount_propagation_flags.conf
+[Service]
+MountFlags=shared
+EOF
+sudo systemctl restart docker.service</code></pre>
+
+      <h5>选项 2：当Docker不是以systemd service运行时，在主机上启用共享挂载选项</h5>
+      <pre><code class="language-bash">sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
+      <div class="alert alert-warning" role="alert">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>注意：</strong>mount --make-shared 命令只在当前运行的系统中生效，重启后需要重新执行。如需重启后自动运行CloudDrive，请将该命令添加到系统启动项中。
+      </div>
+
+      <!-- Usage -->
+      <h2>使用方法</h2>
+      <h5>Docker Compose</h5>
+      <pre><code class="language-yaml">version: "2.1"
+services:
+  cloudnas:
+    image: cloudnas/clouddrive2-unstable
+    container_name: clouddrive2
+    environment:
+      - TZ=Asia/Shanghai
+      - CLOUDDRIVE_HOME=/Config
+    volumes:
+      - &lt;path to accept cloud mounts&gt;:/CloudNAS:shared
+      - &lt;path to app data&gt;:/Config
+      - &lt;other local shared path&gt;:/media:shared #optional media path of host
+    devices:
+      - /dev/fuse:/dev/fuse
+    restart: unless-stopped
+    pid: "host"
+    privileged: true
+    network_mode: "host"
+</code></pre>
+
+      <h5>Docker CLI</h5>
+      <pre><code class="language-bash">docker run -d \
+    --name clouddrive \
+    --restart unless-stopped \
+    --env CLOUDDRIVE_HOME=/Config \
+    -v &lt;path to accept cloud mounts&gt;:/CloudNAS:shared \
+    -v &lt;path to app data&gt;:/Config \
+    -v &lt;other local shared path&gt;:/media:shared \
+    --network host \
+    --pid host \
+    --privileged \
+    --device /dev/fuse:/dev/fuse \
+    cloudnas/clouddrive2-unstable
+</code></pre>
+
+      <!-- Configuration -->
+      <h2>配置</h2>
+      <p>打开浏览器访问配置页面：http://&lt;ip&gt;:19798</p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center bg-light py-4">
+      <div class="container">
+        <p>&copy; 2023 CloudDrive. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+
+</html>

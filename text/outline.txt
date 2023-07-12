@@ -1,0 +1,49 @@
+以下是一个中文版本的CloudDrive网站大纲：
+
+一、首页
+- CloudDrive概述
+- CloudDrive的主要优势
+- 云盘服务的一站式管理
+- 多平台兼容性
+
+二、CloudDrive特性
+- 云盘的本地挂载
+- WebDav Server功能
+- 快速的云盘迁移
+- 云盘文件变更通知
+- 应用级别的权限控制
+
+三、支持的云盘服务
+- 115网盘
+- 阿里云盘
+- 天翼云盘
+- Pikpak
+- WebDav
+- 本地目录
+
+四、多平台兼容性
+- Windows x86_64
+- Linux x86_64
+- Linux aarch64
+- Linux arm
+- macOS x86_64
+- macos_aarch64
+- Android x86_64
+- Android aarch64
+- Android arm* （需root权限）
+
+五、如何使用CloudDrive
+- 安装指南
+- 用户指南
+- 常见问题解答
+
+六、联系我们
+- 客户支持
+- 商业合作
+- 媒体采访
+
+七、法律信息
+- 服务条款
+- 隐私政策
+
+希望这个大纲对你有所帮助！如果你有任何其他的要求，欢迎随时提出。

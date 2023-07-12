@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudDrive - 功能</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/site.js"></script>
+  <link rel="stylesheet" href="css/download.css">
+</head>
+<style>
+  .navbar-collapse {
+    background-color: rgba(234, 242, 248, 0.9);
+    padding: 10px;
+  }
+
+  body {
+    background-color: #f8f9fa;
+    color: #212529;
+  }
+
+  .feature-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+  }
+
+  .feature-card i {
+    color: #2184bf;
+    margin-right: 10px;
+  }
+
+  .feature-icon {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #2184bf;
+  }
+
+  .feature-content {
+    margin-left: 8px;
+    flex-grow: 1;
+    /* Fill remaining space */
+  }
+
+  .feature-title {
+    display: flex;
+    font-size: 35px;
+    font-weight: bold;
+    background-color: #e8f3f8;
+    justify-content: center;
+    align-items: center;
+    /* Light blue background color */
+    padding: 5px 10px;
+    border-radius: 4px;
+    flex-grow: 1;
+  }
+
+  .feature-description {
+    margin-top: 10px;
+    margin-bottom: 0;
+    background-color: #f3f8fb;
+    /* Very light blue background color */
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-align: left;
+    /* Left align the description */
+    flex-grow: 1;
+    /* Fill remaining space */
+  }
+</style>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="img/clouddrive-h.png" height="80">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">主页</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="features.html">功能</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="pricing.html">会员</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="help.html">帮助</a>
+            </li>
+          </ul>
+          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container mt-4">
+    <h1 class="hero-title">CloudDrive - 功能</h1>
+    <div class="feature-card" id="local-mount">
+      <div class="feature-content">
+        <div class="feature-title">
+          <div class="icon-container">
+            <i class="fas fa-laptop-file"></i>
+          </div>云盘本地挂载
+        </div>
+        <div class="feature-description">
+          <p>CloudDrive的“云盘本地挂载”功能允许用户将云盘或者云盘中的某个目录挂载成本地磁盘，就像将USB闪存盘插入电脑一样。用户可以直接访问和操作挂载后的云盘文件，无需事先下载，非常方便。</p>
+          <p>此外，云盘本地挂载不仅可以单独挂载某个云盘，也可以将多个云盘统一挂载，形成一个统一的文件系统。这样，用户可以方便地在多个云盘之间切换和管理文件，提高工作效率。</p>
+          <p>CloudDrive访问云盘文件时，采用多线程下载机制，读取速度成倍提升，在网络带宽保证的情况下，几乎和本地磁盘一样的体验。</p>
+          <p>更为重要的是，云盘本地挂载支持完全的随机读写操作，任何本地应用程序都可以像访问本地磁盘一样访问云盘，无论是办公软件还是媒体播放器，都可以直接读取和写入云盘文件，极大地提高了云盘的使用便利性。</p>
+          <p>CloudDrive的“云盘本地挂载”功能，让云盘使用起来就像本地磁盘一样，无论是数据读取、文件管理还是应用程序的使用，都变得更加简单直观。</p>
+          <p>
+            CloudDrive的"云盘本地挂载"功能还有一个重要的优势，那就是能够方便地实现跨设备数据同步。用户在一个设备上修改的文件，可以通过CloudDrive立即同步到云盘，然后在另一个设备上直接打开最新版本的文件。这样，无论用户在哪个设备上工作，都能保证文件的实时更新和数据的一致性。
+          </p>
+          <p>这种跨设备的数据同步功能，对于多设备用户来说，尤其有用。无论是在家里的电脑上，公司的电脑上，还是在移动设备上，用户都可以随时访问和编辑最新版本的文件，无需担心版本不一致或数据丢失的问题。</p>
+          <p>因此，CloudDrive的“云盘本地挂载”功能，不仅可以像使用本地硬盘一样方便地访问和管理云盘文件，还可以实现跨设备的数据同步，大大提高了云盘的使用便利性和效率。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card" id="unified-web-management">
+      <div class="feature-content">
+        <div class="feature-title">
+          <div class="icon-container">
+            <i class="fas fa-people-roof"></i>
+          </div>统一的多云盘管理
+        </div>
+        <div class="feature-description">
+          <p>
+            CloudDrive的“统一的多云盘Web管理界面”功能为用户提供了一个集中管理所有云盘的平台。在这个界面上，用户可以完成所有云盘的所有文件操作，包括列出文件目录、浏览图片、播放视频和音频等。更重要的是，它甚至可以调用第三方播放器播放音频和视频，包括PotPlayer、VLC
+            Player、Infuse、iina和nPlayer。</p>
+          <p>用户还可以在这个界面上完成创建文件夹、重命名、删除文件、移动文件位置、上传本地文件等操作。所有的这些操作都可以在一个界面里完成，无需在不同的云盘App间切换，大大提高了效率。</p>
+          <p>CloudDrive的"统一的多云盘Web管理界面"功能，实现了真正的一站式云盘管理，让用户的云盘使用体验更加方便，更加高效。</p>
+        </div>
+      </div>
+    </div>
+    <div class="feature-card" id="one-login">
+      <div class="feature-content">
+        <div class="feature-title">
+          <div class="icon-container">
+            <i class="fas fa-sign-in-alt"></i>
+          </div>一次登录，到处使用
+        </div>
+        <div class="feature-description">
+          <p>
+            CloudDrive提供的云盘账户云同步服务，允许用户在一个地方登录所有的云盘账户，并在任何设备上使用这些账户。这意味着用户可以在不同的设备上访问他们的云盘文件，而无需每次都登录不同的账户。</p>
+          <p>CloudDrive的“一次登录，到处使用”功能，不仅可以方便地访问云盘文件，还可以保护用户的账户安全。用户只需要在一个地方登录所有的云盘账户，就可以避免在不同设备上输入账户密码的风险。</p>
+          <p>这种“一次登录，到处使用”的功能，对于经常需要在不同设备上使用云盘的用户来说，尤其有用。用户只需要在一个设备上登录一次，就可以在任何设备上使用云盘，无需重复登录，大大提高了用户的使用便利性。</p>
+          <p>CloudDrive的“一次登录，到处使用”功能，让用户可以随时随地使用云盘，无论是在家里的电脑上，还是在公司的电脑上，都可以方便地访问和管理云盘文件。</p>
+          <div class="alert alert-warning" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>我们保护你的隐私：</strong>当通过用户的云端账户同步云盘账户时，云盘账户信息会使用用户的密码进行高强度加密。这种加密方式确保只有用户自己才能解密其账户信息。我们的服务器不存储用户的密码，仅保存密码的哈希值用于登录时校验。这种设计从理论上保证了用户保存在我们服务器上的云盘账户信息无法被任何人解密，从而保护用户的隐私。
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-card" id="webdav">
+      <div class="feature-content">
+        <div class="feature-title">
+          <div class="icon-container">
+            <i class="fas fa-cloud-upload-alt"></i>
+          </div>WebDAV服务
+        </div>
+        <div class="feature-description">
+          <p>
+            WebDAV是一种基于HTTP协议的文件传输协议，它可以让用户通过HTTP协议访问和管理远程文件，就像访问本地文件一样。WebDAV协议的出现，极大地方便了用户对远程文件的访问和管理，因此被广泛应用于云盘、网盘、NAS等领域。，它的主要优势在于：
+          </p>
+          <p>WebDAV具有极强的兼容性，许多操作系统（包括Windows、macOS、Linux等）和应用程序（如Microsoft Office、Adobe Creative
+            Suite等）都内置了对WebDAV的支持。通过WebDAV，用户可以方便地在不同设备之间共享文件，而无需使用特定的应用程序或平台。</p>
+          <p>CloudDrive通过封装所有云盘为一个统一的WebDAV服务，使得用户可以在任何支持WebDAV的客户端上方便地访问和管理所有的云盘文件，大大提高了云盘使用的便利性和效率。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card" id="inter-cloud-copy">
+      <div class="feature-content">
+        <div class="feature-title">
+          <div class="icon-container">
+            <i class="fas fa-people-carry"></i>
+            <div class="badge">Pro</div>
+          </div>跨云盘文件快速复制
+        </div>
+        <div class="feature-description">
+          <p>
+            在处理大量数据时，云盘之间的迁移是一个常见但又复杂的问题。许多用户因为需要更换云盘服务或者希望在多个云盘服务之间同步数据，而需要进行云盘之间的迁移。然而，由于每个云盘服务都有其特定的API和数据格式，云盘之间的迁移往往需要用户进行繁琐的手动操作，而且速度往往受到网络带宽的限制，如果数据量大，迁移的时间可能会非常长。
+          </p>
+          <p>
+            CloudDrive的云盘之间迁移功解决了这个问题。CloudDrive充分利用云盘的秒传机制，尽最大可能实现秒迁移。秒传机制是一种可以快速完成文件传输的技术，它的工作原理是在上传文件前先获取文件的哈希值，然后将哈希值发送到服务器，服务器根据哈希值检查文件是否已经存在。如果文件已经存在，服务器就不需要再接收文件数据，而是直接创建一个新的文件记录，指向已存在的文件数据，从而实现秒传。这种方式无需重新计算文件的哈希，尤其适用于使用相同哈希算法的不同云盘之间，或者相同云盘不同账号之间的迁移，能够做到真正的秒传。
+          </p>
+          <p>
+            CloudDrive可以直接从云盘中获取文件哈希值，如果目标云盘使用和源云盘相同的哈希算法，那么计算哈希值的过程可以被跳过，从而实现真正的快速复制。这种方式不仅可以提高复制速度，还可以减少网络带宽的占用，降低用户的成本
+          </p>
+          <p>
+            通过使用秒传机制，CloudDrive可以在云盘之间迅速迁移数据，大大提高了迁移效率，节省了用户的时间。而且，CloudDrive的云盘之间迁移功能支持多个云盘服务，无论用户使用的是哪种云盘服务，都可以方便地进行迁移。
+          </p>
+          <p>
+            当然，不是所有的文件都可以使用秒传机制。对于这些文件，CloudDrive仍然提供了高效的迁移方案。CloudDrive可以直接将文件从一个云盘下载并上传到另一个云盘，而无需先将文件下载到本地。这样，用户就无需担心本地存储空间不足的问题，也无需担心下载和上传过程中的网络问题。
+          </p>
+          <p>
+            总的来说，CloudDrive的云盘之间迁移功能提供了一种方便快捷的解决方案，让用户可以更轻松地管理和移动他们的云数据。无论是需要迁移大量数据，还是需要在多个云盘服务之间同步数据，用户都可以信赖CloudDrive，得到满意的结果。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card" id="file-notification">
+      <div class="feature-content">
+        <div class="feature-title">
+          <div class="icon-container">
+            <i class="fas fa-bell"></i>
+            <div class="badge">Pro</div>
+          </div>文件变更通知
+        </div>
+        <div class="feature-description">
+          <p>
+            文件变更通知是操作系统提供的一种机制，当文件系统中的文件或目录发生变化时，操作系统会生成一个事件通知。这些变化可能包括文件的创建、删除、移动、重命名，以及文件内容的修改等。应用程序可以订阅这些事件，以便在文件或目录发生变化时及时得到通知，从而可以执行相应的处理。
+          </p>
+          <p>
+            CloudDrive的"文件变更通知"功能，就是利用了这一机制，使得挂载的云盘文件系统可以支持文件变更通知。当挂载的文件系统发生文件改变时（如创建文件，删除文件，重命名文件、修改文件等），支持FileSystemWatcher或者FileNotify的第三方应用程序就会及时收到操作系统的通知。例如，Emby、Jellyfin、Plex等媒体管理程序就可以利用这个特性来监视媒体文件夹的变化。
+          </p>
+          <p>不仅如此，CloudDrive还在这一机制的基础上做了进一步的扩展。不仅支持通过挂载文件系统产生的文件变化，还支持通过Web界面修改文件，通过WebDAV
+            Server修改文件，或者通过CloudDrive导入离线文件下载产生的文件变化。这些所有的文件变动，CloudDrive都会生成正确的文件变更通知，确保了第三方应用程序可以实时获取文件的最新状态。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card" id="file-access-control">
+      <div class="feature-content">
+        <div class="feature-title">
+          <div class="icon-container">
+            <i class="fas fa-lock"></i>
+            <div class="badge">Pro</div>
+          </div>文件访问监控和权限控制
+        </div>
+        <div class="feature-description">
+          <p>
+            CloudDrive的"文件访问监控和权限控制"功能为用户提供了详细的文件系统访问监控，这是普通文件系统所不能比拟的。</p>
+          <p>CloudDrive可以实时显示当前哪个进程正在访问哪个文件，包括显示访问进程的路径和文件的路径，以及访问网盘文件时的下载速度。这样，用户可以非常方便地了解到每一个进程的文件访问情况，以及访问的性能状况。
+          </p>
+          <p>
+            而且，CloudDrive还提供了权限控制功能，用户可以设定哪些进程可以访问挂载的文件系统，哪些进程不能访问。被加入黑名单的进程将无法打开CloudDrive挂载的文件。这为用户提供了极高的安全性，有效防止了恶意进程访问用户的文件。
+          </p>
+          <p>通过这一功能，用户可以更好地管理和保护自己的文件，避免数据泄露和不必要的麻烦。无论是对于个人用户还是企业用户，CloudDrive的这一功能都极具价值。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card" id="service-vendor-friendly">
+      <div class="feature-content">
+        <div class="feature-title">
+          <div class="icon-container">
+            <i class="fas fa-handshake"></i>
+          </div>云盘服务商友好
+        </div>
+        <div class="feature-description">
+          <p>CloudDrive旨在最大程度地保障云盘服务商的利益，同时保持用户的流畅体验。</p>
+          <p>CloudDrive使用本地缓存的文件元数据来减少文件列表请求，最大程度减少使用过程中对网盘服务的请求次数，用户可按自己的需求为每个目录定制独特的缓存时间，最大限度平衡了数据的时效性和网络请求频度</p>
+          <p>CloudDrive的快速跨网盘复制功能充分利用网盘文件元数据，最大限度避免重新计算文件哈希，节省大量的网络资源</p>
+          <p>
+            CloudDrive读取文件时，下载速度被精确地控制着，以刚刚好满足读取速度的要求，不会占用大量网络带宽。这一功能不仅为用户节省了大量的网络资源，同时也减少了网络拥堵，提高了网络的使用效率。
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- generate 云盘服务商友好 feature card-->
+
+    <!-- <div class="feature-card" id="service-vendor-friendly">
+      <div class="feature-content">
+        <div class="feature-title">
+          <div class="icon-container">
+            <i class="fas fa-handshake"></i>
+          </div>云盘服务商友好
+        </div>
+      </div>
+      <div class="feature-description">
+        <p>CloudDrive旨在最大程度地保障云盘服务商的利益，同时保持用户的流畅体验。</p>
+        <p>CloudDrive使用本地缓存的文件元数据来减少文件列表请求，最大程度减少使用过程中对网盘服务的请求次数，用户可按自己的需求为每个目录定制独特的缓存时间，最大限度平衡了数据的时效性和资源</p>
+        <p></p>
+      </div>
+    </div> -->
+
+    <div class="feature-card" id="multicloud-backup">
+      <div class="feature-content">
+        <div class="feature-title">
+          <div class="icon-container">
+            <i class="fas fa-database"></i>
+            <div class="badge">Pro</div>
+          </div>多云盘备份<span style="color: #f8b500; font-size: 14px;">（即将推出）</span>
+        </div>
+        <div class="feature-description">
+          <p>在面对重要数据的保护和备份时，多重备份是一个非常有效的策略。多重备份可以提高数据的安全性，避免单点故障，保证数据的完整性和可访问性。</p>
+          <p>
+            CloudDrive的“多云盘备份”功能就是为了满足这个需求。用户可以指定需要备份的本地文件夹和多个网盘文件夹，CloudDrive会自动将本地文件夹的内容备份到指定的多个网盘文件夹。这样，用户的数据就有了多重保障，即使某个云盘服务出现问题，也不会影响到用户的数据安全。
+          </p>
+          <p>
+            更为重要的是，CloudDrive的“多云盘备份”功能支持实时更新。当本地文件夹内的文件发生修改时，这些修改会被实时更新到所有的网盘文件夹。这样，无论用户何时查看他们的备份数据，都可以看到最新的文件状态，不会遗漏任何修改。
+          </p>
+          <p>CloudDrive的“多云盘备份”功能，为用户提供了极致的数据安全性。用户无需担心数据丢失或者数据过时，只需简单的设置，就可以实现本地数据与多个云盘之间的自动同步和备份，让数据保护变得轻松简单。</p>
+        </div>
+        <div class="alert alert-warning" role="alert">
+          <i class="fas fa-exclamation-triangle"></i>
+          <strong>注意：</strong>CloudDrive的多云盘备份功能目前仍在开发中，敬请期待！
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 CloudDrive. All rights reserved.</p>
+      <p><a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021040687号-1</a></p>
+    </div>
+  </footer>
+</body>
+
+</html>

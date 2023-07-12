@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudDrive - 帮助</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/site.js"></script>
+  <link rel="stylesheet" href="css/download.css">
+</head>
+<style>
+  .navbar-collapse {
+    background-color: rgba(234, 242, 248, 0.9);
+    padding: 10px;
+  }
+
+  .card-title {
+    background-color: #e7f3ff;
+    color: #1c4966;
+    border-bottom: 1px solid #b3d7ff;
+    padding: 10px;
+  }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ccc;
+    border-radius: 5px 5px 0 0;
+  }
+
+  .card-header i {
+    font-size: 24px;
+    margin-right: 10px;
+  }
+
+  .card-header h4 {
+    margin: 0;
+  }
+
+  .card-body {
+    padding: 10px;
+  }
+
+  @media (min-width: 768px) {
+    .card {
+      width: calc(50% - 10px);
+    }
+  }
+
+  @media (min-width: 992px) {
+    .card {
+      width: calc(33.33% - 10px);
+    }
+  }
+
+  .tip-box {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .tip-box i {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #0078d4;
+  }
+
+  .tip-box span {
+    font-size: 14px;
+    color: #333;
+  }
+</style>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="img/clouddrive-h.png" height="80">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">主页</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="features.html">功能</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="pricing.html">会员</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="help.html">帮助</a>
+            </li>
+          </ul>
+          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="container mt-4">
+    <h1 class="hero-title">CloudDrive - 帮助</h1>
+    <p class="tagline">CloudDrive用户手册</p>
+    <div class="container py-5">
+      <div class="accordion accordion-flush" id="cloudDriveAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              安装与运行
+            </button>
+          </h2>
+        </div>
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+          data-bs-parent="#cloudDriveAccordion">
+          <div class="accordion-body">
+            <h2>安装与运行</h2>
+            <div class="tip-box">
+              <i class="fas fa-info-circle"></i>
+              <span>安装完成后，用浏览器打开http://&lt;安装CloudDrive的主机IP&gt;:19798 打开管理界面。建议采用最新版Edge、Chrome、Safari或者Firefox浏览器，不支持IE浏览器</span>
+            </div>
+            <h3>Windows</h3>
+            <ol>
+              <li>访问我们的官方网站下载 CloudDrive。</li>
+              <li>打开安装包，按照屏幕上的提示进行操作。</li>
+              <li>安装完成后，您可以在桌面找到CloudDrive2快捷方式，双击快捷方式或者浏览器打开http://localhost:19798。</li>
+            </ol>
+
+            <h3>Linux</h3>
+            <ol>
+              <li>如果Linux系统没有安装fuse3，请按照对应操作系统手册安装fuse3，安装好后确认fusermount3命令可以运行</li>
+              <li>如果你需要以非root用户运行CloudDrive，请修改/etc/fuse.conf，确保user_allow_other这一行前面的注释符#已经被删除掉</li>
+              <li>访问我们的官方网站下载对应架构的CloudDrive。</li>
+              <li>打开终端并导航到下载的安装包所在的目录。</li>
+              <li>运行以下命令以展开 CloudDrive：<br><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz</code></li>
+              <li>进入展开后的目录，运行<br><code>./clouddrive</code></li>
+              <li>可以将clouddrive运行加入系统自启动，或者设置为系统服务，具体操作请参考操作系统帮助</li>
+            </ol>
+
+            <h3>macOS</h3>
+            <ol>
+              <li>运行前请确保系统已安装<a href="https://osxfuse.github.io/" target="_blank">macFUSE</a>，并已按照提示正确设置权限</li>
+              <li>访问我们的官方网站下载对应架构的CloudDrive。</li>
+              <li>打开终端并导航到下载的安装包所在的目录。</li>
+              <li>运行以下命令以展开 CloudDrive：<br><code>tar zxvf clouddrive-2-macos-$ARCH-$VERSION.tgz</code></li>
+              <li>进入展开后的目录，运行<br><code>./clouddrive</code></li>
+              <li>可以将clouddrive运行加入系统自启动，或者设置为系统服务，具体操作请参考操作系统帮助</li>
+            </ol>
+
+            <h3>Android</h3>
+            <ol>
+              <li>TBD</li>
+            </ol>
+
+            <h3>Docker</h3>
+            <a href="docker.html">Docker版本安装指南</a>
+
+            <h3>NAS</h3>
+            <div class="card-container">
+              <div class="card">
+                <div class="card-header">
+                  <h4>Synology</h4>
+                </div>
+                <div class="card-body">
+                  <p>您可以按照以下方式在Synology上安装CloudDrive：</p>
+                  <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>注意：</strong>这些 NAS 插件由第三方提供，我们不保证其安全性和稳定性。
+                  </div>
+                  <ul>
+                    <li>使用Docker方式安装CloudDrive。</li>
+                    <li>使用第三方提供的插件安装CloudDrive。</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <h4>QNAP</h4>
+                </div>
+                <div class="card-body">
+                  <p>您可以按照以下方式在QNAP上安装CloudDrive：</p>
+                  <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>注意：</strong>这些 NAS 插件由第三方提供，我们不保证其安全性和稳定性。
+                  </div>
+                  <ul>
+                    <li>使用Docker方式安装CloudDrive。</li>
+                    <li>使用第三方提供的插件安装CloudDrive/li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <h4>其它</h4>
+                </div>
+                <div class="card-body">
+                  <p>如果您的设备支持安装Fuse 3，您可以按照Linux安装指南中的步骤安装CloudDrive。否则，您可以使用Docker方式安装CloudDrive。</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- add 注册与登录 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              注册与登录
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+            data-bs-parent="#cloudDriveAccordion">
+            <div class="accordion-body">
+              <h2>注册</h2>
+              <ol>
+                <li>第一次运行CloudDrive</li>
+                <li>打开CloudDrive，点击右上角的“注册”按钮。</li>
+                <li>输入您的邮箱地址和密码，点击“注册”按钮。</li>
+                <li>系统将发送一封验证邮件到您的邮箱，请按照邮件中的提示进行操作。</li>
+                <li>验证成功后，您将被重定向到登录页面。</li>
+              </ol>
+
+              <h2>登录</h2>
+              <ol>
+                <li>打开CloudDrive，点击右上角的“登录”按钮。</li>
+                <li>输入您的邮箱地址和密码，点击“登录”按钮。</li>
+                <li>如果您的账号已经通过验证，您将被重定向到CloudDrive的主页。</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              添加云存储
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+            data-bs-parent="#cloudDriveAccordion">
+            <div class="accordion-body">
+              <p>1. 打开 CloudDrive，选择 "添加云存储"。</p>
+              <p>2. 在列表中选择您的云存储提供商。</p>
+              <p>3. 输入您的账号信息，然后按 "确定"。</p>
+              <p>4. 系统将验证您的账号，验证通过后，您的云存储将出现在 CloudDrive 中。</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingFour">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+              文件管理
+            </button>
+          </h2>
+          <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+            data-bs-parent="#cloudDriveAccordion">
+            <div class="accordion-body">
+              <p>1. 在 CloudDrive 中，您可以直接操作云存储中的文件，如上传、下载、删除、移动等。</p>
+              <p>2. 如果您将云存储挂载到本地驱动器，您可以像操作本地文件一样操作云存储中的文件。</p>
+              <p>3. 请注意，删除文件将直接影响您云存储中的文件，一旦删除，可能无法恢复。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- Footer -->
+  <footer class="footer text-center bg-light py-4">
+    <div class="container">
+      <p>&copy; 2023 CloudDrive. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+
+</html>
