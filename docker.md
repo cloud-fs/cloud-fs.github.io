@@ -1,4 +1,4 @@
-CloudDrive2 unstable
+CloudDrive2
 ==========
 
 Clouddrive2 mounts cloud storage services as local file system.

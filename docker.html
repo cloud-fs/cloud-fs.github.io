@@ -92,22 +92,29 @@
 
       <!-- Before run -->
       <h2>运行前准备</h2>
-      <p>Clouddrive 使用 fuse3 来挂载云存储服务，使用fuse3在Docker容器中挂载云存储服务时，需要在主机系统上启用共享挂载。这可以通过在Docker服务配置中设置MountFlags选项或在主机系统上使用mount
+      <p>Clouddrive 使用 fuse3
+        来挂载云存储服务，使用fuse3在Docker容器中挂载云存储服务时，需要在主机系统上启用共享挂载。这可以通过在Docker服务配置中设置MountFlags选项或在主机系统上使用mount
         --make-shared命令来实现。这是因为FUSE3需要共享挂载才能正常工作，如果没有共享挂载，挂载将会失败并显示“权限被拒绝”的错误。通过启用共享挂载，FUSE3挂载可以在Docker容器和主机系统之间共享，从而实现对云存储服务的无缝访问。
       </p>
 
       <p>为了在 Docker 容器中启用 fuse 并将挂载分享给主机，需要在主机上设置以下选项之一：</p>
 
       <h5>选项 1：当Docker是以systemd service运行时，在 Docker 服务中启用 MountFlags</h5>
-      <pre><code class="language-bash">sudo mkdir -p /etc/systemd/system/docker.service.d/
+      <div class="code-block">
+        <pre><code class="language-bash">sudo mkdir -p /etc/systemd/system/docker.service.d/
 sudo cat &lt;&lt;EOF &gt; /etc/systemd/system/docker.service.d/clear_mount_propagation_flags.conf
 [Service]
 MountFlags=shared
 EOF
-sudo systemctl restart docker.service</code></pre>
+sudo systemctl restart docker.service</code></pre><button class="copy-btn" onclick="copyCode(this)"><i
+            class="fas fa-copy"></i></button>
+      </div>
 
       <h5>选项 2：当Docker不是以systemd service运行时，在主机上启用共享挂载选项</h5>
-      <pre><code class="language-bash">sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
+      <div class="code-block">
+        <pre><code class="language-bash">sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+      </div>
       <div class="alert alert-warning" role="alert">
         <i class="fas fa-exclamation-triangle"></i>
         <strong>注意：</strong>mount --make-shared 命令只在当前运行的系统中生效，重启后需要重新执行。如需重启后自动运行CloudDrive，请将该命令添加到系统启动项中。
@@ -116,7 +123,8 @@ sudo systemctl restart docker.service</code></pre>
       <!-- Usage -->
       <h2>使用方法</h2>
       <h5>Docker Compose</h5>
-      <pre><code class="language-yaml">version: "2.1"
+      <div class="code-block">
+        <pre><code class="language-yaml">version: "2.1"
 services:
   cloudnas:
     image: cloudnas/clouddrive2-unstable
@@ -134,10 +142,12 @@ services:
     pid: "host"
     privileged: true
     network_mode: "host"
-</code></pre>
+</code></pre><button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+      </div>
 
       <h5>Docker CLI</h5>
-      <pre><code class="language-bash">docker run -d \
+      <div class="code-block">
+        <pre><code class="language-bash">docker run -d \
     --name clouddrive \
     --restart unless-stopped \
     --env CLOUDDRIVE_HOME=/Config \
@@ -149,7 +159,8 @@ services:
     --privileged \
     --device /dev/fuse:/dev/fuse \
     cloudnas/clouddrive2-unstable
-</code></pre>
+</code></pre><button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+      </div>
 
       <!-- Configuration -->
       <h2>配置</h2>
@@ -163,5 +174,49 @@ services:
       </div>
     </footer>
   </body>
+  <script>
+    function copyCode(btn) {
+      const code = btn.previousElementSibling.querySelector('code');
+      const text = code.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const prompt = document.createElement('div');
+        prompt.textContent = '代码已拷贝至剪贴板';
+        prompt.style.position = 'fixed';
+        prompt.style.top = '80%';
+        prompt.style.left = '50%';
+        prompt.style.transform = 'translate(-50%, -50%)';
+        prompt.style.padding = '1rem';
+        prompt.style.backgroundColor = '#f5f5f5';
+        prompt.style.border = '1px solid #ccc';
+        prompt.style.borderRadius = '5px';
+        prompt.style.zIndex = '9999';
+        document.body.appendChild(prompt);
+        setTimeout(() => {
+          document.body.removeChild(prompt);
+        }, 2000);
+      });
+    }
+  </script>
+
+  <style>
+    .code-block {
+      position: relative;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.5rem;
+      background-color: #f5f5f5;
+      border: none;
+      border-radius: 0 5px 0 0;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
 
 </html>
