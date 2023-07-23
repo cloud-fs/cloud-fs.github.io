@@ -142,11 +142,57 @@
           </div>统一的多云盘管理
         </div>
         <div class="feature-description">
-          <p>
-            CloudDrive的“统一的多云盘Web管理界面”功能为用户提供了一个集中管理所有云盘的平台。在这个界面上，用户可以完成所有云盘的所有文件操作，包括列出文件目录、浏览图片、播放视频和音频等。更重要的是，它甚至可以调用第三方播放器播放音频和视频，包括PotPlayer、VLC
-            Player、Infuse、iina和nPlayer。</p>
+          CloudDrive的“统一的多云盘Web管理界面”功能为用户提供了一个集中管理所有云盘的平台。在这个界面上，用户可以完成所有云盘的所有文件操作，包括列出文件目录、浏览图片、播放视频和音频等。更重要的是，它甚至可以调用第三方播放器播放音频和视频，包括PotPlayer、VLC
+          Player、Infuse、iina和nPlayer。</p>
           <p>用户还可以在这个界面上完成创建文件夹、重命名、删除文件、移动文件位置、上传本地文件等操作。所有的这些操作都可以在一个界面里完成，无需在不同的云盘App间切换，大大提高了效率。</p>
           <p>CloudDrive的"统一的多云盘Web管理界面"功能，实现了真正的一站式云盘管理，让用户的云盘使用体验更加方便，更加高效。</p>
+          <p>CloudDrive目前支持的网盘有阿里云盘、115网盘、天翼云盘、Pikpak、WebDAV，以及本地文件夹</p>
+          <!-- add a list of cloud storage services with logo-->
+          <div class="cloud-services">
+            <div class="cloud-service" onclick="window.open('https://www.aliyundrive.com', '_blank')">
+              <img src="img/cloudaliyundrive.png" alt="Aliyun Drive">
+              <div class="cloud-service-name">阿里云盘</div>
+            </div>
+            <div class="cloud-service" onclick="window.open('https://www.115.com', '_blank')">
+              <img src="img/cloud115.png" alt="115">
+              <div class="cloud-service-name">115</div>
+            </div>
+            <div class="cloud-service" onclick="window.open('https://cloud.189.cn', '_blank')">
+              <img src="img/cloud189.png" alt="189">
+              <div class="cloud-service-name">天翼云盘</div>
+            </div>
+            <!-- add more cloud services here -->
+          </div>
+
+          <style>
+            .cloud-services {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+              grid-gap: 1rem;
+            }
+
+            .cloud-service {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              background-color: #f5f5f5;
+              border-radius: 5px;
+              padding: 1rem;
+            }
+
+            .cloud-service img {
+              max-height: 50px;
+              max-width: 100%;
+            }
+
+            .cloud-service-name {
+              margin-top: 0.5rem;
+              font-size: 0.8rem;
+              text-align: center;
+            }
+          </style>
+
         </div>
       </div>
     </div>

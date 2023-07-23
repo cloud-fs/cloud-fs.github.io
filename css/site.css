@@ -113,3 +113,10 @@ footer p {
     padding: 3px 6px;
     border-radius: 50%;
 }
+
+.cloud-logo {
+    height: 50px;
+}
+.cloud-logo-text {
+    font-size: calc(1.5 * var（--cloud-logo-height）);
+}
