@@ -115,7 +115,7 @@ footer p {
 }
 
 .cloud-logo {
-    height: 50px;
+    height: 30px;
 }
 .cloud-logo-text {
     font-size: calc(1.5 * var（--cloud-logo-height）);
