@@ -127,7 +127,7 @@ sudo systemctl restart docker.service</code></pre><button class="copy-btn" oncli
         <pre><code class="language-yaml">version: "2.1"
 services:
   cloudnas:
-    image: cloudnas/clouddrive2-unstable
+    image: cloudnas/clouddrive2
     container_name: clouddrive2
     environment:
       - TZ=Asia/Shanghai
@@ -158,7 +158,7 @@ services:
     --pid host \
     --privileged \
     --device /dev/fuse:/dev/fuse \
-    cloudnas/clouddrive2-unstable
+    cloudnas/clouddrive2
 </code></pre><button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
       </div>
 
