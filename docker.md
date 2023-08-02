@@ -54,7 +54,7 @@ Docker-compose
     version: "2.1"
     services:
       cloudnas:
-        image: cloudnas/clouddrive2-unstable
+        image: cloudnas/clouddrive2
         container_name: clouddrive2
         environment:
            - TZ=Asia/Shanghai
@@ -94,7 +94,7 @@ docker cli
           --pid host \
          --privileged \
          --device /dev/fuse:/dev/fuse \
-         cloudnas/clouddrive2-unstable
+         cloudnas/clouddrive2
     
 
 Configuration
