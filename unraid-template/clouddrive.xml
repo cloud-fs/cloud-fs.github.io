@@ -1,0 +1,35 @@
+XML
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>CloudDrive</Name>
+  <Repository>cloudnas/clouddrive2</Repository>
+  <Registry>https://hub.docker.com/r/cloudnas/clouddrive2</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>true</Privileged>
+  <Support/>
+  <Project>https://www.clouddrive2.com/</Project>
+  <Overview>CloudDrive is a powerful multi-cloud drive management tool, providing users with a one-stop multi-cloud drive solution that includes local mounting of cloud drives</Overview>
+  <Category>Cloud:</Category>
+  <WebUI>http://[IP]:[PORT:19798]</WebUI>
+  <TemplateURL/>
+  <Icon>https://www.clouddrive2.com/img/clouddrive.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1693354630</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>add the following code to /boot/config/go&#xD;
+mkdir -p /etc/systemd/system/docker.service.d/&#xD;
+cat &amp;lt;&amp;lt;EOF &amp;gt; /etc/systemd/system/docker.service.d/clear_mount_propagation_flags.conf&#xD;
+[Service]&#xD;
+MountFlags=shared&#xD;
+EOF&#xD;
+systemctl restart docker.service</Requires>
+  <Config Name="Host Port 1" Target="19798" Default="" Mode="tcp" Description="" Type="Port" Display="always" Required="true" Mask="false">19798</Config>
+  <Config Name="Host Key 1" Target="CLOUDDRIVE_HOME" Default="" Mode="" Description="" Type="Variable" Display="always" Required="true" Mask="false">/mnt/clouddrive/config</Config>
+  <Config Name="Host Path 1" Target="/CloudNAS" Default="" Mode="rw,shared" Description="" Type="Path" Display="always" Required="true" Mask="false">/mnt/clouddrive/MountPoints</Config>
+  <Config Name="Host Device 1" Target="" Default="" Mode="" Description="" Type="Device" Display="always" Required="true" Mask="false">/dev/fuse</Config>
+</Container>
