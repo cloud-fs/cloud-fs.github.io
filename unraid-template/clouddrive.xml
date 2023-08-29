@@ -14,7 +14,7 @@ XML
   <Category>Cloud:</Category>
   <WebUI>http://[IP]:[PORT:19798]</WebUI>
   <TemplateURL/>
-  <Icon>https://www.clouddrive2.com/img/clouddrive.png</Icon>
+  <Icon>https://www.clouddrive2.com/img/clouddrive512.png</Icon>
   <ExtraParams/>
   <PostArgs/>
   <CPUset/>
