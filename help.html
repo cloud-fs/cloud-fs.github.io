@@ -157,7 +157,7 @@
               <li>安装完成后，您可以在桌面找到CloudDrive2快捷方式，双击快捷方式或者浏览器打开http://localhost:19798。</li>
             </ol>
 
-            <h3>Linux</h3>
+            <h3>Linux通用</h3>
             <ol>
               <li>如果Linux系统没有安装fuse3，请按照对应操作系统手册安装fuse3，安装好后确认fusermount3命令可以运行</li>
               <li>如果你需要以非root用户运行CloudDrive，请修改/etc/fuse.conf，确保user_allow_other这一行前面的注释符#已经被删除掉</li>
@@ -166,7 +166,8 @@
               <li>运行以下命令以展开 CloudDrive：<br><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz</code></li>
               <li>进入展开后的目录，运行<br><code>./clouddrive</code></li>
               <li>可以将clouddrive运行加入系统自启动，或者设置为系统服务，具体操作请参考操作系统帮助</li>
-            </ol>                      
+            </ol>
+            <h3>Arch Linux</h3>
             <ol>
               <li>Arch Linux 及其衍生版可以通过 AUR 包安装: <br><code>yay -Syu clouddrive</code></li>
               <li>通过 systemd 设置启动并开启自启：<br><code>systemctl enabele --now clouddrive</code></li>
