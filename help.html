@@ -166,6 +166,14 @@
               <li>运行以下命令以展开 CloudDrive：<br><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz</code></li>
               <li>进入展开后的目录，运行<br><code>./clouddrive</code></li>
               <li>可以将clouddrive运行加入系统自启动，或者设置为系统服务，具体操作请参考操作系统帮助</li>
+            </ol>                      
+            <ol>
+              <li>Arch Linux 及其衍生版可以通过 AUR 包安装: <br><code>yay -Syu clouddrive</code></li>
+              <li>通过 systemd 设置启动并开启自启：<br><code>systemctl enabele --now clouddrive</code></li>
+              <li>通过 systemd 查看运行状态：<br><code>systemctl status clouddrive</code></li>
+              <li>通过默认浏览器打开：<br><code>xdg-open http://localhost:19798</code><br><code>xdg-open http://127.0.0.1:19798</code><br><code>xdg-open http://[::]:19798</code></li>
+              <li>注意：浏览器打开慢或卡顿之类情况，请使用浏览器的无痕模式访问。</li>
+              <li>登录后挂载本地磁盘时设置 UID GID，获取当前用户 UID：<br><code>id -u</code><br>获取其他用户 UID：<br><code>id -u <username></code></li>
             </ol>
 
             <h3>macOS</h3>
