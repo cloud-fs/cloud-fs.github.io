@@ -172,9 +172,14 @@
               <li>Arch Linux 及其衍生版可以通过 AUR 包安装: <br><code>yay -Syu clouddrive</code></li>
               <li>通过 systemd 设置启动并开启自启：<br>root 权限:<code>systemctl enable --now clouddrive.service</code><br>用户权限:<code>systemctl --user enable --now clouddrive.service</code></li>
               <li>通过 systemd 查看运行状态：<br>root 权限:<code>systemctl status clouddrive.service</code><br>用户权限:<code>systemctl --user status clouddrive.service</code></li>
-              <li>通过默认浏览器打开：<br><code>xdg-open http://localhost:19798</code><br><code>xdg-open http://127.0.0.1:19798</code><br><code>xdg-open http://[::]:19798</code></li>
+              <li>通过默认浏览器打开：<br><code>xdg-open http://localhost:19798</code><br>IPv4:<code>xdg-open http://127.0.0.1:19798</code><br>IPv6:<code>xdg-open http://[::]:19798</code></li>
               <li>注意：浏览器打开慢或卡顿之类情况，请使用浏览器的无痕模式访问。</li>
-              <li>登录后挂载本地磁盘时设置 UID GID，获取当前用户 UID：<br><code>id -u</code><br>获取其他用户 UID：<br><code>id -u <i>username</i></code></li>
+
+
+
+
+
+              <li>登录后挂载本地磁盘时设置 UID GID，<br>获取当前用户 UID：<code>id -u</code><br>获取其他用户 UID：<code>id -u <i>username</i></code></li>
             </ol>
 
             <h3>macOS</h3>
