@@ -1,51 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Bootstrap Multiple Level Accordion Demo</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Page for [Your App Name]</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            color: #333;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .small-text {
+            font-size: 12px;
+            color: #333;
+        }
+        a {
+            color: #1a0dab;
+        }
+        .oauth-button {
+            background-color: #4285f4;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Bootstrap Multiple Level Accordion Demo</h2>
-  <div class="panel-group" id="accordion">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Level 1</a>
-        </h4>
-      </div>
-      <div id="collapse1" class="panel-collapse collapse in">
-        <div class="panel-body">
-          <div class="panel-group" id="accordion1">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h4 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion1" href="#collapse1-1">Level 2</a>
-                </h4>
-              </div>
-              <div id="collapse1-1" class="panel-collapse collapse in">
-                <div class="panel-body">Content for Level 2</div>
-              </div>
-            </div>
-          </div> 
-        </div>
-      </div>
+    <div class="section" style="text-align:center;">
+        <button class="oauth-button" onclick="openOAuthWindow()">
+            <img src="google-drive-icon.png" alt="Google Drive Icon" style="height: 20px; vertical-align: middle; margin-right: 5px;"/>
+            Connect to Google Drive
+        </button>
     </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Level 1</a>
-        </h4>
-      </div>
-      <div id="collapse2" class="panel-collapse collapse">
-        <div class="panel-body">Content for Level 1</div>
-      </div>
+
+    <div class="section">
+        <h2>Limited Use Policy Disclosure:</h2>
+        <p class="small-text">
+            ([Your App Name])’s use and transfer of information received from Google APIs will adhere to 
+            <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank">
+                Google API Services User Data Policy
+            </a>, including the Limited Use requirements.
+        </p>
     </div>
-  </div> 
+
+    <div class="section">
+        <h2>Google Play Developer Distribution Agreement:</h2>
+        <p class="small-text">
+            Our app, distributed on Google Play, is also in compliance with the 
+            <a href="https://play.google.com/about/developer-distribution-agreement.html" target="_blank">
+                Google Play Developer Distribution Agreement
+            </a>.
+        </p>
+    </div>
 </div>
+
+<script type="text/javascript">
+    function openOAuthWindow() {
+        // Your OAuth window opening logic
+        window.open('your-oauth-url', '_blank');
+    }
+</script>
 
 </body>
 </html>
