@@ -120,3 +120,21 @@ footer p {
 .cloud-logo-text {
     font-size: calc(1.5 * var（--cloud-logo-height）);
 }
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    .hero-title {
+        font-size: 24px;
+    }
+
+    .tagline {
+        font-size: 18px;
+    }
+
+    .alert {
+        font-size: 14px;
+    }
+}
