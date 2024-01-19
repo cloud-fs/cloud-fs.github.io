@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.6.3)</title>
+  <title>CloudDrive - 下载(v0.6.4)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -46,12 +46,23 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.6.3)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.6.4)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <div class="alert alert-warning" role="alert">
+        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.4"><strong>V0.6.4
+            (Web1.4.4.0):</strong></a>
+        <ol>
+          <li>自动备份的文件过滤规则增加包含文件夹选项，该选项选中后，规则对文件夹也生效，注意：对文件夹生效意味着源文件的任意一级父目录名如果匹配规则，该规则都会生效</li>
+          <li>增加备份日志，所有备份操作日志都会写入配置文件夹log目录下backup.<日期>的文件，可以自行查看，后续版本将会支持在前端显示备份日志</li>
+          <li>支持非root的Android设备选择本地文件夹，可用于本地和云盘互相复制，以及实现在非root的Android设备上完整的多云盘备份功能，非root设备仍然不支持本地文件系统挂载</li>
+          <li>扫描备份文件夹和批量跨盘复制文件时，优先处理最新的文件，提高处理效率</li>
+          <li>修复0.6.3版本115搜索功能失效的问题</li>
+          <li>修复0.6.3版本某些情况下服务可能会自动重启的问题</li>
+          <li>其它功能完善和bug修复</li>
+        </ol>
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.3"><strong>V0.6.3
-            (Web1.4.2.0):</strong></a>
+            (Web1.4.3.0):</strong></a>
         <ol>
           <li>自动备份支持计划任务：每个备份可以添加任意多条计划任务，每个计划任务可设定小时:分钟，默认每天会按设定的时间执行一遍完整扫描，也可选择每周哪几天执行</li>
           <li>阿里云盘：修复部分用户重启电脑后阿里云盘登录失效的问题</li>
@@ -95,7 +106,6 @@
           <li>修复0.6.0-beta发现的所有bug</li>
           <li>其它bug修复和性能改进</li>
         </ol>
-        <!--add a link to https://github.com/cloud-fs/cloud-fs.github.io/releases to get more version histories-->
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases">更多历史版本</a>
       </div>
     </div>
@@ -110,14 +120,13 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.3/CloudDrive2Setup-X64-0.6.3.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.4/CloudDrive2Setup-X64-0.6.4.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- Add more Windows versions if needed -->
       </div>
     </div>
 
@@ -132,7 +141,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.3/clouddrive-2-linux-x86_64-0.6.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.4/clouddrive-2-linux-x86_64-0.6.4.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -146,7 +155,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.3/clouddrive-2-linux-aarch64-0.6.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.4/clouddrive-2-linux-aarch64-0.6.4.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -160,7 +169,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.3/clouddrive-2-linux-armv7-0.6.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.4/clouddrive-2-linux-armv7-0.6.4.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -182,7 +191,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.3/clouddrive-2-macos-x86_64-0.6.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.4/clouddrive-2-macos-x86_64-0.6.4.tgz"><i
                         class="fab fa-apple"></i> macOS x86_64</a></h5>
                 </div>
               </div>
@@ -196,7 +205,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.3/clouddrive-2-macos-aarch64-0.6.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.4/clouddrive-2-macos-aarch64-0.6.4.tgz"><i
                         class="fab fa-apple"></i> macOS aarch64</a></h5>
                 </div>
               </div>
@@ -218,7 +227,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.3/clouddrive-2-android-x86_64-0.6.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.4/clouddrive-2-android-x86_64-0.6.4.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -232,7 +241,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.3/clouddrive-2-android-aarch64-0.6.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.4/clouddrive-2-android-aarch64-0.6.4.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -246,7 +255,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.3/clouddrive-2-android-armv7-0.6.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.4/clouddrive-2-android-armv7-0.6.4.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
