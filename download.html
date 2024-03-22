@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.6.7)</title>
+  <title>CloudDrive - 下载(v0.6.8)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -46,19 +46,38 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.6.7)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.6.8)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <div class="alert alert-warning" role="alert">
+        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.8"><strong>V0.6.8
+            (Web1.4.8.1):</strong></a>
+        <ol>
+          <li>
+            支持OneDrive企业和组织账号登录。注意！升级到这个版本以后，通过老版本添加的OneDrive账号将无法使用，请在新版本重新添加一次OneDrive账号，并请注意Web版本应为1.4.8.1，如果Web版本没有更新，请清除浏览器缓存或者Ctrl-F5强制刷新，否则将无法添加OneDrive账号。
+          </li>
+          <li>阿里云盘的全盘搜索结果支持定位到原始目录</li>
+          <li>Google Drive的API请求限速每秒9次，避免API请求超速被Google限制</li>
+          <li>Google Drive支持检测因请求速度太快导致的服务器错误，并在等待后重试</li>
+          <li>修复macos版Finder访问某些包含韩文日文等特殊字符的文件无法打开的问题</li>
+          <li>修复macos和linux版在极个别情况下掉挂载的问题</li>
+          <li>修复macos和linux版在极个别情况下文件重命名失败的问题</li>
+          <li>修复极个别情况下系统异常重启的问题</li>
+          <li>Android app适配Android TV</li>
+          <li>Android安装包增加对x86_64架构的支持</li>
+          <li>其它性能改进、bug修复和界面微调</li>
+        </ol>
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.7"><strong>V0.6.7
-          (Web1.4.7.0):</strong></a>
-      <ol>
-        <li>正式发布Android apk安装包，支持Android 7及以上的系统，未root的设备具有除了本地挂载外CloudDrive2所有的功能，root设备可以本地挂载，运行时会提示是否已经root，以及建议的挂载点目录，apk版本会申请获取本地存储权限、后台运行权限和通知栏权限，在root设备上会申请root权限，请运行时按提示授权，否则某些功能将无法正常使用。</li>
-        <li>修复从跨网盘复制到百度网盘时，大文件会复制失败的问题</li>
-        <li>修复添加本地文件夹时如果和已有网盘目录同名时显示不正常的问题</li>
-        <li>修复通过web界面重命名时如果输入的内容为空会显示不正常的问题</li>
-        <li>其它bug修复</li>
-      </ol>
+            (Web1.4.7.0):</strong></a>
+        <ol>
+          <li>正式发布Android apk安装包，支持Android
+            7及以上的系统，未root的设备具有除了本地挂载外CloudDrive2所有的功能，root设备可以本地挂载，运行时会提示是否已经root，以及建议的挂载点目录，apk版本会申请获取本地存储权限、后台运行权限和通知栏权限，在root设备上会申请root权限，请运行时按提示授权，否则某些功能将无法正常使用。
+          </li>
+          <li>修复从跨网盘复制到百度网盘时，大文件会复制失败的问题</li>
+          <li>修复添加本地文件夹时如果和已有网盘目录同名时显示不正常的问题</li>
+          <li>修复通过web界面重命名时如果输入的内容为空会显示不正常的问题</li>
+          <li>其它bug修复</li>
+        </ol>
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.6"><strong>V0.6.6
             (Web1.4.5.0):</strong></a>
         <ol>
@@ -143,7 +162,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.7/CloudDrive2Setup-X64-0.6.7.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.8/CloudDrive2Setup-X64-0.6.8.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -164,7 +183,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.7/clouddrive-2-linux-x86_64-0.6.7.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.8/clouddrive-2-linux-x86_64-0.6.8.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -178,7 +197,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.7/clouddrive-2-linux-aarch64-0.6.7.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.8/clouddrive-2-linux-aarch64-0.6.8.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -192,7 +211,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.7/clouddrive-2-linux-armv7-0.6.7.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.8/clouddrive-2-linux-armv7-0.6.8.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -214,7 +233,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.7/clouddrive-2-macos-x86_64-0.6.7.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.8/clouddrive-2-macos-x86_64-0.6.8.tgz"><i
                         class="fab fa-apple"></i> macOS x86_64</a></h5>
                 </div>
               </div>
@@ -228,7 +247,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.7/clouddrive-2-macos-aarch64-0.6.7.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.8/clouddrive-2-macos-aarch64-0.6.8.tgz"><i
                         class="fab fa-apple"></i> macOS aarch64</a></h5>
                 </div>
               </div>
@@ -250,7 +269,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.7/clouddrive-2-android-universal-0.6.7.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.8/clouddrive-2-android-universal-0.6.8.apk"><i
                         class="fab fa-android"></i> Android apk</a></h5>
                 </div>
               </div>
@@ -264,7 +283,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.7/clouddrive-2-android-x86_64-0.6.7.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.8/clouddrive-2-android-x86_64-0.6.8.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -278,7 +297,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.7/clouddrive-2-android-aarch64-0.6.7.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.8/clouddrive-2-android-aarch64-0.6.8.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -292,7 +311,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.7/clouddrive-2-android-armv7-0.6.7.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.8/clouddrive-2-android-armv7-0.6.8.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
