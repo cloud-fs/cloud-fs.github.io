@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.7.0)</title>
+  <title>CloudDrive - 下载(v0.7.1)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -46,23 +46,24 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.7.0)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.7.1)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <div class="alert alert-warning" role="alert">
         <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.7.0"><strong>0.7.0(Web1.5.0.3):</strong></a>
+          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.7.1"><strong>0.7.1(Web1.5.0.3):</strong></a>
         <ol>
-          <li>增加显示同账号下所有在线的clouddrive2终端信息，包括设备名称，操作系统，版本号和IP地址（仅支持0.7.0以上版本的终端），设备名称默认为系统主机名，可以在系统设置中修改设备名称，IP地址默认隐藏，可点击显示图标显示</li>
-          <li>增加踢出同账号下任意在线终端的功能，终端被踢出后将处于彻底退出状态，需要重新输入账号密码才能登录（仅支持踢出0.7.0以上版本的终端）</li>
-          <li>增加用户数据实时自动同步：clouddrive2终端，只要登录时打开了账号信息同步到云端，任意登录终端的云盘登录账号信息修改，都会实时自动同步到所有其它打开账号信息同步的在线终端（账号信息同步只能在0.7.0以上版本的clouddrive2终端之间进行，老版本更新的同步和被同步都不支持）</li>
-          <li>增加修改用户密码功能，在系统设置中可以修改用户密码。注意：在修改密码前，请把同账号下所有终端都升级到0.7.0，否则可能造成用户同步到云端的数据丢失。修改密码后所有在线终端都将强制下线，需要重新登录</li>
+          <li>增加显示同账号下所有在线的clouddrive2终端信息，包括设备名称，操作系统，版本号和IP地址（仅支持0.7.1以上版本的终端），设备名称默认为系统主机名，可以在系统设置中修改设备名称，IP地址默认隐藏，可点击显示图标显示</li>
+          <li>增加踢出同账号下任意在线终端的功能，终端被踢出后将处于彻底退出状态，需要重新输入账号密码才能登录（仅支持踢出0.7.1以上版本的终端）</li>
+          <li>增加用户数据实时自动同步：clouddrive2终端，只要登录时打开了账号信息同步到云端，任意登录终端的云盘登录账号信息修改，都会实时自动同步到所有其它打开账号信息同步的在线终端（账号信息同步只能在0.7.1以上版本的clouddrive2终端之间进行，老版本更新的同步和被同步都不支持）</li>
+          <li>增加修改用户密码功能，在系统设置中可以修改用户密码。注意：在修改密码前，请把同账号下所有终端都升级到0.7.1，否则可能造成用户同步到云端的数据丢失。修改密码后所有在线终端都将强制下线，需要重新登录</li>
           <li>优化下载缓存算法，修复个别情况下下载时内存占用一直升高的问题，修复mpv播放器通过web播放cd2的文件时，个别文件播放卡顿的问题</li>
           <li>所有网盘单文件最大缓存设置不低于128MB</li>
           <li>增加启动后自动运行外部程序设置：在配置目录下systemsettings.json里手动添加"run_after_start"项，可用于在clouddrive服务启动成功后自动执行一次指定的本机外部程序，修改完配置后重启服务生效。如：
             "run_after_start": "service nfsd restart"。注意：出于安全考虑，本功能默认不开启，如需开启，请在运行clouddrive前设置环境变量ENABLE_RUN_AFTER_START=true，只提供本地编辑配置文件实现，不支持通过web设置</li>
           <li>修复pikpak无法登录的问题</li>
           <li>修复天翼云盘无法上传文件的问题</li>
+          <li>修复0.7.0版本在更新可用时不在主界面显示通知的问题，0.7.0版本用户请在系统状态界面点击升级，以免错过后续版本更新</li>
           <li>其它性能改进和bug修复</li>
         </ol>
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases">更多历史版本</a>
@@ -79,7 +80,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/CloudDrive2Setup-X64-0.7.0.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.1/CloudDrive2Setup-X64-0.7.1.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -100,7 +101,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-linux-x86_64-0.7.0.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.1/clouddrive-2-linux-x86_64-0.7.1.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -114,7 +115,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-linux-aarch64-0.7.0.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.1/clouddrive-2-linux-aarch64-0.7.1.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -128,7 +129,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-linux-armv7-0.7.0.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.1/clouddrive-2-linux-armv7-0.7.1.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -150,7 +151,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-macos-x86_64-0.7.0.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.1/clouddrive-2-macos-x86_64-0.7.1.tgz"><i
                         class="fab fa-apple"></i> macOS x86_64</a></h5>
                 </div>
               </div>
@@ -164,7 +165,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-macos-aarch64-0.7.0.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.1/clouddrive-2-macos-aarch64-0.7.1.tgz"><i
                         class="fab fa-apple"></i> macOS aarch64</a></h5>
                 </div>
               </div>
@@ -186,7 +187,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-android-universal-0.7.0.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.1/clouddrive-2-android-universal-0.7.1.apk"><i
                         class="fab fa-android"></i> Android apk</a></h5>
                 </div>
               </div>
@@ -200,7 +201,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-android-x86_64-0.7.0.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.1/clouddrive-2-android-x86_64-0.7.1.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -214,7 +215,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-android-aarch64-0.7.0.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.1/clouddrive-2-android-aarch64-0.7.1.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -228,7 +229,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-android-armv7-0.7.0.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.1/clouddrive-2-android-armv7-0.7.1.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
