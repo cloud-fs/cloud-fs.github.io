@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.6.14)</title>
+  <title>CloudDrive - 下载(v0.7.0)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -46,187 +46,24 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.6.14)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.7.0)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <div class="alert alert-warning" role="alert">
         <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.14"><strong>0.6.14(Web1.4.14.0):</strong></a>
+          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.7.0"><strong>0.7.0(Web1.5.0.3):</strong></a>
         <ol>
-          <li>网盘文件名中含有挂载盘文件名非法字符时，重命名规则适配不同操作系统，Linux只处理'/'，macOS处理'/'和':'，Windows处理'/', '', ':', '*', '?', '"', '&lt;", '&gt;', '|'</li>
-          <li>阿里云盘：增加第三方权益状态提示（第三方权益包目前尚未上线，目前显示为n/a）</li>
-          <li>提高从网盘下载文件的速度，同时网盘设置的MaxReadLengthKB参数设置失效</li>
-          <li>修复前个版本某些情况下可能会上传文件卡死的问题</li>
-          <li>修复一个在很少见的情况下重启服务会丢失添加的本地文件夹的问题</li>
-          <li>其它bug修复和性能改进</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.13"><strong>0.6.13(Web1.4.13.0):</strong></a>
-        <ol>
-          <li>增加支持迅雷云盘，迅雷云盘支持离线下载。注意，因迅雷云盘API的原因，目前有有以下限制
-            <ul>&#8226;上传文件暂时不支持秒传</ul>
-            <ul>&#8226;因迅雷云盘需要绑定设备登录，所以迅雷云盘账号不支持云端同步，需要在每个运行CloudDrive2的设备上单独添加迅雷云盘账号</ul>
-            <ul>&#8226;暂时不支持在同网盘内一次移动多个文件和文件夹，每次只能移动一个文件或文件夹</ul>
-            <ul>&#8226;上述问题会在后面的版本中和迅雷一起解决</ul>
-          </li>
-          <li>修复OneDrive无法上传0字节文件的问题</li>
-          <li>根据阿里云盘的规则进行阿里云盘QPS控制，提升阿里云盘访问体验</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.12"><strong>0.6.12(Web1.4.11.0):</strong></a>
-        <ol>
-          <li>
-            修复0.6.11在网络状况不好情况下上传大文件可能失败的问题
-          </li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.11"><strong>0.6.11(Web1.4.11.0):</strong></a>
-        <ol>
-          <li>
-            增加全局上传下载限速功能，该功能是会员专享功能，会员可以在系统设置中分别设置全局上传和下载最大速度。注意：因大多数网盘都不支持流式上传，上传限速不是很精确
-          </li>
-          <li>
-            上传任务列表增加全局上传速度显示。注意：因大多数网盘都不支持流式上传，上传速度显示不是很精确
-          </li>
-          <li>
-            增加代理设置功能：可以在每个云盘设置界面为这个云盘单独设置代理，每个云盘Api代理和数据传输代理可以单独设置，不设置默认为操作系统的代理设置，可以改为无代理、http代理和socks5代理，http/socks5代理支持用户名密码
-          </li>
-          <li>
-            云盘设置界面移除ForceIPv4选项，强制使用ipv4功能不再支持
-          </li>
-          <li>
-            修复OneDrive超过200个文件的目录不能全部加载的bug
-          </li>
-          <li>修复123网盘高并发上传大量文件时会报错的问题</li>
-          <li>115和Google Drive的QPS流控更精确</li>
-          <li>修复添加某些第三方WebDAV服务后无法立刻访问文件内容，只有重启服务后才能访问的问题</li>
-          <li>Web界面在登录时，如果处于锁定状态，仍然可以通过发送邮件重置账号密码</li>
-          <li>其它bug修复和性能优化</li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.10"><strong>V0.6.10
-            (Web1.4.10.2):</strong></a>
-        <ol>
-          <li>
-            新增支持123云盘：123云盘支持离线下载（不支持下载到指定目录），全盘搜索（不支持在指定目录下搜索），123云盘非会员每天下载量有限额，详见123云盘官方网站；123云盘可以和天翼云盘互相快速秒传，百度网盘和Google
-            Drive可以快速秒传到123云盘
-          </li>
-          <li>
-            修复某些百度网盘文件迁移到123云盘和天翼云盘失败的问题
-          </li>
-          <li>
-            Android APK修复在某些机器上运行闪退的问题
-          </li>
-          <li>
-            docker版修复运行容器时不支持设置时区环境变量的问题
-          </li>
-          <li>
-            其它bug修复
-          </li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.9"><strong>V0.6.9
-            (Web1.4.8.1):</strong></a>
-        <ol>
-          <li>
-            修复OneDrive企业和组织账号无法上传文件的问题
-          </li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.8"><strong>V0.6.8
-            (Web1.4.8.1):</strong></a>
-        <ol>
-          <li>
-            支持OneDrive企业和组织账号登录。注意！升级到这个版本以后，通过老版本添加的OneDrive账号将无法使用，请在新版本重新添加一次OneDrive账号，并请注意Web版本应为1.4.8.1，如果Web版本没有更新，请清除浏览器缓存或者Ctrl-F5强制刷新，否则将无法添加OneDrive账号。
-          </li>
-          <li>阿里云盘的全盘搜索结果支持定位到原始目录</li>
-          <li>Google Drive的API请求限速每秒9次，避免API请求超速被Google限制</li>
-          <li>Google Drive支持检测因请求速度太快导致的服务器错误，并在等待后重试</li>
-          <li>修复macos版Finder访问某些包含韩文日文等特殊字符的文件无法打开的问题</li>
-          <li>修复macos和linux版在极个别情况下掉挂载的问题</li>
-          <li>修复macos和linux版在极个别情况下文件重命名失败的问题</li>
-          <li>修复极个别情况下系统异常重启的问题</li>
-          <li>Android app适配Android TV</li>
-          <li>Android安装包增加对x86_64架构的支持</li>
-          <li>其它性能改进、bug修复和界面微调</li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.7"><strong>V0.6.7
-            (Web1.4.7.0):</strong></a>
-        <ol>
-          <li>正式发布Android apk安装包，支持Android
-            7及以上的系统，未root的设备具有除了本地挂载外CloudDrive2所有的功能，root设备可以本地挂载，运行时会提示是否已经root，以及建议的挂载点目录，apk版本会申请获取本地存储权限、后台运行权限和通知栏权限，在root设备上会申请root权限，请运行时按提示授权，否则某些功能将无法正常使用。
-          </li>
-          <li>修复从跨网盘复制到百度网盘时，大文件会复制失败的问题</li>
-          <li>修复添加本地文件夹时如果和已有网盘目录同名时显示不正常的问题</li>
-          <li>修复通过web界面重命名时如果输入的内容为空会显示不正常的问题</li>
-          <li>其它bug修复</li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.6"><strong>V0.6.6
-            (Web1.4.5.0):</strong></a>
-        <ol>
-          <li>修复115上传大文件有概率无法成功反复重试的问题</li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.5"><strong>V0.6.5
-            (Web1.4.5.0):</strong></a>
-        <ol>
-          <li>修复备份文件时实时监控模式下有可能出现文件重复上传的问题</li>
-          <li>Web界面回到上层目录时默认选中最后一级访问的文件夹，在文件夹较多时方便定位上次的选择</li>
-          <li>修复Web版本更新后本地缓存不自动刷新，需要手动刷新的问题。该修复对今后的新Web版本有效，本次升级仍然可能需要手动刷新一次Web界面</li>
-          <li>提升Web界面响应速度</li>
-          <li>其它bug修复</li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.4"><strong>V0.6.4
-            (Web1.4.4.0):</strong></a>
-        <ol>
-          <li>自动备份的文件过滤规则增加包含文件夹选项，该选项选中后，规则对文件夹也生效，注意：对文件夹生效意味着源文件的任意一级父目录名如果匹配规则，该规则都会生效</li>
-          <li>增加备份日志，所有备份操作日志都会写入配置文件夹log目录下backup.<日期>的文件，可以自行查看，后续版本将会支持在前端显示备份日志</li>
-          <li>支持非root的Android设备选择本地文件夹，可用于本地和云盘互相复制，以及实现在非root的Android设备上完整的多云盘备份功能，非root设备仍然不支持本地文件系统挂载</li>
-          <li>扫描备份文件夹和批量跨盘复制文件时，优先处理最新的文件，提高处理效率</li>
-          <li>修复0.6.3版本115搜索功能失效的问题</li>
-          <li>修复0.6.3版本某些情况下服务可能会自动重启的问题</li>
-          <li>其它功能完善和bug修复</li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.3"><strong>V0.6.3
-            (Web1.4.3.0):</strong></a>
-        <ol>
-          <li>自动备份支持计划任务：每个备份可以添加任意多条计划任务，每个计划任务可设定小时:分钟，默认每天会按设定的时间执行一遍完整扫描，也可选择每周哪几天执行</li>
-          <li>阿里云盘：修复部分用户重启电脑后阿里云盘登录失效的问题</li>
-          <li>115：修复列目录时第三方客户端删除改目录后，115会返回根目录内容，导致结果异常的问题</li>
-          <li>115：修复个别文件无法下载的问题</li>
-          <li>WebUI从.net 8退回.net 7，解决0.6.0开始一些老版本浏览器不兼容的问题</li>
-          <li>其它性能优化、界面微调、bug修复</li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.2"><strong>V0.6.2
-            (Web1.4.2.0):</strong></a>
-        <ol>
-          <li>天翼云盘支持家庭共享盘</li>
-          <li>解决天翼云盘容易掉登录的问题
-            <ul>注意：天翼云盘数据格式有变化，请已经添加过天翼云盘的用户重新扫码添加，否则看不到家庭共享盘，并且还可能掉登录</ul>
-          </li>
-          <li>Google Drive支持团队盘和共享盘写操作，包括创建目录、删除、重命名、移动和上传文件</li>
-          <li>自动备份：修复macOS下用Finder删除备份盘源文件夹的文件时目标文件夹没有相应动作的问题</li>
-          <li>修复某些情况下本地文件上传结束后未正确关闭，导致本地文件不释放，本地文件无法删除或者修改的问题</li>
-          <li>WebUI：隐藏因为操作太快导致的错误信息窗口</li>
-          <li>WebUI：选择本地和远程文件夹窗口按文件名排序，Unix系统下方便查找</li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.6.0"><strong>V0.6.0
-            (Web1.4.1.0):</strong></a>
-        <ol>
-          <li>多云盘备份：
-            <ul>&#8226;多云盘备份是Pro功能，只有CloudDrive2的付费会员可用</ul>
-            <ul>&#8226;用户可指定任意一个本地或者网盘文件夹作为源文件夹，指定多个本地或网盘文件夹作为目的文件夹添加备份，可以添加任意多条备份，每条备份都有是否生效开关，每个目的文件夹都有是否生效开关</ul>
-            <ul>
-              &#8226;如需备份本地文件夹，需要先在CloudDrive的Web界面中添加本地文件夹，对添加的本地文件夹设置。用户仍然可以直接在本地盘操作文件，任何修改都会及时备份，不一定需要进入CloudDrive挂载的文件夹里操作
-            </ul>
-            <ul>&#8226;添加备份时可指定备份规则，备份规则包括 1. 文件删除规则：源文件删除时目标文件夹中的文件可选择保留/彻底删除(目前仅阿里云盘支持，其它盘选择此选项等同于回收站)/回收站/移动到历史版本文件夹；
-            </ul>
-          </li>
-          <li>支持从云盘迁移文件到本地目录</li>
-          <li>上传任务列表中点击暂停任务可暂停正在预处理和正在上传的任务</li>
-          <li>上传任务列表中预处理状态显示完成进度</li>
-          <li>修复百度网盘向其它网盘迁移时，如果不能秒传，有一定概率会出错的问题</li>
-          <li>改进网盘文件名中含有本地文件系统非法字符的重命名规则，非法字符将统一被转换为对应的中文全角字符</li>
-          <li>Web界面修复Firefox浏览器无法下载文件的bug</li>
-          <li>Web界面修复无法直接打开txt, pdf等文件的bug</li>
-          <li>修复0.6.0-beta发现的所有bug</li>
-          <li>其它bug修复和性能改进</li>
+          <li>增加显示同账号下所有在线的clouddrive2终端信息，包括设备名称，操作系统，版本号和IP地址（仅支持0.7.0以上版本的终端），设备名称默认为系统主机名，可以在系统设置中修改设备名称，IP地址默认隐藏，可点击显示图标显示</li>
+          <li>增加踢出同账号下任意在线终端的功能，终端被踢出后将处于彻底退出状态，需要重新输入账号密码才能登录（仅支持踢出0.7.0以上版本的终端）</li>
+          <li>增加用户数据实时自动同步：clouddrive2终端，只要登录时打开了账号信息同步到云端，任意登录终端的云盘登录账号信息修改，都会实时自动同步到所有其它打开账号信息同步的在线终端（账号信息同步只能在0.7.0以上版本的clouddrive2终端之间进行，老版本更新的同步和被同步都不支持）</li>
+          <li>增加修改用户密码功能，在系统设置中可以修改用户密码。注意：在修改密码前，请把同账号下所有终端都升级到0.7.0，否则可能造成用户同步到云端的数据丢失。修改密码后所有在线终端都将强制下线，需要重新登录</li>
+          <li>优化下载缓存算法，修复个别情况下下载时内存占用一直升高的问题，修复mpv播放器通过web播放cd2的文件时，个别文件播放卡顿的问题</li>
+          <li>所有网盘单文件最大缓存设置不低于128MB</li>
+          <li>增加启动后自动运行外部程序设置：在配置目录下systemsettings.json里手动添加"run_after_start"项，可用于在clouddrive服务启动成功后自动执行一次指定的本机外部程序，修改完配置后重启服务生效。如：
+            "run_after_start": "service nfsd restart"。注意：出于安全考虑，本功能默认不开启，如需开启，请在运行clouddrive前设置环境变量ENABLE_RUN_AFTER_START=true，只提供本地编辑配置文件实现，不支持通过web设置</li>
+          <li>修复pikpak无法登录的问题</li>
+          <li>修复天翼云盘无法上传文件的问题</li>
+          <li>其它性能改进和bug修复</li>
         </ol>
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases">更多历史版本</a>
       </div>
@@ -242,7 +79,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.14/CloudDrive2Setup-X64-0.6.14.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/CloudDrive2Setup-X64-0.7.0.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -263,7 +100,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.14/clouddrive-2-linux-x86_64-0.6.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-linux-x86_64-0.7.0.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -277,7 +114,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.14/clouddrive-2-linux-aarch64-0.6.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-linux-aarch64-0.7.0.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -291,7 +128,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.14/clouddrive-2-linux-armv7-0.6.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-linux-armv7-0.7.0.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -313,7 +150,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.14/clouddrive-2-macos-x86_64-0.6.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-macos-x86_64-0.7.0.tgz"><i
                         class="fab fa-apple"></i> macOS x86_64</a></h5>
                 </div>
               </div>
@@ -327,7 +164,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.14/clouddrive-2-macos-aarch64-0.6.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-macos-aarch64-0.7.0.tgz"><i
                         class="fab fa-apple"></i> macOS aarch64</a></h5>
                 </div>
               </div>
@@ -349,7 +186,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.14/clouddrive-2-android-universal-0.6.14.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-android-universal-0.7.0.apk"><i
                         class="fab fa-android"></i> Android apk</a></h5>
                 </div>
               </div>
@@ -363,7 +200,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.14/clouddrive-2-android-x86_64-0.6.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-android-x86_64-0.7.0.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -377,7 +214,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.14/clouddrive-2-android-aarch64-0.6.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-android-aarch64-0.7.0.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -391,7 +228,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.6.14/clouddrive-2-android-armv7-0.6.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.0/clouddrive-2-android-armv7-0.7.0.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
