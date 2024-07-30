@@ -51,7 +51,7 @@
     <div class="container">
       <div class="alert alert-warning" role="alert">
         <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.7.10"><strong>0.7.9(Web1.5.7.1):</strong></a>
+          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.7.10"><strong>0.7.10(Web1.5.7.1):</strong></a>
         <ol>
           <li>Web界面增加文件复制功能：点击复制按钮，可以在同盘内或者跨盘快速复制文件。跨盘复制的功能和原来的移动/复制到...按钮功能完全一致，后面版本会把移动和复制完全分开；同网盘内复制功能优先调用网盘API实现快速复制，目前123网盘API不支持复制，所以123网盘内复制和跨盘复制功能一样，由CloudDrive2遍历复制的文件夹采用秒传方式实现；因为无法确定WebDAV Server是否支持复制接口，所以添加的WebDAV网盘也采用由CloudDrive2遍历复制的文件夹上传文件的方式实现；因API限制，Google Drive的同盘内复制只支持文件复制，不支持文件夹复制</li>
           <li>WebDAV Server支持文件复制接口</li>
