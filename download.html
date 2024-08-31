@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.7.13)</title>
+  <title>CloudDrive - 下载(v0.7.14)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -46,14 +46,27 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.7.13)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.7.14)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <div class="alert alert-warning" role="alert">
         <a
+          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.7.14"><strong>0.7.14(Web1.5.12.0):</strong></a>
+        <ol>
+          <li>
+            系统设置界面增加日志级别调整，日志分为Trace、Debug、Info、Warn、Error共5个级别，默认为Error级别，可以单独为文件日志、终端日志、备份日志设置日志级别
+          </li>
+          <li>系统设置界面可以打开日志文件列表，可以浏览或下载日志文件</li>
+          <li>更详细的文件操作日志，打开Info级别日志后可以看到详细的文件操作日志</li>
+          <li>修复打开目录缓存本地持久化和永久缓存后移动文件有小概率文件丢失的问题</li>
+          <li>其它bug修复、性能改进和界面微调</li>
+        </ol>
+        <a
           href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.7.13"><strong>0.7.13(Web1.5.10.0):</strong></a>
         <ol>
-          <li>根据115的新规则，修复频繁访问115网盘会被风控的问题，115的MaxQueriesPerSecond默认值和最大值都将被自动限定为4。注意，请不要同时在多个同账户的CD2终端上频繁访问同一个115网盘，否则还有可能被风控</li>
+          <li>
+            根据115的新规则，修复频繁访问115网盘会被风控的问题，115的MaxQueriesPerSecond默认值和最大值都将被自动限定为4。注意，请不要同时在多个同账户的CD2终端上频繁访问同一个115网盘，否则还有可能被风控
+          </li>
           <li>因PikPak官方调整，暂时移除PikPak支持，需要使用PikPak网盘的用户，请在官方页面打开WebDAV功能，用CloudDrive2的WebDAV连接使用</li>
           <li>修复在线更新各种不稳定的问题，当前的版本如果无法在线更新，请先手动安装新版本，后续版本更新会更加稳定</li>
           <li>修复打开目录缓存本地持久化之后的一些不稳定和死锁的bug</li>
@@ -64,7 +77,9 @@
         <a
           href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.7.12"><strong>0.7.12(Web1.5.9.0):</strong></a>
         <ol>
-          <li>Web界面文件属性页增加深度清除缓存按钮，点击该按钮后，当前目录包括所有各级子目录的本地缓存都将被强制过期，下次访问时会强制先去网盘获取最新文件。当设置了永久目录缓存（缓存时间为0秒）或很长时间目录缓存时，如果需要局部及时刷新某个目录及其所有子目录，可以点击该按钮</li>
+          <li>
+            Web界面文件属性页增加深度清除缓存按钮，点击该按钮后，当前目录包括所有各级子目录的本地缓存都将被强制过期，下次访问时会强制先去网盘获取最新文件。当设置了永久目录缓存（缓存时间为0秒）或很长时间目录缓存时，如果需要局部及时刷新某个目录及其所有子目录，可以点击该按钮
+          </li>
           <li>修复某些情况下在设置永久缓存并且打开目录缓存本地持久化时，移动文件后需要点击刷新才能看见的问题</li>
           <li>其它界面问题修复</li>
         </ol>
@@ -199,7 +214,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.13/CloudDrive2Setup-X64-0.7.13.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.14/CloudDrive2Setup-X64-0.7.14.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -220,7 +235,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.13/clouddrive-2-linux-x86_64-0.7.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.14/clouddrive-2-linux-x86_64-0.7.14.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -234,7 +249,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.13/clouddrive-2-linux-aarch64-0.7.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.14/clouddrive-2-linux-aarch64-0.7.14.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -248,7 +263,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.13/clouddrive-2-linux-armv7-0.7.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.14/clouddrive-2-linux-armv7-0.7.14.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -270,7 +285,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.13/clouddrive-2-macos-x86_64-0.7.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.14/clouddrive-2-macos-x86_64-0.7.14.tgz"><i
                         class="fab fa-apple"></i> macOS x86_64</a></h5>
                 </div>
               </div>
@@ -284,7 +299,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.13/clouddrive-2-macos-aarch64-0.7.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.14/clouddrive-2-macos-aarch64-0.7.14.tgz"><i
                         class="fab fa-apple"></i> macOS aarch64</a></h5>
                 </div>
               </div>
@@ -306,7 +321,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.13/clouddrive-2-android-universal-0.7.13.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.14/clouddrive-2-android-universal-0.7.14.apk"><i
                         class="fab fa-android"></i> Android apk</a></h5>
                 </div>
               </div>
@@ -320,7 +335,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.13/clouddrive-2-android-x86_64-0.7.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.14/clouddrive-2-android-x86_64-0.7.14.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -334,7 +349,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.13/clouddrive-2-android-aarch64-0.7.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.14/clouddrive-2-android-aarch64-0.7.14.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -348,7 +363,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.13/clouddrive-2-android-armv7-0.7.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.7.14/clouddrive-2-android-armv7-0.7.14.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
