@@ -159,8 +159,8 @@
 
             <h3>Linux 通用</h3>
             <ol>
-              <li>如果Linux系统没有安装fuse3，请按照对应操作系统手册安装fuse3，安装好后确认fusermount3命令可以运行</li>
-              <li>如果你需要以非root用户运行CloudDrive，请修改/etc/fuse.conf，确保user_allow_other这一行前面的注释符#已经被删除掉</li>
+              <li>确保你的Linux内核支持fuse，可以通过查看是否存在/dev/fuse来检查是否支持fuse，内核不支持fuse将无法挂载本地目录</li>
+              <li>如果你需要以非root用户运行CloudDrive，请按照对应操作系统手册安装fuse3，安装好后确认fusermount3命令可以运行，并修改/etc/fuse.conf，确保user_allow_other这一行前面的注释符#已经被删除掉</li>
               <li>访问我们的官方网站下载对应架构的CloudDrive。</li>
               <li>打开终端并导航到下载的安装包所在的目录。</li>
               <li>运行以下命令以展开 CloudDrive：<br><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz</code></li>
@@ -195,55 +195,13 @@
 
             <h3>Android</h3>
             <ol>
-              <li>TBD</li>
+              <li>下载后缀为.apk的安装包安装后执行</li>
+              <li>未root的系统将无法挂载本地文件系统，其它功能包括多云盘备份和WebDAV服务等仍然可以正常使用</li>
             </ol>
 
             <h3>Docker</h3>
             <a href="docker.html">Docker版本安装指南</a>
 
-            <h3>NAS</h3>
-            <div class="card-container">
-              <div class="card">
-                <div class="card-header">
-                  <h4>Synology</h4>
-                </div>
-                <div class="card-body">
-                  <p>您可以按照以下方式在Synology上安装CloudDrive：</p>
-                  <div class="alert alert-warning" role="alert">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <strong>注意：</strong>这些 NAS 插件由第三方提供，我们不保证其安全性和稳定性。
-                  </div>
-                  <ul>
-                    <li>使用Docker方式安装CloudDrive。</li>
-                    <li>使用第三方提供的插件安装CloudDrive。</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-header">
-                  <h4>QNAP</h4>
-                </div>
-                <div class="card-body">
-                  <p>您可以按照以下方式在QNAP上安装CloudDrive：</p>
-                  <div class="alert alert-warning" role="alert">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <strong>注意：</strong>这些 NAS 插件由第三方提供，我们不保证其安全性和稳定性。
-                  </div>
-                  <ul>
-                    <li>使用Docker方式安装CloudDrive。</li>
-                    <li>使用第三方提供的插件安装CloudDrive/li>
-                  </ul>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-header">
-                  <h4>其它</h4>
-                </div>
-                <div class="card-body">
-                  <p>如果您的设备支持安装Fuse 3，您可以按照Linux安装指南中的步骤安装CloudDrive。否则，您可以使用Docker方式安装CloudDrive。</p>
-                </div>
-              </div>
-            </div>
 
           </div>
         </div>
