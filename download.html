@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.8.2)</title>
+  <title>CloudDrive - 下载(v0.8.3)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -46,10 +46,16 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.8.2)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.8.3)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <div class="alert alert-warning" role="alert">
+        <a
+          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.3"><strong>0.8.3(Web1.6.1.0):</strong></a>
+        <ol>
+          <li>web界面的文件列表会根据当前所在目录下的文件变化自动更新</li>
+          <li>修复百度网盘的加密目录的子目录无法访问的问题</li>
+        </ol>
         <a
           href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.2"><strong>0.8.2(Web1.6.0.3):</strong></a>
         <ol>
@@ -72,12 +78,14 @@
             </ul>
             <ul>3) 选择根加密目录后可以在文件属性页点击锁定按钮来重新锁定目录，下次访问时需要重新输入密码解锁</ul>
             <ul>4) 通过CloudDrive2访问解锁后的加密文件和访问正常的文件完全相同，支持所有文件操作，可以随机读写文件，可以在线播放视频等，备份功能也可设置目的目录为解锁后的加密目录来实现加密备份</ul>
-            <ul>5) 从未加密的目录向解锁后的加密目录复制或者移动文件时，不支持快速传输，文件会被加密后复制到加密目录；从解锁后的加密目录向未加密目录复制或移动文件时，不支持快速传输，文件会被解密后复制到目标目录</ul>
+            <ul>5) 从未加密的目录向解锁后的加密目录复制或者移动文件时，不支持快速传输，文件会被加密后复制到加密目录；从解锁后的加密目录向未加密目录复制或移动文件时，不支持快速传输，文件会被解密后复制到目标目录
+            </ul>
             <ul>6) 如果需要快速秒传加密后的原始文件到其它目录，可以先将加密目录锁定，变成原始文件形态，再按传统的文件传输方式传输</ul>
             <ul>7)
               加密算法：文件名用AES加密后UTF8编码，保存到网盘的文件名长度限制和未加密的文件名基本一致，保存到本地文件夹的加密文件名长度可能受不同操作系统的限制；文件内容加密算法为chacha20-poly1305，文件名和文件内容的加密密钥都是创建文件时根据密码动态生成的，每个文件都不相同。加密算法是开源的，解密工具源代码：
               https://github.com/cloud-fs/clouddrive-decrypt</ul>
-            <ul>8) 为防止文件加密功能被滥用，保存到网盘的加密文件大小上限为200MB，超过此大小的加密文件将不予上传，保存到本地文件夹的加密文件不受此限制，网盘加密文件大小上限后续将会根据实际情况做出适当调整</ul>
+            <ul>8) 为防止文件加密功能被滥用，保存到网盘的加密文件大小上限为200MB，超过此大小的加密文件将不予上传，保存到本地文件夹的加密文件不受此限制，网盘加密文件大小上限后续将会根据实际情况做出适当调整
+            </ul>
           </li>
           <li>由于115网盘修改了上传文件接口，115网盘上传非秒传文件最大为20GB，不支持断点续传和多线程上传，秒传的文件不受此限制</li>
           <li>115网盘的MaxQueriesPerSecond最大值从4改为3，降低被风控的风险</li>
@@ -104,7 +112,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.2/CloudDrive2Setup-X64-0.8.2.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.3/CloudDrive2Setup-X64-0.8.3.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -125,7 +133,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.2/clouddrive-2-linux-x86_64-0.8.2.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.3/clouddrive-2-linux-x86_64-0.8.3.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -139,7 +147,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.2/clouddrive-2-linux-aarch64-0.8.2.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.3/clouddrive-2-linux-aarch64-0.8.3.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -153,7 +161,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.2/clouddrive-2-linux-armv7-0.8.2.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.3/clouddrive-2-linux-armv7-0.8.3.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -175,7 +183,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.2/clouddrive-2-macos-x86_64-0.8.2.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.3/clouddrive-2-macos-x86_64-0.8.3.tgz"><i
                         class="fab fa-apple"></i> macOS x86_64</a></h5>
                 </div>
               </div>
@@ -189,7 +197,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.2/clouddrive-2-macos-aarch64-0.8.2.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.3/clouddrive-2-macos-aarch64-0.8.3.tgz"><i
                         class="fab fa-apple"></i> macOS aarch64</a></h5>
                 </div>
               </div>
@@ -211,7 +219,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.2/clouddrive-2-android-universal-0.8.2.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.3/clouddrive-2-android-universal-0.8.3.apk"><i
                         class="fab fa-android"></i> Android apk</a></h5>
                 </div>
               </div>
@@ -225,7 +233,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.2/clouddrive-2-android-x86_64-0.8.2.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.3/clouddrive-2-android-x86_64-0.8.3.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -239,7 +247,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.2/clouddrive-2-android-aarch64-0.8.2.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.3/clouddrive-2-android-aarch64-0.8.3.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -253,7 +261,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.2/clouddrive-2-android-armv7-0.8.2.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.3/clouddrive-2-android-armv7-0.8.3.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
