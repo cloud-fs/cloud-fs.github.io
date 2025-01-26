@@ -19,3 +19,4 @@ cp CloudDrive2/Android-Arm/Beta/$VERSION/readme.txt CloudDrive2/Linux-X64/Beta/$
 cp CloudDrive2/Android-Arm/Beta/$VERSION/readme.txt CloudDrive2/Macos-Arm64/Beta/$VERSION/readme.txt
 cp CloudDrive2/Android-Arm/Beta/$VERSION/readme.txt CloudDrive2/Macos-X64/Beta/$VERSION/readme.txt
 cp CloudDrive2/Android-Arm/Beta/$VERSION/readme.txt CloudDrive2/Windows-X64/Beta/$VERSION/readme.txt
+cp CloudDrive2/Android-Arm/Beta/$VERSION/readme.txt CloudDrive2/Windows-Arm64/Beta/$VERSION/readme.txt
