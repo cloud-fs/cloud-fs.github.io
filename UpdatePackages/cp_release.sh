@@ -19,3 +19,4 @@ cp -r CloudDrive2/Linux-X64/Beta/$VERSION CloudDrive2/Linux-X64/Release/$VERSION
 cp -r CloudDrive2/Macos-Arm64/Beta/$VERSION CloudDrive2/Macos-Arm64/Release/$VERSION
 cp -r CloudDrive2/Macos-X64/Beta/$VERSION CloudDrive2/Macos-X64/Release/$VERSION
 cp -r CloudDrive2/Windows-X64/Beta/$VERSION CloudDrive2/Windows-X64/Release/$VERSION
+cp -r CloudDrive2/Windows-Arm64/Beta/$VERSION CloudDrive2/Windows-Arm64/Release/$VERSION
