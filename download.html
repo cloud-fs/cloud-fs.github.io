@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.8.6)</title>
+  <title>CloudDrive - 下载(v0.8.7)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -46,27 +46,41 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.8.6)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.8.7)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <div class="alert alert-warning" role="alert">
         <a
-        href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.6"><strong>0.8.6(Web1.6.9.1):</strong></a>
-      <ol>
-        <li> 改进和完善115网盘跨设备文件同步功能，同时为避免跨设备文件同步可能造成多终端同时访问115引起不必要的风控，自动跨设备同步功能默认关闭，如需自动同步，可以在115的文件夹属性页中打开监听网盘事件开关</li>
-        <li>优化115访问流程，降低被风控的风险，115的MaxQueriesPerSecond默认为1，最大可以设置到2，如果碰到被风控，请调低MaxQueriesPerSecond值</li>
-        <li>修复115用浏览器cookies登录列文件失败的问题</li>
-        <li>修复在个别情况下上传文件成功后本地缓存磁盘空间不会立即释放，需要重启服务才能释放的问题</li>
-        <li>修复个别情况下通过挂载目录向加密文件夹内拷贝文件或者编辑文件失败的问题</li>
-        <li>为了兼容更多的设备，WebUI框架从.net 9回退到.net 7</li>
-        <li>web界面支持macos下按command键实现多选操作，功能和Windows下用Ctrl键多选相同</li>
-        <li>其它性能改进、bug修复和界面微调</li>
-        <li>其它bug修复、性能优化和界面调整</li>
-      </ol>
+          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.7"><strong>0.8.7(Web1.6.11.0):</strong></a>
+        <ol>
+          <li>增加跨网盘移动功能：在原有跨网盘复制的基础上，增加跨网盘移动功能，去掉web界面的复制按钮，点击移动/复制按钮，选择目的文件夹后可选择是移动还是复制，跨网盘移动将会在全部文件上传成功后删除源网盘的文件和目录
+          </li>
+          <li>系统任务管理增加复制任务管理，显示正在进行的跨网盘复制或者移动任务的状态和进度，可以暂停或取消跨网盘复制/移动任务，在扫描源网盘过程中出现错误也会有相应错误信息显示</li>
+          <li>增加修改账号邮箱功能，可以在web界面的系统设置中修改账号邮箱，要求修改后的邮箱没有注册过CloudDrive2账号</li>
+          <li>增加对Windows Arm64系统的原生支持，不再支持Windows 7系统</li>
+          <li>修复115被风控后正在进行的上传任务可能会一直卡住的问题</li>
+          <li>修复本地文件夹内部复制功能不支持复制文件夹的问</li>
+          <li>其它bug修复和性能改进</li>
+        </ol>
+        <a
+          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.6"><strong>0.8.6(Web1.6.9.1):</strong></a>
+        <ol>
+          <li> 改进和完善115网盘跨设备文件同步功能，同时为避免跨设备文件同步可能造成多终端同时访问115引起不必要的风控，自动跨设备同步功能默认关闭，如需自动同步，可以在115的文件夹属性页中打开监听网盘事件开关</li>
+          <li>优化115访问流程，降低被风控的风险，115的MaxQueriesPerSecond默认为1，最大可以设置到2，如果碰到被风控，请调低MaxQueriesPerSecond值</li>
+          <li>修复115用浏览器cookies登录列文件失败的问题</li>
+          <li>修复在个别情况下上传文件成功后本地缓存磁盘空间不会立即释放，需要重启服务才能释放的问题</li>
+          <li>修复个别情况下通过挂载目录向加密文件夹内拷贝文件或者编辑文件失败的问题</li>
+          <li>为了兼容更多的设备，WebUI框架从.net 9回退到.net 7</li>
+          <li>web界面支持macos下按command键实现多选操作，功能和Windows下用Ctrl键多选相同</li>
+          <li>其它性能改进、bug修复和界面微调</li>
+          <li>其它bug修复、性能优化和界面调整</li>
+        </ol>
         <a
           href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.5"><strong>0.8.5(Web1.6.6.0):</strong></a>
         <ol>
-          <li>115网盘支持跨设备同步文件变更，该功能需要同时具有CloudDrive的VIP会员和115网盘的VIP会员。跨设备文件变更需要首先在115app中打开最近记录，CloudDrive2对115网盘的所有文件变更可以自动同步到所有同115账号的其它CloudDrive2上，同步成功后会发出文件变更通知，通过115官方浏览器和app对115网盘的上传文件和删除文件操作也可以自动同步，其它操作可以通过点击属性页的同步按钮手动同步文件变更。注意：因115网盘限制，以下变更不支持跨设备同步：1)离线下载；2)重命名文件(重命名文件夹支持)；3)网盘内拷贝文件(拷贝文件夹支持)；跨设备文件变更需要开启目录缓存本地持久化；跨设备文件变更可能存在遗漏，必要时可能需要在web界面手动刷新目录来实现完全同步</li>
+          <li>
+            115网盘支持跨设备同步文件变更，该功能需要同时具有CloudDrive的VIP会员和115网盘的VIP会员。跨设备文件变更需要首先在115app中打开最近记录，CloudDrive2对115网盘的所有文件变更可以自动同步到所有同115账号的其它CloudDrive2上，同步成功后会发出文件变更通知，通过115官方浏览器和app对115网盘的上传文件和删除文件操作也可以自动同步，其它操作可以通过点击属性页的同步按钮手动同步文件变更。注意：因115网盘限制，以下变更不支持跨设备同步：1)离线下载；2)重命名文件(重命名文件夹支持)；3)网盘内拷贝文件(拷贝文件夹支持)；跨设备文件变更需要开启目录缓存本地持久化；跨设备文件变更可能存在遗漏，必要时可能需要在web界面手动刷新目录来实现完全同步
+          </li>
           <li>115网盘支持转存115分享链接</li>
           <li>修复115网盘无法登录或者登录后无法进行创建文件夹、删除文件等操作的问题，需要重新添加一次115账号才能修复此类问题</li>
           <li>115网盘限制QPS最大为1.0，缓解115网盘风控的问题，原MAX_QPS_115环境变量取消，目前暂时不支持设置QPS超过1.0</li>
@@ -141,8 +155,22 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.6/CloudDrive2Setup-X64-0.8.6.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.7/CloudDrive2Setup-X64-0.8.7.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Windows arm64 -->
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h5 class="card-title"><a
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.7/CloudDrive2Setup-Arm64-0.8.7.exe"><i
+                        class="fab fa-windows"></i> Windows Arm64</a></h5>
                 </div>
               </div>
             </div>
@@ -162,7 +190,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.6/clouddrive-2-linux-x86_64-0.8.6.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.7/clouddrive-2-linux-x86_64-0.8.7.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -176,7 +204,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.6/clouddrive-2-linux-aarch64-0.8.6.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.7/clouddrive-2-linux-aarch64-0.8.7.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -190,7 +218,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.6/clouddrive-2-linux-armv7-0.8.6.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.7/clouddrive-2-linux-armv7-0.8.7.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -212,7 +240,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.6/clouddrive-2-macos-x86_64-0.8.6.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.7/clouddrive-2-macos-x86_64-0.8.7.tgz"><i
                         class="fab fa-apple"></i> macOS x86_64</a></h5>
                 </div>
               </div>
@@ -226,7 +254,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.6/clouddrive-2-macos-aarch64-0.8.6.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.7/clouddrive-2-macos-aarch64-0.8.7.tgz"><i
                         class="fab fa-apple"></i> macOS aarch64</a></h5>
                 </div>
               </div>
@@ -248,7 +276,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.6/clouddrive-2-android-universal-0.8.6.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.7/clouddrive-2-android-universal-0.8.7.apk"><i
                         class="fab fa-android"></i> Android apk</a></h5>
                 </div>
               </div>
@@ -262,7 +290,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.6/clouddrive-2-android-x86_64-0.8.6.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.7/clouddrive-2-android-x86_64-0.8.7.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -276,7 +304,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.6/clouddrive-2-android-aarch64-0.8.6.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.7/clouddrive-2-android-aarch64-0.8.7.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -290,7 +318,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.6/clouddrive-2-android-armv7-0.8.6.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.7/clouddrive-2-android-armv7-0.8.7.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
