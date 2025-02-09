@@ -102,7 +102,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light”">
       <div class="container">
         <a class="navbar-brand" href="index.html">
-          <img src="img/clouddrive-h.png" height="80">
+          <img alt="clouddrive" src="img/clouddrive-h.png" height="80">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -170,7 +170,7 @@
             <h3>Arch Linux</h3>
             <ol>
               <li><a href="https://repology.org/project/cloud-fs/versions"><img src="https://repology.org/badge/vertical-allrepos/cloud-fs.svg" alt="Packaging status"></a></li>
-              <li>Arch Linux 及其衍生版可以通过 <a href="https://aur.archlinux.org/packages/clouddrive" target="_blank">AUR 包</a>或<a href="https://github.com/taotieren/aur-repo" target="_blank">自建源</a>安装: <br><code>yay -Syu clouddrive</code></li>
+              <li>Arch Linux 及其衍生版可以通过 <a href="https://aur.archlinux.org/packages/clouddrive" target="_blank" rel="noopener">AUR 包</a>或<a href="https://github.com/taotieren/aur-repo" target="_blank" rel="noopener">自建源</a>安装: <br><code>yay -Syu clouddrive</code></li>
               <li>通过 systemd 设置 clouddrive 启动并开启自启：<br>root 权限: <code>systemctl enable --now clouddrive.service</code><br>用户权限: <code>systemctl --user enable --now clouddrive.service</code></li>
               <li>通过 systemd 查看 clouddrive 运行状态：<br>root 权限: <code>systemctl status clouddrive.service</code><br>用户权限: <code>systemctl --user status clouddrive.service</code></li>
               <li>通过默认浏览器打开：<br>推荐：<code>xdg-open http://localhost:19798</code><br>IPv4: <code>xdg-open http://127.0.0.1:19798</code><br>IPv6: <code>xdg-open http://[::]:19798</code></li>
@@ -184,8 +184,23 @@
             </ol>
 
             <h3>macOS</h3>
+            <h4>Homebrew(推荐)</h4>
             <ol>
-              <li>运行前请确保系统已安装<a href="https://osxfuse.github.io/" target="_blank">macFUSE</a>，并已按照提示正确设置权限</li>
+              <li>确保你的macOS已安装<a href="https://brew.sh/" target="_blank" rel="noopener noreferrer">Homebrew</a></li>
+              <li>运行前请确保系统已安装<a href="https://osxfuse.github.io/" target="_blank" rel="noopener noreferrer">macFUSE</a>，并已按照提示正确设置权限。或者通过brew命令安装macFUSE<br><code>brew install --cask macfuse</code></li>
+              <li>运行以下命令安装CloudDrive：<br>
+                <code>brew tap cloud-fs/clouddrive2</code><br>
+                <code>brew install clouddrive2</code>
+              </li>
+              <li>运行以下命令启动CloudDrive：<br><code>brew services start clouddrive2</code><br>运行成功后将会自动创建后台服务并且下次登录会自动运行</li>
+              <li>启动成功后用浏览器打开<a href="http://localhost:19798" target="_blank" rel="noopener noreferrer">http://localhost:19798</a>进入管理配置界面</li>
+              <li>运行以下命令停止CloudDrive：<br><code>brew services stop clouddrive2</code></li>
+              <li>运行以下命令卸载CloudDrive：<br><code>brew services stop clouddrive2<br>brew uninstall clouddrive2</code></li>
+              <li>运行以下命令更新CloudDrive： <br><code>brew services stop clouddrive2<br>brew update<br>brew upgrade clouddrive2<br>brew services start clouddrive2</code></li>
+            </ol>
+            <h4>手动安装</h4>
+            <ol>
+              <li>运行前请确保系统已安装<a href="https://osxfuse.github.io/" target="_blank" rel="noopener">macFUSE</a>，并已按照提示正确设置权限</li>
               <li>访问我们的官方网站下载对应架构的CloudDrive。</li>
               <li>打开终端并导航到下载的安装包所在的目录。</li>
               <li>运行以下命令以展开 CloudDrive：<br><code>tar zxvf clouddrive-2-macos-$ARCH-$VERSION.tgz</code></li>
