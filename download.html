@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.8.15)</title>
+  <title>CloudDrive - 下载(v0.8.16)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -46,10 +46,27 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.8.15)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.8.16)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <div class="alert alert-warning" role="alert">
+        <a
+          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.16"><strong>0.8.16(Web1.6.19.0):</strong></a>
+        <ol>
+          <li>移除原115网盘的支持，请原115网盘用户全部迁移到115open，如需保持挂载的115网盘目录，可以在移除原115、添加115open之后重命名115open文件夹为老的115目录名</li>
+          <li>115open支持离线下载功能</li>
+          <li>115open支持网页授权，网页授权比二维码授权更安全，推荐使用。网页授权时可以放心使用115账号密码登录，不会影响其它115终端的登录状态。目前115open的授权规则是一个应用最多可以授权两次，第三次授权将会使第一次授权失效，按此规则一个115账号最多可以给2个通过云端数据同步的CloudDrive账号授权</li>
+          <li>修复115open在使用同一个CloudDrive账号，通过CloudDrive云端数据同步功能，在多个终端使用时可能出现的一些token失效的问题</li>
+          <li>修复多云盘备份的文件过滤规则中包含白名单规则时可能不备份某些文件的问题</li>
+          <li>macos的挂载管理支持修改uid/git/权限，支持修改挂载的盘符类型</li>
+          <li>修复macos在个别情况下当文件名中包含特殊字符时，挂载盘列文件不全、上传文件重复等问题，更新后如果碰到有文件无法打开，可能需要手动刷新一下目录缓存</li>
+          <li>在线更新功能增加对下载后的安装包进行校验，校验失败会重新下载，避免更新失败</li>
+          <li>修复一个可能会造成首次在线更新失败，需要第二次点击更新才能成功的问题</li>
+          <li>在线更新成功后会自动刷新页面，并且自动将web版本更新到最新版</li>
+          <li>系统任务管理增加全局暂停/恢复自动刷新按钮，暂停后将不再自动刷新任务列表，方便查看某个时刻的系统任务详细信息</li>
+          <li>上传任务列表修复多选框会因为任务刷新而导致的选择紊乱的问题，改进上传任务列表管理的用户体验，增加上传任务总字节数和总完成数，显示总体上传进度条，每个上传任务也显示上传进度条</li>
+          <li>其它性能改进、bug修复和界面优化</li>
+        </ol>
         <a
           href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.15"><strong>0.8.15(Web1.6.17.2):</strong></a>
         <ol>
@@ -231,7 +248,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.15/CloudDrive2Setup-X64-0.8.15.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.16/CloudDrive2Setup-X64-0.8.16.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -245,7 +262,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.15/CloudDrive2Setup-Arm64-0.8.15.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.16/CloudDrive2Setup-Arm64-0.8.16.exe"><i
                         class="fab fa-windows"></i> Windows Arm64</a></h5>
                 </div>
               </div>
@@ -266,7 +283,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.15/clouddrive-2-linux-x86_64-0.8.15.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.16/clouddrive-2-linux-x86_64-0.8.16.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -280,7 +297,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.15/clouddrive-2-linux-aarch64-0.8.15.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.16/clouddrive-2-linux-aarch64-0.8.16.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -294,7 +311,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.15/clouddrive-2-linux-armv7-0.8.15.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.16/clouddrive-2-linux-armv7-0.8.16.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -316,7 +333,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.15/clouddrive-2-macos-x86_64-0.8.15.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.16/clouddrive-2-macos-x86_64-0.8.16.tgz"><i
                         class="fab fa-apple"></i> macOS x86_64</a></h5>
                 </div>
               </div>
@@ -330,7 +347,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.15/clouddrive-2-macos-aarch64-0.8.15.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.16/clouddrive-2-macos-aarch64-0.8.16.tgz"><i
                         class="fab fa-apple"></i> macOS aarch64</a></h5>
                 </div>
               </div>
@@ -352,7 +369,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.15/clouddrive-2-android-universal-0.8.15.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.16/clouddrive-2-android-universal-0.8.16.apk"><i
                         class="fab fa-android"></i> Android apk</a></h5>
                 </div>
               </div>
@@ -366,7 +383,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.15/clouddrive-2-android-x86_64-0.8.15.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.16/clouddrive-2-android-x86_64-0.8.16.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -380,7 +397,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.15/clouddrive-2-android-aarch64-0.8.15.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.16/clouddrive-2-android-aarch64-0.8.16.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -394,7 +411,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.15/clouddrive-2-android-armv7-0.8.15.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.16/clouddrive-2-android-armv7-0.8.16.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
