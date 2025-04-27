@@ -51,10 +51,13 @@
     <ul>
       <li>用户的电子邮件地址</li>
       <li>用户的云存储账户ID</li>
+      <li>云存储刷新令牌和访问令牌（经用户授权）</li>
     </ul>
-    <p>其他云存储数据，包括但不限于cookie、会话密钥、刷新令牌、访问令牌等，这些数据将被加密，CloudDrive不会收集这些数据，也没有任何解密的方法。</p>
+    <p>
+      通过使用CloudDrive，用户明确授权CloudDrive在服务器端存储云存储的刷新令牌和访问令牌，仅用于在需要时刷新访问令牌。所有收集的数据将被加密，CloudDrive不会将这些令牌用于除刷新授权云存储服务访问之外的任何目的。除法律要求外，未经用户同意，CloudDrive不会与第三方共享或出售任何用户数据。
+    </p>
     <p>4.3
-      数据安全：CloudDrive将采取合理的安全措施，保护用户数据的安全性和机密性。用户的网盘登录数据在云端同步时，将使用用户设置的密码进行加密，CloudDrive不保存用户密码明文或者可解密的密文，只保留密码的哈希。因此，CloudDrive没有任何可能性可以解密用户同步到云端的网盘登录数据。
+      数据安全：CloudDrive将采取合理的安全措施，保护用户数据的安全性和机密性。在存储用户的云存储令牌和登录数据时，数据将被加密。CloudDrive不保存用户密码明文或者可解密的密文，只保留密码的哈希。CloudDrive采用严格的安全协议保护存储的令牌，并且只会使用它们来维持对用户云存储服务的授权访问。
     </p>
 
     <h3>5. 免责声明</h3>
@@ -111,24 +114,28 @@
 
     <h3>4. Privacy and Data Security</h3>
     <p>4.1 Privacy Policy: Users are required to comply with CloudDrive's privacy policy when using the service. The
-      privacy policy outlines how CloudDrive collects, uses, and protects users' personal information, including 
+      privacy policy outlines how CloudDrive collects, uses, and protects users' personal information, including
       the following data:</p>
     <ul>
       <li>User's email address</li>
       <li>User's cloud storage user ID</li>
+      <li>Cloud storage refresh tokens and access tokens (with user authorization)</li>
     </ul>
-    <p>Other cloud storage data including but not limited to cookies, session keys, refresh tokens, access tokens, etc. These data will be encrypted and CloudDrive will not collect or have any means to decrypt them..</p>
     <p>4.2 Data Collection Policy: CloudDrive will collect the above-mentioned data to provide the service and improve
+      the user experience. By using CloudDrive, users explicitly authorize CloudDrive to store cloud storage refresh
+      tokens
+      and access tokens on CloudDrive's server side for the sole purpose of refreshing access tokens when needed. All
+      data
+      collected will be encrypted, and CloudDrive will not use these tokens for any purpose other than refreshing access
+      to
+      the authorized cloud storage services. CloudDrive will not share or sell any user data to third parties without
       the
-      user experience. All data collected will be encrypted and CloudDrive will not be able to decrypt them. CloudDrive
-      will not share or sell any user data to third parties without the user's consent, except as required by law.</p>
+      user's consent, except as required by law.</p>
     <p>4.3 Data Security: CloudDrive will implement reasonable security measures to protect the security and
-      confidentiality
-      of user data. When syncing user's login data to the cloud, the data will be encrypted using the password set by
-      the
-      user. CloudDrive does not store the user's password in plain text or any decryptable form. Only the hash of the
-      password is retained. Therefore, CloudDrive has no means to decrypt the user's synced login data stored in the
-      cloud.</p>
+      confidentiality of user data. When storing user's cloud storage tokens and login data, the data will be encrypted.
+      CloudDrive does not store the user's password in plain text or any decryptable form. Only the hash of the
+      password is retained. CloudDrive has strict security protocols to protect stored tokens and will only use them to
+      maintain authorized access to users' cloud storage services.</p>
 
     <h3>5. Disclaimer of Liability</h3>
     <p>5.1 CloudDrive is a tool for managing multiple cloud storage services but does not provide actual cloud
