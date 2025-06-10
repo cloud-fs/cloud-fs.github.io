@@ -521,10 +521,61 @@
         </div>
       </div>
     </div>
+
+    <div class="feature-card" id="encrypted-filesystem">
+      <div class="feature-content">
+        <div class="feature-title">
+          <div class="icon-container">
+            <i class="fas fa-shield-alt"></i>
+            <div class="badge">Pro</div>
+          </div>加密文件系统
+        </div>
+        <div class="feature-description">
+          <div class="alert alert-warning" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>重要声明：</strong>使用加密功能时请务必遵守各网盘相关的用户协议，CloudDrive不对因滥用加密功能导致网盘账号被封承担任何责任。
+          </div>
+          
+          <p>CloudDrive的加密文件系统功能为用户提供了企业级的文件加密保护，确保敏感数据在云端存储时的绝对安全。</p>
+          
+          <h5><i class="fas fa-folder-plus"></i> 灵活的加密文件夹创建</h5>
+          <p>用户可以在任意网盘或添加到CloudDrive2的本地文件夹内任意位置创建任意多个加密文件夹。每个加密文件夹都可以设置独立的密码，创建时默认会在本机保存密码。如果选择不保存密码，CloudDrive2重启后需要重新输入密码才能正常访问该文件夹。</p>
+          
+          <h5><i class="fas fa-lock"></i> 强大的加密保护</h5>
+          <p>所有写入加密文件夹的文件，文件名和内容都会被加密保存到网盘或本地文件夹。密码只会在本地加密保存，不会同步到CloudDrive2的服务器。当你从不同地点登录同账号的CloudDrive2时，访问加密目录都需要重新输入密码来解锁。</p>
+          
+          <div class="alert alert-danger" role="alert">
+            <i class="fas fa-key"></i>
+            <strong>密码安全提醒：</strong>请务必记住设置的密码，如遗忘密码，文件将无法访问并且无法恢复。
+          </div>
+          
+          <h5><i class="fas fa-unlock-alt"></i> 便捷的访问控制</h5>
+          <p>选择根加密目录后可以在文件属性页点击锁定按钮来重新锁定目录，下次访问时需要重新输入密码解锁。通过CloudDrive2访问解锁后的加密文件和访问正常的文件完全相同，支持所有文件操作，可以随机读写文件，可以在线播放视频等。</p>
+          
+          <h5><i class="fas fa-copy"></i> 智能的文件传输</h5>
+          <p>从未加密的目录向解锁后的加密目录复制或移动文件时，文件会被自动加密后复制到加密目录；从解锁后的加密目录向未加密目录复制或移动文件时，文件会被自动解密后复制到目标目录。如果需要快速秒传加密后的原始文件到其它目录，可以先将加密目录锁定，变成原始文件形态，再按传统的文件传输方式传输。</p>
+          
+          <h5><i class="fas fa-code"></i> 商用级加密算法</h5>
+          <ul>
+            <li><strong>文件名加密：</strong>使用AES加密后UTF8编码，保存到网盘的文件名长度限制和未加密的文件名基本一致</li>
+            <li><strong>文件内容加密：</strong>采用chacha20-poly1305算法，每个文件的加密密钥都是根据密码动态生成的，确保每个文件都不相同</li>
+            <li><strong>开源透明：</strong>加密算法完全开源，解密工具源代码：<a href="https://github.com/cloud-fs/clouddrive-decrypt" target="_blank" rel="noopener noreferrer">https://github.com/cloud-fs/clouddrive-decrypt</a></li>
+          </ul>
+          
+          <h5><i class="fas fa-backup"></i> 加密备份支持</h5>
+          <p>备份功能也可设置目的目录为解锁后的加密目录来实现加密备份，为重要数据提供双重保护。</p>
+          
+          <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle"></i>
+            <strong>文件大小限制：</strong>为防止加密功能被滥用，年费会员和月费会员保存到网盘的加密文件大小上限为200MB，终身会员不受此限制，保存到本地文件夹的加密文件不受此限制。网盘加密文件大小上限后续将会根据实际情况做出适当调整。
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <footer>
     <div class="container">
-      <p>&copy; 2023 CloudDrive. All rights reserved.</p>
+      <p>&copy; 2025 CloudDrive. All rights reserved.</p>
     </div>
   </footer>
 </body>

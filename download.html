@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.8.20)</title>
+  <title>CloudDrive - 下载(v0.9.0)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -46,232 +46,31 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.8.20)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.9.0)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <div class="alert alert-warning" role="alert">
         <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.20"><strong>0.8.20(Web1.6.20.1):</strong></a>
+          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.0"><strong>0.9.0(Web1.7.2.1):</strong></a>
         <ol>
-          <li>修复某些OneDrive账号类型无法获取账号email，导致无法添加多个OneDrive账号的问题，如果你的OneDrive账号不显示用户名，请升级到此版本后删除OneDrive重新添加一次</li>
-          <li>改进在网络故障或者网盘故障导致下载失败时的处理流程，更好地适应网络变化</li>
-          <li>修复在个别情况下上传出错小概率可能导致系统死锁的问题</li>
+          <li>增加购买115会员送CloudDrive余额功能，可在115网盘属性页点击购买115会员按钮，选择要购买的套餐，扫码或点击二维码完成购买。注意：目前115开放平台的会员推广订单实时查询接口暂未上线，此功能目前处于测试阶段，需要后台手动完成赠送CloudDrive2会员操作，请完成115会员充值后点击CloudDrive2活动页面的我已完成充值按钮，24小时内会收到赠送的余额，如24小时后仍未收到，请通过邮件联系我们</li>
+          <li>取消终身会员加密文件大小限制，使用时请务必遵守各网盘相关的用户协议，CoudDrive不对因滥用加密功能导致网盘账号被封承担任何责任</li>
+          <li>通过合作厂商设备自动注册的用户，可以在web界面的系统状态窗口内修改账号的用户名（邮箱）和密码，方便在别的设备上使用</li>
+          <li>显示和下载日志文件的日志链接增加签名校验，防止未授权用户远程访问日志文件</li>
+          <li>修复百度网盘因api调整导致文件搜索报错的问题</li>
+          <li>修复一些在网络状况不好的情况下下载失败会造成读取文件超时的问题</li>
+          <li>修复在读取文件的过程中切换网络会导致读取文件超时的问题</li>
+          <li>修复非会员用户无法通过web界面将云盘文件移动或者复制到本地的问题</li>
+          <li> 修复115open和123网盘创建文件夹时，同名目录已经在第三方创建而因目录缓存未刷新导致的目录创建失败的问题</li>
+          <li>修复通过web访问文件时，在web客户端关闭后下载任务不会马上关闭的问题</li>
+          <li>webui文件属性页增加复制当前文件完整路径到剪贴板按钮</li>
+          <li>webui文件属性页在所有云盘子目录显示云盘空间信息和云盘账号信息与设置按钮</li>
+          <li>webui文件属性页云盘空间信息以条状图显示，点击条状图可强制刷新空间信息</li>
+          <li>webui文件属性页云属性改名为文件夹统计信息，增加刷新按钮，点击后可强制刷新当前文件夹的统计信息，包括总文件、总目录和总大小</li>
+          <li>webui会员计划页显示加密文件大小限制</li>
+          <li>webui会员计划页增加充值115网盘送余额按钮</li>
           <li>其它bug修复、性能改进和界面调整</li>
         </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.19"><strong>0.8.19(Web1.6.20.0):</strong></a>
-        <ol>
-          <li>修复115open长时间上传大文件可能会失败的问题。</li>
-          <li>关于115open授权失效的问题：目前已经确认，如果一个115账号授权的多个第三方app刷新access_token，就可能会造成refresh_token失效，115方面正在优化中，在此期间请尽量不要同时运行同一个115账号授权的多个不同的第三方app，以避免115open授权失效</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.18"><strong>0.8.18(Web1.6.20.0):</strong></a>
-        <ol>
-          <li>修复115open在个别情况下会下载失败，重启服务才能恢复的问题</li>
-          <li>修复跨网盘转移到加密文件夹时，0字节文件会转移失败的问题</li>
-          <li>根据百度网盘开放平台API更新，修复百度网盘无法正确显示会员级别的问题</li>
-          <li>其它bug修复和性能改进</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.17"><strong>0.8.17(Web1.6.20.0):</strong></a>
-        <ol>
-          <li>
-            当多个115open通过CloudDrive的云端账号同步多处使用时，改为由CloudDrive服务器统一刷新访问令牌，以彻底解决115open多处使用时各种可能的token失效的问题。同一个CloudDrive账号下的所有运行的CloudDrive请都升级到0.8.17，否则可能会出现115opentoken失效的问题，当出现token失效问题时，请重新授权。注意：使用该功能意味着你同意新版的CloudDrive用户许可协议，新的用户许可协议授权CloudDrive可在必要时在云端加密存储和使用用户的刷新令牌和访问令牌，新的协议完整文本见：<a
-              href="https://www.clouddrive2.com/eula.html">CloudDrive隐私与使用条款</a></li>
-          <li>迅雷云盘增加转存迅雷分享链接功能，使用该功能需要先确保web版本1.6.20.0以上，并且重新授权一次迅雷云盘</li>
-          <li>
-            修复个别情况下机器重启后多云盘备份的配置可能丢失的问题
-          </li>
-          <li>修复跨网盘复制或者移动不支持0字节文件复制移动的问题</li>
-          <li>
-            修复上传任务管理里总字节数和已完成数显示的是当前页统计数据而不是所有任务统计数据的问题</li>
-          <li>其它bug修复和性能改进</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.16"><strong>0.8.16(Web1.6.19.0):</strong></a>
-        <ol>
-          <li>移除原115网盘的支持，请原115网盘用户全部迁移到115open，如需保持挂载的115网盘目录，可以在移除原115、添加115open之后重命名115open文件夹为老的115目录名</li>
-          <li>115open支持离线下载功能</li>
-          <li>
-            115open支持网页授权，网页授权比二维码授权更安全，推荐使用。网页授权时可以放心使用115账号密码登录，不会影响其它115终端的登录状态。目前115open的授权规则是一个应用最多可以授权两次，第三次授权将会使第一次授权失效，按此规则一个115账号最多可以给2个通过云端数据同步的CloudDrive账号授权
-          </li>
-          <li>修复115open在使用同一个CloudDrive账号，通过CloudDrive云端数据同步功能，在多个终端使用时可能出现的一些token失效的问题</li>
-          <li>修复多云盘备份的文件过滤规则中包含白名单规则时可能不备份某些文件的问题</li>
-          <li>macos的挂载管理支持修改uid/git/权限，支持修改挂载的盘符类型</li>
-          <li>修复macos在个别情况下当文件名中包含特殊字符时，挂载盘列文件不全、上传文件重复等问题，更新后如果碰到有文件无法打开，可能需要手动刷新一下目录缓存</li>
-          <li>在线更新功能增加对下载后的安装包进行校验，校验失败会重新下载，避免更新失败</li>
-          <li>修复一个可能会造成首次在线更新失败，需要第二次点击更新才能成功的问题</li>
-          <li>在线更新成功后会自动刷新页面，并且自动将web版本更新到最新版</li>
-          <li>系统任务管理增加全局暂停/恢复自动刷新按钮，暂停后将不再自动刷新任务列表，方便查看某个时刻的系统任务详细信息</li>
-          <li>上传任务列表修复多选框会因为任务刷新而导致的选择紊乱的问题，改进上传任务列表管理的用户体验，增加上传任务总字节数和总完成数，显示总体上传进度条，每个上传任务也显示上传进度条</li>
-          <li>其它性能改进、bug修复和界面优化</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.15"><strong>0.8.15(Web1.6.17.2):</strong></a>
-        <ol>
-          <li>修复macos下文件名含有特殊字符时，通过挂载盘读取和写入时可能出现的问题，如果升级后在永久缓存和本地持久化都开启的情况下出现有文件无法访问，需要手动强制刷新文件列表，或者点击一次深度清除缓存</li>
-          <li>修复多网盘备份在监控到文件系统变化后所产生的备份任务过滤规则没有生效的问题</li>
-          <li>修复多云盘备份在开启备份完成后删除源文件选项后可能会卡死的问题，调整Web界面对应的规则编辑部分，避免备份后删除源文件规则与源文件被删除后目的文件规则的冲突</li>
-          <li>优化上传任务管理器，提高上传任务列表处理效率</li>
-          <li>适配115开放平台近期的修改，修复一些可能出现的达到访问上限的错误，115开放平台仍在调整中，使用过程中有任何问题欢迎及时反馈</li>
-          <li>修复OneDrive某些账号无法显示用户名和可用空间的问题</li>
-          <li>WebUI在点击重命名按钮时会弹出新的对话框修改文件名</li>
-          <li>WebUI的移动/复制功能会记住最后一次选择的目的文件夹作为下次选择的默认文件夹，选择移动/复制目的文件夹时显示当前选择文件夹的完整路径</li>
-          <li>复制任务管理器显示任务起始时间、结束时间和持续时间</li>
-          <li>其它性能优化和界面调整</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.14"><strong>0.8.14(Web1.6.14.0):</strong></a>
-        <ol>
-          <li>修复115open在长时间未访问后可能会token失效的问题</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.13"><strong>0.8.13(Web1.6.14.0):</strong></a>
-        <ol>
-          <li>MacOS版修复在文件名中含有某些特殊字符时，通过本地挂载的文件系统创建文件夹并立刻移动文件到该文件夹内可能失败的问题</li>
-          <li>修复115open在token失效的情况下小概率会造成高CPU占用的问题</li>
-          <li>修复115open在某些情况下秒传文件成功后立刻下载该文件可能会失败的问题</li>
-          <li>Android APK版恢复在近期应用内显示，以解决部分安卓系统下不在近期应用内显示的应用无法一直常驻后台的问题</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.12"><strong>0.8.12(Web1.6.14.0):</strong></a>
-        <ol>
-          <li>多网盘备份功能增加备份状态监控，在备份管理界面点击状态按钮，会实时更新当前备份状态，显示正在扫描的目录，文件监控是否正常，以及本次扫描开始后的所有错误历史信息</li>
-          <li>修复115open在开启目录缓存本地持久化后，重命名文件可能出现的一些问题</li>
-          <li>修复一个115open在多个相同CloudDrive账号通过云端同步账号信息时，小概率会token失效的问题</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.11"><strong>0.8.11(Web1.6.13.3):</strong></a>
-        <ol>
-          <li>修复115open上传加密文件可能失败的问题</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.10"><strong>0.8.10(Web1.6.13.3):</strong></a>
-        <ol>
-          <li>支持115开放平台，添加网盘选择115open，扫码授权后可使用115开放平台，注意：1) 因115开放平台限制，目前不提供离线下载、转存分享链接、监听网盘事件、同步文件变更这四项原115网盘的功能；2)
-            115开放平台目前对一个开放平台app只能授权一次，第二次授权将会作废第一次的授权，所以需要多端同时使用115开放平台请用同一个CloudDrive2账号登录并且通过云端同步账号信息，不要多次扫码授权； 3)
-            115开放平台本身仍处在调整完善的测试阶段，在测试阶段仍有可能修改接口导致115open不可用，在测试阶段原115网盘和115open可同时登录，互相独立</li>
-          <li>
-            支持多个Webhook配置文件，支持通过web界面管理Webhook配置文件，Webhook功能需要配合用户自己的webhook服务器使用，请有需求的用户仔细阅读添加Webhook配置模版的内容并根据自己服务器的需求做出修改
-          </li>
-          <li>WebUI增加刷新WebUI按钮，点击后会强制清除浏览器缓存的数据，让WebUI更新到最新版</li>
-          <li>Windows安装包主安装前做架构和版本检查，避免安装错误的版本或安装后不能运行：Arm64系统不允许安装X64安装包，X64系统不允许安装Arm64安装包，Windows 7也系统会安装失败</li>
-          <li>Android APK版运行后不在近期应用内显示，防止误杀后台进程</li>
-          <li>其它bug修复、性能改进和界面调整</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.9"><strong>0.8.9(Web1.6.12.1):</strong></a>
-        <ol>
-          <li>修复访问115网盘有时会出现404错误的问题</li>
-          <li>修复webdav客户端访问302下载链接的webdav服务器时有时会下载失败的问题</li>
-          <li>修复跨网盘移动警告窗时选中“不再询问”不生效的问题</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.8"><strong>0.8.8(Web1.6.12.0):</strong></a>
-        <ol>
-          <li>多云盘备份功能增加支持备份完成后对源文件处理：当一个源文件到所有目的网盘的备份都完成后，可以对源文件选择：1). 不做处理；2). 删除源文件；3). 删除源文件并删除所在的空目录
-          </li>
-          <li>改进多云盘备份的性能，修复多云盘备份的一些bug</li>
-          <li>复制任务管理增加重启复制任务功能，重启任务将取消正在扫描和上传的任务并重新扫描；已完成的复制任务不再自动删除，可以在复制任务管理界面点击清除按钮手动清除所有已完成任务；复制任务列表增加显示已跳过和已取消的文件数
-          </li>
-          <li>修复复制任务列表在个别情况下可能无法自动刷新状态的问题</li>
-          <li>修复极个别情况下备份或者拷贝到加密目录，重启系统后加密目录失效，会重新创建一个新的未加密目录的问题</li>
-          <li>改善因网络状况导致无法连接到CloudDrive服务器导致无法使用的问题</li>
-          <li>上传任务列表中FatalError的任务会自动移动到队尾</li>
-          <li>MacOS的挂载支持选择挂载成本地盘或者网络盘，支持直接挂载到/Volumes目录下</li>
-          <li>修复115文件下载失败的问题</li>
-          <li>其它bug修复，性能改进和界面优化</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.7"><strong>0.8.7(Web1.6.11.0):</strong></a>
-        <ol>
-          <li>增加跨网盘移动功能：在原有跨网盘复制的基础上，增加跨网盘移动功能，去掉web界面的复制按钮，点击移动/复制按钮，选择目的文件夹后可选择是移动还是复制，跨网盘移动将会在全部文件上传成功后删除源网盘的文件和目录
-          </li>
-          <li>系统任务管理增加复制任务管理，显示正在进行的跨网盘复制或者移动任务的状态和进度，可以暂停或取消跨网盘复制/移动任务，在扫描源网盘过程中出现错误也会有相应错误信息显示</li>
-          <li>增加修改账号邮箱功能，可以在web界面的系统设置中修改账号邮箱，要求修改后的邮箱没有注册过CloudDrive2账号</li>
-          <li>增加对Windows Arm64系统的原生支持，不再支持Windows 7系统</li>
-          <li>修复115被风控后正在进行的上传任务可能会一直卡住的问题</li>
-          <li>修复本地文件夹内部复制功能不支持复制文件夹的问题</li>
-          <li>其它bug修复和性能改进</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.6"><strong>0.8.6(Web1.6.9.1):</strong></a>
-        <ol>
-          <li> 改进和完善115网盘跨设备文件同步功能，同时为避免跨设备文件同步可能造成多终端同时访问115引起不必要的风控，自动跨设备同步功能默认关闭，如需自动同步，可以在115的文件夹属性页中打开监听网盘事件开关</li>
-          <li>优化115访问流程，降低被风控的风险，115的MaxQueriesPerSecond默认为1，最大可以设置到2，如果碰到被风控，请调低MaxQueriesPerSecond值</li>
-          <li>修复115用浏览器cookies登录列文件失败的问题</li>
-          <li>修复在个别情况下上传文件成功后本地缓存磁盘空间不会立即释放，需要重启服务才能释放的问题</li>
-          <li>修复个别情况下通过挂载目录向加密文件夹内拷贝文件或者编辑文件失败的问题</li>
-          <li>为了兼容更多的设备，WebUI框架从.net 9回退到.net 7</li>
-          <li>web界面支持macos下按command键实现多选操作，功能和Windows下用Ctrl键多选相同</li>
-          <li>其它性能改进、bug修复和界面微调</li>
-          <li>其它bug修复、性能优化和界面调整</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.5"><strong>0.8.5(Web1.6.6.0):</strong></a>
-        <ol>
-          <li>
-            115网盘支持跨设备同步文件变更，该功能需要同时具有CloudDrive的VIP会员和115网盘的VIP会员。跨设备文件变更需要首先在115app中打开最近记录，CloudDrive2对115网盘的所有文件变更可以自动同步到所有同115账号的其它CloudDrive2上，同步成功后会发出文件变更通知，通过115官方浏览器和app对115网盘的上传文件和删除文件操作也可以自动同步，其它操作可以通过点击属性页的同步按钮手动同步文件变更。注意：因115网盘限制，以下变更不支持跨设备同步：1)离线下载；2)重命名文件(重命名文件夹支持)；3)网盘内拷贝文件(拷贝文件夹支持)；跨设备文件变更需要开启目录缓存本地持久化；跨设备文件变更可能存在遗漏，必要时可能需要在web界面手动刷新目录来实现完全同步
-          </li>
-          <li>115网盘支持转存115分享链接</li>
-          <li>修复115网盘无法登录或者登录后无法进行创建文件夹、删除文件等操作的问题，需要重新添加一次115账号才能修复此类问题</li>
-          <li>115网盘限制QPS最大为1.0，缓解115网盘风控的问题，原MAX_QPS_115环境变量取消，目前暂时不支持设置QPS超过1.0</li>
-          <li>115网盘属性页显示115会员状态</li>
-          <li>修复115网盘上传文件时可能出现因同名目录已存在导致创建目录失败的问题</li>
-          <li>修复macos系统下文件变更后读取刚变更的文件可能失败的问题</li>
-          <li>修复本地文件夹内创建加密目录后，列目录不完整的问题</li>
-          <li>添加的本地文件夹支持获取本地磁盘空间大小</li>
-          <li>修复阿里云盘每天9:00之前无法下载的问题</li>
-          <li>Web界面框架从.net 7升级至.net 9，如碰到无法打开web界面，请先清空浏览器本地缓存数据</li>
-          <li>其它bug修复、性能优化和界面调整</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.3"><strong>0.8.3(Web1.6.1.0):</strong></a>
-        <ol>
-          <li>web界面的文件列表会根据当前所在目录下的文件变化自动更新</li>
-          <li>修复百度网盘的加密目录的子目录无法访问的问题</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.2"><strong>0.8.2(Web1.6.0.3):</strong></a>
-        <ol>
-          <li>修复某些环境下获取文件列表速度慢的问题</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.1"><strong>0.8.1(Web1.6.0.3):</strong></a>
-        <ol>
-          <li>修复115网盘不能上传超过20GB文件的问题，115网盘上传支持断点续传，不支持单文件多线程上传</li>
-          <li>继续优化网盘请求数量，减少某些情况下不必要的网盘请求</li>
-          <li>界面微调</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.8.0"><strong>0.8.0(Web1.6.0.2):</strong></a>
-        <ol>
-          <li>新增支持加密文件系统
-            <ul>1) 加密文件系统是Pro功能，月费会员、年费会员和终身会员可以使用，使用前请先备份好重要文件以免文件丢失</ul>
-            <ul>2)
-              用户可以在任意网盘或者添加到CloudDrive2的本地文件夹内任意位置创建任意多个加密文件夹，创建时需设置密码，不同加密文件夹可以设置不同的密码，创建时默认会在本机保存密码，如果选择不保存密码，CloudDrive2重启后需要重新输入密码才能正常访问这个文件夹。所有写入加密文件夹的文件，文件名和内容都会被加密保存到网盘或者本地文件夹。请务必记住设置的密码，如遗忘密码，文件将无法访问并且无法恢复。密码只会在本地加密保存，不会同步到CloudDrive2的服务器，当你从更换地点登录同账号的CloudDrive2时，访问加密目录都需要重新输入密码来解锁
-            </ul>
-            <ul>3) 选择根加密目录后可以在文件属性页点击锁定按钮来重新锁定目录，下次访问时需要重新输入密码解锁</ul>
-            <ul>4) 通过CloudDrive2访问解锁后的加密文件和访问正常的文件完全相同，支持所有文件操作，可以随机读写文件，可以在线播放视频等，备份功能也可设置目的目录为解锁后的加密目录来实现加密备份</ul>
-            <ul>5) 从未加密的目录向解锁后的加密目录复制或者移动文件时，不支持快速传输，文件会被加密后复制到加密目录；从解锁后的加密目录向未加密目录复制或移动文件时，不支持快速传输，文件会被解密后复制到目标目录
-            </ul>
-            <ul>6) 如果需要快速秒传加密后的原始文件到其它目录，可以先将加密目录锁定，变成原始文件形态，再按传统的文件传输方式传输</ul>
-            <ul>7)
-              加密算法：文件名用AES加密后UTF8编码，保存到网盘的文件名长度限制和未加密的文件名基本一致，保存到本地文件夹的加密文件名长度可能受不同操作系统的限制；文件内容加密算法为chacha20-poly1305，文件名和文件内容的加密密钥都是创建文件时根据密码动态生成的，每个文件都不相同。加密算法是开源的，解密工具源代码：
-              https://github.com/cloud-fs/clouddrive-decrypt</ul>
-            <ul>8) 为防止文件加密功能被滥用，保存到网盘的加密文件大小上限为200MB，超过此大小的加密文件将不予上传，保存到本地文件夹的加密文件不受此限制，网盘加密文件大小上限后续将会根据实际情况做出适当调整
-            </ul>
-          </li>
-          <li>由于115网盘修改了上传文件接口，115网盘上传非秒传文件最大为20GB，不支持断点续传和多线程上传，秒传的文件不受此限制</li>
-          <li>115网盘的MaxQueriesPerSecond最大值从4改为3，降低被风控的风险</li>
-          <li>优化115添加离线下载任务后的处理流程，降低对网盘的API调用次数</li>
-          <li>下载损坏的115文件会直接返回错误，不再一直重试</li>
-          <li>优化大量访问挂载盘文件的网盘请求数，在目录缓存时间为默认值（40秒）或者其它较短时间情况下，可有效降低被网盘运营商风控的风险</li>
-          <li>修复向阿里云盘上传大文件可能会失败的问题</li>
-          <li>123网盘：修复api代理设置无效的问题</li>
-          <li>修复备份文件过滤规则为字节数不小于的白名单时，规则可能失效的问题</li>
-          <li>修改web访问文件的cors策略，允许web链接嵌入到其它网页使用</li>
-          <li>其它性能优化，bug修复和界面微调</li>
         </ol>
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases">更多历史版本</a>
       </div>
@@ -287,7 +86,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.20/CloudDrive2Setup-X64-0.8.20.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.0/CloudDrive2Setup-X64-0.9.0.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -301,7 +100,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.20/CloudDrive2Setup-Arm64-0.8.20.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.0/CloudDrive2Setup-Arm64-0.9.0.exe"><i
                         class="fab fa-windows"></i> Windows Arm64</a></h5>
                 </div>
               </div>
@@ -322,7 +121,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.20/clouddrive-2-linux-x86_64-0.8.20.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.0/clouddrive-2-linux-x86_64-0.9.0.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -336,7 +135,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.20/clouddrive-2-linux-aarch64-0.8.20.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.0/clouddrive-2-linux-aarch64-0.9.0.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -350,7 +149,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.20/clouddrive-2-linux-armv7-0.8.20.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.0/clouddrive-2-linux-armv7-0.9.0.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -372,7 +171,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.20/clouddrive-2-macos-x86_64-0.8.20.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.0/clouddrive-2-macos-x86_64-0.9.0.tgz"><i
                         class="fab fa-apple"></i> macOS x86_64</a></h5>
                 </div>
               </div>
@@ -386,7 +185,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.20/clouddrive-2-macos-aarch64-0.8.20.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.0/clouddrive-2-macos-aarch64-0.9.0.tgz"><i
                         class="fab fa-apple"></i> macOS aarch64</a></h5>
                 </div>
               </div>
@@ -408,7 +207,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.20/clouddrive-2-android-universal-0.8.20.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.0/clouddrive-2-android-universal-0.9.0.apk"><i
                         class="fab fa-android"></i> Android apk</a></h5>
                 </div>
               </div>
@@ -422,7 +221,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.20/clouddrive-2-android-x86_64-0.8.20.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.0/clouddrive-2-android-x86_64-0.9.0.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -436,7 +235,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.20/clouddrive-2-android-aarch64-0.8.20.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.0/clouddrive-2-android-aarch64-0.9.0.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -450,7 +249,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.8.20/clouddrive-2-android-armv7-0.8.20.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.0/clouddrive-2-android-armv7-0.9.0.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
@@ -537,7 +336,7 @@
       <p><a href="mailto:waytechcloudfs@gmail.com">发送邮件</a> | <a href="https://t.me/cloudnaschat">Telegram</a></p>
     </div>
     <div class="container">
-      <p>&copy; 2023 CloudDrive. All rights reserved.</p>
+      <p>&copy; 2025 CloudDrive. All rights reserved.</p>
     </div>
   </footer>
 </body>
