@@ -216,7 +216,7 @@ header {
   font-size: clamp(1.125rem, 2vw, 1.5rem);
   font-weight: 400;
   margin-bottom: 2rem;
-  opacity: 0.9;
+  color: rgba(255, 255, 255, 0.95);
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
