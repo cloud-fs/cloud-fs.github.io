@@ -5,467 +5,389 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CloudDrive - 下载(v0.9.8)</title>
+  <meta name="description" content="下载CloudDrive最新版本，支持Windows、Linux、macOS、Android等多平台。">
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
-  <link rel="stylesheet" href="css/site.css">
-  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/site.js"></script>
+  <link rel="stylesheet" href="css/modern-site.css">
 </head>
 
 <body>
   <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
+    <nav class="navbar">
       <div class="container">
         <a class="navbar-brand" href="index.html">
-          <img alt="clouddrive" src="img/clouddrive-h.png" height="80">
+          <img alt="clouddrive" src="img/clouddrive-h.png" height="60">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">主页</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="features.html">功能</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="pricing.html">会员</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="help.html">帮助</a>
-            </li>
-          </ul>
-          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
-        </div>
+        <ul class="navbar-nav">
+          <li><a class="nav-link" href="index.html">主页</a></li>
+          <li><a class="nav-link" href="features.html">功能</a></li>
+          <li><a class="nav-link" href="pricing.html">会员</a></li>
+          <li><a class="nav-link" href="help.html">帮助</a></li>
+          <li><a class="btn btn-primary" href="download.html">下载</a></li>
+        </ul>
       </div>
     </nav>
   </header>
 
-  <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.9.8)</h1>
-    <p class="tagline">选择适合你的版本</p>
-    <div class="container">
-      <div class="alert alert-warning" role="alert">
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.8"><strong>0.9.8(Web2.0.8.1):</strong></a>
-        <ol>
-          <li>修复macos的webdav客户端和0.9.7版本webdav服务器的兼容性问题</li>
-          <li>修复0.9.7在某些设备上无法监听https端口的问题</li>
-          <li>修复复制任务不显示已跳过文件数的问题</li>
-          <li>其它bug修复和界面优化</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.7"><strong>0.9.7(Web2.0.8.0):</strong></a>
-        <ol>
-          <li>
-            挂载的文件系统支持通过操作系统命令或者文件管理应用为每个文件单独设置权限: Linux、Android和Macos下支持单独设置每个文件的uid, gid, 访问权限和扩展属性; Windows下支持设置文件完整的用户访问控制和安全属性。文件权限设置在本地持久化，重启后仍然生效，不能跨设备同步文件权限设置
-          </li>
-          <li>支持对下载更新包设置单独的代理，解决部分用户下载更新包失败的问题</li>
-          <li>修复某些Linux系统下在挂载目录内某些应用创建文件失败（如飞牛os的内置文件管理器上传文件失败）的问题</li>
-          <li>WebUI浏览图片视频支持幻灯片播放，在系统设置里可设置图片的播放时间以及是否循环播放，幻灯片播放支持图片和音视频混合播放，在幻灯片播放模式下，音视频会自动播放，播放完成后自动播放下一个图片或者音视频</li>
-          <li>浏览图片视频时点击全屏按钮进入沉浸式浏览模式，默认不显示任何标题和按钮，上下无黑边，也可沉浸式幻灯片播放</li>
-          <li>瀑布流视图显示在本地文件夹和加密文件夹内的图片缩略图</li>
-          <li>WebUI修复当前目录下文件太多时界面操作卡顿的问题</li>
-          <li>浏览文件时的url记住当前页数，复制url并打开可直接定位到指定页</li>
-          <li>浏览文件到上级目录时，自动跳到历史浏览的页数并高亮显示最近浏览的目录</li>
-          <li>备份卡片显示完整的源目录，改进移动设备访问备份功能的一些布局问题</li>
-          <li>修复个别情况下页面会卡死的问题</li>
-          <li>修复WebUI版本升级后可能需要强制刷新页面才能正确显示的问题</li>
-          <li>其它性能改进、bug修复和界面调整</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.6"><strong>0.9.6(Web2.0.6.1):</strong></a>
-        <ol>
-          <li>
-            通过web界面移动或者复制文件夹时，如果目标目录存在同名文件夹，在冲突处理对话框中增加递归应用到子文件夹选项，默认选中，将按所选规则(覆盖、重命名、跳过)深度合并冲突文件，如果不选中递归应用到子文件夹，则直接对最上层目录执行冲突合并；同网盘和跨网盘移动复制都支持递归应用到子文件夹选项
-          </li>
-          <li>备份的文件过滤规则增加应用到文件选项，文件过滤规则应用到文件和应用到文件夹可独立设置开关</li>
-          <li>备份的文件名过滤规则不对源目录生效，只对源目录下的各级子目录生效，修复文件名白名单应用到目录时备份无法进行的问题</li>
-          <li>webhook的[global_params]增加time_format选项，可以设置webhook输出的时间格式，具体设置请参考添加webhook时最新的webhook模版</li>
-          <li>修复webhook某些设置情况下变量名替换失败的问题</li>
-          <li>启动时删除旧日志文件，保留最近10个日志文件</li>
-          <li>通过web界面拖动文件到目录树进行移动操作时，同网盘内移动，跨网盘复制</li>
-          <li>修复某些情况下跨网盘复制任务完成后不显示已完成状态的问题</li>
-          <li>提高文件下载的性能和效率</li>
-          <li>Web界面修复阿里云盘在列表模式下打开图片全屏预览显示失败的问题</li>
-          <li>其它性能改进，bug修复和界面优化</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.5"><strong>0.9.5(Web2.0.5.0):</strong></a>
-        <ol>
-          <li>
-            115网盘增加离线下载管理功能，在115网盘的任意目录内点击离线下载按钮显示离线下载管理窗口，支持复制离线下载链接、删除离线任务、重新开始下载离线任务（将删除当前的离线任务并且在相同文件夹内创建一个新任务，会消耗一个离线配额）、清除离线任务（可选清除全部、已完成、错误、正在下载的任务）
-          </li>
-          <li>改进macos挂载盘访问的性能，修复某些情况下Finder访问挂载盘容易卡顿和掉挂载的问题</li>
-          <li>增加实时系统日志推送功能，可以在日志设置页打开实时日志，系统日志会实时显示，可以在实时日志也设置实时日志的级别，默认级别为Info，可以清理当前的实时日志或者把当前实时日志下载为json文件</li>
-          <li>增加显示目前系统正在使用的文件功能，在性能监控页点击文件句柄打开正在使用的文件窗口，可显示当前系统正在打开的文件，打开文件的进程信息等</li>
-          <li>上传任务管理支持显示上传任务的操作类型，按照上传任务来源，操作类型目前包括来自挂载的上传，来自复制任务的上传和来自备份任务的上传</li>
-          <li>上传任务列表按照操作类型选择优先级，默认优先级为
-            挂载任务>备份任务>复制任务，上传任务列表会按照任务的优先级别从高到低依次处理，可以在设置界面的下载上传页修改任务类型的优先级，也可以改成按照任务添加的自然顺序处理</li>
-          <li>上传任务显示过滤器新增支持按照任务状态和操作类型进行过滤，比如可以只显示来自文件复制的正在上传的任务</li>
-          <li>复制任务支持暂停全部，恢复全部，删除全部，暂停所选，恢复所选，删除所选任务</li>
-          <li>多个复制任务的目录扫描过程由并发扫描改为排队扫描，避免因并发扫描导致的系统卡顿和网盘风控等问题</li>
-          <li>文件浏览器分页显示，默认每页显示100个文件，可以设置每页文件数量</li>
-          <li>大幅改进瀑布流视图，修复一些瀑布流视图的布局问题，桌面版瀑布流视图增加支持XS和S尺寸的图片大小供选择</li>
-          <li>修复复制任务统计数据显示不正确的问题</li>
-          <li>修复webhook配置删除后不会立即生效的问题</li>
-          <li>修复当子目录过多时文件夹选择器选择文件夹后可能自动跳转回原文件夹的问题</li>
-          <li>修复手动检查更新并点击更新后，系统更新可能会失败的问题，并修复更新过程中弹出过多提示信息的问题</li>
-          <li>修复一些在苹果手机上操作的问题</li>
-          <li>其它性能改进，bug修复和界面优化</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.4"><strong>0.9.4(Web2.0.2.1):</strong></a>
-        <ol>
-          <li>
-            新增复制（移动）任务本地持久化，在系统重启后，无论是正在扫描还是扫描完成正在上传的复制（移动）任务都可以恢复启动前的状态继续进行
-          </li>
-          <li>修复无法通过web界面下载0字节文件的问题</li>
-          <li>修复Web2.0.1.0版本通过RefreshToken添加Google Drive可能失败的问题</li>
-          <li>修复全屏浏览照片和图片界面的文件属性按钮不工作的问题</li>
-          <li>在移动、复制操作时，会校验当前选择的文件夹是否合法，不合法的文件夹确认按钮不可点击，鼠标悬浮可显示不合法的原因</li>
-          <li>拖动文件上传和拖动文件到添加离线任务的最大文件数量从10改为1024</li>
-          <li>修复访问非本地地址的web界面时可能出现的一些复制到剪贴板会失败的问题</li>
-          <li>修复会员用户初次打开备份界面添加备份时提示需要升级用户套餐的问题</li>
-          <li>修复重启服务时会提示连接失败的问题</li>
-          <li>其它界面改进和bug修复</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.3"><strong>0.9.3(Web2.0.1.0):</strong></a>
-        <ol>
-          <li>
-            修复从某些网盘下载违规文件失败会导致下载线程一直占用不释放的问题
-          </li>
-          <li>修复一些可能导致上传任务会因为各种原因卡住的问题</li>
-          <li>重新设计的文件夹选择框，操作更简洁，界面更紧凑</li>
-          <li>修复在某些设备上点击添加或者播放按钮没反应的问题</li>
-          <li>修复添加离线下载界面的各种问题</li>
-          <li>修复在线设备上次见到时间没有按照本地时间显示的问题</li>
-          <li>修复备份界面打开显示所有状态后整个页面一直刷新的问题</li>
-          <li>修复网盘管理界面代理服务器设定，打开第二个网盘的设定时仍然显示第一个网盘设定的问题</li>
-          <li>修复在某些移动浏览器上有底部工具栏时页面显示不全的问题</li>
-          <li>修复设置页面目录缓存时间不能设置为0的问题</li>
-          <li>修复非会员用户添加备份后没反应的问题</li>
-          <li>修复用户报告的WebUI的各种问题和改进建议</li>
-          <li>其它界面改进和bug修复</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.2"><strong>0.9.2(Web2.0.0.0):</strong></a>
-        <ol>
-          <li>
-            全新设计的WebUI 2.0版，界面更美观，对移动设备支持更好，新增多项新功能，包括性能监控、瀑布流风格文件浏览器、web界面内播放视频支持加载同目录下srt和vtt格式的字幕文件等。对WebUI
-            2.0版有任何问题和建议请及时反馈，将会在后面的版本中持续改进。由于新版本WebUI框架变化较大，从旧版本升级后如果界面显示有问题请清空浏览器缓存后重新加载
-          </li>
-          <li>提高跨网盘传输无法秒传时边下载边上传的传输速度</li>
-          <li>修复WebDAV客户端上传文件对某些WebDAV Server的兼容性问题</li>
-          <li>每个Webhook请求最多能携带的文件变更通知条数从10改为100，用户也可以通过设置环境变量MAX_FILE_NOTIFIES_PER_WEBHOOK_REQUEST自己修改这个值</li>
-          <li>其它bug修复和性能改进</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.1"><strong>0.9.1(Web1.7.3.1):</strong></a>
-        <ol>
-          <li>
-            增加WebDAV服务管理功能，可以在系统设置界面打开/关闭CloudDrive2的WebDAV服务，允许/禁止以CloudDrive账号访问WebDAV以及WebDAV的根目录位置和是否只读，允许/禁止以匿名身份访问WebDAV服务以及匿名访问的根目录位置和是否只读。可以创建任意多个独立的WebDAV用户，每个用户都可以独立设置根目录位置和是否只读。注意：创建独立WebDAV用户是会员功能，月费、年费、终身和轻享终身会员可以使用，基础会员无此功能
-          </li>
-          <li>系统设置界面改版为多标签页界面，优化部分设置界面，上传下载限速可以选择MB/s或者KB/s为单位</li>
-          <li>通过合作厂商设备自动注册的用户，可以在web界面的系统状态窗口内修改账号的用户名（邮箱）和密码，方便在别的设备上使用</li>
-          <li>改进本地持久化数据库并发写入的性能，修复在极个别情况下目录缓存本地持久化数据库并发写入冲突的问题</li>
-          <li>其它性能改进和界面调整</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.0"><strong>0.9.0(Web1.7.2.1):</strong></a>
-        <ol>
-          <li>
-            增加购买115会员送CloudDrive余额功能，可在115网盘属性页点击购买115会员按钮，选择要购买的套餐，扫码或点击二维码完成购买。注意：目前115开放平台的会员推广订单实时查询接口暂未上线，此功能目前处于测试阶段，需要后台手动完成赠送CloudDrive2会员操作，请完成115会员充值后点击CloudDrive2活动页面的我已完成充值按钮，24小时内会收到赠送的余额，如24小时后仍未收到，请通过邮件联系我们
-          </li>
-          <li>取消终身会员加密文件大小限制，使用时请务必遵守各网盘相关的用户协议，CoudDrive不对因滥用加密功能导致网盘账号被封承担任何责任</li>
-          <li>通过合作厂商设备自动注册的用户，可以在web界面的系统状态窗口内修改账号的用户名（邮箱）和密码，方便在别的设备上使用</li>
-          <li>显示和下载日志文件的日志链接增加签名校验，防止未授权用户远程访问日志文件</li>
-          <li>修复百度网盘因api调整导致文件搜索报错的问题</li>
-          <li>修复一些在网络状况不好的情况下下载失败会造成读取文件超时的问题</li>
-          <li>修复在读取文件的过程中切换网络会导致读取文件超时的问题</li>
-          <li>修复非会员用户无法通过web界面将云盘文件移动或者复制到本地的问题</li>
-          <li> 修复115open和123网盘创建文件夹时，同名目录已经在第三方创建而因目录缓存未刷新导致的目录创建失败的问题</li>
-          <li>修复通过web访问文件时，在web客户端关闭后下载任务不会马上关闭的问题</li>
-          <li>webui文件属性页增加复制当前文件完整路径到剪贴板按钮</li>
-          <li>webui文件属性页在所有云盘子目录显示云盘空间信息和云盘账号信息与设置按钮</li>
-          <li>webui文件属性页云盘空间信息以条状图显示，点击条状图可强制刷新空间信息</li>
-          <li>webui文件属性页云属性改名为文件夹统计信息，增加刷新按钮，点击后可强制刷新当前文件夹的统计信息，包括总文件、总目录和总大小</li>
-          <li>webui会员计划页显示加密文件大小限制</li>
-          <li>webui会员计划页增加充值115网盘送余额按钮</li>
-          <li>其它bug修复、性能改进和界面调整</li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases">更多历史版本</a>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1 class="hero-title">下载 CloudDrive</h1>
+        <p class="hero-subtitle">v0.9.8 - 选择适合您的平台版本，立即开始您的云存储管理之旅</p>
       </div>
-    </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="alert alert-info">
+          <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.8"><strong>0.9.8(Web2.0.8.1):</strong></a>
+          <ol>
+            <li>修复macos的webdav客户端和0.9.7版本webdav服务器的兼容性问题</li>
+            <li>修复0.9.7在某些设备上无法监听https端口的问题</li>
+            <li>修复复制任务不显示已跳过文件数的问题</li>
+            <li>其它bug修复和界面优化</li>
+          </ol>
+          <details>
+            <summary style="cursor: pointer; color: var(--primary-color); margin: 1rem 0;">查看更多版本历史</summary>
+            <div style="margin-top: 1rem;">
+              <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.7"><strong>0.9.7(Web2.0.8.0):</strong></a>
+              <ol>
+                <li>挂载的文件系统支持通过操作系统命令或者文件管理应用为每个文件单独设置权限</li>
+                <li>支持对下载更新包设置单独的代理，解决部分用户下载更新包失败的问题</li>
+                <li>WebUI浏览图片视频支持幻灯片播放，在系统设置里可设置图片的播放时间</li>
+                <li>瀑布流视图显示在本地文件夹和加密文件夹内的图片缩略图</li>
+                <li>其它性能改进、bug修复和界面调整</li>
+              </ol>
+              <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases">查看完整版本历史</a>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
     <!-- Windows Downloads -->
-    <div class="operating-system">
-      <h2>Windows</h2>
-      <div class="row">
-        <!-- Windows x64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/CloudDrive2Setup-X64-0.9.8.exe"><i
-                        class="fab fa-windows"></i> Windows x64</a></h5>
-                </div>
+    <section class="section section-alt">
+      <div class="container download-section">
+        <h2><i class="fab fa-windows"></i> Windows</h2>
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <div class="card download-card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/CloudDrive2Setup-X64-0.9.8.exe">
+                    <i class="fab fa-windows"></i> Windows x64
+                  </a>
+                </h5>
+                <p class="card-text">适用于64位Windows系统</p>
               </div>
             </div>
           </div>
-        </div>
-        <!-- Windows arm64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/CloudDrive2Setup-Arm64-0.9.8.exe"><i
-                        class="fab fa-windows"></i> Windows Arm64</a></h5>
-                </div>
+          <div class="col-md-6 mb-4">
+            <div class="card download-card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/CloudDrive2Setup-Arm64-0.9.8.exe">
+                    <i class="fab fa-windows"></i> Windows Arm64
+                  </a>
+                </h5>
+                <p class="card-text">适用于ARM64架构Windows系统</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Linux Downloads -->
-    <div class="operating-system">
-      <h2>Linux</h2>
-      <div class="row">
-        <!-- Linux x86_64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-linux-x86_64-0.9.8.tgz"><i
-                        class="fab fa-linux"></i> Linux x86_64</a></h5>
-                </div>
+    <section class="section">
+      <div class="container download-section">
+        <h2><i class="fab fa-linux"></i> Linux</h2>
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <div class="card download-card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-linux-x86_64-0.9.8.tgz">
+                    <i class="fab fa-linux"></i> Linux x86_64
+                  </a>
+                </h5>
+                <p class="card-text">适用于64位Linux系统</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card download-card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-linux-aarch64-0.9.8.tgz">
+                    <i class="fab fa-linux"></i> Linux aarch64
+                  </a>
+                </h5>
+                <p class="card-text">适用于ARM64架构Linux系统</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card download-card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-linux-armv7-0.9.8.tgz">
+                    <i class="fab fa-linux"></i> Linux armv7
+                  </a>
+                </h5>
+                <p class="card-text">适用于ARMv7架构Linux系统</p>
               </div>
             </div>
           </div>
         </div>
-        <!-- Linux aarch64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-linux-aarch64-0.9.8.tgz"><i
-                        class="fab fa-linux"></i> Linux aarch64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Linux armv7 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-linux-armv7-0.9.8.tgz"><i
-                        class="fab fa-linux"></i> Linux armv7</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Add more Linux versions if needed -->
       </div>
-    </div>
+    </section>
 
     <!-- macOS Downloads -->
-    <div class="operating-system">
-      <h2>macOS</h2>
-      <div class="row">
-        <!-- macOS x86_64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-macos-x86_64-0.9.8.tgz"><i
-                        class="fab fa-apple"></i> macOS x86_64</a></h5>
-                </div>
+    <section class="section section-alt">
+      <div class="container download-section">
+        <h2><i class="fab fa-apple"></i> macOS</h2>
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <div class="card download-card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-macos-x86_64-0.9.8.tgz">
+                    <i class="fab fa-apple"></i> macOS x86_64
+                  </a>
+                </h5>
+                <p class="card-text">适用于Intel处理器的Mac</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card download-card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-macos-aarch64-0.9.8.tgz">
+                    <i class="fab fa-apple"></i> macOS aarch64
+                  </a>
+                </h5>
+                <p class="card-text">适用于Apple Silicon处理器的Mac</p>
               </div>
             </div>
           </div>
         </div>
-        <!-- macOS aarch64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-macos-aarch64-0.9.8.tgz"><i
-                        class="fab fa-apple"></i> macOS aarch64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Add more macOS versions if needed -->
       </div>
-    </div>
+    </section>
 
     <!-- Android Downloads -->
-    <div class="operating-system">
-      <h2>Android</h2>
-      <div class="row">
-        <!-- Android universal apk -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-android-universal-0.9.8.apk"><i
-                        class="fab fa-android"></i> Android apk</a></h5>
-                </div>
+    <section class="section">
+      <div class="container download-section">
+        <h2><i class="fab fa-android"></i> Android</h2>
+        <div class="row">
+          <div class="col-md-3 mb-4">
+            <div class="card download-card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-android-universal-0.9.8.apk">
+                    <i class="fab fa-android"></i> Android APK
+                  </a>
+                </h5>
+                <p class="card-text">通用安装包，适用于所有Android设备</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-4">
+            <div class="card download-card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-android-x86_64-0.9.8.tgz">
+                    <i class="fab fa-android"></i> Android x86_64
+                  </a>
+                </h5>
+                <p class="card-text">64位x86架构</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-4">
+            <div class="card download-card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-android-aarch64-0.9.8.tgz">
+                    <i class="fab fa-android"></i> Android aarch64
+                  </a>
+                </h5>
+                <p class="card-text">ARM64架构</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-4">
+            <div class="card download-card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-android-armv7-0.9.8.tgz">
+                    <i class="fab fa-android"></i> Android armv7
+                  </a>
+                </h5>
+                <p class="card-text">ARMv7架构</p>
               </div>
             </div>
           </div>
         </div>
-        <!-- Android x86_64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-android-x86_64-0.9.8.tgz"><i
-                        class="fab fa-android"></i> Android x86_64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Android aarch64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-android-aarch64-0.9.8.tgz"><i
-                        class="fab fa-android"></i> Android aarch64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Android armv7 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.8/clouddrive-2-android-armv7-0.9.8.tgz"><i
-                        class="fab fa-android"></i> Android armv7</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Add more Android versions if needed -->
       </div>
-    </div>
-    <div class="mt-4">
-      <h2>从123云盘下载</h2>
-      <div class="container text-center" style="margin-bottom: 20px;">
-        <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://www.123pan.com/s/adWkjv-nxz0h.html">从123云盘下载</a>
-      </div>
-    </div>
-    <div class="mt-4">
-      <h2>从百度网盘下载</h2>
-      <div class="container text-center" style="margin-bottom: 20px;">
-        <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://pan.baidu.com/s/1KTDKYu4aCAH41TncNm5XEg?pwd=cdr2">从百度网盘下载</a>
-      </div>
-    </div>
-    <div class="mt-4">
-      <h2>从阿里云盘下载(Windows版)</h2>
-      <div class="container text-center" style="margin-bottom: 20px;">
-        <p style="font-weight: bold; padding: 10px;">因阿里云盘分享限制，只提供Windows版下载</p>
-        <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://www.aliyundrive.com/s/AHYFMyu8LTR/folder/64c93bd53de2f8fbd3aa41eeb8d0340583dd2425">从阿里云盘下载</a>
-      </div>
-    </div>
-    <div class="mt-4">
-      <h2>从天翼云盘下载</h2>
-      <div class="container text-center" style="margin-bottom: 20px;">
-        <p style="font-weight: bold; padding: 10px;">访问码：1otn</p>
-        <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://cloud.189.cn/web/share?code=jiM3aeUZFRja">从天翼云盘下载</a>
-      </div>
-    </div>
-    <!-- Docker Version Help -->
-    <div class="mt-4">
-      <h2>Docker 版本帮助</h2>
-      <a href="docker.html" class="btn btn-primary btn-block">Docker版本安装指南</a>
-    </div>
+    </section>
 
-    <!-- NAS Plugins -->
-    <div class="mt-4">
-      <h2>NAS 插件</h2>
-      <div class="alert alert-warning" role="alert">
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>注意：</strong>这些 NAS 插件由第三方提供，请自行判断下载，我们不保证其安全性和稳定性。
-      </div>
-      <div class="row">
-        <!-- Synology -->
-        <div class="col-md-6">
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">Synology 插件</h5>
-              <a href="https://imnks.com/3653.html" class="btn btn-primary btn-block">群晖新套件：CloudDrive2 网盘挂载工具
-                支持DSM6、7</a>
+    <!-- Alternative Download Sources -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2>其他下载方式</h2>
+          <p class="lead">如果GitHub下载速度较慢，可以使用以下镜像下载</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-cloud card-icon" style="color: #f39800;"></i>
+                <h5 class="card-title">123云盘下载</h5>
+                <p class="card-text">从123云盘下载所有版本</p>
+                <a class="btn btn-primary" href="https://www.123pan.com/s/adWkjv-nxz0h.html" target="_blank">
+                  <i class="fas fa-download"></i> 前往下载
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-cloud card-icon" style="color: #2196f3;"></i>
+                <h5 class="card-title">百度网盘下载</h5>
+                <p class="card-text">从百度网盘下载所有版本</p>
+                <a class="btn btn-primary" href="https://pan.baidu.com/s/1KTDKYu4aCAH41TncNm5XEg?pwd=cdr2" target="_blank">
+                  <i class="fas fa-download"></i> 前往下载
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-cloud card-icon" style="color: #ff6b35;"></i>
+                <h5 class="card-title">阿里云盘下载</h5>
+                <p class="card-text">仅提供Windows版本</p>
+                <a class="btn btn-primary" href="https://www.aliyundrive.com/s/AHYFMyu8LTR/folder/64c93bd53de2f8fbd3aa41eeb8d0340583dd2425" target="_blank">
+                  <i class="fas fa-download"></i> 前往下载
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-cloud card-icon" style="color: #00c7ff;"></i>
+                <h5 class="card-title">天翼云盘下载</h5>
+                <p class="card-text">访问码：1otn</p>
+                <a class="btn btn-primary" href="https://cloud.189.cn/web/share?code=jiM3aeUZFRja" target="_blank">
+                  <i class="fas fa-download"></i> 前往下载
+                </a>
+              </div>
             </div>
           </div>
         </div>
-        <!-- QNAP -->
-        <div class="col-md-6">
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">QNAP 插件</h5>
-              <a href="https://www.naslab.club/524.html"
-                class="btn btn-primary btn-block">「威联通QNAP」CloudDrive网盘挂载APP中心安装包</a>
+      </div>
+    </section>
+
+    <!-- Docker and NAS -->
+    <section class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fab fa-docker card-icon" style="color: #0db7ed;"></i>
+                <h5 class="card-title">Docker 版本</h5>
+                <p class="card-text">适用于容器化部署的用户</p>
+                <a href="docker.html" class="btn btn-primary">
+                  <i class="fas fa-book"></i> 安装指南
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-server card-icon" style="color: #28a745;"></i>
+                <h5 class="card-title">NAS 插件</h5>
+                <p class="card-text">第三方提供的NAS插件</p>
+                <div class="alert alert-warning mt-3" style="font-size: 0.9rem;">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  注意：这些插件由第三方提供，请自行判断安全性
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fas fa-hdd"></i> Synology 插件
+                </h5>
+                <p class="card-text">支持DSM6、DSM7系统</p>
+                <a href="https://imnks.com/3653.html" class="btn btn-secondary" target="_blank">
+                  前往下载
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fas fa-hdd"></i> QNAP 插件
+                </h5>
+                <p class="card-text">威联通QNAP系统插件</p>
+                <a href="https://www.naslab.club/524.html" class="btn btn-secondary" target="_blank">
+                  前往下载
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-  </div>
-
+    </section>
+  </main>
 
   <footer>
-    <!-- add contact us: Email to waytechcloudfs@gmail.com -->
     <div class="container">
-      <p>如果您有任何问题或建议，请随时联系我们。</p>
-      <p><a href="mailto:waytechcloudfs@gmail.com">发送邮件</a> | <a href="https://t.me/cloudnaschat">Telegram</a></p>
-    </div>
-    <div class="container">
-      <p>&copy; 2025 CloudDrive. All rights reserved.</p>
+      <div class="mb-3">
+        <p>如果您有任何问题或建议，请随时联系我们。</p>
+        <p><a href="mailto:waytechcloudfs@gmail.com">发送邮件</a> | <a href="https://t.me/cloudnaschat">Telegram</a></p>
+      </div>
+      <div>
+        <p>&copy; 2025 CloudDrive. All rights reserved.</p>
+      </div>
     </div>
   </footer>
+
+  <script>
+    // Mobile navigation toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const navbarToggler = document.querySelector('.navbar-toggler');
+      const navbarNav = document.querySelector('.navbar-nav');
+      
+      if (navbarToggler && navbarNav) {
+        navbarToggler.addEventListener('click', function() {
+          navbarToggler.classList.toggle('active');
+          navbarNav.classList.toggle('show');
+        });
+      }
+    });
+  </script>
 </body>
 
 </html>
