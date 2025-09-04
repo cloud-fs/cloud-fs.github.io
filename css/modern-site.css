@@ -562,9 +562,87 @@ footer a:hover {
 .p-3 { padding: 1.5rem !important; }
 .p-4 { padding: 2rem !important; }
 
+/* Docker Page Styles */
+.architecture-list {
+  text-align: left;
+}
+
+.arch-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.arch-item:last-child {
+  border-bottom: none;
+}
+
+.arch-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.arch-tag {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.code-block {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.code-block pre {
+  background-color: var(--bg-accent);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin: 0;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.code-block code {
+  font-family: 'Fira Code', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.copy-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.copy-btn i {
+  font-size: 0.875rem;
+}
+
 /* Print Styles */
 @media print {
   .navbar, footer { display: none; }
   .hero { background: none !important; color: black !important; }
   .card { box-shadow: none !important; border: 1px solid #ccc !important; }
+  .copy-btn { display: none !important; }
 }
