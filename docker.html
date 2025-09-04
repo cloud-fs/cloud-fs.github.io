@@ -4,127 +4,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - Home</title>
+  <title>CloudDrive - Docker安装指南</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/modern-site.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
-  <link rel="stylesheet" href="css/site.css">
-  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/site.js"></script>
-  <link rel="stylesheet" href="css/download.css">
 </head>
-<style>
-  .navbar-collapse {
-    background-color: rgba(234, 242, 248, 0.9);
-    padding: 10px;
-  }
-
-  pre {
-    background-color: #f2f2f2;
-  }
-</style>
 
 <body>
   <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
+    <nav class="navbar">
       <div class="container">
         <a class="navbar-brand" href="index.html">
-          <img src="img/clouddrive-h.png" height="80">
+          <img src="img/clouddrive-h.png" alt="CloudDrive">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" onclick="toggleMobileMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">主页</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="features.html">功能</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="pricing.html">会员</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="help.html">帮助</a>
-            </li>
-          </ul>
-          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
-        </div>
+        <ul class="navbar-nav">
+          <li><a class="nav-link" href="index.html">主页</a></li>
+          <li><a class="nav-link" href="features.html">功能</a></li>
+          <li><a class="nav-link" href="pricing.html">会员</a></li>
+          <li><a class="nav-link" href="help.html">帮助</a></li>
+          <li><a class="btn btn-primary" href="download.html">下载</a></li>
+        </ul>
       </div>
     </nav>
   </header>
 
-  <body>
-
-    <!-- Page Content -->
-    <div class="container mt-4">
-      <h1 class="hero-title">CloudDrive - Docker版本安装指南</h1>
-      <div class="alert alert-warning" role="alert">
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>注意：</strong>如遇到Docker镜像无法更新到最新版本的情况，请尝试禁止使用Docker镜像服务器。
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1 class="hero-title">Docker版本安装指南</h1>
+        <p class="hero-subtitle">使用Docker快速部署CloudDrive，支持多种架构和平台</p>
       </div>
-      <!-- Supported Architectures -->
-      <h2>支持的架构</h2>
-      <table class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th scope="col">架构</th>
-            <th scope="col">Tag</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>x86-64</td>
-            <td>amd64</td>
-          </tr>
-          <tr>
-            <td>arm64</td>
-            <td>arm64</td>
-          </tr>
-          <tr>
-            <td>armv7</td>
-            <td>arm32</td>
-          </tr>
-        </tbody>
-      </table>
+    </section>
 
-      <!-- Before run -->
-      <h2>运行前准备</h2>
-      <p>Clouddrive 使用 fuse3
-        来挂载云存储服务，使用fuse3在Docker容器中挂载云存储服务时，需要在主机系统上启用共享挂载。这可以通过在Docker服务配置中设置MountFlags选项或在主机系统上使用mount
-        --make-shared命令来实现。这是因为FUSE3需要共享挂载才能正常工作，如果没有共享挂载，挂载将会失败并显示“权限被拒绝”的错误。通过启用共享挂载，FUSE3挂载可以在Docker容器和主机系统之间共享，从而实现对云存储服务的无缝访问。
-      </p>
+    <section class="section">
+      <div class="container">
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle"></i>
+          <strong>注意：</strong>如遇到Docker镜像无法更新到最新版本的情况，请尝试禁止使用Docker镜像服务器。
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-microchip card-icon"></i>
+                <h3 class="card-title">支持的架构</h3>
+                <div class="architecture-list">
+                  <div class="arch-item">
+                    <span class="arch-name">x86-64</span>
+                    <span class="arch-tag">amd64</span>
+                  </div>
+                  <div class="arch-item">
+                    <span class="arch-name">arm64</span>
+                    <span class="arch-tag">arm64</span>
+                  </div>
+                  <div class="arch-item">
+                    <span class="arch-name">armv7</span>
+                    <span class="arch-tag">arm32</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <p>为了在 Docker 容器中启用 fuse 并将挂载分享给主机，需要在主机上设置以下选项之一：</p>
+        <h2>运行前准备</h2>
+        <div class="card mb-4">
+          <div class="card-body">
+            <p>CloudDrive 使用 fuse3 来挂载云存储服务，使用fuse3在Docker容器中挂载云存储服务时，需要在主机系统上启用共享挂载。这可以通过在Docker服务配置中设置MountFlags选项或在主机系统上使用mount --make-shared命令来实现。这是因为FUSE3需要共享挂载才能正常工作，如果没有共享挂载，挂载将会失败并显示"权限被拒绝"的错误。通过启用共享挂载，FUSE3挂载可以在Docker容器和主机系统之间共享，从而实现对云存储服务的无缝访问。</p>
+            <p>为了在 Docker 容器中启用 fuse 并将挂载分享给主机，需要在主机上设置以下选项之一：</p>
+          </div>
+        </div>
 
-      <h5>选项 1：当Docker是以systemd service运行时，在 Docker 服务中启用 MountFlags</h5>
-      <div class="code-block">
-        <pre><code class="language-bash">sudo mkdir -p /etc/systemd/system/docker.service.d/
+        <div class="row mb-4">
+          <div class="col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5><i class="fas fa-cog text-primary"></i> 选项 1：systemd service</h5>
+                <p class="text-muted mb-3">当Docker是以systemd service运行时，在 Docker 服务中启用 MountFlags</p>
+                <div class="code-block">
+                  <pre><code class="language-bash">sudo mkdir -p /etc/systemd/system/docker.service.d/
 sudo cat &lt;&lt;EOF &gt; /etc/systemd/system/docker.service.d/clear_mount_propagation_flags.conf
 [Service]
 MountFlags=shared
 EOF
-sudo systemctl restart docker.service</code></pre><button class="copy-btn" onclick="copyCode(this)"><i
-            class="fas fa-copy"></i></button>
-      </div>
+sudo systemctl restart docker.service</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5><i class="fas fa-server text-primary"></i> 选项 2：手动挂载</h5>
+                <p class="text-muted mb-3">当Docker不是以systemd service运行时，在主机上启用共享挂载选项</p>
+                <div class="code-block">
+                  <pre><code class="language-bash">sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <h5>选项 2：当Docker不是以systemd service运行时，在主机上启用共享挂载选项</h5>
-      <div class="code-block">
-        <pre><code class="language-bash">sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
-        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
-      </div>
-      <div class="alert alert-warning" role="alert">
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>注意：</strong>mount --make-shared 命令只在当前运行的系统中生效，重启后需要重新执行。如需重启后自动运行CloudDrive，请将该命令添加到系统启动项中。
-      </div>
+        <div class="alert alert-warning mb-4">
+          <i class="fas fa-exclamation-triangle"></i>
+          <strong>注意：</strong>mount --make-shared 命令只在当前运行的系统中生效，重启后需要重新执行。如需重启后自动运行CloudDrive，请将该命令添加到系统启动项中。
+        </div>
 
-      <!-- Usage -->
-      <h2>使用方法</h2>
-      <h5>Docker Compose</h5>
-      <div class="code-block">
-        <pre><code class="language-yaml">version: "2.1"
+        <h2>使用方法</h2>
+        
+        <div class="row mb-4">
+          <div class="col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5><i class="fab fa-docker text-primary"></i> Docker Compose</h5>
+                <p class="text-muted mb-3">推荐使用Docker Compose进行部署，便于管理和维护</p>
+                <div class="code-block">
+                  <pre><code class="language-yaml">version: "2.1"
 services:
   cloudnas:
     image: cloudnas/clouddrive2
@@ -142,12 +144,19 @@ services:
     pid: "host"
     privileged: true
     network_mode: "host"
-</code></pre><button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
-      </div>
-
-      <h5>Docker CLI</h5>
-      <div class="code-block">
-        <pre><code class="language-bash">docker run -d \
+</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5><i class="fas fa-terminal text-primary"></i> Docker CLI</h5>
+                <p class="text-muted mb-3">使用命令行直接运行Docker容器</p>
+                <div class="code-block">
+                  <pre><code class="language-bash">docker run -d \
     --name clouddrive \
     --restart unless-stopped \
     --env CLOUDDRIVE_HOME=/Config \
@@ -159,22 +168,48 @@ services:
     --privileged \
     --device /dev/fuse:/dev/fuse \
     cloudnas/clouddrive2
-</code></pre><button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
-      </div>
+</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <!-- Configuration -->
-      <h2>配置</h2>
-      <p>打开浏览器访问配置页面：http://&lt;ip&gt;:19798</p>
+        <h2>配置</h2>
+        <div class="card">
+          <div class="card-body text-center">
+            <i class="fas fa-browser card-icon"></i>
+            <h5 class="card-title">Web配置界面</h5>
+            <p class="card-text">Docker容器启动后，打开浏览器访问配置页面</p>
+            <div class="code-block">
+              <pre><code>http://&lt;your-server-ip&gt;:19798</code></pre>
+              <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+            </div>
+            <div class="alert alert-info mt-3">
+              <i class="fas fa-info-circle"></i>
+              将 &lt;your-server-ip&gt; 替换为您的服务器实际IP地址
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 CloudDrive. All rights reserved.</p>
     </div>
+  </footer>
 
-    <!-- Footer -->
-    <footer class="footer text-center bg-light py-4">
-      <div class="container">
-        <p>&copy; 2025 CloudDrive. All rights reserved.</p>
-      </div>
-    </footer>
-  </body>
   <script>
+    function toggleMobileMenu() {
+      const navbar = document.querySelector('.navbar-nav');
+      const toggler = document.querySelector('.navbar-toggler');
+      navbar.classList.toggle('show');
+      toggler.classList.toggle('active');
+    }
+
     function copyCode(btn) {
       const code = btn.previousElementSibling.querySelector('code');
       const text = code.innerText;
@@ -186,10 +221,12 @@ services:
         prompt.style.left = '50%';
         prompt.style.transform = 'translate(-50%, -50%)';
         prompt.style.padding = '1rem';
-        prompt.style.backgroundColor = '#f5f5f5';
-        prompt.style.border = '1px solid #ccc';
-        prompt.style.borderRadius = '5px';
+        prompt.style.backgroundColor = 'var(--bg-secondary)';
+        prompt.style.border = '1px solid var(--border-color)';
+        prompt.style.borderRadius = 'var(--radius-md)';
+        prompt.style.boxShadow = 'var(--shadow-lg)';
         prompt.style.zIndex = '9999';
+        prompt.style.color = 'var(--text-primary)';
         document.body.appendChild(prompt);
         setTimeout(() => {
           document.body.removeChild(prompt);
@@ -197,26 +234,5 @@ services:
       });
     }
   </script>
-
-  <style>
-    .code-block {
-      position: relative;
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 0;
-      right: 0;
-      padding: 0.5rem;
-      background-color: #f5f5f5;
-      border: none;
-      border-radius: 0 5px 0 0;
-      cursor: pointer;
-    }
-
-    .copy-btn:hover {
-      background-color: #e0e0e0;
-    }
-  </style>
 
 </html>

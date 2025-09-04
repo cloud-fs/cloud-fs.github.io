@@ -4,170 +4,441 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 会员</title>
+  <title>CloudDrive - 会员计划</title>
+  <meta name="description" content="选择适合您的CloudDrive会员计划，解锁更多专业功能和云存储空间。">
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
-  <link rel="stylesheet" href="css/site.css">
-  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/site.js"></script>
-  <link rel="stylesheet" href="css/download.css">
+  <link rel="stylesheet" href="css/modern-site.css">
+  <style>
+    .pricing-card {
+      position: relative;
+      border: 2px solid var(--border-light);
+      transition: all 0.3s ease;
+    }
+    
+    .pricing-card:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .pricing-card.featured {
+      border-color: var(--primary-color);
+      transform: scale(1.05);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .pricing-card.featured::before {
+      content: '推荐';
+      position: absolute;
+      top: -10px;
+      right: 20px;
+      background: var(--primary-color);
+      color: white;
+      padding: 5px 15px;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    
+    .pricing-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      color: white;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      margin: -1px -1px 0 -1px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+    
+    .plan-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .plan-price {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    
+    .plan-period {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+    
+    .features-list {
+      padding: 2rem 1.5rem;
+    }
+    
+    .features-list li {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .features-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .features-list i {
+      width: 1.25rem;
+      margin-right: 0.75rem;
+      font-size: 1.125rem;
+    }
+    
+    .fa-check {
+      color: var(--success-color);
+    }
+    
+    .fa-xmark {
+      color: var(--error-color);
+    }
+    
+    .special-note {
+      background: var(--bg-accent);
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+    
+    .price-strike {
+      text-decoration: line-through;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+    }
+    
+    @media (max-width: 991.98px) {
+      .pricing-card.featured {
+        transform: none;
+        margin-bottom: 2rem;
+      }
+    }
+  </style>
 </head>
-<style>
-  .navbar-collapse {
-    background-color: rgba(234, 242, 248, 0.9);
-    padding: 10px;
-  }
-
-  .card-title {
-    background-color: #e7f3ff;
-    color: #1c4966;
-    border-bottom: 1px solid #b3d7ff;
-    padding: 10px;
-  }
-</style>
 
 <body>
   <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
+    <nav class="navbar">
       <div class="container">
         <a class="navbar-brand" href="index.html">
-          <img src="img/clouddrive-h.png" height="80">
+          <img src="img/clouddrive-h.png" alt="CloudDrive" height="60">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">主页</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="features.html">功能</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="pricing.html">会员</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="help.html">帮助</a>
-            </li>
-          </ul>
-          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
-        </div>
+        <ul class="navbar-nav">
+          <li><a class="nav-link" href="index.html">主页</a></li>
+          <li><a class="nav-link" href="features.html">功能</a></li>
+          <li><a class="nav-link" href="pricing.html">会员</a></li>
+          <li><a class="nav-link" href="help.html">帮助</a></li>
+          <li><a class="btn btn-primary" href="download.html">下载</a></li>
+        </ul>
       </div>
     </nav>
   </header>
 
-  <!-- Page Content -->
-  <div class="container mt-4">
-    <h1 class="hero-title">CloudDrive - 会员</h1>
-    <p class="tagline">选择一个适合你的会员，点击下载CloudDrive，在软件内完成购买</p>
-    <!-- Pricing Cards -->
-    <div class="row">
-      <!-- Basic Plan -->
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">基础会员</h5>
-            <h6 class="card-subtitle mb-3 text-muted">免费</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 最多添加2个网盘</li>
-              <li><i class="fas fa-check"></i> 最多添加1个本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时2台设备在线(暂不执行)</li>
-              <li><i class="fas fa-xmark"></i> 无Pro功能</li>
-            </ul>
-          </div>
-        </div>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1 class="hero-title">会员计划</h1>
+        <p class="hero-subtitle">选择适合您的会员计划，解锁CloudDrive的全部潜能</p>
       </div>
+    </section>
 
-      <!-- Standard Plan -->
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">月费会员</h5>
-            <h6 class="card-subtitle mb-3" style="color: #FFA500; font-size: 20px; font-weight: bold;">¥4.99</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 无限添加网盘</li>
-              <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时5台设备在线(暂不执行)</li>
-              <li><i class="fas fa-check"></i> 解锁Pro功能</li>
-            </ul>
-          </div>
+    <section class="section">
+      <div class="container">
+        <div class="text-center mb-5">
+          <p class="lead">下载CloudDrive，在软件内完成购买</p>
         </div>
-      </div>
 
-      <!-- Premium Plan -->
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">年费会员</h5>
-            <h6 class="card-subtitle mb-3" style="color: #008000; font-size: 20px; font-weight: bold;">¥49.99</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 无限添加网盘</li>
-              <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时5台设备在线(暂不执行)</li>
-              <li><i class="fas fa-check"></i> 解锁Pro功能</li>
-            </ul>
+        <div class="row">
+          <!-- Basic Plan -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card pricing-card h-100">
+              <div class="pricing-header" style="background: linear-gradient(135deg, #6c757d 0%, #495057 100%);">
+                <div class="plan-name">基础会员</div>
+                <div class="plan-price">免费</div>
+                <div class="plan-period">永久免费</div>
+              </div>
+              <div class="features-list">
+                <ul class="list-unstyled mb-0">
+                  <li><i class="fas fa-check"></i> 最多添加2个网盘</li>
+                  <li><i class="fas fa-check"></i> 最多添加1个本地挂载</li>
+                  <li><i class="fas fa-check"></i> 最多同时2台设备在线</li>
+                  <li><i class="fas fa-xmark"></i> 无Pro功能</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Monthly Plan -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card pricing-card h-100">
+              <div class="pricing-header">
+                <div class="plan-name">月费会员</div>
+                <div class="plan-price">¥4.99</div>
+                <div class="plan-period">每月</div>
+              </div>
+              <div class="features-list">
+                <ul class="list-unstyled mb-0">
+                  <li><i class="fas fa-check"></i> 无限添加网盘</li>
+                  <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
+                  <li><i class="fas fa-check"></i> 最多同时5台设备在线</li>
+                  <li><i class="fas fa-check"></i> 解锁Pro功能</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Annual Plan -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card pricing-card featured h-100">
+              <div class="pricing-header">
+                <div class="plan-name">年费会员</div>
+                <div class="plan-price">¥49.99</div>
+                <div class="plan-period">每年</div>
+              </div>
+              <div class="features-list">
+                <ul class="list-unstyled mb-0">
+                  <li><i class="fas fa-check"></i> 无限添加网盘</li>
+                  <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
+                  <li><i class="fas fa-check"></i> 最多同时5台设备在线</li>
+                  <li><i class="fas fa-check"></i> 解锁Pro功能</li>
+                </ul>
+                <div class="special-note">
+                  <i class="fas fa-star text-warning"></i> 相比月费会员节省约17%
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lite Lifetime Plan -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card pricing-card h-100">
+              <div class="pricing-header" style="background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);">
+                <div class="plan-name">轻享终身</div>
+                <div class="plan-price">¥199</div>
+                <div class="plan-period">一次付费，终身使用</div>
+              </div>
+              <div class="features-list">
+                <ul class="list-unstyled mb-0">
+                  <li><i class="fas fa-check"></i> 无限添加网盘</li>
+                  <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
+                  <li><i class="fas fa-check"></i> 最多同时5台设备在线</li>
+                  <li><i class="fas fa-xmark"></i> 无Pro功能</li>
+                </ul>
+                <div class="special-note">
+                  <i class="fas fa-gift text-primary"></i> 赠送传输限速和缓存目录本地持久化两项Pro功能<br>
+                  <i class="fas fa-arrow-up text-success"></i> 可以补差价升级到终身会员<br>
+                  <i class="fas fa-plus text-info"></i> 可以叠加购买年费和月费会员
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lifetime Plan -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card pricing-card h-100">
+              <div class="pricing-header" style="background: linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%);">
+                <div class="plan-name">终身会员</div>
+                <div class="plan-price">¥499</div>
+                <div class="plan-period">一次付费，终身使用</div>
+              </div>
+              <div class="features-list">
+                <ul class="list-unstyled mb-0">
+                  <li><i class="fas fa-check"></i> 无限添加网盘</li>
+                  <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
+                  <li><i class="fas fa-check"></i> 最多同时5台设备在线</li>
+                  <li><i class="fas fa-check"></i> 解锁Pro功能</li>
+                </ul>
+                <div class="special-note">
+                  <i class="fas fa-crown text-warning"></i> 享受CloudDrive全部功能，无任何限制
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Special Accessibility Plan -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card pricing-card h-100">
+              <div class="pricing-header" style="background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);">
+                <div class="plan-name">视障用户终身</div>
+                <div class="plan-price">
+                  <span class="price-strike">¥499</span>¥299
+                </div>
+                <div class="plan-period">特惠价格</div>
+              </div>
+              <div class="features-list">
+                <ul class="list-unstyled mb-0">
+                  <li><i class="fas fa-check"></i> 无限添加网盘</li>
+                  <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
+                  <li><i class="fas fa-check"></i> 最多同时5台设备在线</li>
+                  <li><i class="fas fa-check"></i> 解锁Pro功能</li>
+                </ul>
+                <div class="special-note">
+                  <i class="fas fa-heart text-danger"></i> 视障用户请凭姓名和残疾证编号<br>
+                  <a href="mailto:waytechcloudfs@gmail.com" class="text-primary">联系我们</a> 获取优惠码
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pro Features Section -->
+        <div class="mt-5">
+          <h2 class="text-center mb-4">Pro功能详情</h2>
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <i class="fas fa-people-carry card-icon"></i>
+                  <h6>跨云盘复制</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <i class="fas fa-bell card-icon"></i>
+                  <h6>文件变更通知</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <i class="fas fa-shield-alt card-icon"></i>
+                  <h6>加密文件系统</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <i class="fas fa-lock card-icon"></i>
+                  <h6>权限控制</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <i class="fas fa-cloud-upload-alt card-icon"></i>
+                  <h6>多云盘备份</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <i class="fas fa-tachometer-alt card-icon"></i>
+                  <h6>传输限速</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <i class="fas fa-database card-icon"></i>
+                  <h6>缓存持久化</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <i class="fas fa-plus card-icon"></i>
+                  <h6>更多功能</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="mt-5">
+          <h2 class="text-center mb-4">常见问题</h2>
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title"><i class="fas fa-question-circle text-primary"></i> 如何购买会员？</h6>
+                  <p class="card-text">下载CloudDrive软件后，在软件内即可完成会员购买，支持多种支付方式。</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title"><i class="fas fa-question-circle text-primary"></i> 会员可以退款吗？</h6>
+                  <p class="card-text">支持7天无理由退款，具体退款政策请查看用户协议或联系客服。</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title"><i class="fas fa-question-circle text-primary"></i> 可以在多台设备使用吗？</h6>
+                  <p class="card-text">可以，但同时在线设备数量根据会员等级有所限制。</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title"><i class="fas fa-question-circle text-primary"></i> Pro功能包含什么？</h6>
+                  <p class="card-text">包括跨云盘复制、文件变更通知、加密文件系统、权限控制、多云盘备份等高级功能。</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">轻享终身会员</h5>
-            <h6 class="card-subtitle mb-3" style="color: #008000; font-size: 20px; font-weight: bold;">¥199</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 无限添加网盘</li>
-              <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时5台设备在线(暂不执行)</li>
-              <li><i class="fas fa-xmark"></i> 无Pro功能</li>
-              <p>赠送传输限速和缓存目录本地持久化两项Pro功能，可以补差价升级到终身会员，可以叠加购买年费和月费会员，年费和月费会员有效期内拥有全部Pro功能</p>
-            </ul>
-          </div>
-        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section section-alt">
+      <div class="container text-center">
+        <h2 class="mb-4">准备好开始了吗？</h2>
+        <p class="lead mb-4">立即下载CloudDrive，选择适合您的会员计划</p>
+        <a class="btn btn-primary btn-lg" href="download.html">立即下载 CloudDrive</a>
       </div>
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">终身会员</h5>
-            <h6 class="card-subtitle mb-3" style="color: #008000; font-size: 20px; font-weight: bold;">¥499</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 无限添加网盘</li>
-              <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时5台设备在线(暂不执行)</li>
-              <li><i class="fas fa-check"></i> 解锁Pro功能</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">视障用户终身会员</h5>
-            <h6 class="card-subtitle mb-3" style="color: #0000FF; font-size: 20px; font-weight: bold;"><del>¥499</del>
-              ¥299</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 无限添加网盘</li>
-              <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时5台设备在线(暂不执行)</li>
-              <li><i class="fas fa-check"></i> 解锁Pro功能</li>
-              <p>视障用户请凭姓名和残疾证编号<a href="mailto:waytechcloudfs@gmail.com">联系我们</a>获取优惠码</p>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container text-center" style="margin-bottom: 20px;">
-    <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;" href="download.html">下载CloudDrive</a>
-  </div>
-  <!-- Footer -->
-  <footer class="footer text-center bg-light py-4">
+    </section>
+  </main>
+
+  <footer>
     <div class="container">
-      <p>&copy; 2025 CloudDrive. All rights reserved.</p>
+      <div class="mb-3">
+        <p>如果您有任何问题或建议，请随时联系我们。</p>
+        <p><a href="mailto:waytechcloudfs@gmail.com">发送邮件</a> | <a href="https://t.me/cloudnaschat">Telegram</a></p>
+      </div>
+      <div>
+        <p>&copy; 2025 CloudDrive. All rights reserved.</p>
+      </div>
     </div>
   </footer>
+
+  <script>
+    // Mobile navigation toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const navbarToggler = document.querySelector('.navbar-toggler');
+      const navbarNav = document.querySelector('.navbar-nav');
+      
+      if (navbarToggler && navbarNav) {
+        navbarToggler.addEventListener('click', function() {
+          navbarToggler.classList.toggle('active');
+          navbarNav.classList.toggle('show');
+        });
+      }
+    });
+  </script>
 </body>
 
 </html>
