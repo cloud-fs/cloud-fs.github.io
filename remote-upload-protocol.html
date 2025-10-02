@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>远程文件上传协议 / Remote Upload Protocol</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -93,20 +98,25 @@
             color: #e83e8c;
         }
         pre {
-            background: #2d2d2d;
-            color: #f8f8f2;
+            background: #282c34;
+            color: #abb2bf;
             padding: 15px;
             border-radius: 5px;
             overflow-x: auto;
             margin: 15px 0;
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             font-size: 0.9em;
-            line-height: 1.4;
+            line-height: 1.5;
         }
         pre code {
             background: none;
             color: inherit;
             padding: 0;
+            display: block;
+        }
+        pre code.hljs {
+            padding: 0;
+            background: transparent;
         }
         hr {
             border: none;
@@ -158,8 +168,8 @@
 </head>
 <body>
     <div class="language-toggle">
-        <button onclick="switchLanguage('zh')" id="btn-zh" class="active">中文</button>
-        <button onclick="switchLanguage('en')" id="btn-en">English</button>
+        <button type="button" onclick="switchLanguage('zh')" id="btn-zh" class="active">中文</button>
+        <button type="button" onclick="switchLanguage('en')" id="btn-en">English</button>
     </div>
 
     <div class="container">
@@ -234,7 +244,7 @@
             <ul>
                 <li><code>file_path</code>: string — 服务器上的目标路径</li>
                 <li><code>file_size</code>: uint64 — 总字节数</li>
-                <li><code>known_hashes</code>: map&lt;uint32, string&gt; — 可选的预计算文件哈希；键为 CloudDriveFile.HashType 数值（1=MD5, 2=SHA1, 3=PIKPAK_SHA1）</li>
+                <li><code>known_hashes</code>: map&lt;uint32, string&gt; — 可选的预计算文件哈希；键为 CloudDriveFile.HashType 数值（1=MD5, 2=SHA1）</li>
             </ul>
 
             <h3>RemoteUploadChannelRequest</h3>
@@ -256,7 +266,7 @@
                         </li>
                         <li><strong>RemoteHashDataRequest</strong>
                             <ul>
-                                <li><code>hash_type</code>: HashType（例如 MD5、SHA1、PIKPAK_SHA1）</li>
+                                <li><code>hash_type</code>: HashType（例如 MD5、SHA1）</li>
                                 <li><code>block_size</code>: uint32（可选；仅 MD5；0 或未设置表示无块哈希）</li>
                             </ul>
                         </li>
@@ -308,7 +318,7 @@
                     <p>收到 RemoteHashDataRequest 时：</p>
                     <ul>
                         <li>从 hash_type 确定算法。</li>
-                        <li>如果 hash_type == MD5 且 block_size &gt; 0，计算文件 MD5 和每块 MD5（小写十六进制，按顺序）。对于其他算法（例如 SHA1、PikPakSha1），仅计算文件哈希。</li>
+                        <li>如果 hash_type == MD5 且 block_size &gt; 0，计算文件 MD5 和每块 MD5（小写十六进制，按顺序）。对于其他算法（例如 SHA1），仅计算文件哈希。</li>
                         <li>哈希时，定期使用当前 bytes_hashed 调用 RemoteHashProgress。选择合理的频率（基于时间或字节）以避免过度调用。</li>
                         <li>哈希完成时（或如果取消），发送最终的 RemoteHashProgress：
                             <ul>
@@ -337,7 +347,7 @@
             <hr>
 
             <h2>哈希详细信息</h2>
-            <p><strong>支持的算法（典型）：</strong>MD5、SHA1、PikPakSha1。服务器通过 RemoteHashDataRequest.hash_type 指示所需的算法。</p>
+            <p><strong>支持的算法（典型）：</strong>MD5、SHA1。服务器通过 RemoteHashDataRequest.hash_type 指示所需的算法。</p>
 
             <h3>MD5 块哈希（可选）</h3>
             <ul>
@@ -351,29 +361,6 @@
                 <li>文件哈希是算法对空字节流的摘要（例如空字符串的 MD5）。</li>
                 <li>除非服务器特定约定另有指示，否则应省略/清空 block_hashes。</li>
             </ul>
-
-            <h3>PikPakSha1 算法（规范）</h3>
-            <p>PikPakSha1 不是对整个文件的普通 SHA-1。它是一个两级哈希：</p>
-            <ul>
-                <li>使用基于总文件大小的动态段大小将文件分割为连续段：
-                    <ul>
-                        <li>size ≤ 128 MiB: 256 KiB 段</li>
-                        <li>128 MiB &lt; size ≤ 256 MiB: 512 KiB 段</li>
-                        <li>256 MiB &lt; size ≤ 512 MiB: 1024 KiB 段</li>
-                        <li>size &gt; 512 MiB: 2048 KiB 段</li>
-                    </ul>
-                </li>
-                <li>对于每个段，计算段字节的 SHA-1，生成 20 字节的摘要。</li>
-                <li>连接这些每段摘要（按顺序）并计算连接的最终 SHA-1。</li>
-                <li>将最终摘要输出为大写十六进制。</li>
-            </ul>
-            <div class="note">
-                <strong>注意：</strong>
-                <ul>
-                    <li>PikPakSha1 不使用 RemoteHashDataRequest 的 block_size；忽略该字段。</li>
-                    <li>进度（bytes_hashed）应反映到目前为止处理的字节，通常在每个段读取/哈希后递增。</li>
-                </ul>
-            </div>
 
             <hr>
 
@@ -537,28 +524,6 @@ async Task HandleHashAsync(CloudDrive.CloudDriveClient client, string uploadId, 
         md5File.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
         report(true, Convert.ToHexString(md5File.Hash!).ToLowerInvariant(), blocks);
   }
-  else if (req.HashType == HashType.PikPakSha1)
-  {
-    // PikPakSha1: SHA1 对每段 SHA1 摘要的连接；动态段大小
-    int segSize = totalSize &lt;= (128L&lt;&lt;20) ? (256&lt;&lt;10) :
-            (totalSize &lt;= (256L&lt;&lt;20) ? (512&lt;&lt;10) :
-            (totalSize &lt;= (512L&lt;&lt;20) ? (1024&lt;&lt;10) : (2048&lt;&lt;10)));
-    using var finalSha1 = SHA1.Create();
-    byte[] buf = new byte[segSize];
-    int n;
-    while ((n = await fs.ReadAsync(buf, 0, buf.Length, ct)) &gt; 0)
-    {
-      using var seg = SHA1.Create();
-      seg.TransformBlock(buf, 0, n, null, 0);
-      seg.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
-      finalSha1.TransformBlock(seg.Hash!, 0, seg.Hash!.Length, null, 0);
-      bytesHashed += (ulong)n;
-      report(false);
-      if (ct.IsCancellationRequested) { report(true); return; }
-    }
-    finalSha1.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
-    report(true, Convert.ToHexString(finalSha1.Hash!).ToUpperInvariant());
-  }
   else
     {
         using var hash = req.HashType == HashType.Sha1 ? SHA1.Create() : MD5.Create();
@@ -649,27 +614,6 @@ void handleHash(CloudDriveGrpc.CloudDriveBlockingStub blocking, String uploadId,
         if (ctx.isCancelled()) { finalProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null); return; }
       }
       finalProgress(blocking, uploadId, req, f.length(), bytesHashed, bytesToHex(fileMd5.digest()).toLowerCase(), blocks);
-    } else if (req.getHashType() == HashType.PIKPAKSHA1) {
-      // PikPakSha1: 连接的每段 SHA1 摘要的 SHA1
-      int segSize = f.length() &lt;= (128L&lt;&lt;20) ? (256&lt;&lt;10) :
-                    (f.length() &lt;= (256L&lt;&lt;20) ? (512&lt;&lt;10) :
-                    (f.length() &lt;= (512L&lt;&lt;20) ? (1024&lt;&lt;10) : (2048&lt;&lt;10)));
-      MessageDigest finalSha1;
-      try { finalSha1 = MessageDigest.getInstance("SHA-1"); } catch (Exception e) { return; }
-      byte[] buf = new byte[segSize];
-      int n;
-      try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f))) {
-        while ((n = bis.read(buf)) &gt; 0) {
-          MessageDigest seg = MessageDigest.getInstance("SHA-1");
-          seg.update(buf, 0, n);
-          byte[] segDigest = seg.digest();
-          finalSha1.update(segDigest);
-          bytesHashed += n;
-          maybeProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null);
-          if (ctx.isCancelled()) { finalProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null); return; }
-        }
-      } catch (IOException | NoSuchAlgorithmException e) { return; }
-      finalProgress(blocking, uploadId, req, f.length(), bytesHashed, bytesToHex(finalSha1.digest()).toUpperCase(), null);
     } else {
       MessageDigest dig = req.getHashType() == HashType.SHA1 ? MessageDigest.getInstance("SHA-1") : MessageDigest.getInstance("MD5");
       byte[] buf = new byte[1 &lt;&lt; 20];
@@ -758,29 +702,6 @@ def handle_hash(stub, upload_id, req, files, cancel_event):
                     progress(final=True)
                     return
             progress(final=True, hash_value=md5_file.hexdigest(), block_hashes=blocks)
-    elif req.hash_type == HashType.PIKPAKSHA1:
-      # PikPakSha1: 每段 SHA1 摘要连接的 SHA1（大写十六进制）
-      size = file_size
-      if size &lt;= (128 &lt;&lt; 20):
-        seg = 256 &lt;&lt; 10
-      elif size &lt;= (256 &lt;&lt; 20):
-        seg = 512 &lt;&lt; 10
-      elif size &lt;= (512 &lt;&lt; 20):
-        seg = 1024 &lt;&lt; 10
-      else:
-        seg = 2048 &lt;&lt; 10
-      final = hashlib.sha1()
-      while True:
-        chunk = f.read(seg)
-        if not chunk:
-          break
-        final.update(hashlib.sha1(chunk).digest())
-        bytes_hashed += len(chunk)
-        progress()
-        if cancel_event.is_set():
-          progress(final=True)
-          return
-      progress(final=True, hash_value=final.hexdigest().upper())
     else:
             dig = hashlib.sha1() if req.hash_type == HashType.SHA1 else hashlib.md5()
             while True:
@@ -915,7 +836,7 @@ control: resume {}</code></pre>
             <ul>
                 <li><code>file_path</code>: string — desired path on server</li>
                 <li><code>file_size</code>: uint64 — total bytes</li>
-                <li><code>known_hashes</code>: map&lt;uint32, string&gt; — optional precomputed file hashes; keys are CloudDriveFile.HashType numeric values (1=MD5, 2=SHA1, 3=PIKPAK_SHA1)</li>
+                <li><code>known_hashes</code>: map&lt;uint32, string&gt; — optional precomputed file hashes; keys are CloudDriveFile.HashType numeric values (1=MD5, 2=SHA1)</li>
             </ul>
 
             <h3>RemoteUploadChannelRequest</h3>
@@ -937,7 +858,7 @@ control: resume {}</code></pre>
                         </li>
                         <li><strong>RemoteHashDataRequest</strong>
                             <ul>
-                                <li><code>hash_type</code>: HashType (e.g., MD5, SHA1, PIKPAK_SHA1)</li>
+                                <li><code>hash_type</code>: HashType (e.g., MD5, SHA1)</li>
                                 <li><code>block_size</code>: uint32 (optional; MD5-only; 0 or unset means no per-block hashes)</li>
                             </ul>
                         </li>
@@ -989,7 +910,7 @@ control: resume {}</code></pre>
                     <p>Upon RemoteHashDataRequest:</p>
                     <ul>
                         <li>Determine the algorithm from hash_type.</li>
-                        <li>If hash_type == MD5 and block_size &gt; 0, compute both the file MD5 and per-block MD5s (lower-hex, in order). For other algorithms (e.g., SHA1, PikPakSha1), compute only the file hash.</li>
+                        <li>If hash_type == MD5 and block_size &gt; 0, compute both the file MD5 and per-block MD5s (lower-hex, in order). For other algorithms (e.g., SHA1), compute only the file hash.</li>
                         <li>While hashing, periodically call RemoteHashProgress with the current bytes_hashed. Choose a reasonable cadence (time- or byte-based) to avoid spamming.</li>
                         <li>When hashing completes (or if canceled), send a final RemoteHashProgress:
                             <ul>
@@ -1018,7 +939,7 @@ control: resume {}</code></pre>
             <hr>
 
             <h2>Hashing details</h2>
-            <p><strong>Supported algorithms (typical):</strong> MD5, SHA1, PikPakSha1. The server indicates the desired algorithm via RemoteHashDataRequest.hash_type.</p>
+            <p><strong>Supported algorithms (typical):</strong> MD5, SHA1. The server indicates the desired algorithm via RemoteHashDataRequest.hash_type.</p>
 
             <h3>MD5 block hashes (optional)</h3>
             <ul>
@@ -1032,29 +953,6 @@ control: resume {}</code></pre>
                 <li>The file hash is the algorithm's digest of an empty byte stream (e.g., MD5 of empty string).</li>
                 <li>block_hashes should be omitted/empty unless otherwise directed by server-specific conventions.</li>
             </ul>
-
-            <h3>PikPakSha1 algorithm (spec)</h3>
-            <p>PikPakSha1 is not a plain SHA-1 over the entire file. It's a two-level hash:</p>
-            <ul>
-                <li>Split the file into contiguous segments using a dynamic segment size based on the total file size:
-                    <ul>
-                        <li>size ≤ 128 MiB: 256 KiB segments</li>
-                        <li>128 MiB &lt; size ≤ 256 MiB: 512 KiB segments</li>
-                        <li>256 MiB &lt; size ≤ 512 MiB: 1024 KiB segments</li>
-                        <li>size &gt; 512 MiB: 2048 KiB segments</li>
-                    </ul>
-                </li>
-                <li>For each segment, compute SHA-1 over the segment bytes, producing a 20-byte digest.</li>
-                <li>Concatenate these per-segment digests (in order) and compute a final SHA-1 over the concatenation.</li>
-                <li>Output the final digest as UPPERCASE hex.</li>
-            </ul>
-            <div class="note">
-                <strong>Notes:</strong>
-                <ul>
-                    <li>PikPakSha1 does not use block_size from RemoteHashDataRequest; ignore that field for this algorithm.</li>
-                    <li>Progress (bytes_hashed) should reflect bytes processed so far, typically incremented after each segment is read/hashed.</li>
-                </ul>
-            </div>
 
             <hr>
 
@@ -1218,28 +1116,6 @@ async Task HandleHashAsync(CloudDrive.CloudDriveClient client, string uploadId, 
         md5File.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
         report(true, Convert.ToHexString(md5File.Hash!).ToLowerInvariant(), blocks);
   }
-  else if (req.HashType == HashType.PikPakSha1)
-  {
-    // PikPakSha1: SHA1 over concatenation of per-segment SHA1 digests; dynamic segment size
-    int segSize = totalSize &lt;= (128L&lt;&lt;20) ? (256&lt;&lt;10) :
-            (totalSize &lt;= (256L&lt;&lt;20) ? (512&lt;&lt;10) :
-            (totalSize &lt;= (512L&lt;&lt;20) ? (1024&lt;&lt;10) : (2048&lt;&lt;10)));
-    using var finalSha1 = SHA1.Create();
-    byte[] buf = new byte[segSize];
-    int n;
-    while ((n = await fs.ReadAsync(buf, 0, buf.Length, ct)) &gt; 0)
-    {
-      using var seg = SHA1.Create();
-      seg.TransformBlock(buf, 0, n, null, 0);
-      seg.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
-      finalSha1.TransformBlock(seg.Hash!, 0, seg.Hash!.Length, null, 0);
-      bytesHashed += (ulong)n;
-      report(false);
-      if (ct.IsCancellationRequested) { report(true); return; }
-    }
-    finalSha1.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
-    report(true, Convert.ToHexString(finalSha1.Hash!).ToUpperInvariant());
-  }
   else
     {
         using var hash = req.HashType == HashType.Sha1 ? SHA1.Create() : MD5.Create();
@@ -1330,27 +1206,6 @@ void handleHash(CloudDriveGrpc.CloudDriveBlockingStub blocking, String uploadId,
         if (ctx.isCancelled()) { finalProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null); return; }
       }
       finalProgress(blocking, uploadId, req, f.length(), bytesHashed, bytesToHex(fileMd5.digest()).toLowerCase(), blocks);
-    } else if (req.getHashType() == HashType.PIKPAKSHA1) {
-      // PikPakSha1: SHA1 of concatenated per-segment SHA1 digests
-      int segSize = f.length() &lt;= (128L&lt;&lt;20) ? (256&lt;&lt;10) :
-                    (f.length() &lt;= (256L&lt;&lt;20) ? (512&lt;&lt;10) :
-                    (f.length() &lt;= (512L&lt;&lt;20) ? (1024&lt;&lt;10) : (2048&lt;&lt;10)));
-      MessageDigest finalSha1;
-      try { finalSha1 = MessageDigest.getInstance("SHA-1"); } catch (Exception e) { return; }
-      byte[] buf = new byte[segSize];
-      int n;
-      try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f))) {
-        while ((n = bis.read(buf)) &gt; 0) {
-          MessageDigest seg = MessageDigest.getInstance("SHA-1");
-          seg.update(buf, 0, n);
-          byte[] segDigest = seg.digest();
-          finalSha1.update(segDigest);
-          bytesHashed += n;
-          maybeProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null);
-          if (ctx.isCancelled()) { finalProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null); return; }
-        }
-      } catch (IOException | NoSuchAlgorithmException e) { return; }
-      finalProgress(blocking, uploadId, req, f.length(), bytesHashed, bytesToHex(finalSha1.digest()).toUpperCase(), null);
     } else {
       MessageDigest dig = req.getHashType() == HashType.SHA1 ? MessageDigest.getInstance("SHA-1") : MessageDigest.getInstance("MD5");
       byte[] buf = new byte[1 &lt;&lt; 20];
@@ -1439,29 +1294,6 @@ def handle_hash(stub, upload_id, req, files, cancel_event):
                     progress(final=True)
                     return
             progress(final=True, hash_value=md5_file.hexdigest(), block_hashes=blocks)
-    elif req.hash_type == HashType.PIKPAKSHA1:
-      # PikPakSha1: SHA1 over concatenation of per-segment SHA1 digests (upper hex)
-      size = file_size
-      if size &lt;= (128 &lt;&lt; 20):
-        seg = 256 &lt;&lt; 10
-      elif size &lt;= (256 &lt;&lt; 20):
-        seg = 512 &lt;&lt; 10
-      elif size &lt;= (512 &lt;&lt; 20):
-        seg = 1024 &lt;&lt; 10
-      else:
-        seg = 2048 &lt;&lt; 10
-      final = hashlib.sha1()
-      while True:
-        chunk = f.read(seg)
-        if not chunk:
-          break
-        final.update(hashlib.sha1(chunk).digest())
-        bytes_hashed += len(chunk)
-        progress()
-        if cancel_event.is_set():
-          progress(final=True)
-          return
-      progress(final=True, hash_value=final.hexdigest().upper())
     else:
             dig = hashlib.sha1() if req.hash_type == HashType.SHA1 else hashlib.md5()
             while True:
@@ -1527,6 +1359,29 @@ control: resume {}</code></pre>
     </div>
 
     <script>
+        // Initialize syntax highlighting when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add language classes to code blocks for proper highlighting
+            document.querySelectorAll('pre code').forEach(function(block) {
+                const text = block.textContent;
+
+                // Detect language based on content
+                if (text.includes('using System') || text.includes('async Task')) {
+                    block.classList.add('language-csharp');
+                } else if (text.includes('void startUpload') || text.includes('Map<String') || text.includes('@Override')) {
+                    block.classList.add('language-java');
+                } else if (text.includes('def ') || text.includes('import hashlib')) {
+                    block.classList.add('language-python');
+                } else if (text.includes('|--') || text.includes('客户端') || text.includes('Client')) {
+                    // Sequence diagram or plain text
+                    block.classList.add('language-plaintext');
+                }
+
+                // Apply syntax highlighting
+                hljs.highlightElement(block);
+            });
+        });
+
         function switchLanguage(lang) {
             // Hide all content
             document.querySelectorAll('.lang-content').forEach(el => {
