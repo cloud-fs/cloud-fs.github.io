@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>远程文件上传协议 / Remote Upload Protocol</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .language-toggle button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: 2px solid #007bff;
+            background: white;
+            color: #007bff;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .language-toggle button:hover {
+            background: #007bff;
+            color: white;
+        }
+        .language-toggle button.active {
+            background: #007bff;
+            color: white;
+        }
+        .lang-content {
+            display: none;
+        }
+        .lang-content.active {
+            display: block;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+            margin: 30px 0 20px 0;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #007bff;
+            font-size: 1.8em;
+        }
+        h3 {
+            color: #5a6c7d;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        p {
+            margin: 10px 0;
+        }
+        ul, ol {
+            margin: 10px 0 10px 30px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 30px 0;
+        }
+        .note {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.4em;
+            }
+            .language-toggle {
+                position: static;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-toggle">
+        <button onclick="switchLanguage('zh')" id="btn-zh" class="active">中文</button>
+        <button onclick="switchLanguage('en')" id="btn-en">English</button>
+    </div>
+
+    <div class="container">
+        <!-- Chinese Content -->
+        <div id="content-zh" class="lang-content active">
+            <h1>远程文件上传（客户端开发者指南）</h1>
+            <p>本指南说明如何实现一个将文件上传到远程 CloudDrive gRPC 服务器的客户端。重点介绍客户端工作流程、进度报告、哈希计算（包括可选的 MD5 块哈希）、取消操作以及可靠性行为。</p>
+
+            <hr>
+
+            <h2>RPC 和消息概览</h2>
+            <ul>
+                <li><strong>StartRemoteUpload</strong>（一元调用）
+                    <ul>
+                        <li>请求：StartRemoteUploadRequest</li>
+                        <li>响应：RemoteUploadStarted</li>
+                    </ul>
+                </li>
+                <li><strong>RemoteUploadChannel</strong>（服务器端流式；每个客户端会话使用一个长连接通道）
+                    <ul>
+                        <li>请求：RemoteUploadChannelRequest</li>
+                        <li>响应：RemoteUploadChannelReply
+                            <ul>
+                                <li>字段：upload_id</li>
+                                <li>oneof request
+                                    <ul>
+                                        <li>read_data: RemoteReadDataRequest</li>
+                                        <li>hash_data: RemoteHashDataRequest</li>
+                                        <li>status_changed: RemoteUploadStatusChanged</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>RemoteReadData</strong>（一元调用）
+                    <ul>
+                        <li>请求：RemoteReadDataUpload</li>
+                        <li>响应：RemoteReadDataReply</li>
+                    </ul>
+                </li>
+                <li><strong>RemoteHashProgress</strong>（一元调用）— 用于进度更新和哈希请求的完成
+                    <ul>
+                        <li>请求：RemoteHashProgressUpload</li>
+                        <li>响应：RemoteHashProgressReply</li>
+                    </ul>
+                </li>
+                <li><strong>RemoteUploadControl</strong>（一元调用）
+                    <ul>
+                        <li>请求：RemoteUploadControlRequest（oneof: cancel、pause、resume）</li>
+                        <li>响应：google.protobuf.Empty（错误通过 RPC 状态返回）</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="note">
+                <strong>关键协议说明：</strong>
+                <ul>
+                    <li>所有操作都通过服务器提供的 upload_id（从 StartRemoteUpload 返回）进行索引。</li>
+                    <li>RemoteUploadChannel 请求必须包含一个稳定的 device_id，用于唯一标识客户端设备；在重启后重用它，以便服务器可以替换通道并重放待处理的工作。</li>
+                    <li>file_path 仅在 StartRemoteUpload 中提供；后续消息通过 upload_id 索引。不使用 cloudName/cloudAccountId。</li>
+                    <li>服务器的哈希请求可能包含可选的 block_size（仅 MD5）以请求每块 MD5。</li>
+                    <li>最终的哈希值（以及任何块哈希）必须通过 RemoteHashProgress 传递。</li>
+                    <li>客户端控制（暂停/恢复/取消）通过 RemoteUploadControl 发送。状态变化通过流上的 RemoteUploadStatusChanged 观察；控制 RPC 成功时返回 Empty，不携带状态。</li>
+                </ul>
+            </div>
+
+            <hr>
+
+            <h2>消息契约（关键字段）</h2>
+            <h3>StartRemoteUploadRequest</h3>
+            <ul>
+                <li><code>file_path</code>: string — 服务器上的目标路径</li>
+                <li><code>file_size</code>: uint64 — 总字节数</li>
+                <li><code>known_hashes</code>: map&lt;uint32, string&gt; — 可选的预计算文件哈希；键为 CloudDriveFile.HashType 数值（1=MD5, 2=SHA1, 3=PIKPAK_SHA1）</li>
+            </ul>
+
+            <h3>RemoteUploadChannelRequest</h3>
+            <ul>
+                <li><code>device_id</code>: string — 客户端设备的稳定标识符。在进程重启时重用相同的值（例如，CloudFS 的 <code>SELF_GENERATE_MACHINE_ID</code>）。</li>
+            </ul>
+
+            <h3>RemoteUploadChannelReply</h3>
+            <ul>
+                <li><code>upload_id</code>: string</li>
+                <li>oneof request
+                    <ul>
+                        <li><strong>RemoteReadDataRequest</strong>
+                            <ul>
+                                <li><code>offset</code>: uint64</li>
+                                <li><code>length</code>: uint64</li>
+                                <li><code>lazy_read</code>: bool</li>
+                            </ul>
+                        </li>
+                        <li><strong>RemoteHashDataRequest</strong>
+                            <ul>
+                                <li><code>hash_type</code>: HashType（例如 MD5、SHA1、PIKPAK_SHA1）</li>
+                                <li><code>block_size</code>: uint32（可选；仅 MD5；0 或未设置表示无块哈希）</li>
+                            </ul>
+                        </li>
+                        <li><strong>RemoteUploadStatusChanged</strong>
+                            <ul>
+                                <li><code>status</code>: UploadFileInfo.Status（例如 WaitforPreprocessing、Preprocessing、Transfer、Pause、Cancelled、Finish、Skipped、Inqueue、Ignored、Error、FatalError）</li>
+                                <li><code>error_message</code>: string（当状态指示错误时设置）</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>RemoteReadDataUpload</h3>
+            <ul>
+                <li><code>upload_id</code>: string</li>
+                <li><code>offset</code>: uint64</li>
+                <li><code>length</code>: uint64</li>
+                <li><code>lazy_read</code>: bool</li>
+                <li><code>data</code>: bytes</li>
+                <li><code>is_last_chunk</code>: bool</li>
+            </ul>
+
+            <h3>RemoteHashProgressUpload</h3>
+            <ul>
+                <li><code>upload_id</code>: string</li>
+                <li><code>bytes_hashed</code>: uint64 — 累计进度</li>
+                <li><code>total_bytes</code>: uint64 — 通常是文件大小</li>
+                <li><code>hash_type</code>: HashType</li>
+                <li><code>hash_value</code>: string（可选；仅在最终进度消息中存在）</li>
+                <li><code>block_hashes</code>: repeated string（可选；仅 MD5；仅当 block_size &gt; 0 时在最终进度消息中存在）</li>
+            </ul>
+
+            <hr>
+
+            <h2>端到端客户端工作流程</h2>
+            <ol>
+                <li><strong>启动上传</strong>
+                    <p>使用 file_path 和 file_size 调用 StartRemoteUpload。使用返回的 upload_id 进行所有后续 RPC。</p>
+                </li>
+                <li><strong>打开全局通道</strong>
+                    <p>每个客户端会话调用一次 RemoteUploadChannel 并保持打开。每次连接时提供相同的 device_id（即使在重启进程后）。服务器使用 device_id 为该设备切换到最新的流，并自动将任何未完成的读取/哈希请求重放到新通道。</p>
+                    <p>服务器将为任何活动的 upload_id 推送 RemoteReadDataRequest、RemoteHashDataRequest 和 RemoteUploadStatusChanged 消息。</p>
+                </li>
+                <li><strong>处理读取请求</strong>
+                    <p>收到 RemoteReadDataRequest 时，从本地文件读取请求的范围并使用字节调用 RemoteReadData。当知道发送该上传的最后部分时设置 is_last_chunk。</p>
+                </li>
+                <li><strong>处理哈希请求（带进度和完成）</strong>
+                    <p>收到 RemoteHashDataRequest 时：</p>
+                    <ul>
+                        <li>从 hash_type 确定算法。</li>
+                        <li>如果 hash_type == MD5 且 block_size &gt; 0，计算文件 MD5 和每块 MD5（小写十六进制，按顺序）。对于其他算法（例如 SHA1、PikPakSha1），仅计算文件哈希。</li>
+                        <li>哈希时，定期使用当前 bytes_hashed 调用 RemoteHashProgress。选择合理的频率（基于时间或字节）以避免过度调用。</li>
+                        <li>哈希完成时（或如果取消），发送最终的 RemoteHashProgress：
+                            <ul>
+                                <li>成功时将 hash_value 设置为最终文件哈希。</li>
+                                <li>对于 block_size &gt; 0 的 MD5，包含 block_hashes（小写十六进制，每块一个，按顺序）。</li>
+                                <li>如果哈希被取消，发送不带 hash_value 的终端进度。</li>
+                            </ul>
+                        </li>
+                        <li>通过 RemoteHashProgress 报告进度。服务器在终端 RemoteHashProgress 上识别完成。</li>
+                    </ul>
+                </li>
+                <li><strong>处理完成</strong>
+                    <p>服务器将发送带有终端状态的 RemoteUploadStatusChanged（例如 Finish、Skipped、Cancelled、Error、FatalError）。将这些视为给定 upload_id 的完成信号。清理该上传的任何本地状态，但保持通道对其他上传开放。</p>
+                </li>
+                <li><strong>控制操作</strong>
+                    <p>使用 RemoteUploadControl 暂停、恢复或取消特定的 upload_id。不要在此处查询状态；状态更改作为 RemoteUploadStatusChanged 在通道上流式传输。</p>
+                    <ul>
+                        <li>取消：control = cancel {}</li>
+                        <li>暂停：control = pause {}</li>
+                        <li>恢复：control = resume {}</li>
+                        <li>响应：成功时返回 Empty（错误通过 gRPC 状态）</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <hr>
+
+            <h2>哈希详细信息</h2>
+            <p><strong>支持的算法（典型）：</strong>MD5、SHA1、PikPakSha1。服务器通过 RemoteHashDataRequest.hash_type 指示所需的算法。</p>
+
+            <h3>MD5 块哈希（可选）</h3>
+            <ul>
+                <li>服务器可以通过在 RemoteHashDataRequest 中提供 block_size（仅 MD5）来请求块哈希。</li>
+                <li>计算大小为 block_size 的连续、非重叠块的每块 MD5 摘要（最后一块可能更小）。将每个摘要表示为 32 字符的小写十六进制字符串。</li>
+                <li>当 block_size &gt; 0 时，最终的 RemoteHashProgress 必须包含 hash_value（文件的 MD5）和 block_hashes（块 MD5 的有序列表）。</li>
+            </ul>
+
+            <h3>零长度文件</h3>
+            <ul>
+                <li>文件哈希是算法对空字节流的摘要（例如空字符串的 MD5）。</li>
+                <li>除非服务器特定约定另有指示，否则应省略/清空 block_hashes。</li>
+            </ul>
+
+            <h3>PikPakSha1 算法（规范）</h3>
+            <p>PikPakSha1 不是对整个文件的普通 SHA-1。它是一个两级哈希：</p>
+            <ul>
+                <li>使用基于总文件大小的动态段大小将文件分割为连续段：
+                    <ul>
+                        <li>size ≤ 128 MiB: 256 KiB 段</li>
+                        <li>128 MiB &lt; size ≤ 256 MiB: 512 KiB 段</li>
+                        <li>256 MiB &lt; size ≤ 512 MiB: 1024 KiB 段</li>
+                        <li>size &gt; 512 MiB: 2048 KiB 段</li>
+                    </ul>
+                </li>
+                <li>对于每个段，计算段字节的 SHA-1，生成 20 字节的摘要。</li>
+                <li>连接这些每段摘要（按顺序）并计算连接的最终 SHA-1。</li>
+                <li>将最终摘要输出为大写十六进制。</li>
+            </ul>
+            <div class="note">
+                <strong>注意：</strong>
+                <ul>
+                    <li>PikPakSha1 不使用 RemoteHashDataRequest 的 block_size；忽略该字段。</li>
+                    <li>进度（bytes_hashed）应反映到目前为止处理的字节，通常在每个段读取/哈希后递增。</li>
+                </ul>
+            </div>
+
+            <hr>
+
+            <h2>进度语义和可靠性</h2>
+            <ul>
+                <li><strong>进度频率：</strong>在哈希期间定期发送 RemoteHashProgress，bytes_hashed 递增。在响应性和开销之间取得平衡（例如，每几百毫秒或有意义的字节增量后）。</li>
+                <li><strong>完成：</strong>服务器将最终的 RemoteHashProgress（存在 hash_value 的那个，以及如果请求了 block_hashes）视为该 (upload_id, hash_type) 的终端事件。</li>
+                <li><strong>重复请求：</strong>如果服务器观察到给定 (upload_id, hash_type) 在约 60 秒内没有 RemoteHashProgress，它可能会重新发送相应的 RemoteHashDataRequest。客户端必须幂等地处理此类重新请求（例如，如果已在进行中则忽略，或继续哈希并继续发送进度/最终）。</li>
+                <li><strong>客户端重启：</strong>当客户端使用相同的 device_id 重新连接时，服务器透明地替换旧的 RemoteUploadChannel 并重放任何未完成的 RemoteReadDataRequest 或 RemoteHashDataRequest 消息。保持按 upload_id 索引的本地上传状态，以便在收到重放的请求后立即恢复工作。</li>
+                <li><strong>取消：</strong>如果上传（或特定哈希请求）被取消，立即停止工作并发送不带 hash_value 的终端 RemoteHashProgress。服务器将相应地清理状态。</li>
+            </ul>
+
+            <hr>
+
+            <h2>示例序列图</h2>
+            <pre><code>客户端                                     服务器
+  |                                            |
+  |-- StartRemoteUploadRequest --------------> |
+  |                                            |
+  |&lt;----------- RemoteUploadStarted ---------- |
+  |                                            |
+  |-- RemoteUploadChannel (stream) ----------> |
+  |                                            |
+  |&lt;-- RemoteReadDataRequest (stream) -------- |
+  |                                            |
+  |-- RemoteReadData (chunk) ----------------> |
+  |&lt;-- RemoteReadDataReply ------------------- |
+  |                                            |
+  |&lt;-- RemoteHashDataRequest (stream) -------- |
+  |                                            |
+  |== 本地计算哈希 ========================== |
+  |-- RemoteHashProgress (progress) ---------> |
+  |-- RemoteHashProgress (progress) ---------> |
+  |-- RemoteHashProgress (final: hash[,blocks])|
+  |&lt;-- RemoteHashProgressReply --------------- |
+  |                                            |
+  |&lt;-- RemoteUploadStatusChanged (Finish/Skipped/Cancelled/Error/FatalError) -- |
+  |                                            |
+  |-- RemoteUploadControl (pause/resume/cancel) ----> OK |
+  |                                            |
+  |-- (为更多文件重复) ----------------------- |
+  |-- (会话结束时关闭通道) ------------------- |</code></pre>
+
+            <hr>
+
+            <h2>实现大纲（客户端）</h2>
+            <ul>
+                <li>每个会话维护一个 RemoteUploadChannel 流和一个小型调度程序来处理传入请求。</li>
+                <li>连接 RemoteUploadChannel 时提供稳定的 device_id；在本地持久化它，以便重新连接映射到相同的服务器端设备条目。</li>
+                <li>对于每个 RemoteHashDataRequest，生成一个由 (upload_id, hash_type) 索引的哈希任务，以避免阻塞流读取器。</li>
+                <li>使用与 upload_id 绑定的取消令牌在取消时立即停止哈希。</li>
+                <li>将 RemoteHashProgress 更新限制在合理的速率；始终发送带有 hash_value 的终端进度（以及请求时的 MD5 的 block_hashes）。</li>
+                <li>将相同 (upload_id, hash_type) 的重复 RemoteHashDataRequest 视为恢复/继续报告进度的提示。</li>
+            </ul>
+
+            <hr>
+
+            <h2>伪代码示例（C#、Java、Python）</h2>
+            <p>这些片段说明了最小的客户端流程。它们不依赖于任何特定的任务管理器；与您自己的作业/取消框架集成。</p>
+
+            <h3>C#（Grpc.Net.Client）</h3>
+            <pre><code>// 伪代码 — 假设生成的 gRPC 客户端类型存在。
+using System;
+using System.Buffers;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
+
+async Task UploadClientAsync(CloudDrive.CloudDriveClient client, string path, long size, CancellationToken ct)
+{
+    var started = await client.StartRemoteUploadAsync(new StartRemoteUploadRequest {
+        FilePath = path,
+        FileSize = (ulong)size
+    }, cancellationToken: ct);
+    var files = new ConcurrentDictionary&lt;string, (string path, long size)&gt;();
+    files[started.UploadId] = (path, size);
+
+  var deviceId = MachineIdProvider.Current; // 稳定的每设备标识符
+  using var channel = client.RemoteUploadChannel(new RemoteUploadChannelRequest { DeviceId = deviceId }, cancellationToken: ct);
+    await foreach (var msg in channel.ResponseStream.ReadAllAsync(ct))
+    {
+        var uploadId = msg.UploadId;
+        switch (msg.ReplyCase)
+        {
+            case RemoteUploadChannelReply.ReplyOneofCase.ReadData:
+                _ = HandleReadAsync(client, uploadId, msg.ReadData, files, ct);
+                break;
+            case RemoteUploadChannelReply.ReplyOneofCase.HashData:
+                _ = Task.Run(() =&gt; HandleHashAsync(client, uploadId, msg.HashData, files, ct), ct);
+                break;
+            case RemoteUploadChannelReply.ReplyOneofCase.StatusChanged:
+                // 通过 msg.StatusChanged 观察完成/状态（如需要）
+                break;
+        }
+    }
+}
+
+async Task HandleReadAsync(CloudDrive.CloudDriveClient client, string uploadId, RemoteReadDataRequest req,
+                           ConcurrentDictionary&lt;string,(string path,long size)&gt; files, CancellationToken ct)
+{
+    var (localPath, totalSize) = files[uploadId];
+    using var fs = File.OpenRead(localPath);
+    fs.Position = (long)req.Offset;
+    byte[] buffer = ArrayPool&lt;byte&gt;.Shared.Rent((int)req.Length);
+    try
+    {
+        int read = await fs.ReadAsync(buffer.AsMemory(0, (int)req.Length), ct);
+        bool isLast = (ulong)req.Offset + (ulong)Math.Max(0, read) &gt;= (ulong)totalSize;
+        await client.RemoteReadDataAsync(new RemoteReadDataUpload {
+            UploadId = uploadId,
+            Offset = req.Offset,
+            Length = (ulong)Math.Max(0, read),
+            LazyRead = req.LazyRead,
+            Data = Google.Protobuf.ByteString.CopyFrom(buffer, 0, Math.Max(0, read)),
+            IsLastChunk = isLast
+        }, cancellationToken: ct);
+    }
+    finally { ArrayPool&lt;byte&gt;.Shared.Return(buffer); }
+}
+
+async Task HandleHashAsync(CloudDrive.CloudDriveClient client, string uploadId, RemoteHashDataRequest req,
+                           ConcurrentDictionary&lt;string,(string path,long size)&gt; files, CancellationToken ct)
+{
+    var (localPath, totalSize) = files[uploadId];
+    ulong bytesHashed = 0;
+    DateTime lastReport = DateTime.UtcNow;
+
+    void report(bool isFinal, string? hashValue = null, List&lt;string&gt;? blockHashes = null)
+    {
+        if (!isFinal &amp;&amp; (DateTime.UtcNow - lastReport).TotalMilliseconds &lt; 250) return;
+        lastReport = DateTime.UtcNow;
+        client.RemoteHashProgress(new RemoteHashProgressUpload {
+            UploadId = uploadId,
+            TotalBytes = (ulong)totalSize,
+            HashType = req.HashType,
+            BytesHashed = bytesHashed,
+            HashValue = hashValue ?? string.Empty,
+            BlockHashes = { blockHashes ?? new List&lt;string&gt;() }
+        });
+    }
+
+  using var fs = File.OpenRead(localPath);
+  if (req.HashType == HashType.Md5 &amp;&amp; req.BlockSize &gt; 0)
+    {
+        using var md5File = MD5.Create();
+        var blocks = new List&lt;string&gt;();
+        byte[] block = new byte[req.BlockSize];
+        int n;
+        while ((n = await fs.ReadAsync(block, 0, block.Length, ct)) &gt; 0)
+        {
+            md5File.TransformBlock(block, 0, n, null, 0);
+            using var md5 = MD5.Create();
+            blocks.Add(Convert.ToHexString(md5.ComputeHash(block, 0, n)).ToLowerInvariant());
+            bytesHashed += (ulong)n;
+            report(false);
+            if (ct.IsCancellationRequested) { report(true); return; }
+        }
+        md5File.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
+        report(true, Convert.ToHexString(md5File.Hash!).ToLowerInvariant(), blocks);
+  }
+  else if (req.HashType == HashType.PikPakSha1)
+  {
+    // PikPakSha1: SHA1 对每段 SHA1 摘要的连接；动态段大小
+    int segSize = totalSize &lt;= (128L&lt;&lt;20) ? (256&lt;&lt;10) :
+            (totalSize &lt;= (256L&lt;&lt;20) ? (512&lt;&lt;10) :
+            (totalSize &lt;= (512L&lt;&lt;20) ? (1024&lt;&lt;10) : (2048&lt;&lt;10)));
+    using var finalSha1 = SHA1.Create();
+    byte[] buf = new byte[segSize];
+    int n;
+    while ((n = await fs.ReadAsync(buf, 0, buf.Length, ct)) &gt; 0)
+    {
+      using var seg = SHA1.Create();
+      seg.TransformBlock(buf, 0, n, null, 0);
+      seg.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
+      finalSha1.TransformBlock(seg.Hash!, 0, seg.Hash!.Length, null, 0);
+      bytesHashed += (ulong)n;
+      report(false);
+      if (ct.IsCancellationRequested) { report(true); return; }
+    }
+    finalSha1.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
+    report(true, Convert.ToHexString(finalSha1.Hash!).ToUpperInvariant());
+  }
+  else
+    {
+        using var hash = req.HashType == HashType.Sha1 ? SHA1.Create() : MD5.Create();
+        byte[] buf = new byte[1 &lt;&lt; 20];
+        int n;
+        while ((n = await fs.ReadAsync(buf, 0, buf.Length, ct)) &gt; 0)
+        {
+            hash.TransformBlock(buf, 0, n, null, 0);
+            bytesHashed += (ulong)n;
+            report(false);
+            if (ct.IsCancellationRequested) { report(true); return; }
+        }
+        hash.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
+        report(true, Convert.ToHexString(hash.Hash!).ToLowerInvariant());
+    }
+}</code></pre>
+
+            <h3>Java（grpc-java）</h3>
+            <pre><code>// 伪代码 — 假设生成的存根存在。
+void startUpload(CloudDriveGrpc.CloudDriveBlockingStub blocking,
+                 CloudDriveGrpc.CloudDriveStub async,
+                 String path, long size, Context.CancellableContext ctx) {
+  StartRemoteUploadRequest sreq = StartRemoteUploadRequest.newBuilder()
+      .setFilePath(path).setFileSize(size).build();
+  RemoteUploadStarted started = blocking.startRemoteUpload(sreq);
+  Map&lt;String, LocalFile&gt; files = new ConcurrentHashMap&lt;&gt;();
+  files.put(started.getUploadId(), new LocalFile(path, size));
+
+  String deviceId = MachineIdProvider.get();
+  RemoteUploadChannelRequest channelReq = RemoteUploadChannelRequest.newBuilder()
+      .setDeviceId(deviceId)
+      .build();
+  async.remoteUploadChannel(channelReq, new StreamObserver&lt;RemoteUploadChannelReply&gt;() {
+    @Override public void onNext(RemoteUploadChannelReply msg) {
+      String uploadId = msg.getUploadId();
+      switch (msg.getReplyCase()) {
+        case READDATA:
+          handleRead(blocking, uploadId, msg.getReadData(), files);
+          break;
+        case HASHDATA:
+          CompletableFuture.runAsync(() -&gt; handleHash(blocking, uploadId, msg.getHashData(), files, ctx));
+          break;
+        case STATUSCHANGED:
+          // 通过状态观察完成
+          break;
+        default: break;
+      }
+    }
+    @Override public void onError(Throwable t) { }
+    @Override public void onCompleted() { }
+  });
+}
+
+void handleRead(CloudDriveGrpc.CloudDriveBlockingStub blocking, String uploadId, RemoteReadDataRequest req, Map&lt;String, LocalFile&gt; files) {
+  try (RandomAccessFile raf = new RandomAccessFile(files.get(uploadId).path, "r")) {
+    raf.seek(req.getOffset());
+    byte[] buf = new byte[(int)req.getLength()];
+    int read = raf.read(buf);
+    boolean isLast = req.getOffset() + Math.max(0, read) &gt;= files.get(uploadId).size;
+    RemoteReadDataUpload up = RemoteReadDataUpload.newBuilder()
+        .setUploadId(uploadId)
+        .setOffset(req.getOffset())
+        .setLength(Math.max(0, read))
+        .setLazyRead(req.getLazyRead())
+        .setData(ByteString.copyFrom(buf, 0, Math.max(0, read)))
+        .setIsLastChunk(isLast)
+        .build();
+    blocking.remoteReadData(up);
+  } catch (IOException e) { }
+}
+
+void handleHash(CloudDriveGrpc.CloudDriveBlockingStub blocking, String uploadId, RemoteHashDataRequest req, Map&lt;String, LocalFile&gt; files, Context.CancellableContext ctx) {
+  File f = new File(files.get(uploadId).path);
+  long bytesHashed = 0L;
+  try (FileInputStream fis = new FileInputStream(f)) {
+  if (req.getHashType() == HashType.MD5 &amp;&amp; req.getBlockSize() &gt; 0) {
+      MessageDigest fileMd5 = MessageDigest.getInstance("MD5");
+      List&lt;String&gt; blocks = new ArrayList&lt;&gt;();
+      byte[] block = new byte[req.getBlockSize()];
+      int n;
+      while ((n = fis.read(block)) &gt; 0) {
+        fileMd5.update(block, 0, n);
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        md5.update(block, 0, n);
+        blocks.add(bytesToHex(md5.digest()).toLowerCase());
+        bytesHashed += n;
+        maybeProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null);
+        if (ctx.isCancelled()) { finalProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null); return; }
+      }
+      finalProgress(blocking, uploadId, req, f.length(), bytesHashed, bytesToHex(fileMd5.digest()).toLowerCase(), blocks);
+    } else if (req.getHashType() == HashType.PIKPAKSHA1) {
+      // PikPakSha1: 连接的每段 SHA1 摘要的 SHA1
+      int segSize = f.length() &lt;= (128L&lt;&lt;20) ? (256&lt;&lt;10) :
+                    (f.length() &lt;= (256L&lt;&lt;20) ? (512&lt;&lt;10) :
+                    (f.length() &lt;= (512L&lt;&lt;20) ? (1024&lt;&lt;10) : (2048&lt;&lt;10)));
+      MessageDigest finalSha1;
+      try { finalSha1 = MessageDigest.getInstance("SHA-1"); } catch (Exception e) { return; }
+      byte[] buf = new byte[segSize];
+      int n;
+      try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f))) {
+        while ((n = bis.read(buf)) &gt; 0) {
+          MessageDigest seg = MessageDigest.getInstance("SHA-1");
+          seg.update(buf, 0, n);
+          byte[] segDigest = seg.digest();
+          finalSha1.update(segDigest);
+          bytesHashed += n;
+          maybeProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null);
+          if (ctx.isCancelled()) { finalProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null); return; }
+        }
+      } catch (IOException | NoSuchAlgorithmException e) { return; }
+      finalProgress(blocking, uploadId, req, f.length(), bytesHashed, bytesToHex(finalSha1.digest()).toUpperCase(), null);
+    } else {
+      MessageDigest dig = req.getHashType() == HashType.SHA1 ? MessageDigest.getInstance("SHA-1") : MessageDigest.getInstance("MD5");
+      byte[] buf = new byte[1 &lt;&lt; 20];
+      int n;
+      while ((n = fis.read(buf)) &gt; 0) {
+        dig.update(buf, 0, n);
+        bytesHashed += n;
+        maybeProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null);
+        if (ctx.isCancelled()) { finalProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null); return; }
+      }
+      finalProgress(blocking, uploadId, req, f.length(), bytesHashed, bytesToHex(dig.digest()).toLowerCase(), null);
+    }
+  } catch (Exception e) { }
+}</code></pre>
+
+            <h3>Python（grpcio）</h3>
+            <pre><code># 伪代码 — 假设生成的存根和消息存在。
+import hashlib, os, time
+
+def upload_client(stub, path, size, cancel_event):
+    started = stub.StartRemoteUpload(StartRemoteUploadRequest(file_path=path, file_size=size))
+    files = {started.upload_id: {'path': path, 'size': size}}
+
+  device_id = machine_id_provider()  # 返回稳定的每设备标识符
+  channel_request = RemoteUploadChannelRequest(device_id=device_id)
+
+  for msg in stub.RemoteUploadChannel(channel_request):
+        uid = msg.upload_id
+        which = msg.WhichOneof('request')
+        if which == 'read_data':
+            handle_read(stub, uid, msg.read_data, files)
+        elif which == 'hash_data':
+            handle_hash(stub, uid, msg.hash_data, files, cancel_event)
+        elif which == 'status_changed':
+            pass
+
+def handle_read(stub, upload_id, req, files):
+    local = files[upload_id]
+    with open(local['path'], 'rb') as f:
+        f.seek(req.offset)
+        data = f.read(req.length)
+    is_last = (req.offset + len(data)) &gt;= local['size']
+    stub.RemoteReadData(RemoteReadDataUpload(
+        upload_id=upload_id,
+        offset=req.offset,
+        length=len(data),
+        lazy_read=req.lazy_read,
+        data=data,
+        is_last_chunk=is_last,
+    ))
+
+def handle_hash(stub, upload_id, req, files, cancel_event):
+    local = files[upload_id]
+    file_size = local['size']
+    bytes_hashed = 0
+    last_report = 0.0
+
+    def progress(final=False, hash_value='', block_hashes=None):
+        nonlocal last_report
+        now = time.time()
+        if not final and (now - last_report) &lt; 0.25:
+            return
+        last_report = now
+        stub.RemoteHashProgress(RemoteHashProgressUpload(
+            upload_id=upload_id,
+            bytes_hashed=bytes_hashed,
+            total_bytes=file_size,
+            hash_type=req.hash_type,
+            hash_value=hash_value,
+            block_hashes=block_hashes or [],
+        ))
+
+  with open(local['path'], 'rb') as f:
+    if req.hash_type == HashType.MD5 and req.block_size &gt; 0:
+            md5_file = hashlib.md5()
+            blocks = []
+            while True:
+                chunk = f.read(req.block_size)
+                if not chunk:
+                    break
+                md5_file.update(chunk)
+                blocks.append(hashlib.md5(chunk).hexdigest())
+                bytes_hashed += len(chunk)
+                progress()
+                if cancel_event.is_set():
+                    progress(final=True)
+                    return
+            progress(final=True, hash_value=md5_file.hexdigest(), block_hashes=blocks)
+    elif req.hash_type == HashType.PIKPAKSHA1:
+      # PikPakSha1: 每段 SHA1 摘要连接的 SHA1（大写十六进制）
+      size = file_size
+      if size &lt;= (128 &lt;&lt; 20):
+        seg = 256 &lt;&lt; 10
+      elif size &lt;= (256 &lt;&lt; 20):
+        seg = 512 &lt;&lt; 10
+      elif size &lt;= (512 &lt;&lt; 20):
+        seg = 1024 &lt;&lt; 10
+      else:
+        seg = 2048 &lt;&lt; 10
+      final = hashlib.sha1()
+      while True:
+        chunk = f.read(seg)
+        if not chunk:
+          break
+        final.update(hashlib.sha1(chunk).digest())
+        bytes_hashed += len(chunk)
+        progress()
+        if cancel_event.is_set():
+          progress(final=True)
+          return
+      progress(final=True, hash_value=final.hexdigest().upper())
+    else:
+            dig = hashlib.sha1() if req.hash_type == HashType.SHA1 else hashlib.md5()
+            while True:
+                chunk = f.read(1 &lt;&lt; 20)
+                if not chunk:
+                    break
+                dig.update(chunk)
+                bytes_hashed += len(chunk)
+                progress()
+                if cancel_event.is_set():
+                    progress(final=True)
+                    return
+            progress(final=True, hash_value=dig.hexdigest())</code></pre>
+
+            <hr>
+
+            <h2>最佳实践</h2>
+            <ul>
+                <li>始终在每个 RPC 上包含正确的 upload_id。</li>
+                <li>为 RemoteUploadChannel 请求重用稳定的 device_id，以便恢复连接被视为同一设备，并自动重放待处理的工作。</li>
+                <li>保持流通道打开；不要为每个文件创建一个通道。</li>
+                <li>对于数据传输，优先使用 ≤ 1 MiB 的块大小以保持在典型的 gRPC 消息限制之下并减少背压（根据需要调整）。</li>
+                <li>在 StartRemoteUpload 时验证 file_path 和 file_size 以尽早发现不匹配。</li>
+                <li>对于大文件，优先使用内存映射或缓冲 I/O 和增量哈希以最小化内存使用。</li>
+                <li>日志/跟踪：检测进度和完成点以辅助诊断。</li>
+                <li>退避和重试：发送进度或数据时的瞬态 RPC 失败应使用抖动重试；避免重复最终消息，除非您不确定服务器是否收到它们。</li>
+            </ul>
+
+            <hr>
+
+            <h2>错误处理</h2>
+            <ul>
+                <li>一元 RPC 返回标准 gRPC 状态代码；在安全的情况下处理重试。</li>
+                <li>如果 RemoteHashProgress 暂时失败，重试发送最新进度（包括最终进度）。服务器基于 (upload_id, hash_type) 和终端状态去重。</li>
+                <li>如果服务器取消上传，停止哈希/读取，并在适用时发送不带 hash_value 的终端 RemoteHashProgress。</li>
+            </ul>
+
+            <hr>
+
+            <h2>控制示例</h2>
+            <p>RemoteUploadControlRequest 负载的 Proto 风格示例：</p>
+
+            <h3>取消</h3>
+            <pre><code>upload_id: "..."
+control: cancel {}</code></pre>
+
+            <h3>暂停</h3>
+            <pre><code>upload_id: "..."
+control: pause {}</code></pre>
+
+            <h3>恢复</h3>
+            <pre><code>upload_id: "..."
+control: resume {}</code></pre>
+
+            <p>成功时，RPC 返回 Empty。通过流通道上的 RemoteUploadStatusChanged 观察结果状态。</p>
+
+            <hr>
+
+            <div class="note">
+                <p>此协议支持健壮、可恢复和可验证的上传，清晰分离控制、数据和哈希工作流程。实现基于进度驱动的哈希完成可确保 grpc-web 兼容性和与服务器的可靠协调。</p>
+            </div>
+        </div>
+
+        <!-- English Content -->
+        <div id="content-en" class="lang-content">
+            <h1>Remote File Upload (Client Developer Guide)</h1>
+            <p>This guide explains how to implement a client that uploads files to a remote CloudDrive gRPC server. It focuses on the client-side workflow, progress reporting, hashing (including optional MD5 block hashes), cancellation, and reliability behaviors.</p>
+
+            <hr>
+
+            <h2>RPCs and messages at a glance</h2>
+            <ul>
+                <li><strong>StartRemoteUpload</strong> (unary)
+                    <ul>
+                        <li>Request: StartRemoteUploadRequest</li>
+                        <li>Response: RemoteUploadStarted</li>
+                    </ul>
+                </li>
+                <li><strong>RemoteUploadChannel</strong> (server-side streaming; use one long-lived channel per client session)
+                    <ul>
+                        <li>Request: RemoteUploadChannelRequest</li>
+                        <li>Response: RemoteUploadChannelReply
+                            <ul>
+                                <li>Fields: upload_id</li>
+                                <li>oneof request
+                                    <ul>
+                                        <li>read_data: RemoteReadDataRequest</li>
+                                        <li>hash_data: RemoteHashDataRequest</li>
+                                        <li>status_changed: RemoteUploadStatusChanged</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>RemoteReadData</strong> (unary)
+                    <ul>
+                        <li>Request: RemoteReadDataUpload</li>
+                        <li>Response: RemoteReadDataReply</li>
+                    </ul>
+                </li>
+                <li><strong>RemoteHashProgress</strong> (unary) — used for progress updates and finalization of hash requests
+                    <ul>
+                        <li>Request: RemoteHashProgressUpload</li>
+                        <li>Response: RemoteHashProgressReply</li>
+                    </ul>
+                </li>
+                <li><strong>RemoteUploadControl</strong> (unary)
+                    <ul>
+                        <li>Request: RemoteUploadControlRequest (oneof: cancel, pause, resume)</li>
+                        <li>Response: google.protobuf.Empty (errors via RPC status)</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="note">
+                <strong>Key protocol notes:</strong>
+                <ul>
+                    <li>All operations are keyed by a server-provided upload_id (returned from StartRemoteUpload).</li>
+                    <li>RemoteUploadChannel requests must include a stable device_id that uniquely identifies the client device; reuse it across restarts so the server can replace the channel and replay pending work if the client reconnects.</li>
+                    <li>file_path is provided in StartRemoteUpload only; subsequent messages are keyed by upload_id. No cloudName/cloudAccountId is used.</li>
+                    <li>Server requests for hashing may include an optional block_size (MD5-only) to request per-block MD5s.</li>
+                    <li>The final hash value (and any block hashes) MUST be delivered via RemoteHashProgress.</li>
+                    <li>Client-side control (pause/resume/cancel) is sent via RemoteUploadControl. Status changes are observed on the stream via RemoteUploadStatusChanged; the control RPC returns Empty on success and does not carry status.</li>
+                </ul>
+            </div>
+
+            <hr>
+
+            <h2>Message contracts (essential fields)</h2>
+            <h3>StartRemoteUploadRequest</h3>
+            <ul>
+                <li><code>file_path</code>: string — desired path on server</li>
+                <li><code>file_size</code>: uint64 — total bytes</li>
+                <li><code>known_hashes</code>: map&lt;uint32, string&gt; — optional precomputed file hashes; keys are CloudDriveFile.HashType numeric values (1=MD5, 2=SHA1, 3=PIKPAK_SHA1)</li>
+            </ul>
+
+            <h3>RemoteUploadChannelRequest</h3>
+            <ul>
+                <li><code>device_id</code>: string — stable identifier for the client device. Reuse the same value across process restarts (e.g., the CloudFS <code>SELF_GENERATE_MACHINE_ID</code>).</li>
+            </ul>
+
+            <h3>RemoteUploadChannelReply</h3>
+            <ul>
+                <li><code>upload_id</code>: string</li>
+                <li>oneof request
+                    <ul>
+                        <li><strong>RemoteReadDataRequest</strong>
+                            <ul>
+                                <li><code>offset</code>: uint64</li>
+                                <li><code>length</code>: uint64</li>
+                                <li><code>lazy_read</code>: bool</li>
+                            </ul>
+                        </li>
+                        <li><strong>RemoteHashDataRequest</strong>
+                            <ul>
+                                <li><code>hash_type</code>: HashType (e.g., MD5, SHA1, PIKPAK_SHA1)</li>
+                                <li><code>block_size</code>: uint32 (optional; MD5-only; 0 or unset means no per-block hashes)</li>
+                            </ul>
+                        </li>
+                        <li><strong>RemoteUploadStatusChanged</strong>
+                            <ul>
+                                <li><code>status</code>: UploadFileInfo.Status (e.g., WaitforPreprocessing, Preprocessing, Transfer, Pause, Cancelled, Finish, Skipped, Inqueue, Ignored, Error, FatalError)</li>
+                                <li><code>error_message</code>: string (set when status indicates an error)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>RemoteReadDataUpload</h3>
+            <ul>
+                <li><code>upload_id</code>: string</li>
+                <li><code>offset</code>: uint64</li>
+                <li><code>length</code>: uint64</li>
+                <li><code>lazy_read</code>: bool</li>
+                <li><code>data</code>: bytes</li>
+                <li><code>is_last_chunk</code>: bool</li>
+            </ul>
+
+            <h3>RemoteHashProgressUpload</h3>
+            <ul>
+                <li><code>upload_id</code>: string</li>
+                <li><code>bytes_hashed</code>: uint64 — cumulative progress</li>
+                <li><code>total_bytes</code>: uint64 — usually the file size</li>
+                <li><code>hash_type</code>: HashType</li>
+                <li><code>hash_value</code>: string (optional; present only on the final progress message)</li>
+                <li><code>block_hashes</code>: repeated string (optional; MD5-only; present only on the final progress message when block_size &gt; 0)</li>
+            </ul>
+
+            <hr>
+
+            <h2>End-to-end client workflow</h2>
+            <ol>
+                <li><strong>Start the upload</strong>
+                    <p>Call StartRemoteUpload with file_path and file_size. Use the returned upload_id for all subsequent RPCs.</p>
+                </li>
+                <li><strong>Open the global channel</strong>
+                    <p>Call RemoteUploadChannel once per client session and keep it open. Supply the same device_id every time you connect (even after restarting the process). The server uses device_id to swap in the newest stream for that device and will automatically replay any outstanding read/hash requests to the fresh channel.</p>
+                    <p>The server will push RemoteReadDataRequest, RemoteHashDataRequest, and RemoteUploadStatusChanged messages for any active upload_id.</p>
+                </li>
+                <li><strong>Serve read requests</strong>
+                    <p>Upon RemoteReadDataRequest, read the requested range from the local file and call RemoteReadData with the bytes. Set is_last_chunk when you know you're sending the final portion for that upload.</p>
+                </li>
+                <li><strong>Serve hash requests (with progress and finalization)</strong>
+                    <p>Upon RemoteHashDataRequest:</p>
+                    <ul>
+                        <li>Determine the algorithm from hash_type.</li>
+                        <li>If hash_type == MD5 and block_size &gt; 0, compute both the file MD5 and per-block MD5s (lower-hex, in order). For other algorithms (e.g., SHA1, PikPakSha1), compute only the file hash.</li>
+                        <li>While hashing, periodically call RemoteHashProgress with the current bytes_hashed. Choose a reasonable cadence (time- or byte-based) to avoid spamming.</li>
+                        <li>When hashing completes (or if canceled), send a final RemoteHashProgress:
+                            <ul>
+                                <li>Set hash_value to the final file hash when successful.</li>
+                                <li>For MD5 with block_size &gt; 0, include block_hashes (lower-hex, one per block, ordered).</li>
+                                <li>If hashing is canceled, send a terminal progress without hash_value.</li>
+                            </ul>
+                        </li>
+                        <li>Report progress via RemoteHashProgress. Finalization is recognized by the server on the terminal RemoteHashProgress.</li>
+                    </ul>
+                </li>
+                <li><strong>Handle completion</strong>
+                    <p>The server will send RemoteUploadStatusChanged with a terminal state (e.g., Finish, Skipped, Cancelled, Error, FatalError). Treat these as completion signals for the given upload_id. Clean up any local state for that upload, but keep the channel open for other uploads.</p>
+                </li>
+                <li><strong>Control operations</strong>
+                    <p>Use RemoteUploadControl to pause, resume, or cancel a specific upload_id. Do not query status here; status changes are streamed as RemoteUploadStatusChanged on the channel.</p>
+                    <ul>
+                        <li>Cancel: control = cancel {}</li>
+                        <li>Pause: control = pause {}</li>
+                        <li>Resume: control = resume {}</li>
+                        <li>Response: Empty on success (errors via gRPC status)</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <hr>
+
+            <h2>Hashing details</h2>
+            <p><strong>Supported algorithms (typical):</strong> MD5, SHA1, PikPakSha1. The server indicates the desired algorithm via RemoteHashDataRequest.hash_type.</p>
+
+            <h3>MD5 block hashes (optional)</h3>
+            <ul>
+                <li>The server may request block hashes by providing block_size in RemoteHashDataRequest (MD5-only).</li>
+                <li>Compute per-block MD5 digests over contiguous, non-overlapping blocks of size block_size (the final block may be smaller). Represent each digest as a 32-char lower-hex string.</li>
+                <li>The final RemoteHashProgress must include both hash_value (the file's MD5) and block_hashes (ordered list of block MD5s) when block_size &gt; 0.</li>
+            </ul>
+
+            <h3>Zero-length files</h3>
+            <ul>
+                <li>The file hash is the algorithm's digest of an empty byte stream (e.g., MD5 of empty string).</li>
+                <li>block_hashes should be omitted/empty unless otherwise directed by server-specific conventions.</li>
+            </ul>
+
+            <h3>PikPakSha1 algorithm (spec)</h3>
+            <p>PikPakSha1 is not a plain SHA-1 over the entire file. It's a two-level hash:</p>
+            <ul>
+                <li>Split the file into contiguous segments using a dynamic segment size based on the total file size:
+                    <ul>
+                        <li>size ≤ 128 MiB: 256 KiB segments</li>
+                        <li>128 MiB &lt; size ≤ 256 MiB: 512 KiB segments</li>
+                        <li>256 MiB &lt; size ≤ 512 MiB: 1024 KiB segments</li>
+                        <li>size &gt; 512 MiB: 2048 KiB segments</li>
+                    </ul>
+                </li>
+                <li>For each segment, compute SHA-1 over the segment bytes, producing a 20-byte digest.</li>
+                <li>Concatenate these per-segment digests (in order) and compute a final SHA-1 over the concatenation.</li>
+                <li>Output the final digest as UPPERCASE hex.</li>
+            </ul>
+            <div class="note">
+                <strong>Notes:</strong>
+                <ul>
+                    <li>PikPakSha1 does not use block_size from RemoteHashDataRequest; ignore that field for this algorithm.</li>
+                    <li>Progress (bytes_hashed) should reflect bytes processed so far, typically incremented after each segment is read/hashed.</li>
+                </ul>
+            </div>
+
+            <hr>
+
+            <h2>Progress semantics and reliability</h2>
+            <ul>
+                <li><strong>Progress cadence:</strong> Send RemoteHashProgress periodically during hashing with increasing bytes_hashed. Aim for a balance between responsiveness and overhead (for example, every few hundred milliseconds or after meaningful byte increments).</li>
+                <li><strong>Finalization:</strong> The server treats the final RemoteHashProgress (the one where hash_value is present, and block_hashes if requested) as the terminal event for that (upload_id, hash_type).</li>
+                <li><strong>Duplicate requests:</strong> If the server observes no RemoteHashProgress for a given (upload_id, hash_type) for ~60 seconds, it may re-send the corresponding RemoteHashDataRequest. Clients must handle such re-requests idempotently (e.g., ignore if already in progress, or continue hashing and keep sending progress/final).</li>
+                <li><strong>Client restarts:</strong> When a client reconnects with the same device_id, the server transparently replaces the old RemoteUploadChannel and replays any outstanding RemoteReadDataRequest or RemoteHashDataRequest messages. Keep your local upload state keyed by upload_id so you can resume work immediately upon receiving the replayed requests.</li>
+                <li><strong>Cancellation:</strong> If the upload (or specific hash request) is canceled, stop work promptly and send a terminal RemoteHashProgress without hash_value. The server will clean up state accordingly.</li>
+            </ul>
+
+            <hr>
+
+            <h2>Example sequence diagram</h2>
+            <pre><code>Client                                     Server
+  |                                            |
+  |-- StartRemoteUploadRequest --------------> |
+  |                                            |
+  |&lt;----------- RemoteUploadStarted ---------- |
+  |                                            |
+  |-- RemoteUploadChannel (stream) ----------> |
+  |                                            |
+  |&lt;-- RemoteReadDataRequest (stream) -------- |
+  |                                            |
+  |-- RemoteReadData (chunk) ----------------> |
+  |&lt;-- RemoteReadDataReply ------------------- |
+  |                                            |
+  |&lt;-- RemoteHashDataRequest (stream) -------- |
+  |                                            |
+  |== compute hash locally =================== |
+  |-- RemoteHashProgress (progress) ---------> |
+  |-- RemoteHashProgress (progress) ---------> |
+  |-- RemoteHashProgress (final: hash[,blocks])|
+  |&lt;-- RemoteHashProgressReply --------------- |
+  |                                            |
+  |&lt;-- RemoteUploadStatusChanged (Finish/Skipped/Cancelled/Error/FatalError) -- |
+  |                                            |
+  |-- RemoteUploadControl (pause/resume/cancel) ----> OK |
+  |                                            |
+  |-- (repeat for more files) ---------------- |
+  |-- (close channel on session end) -------- |</code></pre>
+
+            <hr>
+
+            <h2>Implementation outline (client)</h2>
+            <ul>
+                <li>Maintain a single RemoteUploadChannel stream per session and a small dispatcher to handle incoming requests.</li>
+                <li>Provide a stable device_id whenever you connect RemoteUploadChannel; persist it locally so reconnects map to the same server-side device entry.</li>
+                <li>For each RemoteHashDataRequest, spawn a hashing task keyed by (upload_id, hash_type) to avoid blocking the stream reader.</li>
+                <li>Use a cancellation token tied to upload_id to stop hashing promptly when canceled.</li>
+                <li>Throttle RemoteHashProgress updates to a reasonable rate; always send the terminal progress with hash_value (and block_hashes for MD5 when requested).</li>
+                <li>Treat repeated RemoteHashDataRequest for the same (upload_id, hash_type) as hints to resume/continue reporting progress.</li>
+            </ul>
+
+            <hr>
+
+            <h2>Pseudo-code examples (C#, Java, Python)</h2>
+            <p>These snippets illustrate a minimal client flow. They do not rely on any specific task manager; integrate with your own job/cancellation framework.</p>
+
+            <h3>C# (Grpc.Net.Client)</h3>
+            <pre><code>// Pseudocode — assumes generated gRPC client types exist.
+using System;
+using System.Buffers;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
+
+async Task UploadClientAsync(CloudDrive.CloudDriveClient client, string path, long size, CancellationToken ct)
+{
+    var started = await client.StartRemoteUploadAsync(new StartRemoteUploadRequest {
+        FilePath = path,
+        FileSize = (ulong)size
+    }, cancellationToken: ct);
+    var files = new ConcurrentDictionary&lt;string, (string path, long size)&gt;();
+    files[started.UploadId] = (path, size);
+
+  var deviceId = MachineIdProvider.Current; // stable per-device identifier
+  using var channel = client.RemoteUploadChannel(new RemoteUploadChannelRequest { DeviceId = deviceId }, cancellationToken: ct);
+    await foreach (var msg in channel.ResponseStream.ReadAllAsync(ct))
+    {
+        var uploadId = msg.UploadId;
+        switch (msg.ReplyCase)
+        {
+            case RemoteUploadChannelReply.ReplyOneofCase.ReadData:
+                _ = HandleReadAsync(client, uploadId, msg.ReadData, files, ct);
+                break;
+            case RemoteUploadChannelReply.ReplyOneofCase.HashData:
+                _ = Task.Run(() =&gt; HandleHashAsync(client, uploadId, msg.HashData, files, ct), ct);
+                break;
+            case RemoteUploadChannelReply.ReplyOneofCase.StatusChanged:
+                // observe completion/state if needed via msg.StatusChanged
+                break;
+        }
+    }
+}
+
+async Task HandleReadAsync(CloudDrive.CloudDriveClient client, string uploadId, RemoteReadDataRequest req,
+                           ConcurrentDictionary&lt;string,(string path,long size)&gt; files, CancellationToken ct)
+{
+    var (localPath, totalSize) = files[uploadId];
+    using var fs = File.OpenRead(localPath);
+    fs.Position = (long)req.Offset;
+    byte[] buffer = ArrayPool&lt;byte&gt;.Shared.Rent((int)req.Length);
+    try
+    {
+        int read = await fs.ReadAsync(buffer.AsMemory(0, (int)req.Length), ct);
+        bool isLast = (ulong)req.Offset + (ulong)Math.Max(0, read) &gt;= (ulong)totalSize;
+        await client.RemoteReadDataAsync(new RemoteReadDataUpload {
+            UploadId = uploadId,
+            Offset = req.Offset,
+            Length = (ulong)Math.Max(0, read),
+            LazyRead = req.LazyRead,
+            Data = Google.Protobuf.ByteString.CopyFrom(buffer, 0, Math.Max(0, read)),
+            IsLastChunk = isLast
+        }, cancellationToken: ct);
+    }
+    finally { ArrayPool&lt;byte&gt;.Shared.Return(buffer); }
+}
+
+async Task HandleHashAsync(CloudDrive.CloudDriveClient client, string uploadId, RemoteHashDataRequest req,
+                           ConcurrentDictionary&lt;string,(string path,long size)&gt; files, CancellationToken ct)
+{
+    var (localPath, totalSize) = files[uploadId];
+    ulong bytesHashed = 0;
+    DateTime lastReport = DateTime.UtcNow;
+
+    void report(bool isFinal, string? hashValue = null, List&lt;string&gt;? blockHashes = null)
+    {
+        if (!isFinal &amp;&amp; (DateTime.UtcNow - lastReport).TotalMilliseconds &lt; 250) return;
+        lastReport = DateTime.UtcNow;
+        client.RemoteHashProgress(new RemoteHashProgressUpload {
+            UploadId = uploadId,
+            TotalBytes = (ulong)totalSize,
+            HashType = req.HashType,
+            BytesHashed = bytesHashed,
+            HashValue = hashValue ?? string.Empty,
+            BlockHashes = { blockHashes ?? new List&lt;string&gt;() }
+        });
+    }
+
+  using var fs = File.OpenRead(localPath);
+  if (req.HashType == HashType.Md5 &amp;&amp; req.BlockSize &gt; 0)
+    {
+        using var md5File = MD5.Create();
+        var blocks = new List&lt;string&gt;();
+        byte[] block = new byte[req.BlockSize];
+        int n;
+        while ((n = await fs.ReadAsync(block, 0, block.Length, ct)) &gt; 0)
+        {
+            md5File.TransformBlock(block, 0, n, null, 0);
+            using var md5 = MD5.Create();
+            blocks.Add(Convert.ToHexString(md5.ComputeHash(block, 0, n)).ToLowerInvariant());
+            bytesHashed += (ulong)n;
+            report(false);
+            if (ct.IsCancellationRequested) { report(true); return; }
+        }
+        md5File.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
+        report(true, Convert.ToHexString(md5File.Hash!).ToLowerInvariant(), blocks);
+  }
+  else if (req.HashType == HashType.PikPakSha1)
+  {
+    // PikPakSha1: SHA1 over concatenation of per-segment SHA1 digests; dynamic segment size
+    int segSize = totalSize &lt;= (128L&lt;&lt;20) ? (256&lt;&lt;10) :
+            (totalSize &lt;= (256L&lt;&lt;20) ? (512&lt;&lt;10) :
+            (totalSize &lt;= (512L&lt;&lt;20) ? (1024&lt;&lt;10) : (2048&lt;&lt;10)));
+    using var finalSha1 = SHA1.Create();
+    byte[] buf = new byte[segSize];
+    int n;
+    while ((n = await fs.ReadAsync(buf, 0, buf.Length, ct)) &gt; 0)
+    {
+      using var seg = SHA1.Create();
+      seg.TransformBlock(buf, 0, n, null, 0);
+      seg.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
+      finalSha1.TransformBlock(seg.Hash!, 0, seg.Hash!.Length, null, 0);
+      bytesHashed += (ulong)n;
+      report(false);
+      if (ct.IsCancellationRequested) { report(true); return; }
+    }
+    finalSha1.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
+    report(true, Convert.ToHexString(finalSha1.Hash!).ToUpperInvariant());
+  }
+  else
+    {
+        using var hash = req.HashType == HashType.Sha1 ? SHA1.Create() : MD5.Create();
+        byte[] buf = new byte[1 &lt;&lt; 20];
+        int n;
+        while ((n = await fs.ReadAsync(buf, 0, buf.Length, ct)) &gt; 0)
+        {
+            hash.TransformBlock(buf, 0, n, null, 0);
+            bytesHashed += (ulong)n;
+            report(false);
+            if (ct.IsCancellationRequested) { report(true); return; }
+        }
+        hash.TransformFinalBlock(Array.Empty&lt;byte&gt;(), 0, 0);
+        report(true, Convert.ToHexString(hash.Hash!).ToLowerInvariant());
+    }
+}</code></pre>
+
+            <h3>Java (grpc-java)</h3>
+            <pre><code>// Pseudocode — assumes generated stubs exist.
+void startUpload(CloudDriveGrpc.CloudDriveBlockingStub blocking,
+                 CloudDriveGrpc.CloudDriveStub async,
+                 String path, long size, Context.CancellableContext ctx) {
+  StartRemoteUploadRequest sreq = StartRemoteUploadRequest.newBuilder()
+      .setFilePath(path).setFileSize(size).build();
+  RemoteUploadStarted started = blocking.startRemoteUpload(sreq);
+  Map&lt;String, LocalFile&gt; files = new ConcurrentHashMap&lt;&gt;();
+  files.put(started.getUploadId(), new LocalFile(path, size));
+
+  String deviceId = MachineIdProvider.get();
+  RemoteUploadChannelRequest channelReq = RemoteUploadChannelRequest.newBuilder()
+      .setDeviceId(deviceId)
+      .build();
+  async.remoteUploadChannel(channelReq, new StreamObserver&lt;RemoteUploadChannelReply&gt;() {
+    @Override public void onNext(RemoteUploadChannelReply msg) {
+      String uploadId = msg.getUploadId();
+      switch (msg.getReplyCase()) {
+        case READDATA:
+          handleRead(blocking, uploadId, msg.getReadData(), files);
+          break;
+        case HASHDATA:
+          CompletableFuture.runAsync(() -&gt; handleHash(blocking, uploadId, msg.getHashData(), files, ctx));
+          break;
+        case STATUSCHANGED:
+          // observe completion via status
+          break;
+        default: break;
+      }
+    }
+    @Override public void onError(Throwable t) { }
+    @Override public void onCompleted() { }
+  });
+}
+
+void handleRead(CloudDriveGrpc.CloudDriveBlockingStub blocking, String uploadId, RemoteReadDataRequest req, Map&lt;String, LocalFile&gt; files) {
+  try (RandomAccessFile raf = new RandomAccessFile(files.get(uploadId).path, "r")) {
+    raf.seek(req.getOffset());
+    byte[] buf = new byte[(int)req.getLength()];
+    int read = raf.read(buf);
+    boolean isLast = req.getOffset() + Math.max(0, read) &gt;= files.get(uploadId).size;
+    RemoteReadDataUpload up = RemoteReadDataUpload.newBuilder()
+        .setUploadId(uploadId)
+        .setOffset(req.getOffset())
+        .setLength(Math.max(0, read))
+        .setLazyRead(req.getLazyRead())
+        .setData(ByteString.copyFrom(buf, 0, Math.max(0, read)))
+        .setIsLastChunk(isLast)
+        .build();
+    blocking.remoteReadData(up);
+  } catch (IOException e) { }
+}
+
+void handleHash(CloudDriveGrpc.CloudDriveBlockingStub blocking, String uploadId, RemoteHashDataRequest req, Map&lt;String, LocalFile&gt; files, Context.CancellableContext ctx) {
+  File f = new File(files.get(uploadId).path);
+  long bytesHashed = 0L;
+  try (FileInputStream fis = new FileInputStream(f)) {
+  if (req.getHashType() == HashType.MD5 &amp;&amp; req.getBlockSize() &gt; 0) {
+      MessageDigest fileMd5 = MessageDigest.getInstance("MD5");
+      List&lt;String&gt; blocks = new ArrayList&lt;&gt;();
+      byte[] block = new byte[req.getBlockSize()];
+      int n;
+      while ((n = fis.read(block)) &gt; 0) {
+        fileMd5.update(block, 0, n);
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        md5.update(block, 0, n);
+        blocks.add(bytesToHex(md5.digest()).toLowerCase());
+        bytesHashed += n;
+        maybeProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null);
+        if (ctx.isCancelled()) { finalProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null); return; }
+      }
+      finalProgress(blocking, uploadId, req, f.length(), bytesHashed, bytesToHex(fileMd5.digest()).toLowerCase(), blocks);
+    } else if (req.getHashType() == HashType.PIKPAKSHA1) {
+      // PikPakSha1: SHA1 of concatenated per-segment SHA1 digests
+      int segSize = f.length() &lt;= (128L&lt;&lt;20) ? (256&lt;&lt;10) :
+                    (f.length() &lt;= (256L&lt;&lt;20) ? (512&lt;&lt;10) :
+                    (f.length() &lt;= (512L&lt;&lt;20) ? (1024&lt;&lt;10) : (2048&lt;&lt;10)));
+      MessageDigest finalSha1;
+      try { finalSha1 = MessageDigest.getInstance("SHA-1"); } catch (Exception e) { return; }
+      byte[] buf = new byte[segSize];
+      int n;
+      try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f))) {
+        while ((n = bis.read(buf)) &gt; 0) {
+          MessageDigest seg = MessageDigest.getInstance("SHA-1");
+          seg.update(buf, 0, n);
+          byte[] segDigest = seg.digest();
+          finalSha1.update(segDigest);
+          bytesHashed += n;
+          maybeProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null);
+          if (ctx.isCancelled()) { finalProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null); return; }
+        }
+      } catch (IOException | NoSuchAlgorithmException e) { return; }
+      finalProgress(blocking, uploadId, req, f.length(), bytesHashed, bytesToHex(finalSha1.digest()).toUpperCase(), null);
+    } else {
+      MessageDigest dig = req.getHashType() == HashType.SHA1 ? MessageDigest.getInstance("SHA-1") : MessageDigest.getInstance("MD5");
+      byte[] buf = new byte[1 &lt;&lt; 20];
+      int n;
+      while ((n = fis.read(buf)) &gt; 0) {
+        dig.update(buf, 0, n);
+        bytesHashed += n;
+        maybeProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null);
+        if (ctx.isCancelled()) { finalProgress(blocking, uploadId, req, f.length(), bytesHashed, null, null); return; }
+      }
+      finalProgress(blocking, uploadId, req, f.length(), bytesHashed, bytesToHex(dig.digest()).toLowerCase(), null);
+    }
+  } catch (Exception e) { }
+}</code></pre>
+
+            <h3>Python (grpcio)</h3>
+            <pre><code># Pseudocode — assumes generated stubs and messages exist.
+import hashlib, os, time
+
+def upload_client(stub, path, size, cancel_event):
+    started = stub.StartRemoteUpload(StartRemoteUploadRequest(file_path=path, file_size=size))
+    files = {started.upload_id: {'path': path, 'size': size}}
+
+  device_id = machine_id_provider()  # return a stable per-device identifier
+  channel_request = RemoteUploadChannelRequest(device_id=device_id)
+
+  for msg in stub.RemoteUploadChannel(channel_request):
+        uid = msg.upload_id
+        which = msg.WhichOneof('request')
+        if which == 'read_data':
+            handle_read(stub, uid, msg.read_data, files)
+        elif which == 'hash_data':
+            handle_hash(stub, uid, msg.hash_data, files, cancel_event)
+        elif which == 'status_changed':
+            pass
+
+def handle_read(stub, upload_id, req, files):
+    local = files[upload_id]
+    with open(local['path'], 'rb') as f:
+        f.seek(req.offset)
+        data = f.read(req.length)
+    is_last = (req.offset + len(data)) &gt;= local['size']
+    stub.RemoteReadData(RemoteReadDataUpload(
+        upload_id=upload_id,
+        offset=req.offset,
+        length=len(data),
+        lazy_read=req.lazy_read,
+        data=data,
+        is_last_chunk=is_last,
+    ))
+
+def handle_hash(stub, upload_id, req, files, cancel_event):
+    local = files[upload_id]
+    file_size = local['size']
+    bytes_hashed = 0
+    last_report = 0.0
+
+    def progress(final=False, hash_value='', block_hashes=None):
+        nonlocal last_report
+        now = time.time()
+        if not final and (now - last_report) &lt; 0.25:
+            return
+        last_report = now
+        stub.RemoteHashProgress(RemoteHashProgressUpload(
+            upload_id=upload_id,
+            bytes_hashed=bytes_hashed,
+            total_bytes=file_size,
+            hash_type=req.hash_type,
+            hash_value=hash_value,
+            block_hashes=block_hashes or [],
+        ))
+
+  with open(local['path'], 'rb') as f:
+    if req.hash_type == HashType.MD5 and req.block_size &gt; 0:
+            md5_file = hashlib.md5()
+            blocks = []
+            while True:
+                chunk = f.read(req.block_size)
+                if not chunk:
+                    break
+                md5_file.update(chunk)
+                blocks.append(hashlib.md5(chunk).hexdigest())
+                bytes_hashed += len(chunk)
+                progress()
+                if cancel_event.is_set():
+                    progress(final=True)
+                    return
+            progress(final=True, hash_value=md5_file.hexdigest(), block_hashes=blocks)
+    elif req.hash_type == HashType.PIKPAKSHA1:
+      # PikPakSha1: SHA1 over concatenation of per-segment SHA1 digests (upper hex)
+      size = file_size
+      if size &lt;= (128 &lt;&lt; 20):
+        seg = 256 &lt;&lt; 10
+      elif size &lt;= (256 &lt;&lt; 20):
+        seg = 512 &lt;&lt; 10
+      elif size &lt;= (512 &lt;&lt; 20):
+        seg = 1024 &lt;&lt; 10
+      else:
+        seg = 2048 &lt;&lt; 10
+      final = hashlib.sha1()
+      while True:
+        chunk = f.read(seg)
+        if not chunk:
+          break
+        final.update(hashlib.sha1(chunk).digest())
+        bytes_hashed += len(chunk)
+        progress()
+        if cancel_event.is_set():
+          progress(final=True)
+          return
+      progress(final=True, hash_value=final.hexdigest().upper())
+    else:
+            dig = hashlib.sha1() if req.hash_type == HashType.SHA1 else hashlib.md5()
+            while True:
+                chunk = f.read(1 &lt;&lt; 20)
+                if not chunk:
+                    break
+                dig.update(chunk)
+                bytes_hashed += len(chunk)
+                progress()
+                if cancel_event.is_set():
+                    progress(final=True)
+                    return
+            progress(final=True, hash_value=dig.hexdigest())</code></pre>
+
+            <hr>
+
+            <h2>Best practices</h2>
+            <ul>
+                <li>Always include the correct upload_id on every RPC.</li>
+                <li>Reuse a stable device_id for the RemoteUploadChannel request so resumed connections are treated as the same device and pending work is replayed automatically.</li>
+                <li>Keep the streaming channel open; do not create one channel per file.</li>
+                <li>For data transfers, prefer chunk sizes ≤ 1 MiB to stay under typical gRPC message limits and reduce backpressure (tune as needed).</li>
+                <li>Validate file_path and file_size at StartRemoteUpload time to catch mismatches early.</li>
+                <li>For large files, prefer memory-mapped or buffered I/O and incremental hashing to minimize memory usage.</li>
+                <li>Log/tracing: instrument progress and finalization points to aid diagnostics.</li>
+                <li>Backoff and retry: transient RPC failures when sending progress or data should be retried with jitter; avoid duplicating final messages unless you're unsure the server received them.</li>
+            </ul>
+
+            <hr>
+
+            <h2>Error handling</h2>
+            <ul>
+                <li>Unary RPCs return standard gRPC status codes; handle retries where safe.</li>
+                <li>If RemoteHashProgress fails transiently, retry sending the latest progress (including the final one). The server deduplicates based on (upload_id, hash_type) and terminal state.</li>
+                <li>If the server cancels an upload, cease hashing/reading and send a terminal RemoteHashProgress without hash_value if applicable.</li>
+            </ul>
+
+            <hr>
+
+            <h2>Control examples</h2>
+            <p>Proto-style examples of RemoteUploadControlRequest payloads:</p>
+
+            <h3>Cancel</h3>
+            <pre><code>upload_id: "..."
+control: cancel {}</code></pre>
+
+            <h3>Pause</h3>
+            <pre><code>upload_id: "..."
+control: pause {}</code></pre>
+
+            <h3>Resume</h3>
+            <pre><code>upload_id: "..."
+control: resume {}</code></pre>
+
+            <p>On success, the RPC returns Empty. Observe the resulting state via RemoteUploadStatusChanged on the streaming channel.</p>
+
+            <hr>
+
+            <div class="note">
+                <p>This protocol enables robust, resumable, and verifiable uploads with clear separation of control, data, and hash workflows. Implementing the progress-driven hashing finalization ensures grpc-web compatibility and reliable coordination with the server.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchLanguage(lang) {
+            // Hide all content
+            document.querySelectorAll('.lang-content').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Show selected language
+            document.getElementById('content-' + lang).classList.add('active');
+
+            // Update button states
+            document.querySelectorAll('.language-toggle button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('btn-' + lang).classList.add('active');
+        }
+    </script>
+</body>
+</html>
