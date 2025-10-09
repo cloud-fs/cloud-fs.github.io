@@ -6106,11 +6106,6 @@ class FileManager
 - ✅ **安全准则**
 - ✅ **完整的工作示例**
 
-获取额外帮助:
-- Proto 文件: `clouddrive.proto`
-- 实现参考: `/Services/CloudDriveService.cs`
-- 服务器版本: 使用 `GetRuntimeInfo()` 检查
-
 **API 版本:** 0.9.9
 
 ---
