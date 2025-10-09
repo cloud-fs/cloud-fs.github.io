@@ -6042,11 +6042,6 @@ This guide covers the complete CloudDrive2 gRPC API with:
 - ✅ **Security guidelines**
 - ✅ **Complete working examples**
 
-For additional help:
-- Proto file: `clouddrive.proto`
-- Implementation reference: `/Services/CloudDriveService.cs`
-- Server version: Check with `GetRuntimeInfo()`
-
 **API Version:** 0.9.9
 
 ---
