@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudDrive2 gRPC API 开发者指南</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-bg: #1e293b;
+            --darker-bg: #0f172a;
+            --light-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --code-bg: #f1f5f9;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: #fff;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .header h1 span[data-lang] {
+            display: inline !important;
+        }
+
+        .header h1 span[data-lang]:not([data-lang="zh-CN"]) {
+            display: none !important;
+        }
+
+        html[lang="en"] .header h1 span[data-lang="zh-CN"] {
+            display: none !important;
+        }
+
+        html[lang="en"] .header h1 span[data-lang="en"] {
+            display: inline !important;
+        }
+
+        .version-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            margin-left: 1rem;
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            padding: 0.25rem;
+            border-radius: 0.5rem;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - 60px);
+            background: var(--light-bg);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 1.5rem 0;
+            z-index: 100;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 0.05em;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.5rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .nav-link:hover {
+            background: white;
+            color: var(--primary-color);
+            padding-left: 2rem;
+        }
+
+        .nav-link.active {
+            background: white;
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
+            font-weight: 600;
+        }
+
+        .nav-link-sub {
+            padding-left: 2.5rem;
+            font-size: 0.8125rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            margin-top: 60px;
+            padding: 3rem;
+            max-width: 1200px;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-top: 3rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-top: 2rem;
+        }
+
+        h4 {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        /* Code */
+        code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.875em;
+            color: #e11d48;
+        }
+
+        pre {
+            background: var(--darker-bg);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+            font-size: 0.875rem;
+            line-height: 1.7;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        thead {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        tr:hover {
+            background: var(--light-bg);
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: var(--primary-color);
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: var(--warning-color);
+            color: #92400e;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-color: var(--success-color);
+            color: #065f46;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            border-color: var(--danger-color);
+            color: #991b1b;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+
+        .badge-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .badge-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 3rem;
+            height: 3rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .back-to-top:hover {
+            background: var(--secondary-color);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .back-to-top.show {
+            display: flex;
+        }
+
+        /* Horizontal Rule */
+        hr {
+            border: none;
+            border-top: 2px solid var(--border-color);
+            margin: 2rem 0;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.25rem;
+            }
+
+            .version-badge {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+                will-change: transform;
+            }
+        }
+
+        /* Syntax Highlighting Improvements */
+        .language-csharp, .language-java, .language-go, .language-python, .language-javascript, .language-protobuf {
+            display: block;
+        }
+
+        /* Section Anchors */
+        .section-anchor {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-left: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        h2:hover .section-anchor,
+        h3:hover .section-anchor {
+            opacity: 1;
+        }
+
+        /* Hidden language content */
+        [data-lang]:not([data-lang="zh-CN"]) {
+            display: none;
+        }
+
+        html[lang="en"] [data-lang="zh-CN"] {
+            display: none;
+        }
+
+        html[lang="en"] [data-lang="en"] {
+            display: block;
+        }
+
+        /* Fix inline style warnings */
+        .lang-text-hidden {
+            display: none;
+        }
+
+        html[lang="en"] .lang-text-hidden {
+            display: inline;
+        }
+
+        html[lang="en"] .lang-text-visible {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-title">
+            <h1>CloudDrive2 gRPC API <span data-lang="zh-CN">开发者指南</span><span data-lang="en" class="lang-text-hidden">Developer's Guide</span></h1>
+            <span class="version-badge">v0.9.9</span>
+        </div>
+        <div class="lang-switcher">
+            <button type="button" class="lang-btn active" onclick="switchLanguage('zh-CN')" id="btn-zh">中文</button>
+            <button type="button" class="lang-btn" onclick="switchLanguage('en')" id="btn-en">English</button>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title" data-lang="zh-CN">快速开始</div>
+            <div class="nav-section-title lang-text-hidden" data-lang="en">Quick Start</div>
+            <a href="#" class="nav-link" data-target-en="overview" data-target-zh="概述"><span data-lang="zh-CN">概述</span><span data-lang="en" class="lang-text-hidden">Overview</span></a>
+            <a href="#" class="nav-link" data-target-en="service-definition" data-target-zh="服务定义"><span data-lang="zh-CN">服务定义</span><span data-lang="en" class="lang-text-hidden">Service Definition</span></a>
+            <a href="#" class="nav-link" data-target-en="authentication" data-target-zh="身份验证"><span data-lang="zh-CN">身份验证</span><span data-lang="en" class="lang-text-hidden">Authentication</span></a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title" data-lang="zh-CN">语言支持</div>
+            <div class="nav-section-title lang-text-hidden" data-lang="en">Language Support</div>
+            <a href="#" class="nav-link" data-target-en="getting-started" data-target-zh="快速入门">Getting Started</a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="c-setup" data-target-zh="c-配置">C# <span data-lang="zh-CN">配置</span><span data-lang="en" class="lang-text-hidden">Setup</span></a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="java-setup" data-target-zh="java-配置">Java <span data-lang="zh-CN">配置</span><span data-lang="en" class="lang-text-hidden">Setup</span></a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="go-setup" data-target-zh="go-配置">Go <span data-lang="zh-CN">配置</span><span data-lang="en" class="lang-text-hidden">Setup</span></a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="python-setup" data-target-zh="python-配置">Python <span data-lang="zh-CN">配置</span><span data-lang="en" class="lang-text-hidden">Setup</span></a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">API <span data-lang="zh-CN">参考</span><span data-lang="en" class="lang-text-hidden">Reference</span></div>
+            <a href="#" class="nav-link" data-target-en="api-reference" data-target-zh="api-参考">API Reference</a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="public-methods-no-authorization-required" data-target-zh="公共方法无需授权"><span data-lang="zh-CN">公共方法</span><span data-lang="en" class="lang-text-hidden">Public Methods</span></a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="file-operations" data-target-zh="文件操作"><span data-lang="zh-CN">文件操作</span><span data-lang="en" class="lang-text-hidden">File Operations</span></a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="mount-point-management" data-target-zh="挂载点管理"><span data-lang="zh-CN">挂载点管理</span><span data-lang="en" class="lang-text-hidden">Mount Management</span></a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="transfer-task-management" data-target-zh="传输任务管理"><span data-lang="zh-CN">传输任务</span><span data-lang="en" class="lang-text-hidden">Transfer Tasks</span></a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="cloud-api-management" data-target-zh="云-api-管理"><span data-lang="zh-CN">云 API 管理</span><span data-lang="en" class="lang-text-hidden">Cloud API</span></a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="backup-management" data-target-zh="备份管理"><span data-lang="zh-CN">备份管理</span><span data-lang="en" class="lang-text-hidden">Backup Management</span></a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="webdav-management" data-target-zh="webdav-管理">WebDAV <span data-lang="zh-CN">管理</span><span data-lang="en" class="lang-text-hidden">Management</span></a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="token-management" data-target-zh="令牌管理"><span data-lang="zh-CN">令牌管理</span><span data-lang="en" class="lang-text-hidden">Token Management</span></a>
+            <a href="#" class="nav-link nav-link-sub" data-target-en="remote-upload-protocol" data-target-zh="远程上传协议"><span data-lang="zh-CN">远程上传</span><span data-lang="en" class="lang-text-hidden">Remote Upload</span></a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title" data-lang="zh-CN">参考</div>
+            <div class="nav-section-title lang-text-hidden" data-lang="en">Reference</div>
+            <a href="#" class="nav-link" data-target-en="data-types-reference" data-target-zh="数据类型参考"><span data-lang="zh-CN">数据类型</span><span data-lang="en" class="lang-text-hidden">Data Types</span></a>
+            <a href="#" class="nav-link" data-target-en="error-handling" data-target-zh="错误处理"><span data-lang="zh-CN">错误处理</span><span data-lang="en" class="lang-text-hidden">Error Handling</span></a>
+            <a href="#" class="nav-link" data-target-en="best-practices" data-target-zh="最佳实践"><span data-lang="zh-CN">最佳实践</span><span data-lang="en" class="lang-text-hidden">Best Practices</span></a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="content">
+        <div class="alert alert-info">
+            <strong data-lang="zh-CN">📖 提示：</strong><strong data-lang="en" class="lang-text-hidden">📖 Note:</strong>
+            <span data-lang="zh-CN">此文档是从 Markdown 自动生成的。使用右上角的语言切换按钮在中文和英文之间切换。</span>
+            <span data-lang="en" class="lang-text-hidden">This documentation is auto-generated from Markdown. Use the language switcher in the top-right to switch between Chinese and English.</span>
+        </div>
+
+        <div id="markdown-content">
+            <p data-lang="zh-CN">正在加载文档...</p>
+            <p data-lang="en" class="lang-text-hidden">Loading documentation...</p>
+        </div>
+    </main>
+
+    <!-- Back to Top Button -->
+    <button type="button" class="back-to-top" onclick="scrollToTop()" id="backToTop">
+        ↑
+    </button>
+
+    <!-- Marked.js for Markdown Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/protobuf.min.js"></script>
+
+    <script>
+        // Configure marked
+        marked.use({
+            renderer: {
+                heading({text, depth, raw}) {
+                    // Use raw if available, otherwise use text
+                    const textToUse = raw || text;
+
+                    // Generate ID from text (strip HTML tags)
+                    const cleanText = textToUse.replace(/<[^>]+>/g, '');
+                    const id = cleanText.toLowerCase()
+                        .replace(/[^\w\u4e00-\u9fa5\s-]+/g, '')
+                        .replace(/\s+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+
+                    return `<h${depth} id="${id}">${text}</h${depth}>\n`;
+                }
+            },
+            breaks: true,
+            gfm: true
+        });
+
+        // Configure syntax highlighting
+        marked.setOptions({
+            highlight: function(code, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return hljs.highlight(code, { language: lang }).value;
+                    } catch (e) {
+                        console.error('Highlight error:', e);
+                    }
+                }
+                return hljs.highlightAuto(code).value;
+            }
+        });
+
+        // Current language
+        let currentLang = 'zh-CN';
+
+        // Load markdown content
+        async function loadMarkdown() {
+            try {
+                const lang = currentLang;
+                const filename = lang === 'zh-CN'
+                    ? 'CloudDrive2_gRPC_API_Guide_zh-CN.md'
+                    : 'CloudDrive2_gRPC_API_Guide.md';
+
+                console.log('Loading markdown file:', filename);
+                const response = await fetch(filename);
+                console.log('Fetch response:', response.status, response.statusText);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to load markdown file: ${response.status} ${response.statusText}`);
+                }
+
+                const markdown = await response.text();
+                console.log('Markdown loaded, length:', markdown.length);
+
+                const html = marked.parse(markdown);
+                console.log('HTML parsed, length:', html.length);
+
+                document.getElementById('markdown-content').innerHTML = html;
+
+                // Highlight code blocks
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+
+                // Add section anchors
+                addSectionAnchors();
+
+                // Debug: Log all heading IDs
+                console.log('Available heading IDs:');
+                document.querySelectorAll('h1, h2, h3, h4').forEach(h => {
+                    if (h.id) console.log(`  ${h.tagName}: ${h.id} - "${h.textContent.substring(0, 50)}"`);
+                });
+
+                // Update active nav links on scroll
+                updateActiveNavLink();
+
+            } catch (error) {
+                console.error('Error loading markdown:', error);
+
+                // Check if it's a CORS/file protocol issue
+                const isFileProtocol = window.location.protocol === 'file:';
+
+                let errorMsg, helpMsg;
+                if (currentLang === 'zh-CN') {
+                    errorMsg = '加载文档失败';
+                    if (isFileProtocol) {
+                        helpMsg = `
+                            <p><strong>原因：</strong>浏览器安全策略不允许从本地文件加载资源。</p>
+                            <p><strong>解决方法：</strong></p>
+                            <ol>
+                                <li><strong>使用本地 Web 服务器：</strong>
+                                    <pre><code># Python 3
+python -m http.server 8000
+
+# Python 2
+python -m SimpleHTTPServer 8000
+
+# Node.js (需要先安装 http-server)
+npx http-server
+
+# 或者使用 .NET
+dotnet serve</code></pre>
+                                    然后访问: <code>http://localhost:8000/CloudDrive2_gRPC_API_Guide.html</code>
+                                </li>
+                                <li><strong>直接查看 Markdown 文件：</strong>
+                                    <ul>
+                                        <li>中文: <code>CloudDrive2_gRPC_API_Guide_zh-CN.md</code></li>
+                                        <li>English: <code>CloudDrive2_gRPC_API_Guide.md</code></li>
+                                    </ul>
+                                </li>
+                            </ol>`;
+                    } else {
+                        helpMsg = '<p>请确保 Markdown 文件与 HTML 文件在同一目录下。</p>';
+                    }
+                } else {
+                    errorMsg = 'Failed to load documentation';
+                    if (isFileProtocol) {
+                        helpMsg = `
+                            <p><strong>Reason:</strong> Browser security policy prevents loading resources from local files.</p>
+                            <p><strong>Solutions:</strong></p>
+                            <ol>
+                                <li><strong>Use a local web server:</strong>
+                                    <pre><code># Python 3
+python -m http.server 8000
+
+# Python 2
+python -m SimpleHTTPServer 8000
+
+# Node.js (install http-server first)
+npx http-server
+
+# Or use .NET
+dotnet serve</code></pre>
+                                    Then visit: <code>http://localhost:8000/CloudDrive2_gRPC_API_Guide.html</code>
+                                </li>
+                                <li><strong>View Markdown files directly:</strong>
+                                    <ul>
+                                        <li>中文: <code>CloudDrive2_gRPC_API_Guide_zh-CN.md</code></li>
+                                        <li>English: <code>CloudDrive2_gRPC_API_Guide.md</code></li>
+                                    </ul>
+                                </li>
+                            </ol>`;
+                    } else {
+                        helpMsg = '<p>Please ensure the Markdown files are in the same directory as this HTML file.</p>';
+                    }
+                }
+
+                document.getElementById('markdown-content').innerHTML =
+                    `<div class="alert alert-danger">
+                        <h3>${errorMsg}</h3>
+                        ${helpMsg}
+                    </div>`;
+            }
+        }
+
+        // Switch language
+        function switchLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+
+            // Update button states
+            document.getElementById('btn-zh').classList.toggle('active', lang === 'zh-CN');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+            // Reload content
+            loadMarkdown();
+
+            // Update all lang-specific elements
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = el.getAttribute('data-lang') === lang ? '' : 'none';
+            });
+        }
+
+        // Add section anchors
+        function addSectionAnchors() {
+            document.querySelectorAll('h1, h2, h3, h4').forEach((heading) => {
+                // Marked.js already generates IDs, but let's ensure they exist
+                if (!heading.id) {
+                    // Generate ID from text content
+                    const text = heading.textContent.replace(/#$/, '').trim(); // Remove trailing #
+                    heading.id = text.toLowerCase()
+                        .replace(/[^\w\u4e00-\u9fa5\s]+/g, '') // Remove special chars but keep spaces
+                        .replace(/\s+/g, '-') // Replace spaces with hyphens
+                        .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+                }
+
+                // Add clickable anchor
+                if (!heading.querySelector('.section-anchor')) {
+                    const anchor = document.createElement('a');
+                    anchor.href = '#' + heading.id;
+                    anchor.className = 'section-anchor';
+                    anchor.textContent = '#';
+                    heading.appendChild(anchor);
+                }
+            });
+        }
+
+        // Update active nav link on scroll
+        function updateActiveNavLink() {
+            const sections = document.querySelectorAll('h2[id], h3[id]');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollY >= sectionTop - 120) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    // Get target based on current language
+                    const target = currentLang === 'zh-CN'
+                        ? (link.getAttribute('data-target-zh') || link.getAttribute('data-target-en'))
+                        : (link.getAttribute('data-target-en') || link.getAttribute('data-target-zh'));
+                    if (target === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // Back to top button
+        window.addEventListener('scroll', () => {
+            const backToTop = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (!link) return;
+
+            // Handle navigation links with data-target
+            if (link.classList.contains('nav-link')) {
+                e.preventDefault();
+                // Get target based on current language
+                const targetId = currentLang === 'zh-CN'
+                    ? (link.getAttribute('data-target-zh') || link.getAttribute('data-target-en'))
+                    : (link.getAttribute('data-target-en') || link.getAttribute('data-target-zh'));
+                if (targetId) {
+                    scrollToSection(targetId);
+                    return;
+                }
+            }
+
+            // Handle regular anchor links
+            if (link.getAttribute('href')?.startsWith('#')) {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                scrollToSection(targetId);
+            }
+        });
+
+        // Scroll to section by ID
+        function scrollToSection(targetId) {
+            if (!targetId) return;
+
+            // Decode URL-encoded characters (e.g., %E5%8F%82 → 参)
+            try {
+                targetId = decodeURIComponent(targetId);
+            } catch (e) {
+                // If decode fails, use original
+            }
+
+            console.log('Scrolling to:', targetId);
+
+            // Try exact match first
+            let target = document.getElementById(targetId);
+
+            // If not found, try variations
+            if (!target) {
+                // Try with different normalization
+                const variations = [
+                    targetId,
+                    targetId.toLowerCase(),
+                    targetId.replace(/-/g, ''),
+                    targetId.replace(/-/g, ' '),
+                ];
+
+                const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+                for (const heading of headings) {
+                    const headingId = heading.id.toLowerCase();
+                    const headingText = heading.textContent.replace(/#$/, '').trim().toLowerCase();
+
+                    for (const variant of variations) {
+                        if (headingId === variant.toLowerCase() ||
+                            headingText.includes(variant.toLowerCase()) ||
+                            headingId.includes(variant.toLowerCase())) {
+                            target = heading;
+                            console.log('Found match:', heading.id, 'for target:', targetId);
+                            break;
+                        }
+                    }
+                    if (target) break;
+                }
+            }
+
+            if (target) {
+                // Scroll with offset for fixed header
+                const headerOffset = 80;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+                console.log('Scrolled to:', target.id);
+            } else {
+                console.warn('Target not found:', targetId, 'Available IDs:',
+                    Array.from(document.querySelectorAll('h1, h2, h3')).map(h => h.id).filter(Boolean).slice(0, 20));
+            }
+        }
+
+        // Initialize
+        loadMarkdown();
+    </script>
+</body>
+</html>
