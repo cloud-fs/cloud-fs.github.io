@@ -44,7 +44,7 @@ CloudDrive2 提供了一个全面的 gRPC API,用于管理云存储、文件操�
 - WebDAV 服务器配置
 - 通过服务器流式传输的实时推送通知
 
-**Proto 文件位置:** `Protos/clouddrive.proto`
+**Proto 文件位置:** `clouddrive.proto`
 
 **服务名称:** `CloudDriveFileSrv`
 
@@ -6107,7 +6107,7 @@ class FileManager
 - ✅ **完整的工作示例**
 
 获取额外帮助:
-- Proto 文件: `/Protos/clouddrive.proto`
+- Proto 文件: `clouddrive.proto`
 - 实现参考: `/Services/CloudDriveService.cs`
 - 服务器版本: 使用 `GetRuntimeInfo()` 检查
 

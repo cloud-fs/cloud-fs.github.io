@@ -44,7 +44,7 @@ CloudDrive2 provides a comprehensive gRPC API for managing cloud storage, file o
 - WebDAV server configuration
 - Real-time push notifications via server streaming
 
-**Proto File Location:** `Protos/clouddrive.proto`
+**Proto File Location:** `clouddrive.proto`
 
 **Service Name:** `CloudDriveFileSrv`
 
@@ -6043,7 +6043,7 @@ This guide covers the complete CloudDrive2 gRPC API with:
 - ✅ **Complete working examples**
 
 For additional help:
-- Proto file: `/Protos/clouddrive.proto`
+- Proto file: `clouddrive.proto`
 - Implementation reference: `/Services/CloudDriveService.cs`
 - Server version: Check with `GetRuntimeInfo()`
 
