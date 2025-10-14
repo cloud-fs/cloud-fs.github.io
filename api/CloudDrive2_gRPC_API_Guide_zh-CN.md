@@ -2141,9 +2141,9 @@ message DownloadFileInfo {
 **请求:** `GetUploadFileListRequest`
 ```protobuf
 message GetUploadFileListRequest {
-  bool getAll = 1;
+  bool getAll = 1;  // 注意: 当前不支持此选项，请使用分页方式
   uint32 itemsPerPage = 2;
-  uint32 pageNumber = 3;
+  uint32 pageNumber = 3;  // 页码从 0 开始
   string filter = 4;
   optional UploadFileInfo.Status statusFilter = 5;
   optional UploadFileInfo.OperatorType operatorTypeFilter = 6;
@@ -2164,9 +2164,9 @@ message GetUploadFileListResult {
 **示例 (Python):**
 ```python
 request = clouddrive_pb2.GetUploadFileListRequest(
-    getAll=False,
+    getAll=False,  # 注意: getAll 当前不支持
     itemsPerPage=50,
-    pageNumber=1,
+    pageNumber=0,  # 页码从 0 开始（第一页）
     filter="",
     statusFilter=clouddrive_pb2.UploadFileInfo.Transfer
 )

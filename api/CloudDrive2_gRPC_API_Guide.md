@@ -2138,9 +2138,9 @@ Gets paginated list of upload tasks.
 **Request:** `GetUploadFileListRequest`
 ```protobuf
 message GetUploadFileListRequest {
-  bool getAll = 1;
+  bool getAll = 1;  // Note: Currently not supported, use pagination instead
   uint32 itemsPerPage = 2;
-  uint32 pageNumber = 3;
+  uint32 pageNumber = 3;  // Page number starts from 0
   string filter = 4;
   optional UploadFileInfo.Status statusFilter = 5;
   optional UploadFileInfo.OperatorType operatorTypeFilter = 6;
@@ -2161,9 +2161,9 @@ message GetUploadFileListResult {
 **Example (Python):**
 ```python
 request = clouddrive_pb2.GetUploadFileListRequest(
-    getAll=False,
+    getAll=False,  # Note: getAll is not currently supported
     itemsPerPage=50,
-    pageNumber=1,
+    pageNumber=0,  # Page number starts from 0 (first page)
     filter="",
     statusFilter=clouddrive_pb2.UploadFileInfo.Transfer
 )
