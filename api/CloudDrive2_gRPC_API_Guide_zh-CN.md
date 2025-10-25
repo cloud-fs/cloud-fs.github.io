@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 0.9.9
+版本: 0.9.12
 
 ## 目录
 
+- [0.9.12 版本新特性](#0912-版本新特性)
 - [概述](#概述)
 - [服务定义](#服务定义)
 - [下载 Proto 文件](#下载-proto-文件)
@@ -27,6 +28,53 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 0.9.12 版本新特性
+
+此版本引入了数据库维护、直接下载功能和离线文件管理的多项增强。
+
+### 新功能
+
+#### 数据库维护方法
+- **`VacuumDirCache`** - 回收目录缓存数据库空间
+- **`GetVacuumProgress`** - 实时监控清理操作进度
+- **`GetDirCacheDbSize`** - 查询当前目录缓存数据库大小
+
+这些方法通过高效管理目录缓存数据库来帮助优化性能。
+
+#### 增强的下载功能
+**`GetDownloadUrlPath` 改进:**
+- 新增 `get_direct_url` 字段以请求云服务商的直接下载 URL
+- 添加 `userAgent` 字段用于指定自定义 User-Agent 请求头
+- 添加 `additionalHeaders` 映射用于向云服务商传递自定义 HTTP 请求头
+- 将 `expiresIn` 从 `int64` 更改为 `uint64` 以更好地处理时间戳
+
+**云 API 增强:**
+- `CloudAPI` 现在包含 `supportHttpDownload` 标志
+- `CloudAPIConfig` 添加三个新的可选字段:
+  - `useHttpDownload` - 启用基于 HTTP 的下载
+  - `supportDirectLink` - 指示是否支持直接链接
+  - `supportDirectDownloadUrl` - 指示是否支持直接下载 URL
+
+#### 搜索和离线下载改进
+- **`SearchRequest`** - 新增 `addResultToMountedSearchFolder` 字段,可自动将搜索结果添加到已挂载的搜索文件夹
+- **`AddOfflineFileRequest`** - 新增 `checkFolderAfterSecs` 字段,可指定检查文件夹内容前的延迟时间
+
+#### 权限更新
+更新了 `TokenPermissions` 注释以包含新的数据库清理相关方法:
+- `allow_get_system_settings` 现在包括 GetDirCacheDbSize 和 GetVacuumProgress
+- `allow_modify_system_settings` 现在包括 VacuumDirCache
+
+### 破坏性变更
+- `DownloadUrlPathInfo.expiresIn` 从 `int64` 更改为 `uint64`
+
+### 迁移指南
+如果您正在使用 `GetDownloadUrlPath`:
+- 将 `expiresIn` 字段类型从 `int64` 更新为 `uint64`
+- 可选择使用新的 `get_direct_url` 标志请求直接 URL
+- 利用 `userAgent` 和 `additionalHeaders` 实现高级下载场景
 
 ---
 
@@ -1559,6 +1607,7 @@ message SearchRequest {
   string searchFor = 2;
   bool forceRefresh = 3;
   bool fuzzyMatch = 4;
+  bool addResultToMountedSearchFolder = 5; // 将搜索结果添加到已挂载的搜索文件夹
 }
 ```
 
@@ -1657,6 +1706,7 @@ message GetDownloadUrlPathRequest {
   string path = 1;
   bool preview = 2;
   bool lazy_read = 3;
+  bool get_direct_url = 4; // 如果可用,请求直接 URL
 }
 ```
 
@@ -1664,8 +1714,10 @@ message GetDownloadUrlPathRequest {
 ```protobuf
 message DownloadUrlPathInfo {
   string downloadUrlPath = 1; // 带占位符 {SCHEME}, {HOST}, {PREVIEW} 的 URL
-  optional int64 expiresIn = 2; // 过期前的秒数
+  optional uint64 expiresIn = 2; // 过期前的秒数
   optional string directUrl = 3; // 直接 URL(如果可用)
+  optional string userAgent = 4; // 直接下载使用的 User-Agent
+  map<string, string> additionalHeaders = 5; // 直接下载的附加请求头
 }
 ```
 
@@ -1675,10 +1727,17 @@ GetDownloadUrlPathRequest request = GetDownloadUrlPathRequest.newBuilder()
     .setPath("/Movies/video.mp4")
     .setPreview(false)
     .setLazyRead(false)
+    .setGetDirectUrl(true)
     .build();
 
 DownloadUrlPathInfo info = stub.getDownloadUrlPath(request);
 System.out.println("下载 URL: " + info.getDownloadUrlPath());
+if (info.hasDirectUrl()) {
+    System.out.println("直接 URL: " + info.getDirectUrl());
+    if (info.hasUserAgent()) {
+        System.out.println("User-Agent: " + info.getUserAgent());
+    }
+}
 ```
 
 ---
@@ -1764,6 +1823,7 @@ message CloseFileRequest {
 message AddOfflineFileRequest {
   string urls = 1;
   string toFolder = 2;
+  uint32 checkFolderAfterSecs = 3; // 指定秒数后检查文件夹
 }
 ```
 
@@ -2957,6 +3017,7 @@ message CloudAPI {
   bool hasPromotions = 8;
   optional string promotionTitle = 9;
   optional string path = 10;
+  bool supportHttpDownload = 11; // 支持 HTTP 下载
 }
 ```
 
@@ -3340,6 +3401,9 @@ message CloudAPIConfig {
   optional string customUserAgent = 10;
   optional uint32 maxUploadThreads = 11;
   optional bool insecureTls = 12;
+  optional bool useHttpDownload = 13; // 使用 HTTP 下载
+  optional bool supportDirectLink = 14; // 支持直接链接下载
+  optional bool supportDirectDownloadUrl = 15; // 支持直接下载 URL
 }
 ```
 
@@ -3456,6 +3520,54 @@ message SetDirCacheTimeRequest {
 **请求:** `FileRequest`
 
 **响应:** `google.protobuf.Empty`
+
+---
+
+#### VacuumDirCache
+
+清理目录缓存数据库以回收空间。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `google.protobuf.Empty`
+
+---
+
+#### GetVacuumProgress
+
+获取清理操作进度。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `VacuumProgressResult`
+```protobuf
+message VacuumProgressResult {
+  VacuumStatus status = 1;
+  optional string message = 2;
+}
+
+enum VacuumStatus {
+  VacuumStatus_IDLE = 0;       // 空闲
+  VacuumStatus_RUNNING = 1;    // 运行中
+  VacuumStatus_COMPLETED = 2;  // 已完成
+  VacuumStatus_ERROR = 3;      // 错误
+}
+```
+
+---
+
+#### GetDirCacheDbSize
+
+获取目录缓存数据库大小。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `GetDirCacheDbSizeResult`
+```protobuf
+message GetDirCacheDbSizeResult {
+  uint64 dbSize = 1; // 数据库大小（字节）
+}
+```
 
 ---
 
@@ -5509,8 +5621,8 @@ message TokenPermissions {
   bool allow_modify_transfer_tasks = 28;
   bool allow_get_cloud_apis = 29;
   bool allow_modify_cloud_apis = 30;
-  bool allow_get_system_settings = 31;
-  bool allow_modify_system_settings = 32;
+  bool allow_get_system_settings = 31; // GetSystemSettings, GetEffectiveDirCacheTimeSecs, GetDirCacheDbSize, GetVacuumProgress
+  bool allow_modify_system_settings = 32; // SetSystemSettings, SetDirCacheTimeSecs, ForceExpireDirCache, VacuumDirCache
   bool allow_get_backups = 33;
   bool allow_modify_backups = 34;
   bool allow_get_dav_config = 35;

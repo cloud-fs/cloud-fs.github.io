@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 0.9.9
+Version: 0.9.12
 
 ## Table of Contents
 
+- [What's New in 0.9.12](#whats-new-in-0912)
 - [Overview](#overview)
 - [Service Definition](#service-definition)
 - [Download Proto File](#download-proto-file)
@@ -27,6 +28,53 @@ Version: 0.9.9
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 0.9.12
+
+This version introduces several enhancements for database maintenance, direct download capabilities, and improved offline file management.
+
+### New Features
+
+#### Database Maintenance Methods
+- **`VacuumDirCache`** - Reclaim space in the directory cache database
+- **`GetVacuumProgress`** - Monitor vacuum operation progress with real-time status
+- **`GetDirCacheDbSize`** - Query the current size of the directory cache database
+
+These methods help optimize performance by managing the directory cache database efficiently.
+
+#### Enhanced Download Capabilities
+**`GetDownloadUrlPath` improvements:**
+- New `get_direct_url` field to request direct download URLs from cloud providers
+- Added `userAgent` field for specifying custom User-Agent headers
+- Added `additionalHeaders` map for passing custom HTTP headers to cloud providers
+- Changed `expiresIn` from `int64` to `uint64` for better timestamp handling
+
+**Cloud API enhancements:**
+- `CloudAPI` now includes `supportHttpDownload` flag
+- `CloudAPIConfig` adds three new optional fields:
+  - `useHttpDownload` - Enable HTTP-based downloads
+  - `supportDirectLink` - Indicates direct link support
+  - `supportDirectDownloadUrl` - Indicates direct download URL support
+
+#### Search and Offline Download Improvements
+- **`SearchRequest`** - New `addResultToMountedSearchFolder` field to automatically add search results to mounted search folders
+- **`AddOfflineFileRequest`** - New `checkFolderAfterSecs` field to specify delay before checking folder contents
+
+#### Permission Updates
+Updated `TokenPermissions` comments to include the new vacuum-related methods:
+- `allow_get_system_settings` now covers GetDirCacheDbSize and GetVacuumProgress
+- `allow_modify_system_settings` now covers VacuumDirCache
+
+### Breaking Changes
+- `DownloadUrlPathInfo.expiresIn` changed from `int64` to `uint64`
+
+### Migration Guide
+If you're using `GetDownloadUrlPath`:
+- Update field type for `expiresIn` from `int64` to `uint64`
+- Optionally use new `get_direct_url` flag to request direct URLs
+- Leverage `userAgent` and `additionalHeaders` for advanced download scenarios
 
 ---
 
@@ -1556,6 +1604,7 @@ message SearchRequest {
   string searchFor = 2;
   bool forceRefresh = 3;
   bool fuzzyMatch = 4;
+  bool addResultToMountedSearchFolder = 5; // Add search results to mounted search folder
 }
 ```
 
@@ -1654,6 +1703,7 @@ message GetDownloadUrlPathRequest {
   string path = 1;
   bool preview = 2;
   bool lazy_read = 3;
+  bool get_direct_url = 4; // Request direct URL if available
 }
 ```
 
@@ -1661,8 +1711,10 @@ message GetDownloadUrlPathRequest {
 ```protobuf
 message DownloadUrlPathInfo {
   string downloadUrlPath = 1; // URL with placeholders {SCHEME}, {HOST}, {PREVIEW}
-  optional int64 expiresIn = 2; // seconds until expiration
+  optional uint64 expiresIn = 2; // seconds until expiration
   optional string directUrl = 3; // direct URL if available
+  optional string userAgent = 4; // User-Agent to use for direct downloads
+  map<string, string> additionalHeaders = 5; // Additional headers for direct downloads
 }
 ```
 
@@ -1672,10 +1724,17 @@ GetDownloadUrlPathRequest request = GetDownloadUrlPathRequest.newBuilder()
     .setPath("/Movies/video.mp4")
     .setPreview(false)
     .setLazyRead(false)
+    .setGetDirectUrl(true)
     .build();
 
 DownloadUrlPathInfo info = stub.getDownloadUrlPath(request);
 System.out.println("Download URL: " + info.getDownloadUrlPath());
+if (info.hasDirectUrl()) {
+    System.out.println("Direct URL: " + info.getDirectUrl());
+    if (info.hasUserAgent()) {
+        System.out.println("User-Agent: " + info.getUserAgent());
+    }
+}
 ```
 
 ---
@@ -1761,6 +1820,7 @@ Adds offline download tasks (magnet links, etc.).
 message AddOfflineFileRequest {
   string urls = 1;
   string toFolder = 2;
+  uint32 checkFolderAfterSecs = 3; // Check folder after specified seconds
 }
 ```
 
@@ -2955,6 +3015,7 @@ message CloudAPI {
   bool hasPromotions = 8;
   optional string promotionTitle = 9;
   optional string path = 10;
+  bool supportHttpDownload = 11; // Supports HTTP download
 }
 ```
 
@@ -3338,6 +3399,9 @@ message CloudAPIConfig {
   optional string customUserAgent = 10;
   optional uint32 maxUploadThreads = 11;
   optional bool insecureTls = 12;
+  optional bool useHttpDownload = 13; // Use HTTP for downloads
+  optional bool supportDirectLink = 14; // Supports direct link downloads
+  optional bool supportDirectDownloadUrl = 15; // Supports direct download URLs
 }
 ```
 
@@ -3454,6 +3518,54 @@ Forces directory cache expiration recursively.
 **Request:** `FileRequest`
 
 **Response:** `google.protobuf.Empty`
+
+---
+
+#### VacuumDirCache
+
+Vacuums the directory cache database to reclaim space.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `google.protobuf.Empty`
+
+---
+
+#### GetVacuumProgress
+
+Gets the vacuum operation progress.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `VacuumProgressResult`
+```protobuf
+message VacuumProgressResult {
+  VacuumStatus status = 1;
+  optional string message = 2;
+}
+
+enum VacuumStatus {
+  VacuumStatus_IDLE = 0;
+  VacuumStatus_RUNNING = 1;
+  VacuumStatus_COMPLETED = 2;
+  VacuumStatus_ERROR = 3;
+}
+```
+
+---
+
+#### GetDirCacheDbSize
+
+Gets the directory cache database size.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `GetDirCacheDbSizeResult`
+```protobuf
+message GetDirCacheDbSizeResult {
+  uint64 dbSize = 1; // Database size in bytes
+}
+```
 
 ---
 
@@ -5445,8 +5557,8 @@ message TokenPermissions {
   bool allow_modify_transfer_tasks = 28;
   bool allow_get_cloud_apis = 29;
   bool allow_modify_cloud_apis = 30;
-  bool allow_get_system_settings = 31;
-  bool allow_modify_system_settings = 32;
+  bool allow_get_system_settings = 31; // GetSystemSettings, GetEffectiveDirCacheTimeSecs, GetDirCacheDbSize, GetVacuumProgress
+  bool allow_modify_system_settings = 32; // SetSystemSettings, SetDirCacheTimeSecs, ForceExpireDirCache, VacuumDirCache
   bool allow_get_backups = 33;
   bool allow_modify_backups = 34;
   bool allow_get_dav_config = 35;
