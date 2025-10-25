@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "0.9.9";
+option (version) = "0.9.12";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -268,6 +268,13 @@ service CloudDriveFileSrv {
       returns (GetEffectiveDirCacheTimeResult) {}
   // force expire dir cache recursively
   rpc ForceExpireDirCache(FileRequest) returns (google.protobuf.Empty) {}
+  // vacuum persisted dir cache database (requires persistence enabled)
+  rpc VacuumDirCache(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  // get vacuum progress status
+  rpc GetVacuumProgress(google.protobuf.Empty) returns (VacuumProgressResult) {}
+  // get dir cache database file size in bytes (includes WAL and SHM files)
+  rpc GetDirCacheDbSize(google.protobuf.Empty)
+      returns (GetDirCacheDbSizeResult) {}
   // get open file table
   // deprecated, use GetOpenFileHandles instead
   rpc GetOpenFileTable(GetOpenFileTableRequest) returns (OpenFileTable) {}
@@ -500,12 +507,15 @@ message GetDownloadUrlPathRequest {
   string path = 1;
   bool preview = 2;
   bool lazy_read = 3;
+  bool get_direct_url = 4; // if true, get direct URL of cloud storage if available
 }
 message DownloadUrlPathInfo {
   string downloadUrlPath = 1; // path and query part of the download URL with placeholders (e.g.,
                               // "/static/{SCHEME}/{HOST}/{PREVIEW}/path/to/file.txt?token=abc123")
-  optional int64 expiresIn = 2; // seconds until expiration, none means never expire
+  optional uint64 expiresIn = 2; // seconds until expiration, none means never expire
   optional string directUrl = 3; // direct URL for download, if available, this will override downloadUrlPath
+  optional string userAgent = 4; // user agent to be used when accessing directUrl
+  map<string, string> additionalHeaders = 5; // additional headers to be used when accessing directUrl
 }
 message BoolResult { bool result = 1; }
 message UnmountArchiveResult { string result = 1; }
@@ -520,10 +530,13 @@ message SearchRequest {
   string searchFor = 2;
   bool forceRefresh = 3;
   bool fuzzyMatch = 4;
+  optional bool addResultToMountedSearchFolder = 5; // if true, add search result to a mounted search folder
 }
 message AddOfflineFileRequest {
   string urls = 1;
   string toFolder = 2;
+  optional uint64 checkFolderAfterSecs = 3; // auto check destination folder after these seconds to see if files are available
+                                            // 0 means no check
 }
 message RemoveOfflineFilesRequest {
   string cloudName = 1;
@@ -690,6 +703,7 @@ message CloudAPI {
   optional string promotionTitle =
       9;                     // promotion title, if hasPromotions is true
   optional string path = 10; // the path of the cloud
+  bool supportHttpDownload = 11; // whether this cloud provider supports HTTP (non-HTTPS) downloads
 }
 message CloudMembership {
   string identity = 1;
@@ -1210,6 +1224,12 @@ message CloudAPIConfig {
   optional uint32 maxUploadThreads = 11;
   // for CloudDrive API only: whether to use insecure TLS when connecting
   optional bool insecureTls = 12;
+  // whether to use HTTP instead of HTTPS for downloads to save CPU (disabled by default)
+  optional bool useHttpDownload = 13;
+  // whether to request direct URLs when available (requires enable_direct_link user role)
+  optional bool supportDirectLink = 14;
+  // whether this cloud API supports direct download URLs (read-only, determined by API implementation)
+  optional bool supportDirectDownloadUrl = 15;
 }
 message SetCloudAPIConfigRequest {
   string cloudName = 1;
@@ -1281,6 +1301,27 @@ message SetDirCacheTimeRequest {
 message GetEffectiveDirCacheTimeRequest { string path = 1; }
 message GetOpenFileTableRequest { bool includeDir = 1; }
 message GetEffectiveDirCacheTimeResult { uint64 dirCacheTimeSecs = 1; }
+message GetDirCacheDbSizeResult {
+  uint64 totalSizeBytes = 1; // Total size including main db + WAL + SHM files
+  bool isVacuuming = 2;      // Whether database is currently being vacuumed
+}
+
+enum VacuumStatus {
+  VACUUM_IDLE = 0;
+  VACUUM_RUNNING = 1;
+  VACUUM_COMPLETED = 2;
+  VACUUM_FAILED = 3;
+}
+
+message VacuumProgressResult {
+  VacuumStatus status = 1;
+  optional google.protobuf.Timestamp startTime = 2;
+  optional google.protobuf.Timestamp endTime = 3;
+  uint64 sizeBefore = 4;      // Database size before vacuum
+  uint64 sizeAfter = 5;       // Database size after vacuum (only set when completed)
+  optional string errorMessage = 6; // Error message if failed
+}
+
 message UpdateResult {
   bool hasUpdate = 1;
   string newVersion = 2;
@@ -1866,9 +1907,9 @@ message TokenPermissions {
 
   // System Settings
   bool allow_get_system_settings =
-      31; // GetSystemSettings, GetEffectiveDirCacheTimeSecs
+      31; // GetSystemSettings, GetEffectiveDirCacheTimeSecs, GetDirCacheDbSize, GetVacuumProgress
   bool allow_modify_system_settings =
-      32; // SetSystemSettings, SetDirCacheTimeSecs, ForceExpireDirCache
+      32; // SetSystemSettings, SetDirCacheTimeSecs, ForceExpireDirCache, VacuumDirCache
 
   // Backup Management
   bool allow_get_backups =
