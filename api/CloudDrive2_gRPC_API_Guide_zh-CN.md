@@ -182,7 +182,7 @@ python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. clouddrive.pr
 
 ### 版本兼容性
 
-**当前版本:** 0.9.9
+**当前版本:** 0.9.12
 
 始终使用与 CloudDrive2 服务器相同版本的 proto 文件以确保兼容性。您可以使用 `GetRuntimeInfo` 方法检查服务器版本。
 
@@ -6218,7 +6218,7 @@ class FileManager
 - ✅ **安全准则**
 - ✅ **完整的工作示例**
 
-**API 版本:** 0.9.9
+**API 版本:** 0.9.12
 
 ---
 

@@ -182,7 +182,7 @@ The `clouddrive.proto` file contains:
 
 ### Version Compatibility
 
-**Current Version:** 0.9.9
+**Current Version:** 0.9.12
 
 Always use the proto file from the same version as your CloudDrive2 server to ensure compatibility. You can check your server version using the `GetRuntimeInfo` method.
 
@@ -6154,7 +6154,7 @@ This guide covers the complete CloudDrive2 gRPC API with:
 - ✅ **Security guidelines**
 - ✅ **Complete working examples**
 
-**API Version:** 0.9.9
+**API Version:** 0.9.12
 
 ---
 
