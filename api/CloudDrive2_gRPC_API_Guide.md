@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 0.9.12
+Version: 0.9.14
 
 ## Table of Contents
 
-- [What's New in 0.9.12](#whats-new-in-0912)
+- [What's New in 0.9.14](#whats-new-in-0914)
 - [Overview](#overview)
 - [Service Definition](#service-definition)
 - [Download Proto File](#download-proto-file)
@@ -24,6 +24,8 @@ Version: 0.9.12
   - [Backup Management](#backup-management)
   - [WebDAV Management](#webdav-management)
   - [Token Management](#token-management)
+  - [Two-Factor Authentication (2FA)](#two-factor-authentication-2fa)
+  - [Session Management](#session-management)
   - [Remote Upload Protocol](#remote-upload-protocol)
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
@@ -31,50 +33,70 @@ Version: 0.9.12
 
 ---
 
-## What's New in 0.9.12
+## What's New in 0.9.14
 
-This version introduces several enhancements for database maintenance, direct download capabilities, and improved offline file management.
+This version introduces major security enhancements with **Two-Factor Authentication (2FA)** support and **Session Management** capabilities, allowing users to secure their accounts and manage active login sessions across devices.
 
 ### New Features
 
-#### Database Maintenance Methods
-- **`VacuumDirCache`** - Reclaim space in the directory cache database
-- **`GetVacuumProgress`** - Monitor vacuum operation progress with real-time status
-- **`GetDirCacheDbSize`** - Query the current size of the directory cache database
+#### Two-Factor Authentication (2FA)
 
-These methods help optimize performance by managing the directory cache database efficiently.
+CloudDrive2 now supports industry-standard Time-based One-Time Password (TOTP) two-factor authentication, compatible with authenticator apps like Microsoft Authenticator, Google Authenticator, and Authy.
 
-#### Enhanced Download Capabilities
-**`GetDownloadUrlPath` improvements:**
-- New `get_direct_url` field to request direct download URLs from cloud providers
-- Added `userAgent` field for specifying custom User-Agent headers
-- Added `additionalHeaders` map for passing custom HTTP headers to cloud providers
-- Changed `expiresIn` from `int64` to `uint64` for better timestamp handling
+**New 2FA Methods:**
+- **`Check2FAStatus`** - Check if 2FA is enabled for the current user
+- **`Setup2FA`** - Generate TOTP secret and QR code for authenticator app setup
+- **`Enable2FA`** - Enable 2FA by verifying TOTP code (returns recovery codes)
+- **`Disable2FA`** - Disable 2FA with valid TOTP code
+- **`GetRecoveryCodes`** - View remaining unused recovery codes
+- **`RegenerateRecoveryCodes`** - Generate new recovery codes (invalidates old ones)
+- **`LoginWith2FA`** - Public login method supporting TOTP codes and recovery codes
 
-**Cloud API enhancements:**
-- `CloudAPI` now includes `supportHttpDownload` flag
-- `CloudAPIConfig` adds three new optional fields:
-  - `useHttpDownload` - Enable HTTP-based downloads
-  - `supportDirectLink` - Indicates direct link support
-  - `supportDirectDownloadUrl` - Indicates direct download URL support
+**Enhanced Existing Methods with 2FA Support:**
+- `GetToken` - Now accepts optional `totpCode` parameter for 2FA-enabled accounts
+- `ChangePassword` - Requires TOTP code when 2FA is enabled
+- `ChangeEmail` - Requires TOTP code when 2FA is enabled
 
-#### Search and Offline Download Improvements
-- **`SearchRequest`** - New `addResultToMountedSearchFolder` field to automatically add search results to mounted search folders
-- **`AddOfflineFileRequest`** - New `checkFolderAfterSecs` field to specify delay before checking folder contents
+**Security Features:**
+- TOTP-based authentication (RFC 6238 standard)
+- Recovery codes for account access when authenticator is unavailable
+- Each recovery code is single-use and automatically invalidated after use
+- Recovery codes can be regenerated at any time
 
-#### Permission Updates
-Updated `TokenPermissions` comments to include the new vacuum-related methods:
-- `allow_get_system_settings` now covers GetDirCacheDbSize and GetVacuumProgress
-- `allow_modify_system_settings` now covers VacuumDirCache
+**Important Notes:**
+- When 2FA is enabled, older CloudDrive2 clients (< 0.9.14) will be unable to login
+- Ensure all devices are upgraded to 0.9.14+ before enabling 2FA
+- Store recovery codes in a secure location - they are your backup access method
 
-### Breaking Changes
-- `DownloadUrlPathInfo.expiresIn` changed from `int64` to `uint64`
+#### Session Management
 
-### Migration Guide
-If you're using `GetDownloadUrlPath`:
-- Update field type for `expiresIn` from `int64` to `uint64`
-- Optionally use new `get_direct_url` flag to request direct URLs
-- Leverage `userAgent` and `additionalHeaders` for advanced download scenarios
+New session management capabilities allow users to view and control active login sessions across all devices.
+
+**New Session Management Methods:**
+- **`GetSessions`** - List all active refresh token sessions with device information
+- **`RevokeSession`** - Revoke a specific session by ID (logs out that device)
+- **`RevokeOtherSessions`** - Revoke all sessions except the current one
+
+**Session Information Includes:**
+- Session ID and device ID
+- Device name and OS type
+- Creation timestamp and last used timestamp
+- Expiration timestamp
+- Last known IP address
+
+**Use Cases:**
+- Review all devices with active access to your account
+- Remotely log out forgotten sessions or lost devices
+- Enhance security by clearing all other sessions after password change
+- Monitor account access patterns
+
+### Security Best Practices
+
+1. **Enable 2FA** on all production accounts to prevent unauthorized access
+2. **Regularly review sessions** using `GetSessions` to identify unknown devices
+3. **Revoke unused sessions** to minimize attack surface
+4. **Store recovery codes securely** - treat them like passwords
+5. **Upgrade all clients to 0.9.14+** before enabling 2FA to avoid lockout
 
 ---
 
@@ -1166,8 +1188,11 @@ Obtains a JWT token for authentication.
 message GetTokenRequest {
   string userName = 1;
   string password = 2;
+  optional string totpCode = 3; // Optional TOTP code for 2FA-enabled accounts
 }
 ```
+
+**Note:** If the account has Two-Factor Authentication (2FA) enabled, you must provide a valid 6-digit TOTP code or an 8-character recovery code in the `totpCode` field. For accounts without 2FA, this field can be omitted.
 
 **Response:** `JWTToken`
 ```protobuf
@@ -3705,8 +3730,11 @@ Changes account password.
 message ChangePasswordRequest {
   string oldPassword = 1;
   string newPassword = 2;
+  optional string totpCode = 3;
 }
 ```
+
+**Note:** If Two-Factor Authentication (2FA) is enabled on your account, you must provide a valid TOTP code or recovery code in the `totpCode` field.
 
 **Response:** `FileOperationResult`
 
@@ -3717,6 +3745,16 @@ message ChangePasswordRequest {
 Changes account email.
 
 **Request:** `ChangeEmailRequest`
+```protobuf
+message ChangeEmailRequest {
+  string newEmail = 1;
+  string password = 2;
+  optional string changeCode = 3;
+  optional string totpCode = 4;
+}
+```
+
+**Note:** If Two-Factor Authentication (2FA) is enabled on your account, you must provide a valid TOTP code or recovery code in the `totpCode` field.
 
 **Response:** `google.protobuf.Empty`
 
@@ -3802,6 +3840,339 @@ Gets user's referral code.
 **Request:** `google.protobuf.Empty`
 
 **Response:** `StringValue`
+
+---
+
+### Two-Factor Authentication (2FA)
+
+CloudDrive2 supports Time-based One-Time Password (TOTP) two-factor authentication for enhanced account security. This section documents all 2FA-related methods.
+
+#### Check2FAStatus
+
+Checks if 2FA is currently enabled for the authenticated user.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `TwoFactorAuthStatusResult`
+```protobuf
+message TwoFactorAuthStatusResult {
+  bool two_factor_enabled = 1;
+}
+```
+
+**Example (C#):**
+```csharp
+var status = await client.Check2FAStatusAsync(new Empty(), callOptions);
+if (status.TwoFactorEnabled)
+{
+    Console.WriteLine("2FA is enabled");
+}
+```
+
+---
+
+#### Setup2FA
+
+Generates a TOTP secret and QR code for setting up 2FA. This is the first step in enabling 2FA.
+
+**Request:** `Setup2FARequest`
+```protobuf
+message Setup2FARequest {
+  string password = 1;
+}
+```
+
+**Response:** `TwoFactorAuthSetupResult`
+```protobuf
+message TwoFactorAuthSetupResult {
+  string secret = 1;
+  string qr_code = 2;  // Base64-encoded PNG image (data URL format)
+  string manual_entry_key = 3;
+}
+```
+
+**Workflow:**
+1. User provides their password
+2. Server generates a TOTP secret
+3. Server returns QR code (as base64 data URL) and manual entry key
+4. User scans QR code with authenticator app (Microsoft Authenticator, Google Authenticator, Authy, etc.)
+5. User proceeds to `Enable2FA` with a code from the app
+
+**Example (C#):**
+```csharp
+var setupRequest = new Setup2FARequest { Password = "mypassword" };
+var setup = await client.Setup2FAAsync(setupRequest, callOptions);
+
+// Display QR code in UI (setup.QrCode is a data URL like "data:image/png;base64,...")
+Console.WriteLine($"Secret: {setup.Secret}");
+Console.WriteLine($"Manual Entry Key: {setup.ManualEntryKey}");
+// Show setup.QrCode as an image in your UI for user to scan
+```
+
+---
+
+#### Enable2FA
+
+Enables 2FA by verifying a TOTP code from the user's authenticator app. Returns recovery codes that should be stored securely.
+
+**Request:** `TwoFactorAuthCodeRequest`
+```protobuf
+message TwoFactorAuthCodeRequest {
+  string totp_code = 1;  // 6-digit TOTP code or 8-character recovery code
+}
+```
+
+**Response:** `TwoFactorAuthEnableResult`
+```protobuf
+message TwoFactorAuthEnableResult {
+  repeated string recovery_codes = 1;
+  string message = 2;
+}
+```
+
+**Important:**
+- Call this immediately after `Setup2FA` to verify the setup worked
+- The TOTP code must be current (codes expire every 30 seconds)
+- Recovery codes are generated and returned only once - store them securely!
+- Each recovery code can be used only once
+
+**Example (C#):**
+```csharp
+var enableRequest = new TwoFactorAuthCodeRequest { TotpCode = "123456" };
+var result = await client.Enable2FAAsync(enableRequest, callOptions);
+
+Console.WriteLine(result.Message);
+Console.WriteLine("Recovery codes (store these securely!):");
+foreach (var code in result.RecoveryCodes)
+{
+    Console.WriteLine($"  {code}");
+}
+```
+
+---
+
+#### Disable2FA
+
+Disables 2FA for the account. Requires a valid TOTP code or recovery code.
+
+**Request:** `TwoFactorAuthCodeRequest`
+```protobuf
+message TwoFactorAuthCodeRequest {
+  string totp_code = 1;  // 6-digit TOTP code or 8-character recovery code
+}
+```
+
+**Response:** `TwoFactorAuthMessageResult`
+```protobuf
+message TwoFactorAuthMessageResult {
+  string message = 1;
+}
+```
+
+**Example (C#):**
+```csharp
+var disableRequest = new TwoFactorAuthCodeRequest { TotpCode = "654321" };
+var result = await client.Disable2FAAsync(disableRequest, callOptions);
+Console.WriteLine(result.Message);
+```
+
+---
+
+#### GetRecoveryCodes
+
+Retrieves the list of unused recovery codes. Requires a valid TOTP code.
+
+**Request:** `TwoFactorAuthCodeRequest`
+```protobuf
+message TwoFactorAuthCodeRequest {
+  string totp_code = 1;  // 6-digit TOTP code
+}
+```
+
+**Response:** `TwoFactorAuthRecoveryCodesResult`
+```protobuf
+message TwoFactorAuthRecoveryCodesResult {
+  repeated string recovery_codes = 1;
+  uint32 total = 2;
+  string message = 3;
+}
+```
+
+**Example (C#):**
+```csharp
+var request = new TwoFactorAuthCodeRequest { TotpCode = "123456" };
+var result = await client.GetRecoveryCodesAsync(request, callOptions);
+
+Console.WriteLine($"You have {result.Total} unused recovery codes:");
+foreach (var code in result.RecoveryCodes)
+{
+    Console.WriteLine($"  {code}");
+}
+```
+
+---
+
+#### RegenerateRecoveryCodes
+
+Generates a new set of recovery codes and invalidates all existing ones. Requires a valid TOTP code.
+
+**Request:** `TwoFactorAuthCodeRequest`
+```protobuf
+message TwoFactorAuthCodeRequest {
+  string totp_code = 1;  // 6-digit TOTP code
+}
+```
+
+**Response:** `TwoFactorAuthRecoveryCodesResult`
+```protobuf
+message TwoFactorAuthRecoveryCodesResult {
+  repeated string recovery_codes = 1;
+  uint32 total = 2;
+  string message = 3;
+}
+```
+
+**Warning:** All old recovery codes will be invalidated immediately upon regeneration.
+
+**Example (C#):**
+```csharp
+var request = new TwoFactorAuthCodeRequest { TotpCode = "123456" };
+var result = await client.RegenerateRecoveryCodesAsync(request, callOptions);
+
+Console.WriteLine("New recovery codes (old codes are now invalid!):");
+foreach (var code in result.RecoveryCodes)
+{
+    Console.WriteLine($"  {code}");
+}
+```
+
+---
+
+#### LoginWith2FA
+
+Public method for logging in with 2FA. Use this instead of `GetToken` when you know the account has 2FA enabled.
+
+**Request:** `LoginWith2FARequest`
+```protobuf
+message LoginWith2FARequest {
+  string userName = 1;
+  string password = 2;
+  string totp_code = 3;  // 6-digit TOTP code or 8-character recovery code
+  bool synDataToCloud = 4;
+}
+```
+
+**Response:** `JWTToken`
+
+**Example (C#):**
+```csharp
+var loginRequest = new LoginWith2FARequest
+{
+    UserName = "myusername",
+    Password = "mypassword",
+    TotpCode = "123456",  // or use recovery code like "ABC12345"
+    SynDataToCloud = true
+};
+
+var token = await client.LoginWith2FAAsync(loginRequest);
+if (token.Success)
+{
+    Console.WriteLine($"Login successful! Token: {token.Token}");
+}
+```
+
+---
+
+### Session Management
+
+CloudDrive2 provides session management capabilities to view and control active login sessions across all devices.
+
+#### GetSessions
+
+Lists all active refresh token sessions for the current user.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `GetSessionsResponse`
+```protobuf
+message GetSessionsResponse {
+  repeated Session sessions = 1;
+}
+
+message Session {
+  string id = 1;
+  string device_id = 2;
+  string device_name = 3;
+  string device_os_type = 4;
+  string created_at = 5;
+  string last_used_at = 6;
+  string expires_at = 7;
+  string last_ip_address = 8;
+}
+```
+
+**Example (C#):**
+```csharp
+var response = await client.GetSessionsAsync(new Empty(), callOptions);
+
+Console.WriteLine($"Active sessions: {response.Sessions.Count}");
+foreach (var session in response.Sessions)
+{
+    Console.WriteLine($"ID: {session.Id}");
+    Console.WriteLine($"  Device: {session.DeviceName} ({session.DeviceOsType})");
+    Console.WriteLine($"  Last Used: {session.LastUsedAt}");
+    Console.WriteLine($"  IP: {session.LastIpAddress}");
+    Console.WriteLine($"  Expires: {session.ExpiresAt}");
+}
+```
+
+---
+
+#### RevokeSession
+
+Revokes a specific session by ID, effectively logging out that device.
+
+**Request:** `RevokeSessionRequest`
+```protobuf
+message RevokeSessionRequest {
+  string session_id = 1;
+}
+```
+
+**Response:** `google.protobuf.Empty`
+
+**Example (C#):**
+```csharp
+var request = new RevokeSessionRequest { SessionId = "session-abc-123" };
+await client.RevokeSessionAsync(request, callOptions);
+Console.WriteLine("Session revoked successfully");
+```
+
+**Use Cases:**
+- Remote logout of lost or stolen devices
+- Logout from public computers you forgot to logout from
+- Terminate suspicious sessions
+
+---
+
+#### RevokeOtherSessions
+
+Revokes all sessions except the current one. Useful after password changes or when you suspect unauthorized access.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `google.protobuf.Empty`
+
+**Example (C#):**
+```csharp
+await client.RevokeOtherSessionsAsync(new Empty(), callOptions);
+Console.WriteLine("All other sessions have been logged out");
+```
+
+**Use Cases:**
+- After changing password
+- When you suspect account compromise
+- When you want to ensure only your current device has access
 
 ---
 
@@ -6154,7 +6525,7 @@ This guide covers the complete CloudDrive2 gRPC API with:
 - ✅ **Security guidelines**
 - ✅ **Complete working examples**
 
-**API Version:** 0.9.12
+**API Version:** 0.9.14
 
 ---
 
