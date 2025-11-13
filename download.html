@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.9.13)</title>
+  <title>CloudDrive - 下载(v0.9.14)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -49,31 +49,30 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.9.13)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.9.14)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <!-- Latest Version -->
       <div class="alert alert-warning" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.13"><strong>0.9.13(Web2.1.3.1):</strong></a>
+        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.14"><strong>0.9.14(Web2.2.0.0):</strong></a>
         <ol>
-          <li>修复通过浏览器上传小文件到非https或者localhost的地址的115open和阿里云盘open网盘会失败的问题</li>
+          <li>支持双因素认证(2FA)，在账户设置页可以打开双因素认证，需要在手机上先下载安装Microsoft Authenticator或者腾讯身份验证器等用于生成随机验证码(TOTP)的App，打开2FA后，从网页登录需要输入手机App上显示的TOTP验证码，修改密码和修改邮箱也需要输入TOTP验证码，打开2FA时会生成一组恢复代码，当手机不在身边或者app无法工作时，可以使用恢复代码代替验证码，恢复代码为一次性使用，用后作废。双因素认证可以显著提高安全性，建议所有用户打开。注意：打开2FA后，所有老版本的CloudDrive2将无法登录，在打开2FA之前，请先确保同账号下所有CloudDrive2都已升级到0.9.14以上版本，再打开2FA，如果有未升级的CloudDrive2无法登录，需要关闭2FA后登录老版本并升级到最新版，然后重新打开2FA</li>
+          <li>修复直接修改挂载盘上的文件在某些情况下可能导致上传文件校验失败的问题</li>
+          <li>修复在Windows挂载盘上直接编辑远程CloudDrive存储目录下的文件时，保存文件可能失败的问题</li>
+          <li>123网盘支持显示会员级别和到期日期</li>
+          <li>WebUI右键点击文件管理器标题栏可以选择显示的属性列，默认为文件的名称、大小、类型、修改时间，右键可选择显示创建时间和访问时间，iPad等设备可以长按标题栏选择</li>
+          <li>文件夹导航栏(breadcrumb)增加编辑按钮，点击后可直接输入访问路径，回车直达输入的路径</li>
+          <li>左侧导航菜单可以单独收起/打开</li>
+          <li>进一步优化WebUI在iPad上的使用体验，可以拖动调整文件属性栏和左菜单栏的大小，修复在iPad上无法长按选择文件，列表模式布局不合理等问题</li>
+          <li>修复在移动设备上主题设置为自动（系统）不工作的问题</li>
+          <li>其它性能改进，bug修复和界面优化</li>
         </ol>
       </div>
 
       <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.12"><strong>0.9.12(Web2.1.3.0):</strong></a>
+        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.13"><strong>0.9.13(Web2.1.3.1):</strong></a>
         <ol>
-          <li>访问远程CloudDrive的网盘支持直链功能，服务端的CloudDrive可以在网盘设置界面打开允许远程直链访问的开关（默认为关闭）。打开开关后客户端CloudDrive访问远程CloudDrive的网盘时会用网盘直链访问。直链是会员功能，需要远程和本地的CloudDrive2都有有效的会员（终身、年费、月费和轻享终身会员都支持）。警告：直接下载链接可能包含敏感的隐私数据，包括用户ID、访问令牌和其他凭据。您需要对滥用或误用这些直接下载链接所产生的任何后果承担全部责任。请勿将这些链接公开分享或与不可信的第三方共享</li>
-          <li>Windows挂载盘支持通过应用程序和文件管理器设置文件属性（隐藏、只读、归档等），默认文件属性为归档，解决一些应用程序打开挂载盘上的文件失败的问题（如Microsoft Excel无法打开和编辑.xls文件的问题等），文件属性设置在本地持久化，重启后仍然生效，不能跨设备同步文件权限设置</li>
-          <li>网盘搜索支持是否将搜索结果添加到挂载盘目录选项，默认为打开，搜索时选择禁止则搜索结果只在Web界面内使用，不会在挂载盘内显示</li>
-          <li>添加离线下载支持是否在添加后自动检查文件夹选项，默认为打开，打开时会在添加离线后10秒检查离线是否完成并发出文件变更通知，关闭时则不做检查，也没有文件变更通知</li>
-          <li>在原有每周自动整理缓存数据库的基础上，增加手动整理目录缓存数据库，在设置页面的缓存持久化里可以手动清理数据库</li>
-          <li>Android APK版支持设置暴露给SAF应用的根文件夹路径</li>
-          <li>修复从123网盘和天翼云盘向百度网盘复制文件可能会失败的问题</li>
-          <li>修复及个别情况下向115上传文件失败的问题</li>
-          <li>修复通过浏览器上传大文件时某些情况下会失败的问题</li>
-          <li>优化WebUI在iPad上的使用体验</li>
-          <li>其它性能改进，bug修复和界面优化</li>
+          <li>修复通过浏览器上传小文件到非https或者localhost的地址的115open和阿里云盘open网盘会失败的问题</li>
         </ol>
       </div>
 
@@ -88,6 +87,21 @@
           <div id="collapseOlder" class="accordion-collapse collapse" aria-labelledby="headingOlder" data-bs-parent="#versionHistoryAccordion">
             <div class="accordion-body">
               <div class="alert alert-secondary" role="alert">
+        <a
+          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.12"><strong>0.9.12(Web2.1.3.0):</strong></a>
+        <ol>
+          <li>访问远程CloudDrive的网盘支持直链功能，服务端的CloudDrive可以在网盘设置界面打开允许远程直链访问的开关（默认为关闭）。打开开关后客户端CloudDrive访问远程CloudDrive的网盘时会用网盘直链访问。直链是会员功能，需要远程和本地的CloudDrive2都有有效的会员（终身、年费、月费和轻享终身会员都支持）。警告：直接下载链接可能包含敏感的隐私数据，包括用户ID、访问令牌和其他凭据。您需要对滥用或误用这些直接下载链接所产生的任何后果承担全部责任。请勿将这些链接公开分享或与不可信的第三方共享</li>
+          <li>Windows挂载盘支持通过应用程序和文件管理器设置文件属性（隐藏、只读、归档等），默认文件属性为归档，解决一些应用程序打开挂载盘上的文件失败的问题（如Microsoft Excel无法打开和编辑.xls文件的问题等），文件属性设置在本地持久化，重启后仍然生效，不能跨设备同步文件权限设置</li>
+          <li>网盘搜索支持是否将搜索结果添加到挂载盘目录选项，默认为打开，搜索时选择禁止则搜索结果只在Web界面内使用，不会在挂载盘内显示</li>
+          <li>添加离线下载支持是否在添加后自动检查文件夹选项，默认为打开，打开时会在添加离线后10秒检查离线是否完成并发出文件变更通知，关闭时则不做检查，也没有文件变更通知</li>
+          <li>在原有每周自动整理缓存数据库的基础上，增加手动整理目录缓存数据库，在设置页面的缓存持久化里可以手动清理数据库</li>
+          <li>Android APK版支持设置暴露给SAF应用的根文件夹路径</li>
+          <li>修复从123网盘和天翼云盘向百度网盘复制文件可能会失败的问题</li>
+          <li>修复及个别情况下向115上传文件失败的问题</li>
+          <li>修复通过浏览器上传大文件时某些情况下会失败的问题</li>
+          <li>优化WebUI在iPad上的使用体验</li>
+          <li>其它性能改进，bug修复和界面优化</li>
+        </ol>
         <a
           href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.11"><strong>0.9.11(Web2.1.2.0):</strong></a>
         <ol>
@@ -305,7 +319,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.13/CloudDrive2Setup-X64-0.9.13.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/CloudDrive2Setup-X64-0.9.14.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -319,7 +333,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.13/CloudDrive2Setup-Arm64-0.9.13.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/CloudDrive2Setup-Arm64-0.9.14.exe"><i
                         class="fab fa-windows"></i> Windows Arm64</a></h5>
                 </div>
               </div>
@@ -340,7 +354,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.13/clouddrive-2-linux-x86_64-0.9.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-linux-x86_64-0.9.14.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -354,7 +368,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.13/clouddrive-2-linux-aarch64-0.9.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-linux-aarch64-0.9.14.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -368,7 +382,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.13/clouddrive-2-linux-armv7-0.9.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-linux-armv7-0.9.14.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -390,7 +404,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.13/clouddrive-2-macos-x86_64-0.9.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-macos-x86_64-0.9.14.tgz"><i
                         class="fab fa-apple"></i> MacOS x86_64</a></h5>
                 </div>
               </div>
@@ -404,7 +418,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.13/clouddrive-2-macos-aarch64-0.9.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-macos-aarch64-0.9.14.tgz"><i
                         class="fab fa-apple"></i> MacOS aarch64</a></h5>
                 </div>
               </div>
@@ -426,7 +440,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.13/clouddrive-2-android-universal-0.9.13-188.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-android-universal-0.9.14-190.apk"><i
                         class="fab fa-android"></i> Android APK</a></h5>
                 </div>
               </div>
@@ -440,7 +454,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.13/clouddrive-2-android-x86_64-0.9.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-android-x86_64-0.9.14.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -454,7 +468,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.13/clouddrive-2-android-aarch64-0.9.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-android-aarch64-0.9.14.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -468,7 +482,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.13/clouddrive-2-android-armv7-0.9.13.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-android-armv7-0.9.14.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
@@ -482,7 +496,7 @@
       <h2>从115网盘下载</h2>
       <div class="container text-center" style="margin-bottom: 20px;">
         <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://115cdn.com/s/swwxjmu3zde?password=rca4">从115网盘下载</a>
+          href="https://115cdn.com/s/sww0qj03zde?password=n3c7">从115网盘下载</a>
       </div>
     </div>
     <div class="mt-4">

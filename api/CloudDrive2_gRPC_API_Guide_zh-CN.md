@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 0.9.12
+版本: 0.9.14
 
 ## 目录
 
-- [0.9.12 版本新特性](#0912-版本新特性)
+- [0.9.14 版本新特性](#0914-版本新特性)
 - [概述](#概述)
 - [服务定义](#服务定义)
 - [下载 Proto 文件](#下载-proto-文件)
@@ -24,6 +24,8 @@
   - [备份管理](#备份管理)
   - [WebDAV 管理](#webdav-管理)
   - [令牌管理](#令牌管理)
+  - [双因素认证 (2FA)](#双因素认证-2fa)
+  - [会话管理](#会话管理)
   - [远程上传协议](#远程上传协议)
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
@@ -31,50 +33,70 @@
 
 ---
 
-## 0.9.12 版本新特性
+## 0.9.14 版本新特性
 
-此版本引入了数据库维护、直接下载功能和离线文件管理的多项增强。
+此版本引入了重大安全增强功能,包括**双因素认证 (2FA)** 支持和**会话管理**功能,允许用户保护账户安全并管理跨设备的活动登录会话。
 
 ### 新功能
 
-#### 数据库维护方法
-- **`VacuumDirCache`** - 回收目录缓存数据库空间
-- **`GetVacuumProgress`** - 实时监控清理操作进度
-- **`GetDirCacheDbSize`** - 查询当前目录缓存数据库大小
+#### 双因素认证 (2FA)
 
-这些方法通过高效管理目录缓存数据库来帮助优化性能。
+CloudDrive2 现在支持业界标准的基于时间的一次性密码 (TOTP) 双因素认证,兼容 Microsoft Authenticator、Google Authenticator 和 Authy 等身份验证器应用。
 
-#### 增强的下载功能
-**`GetDownloadUrlPath` 改进:**
-- 新增 `get_direct_url` 字段以请求云服务商的直接下载 URL
-- 添加 `userAgent` 字段用于指定自定义 User-Agent 请求头
-- 添加 `additionalHeaders` 映射用于向云服务商传递自定义 HTTP 请求头
-- 将 `expiresIn` 从 `int64` 更改为 `uint64` 以更好地处理时间戳
+**新增 2FA 方法:**
+- **`Check2FAStatus`** - 检查当前用户是否启用了 2FA
+- **`Setup2FA`** - 生成 TOTP 密钥和二维码用于身份验证器应用设置
+- **`Enable2FA`** - 通过验证 TOTP 代码启用 2FA(返回恢复代码)
+- **`Disable2FA`** - 使用有效的 TOTP 代码禁用 2FA
+- **`GetRecoveryCodes`** - 查看剩余的未使用恢复代码
+- **`RegenerateRecoveryCodes`** - 生成新的恢复代码(使旧代码失效)
+- **`LoginWith2FA`** - 支持 TOTP 代码和恢复代码的公共登录方法
 
-**云 API 增强:**
-- `CloudAPI` 现在包含 `supportHttpDownload` 标志
-- `CloudAPIConfig` 添加三个新的可选字段:
-  - `useHttpDownload` - 启用基于 HTTP 的下载
-  - `supportDirectLink` - 指示是否支持直接链接
-  - `supportDirectDownloadUrl` - 指示是否支持直接下载 URL
+**增强的现有方法以支持 2FA:**
+- `GetToken` - 现在接受可选的 `totpCode` 参数用于启用 2FA 的账户
+- `ChangePassword` - 启用 2FA 时需要 TOTP 代码
+- `ChangeEmail` - 启用 2FA 时需要 TOTP 代码
 
-#### 搜索和离线下载改进
-- **`SearchRequest`** - 新增 `addResultToMountedSearchFolder` 字段,可自动将搜索结果添加到已挂载的搜索文件夹
-- **`AddOfflineFileRequest`** - 新增 `checkFolderAfterSecs` 字段,可指定检查文件夹内容前的延迟时间
+**安全特性:**
+- 基于 TOTP 的身份验证(RFC 6238 标准)
+- 当身份验证器不可用时可使用恢复代码访问账户
+- 每个恢复代码只能使用一次,使用后自动失效
+- 恢复代码可随时重新生成
 
-#### 权限更新
-更新了 `TokenPermissions` 注释以包含新的数据库清理相关方法:
-- `allow_get_system_settings` 现在包括 GetDirCacheDbSize 和 GetVacuumProgress
-- `allow_modify_system_settings` 现在包括 VacuumDirCache
+**重要提示:**
+- 启用 2FA 后,旧版本的 CloudDrive2 客户端(< 0.9.14)将无法登录
+- 启用 2FA 之前确保所有设备都已升级到 0.9.14+
+- 将恢复代码存储在安全位置 - 它们是您的备用访问方法
 
-### 破坏性变更
-- `DownloadUrlPathInfo.expiresIn` 从 `int64` 更改为 `uint64`
+#### 会话管理
 
-### 迁移指南
-如果您正在使用 `GetDownloadUrlPath`:
-- 将 `expiresIn` 字段类型从 `int64` 更新为 `uint64`
-- 可选择使用新的 `get_direct_url` 标志请求直接 URL
-- 利用 `userAgent` 和 `additionalHeaders` 实现高级下载场景
+新的会话管理功能允许用户查看和控制所有设备上的活动登录会话。
+
+**新增会话管理方法:**
+- **`GetSessions`** - 列出所有活动的刷新令牌会话及设备信息
+- **`RevokeSession`** - 通过 ID 撤销特定会话(注销该设备)
+- **`RevokeOtherSessions`** - 撤销除当前会话外的所有会话
+
+**会话信息包括:**
+- 会话 ID 和设备 ID
+- 设备名称和操作系统类型
+- 创建时间戳和最后使用时间戳
+- 过期时间戳
+- 最后已知 IP 地址
+
+**使用场景:**
+- 查看所有可访问您账户的设备
+- 远程注销遗忘的会话或丢失的设备
+- 更改密码后清除所有其他会话以增强安全性
+- 监控账户访问模式
+
+### 安全最佳实践
+
+1. **在所有生产账户上启用 2FA** 以防止未经授权的访问
+2. **定期使用 `GetSessions` 审查会话**以识别未知设备
+3. **撤销未使用的会话**以最小化攻击面
+4. **安全存储恢复代码** - 像对待密码一样对待它们
+5. **在启用 2FA 之前将所有客户端升级到 0.9.14+** 以避免锁定
 
 ---
 
@@ -1169,8 +1191,11 @@ Console.WriteLine($"已登录: {systemInfo.IsLogin}, 用户: {systemInfo.UserNam
 message GetTokenRequest {
   string userName = 1;
   string password = 2;
+  optional string totpCode = 3; // 启用 2FA 的账户的可选 TOTP 代码
 }
 ```
+
+**注意:** 如果账户启用了双因素认证 (2FA),您必须在 `totpCode` 字段中提供有效的 6 位 TOTP 代码或 8 位恢复代码。对于未启用 2FA 的账户,可以省略此字段。
 
 **响应:** `JWTToken`
 ```protobuf
@@ -3707,8 +3732,11 @@ message AccountPlan {
 message ChangePasswordRequest {
   string oldPassword = 1;
   string newPassword = 2;
+  optional string totpCode = 3;
 }
 ```
+
+**注意:** 如果您的账户启用了双因素认证 (2FA),您必须在 `totpCode` 字段中提供有效的 TOTP 代码或恢复代码。
 
 **响应:** `FileOperationResult`
 
@@ -3719,6 +3747,16 @@ message ChangePasswordRequest {
 更改账户邮箱。
 
 **请求:** `ChangeEmailRequest`
+```protobuf
+message ChangeEmailRequest {
+  string newEmail = 1;
+  string password = 2;
+  optional string changeCode = 3;
+  optional string totpCode = 4;
+}
+```
+
+**注意:** 如果您的账户启用了双因素认证 (2FA),您必须在 `totpCode` 字段中提供有效的 TOTP 代码或恢复代码。
 
 **响应:** `google.protobuf.Empty`
 
@@ -3804,6 +3842,339 @@ message JoinPlanRequest {
 **请求:** `google.protobuf.Empty`
 
 **响应:** `StringValue`
+
+---
+
+### 双因素认证 (2FA)
+
+CloudDrive2 支持基于时间的一次性密码 (TOTP) 双因素认证以增强账户安全性。本节记录所有与 2FA 相关的方法。
+
+#### Check2FAStatus
+
+检查当前认证用户是否启用了 2FA。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `TwoFactorAuthStatusResult`
+```protobuf
+message TwoFactorAuthStatusResult {
+  bool two_factor_enabled = 1;
+}
+```
+
+**示例 (C#):**
+```csharp
+var status = await client.Check2FAStatusAsync(new Empty(), callOptions);
+if (status.TwoFactorEnabled)
+{
+    Console.WriteLine("2FA 已启用");
+}
+```
+
+---
+
+#### Setup2FA
+
+生成 TOTP 密钥和二维码用于设置 2FA。这是启用 2FA 的第一步。
+
+**请求:** `Setup2FARequest`
+```protobuf
+message Setup2FARequest {
+  string password = 1;
+}
+```
+
+**响应:** `TwoFactorAuthSetupResult`
+```protobuf
+message TwoFactorAuthSetupResult {
+  string secret = 1;
+  string qr_code = 2;  // Base64 编码的 PNG 图像(数据 URL 格式)
+  string manual_entry_key = 3;
+}
+```
+
+**工作流程:**
+1. 用户提供密码
+2. 服务器生成 TOTP 密钥
+3. 服务器返回二维码(base64 数据 URL)和手动输入密钥
+4. 用户使用身份验证器应用扫描二维码(Microsoft Authenticator、Google Authenticator、Authy 等)
+5. 用户使用应用中的代码继续执行 `Enable2FA`
+
+**示例 (C#):**
+```csharp
+var setupRequest = new Setup2FARequest { Password = "mypassword" };
+var setup = await client.Setup2FAAsync(setupRequest, callOptions);
+
+// 在 UI 中显示二维码(setup.QrCode 是数据 URL,如 "data:image/png;base64,...")
+Console.WriteLine($"密钥: {setup.Secret}");
+Console.WriteLine($"手动输入密钥: {setup.ManualEntryKey}");
+// 在 UI 中将 setup.QrCode 显示为图像供用户扫描
+```
+
+---
+
+#### Enable2FA
+
+通过验证用户身份验证器应用中的 TOTP 代码来启用 2FA。返回应安全存储的恢复代码。
+
+**请求:** `TwoFactorAuthCodeRequest`
+```protobuf
+message TwoFactorAuthCodeRequest {
+  string totp_code = 1;  // 6 位 TOTP 代码或 8 位恢复代码
+}
+```
+
+**响应:** `TwoFactorAuthEnableResult`
+```protobuf
+message TwoFactorAuthEnableResult {
+  repeated string recovery_codes = 1;
+  string message = 2;
+}
+```
+
+**重要提示:**
+- 在 `Setup2FA` 之后立即调用此方法以验证设置是否正常工作
+- TOTP 代码必须是当前的(代码每 30 秒过期一次)
+- 恢复代码仅生成并返回一次 - 请安全存储!
+- 每个恢复代码只能使用一次
+
+**示例 (C#):**
+```csharp
+var enableRequest = new TwoFactorAuthCodeRequest { TotpCode = "123456" };
+var result = await client.Enable2FAAsync(enableRequest, callOptions);
+
+Console.WriteLine(result.Message);
+Console.WriteLine("恢复代码(请安全存储这些代码!):");
+foreach (var code in result.RecoveryCodes)
+{
+    Console.WriteLine($"  {code}");
+}
+```
+
+---
+
+#### Disable2FA
+
+禁用账户的 2FA。需要有效的 TOTP 代码或恢复代码。
+
+**请求:** `TwoFactorAuthCodeRequest`
+```protobuf
+message TwoFactorAuthCodeRequest {
+  string totp_code = 1;  // 6 位 TOTP 代码或 8 位恢复代码
+}
+```
+
+**响应:** `TwoFactorAuthMessageResult`
+```protobuf
+message TwoFactorAuthMessageResult {
+  string message = 1;
+}
+```
+
+**示例 (C#):**
+```csharp
+var disableRequest = new TwoFactorAuthCodeRequest { TotpCode = "654321" };
+var result = await client.Disable2FAAsync(disableRequest, callOptions);
+Console.WriteLine(result.Message);
+```
+
+---
+
+#### GetRecoveryCodes
+
+检索未使用的恢复代码列表。需要有效的 TOTP 代码。
+
+**请求:** `TwoFactorAuthCodeRequest`
+```protobuf
+message TwoFactorAuthCodeRequest {
+  string totp_code = 1;  // 6 位 TOTP 代码
+}
+```
+
+**响应:** `TwoFactorAuthRecoveryCodesResult`
+```protobuf
+message TwoFactorAuthRecoveryCodesResult {
+  repeated string recovery_codes = 1;
+  uint32 total = 2;
+  string message = 3;
+}
+```
+
+**示例 (C#):**
+```csharp
+var request = new TwoFactorAuthCodeRequest { TotpCode = "123456" };
+var result = await client.GetRecoveryCodesAsync(request, callOptions);
+
+Console.WriteLine($"您有 {result.Total} 个未使用的恢复代码:");
+foreach (var code in result.RecoveryCodes)
+{
+    Console.WriteLine($"  {code}");
+}
+```
+
+---
+
+#### RegenerateRecoveryCodes
+
+生成一组新的恢复代码并使所有现有代码失效。需要有效的 TOTP 代码。
+
+**请求:** `TwoFactorAuthCodeRequest`
+```protobuf
+message TwoFactorAuthCodeRequest {
+  string totp_code = 1;  // 6 位 TOTP 代码
+}
+```
+
+**响应:** `TwoFactorAuthRecoveryCodesResult`
+```protobuf
+message TwoFactorAuthRecoveryCodesResult {
+  repeated string recovery_codes = 1;
+  uint32 total = 2;
+  string message = 3;
+}
+```
+
+**警告:** 重新生成后,所有旧的恢复代码将立即失效。
+
+**示例 (C#):**
+```csharp
+var request = new TwoFactorAuthCodeRequest { TotpCode = "123456" };
+var result = await client.RegenerateRecoveryCodesAsync(request, callOptions);
+
+Console.WriteLine("新的恢复代码(旧代码现已失效!):");
+foreach (var code in result.RecoveryCodes)
+{
+    Console.WriteLine($"  {code}");
+}
+```
+
+---
+
+#### LoginWith2FA
+
+用于使用 2FA 登录的公共方法。当您知道账户启用了 2FA 时,请使用此方法而不是 `GetToken`。
+
+**请求:** `LoginWith2FARequest`
+```protobuf
+message LoginWith2FARequest {
+  string userName = 1;
+  string password = 2;
+  string totp_code = 3;  // 6 位 TOTP 代码或 8 位恢复代码
+  bool synDataToCloud = 4;
+}
+```
+
+**响应:** `JWTToken`
+
+**示例 (C#):**
+```csharp
+var loginRequest = new LoginWith2FARequest
+{
+    UserName = "myusername",
+    Password = "mypassword",
+    TotpCode = "123456",  // 或使用恢复代码如 "ABC12345"
+    SynDataToCloud = true
+};
+
+var token = await client.LoginWith2FAAsync(loginRequest);
+if (token.Success)
+{
+    Console.WriteLine($"登录成功! 令牌: {token.Token}");
+}
+```
+
+---
+
+### 会话管理
+
+CloudDrive2 提供会话管理功能,可查看和控制所有设备上的活动登录会话。
+
+#### GetSessions
+
+列出当前用户的所有活动刷新令牌会话。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `GetSessionsResponse`
+```protobuf
+message GetSessionsResponse {
+  repeated Session sessions = 1;
+}
+
+message Session {
+  string id = 1;
+  string device_id = 2;
+  string device_name = 3;
+  string device_os_type = 4;
+  string created_at = 5;
+  string last_used_at = 6;
+  string expires_at = 7;
+  string last_ip_address = 8;
+}
+```
+
+**示例 (C#):**
+```csharp
+var response = await client.GetSessionsAsync(new Empty(), callOptions);
+
+Console.WriteLine($"活动会话数: {response.Sessions.Count}");
+foreach (var session in response.Sessions)
+{
+    Console.WriteLine($"ID: {session.Id}");
+    Console.WriteLine($"  设备: {session.DeviceName} ({session.DeviceOsType})");
+    Console.WriteLine($"  最后使用: {session.LastUsedAt}");
+    Console.WriteLine($"  IP: {session.LastIpAddress}");
+    Console.WriteLine($"  过期时间: {session.ExpiresAt}");
+}
+```
+
+---
+
+#### RevokeSession
+
+通过 ID 撤销特定会话,有效地注销该设备。
+
+**请求:** `RevokeSessionRequest`
+```protobuf
+message RevokeSessionRequest {
+  string session_id = 1;
+}
+```
+
+**响应:** `google.protobuf.Empty`
+
+**示例 (C#):**
+```csharp
+var request = new RevokeSessionRequest { SessionId = "session-abc-123" };
+await client.RevokeSessionAsync(request, callOptions);
+Console.WriteLine("会话已成功撤销");
+```
+
+**使用场景:**
+- 远程注销丢失或被盗设备
+- 从忘记注销的公共计算机注销
+- 终止可疑会话
+
+---
+
+#### RevokeOtherSessions
+
+撤销除当前会话外的所有会话。在更改密码后或怀疑未经授权访问时很有用。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `google.protobuf.Empty`
+
+**示例 (C#):**
+```csharp
+await client.RevokeOtherSessionsAsync(new Empty(), callOptions);
+Console.WriteLine("所有其他会话已注销");
+```
+
+**使用场景:**
+- 更改密码后
+- 怀疑账户被盗用时
+- 当您希望确保只有当前设备可以访问时
 
 ---
 
@@ -6218,7 +6589,7 @@ class FileManager
 - ✅ **安全准则**
 - ✅ **完整的工作示例**
 
-**API 版本:** 0.9.12
+**API 版本:** 0.9.14
 
 ---
 

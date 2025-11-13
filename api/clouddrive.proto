@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "0.9.12";
+option (version) = "0.9.14";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -30,6 +30,8 @@ service CloudDriveFileSrv {
   rpc ResetAccount(ResetAccountRequest) returns (google.protobuf.Empty) {}
   // get user created API token info by token string
   rpc GetApiTokenInfo(StringValue) returns (TokenInfo) {}
+  // login with 2FA code (public method, no authorization required)
+  rpc LoginWith2FA(LoginWith2FARequest) returns (JWTToken) {}
 
   // authorized methods, Authorization header with Bearer {token} is requirerd
   // asks cloudfs server to send confirm email with confirm link
@@ -38,6 +40,31 @@ service CloudDriveFileSrv {
   rpc ConfirmEmail(ConfirmEmailRequest) returns (google.protobuf.Empty) {}
   // get account status
   rpc GetAccountStatus(google.protobuf.Empty) returns (AccountStatusResult) {}
+  
+  // ==================== 2FA Methods (Authorized) ====================
+  // Check if 2FA is enabled for the current user
+  rpc Check2FAStatus(google.protobuf.Empty) returns (TwoFactorAuthStatusResult) {}
+  // Setup 2FA - Generate TOTP secret and QR code (requires password)
+  rpc Setup2FA(Setup2FARequest) returns (TwoFactorAuthSetupResult) {}
+  // Enable 2FA by verifying TOTP code - Returns recovery codes
+  rpc Enable2FA(TwoFactorAuthCodeRequest) returns (TwoFactorAuthEnableResult) {}
+  // Disable 2FA - Requires valid TOTP code
+  rpc Disable2FA(TwoFactorAuthCodeRequest) returns (TwoFactorAuthMessageResult) {}
+  // View unused recovery codes - Requires valid TOTP code
+  rpc GetRecoveryCodes(TwoFactorAuthCodeRequest) returns (TwoFactorAuthRecoveryCodesResult) {}
+  // Regenerate recovery codes - Requires valid TOTP code
+  rpc RegenerateRecoveryCodes(TwoFactorAuthCodeRequest) returns (TwoFactorAuthRecoveryCodesResult) {}
+  // ==================== End 2FA Methods ====================
+  
+  // ==================== Session Management Methods ====================
+  // Get list of all active refresh token sessions
+  rpc GetSessions(google.protobuf.Empty) returns (GetSessionsResponse) {}
+  // Revoke a specific session by ID
+  rpc RevokeSession(RevokeSessionRequest) returns (google.protobuf.Empty) {}
+  // Revoke all sessions except the current one
+  rpc RevokeOtherSessions(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  // ==================== End Session Management Methods ====================
+  
   // get all subfiles by path
   rpc GetSubFiles(ListSubFileRequest) returns (stream SubFilesReply) {}
   // search under path
@@ -485,6 +512,7 @@ service CloudDriveFileSrv {
 message GetTokenRequest {
   string userName = 1;
   string password = 2;
+  optional string totpCode = 3; // Optional TOTP code for 2FA-enabled accounts
 }
 message JWTToken {
   bool success = 1;
@@ -740,6 +768,7 @@ message UserLogoutRequest { bool logoutFromCloudFS = 1; }
 message ChangePasswordRequest {
   string oldPassword = 1;
   string newPassword = 2;
+  optional string totpCode = 3;
 }
 message AccountStatusResult {
   string userName = 1;
@@ -1489,6 +1518,7 @@ message ChangeEmailRequest {
   string newEmail = 1;
   string password = 2;
   optional string changeCode = 3;
+  optional string totpCode = 4;
 }
 message ChangeEmailAndPasswordRequest {
   string newEmail = 1;
@@ -1996,3 +2026,69 @@ message GenerateSelfSignedCertRequest {
   // config
   bool restart_servers = 1;
 }
+
+// ==================== 2FA Messages ====================
+
+message TwoFactorAuthStatusResult {
+  bool two_factor_enabled = 1;
+}
+
+message Setup2FARequest {
+  string password = 1;
+}
+
+message TwoFactorAuthSetupResult {
+  string secret = 1;
+  string qr_code = 2;  // Base64-encoded PNG image (data URL format)
+  string manual_entry_key = 3;
+}
+
+message TwoFactorAuthCodeRequest {
+  string totp_code = 1;  // 6-digit TOTP code or 8-character recovery code
+}
+
+message TwoFactorAuthEnableResult {
+  repeated string recovery_codes = 1;
+  string message = 2;
+}
+
+message TwoFactorAuthMessageResult {
+  string message = 1;
+}
+
+message TwoFactorAuthRecoveryCodesResult {
+  repeated string recovery_codes = 1;
+  uint32 total = 2;
+  string message = 3;
+}
+
+message LoginWith2FARequest {
+  string userName = 1;
+  string password = 2;
+  string totp_code = 3;  // 6-digit TOTP code or 8-character recovery code
+  bool synDataToCloud = 4;
+}
+
+// ==================== End 2FA Messages ====================
+
+// ==================== Session Management Messages ====================
+message Session {
+  string id = 1;
+  string device_id = 2;
+  string device_name = 3;
+  string device_os_type = 4;
+  string created_at = 5;
+  string last_used_at = 6;
+  string expires_at = 7;
+  string last_ip_address = 8;
+}
+
+message GetSessionsResponse {
+  repeated Session sessions = 1;
+}
+
+message RevokeSessionRequest {
+  string session_id = 1;
+}
+
+// ==================== End Session Management Messages ====================
