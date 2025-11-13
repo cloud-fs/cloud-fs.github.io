@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.9.14)</title>
+  <title>CloudDrive - 下载(v0.9.15)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -49,11 +49,19 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.9.14)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.9.15)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <!-- Latest Version -->
       <div class="alert alert-warning" role="alert">
+        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.15"><strong>0.9.15(Web2.2.1.0):</strong></a>
+        <ol>
+          <li>修复v0.9.14在某些情况下web界面打开时cpu占用高的问题</li>
+          <li>API Token权限列表增加推送消息权限</li>
+        </ol>
+      </div>
+
+      <div class="alert alert-info" role="alert">
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.14"><strong>0.9.14(Web2.2.0.0):</strong></a>
         <ol>
           <li>支持双因素认证(2FA)，在账户设置页可以打开双因素认证，需要在手机上先下载安装Microsoft Authenticator或者腾讯身份验证器等用于生成随机验证码(TOTP)的App，打开2FA后，从网页登录需要输入手机App上显示的TOTP验证码，修改密码和修改邮箱也需要输入TOTP验证码，打开2FA时会生成一组恢复代码，当手机不在身边或者app无法工作时，可以使用恢复代码代替验证码，恢复代码为一次性使用，用后作废。双因素认证可以显著提高安全性，建议所有用户打开。注意：打开2FA后，所有老版本的CloudDrive2将无法登录，在打开2FA之前，请先确保同账号下所有CloudDrive2都已升级到0.9.14以上版本，再打开2FA，如果有未升级的CloudDrive2无法登录，需要关闭2FA后登录老版本并升级到最新版，然后重新打开2FA</li>
@@ -69,13 +77,6 @@
         </ol>
       </div>
 
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.13"><strong>0.9.13(Web2.1.3.1):</strong></a>
-        <ol>
-          <li>修复通过浏览器上传小文件到非https或者localhost的地址的115open和阿里云盘open网盘会失败的问题</li>
-        </ol>
-      </div>
-
       <!-- Older Versions (Collapsible) -->
       <div class="accordion" id="versionHistoryAccordion">
         <div class="accordion-item">
@@ -87,6 +88,11 @@
           <div id="collapseOlder" class="accordion-collapse collapse" aria-labelledby="headingOlder" data-bs-parent="#versionHistoryAccordion">
             <div class="accordion-body">
               <div class="alert alert-secondary" role="alert">
+        <a
+          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.13"><strong>0.9.13(Web2.1.3.1):</strong></a>
+        <ol>
+          <li>修复通过浏览器上传小文件到非https或者localhost的地址的115open和阿里云盘open网盘会失败的问题</li>
+        </ol>
         <a
           href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.12"><strong>0.9.12(Web2.1.3.0):</strong></a>
         <ol>
@@ -319,7 +325,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/CloudDrive2Setup-X64-0.9.14.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.15/CloudDrive2Setup-X64-0.9.15.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -333,7 +339,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/CloudDrive2Setup-Arm64-0.9.14.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.15/CloudDrive2Setup-Arm64-0.9.15.exe"><i
                         class="fab fa-windows"></i> Windows Arm64</a></h5>
                 </div>
               </div>
@@ -354,7 +360,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-linux-x86_64-0.9.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.15/clouddrive-2-linux-x86_64-0.9.15.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -368,7 +374,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-linux-aarch64-0.9.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.15/clouddrive-2-linux-aarch64-0.9.15.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -382,7 +388,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-linux-armv7-0.9.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.15/clouddrive-2-linux-armv7-0.9.15.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -404,7 +410,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-macos-x86_64-0.9.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.15/clouddrive-2-macos-x86_64-0.9.15.tgz"><i
                         class="fab fa-apple"></i> MacOS x86_64</a></h5>
                 </div>
               </div>
@@ -418,7 +424,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-macos-aarch64-0.9.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.15/clouddrive-2-macos-aarch64-0.9.15.tgz"><i
                         class="fab fa-apple"></i> MacOS aarch64</a></h5>
                 </div>
               </div>
@@ -440,7 +446,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-android-universal-0.9.14-190.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.15/clouddrive-2-android-universal-0.9.15-191.apk"><i
                         class="fab fa-android"></i> Android APK</a></h5>
                 </div>
               </div>
@@ -454,7 +460,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-android-x86_64-0.9.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.15/clouddrive-2-android-x86_64-0.9.15.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -468,7 +474,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-android-aarch64-0.9.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.15/clouddrive-2-android-aarch64-0.9.15.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -482,7 +488,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.14/clouddrive-2-android-armv7-0.9.14.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.15/clouddrive-2-android-armv7-0.9.15.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
@@ -496,7 +502,7 @@
       <h2>从115网盘下载</h2>
       <div class="container text-center" style="margin-bottom: 20px;">
         <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://115cdn.com/s/sww0qj03zde?password=n3c7">从115网盘下载</a>
+          href="https://115cdn.com/s/sww07mo3zde?password=c887">从115网盘下载</a>
       </div>
     </div>
     <div class="mt-4">
