@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "0.9.14";
+option (version) = "0.9.16";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -1049,6 +1049,7 @@ message GetUploadFileListResult {
   double globalBytesPerSecond = 3;
   uint64 totalBytes = 4;
   uint64 finishedBytes = 5;
+  uint32 totalCountFiltered = 6;
 }
 message TaskError {
   google.protobuf.Timestamp time = 1;
@@ -1321,6 +1322,8 @@ message SystemSettings {
   optional StringList operatorPriorityOrder = 21;
   // Standalone proxy settings for downloading update packages
   optional ProxyInfo updateProxy = 22;
+  // Delay in seconds before starting process (default: 0)
+  optional uint64 startDelaySecs = 23;
 }
 message SetDirCacheTimeRequest {
   string path = 1;
@@ -1625,6 +1628,7 @@ message Backup {
   bool forceWalkingThroughOnStart = 9;
   repeated TimeSchedule timeSchedules = 10;
   bool isTimeSchedulesEnabled = 11;
+  bool syncDeleteFromDest = 14; // Delete files/folders from destination that don't exist in source while walking through
 }
 message BackupStatus {
   enum Status {
