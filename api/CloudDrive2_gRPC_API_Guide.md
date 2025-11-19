@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 0.9.14
+Version: 0.9.16
 
 ## Table of Contents
 
-- [What's New in 0.9.14](#whats-new-in-0914)
+- [What's New in 0.9.16](#whats-new-in-0916)
 - [Overview](#overview)
 - [Service Definition](#service-definition)
 - [Download Proto File](#download-proto-file)
@@ -33,17 +33,41 @@ Version: 0.9.14
 
 ---
 
-## What's New in 0.9.14
+## What's New in 0.9.16
 
-This version introduces major security enhancements with **Two-Factor Authentication (2FA)** support and **Session Management** capabilities, allowing users to secure their accounts and manage active login sessions across devices.
+CloudDrive2 0.9.16 builds on the big 2FA release from 0.9.14 and the API-token update from 0.9.15. The latest `clouddrive.proto` adds automation controls that make large installations more predictable while keeping every prior security feature intact.
 
-### New Features
+### Backup Automation Enhancements
+
+The `Backup` message now exposes the `syncDeleteFromDest` flag. When enabled, CloudDrive removes destination files or folders that disappeared from the source during a full walk-through, honoring whichever delete rule (`Keep`, `Recycle`, `MoveToVersionHistory`, etc.) you configured. This mirrors the new “同步删除目标文件” option in the UI and gives API clients deterministic mirror-style backups.
+
+Key behaviors:
+- Applies only during full scans (manual or scheduled walks)
+- Uses the existing delete policy, so you keep fine-grained control over how removals are handled
+- Ideal for one-way sync scenarios that must stay perfectly in step with the source tree
+
+### Configurable Startup Delay
+
+`SystemSettings` adds `startDelaySecs`, allowing CloudDrive to pause during startup before it mounts drives, starts backups, or accepts work. Use it when the OS needs extra time for VPNs, disks, or time sync services before CloudDrive initializes.
+
+Typical use cases:
+- Appliances that must wait for dependent services (databases, VPNs, storage) to come online
+- NAS devices that need disks to spin up before CloudDrive watches folders
+- Lab environments where staggered start-up reduces race conditions between services
+
+### API Token Push Permissions (0.9.15)
+
+API tokens can now be granted push-notification access via the `allow_push_message` flag on `TokenPermissions`. Grant it only to automations that need the `PushMessage`/`PushTaskChange` streaming RPCs (task counts, realtime logs, merge updates). Leave it disabled to block long-lived streaming channels for least privilege.
+
+### Security Enhancements (Introduced in 0.9.14)
+
+Version 0.9.14 introduced mandatory upgrades for deployments that want Two-Factor Authentication (2FA) and session revocation. Those capabilities remain unchanged in 0.9.16 but are summarized below for quick reference.
 
 #### Two-Factor Authentication (2FA)
 
-CloudDrive2 now supports industry-standard Time-based One-Time Password (TOTP) two-factor authentication, compatible with authenticator apps like Microsoft Authenticator, Google Authenticator, and Authy.
+CloudDrive2 supports industry-standard Time-based One-Time Password (TOTP) two-factor authentication, compatible with authenticator apps like Microsoft Authenticator, Google Authenticator, and Authy.
 
-**New 2FA Methods:**
+**2FA Methods:**
 - **`Check2FAStatus`** - Check if 2FA is enabled for the current user
 - **`Setup2FA`** - Generate TOTP secret and QR code for authenticator app setup
 - **`Enable2FA`** - Enable 2FA by verifying TOTP code (returns recovery codes)
@@ -53,7 +77,7 @@ CloudDrive2 now supports industry-standard Time-based One-Time Password (TOTP) t
 - **`LoginWith2FA`** - Public login method supporting TOTP codes and recovery codes
 
 **Enhanced Existing Methods with 2FA Support:**
-- `GetToken` - Now accepts optional `totpCode` parameter for 2FA-enabled accounts
+- `GetToken` - Accepts optional `totpCode` for 2FA-enabled accounts
 - `ChangePassword` - Requires TOTP code when 2FA is enabled
 - `ChangeEmail` - Requires TOTP code when 2FA is enabled
 
@@ -70,9 +94,9 @@ CloudDrive2 now supports industry-standard Time-based One-Time Password (TOTP) t
 
 #### Session Management
 
-New session management capabilities allow users to view and control active login sessions across all devices.
+Session management lets users view and control active refresh-token sessions across devices.
 
-**New Session Management Methods:**
+**Session Management Methods:**
 - **`GetSessions`** - List all active refresh token sessions with device information
 - **`RevokeSession`** - Revoke a specific session by ID (logs out that device)
 - **`RevokeOtherSessions`** - Revoke all sessions except the current one
@@ -204,7 +228,7 @@ The `clouddrive.proto` file contains:
 
 ### Version Compatibility
 
-**Current Version:** 0.9.12
+**Current Version:** 0.9.16
 
 Always use the proto file from the same version as your CloudDrive2 server to ensure compatibility. You can check your server version using the `GetRuntimeInfo` method.
 
@@ -3482,8 +3506,11 @@ message SystemSettings {
   optional LogLevel realtimeLogLevel = 20;
   optional StringList operatorPriorityOrder = 21;
   optional ProxyInfo updateProxy = 22;
+    optional uint64 startDelaySecs = 23;
 }
 ```
+
+**New in 0.9.16:** `startDelaySecs` lets the service pause for a configurable number of seconds before mounting drives, starting backups, or accepting work—perfect for systems that must wait for VPN links, disks, or time sync services during boot.
 
 ---
 
@@ -4237,8 +4264,11 @@ message Backup {
   bool forceWalkingThroughOnStart = 9;
   repeated TimeSchedule timeSchedules = 10;
   bool isTimeSchedulesEnabled = 11;
+    bool syncDeleteFromDest = 14; // mirror destination deletions during full scan
 }
 ```
+
+Enable `syncDeleteFromDest` to have CloudDrive prune destination files or folders that no longer exist at the source during a full walk-through. The server applies the existing delete rule (keep, recycle, move to history, etc.), which lets you implement mirror-style backups entirely via the API.
 
 **Response:** `google.protobuf.Empty`
 
@@ -5941,6 +5971,8 @@ message TokenPermissions {
 }
 ```
 
+`allow_push_message` (added in 0.9.15) gates access to the `PushMessage`/`PushTaskChange` streaming RPCs—omit it for tokens that should not subscribe to realtime notifications.
+
 ---
 
 ### ProxyInfo
@@ -6525,9 +6557,9 @@ This guide covers the complete CloudDrive2 gRPC API with:
 - ✅ **Security guidelines**
 - ✅ **Complete working examples**
 
-**API Version:** 0.9.14
+**API Version:** 0.9.16
 
 ---
 
-*Last Updated: 2025-10-25*
+*Last Updated: 2025-11-19*
 *Copyright © 2025 CloudDrive. All rights reserved.*

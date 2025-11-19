@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 0.9.14
+版本: 0.9.16
 
 ## 目录
 
-- [0.9.14 版本新特性](#0914-版本新特性)
+- [0.9.16 版本新特性](#0916-版本新特性)
 - [概述](#概述)
 - [服务定义](#服务定义)
 - [下载 Proto 文件](#下载-proto-文件)
@@ -33,17 +33,41 @@
 
 ---
 
-## 0.9.14 版本新特性
+## 0.9.16 版本新特性
 
-此版本引入了重大安全增强功能,包括**双因素认证 (2FA)** 支持和**会话管理**功能,允许用户保护账户安全并管理跨设备的活动登录会话。
+CloudDrive2 0.9.16 在 0.9.14 推出的安全能力与 0.9.15 的 API 令牌更新基础上, 进一步加强自动化和可靠性, 让大规模部署更可预测。
 
-### 新功能
+### 备份自动化增强
+
+`Backup` 消息新增 `syncDeleteFromDest` 开关。启用后, CloudDrive 在备份完整扫描过程中会按照已配置的删除策略(保留、删除、回收站、移动到历史文件夹等)自动清理目标端那些在源端已经不存在的文件或文件夹, 对应 UI 中的“同步删除目标文件”选项, 方便通过 API 构建镜像式备份。
+
+要点:
+- 仅在完整扫描(手动或计划任务)时生效
+- 完全遵循既有删除策略,确保删改行为可控
+- 适用于希望目标目录与源目录保持严格一致的一向同步场景
+
+### 可配置的延迟启动
+
+`SystemSettings` 新增 `startDelaySecs`, 可以在服务启动后先等待指定秒数, 再去挂载云盘、启动备份或处理请求。对依赖 VPN、磁盘或时间同步服务的设备非常实用。
+
+典型场景:
+- 需要等待数据库、VPN、存储等外部依赖先启动的盒子/服务器
+- NAS 需要等磁盘完成上电自检后再运行 CloudDrive
+- 实验室或家庭多机串联时,希望按顺序依次启动服务
+
+### API 令牌推送权限 (0.9.15)
+
+`TokenPermissions` 新增 `allow_push_message` 权限。只有授予该位的令牌才能调用 `PushMessage`/`PushTaskChange` 等流式推送 RPC, 接收任务计数、实时日志、合并任务等通知; 默认保持关闭以满足最小权限原则。
+
+### 0.9.14 引入的安全增强
+
+0.9.14 为想要启用双因素认证(2FA)和刷新令牌会话管理的部署奠定了基础。0.9.16 沿用并完善这些能力,下面保留一份速查。
 
 #### 双因素认证 (2FA)
 
-CloudDrive2 现在支持业界标准的基于时间的一次性密码 (TOTP) 双因素认证,兼容 Microsoft Authenticator、Google Authenticator 和 Authy 等身份验证器应用。
+CloudDrive2 支持业界标准的基于时间的一次性密码 (TOTP) 双因素认证,兼容 Microsoft Authenticator、Google Authenticator 和 Authy 等身份验证器应用。
 
-**新增 2FA 方法:**
+**2FA 方法:**
 - **`Check2FAStatus`** - 检查当前用户是否启用了 2FA
 - **`Setup2FA`** - 生成 TOTP 密钥和二维码用于身份验证器应用设置
 - **`Enable2FA`** - 通过验证 TOTP 代码启用 2FA(返回恢复代码)
@@ -52,8 +76,8 @@ CloudDrive2 现在支持业界标准的基于时间的一次性密码 (TOTP) 双
 - **`RegenerateRecoveryCodes`** - 生成新的恢复代码(使旧代码失效)
 - **`LoginWith2FA`** - 支持 TOTP 代码和恢复代码的公共登录方法
 
-**增强的现有方法以支持 2FA:**
-- `GetToken` - 现在接受可选的 `totpCode` 参数用于启用 2FA 的账户
+**支持 2FA 的现有方法:**
+- `GetToken` - 接受可选的 `totpCode` 参数用于启用 2FA 的账户
 - `ChangePassword` - 启用 2FA 时需要 TOTP 代码
 - `ChangeEmail` - 启用 2FA 时需要 TOTP 代码
 
@@ -70,9 +94,9 @@ CloudDrive2 现在支持业界标准的基于时间的一次性密码 (TOTP) 双
 
 #### 会话管理
 
-新的会话管理功能允许用户查看和控制所有设备上的活动登录会话。
+会话管理允许用户查看和控制所有设备上的活动登录会话。
 
-**新增会话管理方法:**
+**会话管理方法:**
 - **`GetSessions`** - 列出所有活动的刷新令牌会话及设备信息
 - **`RevokeSession`** - 通过 ID 撤销特定会话(注销该设备)
 - **`RevokeOtherSessions`** - 撤销除当前会话外的所有会话
@@ -204,7 +228,7 @@ python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. clouddrive.pr
 
 ### 版本兼容性
 
-**当前版本:** 0.9.12
+**当前版本:** 0.9.16
 
 始终使用与 CloudDrive2 服务器相同版本的 proto 文件以确保兼容性。您可以使用 `GetRuntimeInfo` 方法检查服务器版本。
 
@@ -3484,8 +3508,11 @@ message SystemSettings {
   optional LogLevel realtimeLogLevel = 20;
   optional StringList operatorPriorityOrder = 21;
   optional ProxyInfo updateProxy = 22;
+    optional uint64 startDelaySecs = 23;
 }
 ```
+
+**0.9.16 新增:** `startDelaySecs` 用于在服务启动后延迟若干秒再去挂载云盘、启动备份或响应请求, 适合需要等待 VPN、磁盘、时间同步等依赖的设备。
 
 ---
 
@@ -4239,8 +4266,11 @@ message Backup {
   bool forceWalkingThroughOnStart = 9;
   repeated TimeSchedule timeSchedules = 10;
   bool isTimeSchedulesEnabled = 11;
+    bool syncDeleteFromDest = 14; // 完整扫描时同步删除目标端多余的文件
 }
 ```
+
+启用 `syncDeleteFromDest` 后, 备份在完整扫描阶段会依据当前删除策略自动清理目标端多出的文件/文件夹, 便于实现镜像式备份。
 
 **响应:** `google.protobuf.Empty`
 
@@ -6005,6 +6035,8 @@ message TokenPermissions {
 }
 ```
 
+`allow_push_message`(0.9.15 新增) 用于控制令牌是否可以订阅 `PushMessage`/`PushTaskChange` 等流式推送通知, 仅在需要实时消息时才应开启。
+
 ---
 
 ### ProxyInfo
@@ -6589,9 +6621,9 @@ class FileManager
 - ✅ **安全准则**
 - ✅ **完整的工作示例**
 
-**API 版本:** 0.9.14
+**API 版本:** 0.9.16
 
 ---
 
-*最后更新: 2025-10-25*
+*最后更新: 2025-11-19*
 *版权所有 © 2025 CloudDrive. 保留所有权利.*
