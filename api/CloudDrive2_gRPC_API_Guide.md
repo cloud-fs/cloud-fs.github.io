@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 0.9.16
+Version: 0.9.18
 
 ## Table of Contents
 
-- [What's New in 0.9.16](#whats-new-in-0916)
+- [What's New in 0.9.18](#whats-new-in-0918)
 - [Overview](#overview)
 - [Service Definition](#service-definition)
 - [Download Proto File](#download-proto-file)
@@ -33,35 +33,72 @@ Version: 0.9.16
 
 ---
 
-## What's New in 0.9.16
+## What's New in 0.9.18
 
-CloudDrive2 0.9.16 builds on the big 2FA release from 0.9.14 and the API-token update from 0.9.15. The latest `clouddrive.proto` adds automation controls that make large installations more predictable while keeping every prior security feature intact.
+CloudDrive2 0.9.18 introduces File Buffer Disk Cache for dramatically improved read performance, mobile photo library integration for iOS backups, and enhanced monitoring capabilities.
 
-### Backup Automation Enhancements
+### File Buffer Disk Cache
 
-The `Backup` message now exposes the `syncDeleteFromDest` flag. When enabled, CloudDrive removes destination files or folders that disappeared from the source during a full walk-through, honoring whichever delete rule (`Keep`, `Recycle`, `MoveToVersionHistory`, etc.) you configured. This mirrors the new “同步删除目标文件” option in the UI and gives API clients deterministic mirror-style backups.
+Version 0.9.18 introduces a powerful disk-based caching system that stores downloaded file content locally, significantly reducing cloud API calls and improving read performance for frequently accessed files.
 
-Key behaviors:
-- Applies only during full scans (manual or scheduled walks)
-- Uses the existing delete policy, so you keep fine-grained control over how removals are handled
-- Ideal for one-way sync scenarios that must stay perfectly in step with the source tree
+**New RPCs:**
+- **`GetFileBufferDiskCacheStats`** - Get runtime statistics for the disk cache including total bytes, entry count, segment count
+- **`PurgeFileBufferDiskCache`** - Clear all cached file buffers to reclaim disk space
 
-### Configurable Startup Delay
+**New System Settings:**
+- `fileBufferDiskCacheLocation` - Root directory for storing cached segments
+- `fileBufferDiskCacheMaxBytes` - Maximum bytes allowed; LRU eviction keeps size under this limit
 
-`SystemSettings` adds `startDelaySecs`, allowing CloudDrive to pause during startup before it mounts drives, starts backups, or accepts work. Use it when the OS needs extra time for VPNs, disks, or time sync services before CloudDrive initializes.
+**Per-Cloud Configuration (`CloudAPIConfig`):**
+- `fileBufferDiskCacheEnabled` - Enable/disable disk caching for specific cloud APIs
+- `fileBufferDiskCacheMaxFileSize` - Maximum file size to cache (0 = no limit, uses system max)
 
-Typical use cases:
-- Appliances that must wait for dependent services (databases, VPNs, storage) to come online
-- NAS devices that need disks to spin up before CloudDrive watches folders
-- Lab environments where staggered start-up reduces race conditions between services
+**Key Benefits:**
+- Reduces repeated downloads of the same file content
+- Improves read performance for frequently accessed files
+- LRU eviction automatically manages disk space
+- Can be enabled/disabled per cloud API for fine-grained control
+
+### Photo Library Integration (iOS/Mobile)
+
+New support for iOS photo library backup integration allows mobile apps to notify CloudDrive about photo library changes.
+
+**New RPC:**
+- **`NotifyPhotoLibraryChanges`** - Notify CloudDrive about new photos available for backup
+
+**Use Cases:**
+- iOS apps can push photo library changes to CloudDrive for automatic backup
+- Supports both create and delete change types
+- Tracks original PHAsset identifiers for deduplication
+
+### Third-Party Account Login
+
+New public RPC for logging in with third-party cloud accounts (e.g., Xunlei).
+
+**New RPC:**
+- **`LoginWithThirdPartyAccount`** - Login using OAuth tokens from supported third-party cloud providers
+
+### Enhanced Vacuum Progress Tracking
+
+`VacuumProgressResult` now provides detailed timing and size information including `startTime`, `endTime`, `sizeBefore`, `sizeAfter`, and `errorMessage` for comprehensive vacuum progress monitoring.
+
+### Previous Release Highlights (0.9.16)
+
+#### Backup Automation Enhancements
+
+The `Backup` message exposes the `syncDeleteFromDest` flag. When enabled, CloudDrive removes destination files that disappeared from the source during a full walk-through, honoring your configured delete rule (`Keep`, `Recycle`, `MoveToVersionHistory`, etc.).
+
+#### Configurable Startup Delay
+
+`SystemSettings` adds `startDelaySecs`, allowing CloudDrive to pause during startup before mounting drives or starting backups—useful when waiting for VPNs, disks, or other services.
 
 ### API Token Push Permissions (0.9.15)
 
-API tokens can now be granted push-notification access via the `allow_push_message` flag on `TokenPermissions`. Grant it only to automations that need the `PushMessage`/`PushTaskChange` streaming RPCs (task counts, realtime logs, merge updates). Leave it disabled to block long-lived streaming channels for least privilege.
+API tokens can be granted push-notification access via the `allow_push_message` flag on `TokenPermissions`. Grant it only to automations that need the `PushMessage`/`PushTaskChange` streaming RPCs.
 
 ### Security Enhancements (Introduced in 0.9.14)
 
-Version 0.9.14 introduced mandatory upgrades for deployments that want Two-Factor Authentication (2FA) and session revocation. Those capabilities remain unchanged in 0.9.16 but are summarized below for quick reference.
+Version 0.9.14 introduced mandatory upgrades for deployments that want Two-Factor Authentication (2FA) and session revocation. Those capabilities remain unchanged in 0.9.18 but are summarized below for quick reference.
 
 #### Two-Factor Authentication (2FA)
 
@@ -228,7 +265,7 @@ The `clouddrive.proto` file contains:
 
 ### Version Compatibility
 
-**Current Version:** 0.9.16
+**Current Version:** 0.9.18
 
 Always use the proto file from the same version as your CloudDrive2 server to ensure compatibility. You can check your server version using the `GetRuntimeInfo` method.
 
@@ -282,6 +319,7 @@ The following methods are public and don't require a JWT token:
 - `GetSystemInfo` - Check if server is logged in
 - `GetToken` - Obtain JWT token
 - `Login` - Login to CloudFS server
+- `LoginWithThirdPartyAccount` - Login with third-party cloud account
 - `Register` - Register new account
 - `SendResetAccountEmail` - Request password reset
 - `ResetAccount` - Reset account with code
@@ -1276,6 +1314,27 @@ if resp.Success {
     fmt.Println("Login successful")
 }
 ```
+
+---
+
+#### LoginWithThirdPartyAccount
+
+Logs in using a third-party cloud account (e.g., Xunlei). This is a public method that doesn't require prior authorization.
+
+**Request:** `LoginWithThirdPartyAccountRequest`
+```protobuf
+message LoginWithThirdPartyAccountRequest {
+  string cloudName = 1;       // Cloud provider name (e.g., "Xunlei")
+  string refreshToken = 2;    // OAuth refresh token
+  string accessToken = 3;     // OAuth access token
+  uint64 expiresIn = 4;       // Token expiration time in seconds
+  bool synDataToCloud = 5;    // Whether to sync data to cloud
+}
+```
+
+**Response:** `JWTToken`
+
+**New in 0.9.18**
 
 ---
 
@@ -3450,9 +3509,13 @@ message CloudAPIConfig {
   optional bool insecureTls = 12;
   optional bool useHttpDownload = 13; // Use HTTP for downloads
   optional bool supportDirectLink = 14; // Supports direct link downloads
-  optional bool supportDirectDownloadUrl = 15; // Supports direct download URLs
+  optional bool supportDirectDownloadUrl = 15; // Supports direct download URLs (read-only)
+  optional bool fileBufferDiskCacheEnabled = 16; // Enable disk caching for this cloud API
+  optional uint64 fileBufferDiskCacheMaxFileSize = 17; // Max file size to cache (0 = no limit)
 }
 ```
+
+**New in 0.9.18:** `fileBufferDiskCacheEnabled` and `fileBufferDiskCacheMaxFileSize` allow per-cloud configuration of the file buffer disk cache.
 
 ---
 
@@ -3506,11 +3569,13 @@ message SystemSettings {
   optional LogLevel realtimeLogLevel = 20;
   optional StringList operatorPriorityOrder = 21;
   optional ProxyInfo updateProxy = 22;
-    optional uint64 startDelaySecs = 23;
+  optional uint64 startDelaySecs = 23;
+  optional string fileBufferDiskCacheLocation = 24; // Root directory for cached segments
+  optional uint64 fileBufferDiskCacheMaxBytes = 25; // Max bytes for disk cache; LRU eviction
 }
 ```
 
-**New in 0.9.16:** `startDelaySecs` lets the service pause for a configurable number of seconds before mounting drives, starting backups, or accepting work—perfect for systems that must wait for VPN links, disks, or time sync services during boot.
+**New in 0.9.18:** `fileBufferDiskCacheLocation` and `fileBufferDiskCacheMaxBytes` configure the global file buffer disk cache system.
 
 ---
 
@@ -3591,18 +3656,24 @@ Gets the vacuum operation progress.
 
 **Response:** `VacuumProgressResult`
 ```protobuf
-message VacuumProgressResult {
-  VacuumStatus status = 1;
-  optional string message = 2;
+enum VacuumStatus {
+  VACUUM_IDLE = 0;
+  VACUUM_RUNNING = 1;
+  VACUUM_COMPLETED = 2;
+  VACUUM_FAILED = 3;
 }
 
-enum VacuumStatus {
-  VacuumStatus_IDLE = 0;
-  VacuumStatus_RUNNING = 1;
-  VacuumStatus_COMPLETED = 2;
-  VacuumStatus_ERROR = 3;
+message VacuumProgressResult {
+  VacuumStatus status = 1;
+  optional google.protobuf.Timestamp startTime = 2;
+  optional google.protobuf.Timestamp endTime = 3;
+  uint64 sizeBefore = 4;           // Database size before vacuum
+  uint64 sizeAfter = 5;            // Database size after vacuum (only set when completed)
+  optional string errorMessage = 6; // Error message if failed
 }
 ```
+
+**Enhanced in 0.9.18:** Now includes `startTime`, `endTime`, `sizeBefore`, `sizeAfter`, and `errorMessage` for detailed vacuum progress tracking.
 
 ---
 
@@ -3615,7 +3686,8 @@ Gets the directory cache database size.
 **Response:** `GetDirCacheDbSizeResult`
 ```protobuf
 message GetDirCacheDbSizeResult {
-  uint64 dbSize = 1; // Database size in bytes
+  uint64 totalSizeBytes = 1; // Total size including main db + WAL + SHM files
+  bool isVacuuming = 2;      // Whether database is currently being vacuumed
 }
 ```
 
@@ -3662,6 +3734,40 @@ message RunInfo {
   uint64 totalMemoryKB = 10;
 }
 ```
+
+---
+
+#### GetFileBufferDiskCacheStats
+
+Gets runtime statistics for the file buffer disk cache.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `FileBufferDiskCacheStats`
+```protobuf
+message FileBufferDiskCacheStats {
+  bool enabled = 1;
+  uint64 totalBytes = 2;     // Current total bytes cached
+  uint64 maxBytes = 3;       // Maximum allowed bytes
+  uint64 entryCount = 4;     // Number of cached file entries
+  uint64 segmentCount = 5;   // Number of cached segments
+  string rootDir = 6;        // Root directory for cache storage
+}
+```
+
+**New in 0.9.18**
+
+---
+
+#### PurgeFileBufferDiskCache
+
+Purges all disk-cached file buffers to reclaim disk space.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `google.protobuf.Empty`
+
+**New in 0.9.18**
 
 ---
 
@@ -4327,6 +4433,36 @@ Checks if user can add more backups.
 **Request:** `google.protobuf.Empty`
 
 **Response:** `FileOperationResult`
+
+---
+
+#### NotifyPhotoLibraryChanges
+
+Notifies CloudDrive about photo library changes for backup (iOS/mobile platform integration).
+
+**Request:** `PhotoLibraryChangeList`
+```protobuf
+message PhotoLibraryChange {
+  enum ChangeType {
+    Create = 0;
+    Delete = 1;
+  }
+  ChangeType changeType = 1;
+  string localFilePath = 2;        // Path in app's sandbox where photo was exported
+  string originalIdentifier = 3;   // PHAsset localIdentifier for tracking
+  optional string originalFileName = 4;
+  optional google.protobuf.Timestamp creationDate = 5;
+}
+
+message PhotoLibraryChangeList {
+  repeated PhotoLibraryChange changes = 1;
+  string backupSourcePath = 2;     // The backup source path to notify (e.g., "Photos")
+}
+```
+
+**Response:** `google.protobuf.Empty`
+
+**New in 0.9.18:** Enables iOS apps to push photo library changes to CloudDrive for automatic backup.
 
 ---
 
@@ -6557,9 +6693,9 @@ This guide covers the complete CloudDrive2 gRPC API with:
 - ✅ **Security guidelines**
 - ✅ **Complete working examples**
 
-**API Version:** 0.9.16
+**API Version:** 0.9.18
 
 ---
 
-*Last Updated: 2025-11-19*
+*Last Updated: 2025-12-24*
 *Copyright © 2025 CloudDrive. All rights reserved.*
