@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "0.9.16";
+option (version) = "0.9.18";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -21,6 +21,8 @@ service CloudDriveFileSrv {
   rpc GetToken(GetTokenRequest) returns (JWTToken) {}
   // login to cloudfs server
   rpc Login(UserLoginRequest) returns (FileOperationResult) {}
+  // login with third party account (e.g., Xunlei)
+  rpc LoginWithThirdPartyAccount(LoginWithThirdPartyAccountRequest) returns (JWTToken) {}
   // register a new count
   rpc Register(UserRegisterRequest) returns (FileOperationResult) {}
   // asks cloudfs server to send reset account email with reset link
@@ -127,6 +129,10 @@ service CloudDriveFileSrv {
   rpc GetCloudMemberships(FileRequest) returns (CloudMemberships) {}
   // get server runtime info
   rpc GetRuntimeInfo(google.protobuf.Empty) returns (RuntimeInfo) {}
+  // file buffer disk cache runtime stats
+  rpc GetFileBufferDiskCacheStats(google.protobuf.Empty) returns (FileBufferDiskCacheStats) {}
+  // purge all disk-cached file buffers
+  rpc PurgeFileBufferDiskCache(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   // get server stats, including cpu/mem/uptime
   rpc GetRunningInfo(google.protobuf.Empty) returns (RunInfo) {}
   // get all opened file handles
@@ -421,6 +427,8 @@ service CloudDriveFileSrv {
   }
   // check if current plan can support more backups
   rpc CanAddMoreBackups(google.protobuf.Empty) returns (FileOperationResult) {}
+  // notify about new photos for backup (iOS/mobile platform integration)
+  rpc NotifyPhotoLibraryChanges(PhotoLibraryChangeList) returns (google.protobuf.Empty) {}
   // get machine id
   rpc GetMachineId(google.protobuf.Empty) returns (StringResult) {}
   // get online devices
@@ -696,7 +704,7 @@ message CloudDriveFile {
   }
   map<uint32, string> fileHashes = 70;
   enum FileEncryptionType {
-    None = 0;      // not encrypted
+    None = 0; // not encrypted
     Encrypted = 1; // encrypted, password not provided, a password is required
     // to unlock the file
     Unlocked = 2; // encrypted but but password is provided, can access the file
@@ -759,6 +767,13 @@ message UserLoginRequest {
   string userName = 1;
   string password = 2;
   bool synDataToCloud = 3;
+}
+message LoginWithThirdPartyAccountRequest {
+  string cloudName = 1;
+  string refreshToken = 2;
+  string accessToken = 3;
+  uint64 expiresIn = 4;
+  bool synDataToCloud = 5;
 }
 message UserRegisterRequest {
   string userName = 1;
@@ -1020,8 +1035,8 @@ message UploadFileInfo {
   enum OperatorType {
     Mount = 0; // Mount means the file is being uploaded by mounted file system
                // operations
-    Copy = 1;  // Copy means the file is being uploaded by a copy task
-    BackupFile = 2;   // BackupFile means the file is being
+    Copy = 1; // Copy means the file is being uploaded by a copy task
+    BackupFile = 2; // BackupFile means the file is being
                       // uploaded by a backup task
     RemoteUpload = 3; // RemoteUpload means the file is being uploaded by a
                       // remote upload task
@@ -1260,6 +1275,10 @@ message CloudAPIConfig {
   optional bool supportDirectLink = 14;
   // whether this cloud API supports direct download URLs (read-only, determined by API implementation)
   optional bool supportDirectDownloadUrl = 15;
+  // whether to cache downloaded file content to local disk for this cloud API
+  optional bool fileBufferDiskCacheEnabled = 16;
+  // maximum file size to cache locally for this cloud API (0 = no limit, uses system max_bytes)
+  optional uint64 fileBufferDiskCacheMaxFileSize = 17;
 }
 message SetCloudAPIConfigRequest {
   string cloudName = 1;
@@ -1324,6 +1343,21 @@ message SystemSettings {
   optional ProxyInfo updateProxy = 22;
   // Delay in seconds before starting process (default: 0)
   optional uint64 startDelaySecs = 23;
+
+  // Root directory for storing cached segments
+  optional string fileBufferDiskCacheLocation = 24;
+  // Max bytes allowed for disk cache; LRU eviction keeps size under this
+  optional uint64 fileBufferDiskCacheMaxBytes = 25;
+}
+
+// File buffer disk cache runtime stats
+message FileBufferDiskCacheStats {
+  bool enabled = 1;
+  uint64 totalBytes = 2;
+  uint64 maxBytes = 3;
+  uint64 entryCount = 4;
+  uint64 segmentCount = 5;
+  string rootDir = 6;
 }
 message SetDirCacheTimeRequest {
   string path = 1;
@@ -1335,7 +1369,7 @@ message GetOpenFileTableRequest { bool includeDir = 1; }
 message GetEffectiveDirCacheTimeResult { uint64 dirCacheTimeSecs = 1; }
 message GetDirCacheDbSizeResult {
   uint64 totalSizeBytes = 1; // Total size including main db + WAL + SHM files
-  bool isVacuuming = 2;      // Whether database is currently being vacuumed
+  bool isVacuuming = 2; // Whether database is currently being vacuumed
 }
 
 enum VacuumStatus {
@@ -1349,8 +1383,8 @@ message VacuumProgressResult {
   VacuumStatus status = 1;
   optional google.protobuf.Timestamp startTime = 2;
   optional google.protobuf.Timestamp endTime = 3;
-  uint64 sizeBefore = 4;      // Database size before vacuum
-  uint64 sizeAfter = 5;       // Database size after vacuum (only set when completed)
+  uint64 sizeBefore = 4; // Database size before vacuum
+  uint64 sizeAfter = 5; // Database size after vacuum (only set when completed)
   optional string errorMessage = 6; // Error message if failed
 }
 
@@ -1666,6 +1700,25 @@ message BackupSetEnabledRequest {
   string sourcePath = 1;
   bool isEnabled = 2;
 }
+
+// Photo Library Integration (iOS/Mobile)
+message PhotoLibraryChange {
+  enum ChangeType {
+    Create = 0;
+    Delete = 1;
+  }
+  ChangeType changeType = 1;
+  string localFilePath = 2; // Path in app's sandbox where photo was exported
+  string originalIdentifier = 3; // PHAsset localIdentifier for tracking
+  optional string originalFileName = 4;
+  optional google.protobuf.Timestamp creationDate = 5;
+}
+
+message PhotoLibraryChangeList {
+  repeated PhotoLibraryChange changes = 1;
+  string backupSourcePath = 2; // The backup source path to notify (e.g., "Photos")
+}
+
 message Device {
   string deviceId = 1;
   string deviceName = 2;
@@ -1731,7 +1784,7 @@ message DavUser {
 }
 message DavServerConfig {
   bool davServerEnabled = 1; // if true, enable DAV server
-  string davServerPath = 2;  // currently fixed to "/dav"
+  string davServerPath = 2; // currently fixed to "/dav"
   bool enableClouddriveAccount =
       3; // if true, enable cloud drive account as webdav user
   string clouddriveAccountRootPath =
@@ -1882,25 +1935,25 @@ message RemoteHashProgressReply {}
 // --- End Remote Upload Protocol Messages ---
 message TokenPermissions {
   // File Operations
-  bool allow_list = 1;   // GetSubFiles, FindFileByPath
+  bool allow_list = 1; // GetSubFiles, FindFileByPath
   bool allow_search = 2; // GetSearchResults
   bool allow_list_local =
       3; // LocalGetSubFiles, GetAvailableDriveLetters, HasDriveLetters
   bool allow_create_folder = 4; // CreateFolder, CreateEncryptedFolder
-  bool allow_create_file = 5;   // CreateFile, WriteToFile, WriteToFileStream
-  bool allow_write = 6;         // File uploads and copy operations
-  bool allow_read = 7;          // File downloads
-  bool allow_rename = 8;        // RenameFile, RenameFiles
-  bool allow_move = 9;          // MoveFile
-  bool allow_copy = 10;         // CopyFile
-  bool allow_delete = 11;       // DeleteFile, DeleteFiles
+  bool allow_create_file = 5; // CreateFile, WriteToFile, WriteToFileStream
+  bool allow_write = 6; // File uploads and copy operations
+  bool allow_read = 7; // File downloads
+  bool allow_rename = 8; // RenameFile, RenameFiles
+  bool allow_move = 9; // MoveFile
+  bool allow_copy = 10; // CopyFile
+  bool allow_delete = 11; // DeleteFile, DeleteFiles
   bool allow_delete_permanently =
       12; // DeleteFilePermanently, DeleteFilesPermanently
 
   // Encryption Operations
-  bool allow_create_encrypt = 13;   // CreateEncryptedFolder
+  bool allow_create_encrypt = 13; // CreateEncryptedFolder
   bool allow_unlock_encrypted = 14; // UnlockEncryptedFile
-  bool allow_lock_encrypted = 15;   // LockEncryptedFile
+  bool allow_lock_encrypted = 15; // LockEncryptedFile
 
   // Cloud Operations
   bool allow_add_offline_download = 16; // AddOfflineFiles
@@ -1911,8 +1964,8 @@ message TokenPermissions {
   bool allow_shared_links = 19; // AddSharedLink
 
   // System Information
-  bool allow_view_properties = 20;   // GetFileDetailProperties
-  bool allow_get_space_info = 21;    // GetSpaceInfo
+  bool allow_view_properties = 20; // GetFileDetailProperties
+  bool allow_get_space_info = 21; // GetSpaceInfo
   bool allow_view_runtime_info = 22; // GetRuntimeInfo, GetRunningInfo
   bool allow_push_message = 41; // Receive push messages (file system changes,
                                 // transfer task updates, etc.)
@@ -2043,12 +2096,12 @@ message Setup2FARequest {
 
 message TwoFactorAuthSetupResult {
   string secret = 1;
-  string qr_code = 2;  // Base64-encoded PNG image (data URL format)
+  string qr_code = 2; // Base64-encoded PNG image (data URL format)
   string manual_entry_key = 3;
 }
 
 message TwoFactorAuthCodeRequest {
-  string totp_code = 1;  // 6-digit TOTP code or 8-character recovery code
+  string totp_code = 1; // 6-digit TOTP code or 8-character recovery code
 }
 
 message TwoFactorAuthEnableResult {
@@ -2069,7 +2122,7 @@ message TwoFactorAuthRecoveryCodesResult {
 message LoginWith2FARequest {
   string userName = 1;
   string password = 2;
-  string totp_code = 3;  // 6-digit TOTP code or 8-character recovery code
+  string totp_code = 3; // 6-digit TOTP code or 8-character recovery code
   bool synDataToCloud = 4;
 }
 

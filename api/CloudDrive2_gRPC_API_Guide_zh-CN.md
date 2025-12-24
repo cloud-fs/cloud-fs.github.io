@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 0.9.16
+版本: 0.9.18
 
 ## 目录
 
-- [0.9.16 版本新特性](#0916-版本新特性)
+- [0.9.18 版本新特性](#0918-版本新特性)
 - [概述](#概述)
 - [服务定义](#服务定义)
 - [下载 Proto 文件](#下载-proto-文件)
@@ -33,35 +33,72 @@
 
 ---
 
-## 0.9.16 版本新特性
+## 0.9.18 版本新特性
 
-CloudDrive2 0.9.16 在 0.9.14 推出的安全能力与 0.9.15 的 API 令牌更新基础上, 进一步加强自动化和可靠性, 让大规模部署更可预测。
+CloudDrive2 0.9.18 引入文件缓冲磁盘缓存以显著提升读取性能，新增 iOS 照片库集成用于移动端备份，并增强了监控能力。
 
-### 备份自动化增强
+### 文件缓冲磁盘缓存
 
-`Backup` 消息新增 `syncDeleteFromDest` 开关。启用后, CloudDrive 在备份完整扫描过程中会按照已配置的删除策略(保留、删除、回收站、移动到历史文件夹等)自动清理目标端那些在源端已经不存在的文件或文件夹, 对应 UI 中的“同步删除目标文件”选项, 方便通过 API 构建镜像式备份。
+0.9.18 版本引入了强大的基于磁盘的缓存系统，可将下载的文件内容存储在本地，显著减少云 API 调用并提升频繁访问文件的读取性能。
 
-要点:
-- 仅在完整扫描(手动或计划任务)时生效
-- 完全遵循既有删除策略,确保删改行为可控
-- 适用于希望目标目录与源目录保持严格一致的一向同步场景
+**新增 RPC:**
+- **`GetFileBufferDiskCacheStats`** - 获取磁盘缓存的运行时统计信息，包括总字节数、条目数、分段数
+- **`PurgeFileBufferDiskCache`** - 清除所有缓存的文件缓冲区以释放磁盘空间
 
-### 可配置的延迟启动
+**新增系统设置:**
+- `fileBufferDiskCacheLocation` - 缓存分段的根目录
+- `fileBufferDiskCacheMaxBytes` - 允许的最大字节数；LRU 淘汰保持大小在限制内
 
-`SystemSettings` 新增 `startDelaySecs`, 可以在服务启动后先等待指定秒数, 再去挂载云盘、启动备份或处理请求。对依赖 VPN、磁盘或时间同步服务的设备非常实用。
+**每云配置 (`CloudAPIConfig`):**
+- `fileBufferDiskCacheEnabled` - 为特定云 API 启用/禁用磁盘缓存
+- `fileBufferDiskCacheMaxFileSize` - 最大缓存文件大小（0 = 无限制，使用系统最大值）
 
-典型场景:
-- 需要等待数据库、VPN、存储等外部依赖先启动的盒子/服务器
-- NAS 需要等磁盘完成上电自检后再运行 CloudDrive
-- 实验室或家庭多机串联时,希望按顺序依次启动服务
+**主要优势:**
+- 减少相同文件内容的重复下载
+- 提升频繁访问文件的读取性能
+- LRU 淘汰自动管理磁盘空间
+- 可按云 API 单独启用/禁用，实现精细控制
+
+### 照片库集成（iOS/移动端）
+
+新增 iOS 照片库备份集成支持，允许移动应用通知 CloudDrive 照片库变更。
+
+**新增 RPC:**
+- **`NotifyPhotoLibraryChanges`** - 通知 CloudDrive 有新照片可供备份
+
+**使用场景:**
+- iOS 应用可将照片库变更推送到 CloudDrive 进行自动备份
+- 支持创建和删除两种变更类型
+- 追踪原始 PHAsset 标识符以进行去重
+
+### 第三方账户登录
+
+新增使用第三方云账户（如迅雷）登录的公开 RPC。
+
+**新增 RPC:**
+- **`LoginWithThirdPartyAccount`** - 使用支持的第三方云提供商的 OAuth 令牌登录
+
+### 增强的清理进度追踪
+
+`VacuumProgressResult` 现在提供详细的时间和大小信息，包括 `startTime`、`endTime`、`sizeBefore`、`sizeAfter` 和 `errorMessage`，用于全面的清理进度监控。
+
+### 历史版本亮点 (0.9.16)
+
+#### 备份自动化增强
+
+`Backup` 消息新增 `syncDeleteFromDest` 开关。启用后，CloudDrive 在完整扫描过程中会按照已配置的删除策略（保留、回收站、移动到历史文件夹等）清理目标端不存在于源端的文件。
+
+#### 可配置的延迟启动
+
+`SystemSettings` 新增 `startDelaySecs`，可在服务启动后先等待指定秒数再挂载云盘或启动备份——适合需要等待 VPN、磁盘或其他服务的场景。
 
 ### API 令牌推送权限 (0.9.15)
 
-`TokenPermissions` 新增 `allow_push_message` 权限。只有授予该位的令牌才能调用 `PushMessage`/`PushTaskChange` 等流式推送 RPC, 接收任务计数、实时日志、合并任务等通知; 默认保持关闭以满足最小权限原则。
+`TokenPermissions` 的 `allow_push_message` 权限可授予令牌推送通知访问权限。仅对需要 `PushMessage`/`PushTaskChange` 流式 RPC 的自动化授予此权限。
 
 ### 0.9.14 引入的安全增强
 
-0.9.14 为想要启用双因素认证(2FA)和刷新令牌会话管理的部署奠定了基础。0.9.16 沿用并完善这些能力,下面保留一份速查。
+0.9.14 为想要启用双因素认证(2FA)和会话管理的部署奠定了基础。这些能力在 0.9.18 中保持不变，下面是速查参考。
 
 #### 双因素认证 (2FA)
 
@@ -285,6 +322,7 @@ var files = await _client.GetSubFilesAsync("/");
 - `GetSystemInfo` - 检查服务器是否已登录
 - `GetToken` - 获取 JWT 令牌
 - `Login` - 登录到 CloudFS 服务器
+- `LoginWithThirdPartyAccount` - 使用第三方云账户登录
 - `Register` - 注册新账户
 - `SendResetAccountEmail` - 请求密码重置
 - `ResetAccount` - 使用验证码重置账户
@@ -1279,6 +1317,27 @@ if resp.Success {
     fmt.Println("登录成功")
 }
 ```
+
+---
+
+#### LoginWithThirdPartyAccount
+
+使用第三方云账户（如迅雷）登录。这是一个不需要预先授权的公开方法。
+
+**请求:** `LoginWithThirdPartyAccountRequest`
+```protobuf
+message LoginWithThirdPartyAccountRequest {
+  string cloudName = 1;       // 云提供商名称（如 "Xunlei"）
+  string refreshToken = 2;    // OAuth 刷新令牌
+  string accessToken = 3;     // OAuth 访问令牌
+  uint64 expiresIn = 4;       // 令牌过期时间（秒）
+  bool synDataToCloud = 5;    // 是否同步数据到云端
+}
+```
+
+**响应:** `JWTToken`
+
+**0.9.18 新增**
 
 ---
 
@@ -3452,9 +3511,13 @@ message CloudAPIConfig {
   optional bool insecureTls = 12;
   optional bool useHttpDownload = 13; // 使用 HTTP 下载
   optional bool supportDirectLink = 14; // 支持直接链接下载
-  optional bool supportDirectDownloadUrl = 15; // 支持直接下载 URL
+  optional bool supportDirectDownloadUrl = 15; // 支持直接下载 URL（只读）
+  optional bool fileBufferDiskCacheEnabled = 16; // 为此云 API 启用磁盘缓存
+  optional uint64 fileBufferDiskCacheMaxFileSize = 17; // 最大缓存文件大小（0 = 无限制）
 }
 ```
+
+**0.9.18 新增:** `fileBufferDiskCacheEnabled` 和 `fileBufferDiskCacheMaxFileSize` 允许为每个云 API 单独配置文件缓冲磁盘缓存。
 
 ---
 
@@ -3508,11 +3571,13 @@ message SystemSettings {
   optional LogLevel realtimeLogLevel = 20;
   optional StringList operatorPriorityOrder = 21;
   optional ProxyInfo updateProxy = 22;
-    optional uint64 startDelaySecs = 23;
+  optional uint64 startDelaySecs = 23;
+  optional string fileBufferDiskCacheLocation = 24; // 缓存段的根目录
+  optional uint64 fileBufferDiskCacheMaxBytes = 25; // 磁盘缓存最大字节数；LRU 淘汰
 }
 ```
 
-**0.9.16 新增:** `startDelaySecs` 用于在服务启动后延迟若干秒再去挂载云盘、启动备份或响应请求, 适合需要等待 VPN、磁盘、时间同步等依赖的设备。
+**0.9.18 新增:** `fileBufferDiskCacheLocation` 和 `fileBufferDiskCacheMaxBytes` 用于配置全局文件缓冲磁盘缓存系统。
 
 ---
 
@@ -3593,18 +3658,24 @@ message SetDirCacheTimeRequest {
 
 **响应:** `VacuumProgressResult`
 ```protobuf
-message VacuumProgressResult {
-  VacuumStatus status = 1;
-  optional string message = 2;
+enum VacuumStatus {
+  VACUUM_IDLE = 0;       // 空闲
+  VACUUM_RUNNING = 1;    // 运行中
+  VACUUM_COMPLETED = 2;  // 已完成
+  VACUUM_FAILED = 3;     // 失败
 }
 
-enum VacuumStatus {
-  VacuumStatus_IDLE = 0;       // 空闲
-  VacuumStatus_RUNNING = 1;    // 运行中
-  VacuumStatus_COMPLETED = 2;  // 已完成
-  VacuumStatus_ERROR = 3;      // 错误
+message VacuumProgressResult {
+  VacuumStatus status = 1;
+  optional google.protobuf.Timestamp startTime = 2;  // 开始时间
+  optional google.protobuf.Timestamp endTime = 3;    // 结束时间
+  uint64 sizeBefore = 4;           // 清理前数据库大小
+  uint64 sizeAfter = 5;            // 清理后数据库大小（仅完成时设置）
+  optional string errorMessage = 6; // 失败时的错误信息
 }
 ```
+
+**0.9.18 增强:** 新增 `startTime`、`endTime`、`sizeBefore`、`sizeAfter` 和 `errorMessage` 字段，提供详细的清理进度追踪。
 
 ---
 
@@ -3617,7 +3688,8 @@ enum VacuumStatus {
 **响应:** `GetDirCacheDbSizeResult`
 ```protobuf
 message GetDirCacheDbSizeResult {
-  uint64 dbSize = 1; // 数据库大小（字节）
+  uint64 totalSizeBytes = 1; // 总大小（包括主数据库 + WAL + SHM 文件）
+  bool isVacuuming = 2;      // 数据库是否正在清理中
 }
 ```
 
@@ -3664,6 +3736,40 @@ message RunInfo {
   uint64 totalMemoryKB = 10;
 }
 ```
+
+---
+
+#### GetFileBufferDiskCacheStats
+
+获取文件缓冲磁盘缓存的运行时统计信息。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `FileBufferDiskCacheStats`
+```protobuf
+message FileBufferDiskCacheStats {
+  bool enabled = 1;
+  uint64 totalBytes = 2;     // 当前已缓存的总字节数
+  uint64 maxBytes = 3;       // 允许的最大字节数
+  uint64 entryCount = 4;     // 缓存的文件条目数
+  uint64 segmentCount = 5;   // 缓存的分段数
+  string rootDir = 6;        // 缓存存储的根目录
+}
+```
+
+**0.9.18 新增**
+
+---
+
+#### PurgeFileBufferDiskCache
+
+清除所有磁盘缓存的文件缓冲区以释放磁盘空间。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `google.protobuf.Empty`
+
+**0.9.18 新增**
 
 ---
 
@@ -4329,6 +4435,36 @@ message BackupSetEnabledRequest {
 **请求:** `google.protobuf.Empty`
 
 **响应:** `FileOperationResult`
+
+---
+
+#### NotifyPhotoLibraryChanges
+
+通知 CloudDrive 照片库变更以进行备份（iOS/移动端平台集成）。
+
+**请求:** `PhotoLibraryChangeList`
+```protobuf
+message PhotoLibraryChange {
+  enum ChangeType {
+    Create = 0;
+    Delete = 1;
+  }
+  ChangeType changeType = 1;
+  string localFilePath = 2;        // 应用沙盒中导出的照片路径
+  string originalIdentifier = 3;   // PHAsset localIdentifier 用于追踪
+  optional string originalFileName = 4;
+  optional google.protobuf.Timestamp creationDate = 5;
+}
+
+message PhotoLibraryChangeList {
+  repeated PhotoLibraryChange changes = 1;
+  string backupSourcePath = 2;     // 要通知的备份源路径（如 "Photos"）
+}
+```
+
+**响应:** `google.protobuf.Empty`
+
+**0.9.18 新增:** 允许 iOS 应用将照片库变更推送到 CloudDrive 进行自动备份。
 
 ---
 
@@ -6621,9 +6757,9 @@ class FileManager
 - ✅ **安全准则**
 - ✅ **完整的工作示例**
 
-**API 版本:** 0.9.16
+**API 版本:** 0.9.18
 
 ---
 
-*最后更新: 2025-11-19*
+*最后更新: 2025-12-24*
 *版权所有 © 2025 CloudDrive. 保留所有权利.*

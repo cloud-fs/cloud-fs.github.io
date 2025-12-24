@@ -1,3 +1,4 @@
 {
-    "liveServer.settings.port": 5764
+    "liveServer.settings.port": 5764,
+    "protobuf.protoc.path": "/opt/homebrew/bin/protoc"
 }
