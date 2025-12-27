@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v0.9.18)</title>
+  <title>CloudDrive - 下载(v0.9.19)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -49,11 +49,22 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v0.9.18)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v0.9.19)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <!-- Latest Version -->
       <div class="alert alert-warning" role="alert">
+        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.19"><strong>0.9.19(Web2.2.5.0):</strong></a>
+        <ol>
+          <li>系统设置增加本地文件缓存淘汰策略选项，可以在LRU（最近最少使用）、优先移除大文件、优先移除小文件中选择，默认为LRU</li>
+          <li>修复本地文件缓存重新启动后显示的缓存大小和文件都为0的问题；修复本地文件缓存大小可能超过限制总大小的问题；修复在某些操作系统上sparse文件创建失败，导致缓存大文件时会立刻分配整个文件大小空间的问题。注意：上个版本缓存的文件升级后有部分可能会被清除并在下次访问的时候重新下载</li>
+          <li>修复极个别情况下开启2FA验证后登录无限退出的问题</li>
+          <li>修复指定最大缓存文件大小时无法修改单位的问题</li>
+          <li>其它界面优化</li>
+        </ol>
+      </div>
+
+      <div class="alert alert-info" role="alert">
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.18"><strong>0.9.18(Web2.2.4.0):</strong></a>
         <ol>
           <li>新增下载文件的本地缓存功能：本地缓存需要在网盘设置里对每个网盘账号单独开启，默认为关闭，可以为每个网盘设置需要缓存的单个文件最大大小；在系统设置里设置可以本地缓存占用本地磁盘空间总大小，当缓存占用超过设定大小时，旧缓存将被删除掉；可以查看当前已经占用的本地缓存大小，可以彻底清除本地缓存。本地缓存是以文件哈希作为索引，所以缓存的文件可以跨目录跨用户和跨网盘（如果采用同样哈希算法）共享</li>
@@ -364,7 +375,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.18/CloudDrive2Setup-X64-0.9.18.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.19/CloudDrive2Setup-X64-0.9.19.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -378,7 +389,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.18/CloudDrive2Setup-Arm64-0.9.18.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.19/CloudDrive2Setup-Arm64-0.9.19.exe"><i
                         class="fab fa-windows"></i> Windows Arm64</a></h5>
                 </div>
               </div>
@@ -399,7 +410,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.18/clouddrive-2-linux-x86_64-0.9.18.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.19/clouddrive-2-linux-x86_64-0.9.19.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -413,7 +424,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.18/clouddrive-2-linux-aarch64-0.9.18.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.19/clouddrive-2-linux-aarch64-0.9.19.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -427,7 +438,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.18/clouddrive-2-linux-armv7-0.9.18.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.19/clouddrive-2-linux-armv7-0.9.19.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -449,7 +460,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.18/clouddrive-2-macos-x86_64-0.9.18.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.19/clouddrive-2-macos-x86_64-0.9.19.tgz"><i
                         class="fab fa-apple"></i> MacOS x86_64</a></h5>
                 </div>
               </div>
@@ -463,7 +474,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.18/clouddrive-2-macos-aarch64-0.9.18.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.19/clouddrive-2-macos-aarch64-0.9.19.tgz"><i
                         class="fab fa-apple"></i> MacOS aarch64</a></h5>
                 </div>
               </div>
@@ -485,7 +496,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.18/clouddrive-2-android-universal-0.9.18-194.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.19/clouddrive-2-android-universal-0.9.19-195.apk"><i
                         class="fab fa-android"></i> Android APK</a></h5>
                 </div>
               </div>
@@ -499,7 +510,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.18/clouddrive-2-android-x86_64-0.9.18.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.19/clouddrive-2-android-x86_64-0.9.19.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -513,7 +524,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.18/clouddrive-2-android-aarch64-0.9.18.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.19/clouddrive-2-android-aarch64-0.9.19.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -527,7 +538,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.18/clouddrive-2-android-armv7-0.9.18.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v0.9.19/clouddrive-2-android-armv7-0.9.19.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
@@ -541,7 +552,7 @@
       <h2>从115网盘下载</h2>
       <div class="container text-center" style="margin-bottom: 20px;">
         <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://115cdn.com/s/swfhht13zde?password=f3d1">从115网盘下载</a>
+          href="https://115cdn.com/s/swfheau3zde?password=ma44">从115网盘下载</a>
       </div>
     </div>
     <div class="mt-4">
