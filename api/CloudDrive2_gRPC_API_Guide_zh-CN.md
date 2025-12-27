@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 0.9.18
+版本: 0.9.19
 
 ## 目录
 
-- [0.9.18 版本新特性](#0918-版本新特性)
+- [0.9.19 版本新特性](#0919-版本新特性)
 - [概述](#概述)
 - [服务定义](#服务定义)
 - [下载 Proto 文件](#下载-proto-文件)
@@ -33,54 +33,95 @@
 
 ---
 
-## 0.9.18 版本新特性
+## 0.9.19 版本新特性
 
-CloudDrive2 0.9.18 引入文件缓冲磁盘缓存以显著提升读取性能，新增 iOS 照片库集成用于移动端备份，并增强了监控能力。
+CloudDrive2 0.9.19 引入可配置的缓存淘汰策略、增强的缓存监控，以及多项稳定性改进。
 
-### 文件缓冲磁盘缓存
+### 可配置的缓存淘汰策略
+
+0.9.19 版本新增配置文件缓冲磁盘缓存淘汰策略的功能。当需要释放空间时，您可以选择最适合您使用场景的淘汰策略。
+
+**新增 RPC:**
+- **`SetDiskCacheEvictionStrategy`** - 设置磁盘缓存淘汰策略
+
+**新增枚举 `EvictionStrategy`:**
+```protobuf
+enum EvictionStrategy {
+  LRU = 0;           // 最近最少使用 - 淘汰最近未访问的条目（默认）
+  LARGEST_FIRST = 1; // 优先移除大文件 - 快速释放空间
+  SMALLEST_FIRST = 2; // 优先移除小文件 - 保留大文件在缓存中
+}
+```
+
+**策略使用场景:**
+- **LRU（默认）**: 通用场景最佳 - 无论文件大小都保留频繁访问的文件
+- **优先移除大文件**: 适合需要优先保留多个小文件并快速回收空间的场景
+- **优先移除小文件**: 适合大文件更重要需要保留的场景（如视频流媒体）
+
+**请求消息:**
+```protobuf
+message SetDiskCacheEvictionStrategyRequest {
+  EvictionStrategy strategy = 1;
+}
+```
+
+### 增强的缓存统计
+
+`FileBufferDiskCacheStats` 消息现在包含更多字段以便更好地监控:
+
+```protobuf
+message FileBufferDiskCacheStats {
+  bool enabled = 1;
+  uint64 totalBytes = 2;
+  uint64 maxBytes = 3;
+  uint64 entryCount = 4;
+  uint64 segmentCount = 5;
+  string rootDir = 6;
+  bool scanCompleted = 7;              // 新增: 重启后初始磁盘扫描是否完成
+  EvictionStrategy evictionStrategy = 8; // 新增: 当前活动的淘汰策略
+}
+```
+
+**新增字段:**
+- `scanCompleted` - 指示服务重启后初始磁盘扫描是否完成。在此值为 `true` 之前，缓存统计可能不反映磁盘上的实际缓存数据。
+- `evictionStrategy` - 显示当前活动的淘汰策略。
+
+### Bug 修复
+
+- 修复服务重启后缓存大小和文件数显示为 0 的问题
+- 修复缓存大小可能超过配置的最大限制的问题
+- 修复某些操作系统上 sparse 文件创建失败，导致大文件立即分配全部大小而非使用稀疏分配的问题
+- 修复极个别情况下启用 2FA 后无限登出的问题
+- 修复指定最大缓存文件大小时无法修改单位的问题
+- 其它界面优化
+
+**注意:** 0.9.18 版本缓存的文件升级后可能部分被清除，将在下次访问时重新下载。
+
+### 历史版本亮点 (0.9.18)
+
+#### 文件缓冲磁盘缓存
 
 0.9.18 版本引入了强大的基于磁盘的缓存系统，可将下载的文件内容存储在本地，显著减少云 API 调用并提升频繁访问文件的读取性能。
 
-**新增 RPC:**
-- **`GetFileBufferDiskCacheStats`** - 获取磁盘缓存的运行时统计信息，包括总字节数、条目数、分段数
+**RPC:**
+- **`GetFileBufferDiskCacheStats`** - 获取磁盘缓存的运行时统计信息
 - **`PurgeFileBufferDiskCache`** - 清除所有缓存的文件缓冲区以释放磁盘空间
 
-**新增系统设置:**
+**系统设置:**
 - `fileBufferDiskCacheLocation` - 缓存分段的根目录
-- `fileBufferDiskCacheMaxBytes` - 允许的最大字节数；LRU 淘汰保持大小在限制内
+- `fileBufferDiskCacheMaxBytes` - 磁盘缓存允许的最大字节数
 
 **每云配置 (`CloudAPIConfig`):**
 - `fileBufferDiskCacheEnabled` - 为特定云 API 启用/禁用磁盘缓存
-- `fileBufferDiskCacheMaxFileSize` - 最大缓存文件大小（0 = 无限制，使用系统最大值）
+- `fileBufferDiskCacheMaxFileSize` - 最大缓存文件大小（0 = 无限制）
 
-**主要优势:**
-- 减少相同文件内容的重复下载
-- 提升频繁访问文件的读取性能
-- LRU 淘汰自动管理磁盘空间
-- 可按云 API 单独启用/禁用，实现精细控制
+#### 照片库集成（iOS/移动端）
 
-### 照片库集成（iOS/移动端）
-
-新增 iOS 照片库备份集成支持，允许移动应用通知 CloudDrive 照片库变更。
-
-**新增 RPC:**
 - **`NotifyPhotoLibraryChanges`** - 通知 CloudDrive 有新照片可供备份
 
-**使用场景:**
-- iOS 应用可将照片库变更推送到 CloudDrive 进行自动备份
-- 支持创建和删除两种变更类型
-- 追踪原始 PHAsset 标识符以进行去重
+#### 第三方账户登录
 
-### 第三方账户登录
-
-新增使用第三方云账户（如迅雷）登录的公开 RPC。
-
-**新增 RPC:**
 - **`LoginWithThirdPartyAccount`** - 使用支持的第三方云提供商的 OAuth 令牌登录
-
-### 增强的清理进度追踪
-
-`VacuumProgressResult` 现在提供详细的时间和大小信息，包括 `startTime`、`endTime`、`sizeBefore`、`sizeAfter` 和 `errorMessage`，用于全面的清理进度监控。
 
 ### 历史版本亮点 (0.9.16)
 
@@ -98,7 +139,7 @@ CloudDrive2 0.9.18 引入文件缓冲磁盘缓存以显著提升读取性能，�
 
 ### 0.9.14 引入的安全增强
 
-0.9.14 为想要启用双因素认证(2FA)和会话管理的部署奠定了基础。这些能力在 0.9.18 中保持不变，下面是速查参考。
+0.9.14 为想要启用双因素认证(2FA)和会话管理的部署奠定了基础。这些能力在 0.9.19 中保持不变，下面是速查参考。
 
 #### 双因素认证 (2FA)
 
@@ -265,7 +306,7 @@ python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. clouddrive.pr
 
 ### 版本兼容性
 
-**当前版本:** 0.9.16
+**当前版本:** 0.9.19
 
 始终使用与 CloudDrive2 服务器相同版本的 proto 文件以确保兼容性。您可以使用 `GetRuntimeInfo` 方法检查服务器版本。
 
@@ -3747,17 +3788,26 @@ message RunInfo {
 
 **响应:** `FileBufferDiskCacheStats`
 ```protobuf
+// 磁盘缓存淘汰策略
+enum EvictionStrategy {
+  LRU = 0;           // 最近最少使用 - 淘汰最近未访问的条目
+  LARGEST_FIRST = 1; // 优先移除大文件 - 快速释放空间
+  SMALLEST_FIRST = 2; // 优先移除小文件 - 保留大文件在缓存中
+}
+
 message FileBufferDiskCacheStats {
   bool enabled = 1;
-  uint64 totalBytes = 2;     // 当前已缓存的总字节数
-  uint64 maxBytes = 3;       // 允许的最大字节数
-  uint64 entryCount = 4;     // 缓存的文件条目数
-  uint64 segmentCount = 5;   // 缓存的分段数
-  string rootDir = 6;        // 缓存存储的根目录
+  uint64 totalBytes = 2;               // 当前已缓存的总字节数
+  uint64 maxBytes = 3;                 // 允许的最大字节数
+  uint64 entryCount = 4;               // 缓存的文件条目数
+  uint64 segmentCount = 5;             // 缓存的分段数
+  string rootDir = 6;                  // 缓存存储的根目录
+  bool scanCompleted = 7;              // 重启后初始磁盘扫描是否完成
+  EvictionStrategy evictionStrategy = 8; // 当前活动的淘汰策略
 }
 ```
 
-**0.9.18 新增**
+**0.9.18 新增，0.9.19 更新**（新增 `scanCompleted` 和 `evictionStrategy` 字段）
 
 ---
 
@@ -3770,6 +3820,28 @@ message FileBufferDiskCacheStats {
 **响应:** `google.protobuf.Empty`
 
 **0.9.18 新增**
+
+---
+
+#### SetDiskCacheEvictionStrategy
+
+设置磁盘缓存的淘汰策略。
+
+**请求:** `SetDiskCacheEvictionStrategyRequest`
+```protobuf
+message SetDiskCacheEvictionStrategyRequest {
+  EvictionStrategy strategy = 1;
+}
+```
+
+**响应:** `google.protobuf.Empty`
+
+**淘汰策略选项:**
+- `LRU` (0): 最近最少使用 - 淘汰最近未访问的条目（默认）
+- `LARGEST_FIRST` (1): 优先移除大文件 - 快速释放空间
+- `SMALLEST_FIRST` (2): 优先移除小文件 - 保留大文件在缓存中
+
+**0.9.19 新增**
 
 ---
 

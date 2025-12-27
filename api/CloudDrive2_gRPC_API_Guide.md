@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 0.9.18
+Version: 0.9.19
 
 ## Table of Contents
 
-- [What's New in 0.9.18](#whats-new-in-0918)
+- [What's New in 0.9.19](#whats-new-in-0919)
 - [Overview](#overview)
 - [Service Definition](#service-definition)
 - [Download Proto File](#download-proto-file)
@@ -33,54 +33,95 @@ Version: 0.9.18
 
 ---
 
-## What's New in 0.9.18
+## What's New in 0.9.19
 
-CloudDrive2 0.9.18 introduces File Buffer Disk Cache for dramatically improved read performance, mobile photo library integration for iOS backups, and enhanced monitoring capabilities.
+CloudDrive2 0.9.19 introduces configurable cache eviction strategies, enhanced cache monitoring, and various bug fixes for improved stability.
 
-### File Buffer Disk Cache
+### Configurable Cache Eviction Strategy
 
-Version 0.9.18 introduces a powerful disk-based caching system that stores downloaded file content locally, significantly reducing cloud API calls and improving read performance for frequently accessed files.
+Version 0.9.19 adds the ability to configure how the file buffer disk cache evicts entries when space is needed. You can now choose the eviction strategy that best fits your use case.
 
-**New RPCs:**
-- **`GetFileBufferDiskCacheStats`** - Get runtime statistics for the disk cache including total bytes, entry count, segment count
+**New RPC:**
+- **`SetDiskCacheEvictionStrategy`** - Set the disk cache eviction strategy
+
+**New Enum `EvictionStrategy`:**
+```protobuf
+enum EvictionStrategy {
+  LRU = 0;           // Least Recently Used - evict entries not accessed recently (default)
+  LARGEST_FIRST = 1; // Evict largest files first to free space quickly
+  SMALLEST_FIRST = 2; // Evict smallest files first to keep large files cached
+}
+```
+
+**Strategy Use Cases:**
+- **LRU (default)**: Best for general use - keeps frequently accessed files cached regardless of size
+- **LARGEST_FIRST**: Useful when you want to prioritize keeping many small files cached and quickly reclaim space
+- **SMALLEST_FIRST**: Ideal when large files are more important to keep cached (e.g., video streaming scenarios)
+
+**Request Message:**
+```protobuf
+message SetDiskCacheEvictionStrategyRequest {
+  EvictionStrategy strategy = 1;
+}
+```
+
+### Enhanced Cache Statistics
+
+The `FileBufferDiskCacheStats` message now includes additional fields for better monitoring:
+
+```protobuf
+message FileBufferDiskCacheStats {
+  bool enabled = 1;
+  uint64 totalBytes = 2;
+  uint64 maxBytes = 3;
+  uint64 entryCount = 4;
+  uint64 segmentCount = 5;
+  string rootDir = 6;
+  bool scanCompleted = 7;              // NEW: Whether initial disk scan has completed after restart
+  EvictionStrategy evictionStrategy = 8; // NEW: Current active eviction strategy
+}
+```
+
+**New Fields:**
+- `scanCompleted` - Indicates whether the initial disk scan has completed after a service restart. Until this is `true`, the cache statistics may not reflect the actual cached data on disk.
+- `evictionStrategy` - Shows the currently active eviction strategy.
+
+### Bug Fixes
+
+- Fixed issue where cache size and file count displayed as 0 after service restart
+- Fixed cache size potentially exceeding the configured maximum limit
+- Fixed sparse file creation failure on some operating systems, which caused large files to immediately allocate their full size instead of using sparse allocation
+- Fixed infinite logout loop in rare cases after enabling 2FA
+- Fixed inability to change the unit when specifying maximum cache file size
+- Various UI optimizations
+
+**Note:** Files cached in version 0.9.18 may be partially cleared after upgrading and will be re-downloaded on next access.
+
+### Previous Release Highlights (0.9.18)
+
+#### File Buffer Disk Cache
+
+Version 0.9.18 introduced a powerful disk-based caching system that stores downloaded file content locally, significantly reducing cloud API calls and improving read performance for frequently accessed files.
+
+**RPCs:**
+- **`GetFileBufferDiskCacheStats`** - Get runtime statistics for the disk cache
 - **`PurgeFileBufferDiskCache`** - Clear all cached file buffers to reclaim disk space
 
-**New System Settings:**
+**System Settings:**
 - `fileBufferDiskCacheLocation` - Root directory for storing cached segments
-- `fileBufferDiskCacheMaxBytes` - Maximum bytes allowed; LRU eviction keeps size under this limit
+- `fileBufferDiskCacheMaxBytes` - Maximum bytes allowed for disk cache
 
 **Per-Cloud Configuration (`CloudAPIConfig`):**
 - `fileBufferDiskCacheEnabled` - Enable/disable disk caching for specific cloud APIs
-- `fileBufferDiskCacheMaxFileSize` - Maximum file size to cache (0 = no limit, uses system max)
+- `fileBufferDiskCacheMaxFileSize` - Maximum file size to cache (0 = no limit)
 
-**Key Benefits:**
-- Reduces repeated downloads of the same file content
-- Improves read performance for frequently accessed files
-- LRU eviction automatically manages disk space
-- Can be enabled/disabled per cloud API for fine-grained control
+#### Photo Library Integration (iOS/Mobile)
 
-### Photo Library Integration (iOS/Mobile)
-
-New support for iOS photo library backup integration allows mobile apps to notify CloudDrive about photo library changes.
-
-**New RPC:**
 - **`NotifyPhotoLibraryChanges`** - Notify CloudDrive about new photos available for backup
 
-**Use Cases:**
-- iOS apps can push photo library changes to CloudDrive for automatic backup
-- Supports both create and delete change types
-- Tracks original PHAsset identifiers for deduplication
+#### Third-Party Account Login
 
-### Third-Party Account Login
-
-New public RPC for logging in with third-party cloud accounts (e.g., Xunlei).
-
-**New RPC:**
 - **`LoginWithThirdPartyAccount`** - Login using OAuth tokens from supported third-party cloud providers
-
-### Enhanced Vacuum Progress Tracking
-
-`VacuumProgressResult` now provides detailed timing and size information including `startTime`, `endTime`, `sizeBefore`, `sizeAfter`, and `errorMessage` for comprehensive vacuum progress monitoring.
 
 ### Previous Release Highlights (0.9.16)
 
@@ -265,7 +306,7 @@ The `clouddrive.proto` file contains:
 
 ### Version Compatibility
 
-**Current Version:** 0.9.18
+**Current Version:** 0.9.19
 
 Always use the proto file from the same version as your CloudDrive2 server to ensure compatibility. You can check your server version using the `GetRuntimeInfo` method.
 
@@ -3745,17 +3786,26 @@ Gets runtime statistics for the file buffer disk cache.
 
 **Response:** `FileBufferDiskCacheStats`
 ```protobuf
+// Eviction strategy for disk cache
+enum EvictionStrategy {
+  LRU = 0;           // Least Recently Used - evict entries not accessed recently
+  LARGEST_FIRST = 1; // Evict largest files first to free space quickly
+  SMALLEST_FIRST = 2; // Evict smallest files first to keep large files cached
+}
+
 message FileBufferDiskCacheStats {
   bool enabled = 1;
-  uint64 totalBytes = 2;     // Current total bytes cached
-  uint64 maxBytes = 3;       // Maximum allowed bytes
-  uint64 entryCount = 4;     // Number of cached file entries
-  uint64 segmentCount = 5;   // Number of cached segments
-  string rootDir = 6;        // Root directory for cache storage
+  uint64 totalBytes = 2;               // Current total bytes cached
+  uint64 maxBytes = 3;                 // Maximum allowed bytes
+  uint64 entryCount = 4;               // Number of cached file entries
+  uint64 segmentCount = 5;             // Number of cached segments
+  string rootDir = 6;                  // Root directory for cache storage
+  bool scanCompleted = 7;              // Whether initial disk scan has completed after restart
+  EvictionStrategy evictionStrategy = 8; // Current active eviction strategy
 }
 ```
 
-**New in 0.9.18**
+**New in 0.9.18, Updated in 0.9.19** (added `scanCompleted` and `evictionStrategy` fields)
 
 ---
 
@@ -3768,6 +3818,28 @@ Purges all disk-cached file buffers to reclaim disk space.
 **Response:** `google.protobuf.Empty`
 
 **New in 0.9.18**
+
+---
+
+#### SetDiskCacheEvictionStrategy
+
+Sets the eviction strategy for the disk cache.
+
+**Request:** `SetDiskCacheEvictionStrategyRequest`
+```protobuf
+message SetDiskCacheEvictionStrategyRequest {
+  EvictionStrategy strategy = 1;
+}
+```
+
+**Response:** `google.protobuf.Empty`
+
+**Eviction Strategy Options:**
+- `LRU` (0): Least Recently Used - evicts entries not accessed recently (default)
+- `LARGEST_FIRST` (1): Evicts largest files first to free space quickly
+- `SMALLEST_FIRST` (2): Evicts smallest files first to keep large files cached
+
+**New in 0.9.19**
 
 ---
 

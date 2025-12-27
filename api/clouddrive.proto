@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "0.9.18";
+option (version) = "0.9.19";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -133,6 +133,8 @@ service CloudDriveFileSrv {
   rpc GetFileBufferDiskCacheStats(google.protobuf.Empty) returns (FileBufferDiskCacheStats) {}
   // purge all disk-cached file buffers
   rpc PurgeFileBufferDiskCache(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  // set disk cache eviction strategy
+  rpc SetDiskCacheEvictionStrategy(SetDiskCacheEvictionStrategyRequest) returns (google.protobuf.Empty) {}
   // get server stats, including cpu/mem/uptime
   rpc GetRunningInfo(google.protobuf.Empty) returns (RunInfo) {}
   // get all opened file handles
@@ -1350,6 +1352,18 @@ message SystemSettings {
   optional uint64 fileBufferDiskCacheMaxBytes = 25;
 }
 
+// Eviction strategy for disk cache
+enum EvictionStrategy {
+  LRU = 0; // Least Recently Used - evict entries not accessed recently
+  LARGEST_FIRST = 1; // Evict largest files first to free space quickly
+  SMALLEST_FIRST = 2; // Evict smallest files first to keep large files cached
+}
+
+// Request to set disk cache eviction strategy
+message SetDiskCacheEvictionStrategyRequest {
+  EvictionStrategy strategy = 1;
+}
+
 // File buffer disk cache runtime stats
 message FileBufferDiskCacheStats {
   bool enabled = 1;
@@ -1358,6 +1372,8 @@ message FileBufferDiskCacheStats {
   uint64 entryCount = 4;
   uint64 segmentCount = 5;
   string rootDir = 6;
+  bool scanCompleted = 7; // Whether initial disk scan has completed after restart
+  EvictionStrategy evictionStrategy = 8; // Current active eviction strategy
 }
 message SetDirCacheTimeRequest {
   string path = 1;
