@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 0.9.19
+Version: 0.9.22
 
 ## Table of Contents
 
-- [What's New in 0.9.19](#whats-new-in-0919)
+- [What's New in 0.9.22](#whats-new-in-0922)
 - [Overview](#overview)
 - [Service Definition](#service-definition)
 - [Download Proto File](#download-proto-file)
@@ -33,71 +33,93 @@ Version: 0.9.19
 
 ---
 
-## What's New in 0.9.19
+## What's New in 0.9.22
 
-CloudDrive2 0.9.19 introduces configurable cache eviction strategies, enhanced cache monitoring, and various bug fixes for improved stability.
+CloudDrive2 0.9.22 introduces support for Amazon S3 and S3-compatible object storage services.
 
-### Configurable Cache Eviction Strategy
+### Amazon S3 and S3-Compatible Storage Support
 
-Version 0.9.19 adds the ability to configure how the file buffer disk cache evicts entries when space is needed. You can now choose the eviction strategy that best fits your use case.
+Version 0.9.22 adds native support for Amazon S3 and S3-compatible object storage services such as MinIO, Wasabi, Backblaze B2, DigitalOcean Spaces, and others.
 
 **New RPC:**
-- **`SetDiskCacheEvictionStrategy`** - Set the disk cache eviction strategy
+- **`APILoginS3`** - Add Amazon S3 or S3-compatible storage
 
-**New Enum `EvictionStrategy`:**
+**New Message:**
 ```protobuf
-enum EvictionStrategy {
-  LRU = 0;           // Least Recently Used - evict entries not accessed recently (default)
-  LARGEST_FIRST = 1; // Evict largest files first to free space quickly
-  SMALLEST_FIRST = 2; // Evict smallest files first to keep large files cached
+message LoginS3Request {
+  string accessKeyId = 1;           // AWS Access Key ID
+  string secretAccessKey = 2;       // AWS Secret Access Key
+  string region = 3;                // AWS region (e.g., "us-east-1")
+  string bucket = 4;                // S3 bucket name
+  optional string endpoint = 5;     // Custom endpoint URL for S3-compatible services (e.g., MinIO, Wasabi)
+  bool pathStyle = 6;               // Use path-style URLs instead of virtual-hosted style
+  bool doNotSyncToCloud = 7;        // If true, do NOT sync this API config to cloud
 }
 ```
 
-**Strategy Use Cases:**
-- **LRU (default)**: Best for general use - keeps frequently accessed files cached regardless of size
-- **LARGEST_FIRST**: Useful when you want to prioritize keeping many small files cached and quickly reclaim space
-- **SMALLEST_FIRST**: Ideal when large files are more important to keep cached (e.g., video streaming scenarios)
+**Key Features:**
+- Full read/write access to S3 buckets
+- Support for standard AWS S3 regions
+- Custom endpoint configuration for S3-compatible services
+- Path-style URL option for services that don't support virtual-hosted style
+- Seamless integration with CloudDrive's unified file management interface
 
-**Request Message:**
-```protobuf
-message SetDiskCacheEvictionStrategyRequest {
-  EvictionStrategy strategy = 1;
-}
+**Supported Services:**
+- **Amazon S3** - AWS's object storage service
+- **MinIO** - Self-hosted S3-compatible storage
+- **Wasabi** - Cloud object storage
+- **Backblaze B2** - Cloud storage with S3-compatible API
+- **DigitalOcean Spaces** - Object storage for developers
+- **Alibaba Cloud OSS** - With S3-compatible mode
+- Any other service implementing the S3 API
+
+**Usage Example:**
+```csharp
+// Add AWS S3 bucket
+var s3Request = new LoginS3Request
+{
+    AccessKeyId = "AKIAIOSFODNN7EXAMPLE",
+    SecretAccessKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+    Region = "us-east-1",
+    Bucket = "my-bucket",
+    PathStyle = false,
+    DoNotSyncToCloud = false
+};
+
+var result = await client.APILoginS3Async(s3Request);
+
+// Add MinIO (S3-compatible)
+var minioRequest = new LoginS3Request
+{
+    AccessKeyId = "minioadmin",
+    SecretAccessKey = "minioadmin",
+    Region = "us-east-1",  // Required but can be any value for MinIO
+    Bucket = "test-bucket",
+    Endpoint = "http://localhost:9000",
+    PathStyle = true,  // MinIO requires path-style
+    DoNotSyncToCloud = false
+};
+
+var result = await client.APILoginS3Async(minioRequest);
 ```
 
-### Enhanced Cache Statistics
+**Configuration Notes:**
+- **region**: Required field. For AWS S3, use the actual region (e.g., "us-east-1", "eu-west-1"). For S3-compatible services, this field is still required but the value may not matter depending on the service.
+- **endpoint**: Optional for AWS S3 (uses default endpoints). Required for S3-compatible services (e.g., "https://s3.wasabisys.com" for Wasabi, "http://localhost:9000" for MinIO).
+- **pathStyle**: Set to `true` for services that require path-style URLs (`https://endpoint/bucket/key`) instead of virtual-hosted style (`https://bucket.endpoint/key`). MinIO and some other services require path-style.
+- **doNotSyncToCloud**: If `true`, this S3 configuration will not be synced to other CloudDrive instances using the same account.
 
-The `FileBufferDiskCacheStats` message now includes additional fields for better monitoring:
+### Previous Release Highlights (0.9.19 - 0.9.21)
 
-```protobuf
-message FileBufferDiskCacheStats {
-  bool enabled = 1;
-  uint64 totalBytes = 2;
-  uint64 maxBytes = 3;
-  uint64 entryCount = 4;
-  uint64 segmentCount = 5;
-  string rootDir = 6;
-  bool scanCompleted = 7;              // NEW: Whether initial disk scan has completed after restart
-  EvictionStrategy evictionStrategy = 8; // NEW: Current active eviction strategy
-}
-```
+**0.9.21:**
+- Fixed incorrect cache size statistics that could cause disk space to exceed the configured limit
+- Various bug fixes
 
-**New Fields:**
-- `scanCompleted` - Indicates whether the initial disk scan has completed after a service restart. Until this is `true`, the cache statistics may not reflect the actual cached data on disk.
-- `evictionStrategy` - Shows the currently active eviction strategy.
+**0.9.20:**
+- Fixed cache eviction strategy settings not persisting after restart
+- Fixed some cached files requiring re-download after restart
 
-### Bug Fixes
-
-- Fixed issue where cache size and file count displayed as 0 after service restart
-- Fixed cache size potentially exceeding the configured maximum limit
-- Fixed sparse file creation failure on some operating systems, which caused large files to immediately allocate their full size instead of using sparse allocation
-- Fixed infinite logout loop in rare cases after enabling 2FA
-- Fixed inability to change the unit when specifying maximum cache file size
-- Various UI optimizations
-
-**Note:** Files cached in version 0.9.18 may be partially cleared after upgrading and will be re-downloaded on next access.
-
-### Previous Release Highlights (0.9.18)
+**0.9.19:**
 
 #### File Buffer Disk Cache
 
@@ -3469,6 +3491,81 @@ message LoginWebDavRequest {
 
 **Response:** `APILoginResult`
 
+*Added in 0.9.8*
+
+---
+
+#### APILoginS3
+
+Adds Amazon S3 or S3-compatible object storage.
+
+**Request:** `LoginS3Request`
+```protobuf
+message LoginS3Request {
+  string accessKeyId = 1;           // AWS Access Key ID
+  string secretAccessKey = 2;       // AWS Secret Access Key
+  string region = 3;                // AWS region (e.g., "us-east-1")
+  string bucket = 4;                // S3 bucket name
+  optional string endpoint = 5;     // Custom endpoint URL for S3-compatible services
+  bool pathStyle = 6;               // Use path-style URLs instead of virtual-hosted style
+  bool doNotSyncToCloud = 7;        // If true, do NOT sync this API config to cloud
+}
+```
+
+**Response:** `APILoginResult`
+
+**Field Descriptions:**
+- `accessKeyId`: AWS Access Key ID or equivalent for S3-compatible services
+- `secretAccessKey`: AWS Secret Access Key or equivalent credential
+- `region`: AWS region (e.g., "us-east-1", "eu-west-1"). Required even for S3-compatible services.
+- `bucket`: The S3 bucket name to access
+- `endpoint`: Optional for AWS S3. Required for S3-compatible services (e.g., "http://localhost:9000" for MinIO, "https://s3.wasabisys.com" for Wasabi)
+- `pathStyle`: Set to `true` for path-style URLs (`https://endpoint/bucket/key`), `false` for virtual-hosted style (`https://bucket.endpoint/key`). MinIO and some other services require `true`.
+- `doNotSyncToCloud`: If `true`, this configuration will not sync to other devices
+
+**Example - AWS S3:**
+```csharp
+var request = new LoginS3Request
+{
+    AccessKeyId = "AKIAIOSFODNN7EXAMPLE",
+    SecretAccessKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+    Region = "us-east-1",
+    Bucket = "my-bucket",
+    PathStyle = false
+};
+var result = await client.APILoginS3Async(request);
+```
+
+**Example - MinIO:**
+```csharp
+var request = new LoginS3Request
+{
+    AccessKeyId = "minioadmin",
+    SecretAccessKey = "minioadmin",
+    Region = "us-east-1",  // Can be any value for MinIO
+    Bucket = "test-bucket",
+    Endpoint = "http://localhost:9000",
+    PathStyle = true  // MinIO requires path-style
+};
+var result = await client.APILoginS3Async(request);
+```
+
+**Example - Wasabi:**
+```csharp
+var request = new LoginS3Request
+{
+    AccessKeyId = "YOUR_WASABI_ACCESS_KEY",
+    SecretAccessKey = "YOUR_WASABI_SECRET_KEY",
+    Region = "us-east-1",  // Wasabi region
+    Bucket = "my-wasabi-bucket",
+    Endpoint = "https://s3.wasabisys.com",
+    PathStyle = false
+};
+var result = await client.APILoginS3Async(request);
+```
+
+*Added in 0.9.22*
+
 ---
 
 #### APIAddLocalFolder
@@ -6769,5 +6866,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2025-12-24*
-*Copyright © 2025 CloudDrive. All rights reserved.*
+*Last Updated: 2026-01-11*
+*Copyright © 2026 CloudDrive. All rights reserved.*

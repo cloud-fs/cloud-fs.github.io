@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "0.9.19";
+option (version) = "0.9.22";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -278,6 +278,8 @@ service CloudDriveFileSrv {
   // rpc APILoginPikPak(UserLoginRequest) returns (APILoginResult) {}
   // add webdav
   rpc APILoginWebDav(LoginWebDavRequest) returns (APILoginResult) {}
+  // add Amazon S3 or S3-compatible storage
+  rpc APILoginS3(LoginS3Request) returns (APILoginResult) {}
   // add local folder
   rpc APIAddLocalFolder(AddLocalFolderRequest) returns (APILoginResult) {}
   // add remote clouddrive
@@ -1216,6 +1218,15 @@ message LoginWebDavRequest {
   string userName = 2;
   string password = 3;
   bool doNotSyncToCloud = 4; // If true, do NOT sync this API config to cloud (default: false, meaning sync by default)
+}
+message LoginS3Request {
+  string accessKeyId = 1; // AWS Access Key ID
+  string secretAccessKey = 2; // AWS Secret Access Key
+  string region = 3; // AWS region (e.g., "us-east-1")
+  string bucket = 4; // S3 bucket name
+  optional string endpoint = 5; // Custom endpoint URL for S3-compatible services (e.g., MinIO, Wasabi)
+  bool pathStyle = 6; // Use path-style URLs instead of virtual-hosted style (required for some S3-compatible services)
+  bool doNotSyncToCloud = 7; // If true, do NOT sync this API config to cloud (default: false, meaning sync by default)
 }
 message APILoginResult {
   bool success = 1;
