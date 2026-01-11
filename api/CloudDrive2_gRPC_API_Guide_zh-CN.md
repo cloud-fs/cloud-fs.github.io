@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 0.9.19
+版本: 0.9.22
 
 ## 目录
 
-- [0.9.19 版本新特性](#0919-版本新特性)
+- [0.9.22 版本新特性](#0922-版本新特性)
 - [概述](#概述)
 - [服务定义](#服务定义)
 - [下载 Proto 文件](#下载-proto-文件)
@@ -33,71 +33,93 @@
 
 ---
 
-## 0.9.19 版本新特性
+## 0.9.22 版本新特性
 
-CloudDrive2 0.9.19 引入可配置的缓存淘汰策略、增强的缓存监控，以及多项稳定性改进。
+CloudDrive2 0.9.22 引入了对 Amazon S3 及 S3 兼容对象存储服务的支持。
 
-### 可配置的缓存淘汰策略
+### Amazon S3 及 S3 兼容存储支持
 
-0.9.19 版本新增配置文件缓冲磁盘缓存淘汰策略的功能。当需要释放空间时，您可以选择最适合您使用场景的淘汰策略。
+0.9.22 版本新增对 Amazon S3 和 S3 兼容对象存储服务（如 MinIO、Wasabi、Backblaze B2、DigitalOcean Spaces 等）的原生支持。
 
 **新增 RPC:**
-- **`SetDiskCacheEvictionStrategy`** - 设置磁盘缓存淘汰策略
+- **`APILoginS3`** - 添加 Amazon S3 或 S3 兼容存储
 
-**新增枚举 `EvictionStrategy`:**
+**新增消息:**
 ```protobuf
-enum EvictionStrategy {
-  LRU = 0;           // 最近最少使用 - 淘汰最近未访问的条目（默认）
-  LARGEST_FIRST = 1; // 优先移除大文件 - 快速释放空间
-  SMALLEST_FIRST = 2; // 优先移除小文件 - 保留大文件在缓存中
+message LoginS3Request {
+  string accessKeyId = 1;           // AWS 访问密钥 ID
+  string secretAccessKey = 2;       // AWS 秘密访问密钥
+  string region = 3;                // AWS 区域（如 "us-east-1"）
+  string bucket = 4;                // S3 桶名称
+  optional string endpoint = 5;     // S3 兼容服务的自定义端点 URL（如 MinIO、Wasabi）
+  bool pathStyle = 6;               // 使用路径样式 URL 而非虚拟主机样式
+  bool doNotSyncToCloud = 7;        // 如为 true，则不将此 API 配置同步到云端
 }
 ```
 
-**策略使用场景:**
-- **LRU（默认）**: 通用场景最佳 - 无论文件大小都保留频繁访问的文件
-- **优先移除大文件**: 适合需要优先保留多个小文件并快速回收空间的场景
-- **优先移除小文件**: 适合大文件更重要需要保留的场景（如视频流媒体）
+**主要功能:**
+- 对 S3 桶的完整读写访问
+- 支持标准 AWS S3 区域
+- 为 S3 兼容服务提供自定义端点配置
+- 为不支持虚拟主机样式的服务提供路径样式 URL 选项
+- 与 CloudDrive 统一文件管理界面无缝集成
 
-**请求消息:**
-```protobuf
-message SetDiskCacheEvictionStrategyRequest {
-  EvictionStrategy strategy = 1;
-}
+**支持的服务:**
+- **Amazon S3** - AWS 的对象存储服务
+- **MinIO** - 自托管 S3 兼容存储
+- **Wasabi** - 云对象存储
+- **Backblaze B2** - 带 S3 兼容 API 的云存储
+- **DigitalOcean Spaces** - 面向开发者的对象存储
+- **阿里云 OSS** - S3 兼容模式
+- 任何其他实现 S3 API 的服务
+
+**使用示例:**
+```csharp
+// 添加 AWS S3 桶
+var s3Request = new LoginS3Request
+{
+    AccessKeyId = "AKIAIOSFODNN7EXAMPLE",
+    SecretAccessKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+    Region = "us-east-1",
+    Bucket = "my-bucket",
+    PathStyle = false,
+    DoNotSyncToCloud = false
+};
+
+var result = await client.APILoginS3Async(s3Request);
+
+// 添加 MinIO（S3 兼容）
+var minioRequest = new LoginS3Request
+{
+    AccessKeyId = "minioadmin",
+    SecretAccessKey = "minioadmin",
+    Region = "us-east-1",  // MinIO 需要但值可以是任意的
+    Bucket = "test-bucket",
+    Endpoint = "http://localhost:9000",
+    PathStyle = true,  // MinIO 需要路径样式
+    DoNotSyncToCloud = false
+};
+
+var result = await client.APILoginS3Async(minioRequest);
 ```
 
-### 增强的缓存统计
+**配置说明:**
+- **region**: 必填字段。对于 AWS S3，使用实际区域（如 "us-east-1"、"eu-west-1"）。对于 S3 兼容服务，此字段仍然必填，但值可能不重要，具体取决于服务。
+- **endpoint**: 对于 AWS S3 可选（使用默认端点）。对于 S3 兼容服务必填（如 Wasabi 为 "https://s3.wasabisys.com"，MinIO 为 "http://localhost:9000"）。
+- **pathStyle**: 对于需要路径样式 URL（`https://endpoint/bucket/key`）而非虚拟主机样式（`https://bucket.endpoint/key`）的服务，设置为 `true`。MinIO 和其他一些服务需要路径样式。
+- **doNotSyncToCloud**: 如果为 `true`，此 S3 配置将不会同步到使用同一账户的其他 CloudDrive 实例。
 
-`FileBufferDiskCacheStats` 消息现在包含更多字段以便更好地监控:
+### 历史版本亮点 (0.9.19 - 0.9.21)
 
-```protobuf
-message FileBufferDiskCacheStats {
-  bool enabled = 1;
-  uint64 totalBytes = 2;
-  uint64 maxBytes = 3;
-  uint64 entryCount = 4;
-  uint64 segmentCount = 5;
-  string rootDir = 6;
-  bool scanCompleted = 7;              // 新增: 重启后初始磁盘扫描是否完成
-  EvictionStrategy evictionStrategy = 8; // 新增: 当前活动的淘汰策略
-}
-```
+**0.9.21:**
+- 修复缓存大小统计不准确，可能导致磁盘空间超过配置限制的问题
+- 其它 bug 修复
 
-**新增字段:**
-- `scanCompleted` - 指示服务重启后初始磁盘扫描是否完成。在此值为 `true` 之前，缓存统计可能不反映磁盘上的实际缓存数据。
-- `evictionStrategy` - 显示当前活动的淘汰策略。
+**0.9.20:**
+- 修复缓存淘汰策略设置重启后失效的问题
+- 修复部分缓存文件重启后需要重新下载的问题
 
-### Bug 修复
-
-- 修复服务重启后缓存大小和文件数显示为 0 的问题
-- 修复缓存大小可能超过配置的最大限制的问题
-- 修复某些操作系统上 sparse 文件创建失败，导致大文件立即分配全部大小而非使用稀疏分配的问题
-- 修复极个别情况下启用 2FA 后无限登出的问题
-- 修复指定最大缓存文件大小时无法修改单位的问题
-- 其它界面优化
-
-**注意:** 0.9.18 版本缓存的文件升级后可能部分被清除，将在下次访问时重新下载。
-
-### 历史版本亮点 (0.9.18)
+**0.9.19:**
 
 #### 文件缓冲磁盘缓存
 
@@ -3471,6 +3493,81 @@ message LoginWebDavRequest {
 
 **响应:** `APILoginResult`
 
+*0.9.8 新增*
+
+---
+
+#### APILoginS3
+
+添加 Amazon S3 或 S3 兼容对象存储。
+
+**请求:** `LoginS3Request`
+```protobuf
+message LoginS3Request {
+  string accessKeyId = 1;           // AWS 访问密钥 ID
+  string secretAccessKey = 2;       // AWS 秘密访问密钥
+  string region = 3;                // AWS 区域（如 "us-east-1"）
+  string bucket = 4;                // S3 桶名称
+  optional string endpoint = 5;     // S3 兼容服务的自定义端点 URL
+  bool pathStyle = 6;               // 使用路径样式 URL 而非虚拟主机样式
+  bool doNotSyncToCloud = 7;        // 如为 true，则不将此 API 配置同步到云端
+}
+```
+
+**响应:** `APILoginResult`
+
+**字段说明:**
+- `accessKeyId`: AWS 访问密钥 ID 或 S3 兼容服务的等效凭证
+- `secretAccessKey`: AWS 秘密访问密钥或等效凭证
+- `region`: AWS 区域（如 "us-east-1"、"eu-west-1"）。即使对于 S3 兼容服务也是必填的。
+- `bucket`: 要访问的 S3 桶名称
+- `endpoint`: 对于 AWS S3 可选。对于 S3 兼容服务必填（如 MinIO 为 "http://localhost:9000"，Wasabi 为 "https://s3.wasabisys.com"）
+- `pathStyle`: 对于需要路径样式 URL（`https://endpoint/bucket/key`）的服务设置为 `true`，虚拟主机样式（`https://bucket.endpoint/key`）设置为 `false`。MinIO 和其他一些服务需要 `true`。
+- `doNotSyncToCloud`: 如果为 `true`，此配置将不会同步到其他设备
+
+**示例 - AWS S3:**
+```csharp
+var request = new LoginS3Request
+{
+    AccessKeyId = "AKIAIOSFODNN7EXAMPLE",
+    SecretAccessKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+    Region = "us-east-1",
+    Bucket = "my-bucket",
+    PathStyle = false
+};
+var result = await client.APILoginS3Async(request);
+```
+
+**示例 - MinIO:**
+```csharp
+var request = new LoginS3Request
+{
+    AccessKeyId = "minioadmin",
+    SecretAccessKey = "minioadmin",
+    Region = "us-east-1",  // 对于 MinIO 可以是任意值
+    Bucket = "test-bucket",
+    Endpoint = "http://localhost:9000",
+    PathStyle = true  // MinIO 需要路径样式
+};
+var result = await client.APILoginS3Async(request);
+```
+
+**示例 - Wasabi:**
+```csharp
+var request = new LoginS3Request
+{
+    AccessKeyId = "YOUR_WASABI_ACCESS_KEY",
+    SecretAccessKey = "YOUR_WASABI_SECRET_KEY",
+    Region = "us-east-1",  // Wasabi 区域
+    Bucket = "my-wasabi-bucket",
+    Endpoint = "https://s3.wasabisys.com",
+    PathStyle = false
+};
+var result = await client.APILoginS3Async(request);
+```
+
+*0.9.22 新增*
+
 ---
 
 #### APIAddLocalFolder
@@ -6833,5 +6930,5 @@ class FileManager
 
 ---
 
-*最后更新: 2025-12-24*
-*版权所有 © 2025 CloudDrive. 保留所有权利.*
+*最后更新: 2026-01-11*
+*版权所有 © 2026 CloudDrive. 保留所有权利.*
