@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 0.9.22
+版本: 0.9.24
 
 ## 目录
 
-- [0.9.22 版本新特性](#0922-版本新特性)
+- [0.9.24 版本新特性](#0924-版本新特性)
 - [概述](#概述)
 - [服务定义](#服务定义)
 - [下载 Proto 文件](#下载-proto-文件)
@@ -33,13 +33,61 @@
 
 ---
 
-## 0.9.22 版本新特性
+## 0.9.24 版本新特性
 
-CloudDrive2 0.9.22 引入了对 Amazon S3 及 S3 兼容对象存储服务的支持。
+CloudDrive2 0.9.24 增加 S3 签名版本配置，以更好地兼容传统 S3 服务。
 
-### Amazon S3 及 S3 兼容存储支持
+### S3 签名版本支持
 
-0.9.22 版本新增对 Amazon S3 和 S3 兼容对象存储服务（如 MinIO、Wasabi、Backblaze B2、DigitalOcean Spaces 等）的原生支持。
+0.9.24 版本为现有的 S3 集成增加了可配置的 S3 签名版本支持。这允许与可能不支持签名版本 4 的老版 S3 兼容服务兼容。
+
+**更新的消息:**
+```protobuf
+message LoginS3Request {
+  string accessKeyId = 1;
+  string secretAccessKey = 2;
+  string region = 3;
+  string bucket = 4;
+  optional string endpoint = 5;
+  bool pathStyle = 6;
+  bool doNotSyncToCloud = 7;
+  optional uint32 signatureVersion = 8;  // 新增: S3 签名版本：2 或 4（默认 4）
+}
+```
+
+**新增字段:**
+- `signatureVersion` - 可选字段，用于指定 S3 签名版本。对于不支持 v4 签名的老版 S3 兼容服务设置为 `2`，或对于现代 AWS S3 和兼容服务设置为 `4`（默认）。
+
+**使用场景:**
+- **版本 4（默认）**: 现代 AWS S3、MinIO、Wasabi 以及大多数最新的 S3 兼容服务
+- **版本 2**: 传统 S3 服务或不支持签名 v4 的老版 S3 兼容实现
+
+**示例:**
+```csharp
+// 需要签名 v2 的传统 S3 服务
+var request = new LoginS3Request
+{
+    AccessKeyId = "YOUR_ACCESS_KEY",
+    SecretAccessKey = "YOUR_SECRET_KEY",
+    Region = "us-east-1",
+    Bucket = "my-bucket",
+    Endpoint = "https://legacy-s3.example.com",
+    PathStyle = true,
+    SignatureVersion = 2  // 使用签名 v2 以兼容
+};
+var result = await client.APILoginS3Async(request);
+```
+
+### 历史版本亮点 (0.9.22 - 0.9.23)
+
+**0.9.23:**
+- 支持从 115 Open 和阿里云盘快速复制到 123 云盘
+- 修复打开本地缓存时某些情况下可能内存占用高的问题
+- 其它 bug 修复
+
+**0.9.22:**
+- 增加 Amazon S3 及 S3 兼容对象存储支持
+- 新增 `APILoginS3` RPC 用于 S3 集成
 
 **新增 RPC:**
 - **`APILoginS3`** - 添加 Amazon S3 或 S3 兼容存储
@@ -3511,6 +3559,7 @@ message LoginS3Request {
   optional string endpoint = 5;     // S3 兼容服务的自定义端点 URL
   bool pathStyle = 6;               // 使用路径样式 URL 而非虚拟主机样式
   bool doNotSyncToCloud = 7;        // 如为 true，则不将此 API 配置同步到云端
+  optional uint32 signatureVersion = 8; // S3 签名版本：2 或 4（默认 4）
 }
 ```
 
@@ -3524,6 +3573,7 @@ message LoginS3Request {
 - `endpoint`: 对于 AWS S3 可选。对于 S3 兼容服务必填（如 MinIO 为 "http://localhost:9000"，Wasabi 为 "https://s3.wasabisys.com"）
 - `pathStyle`: 对于需要路径样式 URL（`https://endpoint/bucket/key`）的服务设置为 `true`，虚拟主机样式（`https://bucket.endpoint/key`）设置为 `false`。MinIO 和其他一些服务需要 `true`。
 - `doNotSyncToCloud`: 如果为 `true`，此配置将不会同步到其他设备
+- `signatureVersion`: S3 签名版本，`2` 或 `4`（默认：`4`）。对于不支持签名 v4 的传统 S3 兼容服务使用 `2`。
 
 **示例 - AWS S3:**
 ```csharp
@@ -6930,5 +6980,5 @@ class FileManager
 
 ---
 
-*最后更新: 2026-01-11*
+*最后更新: 2026-01-27*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*

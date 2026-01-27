@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 0.9.22
+Version: 0.9.24
 
 ## Table of Contents
 
-- [What's New in 0.9.22](#whats-new-in-0922)
+- [What's New in 0.9.24](#whats-new-in-0924)
 - [Overview](#overview)
 - [Service Definition](#service-definition)
 - [Download Proto File](#download-proto-file)
@@ -33,13 +33,61 @@ Version: 0.9.22
 
 ---
 
-## What's New in 0.9.22
+## What's New in 0.9.24
 
-CloudDrive2 0.9.22 introduces support for Amazon S3 and S3-compatible object storage services.
+CloudDrive2 0.9.24 adds S3 signature version configuration for better compatibility with legacy S3 services.
 
-### Amazon S3 and S3-Compatible Storage Support
+### S3 Signature Version Support
 
-Version 0.9.22 adds native support for Amazon S3 and S3-compatible object storage services such as MinIO, Wasabi, Backblaze B2, DigitalOcean Spaces, and others.
+Version 0.9.24 adds configurable S3 signature version support to the existing S3 integration. This allows compatibility with older S3-compatible services that may not support signature version 4.
+
+**Updated Message:**
+```protobuf
+message LoginS3Request {
+  string accessKeyId = 1;
+  string secretAccessKey = 2;
+  string region = 3;
+  string bucket = 4;
+  optional string endpoint = 5;
+  bool pathStyle = 6;
+  bool doNotSyncToCloud = 7;
+  optional uint32 signatureVersion = 8;  // NEW: S3 signature version: 2 or 4 (default 4)
+}
+```
+
+**New Field:**
+- `signatureVersion` - Optional field to specify the S3 signature version. Set to `2` for older S3-compatible services that don't support v4 signatures, or `4` (default) for modern AWS S3 and compatible services.
+
+**When to Use:**
+- **Version 4 (default)**: Modern AWS S3, MinIO, Wasabi, and most recent S3-compatible services
+- **Version 2**: Legacy S3 services or older S3-compatible implementations that don't support signature v4
+
+**Example:**
+```csharp
+// For legacy S3 service requiring signature v2
+var request = new LoginS3Request
+{
+    AccessKeyId = "YOUR_ACCESS_KEY",
+    SecretAccessKey = "YOUR_SECRET_KEY",
+    Region = "us-east-1",
+    Bucket = "my-bucket",
+    Endpoint = "https://legacy-s3.example.com",
+    PathStyle = true,
+    SignatureVersion = 2  // Use signature v2 for compatibility
+};
+var result = await client.APILoginS3Async(request);
+```
+
+### Previous Release Highlights (0.9.22 - 0.9.23)
+
+**0.9.23:**
+- Support for fast copy from 115 Open and Aliyun Drive to 123 Pan
+- Fixed high memory usage in certain scenarios when local cache is enabled
+- Various bug fixes
+
+**0.9.22:**
+- Added Amazon S3 and S3-compatible object storage support
+- New `APILoginS3` RPC for S3 integration
 
 **New RPC:**
 - **`APILoginS3`** - Add Amazon S3 or S3-compatible storage
@@ -3509,6 +3557,7 @@ message LoginS3Request {
   optional string endpoint = 5;     // Custom endpoint URL for S3-compatible services
   bool pathStyle = 6;               // Use path-style URLs instead of virtual-hosted style
   bool doNotSyncToCloud = 7;        // If true, do NOT sync this API config to cloud
+  optional uint32 signatureVersion = 8; // S3 signature version: 2 or 4 (default 4)
 }
 ```
 
@@ -3522,6 +3571,7 @@ message LoginS3Request {
 - `endpoint`: Optional for AWS S3. Required for S3-compatible services (e.g., "http://localhost:9000" for MinIO, "https://s3.wasabisys.com" for Wasabi)
 - `pathStyle`: Set to `true` for path-style URLs (`https://endpoint/bucket/key`), `false` for virtual-hosted style (`https://bucket.endpoint/key`). MinIO and some other services require `true`.
 - `doNotSyncToCloud`: If `true`, this configuration will not sync to other devices
+- `signatureVersion`: S3 signature version, `2` or `4` (default: `4`). Use `2` for legacy S3-compatible services that don't support signature v4.
 
 **Example - AWS S3:**
 ```csharp
@@ -6866,5 +6916,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2026-01-11*
+*Last Updated: 2026-01-27*
 *Copyright © 2026 CloudDrive. All rights reserved.*
