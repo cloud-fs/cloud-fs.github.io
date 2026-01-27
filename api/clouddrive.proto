@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "0.9.22";
+option (version) = "0.9.24";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -1227,6 +1227,7 @@ message LoginS3Request {
   optional string endpoint = 5; // Custom endpoint URL for S3-compatible services (e.g., MinIO, Wasabi)
   bool pathStyle = 6; // Use path-style URLs instead of virtual-hosted style (required for some S3-compatible services)
   bool doNotSyncToCloud = 7; // If true, do NOT sync this API config to cloud (default: false, meaning sync by default)
+  optional uint32 signatureVersion = 8; // S3 signature version: 2 or 4 (default 4)
 }
 message APILoginResult {
   bool success = 1;
