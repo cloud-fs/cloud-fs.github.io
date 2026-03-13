@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 0.9.24
+Version: 1.0.0
 
 ## Table of Contents
 
-- [What's New in 0.9.24](#whats-new-in-0924)
+- [What's New in 1.0.0](#whats-new-in-100)
 - [Overview](#overview)
 - [Service Definition](#service-definition)
 - [Download Proto File](#download-proto-file)
@@ -33,52 +33,110 @@ Version: 0.9.24
 
 ---
 
-## What's New in 0.9.24
+## What's New in 1.0.0
 
-CloudDrive2 0.9.24 adds S3 signature version configuration for better compatibility with legacy S3 services.
+CloudDrive2 1.0.0 is a major release featuring per-folder disk cache control, content search, proxy support for cloud API logins, service capability queries, and local folder creation.
 
-### S3 Signature Version Support
+### Per-Folder Disk Cache Control
 
-Version 0.9.24 adds configurable S3 signature version support to the existing S3 integration. This allows compatibility with older S3-compatible services that may not support signature version 4.
+Disk cache settings have been moved from per-cloud API to per-folder granularity. The old `fileBufferDiskCacheEnabled` and `fileBufferDiskCacheMaxFileSize` fields on `CloudAPIConfig` have been removed (reserved 16, 17).
 
-**Updated Message:**
+**New RPCs:**
+- **`SetFolderDiskCache`** - Enable and configure disk cache rules for a specific folder
+- **`RemoveFolderDiskCache`** - Disable disk cache for a folder
+- **`ListDiskCacheFolders`** - List all folders with disk cache rules
+
+**New Messages:**
 ```protobuf
-message LoginS3Request {
-  string accessKeyId = 1;
-  string secretAccessKey = 2;
-  string region = 3;
-  string bucket = 4;
-  optional string endpoint = 5;
-  bool pathStyle = 6;
-  bool doNotSyncToCloud = 7;
-  optional uint32 signatureVersion = 8;  // NEW: S3 signature version: 2 or 4 (default 4)
+enum ExtensionFilterMode {
+  EXTENSION_FILTER_DISABLED = 0;
+  EXTENSION_FILTER_INCLUDE = 1; // Only cache files with listed extensions
+  EXTENSION_FILTER_EXCLUDE = 2; // Cache all files except listed extensions
+}
+
+message SetFolderDiskCacheRequest {
+  string path = 1;
+  uint64 maxFileSize = 2;      // 0 = no limit
+  uint64 minFileSize = 3;      // 0 = no minimum
+  ExtensionFilterMode extensionFilterMode = 4;
+  repeated string extensions = 5; // without dot, lowercase (e.g. "mp4", "mkv")
+  bool enabled = 6;            // true = enable, false = explicitly disable
+}
+
+message DiskCacheFolder {
+  string path = 1;
+  uint64 maxFileSize = 2;
+  uint64 minFileSize = 3;
+  ExtensionFilterMode extensionFilterMode = 4;
+  repeated string extensions = 5;
+  bool enabled = 6;
+}
+
+message ListDiskCacheFoldersReply {
+  repeated DiskCacheFolder folders = 1;
 }
 ```
 
-**New Field:**
-- `signatureVersion` - Optional field to specify the S3 signature version. Set to `2` for older S3-compatible services that don't support v4 signatures, or `4` (default) for modern AWS S3 and compatible services.
+**New fields on `CloudDriveFile`:**
+- `fileBufferDiskCacheEnabled` (field 77) - Whether disk cache is enabled for this file/folder (resolved via ancestor)
+- `fileBufferDiskCacheRules` (field 78) - Disk cache rules for this file/folder (resolved via ancestor, present only when enabled)
 
-**When to Use:**
-- **Version 4 (default)**: Modern AWS S3, MinIO, Wasabi, and most recent S3-compatible services
-- **Version 2**: Legacy S3 services or older S3-compatible implementations that don't support signature v4
+### Content Search
 
-**Example:**
-```csharp
-// For legacy S3 service requiring signature v2
-var request = new LoginS3Request
-{
-    AccessKeyId = "YOUR_ACCESS_KEY",
-    SecretAccessKey = "YOUR_SECRET_KEY",
-    Region = "us-east-1",
-    Bucket = "my-bucket",
-    Endpoint = "https://legacy-s3.example.com",
-    PathStyle = true,
-    SignatureVersion = 2  // Use signature v2 for compatibility
-};
-var result = await client.APILoginS3Async(request);
+Files can now be searched by content (not just filename) on clouds that support it.
+
+**New field in `SearchRequest`:**
+- `contentSearch` (field 6) - If true, also search file content (requires `canContentSearch` on the cloud)
+
+**New field on `CloudDriveFile`:**
+- `canContentSearch` (field 79) - Whether the cloud supports content search
+
+### Proxy Support for Cloud API Logins
+
+All cloud API login requests now support optional `apiProxy` and `dataProxy` fields for routing connections through proxies. User login/register requests support `cloudfsProxy` for reaching the CloudFS account server.
+
+**Updated Messages with proxy fields:**
+- `UserLoginRequest`, `UserRegisterRequest`, `LoginWith2FARequest`, `LoginWithThirdPartyAccountRequest` - added `cloudfsProxy`
+- `LoginAliyundriveOAuthRequest`, `LoginAliyundriveQRCodeRequest`, `LoginBaiduPanOAuthRequest`, `LoginOneDriveOAuthRequest`, `LoginGoogleDriveOAuthRequest`, `LoginGoogleDriveRefreshTokenRequest`, `LoginXunleiOAuthRequest`, `LoginXunleiOpenOAuthRequest`, `Login123panOAuthRequest`, `Login115OpenOAuthRequest`, `LoginWebDavRequest`, `LoginS3Request`, `LoginCloudDriveRequest` - added `apiProxy` and `dataProxy`
+- `SystemSettings` - added `cloudfsProxy` (field 26)
+
+**Changed RPCs:**
+- `APILogin115OpenQRCode` - Now takes `Login115OpenQRCodeRequest` instead of `google.protobuf.Empty`
+- `APILogin189QRCode` - Now takes `Login189QRCodeRequest` instead of `google.protobuf.Empty`
+
+### Service Capabilities
+
+**New RPC:**
+- **`GetServiceCapabilities`** - Query whether the service supports restart and update
+
+```protobuf
+message ServiceCapabilities {
+  bool canRestart = 1;
+  bool canUpdate = 2;
+}
 ```
 
-### Previous Release Highlights (0.9.22 - 0.9.23)
+### Local Folder Creation
+
+**New RPC:**
+- **`LocalCreateFolder`** - Create a folder on the local filesystem
+
+```protobuf
+message LocalCreateFolderRequest {
+  string parentFolder = 1;
+  string folderName = 2;
+}
+message LocalCreateFolderResult {
+  bool success = 1;
+  string errorMessage = 2;
+  string createdPath = 3;
+}
+```
+
+### Previous Release Highlights (0.9.22 - 0.9.24)
+
+**0.9.24:**
+- S3 signature version configuration for better compatibility with legacy S3 services
 
 **0.9.23:**
 - Support for fast copy from 115 Open and Aliyun Drive to 123 Pan
@@ -181,9 +239,9 @@ Version 0.9.18 introduced a powerful disk-based caching system that stores downl
 - `fileBufferDiskCacheLocation` - Root directory for storing cached segments
 - `fileBufferDiskCacheMaxBytes` - Maximum bytes allowed for disk cache
 
-**Per-Cloud Configuration (`CloudAPIConfig`):**
-- `fileBufferDiskCacheEnabled` - Enable/disable disk caching for specific cloud APIs
-- `fileBufferDiskCacheMaxFileSize` - Maximum file size to cache (0 = no limit)
+**Per-Cloud Configuration (`CloudAPIConfig`):** *(Removed in 1.0.0 — disk cache is now per-folder via `SetFolderDiskCache`)*
+- ~~`fileBufferDiskCacheEnabled`~~ - Removed in 1.0.0
+- ~~`fileBufferDiskCacheMaxFileSize`~~ - Removed in 1.0.0
 
 #### Photo Library Integration (iOS/Mobile)
 
@@ -1403,6 +1461,7 @@ message UserLoginRequest {
   string userName = 1;
   string password = 2;
   bool synDataToCloud = 3;
+  optional ProxyInfo cloudfsProxy = 4; // Optional proxy for reaching CloudFS account server
 }
 ```
 
@@ -1823,7 +1882,8 @@ message SearchRequest {
   string searchFor = 2;
   bool forceRefresh = 3;
   bool fuzzyMatch = 4;
-  bool addResultToMountedSearchFolder = 5; // Add search results to mounted search folder
+  optional bool addResultToMountedSearchFolder = 5; // Add search results to mounted search folder
+  optional bool contentSearch = 6; // If true, also search file content (requires canContentSearch)
 }
 ```
 
@@ -3038,7 +3098,7 @@ message QRCodeScanMessage {
 public async Task Login115OpenQRCodeAsync(CancellationToken cancellationToken = default)
 {
     var callOptions = CreateAuthorizedCallOptions(cancellationToken);
-    using var call = client.APILogin115OpenQRCode(new Empty(), callOptions);
+    using var call = client.APILogin115OpenQRCode(new Login115OpenQRCodeRequest(), callOptions);
 
     try
     {
@@ -3135,7 +3195,7 @@ public void loginAliyunDriveQRCode() {
 ```python
 # 189 Cloud QR Code Login
 def login_189_qrcode():
-    responses = stub.APILogin189QRCode(Empty(), metadata=auth_metadata)
+    responses = stub.APILogin189QRCode(Login189QRCodeRequest(), metadata=auth_metadata)
 
     for message in responses:
         if message.messageType == clouddrive_pb2.SHOW_IMAGE:
@@ -3260,6 +3320,8 @@ message Login115OpenOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3271,14 +3333,20 @@ message Login115OpenOAuthRequest {
 
 Adds 115 Cloud (Open API) via QR code scanning. See [QRCode Login Process](#qrcode-login-process) for detailed usage.
 
-**Request:** `google.protobuf.Empty`
+**Request:** `Login115OpenQRCodeRequest`
+```protobuf
+message Login115OpenQRCodeRequest {
+  optional ProxyInfo apiProxy = 1;
+  optional ProxyInfo dataProxy = 2;
+}
+```
 
 **Response Stream:** `QRCodeScanMessage`
 
 **Example (C#):**
 ```csharp
 var callOptions = CreateAuthorizedCallOptions(cancellationToken);
-using var call = client.APILogin115OpenQRCode(new Empty(), callOptions);
+using var call = client.APILogin115OpenQRCode(new Login115OpenQRCodeRequest(), callOptions);
 
 await foreach (var message in call.ResponseStream.ReadAllAsync(cancellationToken))
 {
@@ -3312,6 +3380,8 @@ message LoginAliyundriveOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3358,6 +3428,8 @@ Adds AliyunDrive via QR code scanning. See [QRCode Login Process](#qrcode-login-
 ```protobuf
 message LoginAliyundriveQRCodeRequest {
   bool useOpenAPI = 1;  // Use AliyunDrive Open API
+  optional ProxyInfo apiProxy = 2;
+  optional ProxyInfo dataProxy = 3;
 }
 ```
 
@@ -3375,6 +3447,8 @@ message LoginBaiduPanOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3392,6 +3466,8 @@ message LoginOneDriveOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3409,6 +3485,8 @@ message LoginGoogleDriveOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3458,6 +3536,8 @@ message LoginXunleiOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3475,6 +3555,8 @@ message LoginXunleiOpenOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3489,8 +3571,11 @@ Adds 123 Pan using client credentials.
 **Request:** `Login123panOAuthRequest`
 ```protobuf
 message Login123panOAuthRequest {
-  string client_id = 1;
-  string client_secret = 2;
+  string refresh_token = 1;
+  string access_token = 2;
+  uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3517,7 +3602,13 @@ if (result.getSuccess()) {
 
 Adds 189 Cloud (天翼云盘) via QR code scanning. See [QRCode Login Process](#qrcode-login-process) for detailed usage.
 
-**Request:** `google.protobuf.Empty`
+**Request:** `Login189QRCodeRequest`
+```protobuf
+message Login189QRCodeRequest {
+  optional ProxyInfo apiProxy = 1;
+  optional ProxyInfo dataProxy = 2;
+}
+```
 
 **Response Stream:** `QRCodeScanMessage`
 
@@ -3534,6 +3625,8 @@ message LoginWebDavRequest {
   string userName = 2;
   string password = 3;
   bool doNotSyncToCloud = 4;
+  optional ProxyInfo apiProxy = 5;
+  optional ProxyInfo dataProxy = 6;
 }
 ```
 
@@ -3558,6 +3651,8 @@ message LoginS3Request {
   bool pathStyle = 6;               // Use path-style URLs instead of virtual-hosted style
   bool doNotSyncToCloud = 7;        // If true, do NOT sync this API config to cloud
   optional uint32 signatureVersion = 8; // S3 signature version: 2 or 4 (default 4)
+  optional ProxyInfo apiProxy = 9;      // Optional API proxy
+  optional ProxyInfo dataProxy = 10;    // Optional data proxy
 }
 ```
 
@@ -3644,6 +3739,8 @@ message LoginCloudDriveRequest {
   string token = 2;
   bool insecureTls = 3; // for self-signed certs
   bool doNotSyncToCloud = 4;
+  optional ProxyInfo apiProxy = 5;
+  optional ProxyInfo dataProxy = 6;
 }
 ```
 
@@ -3698,12 +3795,12 @@ message CloudAPIConfig {
   optional bool useHttpDownload = 13; // Use HTTP for downloads
   optional bool supportDirectLink = 14; // Supports direct link downloads
   optional bool supportDirectDownloadUrl = 15; // Supports direct download URLs (read-only)
-  optional bool fileBufferDiskCacheEnabled = 16; // Enable disk caching for this cloud API
-  optional uint64 fileBufferDiskCacheMaxFileSize = 17; // Max file size to cache (0 = no limit)
+  // fields 16, 17 removed: disk cache settings moved to per-folder (SetFolderDiskCache)
+  reserved 16, 17;
 }
 ```
 
-**New in 0.9.18:** `fileBufferDiskCacheEnabled` and `fileBufferDiskCacheMaxFileSize` allow per-cloud configuration of the file buffer disk cache.
+**Note:** Fields `fileBufferDiskCacheEnabled` (16) and `fileBufferDiskCacheMaxFileSize` (17) were removed in 1.0.0. Disk cache is now configured per-folder via `SetFolderDiskCache`.
 
 ---
 
@@ -3760,6 +3857,7 @@ message SystemSettings {
   optional uint64 startDelaySecs = 23;
   optional string fileBufferDiskCacheLocation = 24; // Root directory for cached segments
   optional uint64 fileBufferDiskCacheMaxBytes = 25; // Max bytes for disk cache; LRU eviction
+  optional ProxyInfo cloudfsProxy = 26; // Proxy for reaching CloudFS account server
 }
 ```
 
@@ -3987,6 +4085,66 @@ message SetDiskCacheEvictionStrategyRequest {
 - `SMALLEST_FIRST` (2): Evicts smallest files first to keep large files cached
 
 **New in 0.9.19**
+
+---
+
+#### SetFolderDiskCache
+
+Enables and configures disk cache rules for a specific folder.
+
+**Request:** `SetFolderDiskCacheRequest`
+```protobuf
+message SetFolderDiskCacheRequest {
+  string path = 1;
+  uint64 maxFileSize = 2;      // 0 = no limit
+  uint64 minFileSize = 3;      // 0 = no minimum
+  ExtensionFilterMode extensionFilterMode = 4;
+  repeated string extensions = 5; // without dot, lowercase (e.g. "mp4", "mkv")
+  bool enabled = 6;            // true = enable, false = explicitly disable
+}
+```
+
+**Response:** `google.protobuf.Empty`
+
+**New in 1.0.0**
+
+---
+
+#### RemoveFolderDiskCache
+
+Disables disk cache for a folder.
+
+**Request:** `FileRequest`
+
+**Response:** `google.protobuf.Empty`
+
+**New in 1.0.0**
+
+---
+
+#### ListDiskCacheFolders
+
+Lists all folders with disk cache rules.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `ListDiskCacheFoldersReply`
+```protobuf
+message ListDiskCacheFoldersReply {
+  repeated DiskCacheFolder folders = 1;
+}
+
+message DiskCacheFolder {
+  string path = 1;
+  uint64 maxFileSize = 2;
+  uint64 minFileSize = 3;
+  ExtensionFilterMode extensionFilterMode = 4;
+  repeated string extensions = 5;
+  bool enabled = 6;
+}
+```
+
+**New in 1.0.0**
 
 ---
 
@@ -6060,6 +6218,24 @@ message UserLogoutRequest {
 ```
 
 **Response:** `FileOperationResult`
+
+---
+
+#### GetServiceCapabilities
+
+Gets service capabilities (restart/update availability).
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `ServiceCapabilities`
+```protobuf
+message ServiceCapabilities {
+  bool canRestart = 1;
+  bool canUpdate = 2;
+}
+```
+
+**New in 1.0.0**
 
 ---
 

@@ -115,6 +115,26 @@
             color: var(--primary-color);
         }
 
+        .download-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .download-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
         /* Sidebar */
         .sidebar {
             position: fixed;
@@ -526,11 +546,17 @@
     <div class="header">
         <div class="header-title">
             <h1>CloudDrive2 gRPC API <span data-lang="zh-CN">开发者指南</span><span data-lang="en" class="lang-text-hidden">Developer's Guide</span></h1>
-            <span class="version-badge">v0.9.24</span>
+            <span class="version-badge">v1.0.0</span>
         </div>
-        <div class="lang-switcher">
-            <button type="button" class="lang-btn active" onclick="switchLanguage('zh-CN')" id="btn-zh">中文</button>
-            <button type="button" class="lang-btn" onclick="switchLanguage('en')" id="btn-en">English</button>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+            <a class="download-btn" id="download-md-btn" onclick="downloadMarkdown()" title="Download Markdown">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"/><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06Z"/></svg>
+                <span data-lang="zh-CN">MD</span><span data-lang="en" class="lang-text-hidden">MD</span>
+            </a>
+            <div class="lang-switcher">
+                <button type="button" class="lang-btn active" onclick="switchLanguage('zh-CN')" id="btn-zh">中文</button>
+                <button type="button" class="lang-btn" onclick="switchLanguage('en')" id="btn-en">English</button>
+            </div>
         </div>
     </div>
 
@@ -939,6 +965,19 @@ dotnet serve</code></pre>
                 console.warn('Target not found:', targetId, 'Available IDs:',
                     Array.from(document.querySelectorAll('h1, h2, h3')).map(h => h.id).filter(Boolean).slice(0, 20));
             }
+        }
+
+        // Download current language's markdown file
+        function downloadMarkdown() {
+            const filename = currentLang === 'zh-CN'
+                ? 'CloudDrive2_gRPC_API_Guide_zh-CN.md'
+                : 'CloudDrive2_gRPC_API_Guide.md';
+            const link = document.createElement('a');
+            link.href = filename;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // Initialize
