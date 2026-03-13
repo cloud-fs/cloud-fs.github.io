@@ -1,10 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 0.9.24
+版本: 1.0.0
 
 ## 目录
 
-- [0.9.24 版本新特性](#0924-版本新特性)
+- [1.0.0 版本新特性](#100-版本新特性)
 - [概述](#概述)
 - [服务定义](#服务定义)
 - [下载 Proto 文件](#下载-proto-文件)
@@ -33,52 +33,110 @@
 
 ---
 
-## 0.9.24 版本新特性
+## 1.0.0 版本新特性
 
-CloudDrive2 0.9.24 增加 S3 签名版本配置，以更好地兼容传统 S3 服务。
+CloudDrive2 1.0.0 是一个重大版本，新增按文件夹磁盘缓存控制、内容搜索、云 API 登录代理支持、服务能力查询以及本地文件夹创建功能。
 
-### S3 签名版本支持
+### 按文件夹磁盘缓存控制
 
-0.9.24 版本为现有的 S3 集成增加了可配置的 S3 签名版本支持。这允许与可能不支持签名版本 4 的老版 S3 兼容服务兼容。
+磁盘缓存设置已从按云 API 配置迁移到按文件夹粒度。`CloudAPIConfig` 上的旧字段 `fileBufferDiskCacheEnabled` 和 `fileBufferDiskCacheMaxFileSize` 已被移除（reserved 16, 17）。
 
-**更新的消息:**
+**新增 RPC:**
+- **`SetFolderDiskCache`** - 为指定文件夹启用并配置磁盘缓存规则
+- **`RemoveFolderDiskCache`** - 禁用文件夹的磁盘缓存
+- **`ListDiskCacheFolders`** - 列出所有配置了磁盘缓存规则的文件夹
+
+**新增消息:**
 ```protobuf
-message LoginS3Request {
-  string accessKeyId = 1;
-  string secretAccessKey = 2;
-  string region = 3;
-  string bucket = 4;
-  optional string endpoint = 5;
-  bool pathStyle = 6;
-  bool doNotSyncToCloud = 7;
-  optional uint32 signatureVersion = 8;  // 新增: S3 签名版本：2 或 4（默认 4）
+enum ExtensionFilterMode {
+  EXTENSION_FILTER_DISABLED = 0;
+  EXTENSION_FILTER_INCLUDE = 1; // 仅缓存列出扩展名的文件
+  EXTENSION_FILTER_EXCLUDE = 2; // 缓存除列出扩展名外的所有文件
+}
+
+message SetFolderDiskCacheRequest {
+  string path = 1;
+  uint64 maxFileSize = 2;      // 0 = 无限制
+  uint64 minFileSize = 3;      // 0 = 无最小限制
+  ExtensionFilterMode extensionFilterMode = 4;
+  repeated string extensions = 5; // 不含点号，小写（如 "mp4"、"mkv"）
+  bool enabled = 6;            // true = 启用，false = 显式禁用
+}
+
+message DiskCacheFolder {
+  string path = 1;
+  uint64 maxFileSize = 2;
+  uint64 minFileSize = 3;
+  ExtensionFilterMode extensionFilterMode = 4;
+  repeated string extensions = 5;
+  bool enabled = 6;
+}
+
+message ListDiskCacheFoldersReply {
+  repeated DiskCacheFolder folders = 1;
 }
 ```
 
-**新增字段:**
-- `signatureVersion` - 可选字段，用于指定 S3 签名版本。对于不支持 v4 签名的老版 S3 兼容服务设置为 `2`，或对于现代 AWS S3 和兼容服务设置为 `4`（默认）。
+**`CloudDriveFile` 新增字段:**
+- `fileBufferDiskCacheEnabled`（字段 77）- 是否为此文件/文件夹启用了磁盘缓存（通过祖先解析）
+- `fileBufferDiskCacheRules`（字段 78）- 此文件/文件夹的磁盘缓存规则（通过祖先解析，仅在启用时存在）
 
-**使用场景:**
-- **版本 4（默认）**: 现代 AWS S3、MinIO、Wasabi 以及大多数最新的 S3 兼容服务
-- **版本 2**: 传统 S3 服务或不支持签名 v4 的老版 S3 兼容实现
+### 内容搜索
 
-**示例:**
-```csharp
-// 需要签名 v2 的传统 S3 服务
-var request = new LoginS3Request
-{
-    AccessKeyId = "YOUR_ACCESS_KEY",
-    SecretAccessKey = "YOUR_SECRET_KEY",
-    Region = "us-east-1",
-    Bucket = "my-bucket",
-    Endpoint = "https://legacy-s3.example.com",
-    PathStyle = true,
-    SignatureVersion = 2  // 使用签名 v2 以兼容
-};
-var result = await client.APILoginS3Async(request);
+现在可以按文件内容搜索（不仅仅是文件名），前提是云端支持。
+
+**`SearchRequest` 新增字段:**
+- `contentSearch`（字段 6）- 如果为 true，同时搜索文件内容（需要云端 `canContentSearch` 支持）
+
+**`CloudDriveFile` 新增字段:**
+- `canContentSearch`（字段 79）- 云端是否支持内容搜索
+
+### 云 API 登录代理支持
+
+所有云 API 登录请求现在都支持可选的 `apiProxy` 和 `dataProxy` 字段，用于通过代理路由连接。用户登录/注册请求支持 `cloudfsProxy`，用于访问 CloudFS 账户服务器。
+
+**新增代理字段的消息:**
+- `UserLoginRequest`、`UserRegisterRequest`、`LoginWith2FARequest`、`LoginWithThirdPartyAccountRequest` - 新增 `cloudfsProxy`
+- `LoginAliyundriveOAuthRequest`、`LoginAliyundriveQRCodeRequest`、`LoginBaiduPanOAuthRequest`、`LoginOneDriveOAuthRequest`、`LoginGoogleDriveOAuthRequest`、`LoginGoogleDriveRefreshTokenRequest`、`LoginXunleiOAuthRequest`、`LoginXunleiOpenOAuthRequest`、`Login123panOAuthRequest`、`Login115OpenOAuthRequest`、`LoginWebDavRequest`、`LoginS3Request`、`LoginCloudDriveRequest` - 新增 `apiProxy` 和 `dataProxy`
+- `SystemSettings` - 新增 `cloudfsProxy`（字段 26）
+
+**变更的 RPC:**
+- `APILogin115OpenQRCode` - 现在接受 `Login115OpenQRCodeRequest` 而非 `google.protobuf.Empty`
+- `APILogin189QRCode` - 现在接受 `Login189QRCodeRequest` 而非 `google.protobuf.Empty`
+
+### 服务能力查询
+
+**新增 RPC:**
+- **`GetServiceCapabilities`** - 查询服务是否支持重启和更新
+
+```protobuf
+message ServiceCapabilities {
+  bool canRestart = 1; // 服务重启是否可用
+  bool canUpdate = 2;  // 服务更新是否可用
+}
 ```
 
-### 历史版本亮点 (0.9.22 - 0.9.23)
+### 本地文件夹创建
+
+**新增 RPC:**
+- **`LocalCreateFolder`** - 在本地文件系统创建文件夹
+
+```protobuf
+message LocalCreateFolderRequest {
+  string parentFolder = 1;
+  string folderName = 2;
+}
+message LocalCreateFolderResult {
+  bool success = 1;
+  string errorMessage = 2;
+  string createdPath = 3;
+}
+```
+
+### 历史版本亮点 (0.9.22 - 0.9.24)
+
+**0.9.24:**
+- S3 签名版本配置，以更好地兼容传统 S3 服务
 
 **0.9.23:**
 - 支持从 115 Open 和阿里云盘快速复制到 123 云盘
@@ -181,9 +239,9 @@ var result = await client.APILoginS3Async(minioRequest);
 - `fileBufferDiskCacheLocation` - 缓存分段的根目录
 - `fileBufferDiskCacheMaxBytes` - 磁盘缓存允许的最大字节数
 
-**每云配置 (`CloudAPIConfig`):**
-- `fileBufferDiskCacheEnabled` - 为特定云 API 启用/禁用磁盘缓存
-- `fileBufferDiskCacheMaxFileSize` - 最大缓存文件大小（0 = 无限制）
+**每云配置 (`CloudAPIConfig`):** *（已在 1.0.0 中移除 — 磁盘缓存现在通过 `SetFolderDiskCache` 按文件夹配置）*
+- ~~`fileBufferDiskCacheEnabled`~~ - 已在 1.0.0 中移除
+- ~~`fileBufferDiskCacheMaxFileSize`~~ - 已在 1.0.0 中移除
 
 #### 照片库集成（iOS/移动端）
 
@@ -1406,6 +1464,7 @@ message UserLoginRequest {
   string userName = 1;
   string password = 2;
   bool synDataToCloud = 3;
+  optional ProxyInfo cloudfsProxy = 4; // 可选代理，用于访问 CloudFS 账户服务器
 }
 ```
 
@@ -1826,7 +1885,8 @@ message SearchRequest {
   string searchFor = 2;
   bool forceRefresh = 3;
   bool fuzzyMatch = 4;
-  bool addResultToMountedSearchFolder = 5; // 将搜索结果添加到已挂载的搜索文件夹
+  optional bool addResultToMountedSearchFolder = 5; // 将搜索结果添加到已挂载的搜索文件夹
+  optional bool contentSearch = 6; // 如果为 true，同时搜索文件内容（需要 canContentSearch）
 }
 ```
 
@@ -3262,6 +3322,8 @@ message Login115OpenOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3273,14 +3335,20 @@ message Login115OpenOAuthRequest {
 
 通过扫描二维码添加 115 云盘 (Open API)。详见 [二维码登录流程](#二维码登录流程)。
 
-**请求:** `google.protobuf.Empty`
+**请求:** `Login115OpenQRCodeRequest`
+```protobuf
+message Login115OpenQRCodeRequest {
+  optional ProxyInfo apiProxy = 1;
+  optional ProxyInfo dataProxy = 2;
+}
+```
 
 **响应流:** `QRCodeScanMessage`
 
 **示例 (C#):**
 ```csharp
 var callOptions = CreateAuthorizedCallOptions(cancellationToken);
-using var call = client.APILogin115OpenQRCode(new Empty(), callOptions);
+using var call = client.APILogin115OpenQRCode(new Login115OpenQRCodeRequest(), callOptions);
 
 await foreach (var message in call.ResponseStream.ReadAllAsync(cancellationToken))
 {
@@ -3314,6 +3382,8 @@ message LoginAliyundriveOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3360,6 +3430,8 @@ if (result.Success)
 ```protobuf
 message LoginAliyundriveQRCodeRequest {
   bool useOpenAPI = 1;  // 使用阿里云盘 Open API
+  optional ProxyInfo apiProxy = 2;
+  optional ProxyInfo dataProxy = 3;
 }
 ```
 
@@ -3377,6 +3449,8 @@ message LoginBaiduPanOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3394,6 +3468,8 @@ message LoginOneDriveOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3411,6 +3487,8 @@ message LoginGoogleDriveOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3428,6 +3506,8 @@ message LoginGoogleDriveRefreshTokenRequest {
   string client_id = 1;
   string client_secret = 2;
   string refresh_token = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3460,6 +3540,8 @@ message LoginXunleiOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3477,6 +3559,8 @@ message LoginXunleiOpenOAuthRequest {
   string refresh_token = 1;
   string access_token = 2;
   uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3491,8 +3575,11 @@ message LoginXunleiOpenOAuthRequest {
 **请求:** `Login123panOAuthRequest`
 ```protobuf
 message Login123panOAuthRequest {
-  string client_id = 1;
-  string client_secret = 2;
+  string refresh_token = 1;
+  string access_token = 2;
+  uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -3519,7 +3606,13 @@ if (result.getSuccess()) {
 
 通过扫描二维码添加 189 云盘 (天翼云盘)。详见 [二维码登录流程](#二维码登录流程)。
 
-**请求:** `google.protobuf.Empty`
+**请求:** `Login189QRCodeRequest`
+```protobuf
+message Login189QRCodeRequest {
+  optional ProxyInfo apiProxy = 1;
+  optional ProxyInfo dataProxy = 2;
+}
+```
 
 **响应流:** `QRCodeScanMessage`
 
@@ -3536,6 +3629,8 @@ message LoginWebDavRequest {
   string userName = 2;
   string password = 3;
   bool doNotSyncToCloud = 4;
+  optional ProxyInfo apiProxy = 5;
+  optional ProxyInfo dataProxy = 6;
 }
 ```
 
@@ -3560,6 +3655,8 @@ message LoginS3Request {
   bool pathStyle = 6;               // 使用路径样式 URL 而非虚拟主机样式
   bool doNotSyncToCloud = 7;        // 如为 true，则不将此 API 配置同步到云端
   optional uint32 signatureVersion = 8; // S3 签名版本：2 或 4（默认 4）
+  optional ProxyInfo apiProxy = 9;
+  optional ProxyInfo dataProxy = 10;
 }
 ```
 
@@ -3646,6 +3743,8 @@ message LoginCloudDriveRequest {
   string token = 2;
   bool insecureTls = 3; // 用于自签名证书
   bool doNotSyncToCloud = 4;
+  optional ProxyInfo apiProxy = 5;
+  optional ProxyInfo dataProxy = 6;
 }
 ```
 
@@ -3700,12 +3799,12 @@ message CloudAPIConfig {
   optional bool useHttpDownload = 13; // 使用 HTTP 下载
   optional bool supportDirectLink = 14; // 支持直接链接下载
   optional bool supportDirectDownloadUrl = 15; // 支持直接下载 URL（只读）
-  optional bool fileBufferDiskCacheEnabled = 16; // 为此云 API 启用磁盘缓存
-  optional uint64 fileBufferDiskCacheMaxFileSize = 17; // 最大缓存文件大小（0 = 无限制）
+  // 字段 16, 17 已移除：磁盘缓存设置已迁移到按文件夹配置（SetFolderDiskCache）
+  reserved 16, 17;
 }
 ```
 
-**0.9.18 新增:** `fileBufferDiskCacheEnabled` 和 `fileBufferDiskCacheMaxFileSize` 允许为每个云 API 单独配置文件缓冲磁盘缓存。
+**注意:** 字段 `fileBufferDiskCacheEnabled`（16）和 `fileBufferDiskCacheMaxFileSize`（17）已在 1.0.0 中移除。磁盘缓存现在通过 `SetFolderDiskCache` 按文件夹配置。
 
 ---
 
@@ -3762,6 +3861,7 @@ message SystemSettings {
   optional uint64 startDelaySecs = 23;
   optional string fileBufferDiskCacheLocation = 24; // 缓存段的根目录
   optional uint64 fileBufferDiskCacheMaxBytes = 25; // 磁盘缓存最大字节数；LRU 淘汰
+  optional ProxyInfo cloudfsProxy = 26; // 用于访问 CloudFS 账户服务器的代理
 }
 ```
 
@@ -3989,6 +4089,66 @@ message SetDiskCacheEvictionStrategyRequest {
 - `SMALLEST_FIRST` (2): 优先移除小文件 - 保留大文件在缓存中
 
 **0.9.19 新增**
+
+---
+
+#### SetFolderDiskCache
+
+为指定文件夹启用并配置磁盘缓存规则。
+
+**请求:** `SetFolderDiskCacheRequest`
+```protobuf
+message SetFolderDiskCacheRequest {
+  string path = 1;
+  uint64 maxFileSize = 2;      // 0 = 无限制
+  uint64 minFileSize = 3;      // 0 = 无最小限制
+  ExtensionFilterMode extensionFilterMode = 4;
+  repeated string extensions = 5; // 不含点号，小写（如 "mp4"、"mkv"）
+  bool enabled = 6;            // true = 启用，false = 显式禁用
+}
+```
+
+**响应:** `google.protobuf.Empty`
+
+**1.0.0 新增**
+
+---
+
+#### RemoveFolderDiskCache
+
+禁用文件夹的磁盘缓存。
+
+**请求:** `FileRequest`
+
+**响应:** `google.protobuf.Empty`
+
+**1.0.0 新增**
+
+---
+
+#### ListDiskCacheFolders
+
+列出所有配置了磁盘缓存规则的文件夹。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `ListDiskCacheFoldersReply`
+```protobuf
+message ListDiskCacheFoldersReply {
+  repeated DiskCacheFolder folders = 1;
+}
+
+message DiskCacheFolder {
+  string path = 1;
+  uint64 maxFileSize = 2;
+  uint64 minFileSize = 3;
+  ExtensionFilterMode extensionFilterMode = 4;
+  repeated string extensions = 5;
+  bool enabled = 6;
+}
+```
+
+**1.0.0 新增**
 
 ---
 
@@ -6124,6 +6284,24 @@ message UserLogoutRequest {
 ```
 
 **响应:** `FileOperationResult`
+
+---
+
+#### GetServiceCapabilities
+
+获取服务能力（重启/更新可用性）。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `ServiceCapabilities`
+```protobuf
+message ServiceCapabilities {
+  bool canRestart = 1; // 服务重启是否可用
+  bool canUpdate = 2;  // 服务更新是否可用
+}
+```
+
+**1.0.0 新增**
 
 ---
 
