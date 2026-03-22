@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.0.0
+Version: 1.0.1
 
 ## Table of Contents
 
+- [What's New in 1.0.1](#whats-new-in-101)
 - [What's New in 1.0.0](#whats-new-in-100)
 - [Overview](#overview)
 - [Service Definition](#service-definition)
@@ -30,6 +31,22 @@ Version: 1.0.0
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.0.1
+
+### Log File Rotation Settings
+
+`SystemSettings` now supports configurable log file rotation. Four new fields control how log files are rotated and retained:
+
+**New fields on `SystemSettings`:**
+- `maxFileLogSizeBytes` (field 27) — Max size in bytes for a single log file before rotation. Not set = no limit; 0 = disable logging to file; > 0 = rotate when the file exceeds this size.
+- `maxBackupLogSizeBytes` (field 28) — Max size in bytes for a single backup log file before rotation, same semantics as above.
+- `maxFileLogFiles` (field 29) — Max number of rotated log files to keep (default: 10).
+- `maxBackupLogFiles` (field 30) — Max number of rotated backup log files to keep (default: 10).
+
+> **Important:** All 4 fields must be sent together in `SetSystemSettings`. When any field is present the server updates all 4, so omitted size fields are interpreted as "no limit" rather than "don't change".
 
 ---
 
@@ -3858,8 +3875,14 @@ message SystemSettings {
   optional string fileBufferDiskCacheLocation = 24; // Root directory for cached segments
   optional uint64 fileBufferDiskCacheMaxBytes = 25; // Max bytes for disk cache; LRU eviction
   optional ProxyInfo cloudfsProxy = 26; // Proxy for reaching CloudFS account server
+  optional uint64 maxFileLogSizeBytes = 27;   // Max log file size before rotation (None=no limit, 0=disable)
+  optional uint64 maxBackupLogSizeBytes = 28; // Max backup log file size before rotation
+  optional uint32 maxFileLogFiles = 29;       // Max rotated log files to keep (default: 10)
+  optional uint32 maxBackupLogFiles = 30;     // Max rotated backup log files to keep (default: 10)
 }
 ```
+
+**New in 1.0.1:** `maxFileLogSizeBytes`, `maxBackupLogSizeBytes`, `maxFileLogFiles`, and `maxBackupLogFiles` configure log file rotation. All 4 fields must be sent together in `SetSystemSettings`.
 
 **New in 0.9.18:** `fileBufferDiskCacheLocation` and `fileBufferDiskCacheMaxBytes` configure the global file buffer disk cache system.
 
@@ -7092,5 +7115,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2026-01-27*
+*Last Updated: 2026-03-22*
 *Copyright © 2026 CloudDrive. All rights reserved.*

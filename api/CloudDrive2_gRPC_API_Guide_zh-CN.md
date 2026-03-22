@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.0.0
+版本: 1.0.1
 
 ## 目录
 
+- [1.0.1 版本新特性](#101-版本新特性)
 - [1.0.0 版本新特性](#100-版本新特性)
 - [概述](#概述)
 - [服务定义](#服务定义)
@@ -30,6 +31,22 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.0.1 版本新特性
+
+### 日志文件轮转设置
+
+`SystemSettings` 现在支持可配置的日志文件轮转。新增四个字段用于控制日志文件的轮转和保留策略：
+
+**`SystemSettings` 新增字段:**
+- `maxFileLogSizeBytes`（字段 27）— 单个日志文件轮转前的最大字节数。未设置 = 无限制；0 = 禁用文件日志；> 0 = 文件超过此大小时轮转。
+- `maxBackupLogSizeBytes`（字段 28）— 单个备份日志文件轮转前的最大字节数，语义同上。
+- `maxFileLogFiles`（字段 29）— 保留的轮转日志文件最大数量（默认：10）。
+- `maxBackupLogFiles`（字段 30）— 保留的轮转备份日志文件最大数量（默认：10）。
+
+> **重要提示:** 在 `SetSystemSettings` 中必须同时发送所有 4 个字段。当任一字段存在时，服务器将更新全部 4 个字段，因此未设置的大小字段将被解释为"无限制"而非"不更改"。
 
 ---
 
@@ -3862,8 +3879,14 @@ message SystemSettings {
   optional string fileBufferDiskCacheLocation = 24; // 缓存段的根目录
   optional uint64 fileBufferDiskCacheMaxBytes = 25; // 磁盘缓存最大字节数；LRU 淘汰
   optional ProxyInfo cloudfsProxy = 26; // 用于访问 CloudFS 账户服务器的代理
+  optional uint64 maxFileLogSizeBytes = 27;   // 日志文件轮转前的最大大小（None=无限制，0=禁用）
+  optional uint64 maxBackupLogSizeBytes = 28; // 备份日志文件轮转前的最大大小
+  optional uint32 maxFileLogFiles = 29;       // 保留的轮转日志文件最大数量（默认：10）
+  optional uint32 maxBackupLogFiles = 30;     // 保留的轮转备份日志文件最大数量（默认：10）
 }
 ```
+
+**1.0.1 新增:** `maxFileLogSizeBytes`、`maxBackupLogSizeBytes`、`maxFileLogFiles` 和 `maxBackupLogFiles` 用于配置日志文件轮转。在 `SetSystemSettings` 中必须同时发送所有 4 个字段。
 
 **0.9.18 新增:** `fileBufferDiskCacheLocation` 和 `fileBufferDiskCacheMaxBytes` 用于配置全局文件缓冲磁盘缓存系统。
 
@@ -7158,5 +7181,5 @@ class FileManager
 
 ---
 
-*最后更新: 2026-01-27*
+*最后更新: 2026-03-22*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*

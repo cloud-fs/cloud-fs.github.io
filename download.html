@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v1.0.1)</title>
+  <title>CloudDrive - 下载(v1.0.2)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -49,11 +49,25 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v1.0.1)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v1.0.2)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <!-- Latest Version -->
       <div class="alert alert-warning" role="alert">
+        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.2"><strong>1.0.2(Web3.0.2):</strong></a>
+        <ol>
+          <li>增加日志大小和保留数量设置：设置页面日志标签下新增文件日志和备份日志的单文件最大大小及最大保留文件数设置，最大文件大小提供"无限制"、"不记录日志"、"自定义"三个选项</li>
+          <li>Web界面复制文件后不再清除选中状态，方便连续复制当前选择的文件到多个目标位置</li>
+          <li>修复一些文件夹选择器根目录无法选中的问题</li>
+          <li>修复备份列表加载失败：修复备份数据量较大时 gRPC 消息超过 4MB 默认限制导致加载失败的问题，上限调整为 64MB</li>
+          <li>修复一些从web界面上传文件页面被刷新后续传的问题</li>
+          <li>修复移动端排序菜单未保存偏好的问题</li>
+          <li>网格视图缩略图：显示所有可用缩略图，不再限制为可预览文件类型</li>
+          <li>其它bug修复和界面优化</li>
+        </ol>
+      </div>
+
+      <div class="alert alert-info" role="alert">
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.1"><strong>1.0.1(Web3.0.1):</strong></a>
         <ol>
           <li>安全加固：修复一个部署在公网的clouddrive2服务在某些情况下可能存在的安全漏洞，强烈建议所有用户升级以避免可能的信息泄露</li>
@@ -347,87 +361,6 @@
           <li>修复一些在苹果手机上操作的问题</li>
           <li>其它性能改进，bug修复和界面优化</li>
         </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.4"><strong>0.9.4(Web2.0.2.1):</strong></a>
-        <ol>
-          <li>
-            新增复制（移动）任务本地持久化，在系统重启后，无论是正在扫描还是扫描完成正在上传的复制（移动）任务都可以恢复启动前的状态继续进行
-          </li>
-          <li>修复无法通过web界面下载0字节文件的问题</li>
-          <li>修复Web2.0.1.0版本通过RefreshToken添加Google Drive可能失败的问题</li>
-          <li>修复全屏浏览照片和图片界面的文件属性按钮不工作的问题</li>
-          <li>在移动、复制操作时，会校验当前选择的文件夹是否合法，不合法的文件夹确认按钮不可点击，鼠标悬浮可显示不合法的原因</li>
-          <li>拖动文件上传和拖动文件到添加离线任务的最大文件数量从10改为1024</li>
-          <li>修复访问非本地地址的web界面时可能出现的一些复制到剪贴板会失败的问题</li>
-          <li>修复会员用户初次打开备份界面添加备份时提示需要升级用户套餐的问题</li>
-          <li>修复重启服务时会提示连接失败的问题</li>
-          <li>其它界面改进和bug修复</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.3"><strong>0.9.3(Web2.0.1.0):</strong></a>
-        <ol>
-          <li>
-            修复从某些网盘下载违规文件失败会导致下载线程一直占用不释放的问题
-          </li>
-          <li>修复一些可能导致上传任务会因为各种原因卡住的问题</li>
-          <li>重新设计的文件夹选择框，操作更简洁，界面更紧凑</li>
-          <li>修复在某些设备上点击添加或者播放按钮没反应的问题</li>
-          <li>修复添加离线下载界面的各种问题</li>
-          <li>修复在线设备上次见到时间没有按照本地时间显示的问题</li>
-          <li>修复备份界面打开显示所有状态后整个页面一直刷新的问题</li>
-          <li>修复网盘管理界面代理服务器设定，打开第二个网盘的设定时仍然显示第一个网盘设定的问题</li>
-          <li>修复在某些移动浏览器上有底部工具栏时页面显示不全的问题</li>
-          <li>修复设置页面目录缓存时间不能设置为0的问题</li>
-          <li>修复非会员用户添加备份后没反应的问题</li>
-          <li>修复用户报告的WebUI的各种问题和改进建议</li>
-          <li>其它界面改进和bug修复</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.2"><strong>0.9.2(Web2.0.0.0):</strong></a>
-        <ol>
-          <li>
-            全新设计的WebUI 2.0版，界面更美观，对移动设备支持更好，新增多项新功能，包括性能监控、瀑布流风格文件浏览器、web界面内播放视频支持加载同目录下srt和vtt格式的字幕文件等。对WebUI
-            2.0版有任何问题和建议请及时反馈，将会在后面的版本中持续改进。由于新版本WebUI框架变化较大，从旧版本升级后如果界面显示有问题请清空浏览器缓存后重新加载
-          </li>
-          <li>提高跨网盘传输无法秒传时边下载边上传的传输速度</li>
-          <li>修复WebDAV客户端上传文件对某些WebDAV Server的兼容性问题</li>
-          <li>每个Webhook请求最多能携带的文件变更通知条数从10改为100，用户也可以通过设置环境变量MAX_FILE_NOTIFIES_PER_WEBHOOK_REQUEST自己修改这个值</li>
-          <li>其它bug修复和性能改进</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.1"><strong>0.9.1(Web1.7.3.1):</strong></a>
-        <ol>
-          <li>
-            增加WebDAV服务管理功能，可以在系统设置界面打开/关闭CloudDrive2的WebDAV服务，允许/禁止以CloudDrive账号访问WebDAV以及WebDAV的根目录位置和是否只读，允许/禁止以匿名身份访问WebDAV服务以及匿名访问的根目录位置和是否只读。可以创建任意多个独立的WebDAV用户，每个用户都可以独立设置根目录位置和是否只读。注意：创建独立WebDAV用户是会员功能，月费、年费、终身和轻享终身会员可以使用，基础会员无此功能
-          </li>
-          <li>系统设置界面改版为多标签页界面，优化部分设置界面，上传下载限速可以选择MB/s或者KB/s为单位</li>
-          <li>通过合作厂商设备自动注册的用户，可以在web界面的系统状态窗口内修改账号的用户名（邮箱）和密码，方便在别的设备上使用</li>
-          <li>改进本地持久化数据库并发写入的性能，修复在极个别情况下目录缓存本地持久化数据库并发写入冲突的问题</li>
-          <li>其它性能改进和界面调整</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.0"><strong>0.9.0(Web1.7.2.1):</strong></a>
-        <ol>
-          <li>
-            增加购买115会员送CloudDrive余额功能，可在115网盘属性页点击购买115会员按钮，选择要购买的套餐，扫码或点击二维码完成购买。注意：目前115开放平台的会员推广订单实时查询接口暂未上线，此功能目前处于测试阶段，需要后台手动完成赠送CloudDrive2会员操作，请完成115会员充值后点击CloudDrive2活动页面的我已完成充值按钮，24小时内会收到赠送的余额，如24小时后仍未收到，请通过邮件联系我们
-          </li>
-          <li>取消终身会员加密文件大小限制，使用时请务必遵守各网盘相关的用户协议，CoudDrive不对因滥用加密功能导致网盘账号被封承担任何责任</li>
-          <li>通过合作厂商设备自动注册的用户，可以在web界面的系统状态窗口内修改账号的用户名（邮箱）和密码，方便在别的设备上使用</li>
-          <li>显示和下载日志文件的日志链接增加签名校验，防止未授权用户远程访问日志文件</li>
-          <li>修复百度网盘因api调整导致文件搜索报错的问题</li>
-          <li>修复一些在网络状况不好的情况下下载失败会造成读取文件超时的问题</li>
-          <li>修复在读取文件的过程中切换网络会导致读取文件超时的问题</li>
-          <li>修复非会员用户无法通过web界面将云盘文件移动或者复制到本地的问题</li>
-          <li> 修复115open和123网盘创建文件夹时，同名目录已经在第三方创建而因目录缓存未刷新导致的目录创建失败的问题</li>
-          <li>修复通过web访问文件时，在web客户端关闭后下载任务不会马上关闭的问题</li>
-          <li>webui文件属性页增加复制当前文件完整路径到剪贴板按钮</li>
-          <li>webui文件属性页在所有云盘子目录显示云盘空间信息和云盘账号信息与设置按钮</li>
-          <li>webui文件属性页云盘空间信息以条状图显示，点击条状图可强制刷新空间信息</li>
-          <li>webui文件属性页云属性改名为文件夹统计信息，增加刷新按钮，点击后可强制刷新当前文件夹的统计信息，包括总文件、总目录和总大小</li>
-          <li>webui会员计划页显示加密文件大小限制</li>
-          <li>webui会员计划页增加充值115网盘送余额按钮</li>
-          <li>其它bug修复、性能改进和界面调整</li>
-        </ol>
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases">更多历史版本</a>
               </div>
             </div>
@@ -446,7 +379,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.1/CloudDrive2Setup-X64-1.0.1.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.2/CloudDrive2Setup-X64-1.0.2.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -460,7 +393,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.1/CloudDrive2Setup-Arm64-1.0.1.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.2/CloudDrive2Setup-Arm64-1.0.2.exe"><i
                         class="fab fa-windows"></i> Windows Arm64</a></h5>
                 </div>
               </div>
@@ -481,7 +414,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.1/clouddrive-2-linux-x86_64-1.0.1.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.2/clouddrive-2-linux-x86_64-1.0.2.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -495,7 +428,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.1/clouddrive-2-linux-aarch64-1.0.1.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.2/clouddrive-2-linux-aarch64-1.0.2.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -509,7 +442,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.1/clouddrive-2-linux-armv7-1.0.1.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.2/clouddrive-2-linux-armv7-1.0.2.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -531,7 +464,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.1/clouddrive-2-macos-x86_64-1.0.1.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.2/clouddrive-2-macos-x86_64-1.0.2.tgz"><i
                         class="fab fa-apple"></i> MacOS x86_64</a></h5>
                 </div>
               </div>
@@ -545,7 +478,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.1/clouddrive-2-macos-aarch64-1.0.1.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.2/clouddrive-2-macos-aarch64-1.0.2.tgz"><i
                         class="fab fa-apple"></i> MacOS aarch64</a></h5>
                 </div>
               </div>
@@ -567,7 +500,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.1/clouddrive-2-android-universal-1.0.1-207.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.2/clouddrive-2-android-universal-1.0.2-208.apk"><i
                         class="fab fa-android"></i> Android APK</a></h5>
                 </div>
               </div>
@@ -581,7 +514,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.1/clouddrive-2-android-x86_64-1.0.1.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.2/clouddrive-2-android-x86_64-1.0.2.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -595,7 +528,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.1/clouddrive-2-android-aarch64-1.0.1.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.2/clouddrive-2-android-aarch64-1.0.2.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -609,7 +542,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.1/clouddrive-2-android-armv7-1.0.1.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.2/clouddrive-2-android-armv7-1.0.2.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
@@ -623,7 +556,7 @@
       <h2>从115网盘下载</h2>
       <div class="container text-center" style="margin-bottom: 20px;">
         <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://115cdn.com/s/swfe1h13zde?password=j7b8&">从115网盘下载</a>
+          href="https://115cdn.com/s/swfa0jv3zde?password=u862&">从115网盘下载</a>
       </div>
     </div>
     <div class="mt-4">
@@ -633,7 +566,7 @@
           href="https://www.123pan.com/s/adWkjv-nxz0h.html">从123云盘下载</a>
       </div>
     </div>
-    <div class="mt-4">
+    <div clas
       <h2>从百度网盘下载</h2>
       <div class="container text-center" style="margin-bottom: 20px;">
         <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"

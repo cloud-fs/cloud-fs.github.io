@@ -1426,6 +1426,20 @@ message SystemSettings {
   optional uint64 fileBufferDiskCacheMaxBytes = 25;
   // Proxy settings for reaching CloudFS account server (cloudfs.zhenyunpan.com)
   optional ProxyInfo cloudfsProxy = 26;
+  // Log file rotation settings.
+  // All 4 fields must be sent together in SetSystemSettings; when any
+  // field is present the server updates all 4, so omitted size fields
+  // are interpreted as "no limit" rather than "don't change".
+  //
+  // Max size in bytes for a single log file before rotation:
+  //   not set (None) = no limit (file grows indefinitely)
+  //   0              = disable logging to file
+  //   > 0            = rotate when the file exceeds this size
+  optional uint64 maxFileLogSizeBytes = 27;
+  optional uint64 maxBackupLogSizeBytes = 28;
+  // Max number of rotated log files to keep (default: 10)
+  optional uint32 maxFileLogFiles = 29;
+  optional uint32 maxBackupLogFiles = 30;
 }
 
 // Eviction strategy for disk cache
