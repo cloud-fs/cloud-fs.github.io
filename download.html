@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v1.0.3)</title>
+  <title>CloudDrive - 下载(v1.0.4)</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
@@ -49,11 +49,25 @@
   </header>
 
   <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v1.0.3)</h1>
+    <h1 class="hero-title">下载 CloudDrive(v1.0.4)</h1>
     <p class="tagline">选择适合你的版本</p>
     <div class="container">
       <!-- Latest Version -->
       <div class="alert alert-warning" role="alert">
+        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.4"><strong>1.0.4(Web3.0.4):</strong></a>
+        <ol>
+          <li>修复以点开头的文件（如 .DS_Store）无法匹配上传和备份忽略扩展名规则的问题</li>
+          <li>修复云存储代理服务器不可用时 FUSE statfs 长时间阻塞的问题，新增 15 秒超时，超时的云盘暂不计入磁盘空间统计，待恢复后会自动更新</li>
+          <li>移动复制时冲突解决对话框中显示冲突文件列表</li>
+          <li>修复备份文件过滤规则页面"添加规则"下拉菜单被裁剪的问题</li>
+          <li>修复面包屑编辑器在有自动补全候选项时按回车无法导航的问题</li>
+          <li>修复日志页面下载链接失效的问题</li>
+          <li>修复 Shift 点击范围选择未考虑当前文件过滤器的问题</li>
+          <li>其它bug修复和性能改进</li>
+        </ol>
+      </div>
+
+      <div class="alert alert-info" role="alert">
         <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.3"><strong>1.0.3(Web3.0.3):</strong></a>
         <ol>
           <li>修复对挂载盘上文件直接编辑时，截断文件大小后上传可能失败的问题</li>
@@ -166,37 +180,6 @@
         <ol>
           <li>新增下载文件的本地缓存功能：本地缓存需要在网盘设置里对每个网盘账号单独开启，默认为关闭，可以为每个网盘设置需要缓存的单个文件最大大小；在系统设置里设置可以本地缓存占用本地磁盘空间总大小，当缓存占用超过设定大小时，旧缓存将被删除掉；可以查看当前已经占用的本地缓存大小，可以彻底清除本地缓存。本地缓存是以文件哈希作为索引，所以缓存的文件可以跨目录跨用户和跨网盘（如果采用同样哈希算法）共享</li>
           <li>其它性能优化</li>
-        </ol>
-      </div>
-
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.17"><strong>0.9.17(Web2.2.3.0):</strong></a>
-        <ol>
-          <li>增加第三方账号登录功能，目前支持迅雷账号直接注册新账号并登录CloudDrive2，不需要单独用邮箱注册</li>
-          <li>增加支持调用迅雷客户端下载文件，可利用迅雷网络加速下载网盘文件（目前仅迅雷下载加速功能仅支持安装了迅雷客户端的Windows版），支持下载多个文件。web界面选中要下载的文件后点击迅雷下载按钮即可打开迅雷客户端实现高速下载，同时目前迅雷云盘已经对CloudDrive2客户端开放下载速度，目前迅雷云盘SVIP用户单线程速度为1MB/s，多线程速度可叠加</li>
-          <li>修复某些情况下从挂载盘上传文件成功后本地临时文件占用空间不立即释放，需要重启服务才会释放的问题</li>
-          <li>修复Windows版本挂载多个网络盘会失败的问题，修复Windows版卸载删除挂载盘后，网络盘符仍然显示为断开连接的盘符的问题</li>
-          <li>WebUI新增支持调用vidhub作为外部播放器，Vidhub和Infuse外部播放器支持调用同目录下的字幕文件</li>
-          <li>修复触摸屏设备无法多选文件的问题</li>
-          <li>其它性能改进，bug修复和界面优化</li>
-        </ol>
-      </div>
-
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.16"><strong>0.9.16(Web2.2.2.0):</strong></a>
-        <ol>
-          <li>备份的完整扫描规则增加同步删除目标文件选项，打开该选项后，在完整扫描期间检测到源目录不存在但在目标目录中存在的文件或文件夹时，会按照备份规则的删除规则对目标文件夹中多余的文件或文件夹执行删除操作（保留、删除、回收、移动到历史文件夹）</li>
-          <li>系统设置中增加延迟启动时间设置，在某些系统上可以设置延迟启动时间，等待依赖服务或网络、时间、磁盘等准备好后再启动clouddrive</li>
-          <li>修复网盘上的文件被从第三方删除后，因本地目录缓存没有及时更新，导致的文件下载失败，复制文件时长时间卡住，读取文件长时间无反应等问题</li>
-          <li>修复123网盘上传文件时，如果同目录下已有同名文件存在但本地未及时更新时，上传文件失败的问题</li>
-          <li>修复macos备份本地文件夹，并打开文件系统监控时，先在本地文件夹内创建一个空文件然后马上重命名，会导致备份失败的问题</li>
-          <li>修复OneDrive在长时间运行后下载文件可能会失败的问题</li>
-          <li>修复当实时日志级别设置为trace时系统cpu占用过高的问题</li>
-          <li>上传任务列表在设置了过滤条件时显示过滤后的任务数和总任务数，修复设置过滤条件后任务列表分页的总页数不正确的问题</li>
-          <li>关于页面增加版本历史按钮，点击后会跳转到官网下载页显示完整的版本历史</li>
-          <li>WebUI修复在具有触摸屏的桌面或者笔记本电脑上无法用鼠标选择或者打开文件的问题</li>
-          <li>WebUI修复从任务管理页面切换到其它页面时间较长的问题</li>
-          <li>其它性能改进、bug修复和界面优化</li>
         </ol>
       </div>
 
@@ -367,7 +350,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.3/CloudDrive2Setup-X64-1.0.3.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.4/CloudDrive2Setup-X64-1.0.4.exe"><i
                         class="fab fa-windows"></i> Windows x64</a></h5>
                 </div>
               </div>
@@ -381,7 +364,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.3/CloudDrive2Setup-Arm64-1.0.3.exe"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.4/CloudDrive2Setup-Arm64-1.0.4.exe"><i
                         class="fab fa-windows"></i> Windows Arm64</a></h5>
                 </div>
               </div>
@@ -402,7 +385,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.3/clouddrive-2-linux-x86_64-1.0.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.4/clouddrive-2-linux-x86_64-1.0.4.tgz"><i
                         class="fab fa-linux"></i> Linux x86_64</a></h5>
                 </div>
               </div>
@@ -416,7 +399,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.3/clouddrive-2-linux-aarch64-1.0.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.4/clouddrive-2-linux-aarch64-1.0.4.tgz"><i
                         class="fab fa-linux"></i> Linux aarch64</a></h5>
                 </div>
               </div>
@@ -430,7 +413,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.3/clouddrive-2-linux-armv7-1.0.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.4/clouddrive-2-linux-armv7-1.0.4.tgz"><i
                         class="fab fa-linux"></i> Linux armv7</a></h5>
                 </div>
               </div>
@@ -452,7 +435,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.3/clouddrive-2-macos-x86_64-1.0.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.4/clouddrive-2-macos-x86_64-1.0.4.tgz"><i
                         class="fab fa-apple"></i> MacOS x86_64</a></h5>
                 </div>
               </div>
@@ -466,7 +449,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.3/clouddrive-2-macos-aarch64-1.0.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.4/clouddrive-2-macos-aarch64-1.0.4.tgz"><i
                         class="fab fa-apple"></i> MacOS aarch64</a></h5>
                 </div>
               </div>
@@ -488,7 +471,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.3/clouddrive-2-android-universal-1.0.3-209.apk"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.4/clouddrive-2-android-universal-1.0.4-210.apk"><i
                         class="fab fa-android"></i> Android APK</a></h5>
                 </div>
               </div>
@@ -502,7 +485,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.3/clouddrive-2-android-x86_64-1.0.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.4/clouddrive-2-android-x86_64-1.0.4.tgz"><i
                         class="fab fa-android"></i> Android x86_64</a></h5>
                 </div>
               </div>
@@ -516,7 +499,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.3/clouddrive-2-android-aarch64-1.0.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.4/clouddrive-2-android-aarch64-1.0.4.tgz"><i
                         class="fab fa-android"></i> Android aarch64</a></h5>
                 </div>
               </div>
@@ -530,7 +513,7 @@
               <div class="row align-items-center">
                 <div class="col-8">
                   <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.3/clouddrive-2-android-armv7-1.0.3.tgz"><i
+                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.4/clouddrive-2-android-armv7-1.0.4.tgz"><i
                         class="fab fa-android"></i> Android armv7</a></h5>
                 </div>
               </div>
@@ -544,7 +527,7 @@
       <h2>从115网盘下载</h2>
       <div class="container text-center" style="margin-bottom: 20px;">
         <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://115cdn.com/s/swfgpdr3zde?password=yd08&">从115网盘下载</a>
+          href="https://115cdn.com/s/swftouj3zde?password=j0a4&">从115网盘下载</a>
       </div>
     </div>
     <div class="mt-4">
