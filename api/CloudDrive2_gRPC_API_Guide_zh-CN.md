@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.0.1
+版本: 1.0.5
 
 ## 目录
 
+- [1.0.5 版本新特性](#105-版本新特性)
 - [1.0.1 版本新特性](#101-版本新特性)
 - [1.0.0 版本新特性](#100-版本新特性)
 - [概述](#概述)
@@ -31,6 +32,32 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.0.5 版本新特性
+
+### 设备电源类型
+
+新增 `DevicePowerType` 枚举，用于描述宿主设备的电源和存储特性。通过 `GetSystemInfo` 在 `CloudDriveSystemInfo` 消息中暴露。
+
+**新增枚举:**
+```protobuf
+enum DevicePowerType {
+  // 桌面/服务器：持续供电，快速存储 — 无限制（默认）
+  DESKTOP = 0;
+  // 电视机/机顶盒：持续供电，慢速闪存存储
+  // → 本地缓存禁用，Web UI 应隐藏缓存相关功能
+  SLOW_STORAGE = 1;
+  // 手机/平板：电池供电，快速存储
+  // → Web UI 应在电池模式下提供省电选项
+  BATTERY = 2;
+}
+```
+
+**`CloudDriveSystemInfo` 新增字段:**
+- `devicePowerType`（字段 6）— 设备电源和存储配置。参见 `DevicePowerType` 枚举。
+- `diskCacheDisabled`（字段 7）— 当目录缓存持久化和磁盘缓冲区被强制禁用时为 `true`（由平台配置或 `SLOW_STORAGE` 设备类型决定）。
 
 ---
 
@@ -1419,6 +1446,11 @@ message CloudDriveSystemInfo {
   bool SystemReady = 3;
   optional string SystemMessage = 4;
   optional bool hasError = 5;
+  // 设备电源和存储配置，参见 DevicePowerType
+  DevicePowerType devicePowerType = 6;
+  // 当目录缓存持久化和磁盘缓冲区被强制禁用时为 true
+  //（由平台配置或 SLOW_STORAGE 设备类型决定）
+  optional bool diskCacheDisabled = 7;
 }
 ```
 
@@ -7181,5 +7213,5 @@ class FileManager
 
 ---
 
-*最后更新: 2026-03-22*
+*最后更新: 2026-04-12*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*
