@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.0.1
+Version: 1.0.5
 
 ## Table of Contents
 
+- [What's New in 1.0.5](#whats-new-in-105)
 - [What's New in 1.0.1](#whats-new-in-101)
 - [What's New in 1.0.0](#whats-new-in-100)
 - [Overview](#overview)
@@ -31,6 +32,32 @@ Version: 1.0.1
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.0.5
+
+### Device Power Type
+
+A new `DevicePowerType` enum has been added to describe the power and storage characteristics of the host device. This is exposed via `GetSystemInfo` in the `CloudDriveSystemInfo` message.
+
+**New Enum:**
+```protobuf
+enum DevicePowerType {
+  // Desktop/server: constant power, fast storage — no restrictions (default)
+  DESKTOP = 0;
+  // TV set / set-top box: constant power, slow flash storage
+  // → local caches disabled, web UI should hide cache-heavy features
+  SLOW_STORAGE = 1;
+  // Phone / tablet: battery-powered, fast storage
+  // → web UI should offer power-saving options when on battery
+  BATTERY = 2;
+}
+```
+
+**New fields on `CloudDriveSystemInfo`:**
+- `devicePowerType` (field 6) — Device power and storage profile. See `DevicePowerType` enum.
+- `diskCacheDisabled` (field 7) — `true` when directory cache persistence and disk buffer are force-disabled (by platform config or `SLOW_STORAGE` device type).
 
 ---
 
@@ -1416,6 +1443,11 @@ message CloudDriveSystemInfo {
   bool SystemReady = 3;
   optional string SystemMessage = 4;
   optional bool hasError = 5;
+  // device power and storage profile, see DevicePowerType
+  DevicePowerType devicePowerType = 6;
+  // true when dir cache persistence and disk buffer are force-disabled
+  // (by platform config or SLOW_STORAGE device type)
+  optional bool diskCacheDisabled = 7;
 }
 ```
 
@@ -7115,5 +7147,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2026-03-22*
+*Last Updated: 2026-04-12*
 *Copyright © 2026 CloudDrive. All rights reserved.*
