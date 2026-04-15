@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.0.5
+Version: 1.0.6
 
 ## Table of Contents
 
+- [What's New in 1.0.6](#whats-new-in-106)
 - [What's New in 1.0.5](#whats-new-in-105)
 - [What's New in 1.0.1](#whats-new-in-101)
 - [What's New in 1.0.0](#whats-new-in-100)
@@ -32,6 +33,85 @@ Version: 1.0.5
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.0.6
+
+### Network File System Support (SFTP / FTP / SMB)
+
+CloudDrive2 1.0.6 adds support for three network file system protocols. Each has a dedicated login RPC and request message.
+
+**New RPCs:**
+- **`APILoginSftp`** — Add an SFTP server. Supports password and private-key authentication.
+- **`APILoginFtp`** — Add an FTP/FTPS server. Set `useTls = true` for FTPS.
+- **`APILoginSmb`** — Add an SMB/CIFS share.
+- **`DiscoverSmbServers`** — Discover SMB servers on the local network (returns `DiscoverSmbServersResult`).
+- **`DiscoverSmbShares`** — List shares on a given SMB server (returns `DiscoverSmbSharesResult`).
+
+**New Messages:**
+```protobuf
+message LoginSftpRequest {
+  string host = 1;
+  uint32 port = 2;                    // default 22
+  string userName = 3;
+  string password = 4;                // password authentication
+  optional string privateKey = 5;     // PEM-encoded private key
+  optional string passphrase = 6;     // passphrase for encrypted keys
+  optional string rootPath = 7;       // remote root directory (default "/")
+  bool doNotSyncToCloud = 8;
+  optional ProxyInfo apiProxy = 9;
+  optional ProxyInfo dataProxy = 10;
+}
+
+message LoginFtpRequest {
+  string host = 1;
+  uint32 port = 2;                    // default 21
+  string userName = 3;
+  string password = 4;
+  bool useTls = 5;                    // enable FTPS (TLS)
+  optional string rootPath = 6;       // remote root directory (default "/")
+  bool doNotSyncToCloud = 7;
+  optional ProxyInfo apiProxy = 8;
+  optional ProxyInfo dataProxy = 9;
+}
+
+message LoginSmbRequest {
+  string server = 1;                  // SMB server hostname or IP
+  string share = 2;                   // share name (e.g. "SharedDocs")
+  uint32 port = 3;                    // default 445
+  string userName = 4;
+  string password = 5;
+  optional string workgroup = 6;      // domain/workgroup
+  optional string rootPath = 7;       // path within share (default "/")
+  bool doNotSyncToCloud = 8;
+  optional ProxyInfo apiProxy = 9;
+  optional ProxyInfo dataProxy = 10;
+}
+
+message SmbServerInfo {
+  string name = 1;                    // server name (e.g. "MINIPC-Y10")
+  string address = 2;                 // IP address or hostname
+}
+message DiscoverSmbServersResult {
+  repeated SmbServerInfo servers = 1;
+}
+
+message DiscoverSmbSharesRequest {
+  string server = 1;
+  uint32 port = 2;                    // default 445
+  string userName = 3;
+  string password = 4;
+  optional string workgroup = 5;
+}
+message DiscoverSmbSharesResult {
+  repeated string shareNames = 1;
+}
+```
+
+### Backup: Skip Initial Scan
+
+A new optional field `dontStartScanAfterAdd` (field 15) has been added to the `Backup` message. When set to `true`, adding a backup will not immediately trigger a full scan. The default behavior (unset or `false`) remains unchanged — a full scan starts immediately after the backup is added.
 
 ---
 
@@ -3797,6 +3877,120 @@ message LoginCloudDriveRequest {
 
 ---
 
+#### APILoginSftp
+
+Adds an SFTP server. Supports password and private-key authentication.
+
+**Request:** `LoginSftpRequest`
+```protobuf
+message LoginSftpRequest {
+  string host = 1;
+  uint32 port = 2;                    // default 22
+  string userName = 3;
+  string password = 4;
+  optional string privateKey = 5;     // PEM-encoded private key
+  optional string passphrase = 6;     // passphrase for encrypted keys
+  optional string rootPath = 7;       // remote root directory (default "/")
+  bool doNotSyncToCloud = 8;
+  optional ProxyInfo apiProxy = 9;
+  optional ProxyInfo dataProxy = 10;
+}
+```
+
+**Response:** `APILoginResult`
+
+---
+
+#### APILoginFtp
+
+Adds an FTP/FTPS server. Set `useTls = true` for FTPS.
+
+**Request:** `LoginFtpRequest`
+```protobuf
+message LoginFtpRequest {
+  string host = 1;
+  uint32 port = 2;                    // default 21
+  string userName = 3;
+  string password = 4;
+  bool useTls = 5;                    // enable FTPS (TLS)
+  optional string rootPath = 6;       // remote root directory (default "/")
+  bool doNotSyncToCloud = 7;
+  optional ProxyInfo apiProxy = 8;
+  optional ProxyInfo dataProxy = 9;
+}
+```
+
+**Response:** `APILoginResult`
+
+---
+
+#### APILoginSmb
+
+Adds an SMB/CIFS share.
+
+**Request:** `LoginSmbRequest`
+```protobuf
+message LoginSmbRequest {
+  string server = 1;                  // SMB server hostname or IP
+  string share = 2;                   // share name (e.g. "SharedDocs")
+  uint32 port = 3;                    // default 445
+  string userName = 4;
+  string password = 5;
+  optional string workgroup = 6;      // domain/workgroup
+  optional string rootPath = 7;       // path within share (default "/")
+  bool doNotSyncToCloud = 8;
+  optional ProxyInfo apiProxy = 9;
+  optional ProxyInfo dataProxy = 10;
+}
+```
+
+**Response:** `APILoginResult`
+
+---
+
+#### DiscoverSmbServers
+
+Discovers SMB servers on the local network.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `DiscoverSmbServersResult`
+```protobuf
+message SmbServerInfo {
+  string name = 1;                    // server name (e.g. "MINIPC-Y10")
+  string address = 2;                 // IP address or hostname
+}
+message DiscoverSmbServersResult {
+  repeated SmbServerInfo servers = 1;
+}
+```
+
+---
+
+#### DiscoverSmbShares
+
+Lists shares on a given SMB server.
+
+**Request:** `DiscoverSmbSharesRequest`
+```protobuf
+message DiscoverSmbSharesRequest {
+  string server = 1;
+  uint32 port = 2;                    // default 445
+  string userName = 3;
+  string password = 4;
+  optional string workgroup = 5;
+}
+```
+
+**Response:** `DiscoverSmbSharesResult`
+```protobuf
+message DiscoverSmbSharesResult {
+  repeated string shareNames = 1;
+}
+```
+
+---
+
 #### RemoveCloudAPI
 
 Removes a cloud API connection.
@@ -4803,10 +4997,13 @@ message Backup {
   repeated TimeSchedule timeSchedules = 10;
   bool isTimeSchedulesEnabled = 11;
     bool syncDeleteFromDest = 14; // mirror destination deletions during full scan
+    optional bool dontStartScanAfterAdd = 15; // if true, don't auto-start full scan after adding backup
 }
 ```
 
 Enable `syncDeleteFromDest` to have CloudDrive prune destination files or folders that no longer exist at the source during a full walk-through. The server applies the existing delete rule (keep, recycle, move to history, etc.), which lets you implement mirror-style backups entirely via the API.
+
+Set `dontStartScanAfterAdd` to `true` to skip the automatic full scan when a new backup is added. By default (unset or `false`), a full scan starts immediately after the backup is created.
 
 **Response:** `google.protobuf.Empty`
 
