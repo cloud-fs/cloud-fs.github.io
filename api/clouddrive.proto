@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.0.5";
+option (version) = "1.0.6";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -292,6 +292,16 @@ service CloudDriveFileSrv {
   rpc APIAddLocalFolder(AddLocalFolderRequest) returns (APILoginResult) {}
   // add remote clouddrive
   rpc APILoginCloudDrive(LoginCloudDriveRequest) returns (APILoginResult) {}
+  // add SFTP server
+  rpc APILoginSftp(LoginSftpRequest) returns (APILoginResult) {}
+  // add FTP/FTPS server
+  rpc APILoginFtp(LoginFtpRequest) returns (APILoginResult) {}
+  // add SMB/CIFS share
+  rpc APILoginSmb(LoginSmbRequest) returns (APILoginResult) {}
+  // discover SMB servers on the local network
+  rpc DiscoverSmbServers(google.protobuf.Empty) returns (DiscoverSmbServersResult) {}
+  // discover SMB shares on a server
+  rpc DiscoverSmbShares(DiscoverSmbSharesRequest) returns (DiscoverSmbSharesResult) {}
   // remove a cloud
   rpc RemoveCloudAPI(RemoveCloudAPIRequest) returns (FileOperationResult) {}
   // get all cloud apis
@@ -1323,6 +1333,58 @@ message LoginCloudDriveRequest {
   optional ProxyInfo apiProxy = 5;
   optional ProxyInfo dataProxy = 6;
 }
+message LoginSftpRequest {
+  string host = 1;
+  uint32 port = 2; // default 22
+  string userName = 3;
+  string password = 4; // password authentication
+  optional string privateKey = 5;     // PEM-encoded private key for key-based auth
+  optional string passphrase = 6;     // passphrase for encrypted private keys
+  optional string rootPath = 7;       // remote root directory (default: "/")
+  bool doNotSyncToCloud = 8;
+  optional ProxyInfo apiProxy = 9;
+  optional ProxyInfo dataProxy = 10;
+}
+message LoginFtpRequest {
+  string host = 1;
+  uint32 port = 2; // default 21
+  string userName = 3;
+  string password = 4;
+  bool useTls = 5; // enable FTPS (TLS)
+  optional string rootPath = 6;       // remote root directory (default: "/")
+  bool doNotSyncToCloud = 7;
+  optional ProxyInfo apiProxy = 8;
+  optional ProxyInfo dataProxy = 9;
+}
+message LoginSmbRequest {
+  string server = 1; // SMB server hostname or IP
+  string share = 2; // share name (e.g., "SharedDocs")
+  uint32 port = 3; // default 445
+  string userName = 4;
+  string password = 5;
+  optional string workgroup = 6;      // domain/workgroup
+  optional string rootPath = 7;       // path within share (default: "/")
+  bool doNotSyncToCloud = 8;
+  optional ProxyInfo apiProxy = 9;
+  optional ProxyInfo dataProxy = 10;
+}
+message SmbServerInfo {
+  string name = 1; // server name (e.g., "MINIPC-Y10")
+  string address = 2; // IP address or hostname
+}
+message DiscoverSmbServersResult {
+  repeated SmbServerInfo servers = 1;
+}
+message DiscoverSmbSharesRequest {
+  string server = 1;
+  uint32 port = 2; // default 445
+  string userName = 3;
+  string password = 4;
+  optional string workgroup = 5;
+}
+message DiscoverSmbSharesResult {
+  repeated string shareNames = 1;
+}
 message RemoveCloudAPIRequest {
   string cloudName = 1;
   string userName = 2;
@@ -1822,6 +1884,7 @@ message Backup {
   repeated TimeSchedule timeSchedules = 10;
   bool isTimeSchedulesEnabled = 11;
   bool syncDeleteFromDest = 14; // Delete files/folders from destination that don't exist in source while walking through
+  optional bool dontStartScanAfterAdd = 15; // If set to true, don't auto start full scan after backup is added. Default (false/unset) scans immediately.
 }
 message BackupStatus {
   enum Status {

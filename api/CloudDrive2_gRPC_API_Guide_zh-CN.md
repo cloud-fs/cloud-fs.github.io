@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.0.5
+版本: 1.0.6
 
 ## 目录
 
+- [1.0.6 版本新特性](#106-版本新特性)
 - [1.0.5 版本新特性](#105-版本新特性)
 - [1.0.1 版本新特性](#101-版本新特性)
 - [1.0.0 版本新特性](#100-版本新特性)
@@ -32,6 +33,85 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.0.6 版本新特性
+
+### 网络文件系统支持（SFTP / FTP / SMB）
+
+CloudDrive2 1.0.6 新增三种网络文件系统协议支持，每种协议都有专用的登录 RPC 和请求消息。
+
+**新增 RPC:**
+- **`APILoginSftp`** — 添加 SFTP 服务器。支持密码和私钥认证。
+- **`APILoginFtp`** — 添加 FTP/FTPS 服务器。设置 `useTls = true` 启用 FTPS。
+- **`APILoginSmb`** — 添加 SMB/CIFS 共享。
+- **`DiscoverSmbServers`** — 发现局域网内的 SMB 服务器（返回 `DiscoverSmbServersResult`）。
+- **`DiscoverSmbShares`** — 列出指定 SMB 服务器上的共享目录（返回 `DiscoverSmbSharesResult`）。
+
+**新增消息:**
+```protobuf
+message LoginSftpRequest {
+  string host = 1;
+  uint32 port = 2;                    // 默认 22
+  string userName = 3;
+  string password = 4;                // 密码认证
+  optional string privateKey = 5;     // PEM 编码的私钥
+  optional string passphrase = 6;     // 加密私钥的密码短语
+  optional string rootPath = 7;       // 远程根目录（默认 "/"）
+  bool doNotSyncToCloud = 8;
+  optional ProxyInfo apiProxy = 9;
+  optional ProxyInfo dataProxy = 10;
+}
+
+message LoginFtpRequest {
+  string host = 1;
+  uint32 port = 2;                    // 默认 21
+  string userName = 3;
+  string password = 4;
+  bool useTls = 5;                    // 启用 FTPS (TLS)
+  optional string rootPath = 6;       // 远程根目录（默认 "/"）
+  bool doNotSyncToCloud = 7;
+  optional ProxyInfo apiProxy = 8;
+  optional ProxyInfo dataProxy = 9;
+}
+
+message LoginSmbRequest {
+  string server = 1;                  // SMB 服务器主机名或 IP
+  string share = 2;                   // 共享名（如 "SharedDocs"）
+  uint32 port = 3;                    // 默认 445
+  string userName = 4;
+  string password = 5;
+  optional string workgroup = 6;      // 域/工作组
+  optional string rootPath = 7;       // 共享内路径（默认 "/"）
+  bool doNotSyncToCloud = 8;
+  optional ProxyInfo apiProxy = 9;
+  optional ProxyInfo dataProxy = 10;
+}
+
+message SmbServerInfo {
+  string name = 1;                    // 服务器名称（如 "MINIPC-Y10"）
+  string address = 2;                 // IP 地址或主机名
+}
+message DiscoverSmbServersResult {
+  repeated SmbServerInfo servers = 1;
+}
+
+message DiscoverSmbSharesRequest {
+  string server = 1;
+  uint32 port = 2;                    // 默认 445
+  string userName = 3;
+  string password = 4;
+  optional string workgroup = 5;
+}
+message DiscoverSmbSharesResult {
+  repeated string shareNames = 1;
+}
+```
+
+### 备份：跳过初始扫描
+
+`Backup` 消息新增可选字段 `dontStartScanAfterAdd`（字段 15）。设置为 `true` 时，添加备份后不会立即触发全量扫描。默认行为（未设置或 `false`）保持不变 — 添加备份后立即开始全量扫描。
 
 ---
 
@@ -3801,6 +3881,120 @@ message LoginCloudDriveRequest {
 
 ---
 
+#### APILoginSftp
+
+添加 SFTP 服务器。支持密码和私钥认证。
+
+**请求:** `LoginSftpRequest`
+```protobuf
+message LoginSftpRequest {
+  string host = 1;
+  uint32 port = 2;                    // 默认 22
+  string userName = 3;
+  string password = 4;
+  optional string privateKey = 5;     // PEM 编码的私钥
+  optional string passphrase = 6;     // 加密私钥的密码短语
+  optional string rootPath = 7;       // 远程根目录（默认 "/"）
+  bool doNotSyncToCloud = 8;
+  optional ProxyInfo apiProxy = 9;
+  optional ProxyInfo dataProxy = 10;
+}
+```
+
+**响应:** `APILoginResult`
+
+---
+
+#### APILoginFtp
+
+添加 FTP/FTPS 服务器。设置 `useTls = true` 启用 FTPS。
+
+**请求:** `LoginFtpRequest`
+```protobuf
+message LoginFtpRequest {
+  string host = 1;
+  uint32 port = 2;                    // 默认 21
+  string userName = 3;
+  string password = 4;
+  bool useTls = 5;                    // 启用 FTPS (TLS)
+  optional string rootPath = 6;       // 远程根目录（默认 "/"）
+  bool doNotSyncToCloud = 7;
+  optional ProxyInfo apiProxy = 8;
+  optional ProxyInfo dataProxy = 9;
+}
+```
+
+**响应:** `APILoginResult`
+
+---
+
+#### APILoginSmb
+
+添加 SMB/CIFS 共享。
+
+**请求:** `LoginSmbRequest`
+```protobuf
+message LoginSmbRequest {
+  string server = 1;                  // SMB 服务器主机名或 IP
+  string share = 2;                   // 共享名（如 "SharedDocs"）
+  uint32 port = 3;                    // 默认 445
+  string userName = 4;
+  string password = 5;
+  optional string workgroup = 6;      // 域/工作组
+  optional string rootPath = 7;       // 共享内路径（默认 "/"）
+  bool doNotSyncToCloud = 8;
+  optional ProxyInfo apiProxy = 9;
+  optional ProxyInfo dataProxy = 10;
+}
+```
+
+**响应:** `APILoginResult`
+
+---
+
+#### DiscoverSmbServers
+
+发现局域网内的 SMB 服务器。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `DiscoverSmbServersResult`
+```protobuf
+message SmbServerInfo {
+  string name = 1;                    // 服务器名称（如 "MINIPC-Y10"）
+  string address = 2;                 // IP 地址或主机名
+}
+message DiscoverSmbServersResult {
+  repeated SmbServerInfo servers = 1;
+}
+```
+
+---
+
+#### DiscoverSmbShares
+
+列出指定 SMB 服务器上的共享目录。
+
+**请求:** `DiscoverSmbSharesRequest`
+```protobuf
+message DiscoverSmbSharesRequest {
+  string server = 1;
+  uint32 port = 2;                    // 默认 445
+  string userName = 3;
+  string password = 4;
+  optional string workgroup = 5;
+}
+```
+
+**响应:** `DiscoverSmbSharesResult`
+```protobuf
+message DiscoverSmbSharesResult {
+  repeated string shareNames = 1;
+}
+```
+
+---
+
 #### RemoveCloudAPI
 
 删除云 API 连接。
@@ -4807,10 +5001,13 @@ message Backup {
   repeated TimeSchedule timeSchedules = 10;
   bool isTimeSchedulesEnabled = 11;
     bool syncDeleteFromDest = 14; // 完整扫描时同步删除目标端多余的文件
+    optional bool dontStartScanAfterAdd = 15; // 为 true 时添加备份后不自动开始全量扫描
 }
 ```
 
 启用 `syncDeleteFromDest` 后, 备份在完整扫描阶段会依据当前删除策略自动清理目标端多出的文件/文件夹, 便于实现镜像式备份。
+
+将 `dontStartScanAfterAdd` 设为 `true` 可跳过添加备份后的自动全量扫描。默认行为（未设置或 `false`）保持不变 — 添加备份后立即开始全量扫描。
 
 **响应:** `google.protobuf.Empty`
 
