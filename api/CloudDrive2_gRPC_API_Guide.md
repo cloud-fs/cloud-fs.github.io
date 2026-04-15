@@ -7344,5 +7344,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2026-04-12*
+*Last Updated: 2026-04-16*
 *Copyright © 2026 CloudDrive. All rights reserved.*
