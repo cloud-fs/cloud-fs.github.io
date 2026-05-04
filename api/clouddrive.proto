@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.0.6";
+option (version) = "1.0.7";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -141,6 +141,21 @@ service CloudDriveFileSrv {
   rpc RemoveFolderDiskCache(FileRequest) returns (google.protobuf.Empty) {}
   // list all folders with disk cache enabled
   rpc ListDiskCacheFolders(google.protobuf.Empty) returns (ListDiskCacheFoldersReply) {}
+  // client-driven cache hints: tell the server to prefetch byte ranges ahead of
+  // actual reads, with a priority that also triages concurrent work
+  rpc PrefetchFileRanges(PrefetchFileRangesRequest) returns (PrefetchFileRangesReply) {}
+  // cancel one or more hints previously registered via PrefetchFileRanges
+  rpc CancelFilePrefetch(CancelFilePrefetchRequest) returns (google.protobuf.Empty) {}
+  // Tell the server: "I won't read this file again — drop the EntryReader
+  // (download buffers + downloader threads) as soon as no open handles
+  // remain, skipping the default 2-second post-close retention window that
+  // serves rapid close/reopen patterns from mounted filesystems. Use for
+  // web thumbnail generation, one-shot metadata probes, and any client that
+  // can guarantee it won't re-open the file in the near future."
+  rpc CloseFileReader(FileRequest) returns (google.protobuf.Empty) {}
+  // diagnostic: list currently-registered prefetch hints and cumulative
+  // telemetry counters (since process start)
+  rpc GetActivePrefetchHints(google.protobuf.Empty) returns (GetActivePrefetchHintsReply) {}
   // get server stats, including cpu/mem/uptime
   rpc GetRunningInfo(google.protobuf.Empty) returns (RunInfo) {}
   // get all opened file handles
@@ -1434,6 +1449,13 @@ message CloudAPIConfig {
   optional bool supportDirectDownloadUrl = 15;
   // field 16 and 17 removed: disk cache settings moved to per-folder (SetFolderDiskCache)
   reserved 16, 17;
+  // Read-only caps reported by the server so clients can bound user input.
+  // Each is the effective per-cloud (and platform-clamped, where applicable)
+  // upper bound. Absent / zero means "no advertised cap; client should fall
+  // back to a sensible default". Ignored on SetCloudAPIConfig.
+  optional uint32 maxDownloadThreadsLimit = 18;
+  optional uint64 maxBufferPoolSizeMBLimit = 19;
+  optional double maxQueriesPerSecondLimit = 20;
 }
 message SetCloudAPIConfigRequest {
   string cloudName = 1;
@@ -1574,6 +1596,67 @@ message DiskCacheFolder {
 // List of folders with disk cache enabled
 message ListDiskCacheFoldersReply {
   repeated DiskCacheFolder folders = 1;
+}
+
+// Priority of a client-driven cache hint or a Range read.
+// HIGH is served before NORMAL, NORMAL before LOW. LOW is used for
+// best-effort prefetch (e.g. thumbnail batches) that should not
+// stall the main playback read stream.
+enum HintPriority {
+  HINT_PRIORITY_LOW = 0;
+  HINT_PRIORITY_NORMAL = 1;
+  HINT_PRIORITY_HIGH = 2;
+}
+
+message ByteRange {
+  uint64 start = 1;  // inclusive
+  uint64 length = 2; // bytes
+}
+
+message PrefetchFileRangesRequest {
+  string path = 1;
+  repeated ByteRange ranges = 2;
+  HintPriority priority = 3;
+  // 0 = server allocates and returns an id
+  uint64 hint_id = 4;
+  // 0 = server default (clamped to [1, PREFETCH_HINT_TTL_SEC])
+  uint32 ttl_seconds = 5;
+  // if true, cancel any prior hints on this path before adding
+  bool replace_existing = 6;
+}
+
+message PrefetchFileRangesReply {
+  uint64 hint_id = 1;
+  uint32 accepted_range_count = 2;
+  // ranges dropped for being out-of-bounds or already fully cached
+  uint32 rejected_range_count = 3;
+}
+
+message CancelFilePrefetchRequest {
+  string path = 1;
+  // empty = cancel all hints on that path
+  repeated uint64 hint_ids = 2;
+}
+
+message ActivePrefetchHint {
+  string path = 1;
+  uint64 hint_id = 2;
+  HintPriority priority = 3;
+  uint64 total_bytes = 4;
+  uint32 seconds_since_created = 5;
+  uint32 remaining_ttl_seconds = 6;
+  uint32 event_count = 7;
+}
+
+// Diagnostic snapshot + process-lifetime counters for the prefetch system.
+message GetActivePrefetchHintsReply {
+  repeated ActivePrefetchHint hints = 1;
+  uint64 hints_created_total = 2;
+  uint64 hints_cancelled_total = 3;
+  uint64 hints_expired_total = 4;
+  uint64 ranges_rejected_cache_hit_total = 5;
+  uint64 scale_up_events_total = 6;
+  uint64 preempt_events_total = 7;
 }
 
 message SetDirCacheTimeRequest {

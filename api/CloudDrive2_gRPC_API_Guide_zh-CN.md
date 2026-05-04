@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.0.6
+版本: 1.0.7
 
 ## 目录
 
+- [1.0.7 版本新特性](#107-版本新特性)
 - [1.0.6 版本新特性](#106-版本新特性)
 - [1.0.5 版本新特性](#105-版本新特性)
 - [1.0.1 版本新特性](#101-版本新特性)
@@ -33,6 +34,95 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.0.7 版本新特性
+
+### 客户端驱动的缓存预取提示
+
+CloudDrive2 1.0.7 新增客户端驱动的预取系统。客户端可以提前告知服务器即将读取的字节范围，让服务器在实际读取请求到达之前填充预读缓存，同时通过优先级对并发任务进行调度。该机制面向能预知访问模式的客户端（媒体播放器拖动、批量缩略图生成、压缩归档浏览器读取中心目录等）。
+
+**新增 RPC:**
+- **`PrefetchFileRanges`** — 通知服务器对文件中一组字节范围进行预取。返回 `hint_id` 用于后续取消，以及接受/拒绝计数。
+- **`CancelFilePrefetch`** — 取消之前在某路径上注册的一个或多个提示。`hint_ids` 为空时取消该路径上的全部提示。
+- **`CloseFileReader`** — 告诉服务器"我不会再读这个文件了"。当不再有打开的文件句柄时立即释放服务端 `EntryReader`（下载缓冲 + 下载线程），跳过默认 2 秒的关闭后保留窗口。用于一次性读取场景（Web 缩略图、元数据探测）。
+- **`GetActivePrefetchHints`** — 诊断接口：返回当前注册的提示快照以及进程启动以来的累计计数器。
+
+**新增枚举:**
+```protobuf
+// HIGH 优先于 NORMAL，NORMAL 优先于 LOW。LOW 用于
+// 不应阻塞主播放读流的尽力而为预取（如批量缩略图）。
+enum HintPriority {
+  HINT_PRIORITY_LOW = 0;
+  HINT_PRIORITY_NORMAL = 1;
+  HINT_PRIORITY_HIGH = 2;
+}
+```
+
+**新增消息:**
+```protobuf
+message ByteRange {
+  uint64 start = 1;  // 起始位置（含）
+  uint64 length = 2; // 字节数
+}
+
+message PrefetchFileRangesRequest {
+  string path = 1;
+  repeated ByteRange ranges = 2;
+  HintPriority priority = 3;
+  // 0 = 由服务器分配并返回 id
+  uint64 hint_id = 4;
+  // 0 = 服务器默认值（限制在 [1, PREFETCH_HINT_TTL_SEC] 范围内）
+  uint32 ttl_seconds = 5;
+  // 为 true 时，添加前先取消该路径上已存在的提示
+  bool replace_existing = 6;
+}
+
+message PrefetchFileRangesReply {
+  uint64 hint_id = 1;
+  uint32 accepted_range_count = 2;
+  // 因越界或已完全缓存而被丢弃的范围数
+  uint32 rejected_range_count = 3;
+}
+
+message CancelFilePrefetchRequest {
+  string path = 1;
+  // 为空时取消该路径上的全部提示
+  repeated uint64 hint_ids = 2;
+}
+
+message ActivePrefetchHint {
+  string path = 1;
+  uint64 hint_id = 2;
+  HintPriority priority = 3;
+  uint64 total_bytes = 4;
+  uint32 seconds_since_created = 5;
+  uint32 remaining_ttl_seconds = 6;
+  uint32 event_count = 7;
+}
+
+message GetActivePrefetchHintsReply {
+  repeated ActivePrefetchHint hints = 1;
+  uint64 hints_created_total = 2;
+  uint64 hints_cancelled_total = 3;
+  uint64 hints_expired_total = 4;
+  uint64 ranges_rejected_cache_hit_total = 5;
+  uint64 scale_up_events_total = 6;
+  uint64 preempt_events_total = 7;
+}
+```
+
+### CloudAPIConfig：服务器报告的上限
+
+`CloudAPIConfig` 新增三个只读字段。服务器会报告每个设置在当前云端（必要时还会按平台进一步收紧）的有效上限，便于客户端在配置界面中限制用户输入。字段缺失或为 0 表示"未声明上限，客户端应使用合理默认值"。这些字段在 `SetCloudAPIConfig` 中会被忽略。
+
+**`CloudAPIConfig` 新增字段:**
+- `maxDownloadThreadsLimit`（字段 18）— `maxDownloadThreads` 的有效上限。
+- `maxBufferPoolSizeMBLimit`（字段 19）— `maxBufferPoolSizeMB` 的有效上限。
+- `maxQueriesPerSecondLimit`（字段 20）— `maxQueriesPerSecond` 的有效上限。
+
+示例：115 网盘报告 `maxDownloadThreadsLimit = 2` 和 `maxQueriesPerSecondLimit = 5.0`，因此客户端 UI 会将下载线程数滑块限制在 2、QPS 滑块限制在 5.0。
 
 ---
 
@@ -4044,10 +4134,19 @@ message CloudAPIConfig {
   optional bool supportDirectDownloadUrl = 15; // 支持直接下载 URL（只读）
   // 字段 16, 17 已移除：磁盘缓存设置已迁移到按文件夹配置（SetFolderDiskCache）
   reserved 16, 17;
+  // 服务器报告的只读上限，便于客户端限制用户输入。
+  // 每个字段都是当前云端（必要时按平台进一步收紧）的有效上限。
+  // 缺失或为 0 表示"未声明上限，客户端应使用合理默认值"。
+  // 在 SetCloudAPIConfig 中会被忽略。
+  optional uint32 maxDownloadThreadsLimit = 18;
+  optional uint64 maxBufferPoolSizeMBLimit = 19;
+  optional double maxQueriesPerSecondLimit = 20;
 }
 ```
 
 **注意:** 字段 `fileBufferDiskCacheEnabled`（16）和 `fileBufferDiskCacheMaxFileSize`（17）已在 1.0.0 中移除。磁盘缓存现在通过 `SetFolderDiskCache` 按文件夹配置。
+
+**服务器报告的上限（1.0.7）：** 字段 18、19、20 是服务器报告的各对应设置的只读上限。客户端在 UI 中存在这些值时应据此限制滑块/输入。这些字段在 `SetCloudAPIConfig` 中会被忽略。
 
 ---
 
@@ -4398,6 +4497,108 @@ message DiskCacheFolder {
 ```
 
 **1.0.0 新增**
+
+---
+
+#### PrefetchFileRanges
+
+通知服务器对文件中一组字节范围进行预取，同时通过优先级对并发任务进行调度。面向能预知访问模式的客户端（媒体拖动、批量缩略图生成、压缩归档读取中心目录等）。
+
+**请求:** `PrefetchFileRangesRequest`
+```protobuf
+message ByteRange {
+  uint64 start = 1;  // 起始位置（含）
+  uint64 length = 2; // 字节数
+}
+
+message PrefetchFileRangesRequest {
+  string path = 1;
+  repeated ByteRange ranges = 2;
+  HintPriority priority = 3;
+  // 0 = 由服务器分配并返回 id
+  uint64 hint_id = 4;
+  // 0 = 服务器默认值（限制在 [1, PREFETCH_HINT_TTL_SEC] 范围内）
+  uint32 ttl_seconds = 5;
+  // 为 true 时，添加前先取消该路径上已存在的提示
+  bool replace_existing = 6;
+}
+```
+
+**响应:** `PrefetchFileRangesReply`
+```protobuf
+message PrefetchFileRangesReply {
+  uint64 hint_id = 1;
+  uint32 accepted_range_count = 2;
+  // 因越界或已完全缓存而被丢弃的范围数
+  uint32 rejected_range_count = 3;
+}
+```
+
+**1.0.7 新增**
+
+---
+
+#### CancelFilePrefetch
+
+取消之前通过 `PrefetchFileRanges` 注册的一个或多个提示。`hint_ids` 为空时取消该路径上的全部提示。
+
+**请求:** `CancelFilePrefetchRequest`
+```protobuf
+message CancelFilePrefetchRequest {
+  string path = 1;
+  // 为空时取消该路径上的全部提示
+  repeated uint64 hint_ids = 2;
+}
+```
+
+**响应:** `google.protobuf.Empty`
+
+**1.0.7 新增**
+
+---
+
+#### CloseFileReader
+
+告诉服务器"我不会再读这个文件了"。当不再有打开的文件句柄时立即释放服务端 `EntryReader`（下载缓冲 + 下载线程），跳过默认 2 秒的关闭后保留窗口（该窗口主要服务于挂载文件系统的快速关闭/重开模式）。适用于一次性读取场景（Web 缩略图生成、元数据探测）等能保证近期不会再次打开该文件的客户端。
+
+**请求:** `FileRequest`（路径）
+
+**响应:** `google.protobuf.Empty`
+
+**1.0.7 新增**
+
+---
+
+#### GetActivePrefetchHints
+
+诊断接口：返回当前注册的预取提示快照，以及进程启动以来的累计计数器。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `GetActivePrefetchHintsReply`
+```protobuf
+message ActivePrefetchHint {
+  string path = 1;
+  uint64 hint_id = 2;
+  HintPriority priority = 3;
+  uint64 total_bytes = 4;
+  uint32 seconds_since_created = 5;
+  uint32 remaining_ttl_seconds = 6;
+  uint32 event_count = 7;
+}
+
+message GetActivePrefetchHintsReply {
+  repeated ActivePrefetchHint hints = 1;
+  uint64 hints_created_total = 2;
+  uint64 hints_cancelled_total = 3;
+  uint64 hints_expired_total = 4;
+  uint64 ranges_rejected_cache_hit_total = 5;
+  uint64 scale_up_events_total = 6;
+  uint64 preempt_events_total = 7;
+}
+```
+
+**1.0.7 新增**
 
 ---
 
@@ -7410,5 +7611,5 @@ class FileManager
 
 ---
 
-*最后更新: 2026-04-16*
+*最后更新: 2026-05-04*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*
