@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.0.6
+Version: 1.0.7
 
 ## Table of Contents
 
+- [What's New in 1.0.7](#whats-new-in-107)
 - [What's New in 1.0.6](#whats-new-in-106)
 - [What's New in 1.0.5](#whats-new-in-105)
 - [What's New in 1.0.1](#whats-new-in-101)
@@ -33,6 +34,96 @@ Version: 1.0.6
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.0.7
+
+### Client-Driven Cache Prefetch Hints
+
+CloudDrive2 1.0.7 adds a client-driven prefetch system. Clients can hint at byte ranges they intend to read so the server can populate the read-ahead cache before the actual reads arrive, with a priority that also triages concurrent work. This is intended for clients with explicit knowledge of upcoming access patterns (media players seeking, batched thumbnail generation, archive browsers reading central directories, etc.).
+
+**New RPCs:**
+- **`PrefetchFileRanges`** — Tell the server to prefetch one or more byte ranges on a file. Returns a `hint_id` for later cancellation, plus accepted/rejected counts.
+- **`CancelFilePrefetch`** — Cancel one or more hints previously registered on a path. An empty `hint_ids` list cancels all hints on that path.
+- **`CloseFileReader`** — Signal "I will not read this file again." Drops the server-side `EntryReader` (download buffers + downloader threads) as soon as no open handles remain, skipping the default 2-second post-close retention window. Use for one-shot reads (web thumbnails, metadata probes).
+- **`GetActivePrefetchHints`** — Diagnostic snapshot of currently-registered hints plus cumulative process-lifetime counters.
+
+**New Enum:**
+```protobuf
+// HIGH is served before NORMAL, NORMAL before LOW. LOW is best-effort
+// prefetch (e.g. thumbnail batches) that should not stall the main
+// playback read stream.
+enum HintPriority {
+  HINT_PRIORITY_LOW = 0;
+  HINT_PRIORITY_NORMAL = 1;
+  HINT_PRIORITY_HIGH = 2;
+}
+```
+
+**New Messages:**
+```protobuf
+message ByteRange {
+  uint64 start = 1;  // inclusive
+  uint64 length = 2; // bytes
+}
+
+message PrefetchFileRangesRequest {
+  string path = 1;
+  repeated ByteRange ranges = 2;
+  HintPriority priority = 3;
+  // 0 = server allocates and returns an id
+  uint64 hint_id = 4;
+  // 0 = server default (clamped to [1, PREFETCH_HINT_TTL_SEC])
+  uint32 ttl_seconds = 5;
+  // if true, cancel any prior hints on this path before adding
+  bool replace_existing = 6;
+}
+
+message PrefetchFileRangesReply {
+  uint64 hint_id = 1;
+  uint32 accepted_range_count = 2;
+  // ranges dropped for being out-of-bounds or already fully cached
+  uint32 rejected_range_count = 3;
+}
+
+message CancelFilePrefetchRequest {
+  string path = 1;
+  // empty = cancel all hints on that path
+  repeated uint64 hint_ids = 2;
+}
+
+message ActivePrefetchHint {
+  string path = 1;
+  uint64 hint_id = 2;
+  HintPriority priority = 3;
+  uint64 total_bytes = 4;
+  uint32 seconds_since_created = 5;
+  uint32 remaining_ttl_seconds = 6;
+  uint32 event_count = 7;
+}
+
+message GetActivePrefetchHintsReply {
+  repeated ActivePrefetchHint hints = 1;
+  uint64 hints_created_total = 2;
+  uint64 hints_cancelled_total = 3;
+  uint64 hints_expired_total = 4;
+  uint64 ranges_rejected_cache_hit_total = 5;
+  uint64 scale_up_events_total = 6;
+  uint64 preempt_events_total = 7;
+}
+```
+
+### CloudAPIConfig: Server-Reported Caps
+
+Three new read-only fields have been added to `CloudAPIConfig`. The server reports the effective per-cloud (and platform-clamped, where applicable) upper bound for each setting so clients can bound user input in configuration UI. Absent or zero means "no advertised cap; client should fall back to a sensible default". These fields are ignored on `SetCloudAPIConfig`.
+
+**New fields on `CloudAPIConfig`:**
+- `maxDownloadThreadsLimit` (field 18) — Effective upper bound for `maxDownloadThreads`.
+- `maxBufferPoolSizeMBLimit` (field 19) — Effective upper bound for `maxBufferPoolSizeMB`.
+- `maxQueriesPerSecondLimit` (field 20) — Effective upper bound for `maxQueriesPerSecond`.
+
+Example: 115 cloud reports `maxDownloadThreadsLimit = 2` and `maxQueriesPerSecondLimit = 5.0`, so the client UI clamps the threads slider to 2 and the QPS slider to 5.0.
 
 ---
 
@@ -4040,10 +4131,19 @@ message CloudAPIConfig {
   optional bool supportDirectDownloadUrl = 15; // Supports direct download URLs (read-only)
   // fields 16, 17 removed: disk cache settings moved to per-folder (SetFolderDiskCache)
   reserved 16, 17;
+  // Read-only caps reported by the server so clients can bound user input.
+  // Each is the effective per-cloud (and platform-clamped, where applicable)
+  // upper bound. Absent / zero means "no advertised cap; client should fall
+  // back to a sensible default". Ignored on SetCloudAPIConfig.
+  optional uint32 maxDownloadThreadsLimit = 18;
+  optional uint64 maxBufferPoolSizeMBLimit = 19;
+  optional double maxQueriesPerSecondLimit = 20;
 }
 ```
 
 **Note:** Fields `fileBufferDiskCacheEnabled` (16) and `fileBufferDiskCacheMaxFileSize` (17) were removed in 1.0.0. Disk cache is now configured per-folder via `SetFolderDiskCache`.
+
+**Server-reported caps (1.0.7):** Fields 18, 19, and 20 are read-only upper bounds reported by the server for each respective setting. Clients should clamp UI sliders/inputs to these values when present. They are ignored on `SetCloudAPIConfig`.
 
 ---
 
@@ -4394,6 +4494,108 @@ message DiskCacheFolder {
 ```
 
 **New in 1.0.0**
+
+---
+
+#### PrefetchFileRanges
+
+Tells the server to prefetch one or more byte ranges on a file, with a priority that also triages concurrent work. Use for clients with explicit knowledge of upcoming access patterns (media seeks, batched thumbnail generation, archive central directory reads, etc.).
+
+**Request:** `PrefetchFileRangesRequest`
+```protobuf
+message ByteRange {
+  uint64 start = 1;  // inclusive
+  uint64 length = 2; // bytes
+}
+
+message PrefetchFileRangesRequest {
+  string path = 1;
+  repeated ByteRange ranges = 2;
+  HintPriority priority = 3;
+  // 0 = server allocates and returns an id
+  uint64 hint_id = 4;
+  // 0 = server default (clamped to [1, PREFETCH_HINT_TTL_SEC])
+  uint32 ttl_seconds = 5;
+  // if true, cancel any prior hints on this path before adding
+  bool replace_existing = 6;
+}
+```
+
+**Response:** `PrefetchFileRangesReply`
+```protobuf
+message PrefetchFileRangesReply {
+  uint64 hint_id = 1;
+  uint32 accepted_range_count = 2;
+  // ranges dropped for being out-of-bounds or already fully cached
+  uint32 rejected_range_count = 3;
+}
+```
+
+**New in 1.0.7**
+
+---
+
+#### CancelFilePrefetch
+
+Cancels one or more hints previously registered via `PrefetchFileRanges`. An empty `hint_ids` list cancels all hints on the given path.
+
+**Request:** `CancelFilePrefetchRequest`
+```protobuf
+message CancelFilePrefetchRequest {
+  string path = 1;
+  // empty = cancel all hints on that path
+  repeated uint64 hint_ids = 2;
+}
+```
+
+**Response:** `google.protobuf.Empty`
+
+**New in 1.0.7**
+
+---
+
+#### CloseFileReader
+
+Signals "I will not read this file again." Drops the server-side `EntryReader` (download buffers + downloader threads) as soon as no open handles remain, skipping the default 2-second post-close retention window that serves rapid close/reopen patterns from mounted filesystems. Use for one-shot reads such as web thumbnail generation or metadata probes — any client that can guarantee it won't re-open the file in the near future.
+
+**Request:** `FileRequest` (path)
+
+**Response:** `google.protobuf.Empty`
+
+**New in 1.0.7**
+
+---
+
+#### GetActivePrefetchHints
+
+Diagnostic snapshot of currently-registered prefetch hints plus cumulative process-lifetime counters.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `GetActivePrefetchHintsReply`
+```protobuf
+message ActivePrefetchHint {
+  string path = 1;
+  uint64 hint_id = 2;
+  HintPriority priority = 3;
+  uint64 total_bytes = 4;
+  uint32 seconds_since_created = 5;
+  uint32 remaining_ttl_seconds = 6;
+  uint32 event_count = 7;
+}
+
+message GetActivePrefetchHintsReply {
+  repeated ActivePrefetchHint hints = 1;
+  uint64 hints_created_total = 2;
+  uint64 hints_cancelled_total = 3;
+  uint64 hints_expired_total = 4;
+  uint64 ranges_rejected_cache_hit_total = 5;
+  uint64 scale_up_events_total = 6;
+  uint64 preempt_events_total = 7;
+}
+```
+
+**New in 1.0.7**
 
 ---
 
@@ -7344,5 +7546,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2026-04-16*
+*Last Updated: 2026-05-04*
 *Copyright © 2026 CloudDrive. All rights reserved.*
