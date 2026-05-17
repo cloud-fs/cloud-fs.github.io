@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.0.7";
+option (version) = "1.0.8";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -927,6 +927,10 @@ message MountPoint {
   string permissions = 8;
   bool isMounted = 9;
   string failReason = 10;
+  // Volume label used on Windows drive-letter mounts (interpolated into the
+  // WinFSP UNC path). On non-Windows mounts this is cosmetic — the last
+  // component of mountPoint is what the user actually sees.
+  string name = 11;
 }
 message MountPointRequest { string MountPoint = 1; }
 message GetMountPointsResult { repeated MountPoint mountPoints = 1; }

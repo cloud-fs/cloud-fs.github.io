@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.0.7
+版本: 1.0.8
 
 ## 目录
 
+- [1.0.8 版本新特性](#108-版本新特性)
 - [1.0.7 版本新特性](#107-版本新特性)
 - [1.0.6 版本新特性](#106-版本新特性)
 - [1.0.5 版本新特性](#105-版本新特性)
@@ -34,6 +35,17 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.0.8 版本新特性
+
+### MountPoint：Windows 卷标
+
+`MountPoint` 消息新增 `name` 字段（字段 11）。在 Windows 盘符挂载场景下，该字段是嵌入到 WinFSP UNC 路径中的卷标。在非 Windows 挂载场景下该字段仅作展示用途 — 用户实际看到的仍是 `mountPoint` 的最后一段。
+
+**`MountPoint` 新增字段:**
+- `name`（字段 11）— Windows 盘符挂载的卷标。
 
 ---
 
@@ -2495,6 +2507,10 @@ message MountPoint {
   string permissions = 8;
   bool isMounted = 9;
   string failReason = 10;
+  // Windows 盘符挂载使用的卷标（会嵌入到 WinFSP UNC 路径中）。
+  // 在非 Windows 挂载场景下该字段仅作展示用途 —
+  // 用户实际看到的是 mountPoint 的最后一段。
+  string name = 11;
 }
 ```
 
@@ -7611,5 +7627,5 @@ class FileManager
 
 ---
 
-*最后更新: 2026-05-04*
+*最后更新: 2026-05-17*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*

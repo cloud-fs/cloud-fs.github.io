@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.0.7
+Version: 1.0.8
 
 ## Table of Contents
 
+- [What's New in 1.0.8](#whats-new-in-108)
 - [What's New in 1.0.7](#whats-new-in-107)
 - [What's New in 1.0.6](#whats-new-in-106)
 - [What's New in 1.0.5](#whats-new-in-105)
@@ -34,6 +35,17 @@ Version: 1.0.7
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.0.8
+
+### MountPoint: Windows Volume Label
+
+A new `name` field (field 11) has been added to the `MountPoint` message. On Windows drive-letter mounts this is the volume label interpolated into the WinFSP UNC path. On non-Windows mounts it is cosmetic — the last component of `mountPoint` is what the user actually sees.
+
+**New field on `MountPoint`:**
+- `name` (field 11) — Volume label for Windows drive-letter mounts.
 
 ---
 
@@ -2493,6 +2505,10 @@ message MountPoint {
   string permissions = 8;
   bool isMounted = 9;
   string failReason = 10;
+  // Volume label used on Windows drive-letter mounts (interpolated into
+  // the WinFSP UNC path). On non-Windows mounts this is cosmetic — the
+  // last component of mountPoint is what the user actually sees.
+  string name = 11;
 }
 ```
 
@@ -7546,5 +7562,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2026-05-04*
+*Last Updated: 2026-05-17*
 *Copyright © 2026 CloudDrive. All rights reserved.*
