@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.0.8
+Version: 1.0.9
 
 ## Table of Contents
 
+- [What's New in 1.0.9](#whats-new-in-109)
 - [What's New in 1.0.8](#whats-new-in-108)
 - [What's New in 1.0.7](#whats-new-in-107)
 - [What's New in 1.0.6](#whats-new-in-106)
@@ -35,6 +36,163 @@ Version: 1.0.8
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.0.9
+
+### In-App Purchase (App Store / Google Play / Meta Quest)
+
+CloudDrive2 1.0.9 introduces a full in-app-purchase flow for store-distributed builds. The server quotes the in-store price (applying any coupon/referral discount and CNY balance) and validates the resulting receipt before activating the plan.
+
+**New RPCs:**
+- **`GetStorePurchaseQuote`** — Quote the in-store price for a store product. The server applies coupon/referral and CNY balance and returns the remainder to charge in-store.
+- **`VerifyStorePurchase`** — Submit a store receipt for server-side validation and plan activation. Idempotent — re-submitting a known receipt returns `ALREADY_ACTIVE`.
+
+**New Enum:**
+```protobuf
+enum VerifyStorePurchaseStatus {
+  VERIFY_STORE_PURCHASE_SUCCESS = 0;        // newly granted/extended
+  VERIFY_STORE_PURCHASE_ALREADY_ACTIVE = 1; // idempotent re-submit / restore
+  VERIFY_STORE_PURCHASE_PENDING = 2;        // reserved (Ask-to-Buy / Google PENDING)
+}
+```
+
+**New Messages:**
+```protobuf
+message GetStorePurchaseQuoteRequest {
+  string productId = 1;            // canonical product id, e.g. "cd_app_pro"
+  optional string couponCode = 2;  // coupon or 8-char referral code
+}
+message StorePurchaseQuote {
+  string productId = 1;
+  string planId = 2;
+  double basePriceUsd = 3;         // catalog/reference price
+  double basePriceCny = 4;
+  double couponDiscountCny = 5;
+  double balanceAppliedCny = 6;    // CNY balance spent toward this purchase
+  double finalPriceCny = 7;
+  double finalPriceUsd = 8;        // charge THIS in-store (CNY remainder / 7, rounded up)
+}
+message VerifyStorePurchaseRequest {
+  string store = 1;                // "apple" | "google" | "meta"
+  string productId = 2;            // canonical product id
+  string receipt = 3;              // Apple JWS / Google purchaseToken / Meta receipt
+  optional string transactionId = 4;
+  optional bool sandbox = 5;
+  optional string couponCode = 6;  // same code used at quote time
+  optional string packageName = 7; // reserved for Google
+}
+message VerifyStorePurchaseResult {
+  VerifyStorePurchaseStatus status = 1;
+  optional AccountStatusResult accountStatus = 2; // fresh status on SUCCESS/ALREADY_ACTIVE
+  optional string pendingReason = 3;              // set when status == PENDING
+}
+```
+
+**New fields on `CloudDrivePlan` (for store-aware plan rendering):**
+- `priceUsd` (field 11) — Predefined USD price (App Store catalog price). Unset if none.
+- `originalPriceUsd` (field 12) — Predefined USD original (pre-discount) price. Unset if none.
+- `payableByBalance` (field 13) — `true` if the user's CNY balance covers this plan (the client can skip IAP and call `JoinPlan` directly).
+- `balancePriceCny` (field 14) — CNY deducted from balance if bought directly. Unset if none.
+- `storeProductId` (field 15) — The store SKU to buy for this plan (may be an upgrade SKU).
+
+### Auto-Renew Subscription Info
+
+`AccountStatusResult` now reports the user's auto-renew subscription state for store-distributed builds.
+
+**New fields on `AccountStatusResult`:**
+- `subscription` (field 11) — Present only for a store auto-renew subscription (Apple / Google / Meta). Null for Alipay or one-time purchases.
+
+**New Message:**
+```protobuf
+message SubscriptionInfo {
+  string store = 1;        // apple | google | meta — where to manage it
+  string productId = 2;    // cd_core_monthly | cd_core_yearly
+  bool autoRenew = 3;      // false after the user cancels (access stays until expiresAt)
+  bool inGracePeriod = 4;
+  string expiresAt = 5;    // next auto-charge date (auto_renew) or access-end (naive UTC string)
+}
+```
+
+### Partner Device Management & 2FA Recovery
+
+Three new RPCs let users recover access without contacting support: unbinding partner-OEM devices from their account, and disabling 2FA via an emailed recovery code when both TOTP and recovery codes are unavailable.
+
+**New RPCs:**
+- **`UnbindDevice`** *(authorized)* — Detach all partner devices currently bound to the account (e.g. lost or sold device). Requires the account password, plus TOTP when 2FA is on.
+- **`SendDisable2FAEmail`** *(public)* — Recovery flow: ask cloudfs to email a one-time disable-2FA code to the account email.
+- **`Disable2FAByEmail`** *(public)* — Recovery flow: submit the emailed disable-code and the account password to clear the 2FA setting.
+
+**New field on `AccountStatusResult`:**
+- `boundDevices` (field 10) — Partner devices this account is bound to. Empty if none. Drives the unbind UI.
+
+**New Messages:**
+```protobuf
+message BoundDevice {
+  string deviceId = 1;
+  string manufacturerId = 2;
+  string status = 3;       // ACTIVE / INACTIVE / DELETED
+  string createTime = 4;   // naive UTC datetime string
+  string partnerName = 5;  // human-readable partner name (empty if missing)
+}
+
+message SendDisable2FAEmailRequest {
+  string email = 1;
+  optional ProxyInfo cloudfsProxy = 2; // optional proxy for reaching CloudFS account server
+}
+
+message Disable2FAByEmailRequest {
+  string disable_code = 1; // UUID code from the recovery email
+  string password = 2;     // clear-text account password; MD5-hashed by the backend before send
+  optional ProxyInfo cloudfsProxy = 3;
+}
+
+message UnbindDeviceRequest {
+  string password = 1;           // clear-text account password; MD5-hashed by the backend
+  optional string totp_code = 2; // required only when 2FA is enabled
+}
+```
+
+### Signed OAuth `state` Tokens
+
+OAuth flows (Google Drive, OneDrive, Xunlei, …) now use a server-minted signed `state` token. The frontend asks `CreateOAuthState` for a short-lived token, passes it as the OAuth `state` parameter, and the callback server validates it before processing the redirect — preventing CSRF and OAuth state forgery.
+
+**New RPC:**
+- **`CreateOAuthState`** — Mint a short-lived signed OAuth `state` token (relayed to the cloudfs server).
+
+**New Messages:**
+```protobuf
+message CreateOAuthStateRequest {
+  string oauth_type = 1;          // provider key, e.g. "google_drive", "onedrive"
+  string return_url = 2;          // where tokens are delivered after the callback
+  optional string device_id = 3;  // carried through the flow for xunlei
+}
+message CreateOAuthStateResult {
+  bool success = 1;
+  string error_message = 2;
+  string state = 3;       // signed token to use as the OAuth `state` parameter
+  uint64 expires_in = 4;  // token lifetime in seconds
+}
+```
+
+### CloudAPIConfig: Multi-threaded Downloader for Copy/Upload
+
+A new optional field tells copy/upload tasks to read source bytes via the legacy multi-thread buffered downloader instead of a single long HTTP GET stream — useful when single-stream throughput is lower than the destination's write or upload speed.
+
+**New field on `CloudAPIConfig`:**
+- `useMultithreadDownloaderForCopy` (field 21) — When set, copy/upload tasks reading from this cloud use the multi-thread buffered downloader (`ENTRY_READER_MANAGER`) instead of a single HTTP stream. Applies to both hash preprocessing and upload byte streaming.
+
+### AccountPlan: Server Plan ID
+
+`AccountPlan` now carries the server plan id so clients can distinguish plan tiers without parsing the localized display name.
+
+**New field on `AccountPlan`:**
+- `planId` (field 6) — Server plan id. Examples: `"1"` = Lifetime VIP, `"4"` = Lifetime Lite. `"0"` or empty means no plan.
+
+### CopyTaskBatchRequest: Documented Key Format
+
+The doc-comment on `CopyTaskBatchRequest.taskKeys` now states the format explicitly: each key is `"{sourcePath}:{destPath}"`, built from the exact `sourcePath` and `destPath` strings returned by `GetCopyTasks` without further normalization. No schema change.
 
 ---
 
@@ -3834,6 +3992,33 @@ if (result.getSuccess()) {
 
 ---
 
+#### CreateOAuthState
+
+Mints a short-lived signed OAuth `state` token (relayed to the cloudfs server). The frontend uses the returned token as the OAuth `state` parameter; the OAuth callback server validates it before processing the redirect — preventing CSRF and OAuth state forgery.
+
+**Request:** `CreateOAuthStateRequest`
+```protobuf
+message CreateOAuthStateRequest {
+  string oauth_type = 1;          // provider key, e.g. "google_drive", "onedrive"
+  string return_url = 2;          // where tokens are delivered after the callback
+  optional string device_id = 3;  // carried through the flow for xunlei
+}
+```
+
+**Response:** `CreateOAuthStateResult`
+```protobuf
+message CreateOAuthStateResult {
+  bool success = 1;
+  string error_message = 2;
+  string state = 3;       // signed token to use as the OAuth `state` parameter
+  uint64 expires_in = 4;  // token lifetime in seconds
+}
+```
+
+**New in 1.0.9**
+
+---
+
 #### APILogin189QRCode (Server Streaming)
 
 Adds 189 Cloud (天翼云盘) via QR code scanning. See [QRCode Login Process](#qrcode-login-process) for detailed usage.
@@ -4154,12 +4339,20 @@ message CloudAPIConfig {
   optional uint32 maxDownloadThreadsLimit = 18;
   optional uint64 maxBufferPoolSizeMBLimit = 19;
   optional double maxQueriesPerSecondLimit = 20;
+  // For files from this cloud, copy/upload tasks read source bytes via the
+  // legacy multi-thread buffered downloader (ENTRY_READER_MANAGER) instead of
+  // a single long HTTP GET stream. Useful when single-stream throughput is
+  // lower than the destination write/upload speed. Applies to both hash
+  // preprocessing and upload byte streaming.
+  optional bool useMultithreadDownloaderForCopy = 21;
 }
 ```
 
 **Note:** Fields `fileBufferDiskCacheEnabled` (16) and `fileBufferDiskCacheMaxFileSize` (17) were removed in 1.0.0. Disk cache is now configured per-folder via `SetFolderDiskCache`.
 
 **Server-reported caps (1.0.7):** Fields 18, 19, and 20 are read-only upper bounds reported by the server for each respective setting. Clients should clamp UI sliders/inputs to these values when present. They are ignored on `SetCloudAPIConfig`.
+
+**Multi-threaded copy downloader (1.0.9):** Field 21 routes copy/upload reads through the multi-thread buffered downloader. Enable when single-stream HTTP GET is the bottleneck.
 
 ---
 
@@ -4685,6 +4878,11 @@ message AccountStatusResult {
   optional string partnerReferralCode = 7;
   optional bool trustedDevice = 8;
   optional bool userNameIsDeviceId = 9;
+  // partner devices this account is bound to (empty if none); drives the unbind UI
+  repeated BoundDevice boundDevices = 10;
+  // present only for a store auto-renew subscription (Apple/Google/Meta);
+  // null for Alipay or one-time purchases
+  optional SubscriptionInfo subscription = 11;
 }
 
 message AccountPlan {
@@ -4693,6 +4891,24 @@ message AccountPlan {
   string fontAwesomeIcon = 3;
   string durationDescription = 4;
   google.protobuf.Timestamp endTime = 5;
+  // server plan id ("1"=Lifetime VIP, "4"=Lifetime Lite, etc.); "0"/empty if none
+  string planId = 6;
+}
+
+message BoundDevice {
+  string deviceId = 1;
+  string manufacturerId = 2;
+  string status = 3;       // ACTIVE / INACTIVE / DELETED
+  string createTime = 4;   // naive UTC datetime string
+  string partnerName = 5;
+}
+
+message SubscriptionInfo {
+  string store = 1;        // apple | google | meta
+  string productId = 2;    // cd_core_monthly | cd_core_yearly
+  bool autoRenew = 3;
+  bool inGracePeriod = 4;
+  string expiresAt = 5;    // next auto-charge or access-end (naive UTC string)
 }
 ```
 
@@ -4817,6 +5033,80 @@ Gets user's referral code.
 **Request:** `google.protobuf.Empty`
 
 **Response:** `StringValue`
+
+---
+
+#### GetStorePurchaseQuote
+
+IAP — Quote the in-store price for a store product. The server applies coupon/referral discount and CNY balance, and returns the remainder to charge in-store.
+
+**Request:** `GetStorePurchaseQuoteRequest`
+```protobuf
+message GetStorePurchaseQuoteRequest {
+  string productId = 1;            // canonical product id, e.g. "cd_app_pro"
+  optional string couponCode = 2;  // coupon or 8-char referral code
+}
+```
+
+**Response:** `StorePurchaseQuote`
+```protobuf
+message StorePurchaseQuote {
+  string productId = 1;
+  string planId = 2;
+  double basePriceUsd = 3;          // catalog/reference price
+  double basePriceCny = 4;
+  double couponDiscountCny = 5;
+  double balanceAppliedCny = 6;     // CNY balance spent toward this purchase
+  double finalPriceCny = 7;
+  double finalPriceUsd = 8;         // charge THIS in-store (CNY remainder / 7, rounded up)
+}
+```
+
+**Notes:**
+- Use `CloudDrivePlan.payableByBalance` to detect plans the user's CNY balance covers entirely — skip IAP and call `JoinPlan` directly for those.
+- `finalPriceUsd` is the amount the client must initiate the in-store purchase with. The server will reconcile the receipt against this quote (using the same `couponCode`) in `VerifyStorePurchase`.
+
+**New in 1.0.9**
+
+---
+
+#### VerifyStorePurchase
+
+IAP — Submit a store receipt for server-side validation and plan activation. Idempotent — re-submitting a known receipt returns `ALREADY_ACTIVE`, which is what restore-purchase flows expect.
+
+**Request:** `VerifyStorePurchaseRequest`
+```protobuf
+message VerifyStorePurchaseRequest {
+  string store = 1;                 // "apple" | "google" | "meta"
+  string productId = 2;             // canonical product id
+  string receipt = 3;               // Apple JWS / Google purchaseToken / Meta receipt
+  optional string transactionId = 4;
+  optional bool sandbox = 5;
+  optional string couponCode = 6;   // same code used at quote time
+  optional string packageName = 7;  // reserved for Google
+}
+```
+
+**Response:** `VerifyStorePurchaseResult`
+```protobuf
+enum VerifyStorePurchaseStatus {
+  VERIFY_STORE_PURCHASE_SUCCESS = 0;        // newly granted/extended
+  VERIFY_STORE_PURCHASE_ALREADY_ACTIVE = 1; // idempotent re-submit / restore
+  VERIFY_STORE_PURCHASE_PENDING = 2;        // reserved (Ask-to-Buy / Google PENDING)
+}
+
+message VerifyStorePurchaseResult {
+  VerifyStorePurchaseStatus status = 1;
+  optional AccountStatusResult accountStatus = 2; // fresh status on SUCCESS/ALREADY_ACTIVE
+  optional string pendingReason = 3;              // set when status == PENDING
+}
+```
+
+**Notes:**
+- Pass the same `couponCode` used in `GetStorePurchaseQuote`, otherwise the server may reject the receipt as inconsistent with the quoted price.
+- `accountStatus` includes the updated `accountPlan` / `subscription` — the client can replace its cached account state directly.
+
+**New in 1.0.9**
 
 ---
 
@@ -5025,6 +5315,24 @@ foreach (var code in result.RecoveryCodes)
 
 ---
 
+#### UnbindDevice
+
+Detaches all partner-OEM devices currently bound to the account (e.g. lost or sold device). Requires the account password, plus the current TOTP code when 2FA is on. Use `AccountStatusResult.boundDevices` to determine whether the user has any bound devices.
+
+**Request:** `UnbindDeviceRequest`
+```protobuf
+message UnbindDeviceRequest {
+  string password = 1;           // clear-text account password; MD5-hashed by the backend
+  optional string totp_code = 2; // required only when 2FA is enabled
+}
+```
+
+**Response:** `google.protobuf.Empty`
+
+**New in 1.0.9**
+
+---
+
 #### LoginWith2FA
 
 Public method for logging in with 2FA. Use this instead of `GetToken` when you know the account has 2FA enabled.
@@ -5057,6 +5365,43 @@ if (token.Success)
     Console.WriteLine($"Login successful! Token: {token.Token}");
 }
 ```
+
+---
+
+#### SendDisable2FAEmail
+
+Public recovery method — asks the cloudfs account server to email a one-time disable-2FA code to the account email. Use this when the user has lost both their TOTP authenticator and all recovery codes.
+
+**Request:** `SendDisable2FAEmailRequest`
+```protobuf
+message SendDisable2FAEmailRequest {
+  string email = 1;
+  optional ProxyInfo cloudfsProxy = 2; // optional proxy for reaching CloudFS account server
+}
+```
+
+**Response:** `google.protobuf.Empty`
+
+**New in 1.0.9**
+
+---
+
+#### Disable2FAByEmail
+
+Public recovery method — submits the disable-code from the recovery email plus the account password to clear the 2FA setting. On success, the user can log in with `GetToken` again (no TOTP required).
+
+**Request:** `Disable2FAByEmailRequest`
+```protobuf
+message Disable2FAByEmailRequest {
+  string disable_code = 1; // UUID code from the recovery email
+  string password = 2;     // clear-text account password; MD5-hashed by the backend before send
+  optional ProxyInfo cloudfsProxy = 3;
+}
+```
+
+**Response:** `google.protobuf.Empty`
+
+**New in 1.0.9**
 
 ---
 
@@ -7562,5 +7907,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2026-05-17*
+*Last Updated: 2026-06-10*
 *Copyright © 2026 CloudDrive. All rights reserved.*

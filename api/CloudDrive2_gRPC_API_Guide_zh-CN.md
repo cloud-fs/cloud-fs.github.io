@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.0.8
+版本: 1.0.9
 
 ## 目录
 
+- [1.0.9 版本新特性](#109-版本新特性)
 - [1.0.8 版本新特性](#108-版本新特性)
 - [1.0.7 版本新特性](#107-版本新特性)
 - [1.0.6 版本新特性](#106-版本新特性)
@@ -35,6 +36,163 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.0.9 版本新特性
+
+### 应用内购买（App Store / Google Play / Meta Quest）
+
+CloudDrive2 1.0.9 引入完整的应用内购买流程，面向各应用商店分发版本。服务器先报价店内价格（自动应用优惠码/推荐码折扣以及人民币余额），然后在购买完成后校验票据并激活计划。
+
+**新增 RPC:**
+- **`GetStorePurchaseQuote`** — 报价店内商品价格。服务器自动应用优惠码/推荐码与人民币余额，返回需在店内支付的剩余金额。
+- **`VerifyStorePurchase`** — 提交店内购买票据进行服务端校验并激活计划。幂等接口 — 重复提交已知票据会返回 `ALREADY_ACTIVE`。
+
+**新增枚举:**
+```protobuf
+enum VerifyStorePurchaseStatus {
+  VERIFY_STORE_PURCHASE_SUCCESS = 0;        // 新授予/延长
+  VERIFY_STORE_PURCHASE_ALREADY_ACTIVE = 1; // 幂等重提交 / 恢复购买
+  VERIFY_STORE_PURCHASE_PENDING = 2;        // 预留（Ask-to-Buy / Google PENDING）
+}
+```
+
+**新增消息:**
+```protobuf
+message GetStorePurchaseQuoteRequest {
+  string productId = 1;            // 规范商品 ID，如 "cd_app_pro"
+  optional string couponCode = 2;  // 优惠码或 8 位推荐码
+}
+message StorePurchaseQuote {
+  string productId = 1;
+  string planId = 2;
+  double basePriceUsd = 3;         // 目录/参考价
+  double basePriceCny = 4;
+  double couponDiscountCny = 5;
+  double balanceAppliedCny = 6;    // 从人民币余额扣减的金额
+  double finalPriceCny = 7;
+  double finalPriceUsd = 8;        // 实际在店内收取的金额（CNY 余额 / 7，向上取整）
+}
+message VerifyStorePurchaseRequest {
+  string store = 1;                // "apple" | "google" | "meta"
+  string productId = 2;            // 规范商品 ID
+  string receipt = 3;              // Apple JWS / Google purchaseToken / Meta receipt
+  optional string transactionId = 4;
+  optional bool sandbox = 5;
+  optional string couponCode = 6;  // 报价时使用的同一优惠码
+  optional string packageName = 7; // 预留给 Google
+}
+message VerifyStorePurchaseResult {
+  VerifyStorePurchaseStatus status = 1;
+  optional AccountStatusResult accountStatus = 2; // SUCCESS/ALREADY_ACTIVE 时返回最新账号状态
+  optional string pendingReason = 3;              // status == PENDING 时设置
+}
+```
+
+**`CloudDrivePlan` 新增字段（用于商店感知的计划展示）:**
+- `priceUsd`（字段 11）— 预定义美元价（App Store 目录价）。未设置则不返回。
+- `originalPriceUsd`（字段 12）— 预定义美元原价（折扣前）。未设置则不返回。
+- `payableByBalance`（字段 13）— 为 `true` 时表示用户人民币余额可覆盖该计划（客户端可跳过 IAP 直接调用 `JoinPlan`）。
+- `balancePriceCny`（字段 14）— 直接购买时从余额扣减的人民币金额。未设置则不返回。
+- `storeProductId`（字段 15）— 该计划在商店的 SKU（升级套餐可能是不同的 SKU）。
+
+### 自动续费订阅信息
+
+`AccountStatusResult` 新增字段，面向应用商店分发版本报告用户的自动续费订阅状态。
+
+**`AccountStatusResult` 新增字段:**
+- `subscription`（字段 11）— 仅在用户拥有商店自动续费订阅（Apple / Google / Meta）时存在。支付宝或一次性购买不返回该字段。
+
+**新增消息:**
+```protobuf
+message SubscriptionInfo {
+  string store = 1;        // apple | google | meta — 用于跳转到对应商店管理
+  string productId = 2;    // cd_core_monthly | cd_core_yearly
+  bool autoRenew = 3;      // 取消后变为 false（仍可使用至 expiresAt）
+  bool inGracePeriod = 4;
+  string expiresAt = 5;    // 下一次自动扣款日期（自动续费时）或访问截止时间（naive UTC 字符串）
+}
+```
+
+### 合作伙伴设备管理与 2FA 恢复流程
+
+新增三个 RPC，让用户无需联系客服即可恢复账号访问：解绑账号绑定的合作伙伴 OEM 设备；在 TOTP 与恢复代码均不可用时，通过邮件验证码关闭 2FA。
+
+**新增 RPC:**
+- **`UnbindDevice`** *（需要授权）* — 解绑账号当前绑定的所有合作伙伴设备（如设备丢失或转售）。需要账号密码，开启 2FA 时还需 TOTP。
+- **`SendDisable2FAEmail`** *（公共方法）* — 恢复流程：请求 cloudfs 服务器向账号邮箱发送一次性的关闭 2FA 验证码。
+- **`Disable2FAByEmail`** *（公共方法）* — 恢复流程：提交邮件中的关闭验证码和账号密码以关闭 2FA。
+
+**`AccountStatusResult` 新增字段:**
+- `boundDevices`（字段 10）— 账号当前绑定的合作伙伴设备列表。无绑定时为空。驱动解绑界面。
+
+**新增消息:**
+```protobuf
+message BoundDevice {
+  string deviceId = 1;
+  string manufacturerId = 2;
+  string status = 3;       // ACTIVE / INACTIVE / DELETED
+  string createTime = 4;   // naive UTC 日期时间字符串
+  string partnerName = 5;  // 合作伙伴可读名称（缺失时为空）
+}
+
+message SendDisable2FAEmailRequest {
+  string email = 1;
+  optional ProxyInfo cloudfsProxy = 2; // 访问 CloudFS 账号服务器的可选代理
+}
+
+message Disable2FAByEmailRequest {
+  string disable_code = 1; // 恢复邮件中的 UUID 验证码
+  string password = 2;     // 明文账号密码；后端发送前会进行 MD5 哈希
+  optional ProxyInfo cloudfsProxy = 3;
+}
+
+message UnbindDeviceRequest {
+  string password = 1;           // 明文账号密码；后端会进行 MD5 哈希
+  optional string totp_code = 2; // 仅在开启 2FA 时必填
+}
+```
+
+### OAuth `state` 签名令牌
+
+OAuth 登录流程（Google Drive、OneDrive、迅雷等）现在使用服务端签发的签名 `state` 令牌。前端调用 `CreateOAuthState` 获取一个短期签名令牌，作为 OAuth `state` 参数传递；回调服务器在处理重定向回调前验证该令牌，避免 CSRF 和 OAuth state 伪造。
+
+**新增 RPC:**
+- **`CreateOAuthState`** — 签发短期 OAuth `state` 签名令牌（中继到 cloudfs 服务器）。
+
+**新增消息:**
+```protobuf
+message CreateOAuthStateRequest {
+  string oauth_type = 1;          // 提供方标识，如 "google_drive"、"onedrive"
+  string return_url = 2;          // 回调完成后接收令牌的地址
+  optional string device_id = 3;  // 迅雷流程中需要透传
+}
+message CreateOAuthStateResult {
+  bool success = 1;
+  string error_message = 2;
+  string state = 3;       // 用作 OAuth `state` 参数的签名令牌
+  uint64 expires_in = 4;  // 令牌有效期（秒）
+}
+```
+
+### CloudAPIConfig：复制/上传使用多线程下载器
+
+新增可选字段，让复制/上传任务通过传统的多线程缓冲下载器读取源字节，而不是使用单条长 HTTP GET 流 — 适用于单流吞吐低于目标端写入/上传速度的场景。
+
+**`CloudAPIConfig` 新增字段:**
+- `useMultithreadDownloaderForCopy`（字段 21）— 设置后，复制/上传任务从该云盘读取源字节时改用多线程缓冲下载器（`ENTRY_READER_MANAGER`）。对哈希预处理与上传字节流均生效。
+
+### AccountPlan：服务端计划 ID
+
+`AccountPlan` 新增服务端计划 ID，便于客户端无需解析本地化显示名即可区分计划等级。
+
+**`AccountPlan` 新增字段:**
+- `planId`（字段 6）— 服务端计划 ID。例如：`"1"` = 终身 VIP，`"4"` = 终身轻享。`"0"` 或空表示无计划。
+
+### CopyTaskBatchRequest：明确的 key 格式
+
+`CopyTaskBatchRequest.taskKeys` 的文档注释现在明确说明格式：每个 key 形如 `"{sourcePath}:{destPath}"`，使用 `GetCopyTasks` 返回的 `CopyTask` 中的原始 `sourcePath` 与 `destPath`，不做任何额外规范化处理。无 schema 变更。
 
 ---
 
@@ -3837,6 +3995,33 @@ if (result.getSuccess()) {
 
 ---
 
+#### CreateOAuthState
+
+签发短期 OAuth `state` 签名令牌（中继到 cloudfs 服务器）。前端将返回的令牌作为 OAuth `state` 参数；OAuth 回调服务器在处理重定向回调前验证该令牌 — 避免 CSRF 和 OAuth state 伪造。
+
+**请求:** `CreateOAuthStateRequest`
+```protobuf
+message CreateOAuthStateRequest {
+  string oauth_type = 1;          // 提供方标识，如 "google_drive"、"onedrive"
+  string return_url = 2;          // 回调完成后接收令牌的地址
+  optional string device_id = 3;  // 迅雷流程中需要透传
+}
+```
+
+**响应:** `CreateOAuthStateResult`
+```protobuf
+message CreateOAuthStateResult {
+  bool success = 1;
+  string error_message = 2;
+  string state = 3;       // 用作 OAuth `state` 参数的签名令牌
+  uint64 expires_in = 4;  // 令牌有效期（秒）
+}
+```
+
+**1.0.9 新增**
+
+---
+
 #### APILogin189QRCode (服务器流式传输)
 
 通过扫描二维码添加 189 云盘 (天翼云盘)。详见 [二维码登录流程](#二维码登录流程)。
@@ -4157,12 +4342,18 @@ message CloudAPIConfig {
   optional uint32 maxDownloadThreadsLimit = 18;
   optional uint64 maxBufferPoolSizeMBLimit = 19;
   optional double maxQueriesPerSecondLimit = 20;
+  // 设置后，复制/上传任务从该云盘读取源字节时使用传统的多线程缓冲下载器
+  // （ENTRY_READER_MANAGER）而非单条长 HTTP GET 流。适用于单流吞吐低于目标
+  // 端写入/上传速度的场景。对哈希预处理与上传字节流均生效。
+  optional bool useMultithreadDownloaderForCopy = 21;
 }
 ```
 
 **注意:** 字段 `fileBufferDiskCacheEnabled`（16）和 `fileBufferDiskCacheMaxFileSize`（17）已在 1.0.0 中移除。磁盘缓存现在通过 `SetFolderDiskCache` 按文件夹配置。
 
 **服务器报告的上限（1.0.7）：** 字段 18、19、20 是服务器报告的各对应设置的只读上限。客户端在 UI 中存在这些值时应据此限制滑块/输入。这些字段在 `SetCloudAPIConfig` 中会被忽略。
+
+**复制使用多线程下载器（1.0.9）：** 字段 21 让复制/上传读取走多线程缓冲下载器。在单流 HTTP GET 成为瓶颈时启用。
 
 ---
 
@@ -4688,6 +4879,11 @@ message AccountStatusResult {
   optional string partnerReferralCode = 7;
   optional bool trustedDevice = 8;
   optional bool userNameIsDeviceId = 9;
+  // 账号当前绑定的合作伙伴设备（无绑定时为空），驱动解绑界面
+  repeated BoundDevice boundDevices = 10;
+  // 仅在用户拥有商店自动续费订阅（Apple/Google/Meta）时存在；
+  // 支付宝或一次性购买不返回
+  optional SubscriptionInfo subscription = 11;
 }
 
 message AccountPlan {
@@ -4696,6 +4892,24 @@ message AccountPlan {
   string fontAwesomeIcon = 3;
   string durationDescription = 4;
   google.protobuf.Timestamp endTime = 5;
+  // 服务端计划 ID（"1" = 终身 VIP，"4" = 终身轻享等）；"0"/空表示无计划
+  string planId = 6;
+}
+
+message BoundDevice {
+  string deviceId = 1;
+  string manufacturerId = 2;
+  string status = 3;       // ACTIVE / INACTIVE / DELETED
+  string createTime = 4;   // naive UTC 日期时间字符串
+  string partnerName = 5;
+}
+
+message SubscriptionInfo {
+  string store = 1;        // apple | google | meta
+  string productId = 2;    // cd_core_monthly | cd_core_yearly
+  bool autoRenew = 3;
+  bool inGracePeriod = 4;
+  string expiresAt = 5;    // 下一次自动扣款或访问截止时间（naive UTC 字符串）
 }
 ```
 
@@ -4820,6 +5034,80 @@ message JoinPlanRequest {
 **请求:** `google.protobuf.Empty`
 
 **响应:** `StringValue`
+
+---
+
+#### GetStorePurchaseQuote
+
+IAP — 报价店内商品价格。服务器自动应用优惠码/推荐码折扣与人民币余额，返回需在店内支付的剩余金额。
+
+**请求:** `GetStorePurchaseQuoteRequest`
+```protobuf
+message GetStorePurchaseQuoteRequest {
+  string productId = 1;            // 规范商品 ID，如 "cd_app_pro"
+  optional string couponCode = 2;  // 优惠码或 8 位推荐码
+}
+```
+
+**响应:** `StorePurchaseQuote`
+```protobuf
+message StorePurchaseQuote {
+  string productId = 1;
+  string planId = 2;
+  double basePriceUsd = 3;          // 目录/参考价
+  double basePriceCny = 4;
+  double couponDiscountCny = 5;
+  double balanceAppliedCny = 6;     // 从人民币余额扣减的金额
+  double finalPriceCny = 7;
+  double finalPriceUsd = 8;         // 实际在店内收取的金额（CNY 余额 / 7，向上取整）
+}
+```
+
+**说明:**
+- 通过 `CloudDrivePlan.payableByBalance` 判断用户余额是否可完全覆盖该计划 — 对这些计划应跳过 IAP，直接调用 `JoinPlan`。
+- `finalPriceUsd` 是客户端发起店内购买时使用的金额。服务器会在 `VerifyStorePurchase` 中根据相同的 `couponCode` 对账。
+
+**1.0.9 新增**
+
+---
+
+#### VerifyStorePurchase
+
+IAP — 提交店内购买票据进行服务端校验并激活计划。幂等接口 — 重复提交已知票据会返回 `ALREADY_ACTIVE`，这正是"恢复购买"流程所需要的。
+
+**请求:** `VerifyStorePurchaseRequest`
+```protobuf
+message VerifyStorePurchaseRequest {
+  string store = 1;                 // "apple" | "google" | "meta"
+  string productId = 2;             // 规范商品 ID
+  string receipt = 3;               // Apple JWS / Google purchaseToken / Meta receipt
+  optional string transactionId = 4;
+  optional bool sandbox = 5;
+  optional string couponCode = 6;   // 报价时使用的同一优惠码
+  optional string packageName = 7;  // 预留给 Google
+}
+```
+
+**响应:** `VerifyStorePurchaseResult`
+```protobuf
+enum VerifyStorePurchaseStatus {
+  VERIFY_STORE_PURCHASE_SUCCESS = 0;        // 新授予/延长
+  VERIFY_STORE_PURCHASE_ALREADY_ACTIVE = 1; // 幂等重提交 / 恢复购买
+  VERIFY_STORE_PURCHASE_PENDING = 2;        // 预留（Ask-to-Buy / Google PENDING）
+}
+
+message VerifyStorePurchaseResult {
+  VerifyStorePurchaseStatus status = 1;
+  optional AccountStatusResult accountStatus = 2; // SUCCESS/ALREADY_ACTIVE 时返回最新账号状态
+  optional string pendingReason = 3;              // status == PENDING 时设置
+}
+```
+
+**说明:**
+- 必须传入与 `GetStorePurchaseQuote` 一致的 `couponCode`，否则服务器可能因价格与报价不一致而拒绝票据。
+- `accountStatus` 包含更新后的 `accountPlan` / `subscription` — 客户端可直接替换缓存的账号状态。
+
+**1.0.9 新增**
 
 ---
 
@@ -5028,6 +5316,24 @@ foreach (var code in result.RecoveryCodes)
 
 ---
 
+#### UnbindDevice
+
+解绑账号当前绑定的所有合作伙伴 OEM 设备（如设备丢失或转售）。需要账号密码，开启 2FA 时还需当前的 TOTP 验证码。通过 `AccountStatusResult.boundDevices` 判断用户是否存在已绑定设备。
+
+**请求:** `UnbindDeviceRequest`
+```protobuf
+message UnbindDeviceRequest {
+  string password = 1;           // 明文账号密码；后端会进行 MD5 哈希
+  optional string totp_code = 2; // 仅在开启 2FA 时必填
+}
+```
+
+**响应:** `google.protobuf.Empty`
+
+**1.0.9 新增**
+
+---
+
 #### LoginWith2FA
 
 用于使用 2FA 登录的公共方法。当您知道账户启用了 2FA 时,请使用此方法而不是 `GetToken`。
@@ -5060,6 +5366,43 @@ if (token.Success)
     Console.WriteLine($"登录成功! 令牌: {token.Token}");
 }
 ```
+
+---
+
+#### SendDisable2FAEmail
+
+公共恢复方法 — 请求 cloudfs 账号服务器向账号邮箱发送一次性的关闭 2FA 验证码。在用户同时丢失 TOTP 验证器和所有恢复代码时使用。
+
+**请求:** `SendDisable2FAEmailRequest`
+```protobuf
+message SendDisable2FAEmailRequest {
+  string email = 1;
+  optional ProxyInfo cloudfsProxy = 2; // 访问 CloudFS 账号服务器的可选代理
+}
+```
+
+**响应:** `google.protobuf.Empty`
+
+**1.0.9 新增**
+
+---
+
+#### Disable2FAByEmail
+
+公共恢复方法 — 提交恢复邮件中的关闭验证码和账号密码以关闭 2FA。成功后，用户可以重新使用 `GetToken` 登录（无需 TOTP）。
+
+**请求:** `Disable2FAByEmailRequest`
+```protobuf
+message Disable2FAByEmailRequest {
+  string disable_code = 1; // 恢复邮件中的 UUID 验证码
+  string password = 2;     // 明文账号密码；后端发送前会进行 MD5 哈希
+  optional ProxyInfo cloudfsProxy = 3;
+}
+```
+
+**响应:** `google.protobuf.Empty`
+
+**1.0.9 新增**
 
 ---
 
@@ -7627,5 +7970,5 @@ class FileManager
 
 ---
 
-*最后更新: 2026-05-17*
+*最后更新: 2026-06-10*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*
