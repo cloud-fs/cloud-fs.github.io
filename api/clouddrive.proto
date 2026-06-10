@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.0.8";
+option (version) = "1.0.9";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -30,6 +30,11 @@ service CloudDriveFileSrv {
       returns (google.protobuf.Empty) {}
   // reset account's data, set new password, with received reset code from email
   rpc ResetAccount(ResetAccountRequest) returns (google.protobuf.Empty) {}
+  // recovery flow (no authorization): ask cloudfs to email a disable-2FA code to the account
+  rpc SendDisable2FAEmail(SendDisable2FAEmailRequest)
+      returns (google.protobuf.Empty) {}
+  // recovery flow (no authorization): disable 2FA using the emailed code + account password
+  rpc Disable2FAByEmail(Disable2FAByEmailRequest) returns (google.protobuf.Empty) {}
   // get user created API token info by token string
   rpc GetApiTokenInfo(StringValue) returns (TokenInfo) {}
   // login with 2FA code (public method, no authorization required)
@@ -56,6 +61,8 @@ service CloudDriveFileSrv {
   rpc GetRecoveryCodes(TwoFactorAuthCodeRequest) returns (TwoFactorAuthRecoveryCodesResult) {}
   // Regenerate recovery codes - Requires valid TOTP code
   rpc RegenerateRecoveryCodes(TwoFactorAuthCodeRequest) returns (TwoFactorAuthRecoveryCodesResult) {}
+  // Detach all devices bound to the account (lost/sold device). Requires password (+ TOTP if 2FA on)
+  rpc UnbindDevice(UnbindDeviceRequest) returns (google.protobuf.Empty) {}
   // ==================== End 2FA Methods ====================
   
   // ==================== Session Management Methods ====================
@@ -294,6 +301,10 @@ service CloudDriveFileSrv {
       returns (APILoginResult) {}
   // add 123 cloud with client id and client secret
   rpc ApiLogin123panOAuth(Login123panOAuthRequest) returns (APILoginResult) {}
+  // mint a short-lived signed OAuth `state` token (relayed to cloudfs server).
+  // The frontend uses the returned token as the OAuth `state` parameter; the
+  // oauth callback server validates it before processing the redirect callback.
+  rpc CreateOAuthState(CreateOAuthStateRequest) returns (CreateOAuthStateResult) {}
   // add 189 cloud with qr scanning
   rpc APILogin189QRCode(Login189QRCodeRequest)
       returns (stream QRCodeScanMessage) {}
@@ -434,6 +445,13 @@ service CloudDriveFileSrv {
   rpc ActivatePlan(StringValue) returns (JoinPlanResult) {}
   // check counpon code for a plan
   rpc CheckCouponCode(CheckCouponCodeRequest) returns (CouponCodeResult) {}
+  // IAP: quote the in-store price for a store product (server applies coupon/referral + CNY
+  // balance and returns the remainder to charge in-store)
+  rpc GetStorePurchaseQuote(GetStorePurchaseQuoteRequest)
+      returns (StorePurchaseQuote) {}
+  // IAP: submit a store receipt for server validation + plan/entitlement activation
+  rpc VerifyStorePurchase(VerifyStorePurchaseRequest)
+      returns (VerifyStorePurchaseResult) {}
   // get referral code of current user
   rpc GetReferralCode(google.protobuf.Empty) returns (StringValue) {}
   // list all backups
@@ -863,6 +881,24 @@ message AccountStatusResult {
   optional bool userNameIsDeviceId =
       9; // if true, the deviceId is used as userName, which can be changed to
   // a real user name later
+  repeated BoundDevice boundDevices =
+      10; // partner devices this account is bound to (empty if none); drives the unbind UI
+  optional SubscriptionInfo subscription = 11; // present only for a store auto-renew subscription (Apple/Google/Meta); null for Alipay/one-time
+}
+// Auto-renew store subscription details (see iap-server-handoff §6.2).
+message SubscriptionInfo {
+  string store = 1;        // apple | google | meta — where to manage it
+  string productId = 2;    // cd_core_monthly | cd_core_yearly
+  bool autoRenew = 3;      // false after the user cancels (access stays until expiresAt)
+  bool inGracePeriod = 4;
+  string expiresAt = 5;    // next auto-charge date (auto_renew) or access-end (naive UTC string)
+}
+message BoundDevice {
+  string deviceId = 1;
+  string manufacturerId = 2;
+  string status = 3;       // ACTIVE / INACTIVE / DELETED
+  string createTime = 4;   // naive UTC datetime string
+  string partnerName = 5;  // human-readable partner name (empty if missing)
 }
 message AccountPlan {
   string planName = 1;
@@ -870,6 +906,7 @@ message AccountPlan {
   string fontAwesomeIcon = 3;
   string durationDescription = 4;
   google.protobuf.Timestamp endTime = 5;
+  string planId = 6;  // server plan id ("1"=Lifetime VIP, "4"=Lifetime Lite, etc.); "0"/empty if none
 }
 message AccountRole {
   string roleName = 1;
@@ -1157,7 +1194,12 @@ message PauseCopyTaskRequest {
   string destPath = 2;
   bool pause = 3;
 }
-message CopyTaskBatchRequest { repeated string taskKeys = 1; }
+message CopyTaskBatchRequest {
+  // Task key format: "{sourcePath}:{destPath}".
+  // Build each key from the CopyTask returned by GetCopyTasks using the
+  // exact sourcePath and destPath strings (no extra normalization).
+  repeated string taskKeys = 1;
+}
 message PauseAllCopyTasksRequest { bool pause = 1; }
 message PauseCopyTasksRequest {
   repeated string taskKeys = 1;
@@ -1317,6 +1359,17 @@ message Login115OpenOAuthRequest {
   optional ProxyInfo apiProxy = 4;
   optional ProxyInfo dataProxy = 5;
 }
+message CreateOAuthStateRequest {
+  string oauth_type = 1; // provider key, e.g. "google_drive", "onedrive"
+  string return_url = 2; // where tokens are delivered after the callback
+  optional string device_id = 3; // carried through the flow for xunlei
+}
+message CreateOAuthStateResult {
+  bool success = 1;
+  string error_message = 2;
+  string state = 3; // signed token to use as the OAuth `state` parameter
+  uint64 expires_in = 4; // token lifetime in seconds
+}
 message LoginWebDavRequest {
   string serverUrl = 1;
   string userName = 2;
@@ -1460,6 +1513,12 @@ message CloudAPIConfig {
   optional uint32 maxDownloadThreadsLimit = 18;
   optional uint64 maxBufferPoolSizeMBLimit = 19;
   optional double maxQueriesPerSecondLimit = 20;
+  // For files from this cloud, copy/upload tasks read the source bytes via the
+  // legacy multi-thread buffered downloader (ENTRY_READER_MANAGER) instead of
+  // the single long HTTP GET stream. Useful when single-stream throughput is
+  // lower than the destination write/upload speed. Applies to both hash
+  // preprocessing and upload byte streaming.
+  optional bool useMultithreadDownloaderForCopy = 21;
 }
 message SetCloudAPIConfigRequest {
   string cloudName = 1;
@@ -1730,8 +1789,13 @@ message CloudDrivePlan {
   string durationDescription = 6;
   bool isActive = 7;
   optional string fontAwesomeIcon = 8;
-  optional double originalPrice = 9;
+  optional double originalPrice = 9;      // CNY
   repeated AccountRole planRoles = 10;
+  optional double priceUsd = 11;          // predefined USD price (App Store price); unset if none
+  optional double originalPriceUsd = 12;  // predefined USD original price; unset if none
+  bool payableByBalance = 13;             // true if the user's CNY balance covers this plan (skip IAP)
+  optional double balancePriceCny = 14;   // CNY deducted from balance if bought directly; unset if none
+  string storeProductId = 15;             // the store SKU to buy for this plan (may be an upgrade SKU)
 }
 message GetCloudDrivePlansResult { repeated CloudDrivePlan plans = 1; }
 message JoinPlanRequest {
@@ -1753,6 +1817,40 @@ message JoinPlanResult {
   string planDescription = 4;
   optional google.protobuf.Timestamp expireTime = 5;
   optional PaymentInfo paymentInfo = 6;
+}
+// IAP (App Store / Google Play / Meta Quest)
+message GetStorePurchaseQuoteRequest {
+  string productId = 1;            // canonical product id, e.g. "cd_app_pro"
+  optional string couponCode = 2;  // coupon or 8-char referral code
+}
+message StorePurchaseQuote {
+  string productId = 1;
+  string planId = 2;
+  double basePriceUsd = 3;          // catalog/reference price
+  double basePriceCny = 4;
+  double couponDiscountCny = 5;
+  double balanceAppliedCny = 6;     // CNY balance spent toward this purchase
+  double finalPriceCny = 7;
+  double finalPriceUsd = 8;         // charge THIS in-store (CNY remainder / 7, rounded up)
+}
+message VerifyStorePurchaseRequest {
+  string store = 1;                 // "apple" | "google" | "meta"
+  string productId = 2;             // canonical product id
+  string receipt = 3;               // Apple JWS / Google purchaseToken / Meta receipt
+  optional string transactionId = 4;
+  optional bool sandbox = 5;
+  optional string couponCode = 6;   // same code used at quote time
+  optional string packageName = 7;  // reserved for Google
+}
+enum VerifyStorePurchaseStatus {
+  VERIFY_STORE_PURCHASE_SUCCESS = 0;        // newly granted/extended
+  VERIFY_STORE_PURCHASE_ALREADY_ACTIVE = 1; // idempotent re-submit / restore
+  VERIFY_STORE_PURCHASE_PENDING = 2;        // reserved (Ask-to-Buy / Google PENDING)
+}
+message VerifyStorePurchaseResult {
+  VerifyStorePurchaseStatus status = 1;
+  optional AccountStatusResult accountStatus = 2; // fresh status on SUCCESS/ALREADY_ACTIVE
+  optional string pendingReason = 3;              // set when status == PENDING
 }
 message Promotion {
   string id = 1;
@@ -2434,6 +2532,22 @@ message LoginWith2FARequest {
   string totp_code = 3; // 6-digit TOTP code or 8-character recovery code
   bool synDataToCloud = 4;
   optional ProxyInfo cloudfsProxy = 5; // Optional proxy for reaching CloudFS account server
+}
+
+message SendDisable2FAEmailRequest {
+  string email = 1;
+  optional ProxyInfo cloudfsProxy = 2; // Optional proxy for reaching CloudFS account server
+}
+
+message Disable2FAByEmailRequest {
+  string disable_code = 1; // UUID code from the recovery email
+  string password = 2;     // clear-text account password; MD5-hashed by the backend before send
+  optional ProxyInfo cloudfsProxy = 3; // Optional proxy for reaching CloudFS account server
+}
+
+message UnbindDeviceRequest {
+  string password = 1;          // clear-text account password; MD5-hashed by the backend
+  optional string totp_code = 2; // required only when 2FA is enabled
 }
 
 // ==================== End 2FA Messages ====================
