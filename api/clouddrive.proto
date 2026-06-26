@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.0.9";
+option (version) = "1.0.11";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -273,6 +273,12 @@ service CloudDriveFileSrv {
   // add 115 open with qr scanning
   rpc APILogin115OpenQRCode(Login115OpenQRCodeRequest)
       returns (stream QRCodeScanMessage) {}
+  // add GuangYaPan with qr (device code) scanning
+  rpc APILoginGuangYaPanQRCode(LoginGuangYaPanQRCodeRequest)
+      returns (stream QRCodeScanMessage) {}
+  // add GuangYaPan with web PKCE (authorization code) result
+  rpc APILoginGuangYaPanOAuth(LoginGuangYaPanOAuthRequest)
+      returns (APILoginResult) {}
   // add AliyunDriveOpen with OAuth result
   rpc APILoginAliyundriveOAuth(LoginAliyundriveOAuthRequest)
       returns (APILoginResult) {}
@@ -754,6 +760,10 @@ message CloudDriveFile {
   bool canAddShareLink = 67;
   optional uint64 dirCacheTimeToLiveSecs = 68;
   bool canDeletePermanently = 69;
+  // True when the owning cloud is read-only (GuangYaPan, etc.): all write ops
+  // (create/rename/move/copy-into/delete/upload) are unsupported. Frontends hide
+  // write actions on such items and disallow them as copy/move destinations.
+  bool readOnly = 80;
   enum HashType {
     Unknown = 0;
     Md5 = 1;
@@ -803,6 +813,7 @@ message CloudAPI {
       9;                     // promotion title, if hasPromotions is true
   optional string path = 10; // the path of the cloud
   bool supportHttpDownload = 11; // whether this cloud provider supports HTTP (non-HTTPS) downloads
+  bool readOnly = 12; // true when this cloud is read-only (all write ops unsupported)
 }
 message CloudMembership {
   string identity = 1;
@@ -1299,6 +1310,20 @@ message Login115OpenQRCodeRequest {
   optional ProxyInfo apiProxy = 1;
   optional ProxyInfo dataProxy = 2;
 }
+message LoginGuangYaPanQRCodeRequest {
+  optional ProxyInfo apiProxy = 1;
+  optional ProxyInfo dataProxy = 2;
+}
+// GuangYaPan web PKCE: the oauth_callback redirect server performs the PKCE
+// token exchange and delivers ready-made tokens back to the app (same shape as
+// the other OAuth providers).
+message LoginGuangYaPanOAuthRequest {
+  string refresh_token = 1;
+  string access_token = 2;
+  uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
+}
 message Login189QRCodeRequest {
   optional ProxyInfo apiProxy = 1;
   optional ProxyInfo dataProxy = 2;
@@ -1363,6 +1388,9 @@ message CreateOAuthStateRequest {
   string oauth_type = 1; // provider key, e.g. "google_drive", "onedrive"
   string return_url = 2; // where tokens are delivered after the callback
   optional string device_id = 3; // carried through the flow for xunlei
+  // PKCE code_verifier, sealed into the signed state for guangyapan so the
+  // oauth_callback server can complete the token exchange (PKCE has no secret).
+  optional string code_verifier = 4;
 }
 message CreateOAuthStateResult {
   bool success = 1;

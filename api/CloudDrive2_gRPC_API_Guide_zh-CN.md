@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.0.9
+版本: 1.0.11
 
 ## 目录
 
+- [1.0.11 版本新特性](#1011-版本新特性)
 - [1.0.9 版本新特性](#109-版本新特性)
 - [1.0.8 版本新特性](#108-版本新特性)
 - [1.0.7 版本新特性](#107-版本新特性)
@@ -36,6 +37,57 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.0.11 版本新特性
+
+### 光鸭云盘（GuangYaPan）支持
+
+CloudDrive2 1.0.11 新增对光鸭云盘的支持，通过 QR（设备码）扫码登录。光鸭云盘目前在 CloudDrive2 端为**只读**模式 — 详见下文[只读云盘标识](#只读云盘标识)。
+
+> **注意：** Web PKCE OAuth 登录（`APILoginGuangYaPanOAuth`）在 1.0.11 中**暂不支持**。该 RPC、`LoginGuangYaPanOAuthRequest` 消息以及 `CreateOAuthStateRequest.code_verifier` 字段已在 proto 中预留，将在后续版本启用。在 1.0.11 中请使用 `APILoginGuangYaPanQRCode` 添加光鸭云盘。
+
+**新增 RPC:**
+- **`APILoginGuangYaPanQRCode`** *（服务器流式）* — 通过 QR / 设备码扫描添加光鸭云盘。流式协议与其他 QR 登录 RPC 一致（参见 [QRCode 登录流程](#qrcode-登录流程)）。
+- **`APILoginGuangYaPanOAuth`** — *预留，暂不可用。* 后续版本将接受 oauth_callback 服务器完成 Web PKCE 后回传的现成 token 来添加光鸭云盘。
+
+**新增消息:**
+```protobuf
+message LoginGuangYaPanQRCodeRequest {
+  optional ProxyInfo apiProxy = 1;
+  optional ProxyInfo dataProxy = 2;
+}
+
+// 光鸭云盘 Web PKCE：oauth_callback 重定向服务器完成 PKCE token 交换
+// 并将现成 token 回传至应用（与其他 OAuth 提供方相同的形式）。
+message LoginGuangYaPanOAuthRequest {
+  string refresh_token = 1;
+  string access_token = 2;
+  uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
+}
+```
+
+### `CreateOAuthState` 新增 PKCE `code_verifier`
+
+`CreateOAuthStateRequest` 新增 `code_verifier` 字段以支持基于 PKCE 的 OAuth 流程。PKCE 提供方没有客户端密钥，因此 `code_verifier` 会被封装到签名 `state` 令牌中，由 oauth_callback 服务器在完成 token 交换时读取。
+
+**`CreateOAuthStateRequest` 新增字段:**
+- `code_verifier`（字段 4）— 封装到签名 state 令牌中的 PKCE code_verifier。
+
+> **注意：** 1.0.11 中没有任何 CloudDrive2 云盘提供方使用 PKCE OAuth。该字段为后续的光鸭云盘 Web PKCE 登录（`APILoginGuangYaPanOAuth`）预留，目前尚未启用。对于当前所有已支持的提供方，请留空。
+
+### 只读云盘标识
+
+`CloudAPI` 和 `CloudDriveFile` 新增 `readOnly` 标记，便于前端在不支持写操作的云盘上隐藏写动作。目前光鸭云盘会被标记为只读；只读云盘上的所有写操作（创建 / 重命名 / 移动 / 复制到 / 删除 / 上传）会在服务端失败。前端还应禁止将这类项作为复制/移动目标。
+
+**`CloudAPI` 新增字段:**
+- `readOnly`（字段 12）— 该云盘为只读时为 `true`。
+
+**`CloudDriveFile` 新增字段:**
+- `readOnly`（字段 80）— 所属云盘为只读时为 `true`。方便针对每个条目进行 UI 决策，无需回查父云盘。
 
 ---
 
@@ -3690,6 +3742,8 @@ message CloudAPI {
   optional string promotionTitle = 9;
   optional string path = 10;
   bool supportHttpDownload = 11; // 支持 HTTP 下载
+  // 该云盘为只读时为 true（所有写操作均不支持）；1.0.11+
+  bool readOnly = 12;
 }
 ```
 
@@ -3762,6 +3816,49 @@ await foreach (var message in call.ResponseStream.ReadAllAsync(cancellationToken
     }
 }
 ```
+
+---
+
+#### APILoginGuangYaPanQRCode (服务器流式传输)
+
+通过 QR（设备码）扫描添加光鸭云盘。流式协议与其他 QR 登录 RPC 一致，详见 [QRCode 登录流程](#qrcode-登录流程)。
+
+**请求:** `LoginGuangYaPanQRCodeRequest`
+```protobuf
+message LoginGuangYaPanQRCodeRequest {
+  optional ProxyInfo apiProxy = 1;
+  optional ProxyInfo dataProxy = 2;
+}
+```
+
+**响应流:** `QRCodeScanMessage`
+
+**说明:** 光鸭云盘目前为只读 — 详见[只读云盘标识](#1011-版本新特性)。
+
+**1.0.11 新增**
+
+---
+
+#### APILoginGuangYaPanOAuth
+
+> **1.0.11 中暂不支持。** 该 RPC 和 `LoginGuangYaPanOAuthRequest` 已在 proto 中为后续的 Web PKCE OAuth 登录预留。在 1.0.11 中调用该 RPC 会失败。本版本请使用 [`APILoginGuangYaPanQRCode`](#apilogguangyapanqrcode-服务器流式传输) 添加光鸭云盘。
+
+后续版本启用后，该方法将使用 oauth_callback 服务器完成 Web PKCE token 交换后回传的现成 token 添加光鸭云盘。客户端通过 `CreateOAuthState`（传入 PKCE `code_verifier`）触发 Web 流程；回调服务器以与其他 OAuth 提供方相同的方式回传 token。
+
+**请求:** `LoginGuangYaPanOAuthRequest`
+```protobuf
+message LoginGuangYaPanOAuthRequest {
+  string refresh_token = 1;
+  string access_token = 2;
+  uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
+}
+```
+
+**响应:** `APILoginResult`
+
+**1.0.11 中预留（暂不支持）**
 
 ---
 
@@ -4005,6 +4102,11 @@ message CreateOAuthStateRequest {
   string oauth_type = 1;          // 提供方标识，如 "google_drive"、"onedrive"
   string return_url = 2;          // 回调完成后接收令牌的地址
   optional string device_id = 3;  // 迅雷流程中需要透传
+  // 封装到签名 state 令牌中的 PKCE code_verifier，
+  // 以便 oauth_callback 服务器完成 token 交换（PKCE 没有客户端密钥）。
+  // 1.0.11 中为后续的光鸭云盘 Web PKCE 登录预留 —
+  // 当前所有已支持的提供方均不使用。请留空。1.0.11+
+  optional string code_verifier = 4;
 }
 ```
 
@@ -7282,6 +7384,10 @@ message CloudDriveFile {
   bool canAddShareLink = 67;
   optional uint64 dirCacheTimeToLiveSecs = 68;
   bool canDeletePermanently = 69;
+  // 所属云盘为只读时为 true（光鸭云盘等）：所有写操作
+  //（创建/重命名/移动/复制到/删除/上传）均不支持。前端会在此类条目上
+  // 隐藏写动作，并禁止将其作为复制/移动目标。1.0.11+
+  bool readOnly = 80;
 
   // 哈希信息
   enum HashType {
@@ -7970,5 +8076,5 @@ class FileManager
 
 ---
 
-*最后更新: 2026-06-10*
+*最后更新: 2026-06-26*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*

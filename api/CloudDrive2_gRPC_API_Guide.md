@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.0.9
+Version: 1.0.11
 
 ## Table of Contents
 
+- [What's New in 1.0.11](#whats-new-in-1011)
 - [What's New in 1.0.9](#whats-new-in-109)
 - [What's New in 1.0.8](#whats-new-in-108)
 - [What's New in 1.0.7](#whats-new-in-107)
@@ -36,6 +37,58 @@ Version: 1.0.9
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.0.11
+
+### GuangYaPan (光鸭云盘) Support
+
+CloudDrive2 1.0.11 adds support for GuangYaPan as a cloud storage backend via QR-code (device code) login. GuangYaPan is currently **read-only** on the CloudDrive2 side — see [Read-only Cloud Marker](#read-only-cloud-marker) below.
+
+> **Note:** Web PKCE OAuth login (`APILoginGuangYaPanOAuth`) is **not yet supported** for GuangYaPan in 1.0.11. The RPC, the `LoginGuangYaPanOAuthRequest` message, and the `CreateOAuthStateRequest.code_verifier` field are reserved in the proto for a future release. Use `APILoginGuangYaPanQRCode` to add GuangYaPan in 1.0.11.
+
+**New RPCs:**
+- **`APILoginGuangYaPanQRCode`** *(server streaming)* — Add GuangYaPan via QR / device-code scanning. Same streaming protocol as the other QR-code login RPCs (see [QRCode Login Process](#qrcode-login-process)).
+- **`APILoginGuangYaPanOAuth`** — *Reserved; not yet usable.* Will accept ready-made tokens delivered by the oauth_callback server after a web PKCE exchange.
+
+**New Messages:**
+```protobuf
+message LoginGuangYaPanQRCodeRequest {
+  optional ProxyInfo apiProxy = 1;
+  optional ProxyInfo dataProxy = 2;
+}
+
+// GuangYaPan web PKCE: the oauth_callback redirect server performs the PKCE
+// token exchange and delivers ready-made tokens back to the app (same shape as
+// the other OAuth providers).
+message LoginGuangYaPanOAuthRequest {
+  string refresh_token = 1;
+  string access_token = 2;
+  uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
+}
+```
+
+### PKCE `code_verifier` on `CreateOAuthState`
+
+A new `code_verifier` field has been added to `CreateOAuthStateRequest` to support PKCE-based OAuth flows. PKCE providers have no client secret, so the `code_verifier` is sealed into the signed `state` token for the oauth_callback server to read when completing the token exchange.
+
+**New field on `CreateOAuthStateRequest`:**
+- `code_verifier` (field 4) — PKCE code_verifier sealed into the signed state token.
+
+> **Note:** No CloudDrive2 cloud provider uses PKCE OAuth in 1.0.11. This field is reserved for the planned GuangYaPan web PKCE login (`APILoginGuangYaPanOAuth`), which is not yet enabled. Leave unset for all currently-supported providers.
+
+### Read-only Cloud Marker
+
+A new `readOnly` flag has been added to both `CloudAPI` and `CloudDriveFile` so frontends can hide write actions on clouds that don't support them. Currently set for GuangYaPan; all write ops (create / rename / move / copy-into / delete / upload) on read-only clouds will fail server-side. Frontends should also disallow such items as copy/move destinations.
+
+**New field on `CloudAPI`:**
+- `readOnly` (field 12) — `true` when this cloud is read-only.
+
+**New field on `CloudDriveFile`:**
+- `readOnly` (field 80) — `true` when the owning cloud is read-only. Useful for per-item UI decisions without having to look up the parent cloud.
 
 ---
 
@@ -3689,6 +3742,8 @@ message CloudAPI {
   optional string promotionTitle = 9;
   optional string path = 10;
   bool supportHttpDownload = 11; // Supports HTTP download
+  // true when this cloud is read-only (all write ops unsupported); 1.0.11+
+  bool readOnly = 12;
 }
 ```
 
@@ -3761,6 +3816,49 @@ await foreach (var message in call.ResponseStream.ReadAllAsync(cancellationToken
     }
 }
 ```
+
+---
+
+#### APILoginGuangYaPanQRCode (Server Streaming)
+
+Adds GuangYaPan (光鸭云盘) via QR code (device-code) scanning. See [QRCode Login Process](#qrcode-login-process) for the streaming protocol used by all QR-code login RPCs.
+
+**Request:** `LoginGuangYaPanQRCodeRequest`
+```protobuf
+message LoginGuangYaPanQRCodeRequest {
+  optional ProxyInfo apiProxy = 1;
+  optional ProxyInfo dataProxy = 2;
+}
+```
+
+**Response Stream:** `QRCodeScanMessage`
+
+**Note:** GuangYaPan is currently read-only — see [Read-only Cloud Marker](#whats-new-in-1011).
+
+**New in 1.0.11**
+
+---
+
+#### APILoginGuangYaPanOAuth
+
+> **Not yet supported in 1.0.11.** The RPC and `LoginGuangYaPanOAuthRequest` are reserved in the proto for the planned web PKCE OAuth login. Calling this RPC in 1.0.11 will fail. Use [`APILoginGuangYaPanQRCode`](#apilogguangyapanqrcode-server-streaming) to add GuangYaPan in this release.
+
+When enabled in a future release, this will add GuangYaPan (光鸭云盘) with the ready-made tokens delivered by the oauth_callback server after a web PKCE exchange. The client will trigger the web flow via `CreateOAuthState` (passing the PKCE `code_verifier`); the callback server will return the tokens via the same delivery mechanism as the other OAuth providers.
+
+**Request:** `LoginGuangYaPanOAuthRequest`
+```protobuf
+message LoginGuangYaPanOAuthRequest {
+  string refresh_token = 1;
+  string access_token = 2;
+  uint64 expires_in = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
+}
+```
+
+**Response:** `APILoginResult`
+
+**Reserved in 1.0.11 (not yet supported)**
 
 ---
 
@@ -4002,6 +4100,11 @@ message CreateOAuthStateRequest {
   string oauth_type = 1;          // provider key, e.g. "google_drive", "onedrive"
   string return_url = 2;          // where tokens are delivered after the callback
   optional string device_id = 3;  // carried through the flow for xunlei
+  // PKCE code_verifier, sealed into the signed state so the oauth_callback
+  // server can complete the token exchange (PKCE has no client secret).
+  // Reserved in 1.0.11 for the planned GuangYaPan web PKCE login — no
+  // currently-supported provider uses it. Leave unset. 1.0.11+
+  optional string code_verifier = 4;
 }
 ```
 
@@ -7219,6 +7322,11 @@ message CloudDriveFile {
   bool canAddShareLink = 67;
   optional uint64 dirCacheTimeToLiveSecs = 68;
   bool canDeletePermanently = 69;
+  // True when the owning cloud is read-only (GuangYaPan, etc.): all write ops
+  // (create/rename/move/copy-into/delete/upload) are unsupported. Frontends
+  // hide write actions on such items and disallow them as copy/move
+  // destinations. 1.0.11+
+  bool readOnly = 80;
 
   // Hash information
   enum HashType {
@@ -7907,5 +8015,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2026-06-10*
+*Last Updated: 2026-06-26*
 *Copyright © 2026 CloudDrive. All rights reserved.*
