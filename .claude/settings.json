@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk '/^message CloudDriveFile/,/^}/' /Users/cloudfs/rust/cloud-fs.github.io/api/clouddrive.proto)"
+    ]
+  }
+}
