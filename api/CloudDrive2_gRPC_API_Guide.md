@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.0.11
+Version: 1.0.13
 
 ## Table of Contents
 
+- [What's New in 1.0.13](#whats-new-in-1013)
 - [What's New in 1.0.11](#whats-new-in-1011)
 - [What's New in 1.0.9](#whats-new-in-109)
 - [What's New in 1.0.8](#whats-new-in-108)
@@ -37,6 +38,32 @@ Version: 1.0.11
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.0.13
+
+### Backup Full-Scan Resource Bounds
+
+CloudDrive2 1.0.13 lets clients cap the resource usage of concurrent backup full-scans. Three new fields on `SystemSettings` bound the number of parallel walkers and the size of the in-memory transfer queue that each walker enqueues to. Backup scans that hit these bounds are paused and reported to clients via a new `Waiting` status.
+
+**New fields on `SystemSettings`:**
+- `backupQueueHighWater` (field 31) — When set, the walker pauses adding tasks once the pending transfer-task queue reaches this size. Unset = no limit (legacy behavior).
+- `backupQueueLowWater` (field 32) — When set, a paused walker resumes once the queue drains back down to this size.
+- `maxConcurrentBackupWalkers` (field 33) — Max backup scans (source walkers) allowed to run at once. Default `1`, minimum `1`. Extra due scans queue until a slot frees.
+
+> **Important:** These 3 fields form a group. When `maxConcurrentBackupWalkers` is present in `SetSystemSettings`, the server rewrites all 3 — so an omitted water mark is interpreted as **"no limit"**, not "don't change". To leave them unchanged, omit **all 3**.
+
+### Cross-Cloud Copy: Local Temp Spool
+
+A new `SystemSettings` field lets cross-cloud copies avoid downloading the source twice. When enabled, CloudDrive spools the source file to a local temp file during hash calculation; the upload stage then reads from the temp file instead of re-downloading from the source cloud. Falls back to double download when local temp space is insufficient.
+
+**New field on `SystemSettings`:**
+- `useTempFileForCrossCloudCopy` (field 34) — Default `false`. When `true`, cross-cloud copy tasks spool the source to a local temp file during hashing and reuse it for upload.
+
+### BackupStatus.Status: `Waiting`
+
+A new enum value `Waiting = 6` has been added to `BackupStatus.Status`. A backup enters `Waiting` when its scan is queued for a walker slot, or when the walker is paused by the transfer-queue high-water mark. Clients should render this as **"Pending"** (or an equivalent localized label).
 
 ---
 
@@ -4517,8 +4544,16 @@ message SystemSettings {
   optional uint64 maxBackupLogSizeBytes = 28; // Max backup log file size before rotation
   optional uint32 maxFileLogFiles = 29;       // Max rotated log files to keep (default: 10)
   optional uint32 maxBackupLogFiles = 30;     // Max rotated backup log files to keep (default: 10)
+  // Backup full-scan resource bounds — group of 3, rewritten together on SetSystemSettings
+  optional uint64 backupQueueHighWater = 31;  // Pause walker when pending queue reaches this size (unset = no limit)
+  optional uint64 backupQueueLowWater = 32;   // Resume walker when queue drains to this size
+  optional uint32 maxConcurrentBackupWalkers = 33; // Max concurrent scans (default 1, min 1)
+  // Cross-cloud copy: spool source to local temp during hashing so upload doesn't re-download
+  optional bool useTempFileForCrossCloudCopy = 34; // default: false
 }
 ```
+
+**New in 1.0.13:** `backupQueueHighWater`, `backupQueueLowWater`, `maxConcurrentBackupWalkers` bound backup full-scan resource usage. These 3 fields form a group — when `maxConcurrentBackupWalkers` is present in `SetSystemSettings` the server rewrites all 3, so an omitted water mark means "no limit" rather than "don't change". `useTempFileForCrossCloudCopy` enables local temp spooling for cross-cloud copy (default: false).
 
 **New in 1.0.1:** `maxFileLogSizeBytes`, `maxBackupLogSizeBytes`, `maxFileLogFiles`, and `maxBackupLogFiles` configure log file rotation. All 4 fields must be sent together in `SetSystemSettings`.
 
@@ -5623,6 +5658,10 @@ message BackupStatus {
     Disabled = 3;
     Scanned = 4;
     Finished = 5;
+    // Scan is queued/paused: waiting for a walker slot or for the transfer
+    // queue to drain (see maxConcurrentBackupWalkers / backupQueueHighWater).
+    // Clients render as "Pending". 1.0.13+
+    Waiting = 6;
   }
   Backup backup = 1;
   Status status = 2;
@@ -8015,5 +8054,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2026-06-26*
+*Last Updated: 2026-07-23*
 *Copyright © 2026 CloudDrive. All rights reserved.*
