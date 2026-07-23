@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.0.11
+版本: 1.0.13
 
 ## 目录
 
+- [1.0.13 版本新特性](#1013-版本新特性)
 - [1.0.11 版本新特性](#1011-版本新特性)
 - [1.0.9 版本新特性](#109-版本新特性)
 - [1.0.8 版本新特性](#108-版本新特性)
@@ -37,6 +38,32 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.0.13 版本新特性
+
+### 备份全量扫描资源占用控制
+
+CloudDrive2 1.0.13 允许客户端限制并发备份全量扫描的资源占用。`SystemSettings` 新增三个字段用于限制并发 walker 数量以及每个 walker 入队的内存传输队列大小。触发上限的备份扫描会被暂停，并通过新增的 `Waiting` 状态回报给客户端。
+
+**`SystemSettings` 新增字段:**
+- `backupQueueHighWater`（字段 31）— 设置后，待处理传输任务队列达到该大小时 walker 暂停添加任务。未设置 = 无限制（旧版行为）。
+- `backupQueueLowWater`（字段 32）— 设置后，队列下降至该大小时被暂停的 walker 恢复添加任务。
+- `maxConcurrentBackupWalkers`（字段 33）— 允许同时运行的备份扫描（source walker）数量上限。默认 `1`，最小 `1`。超出的到期扫描将排队等待空闲槽位。
+
+> **重要:** 这 3 个字段构成一组。当 `SetSystemSettings` 中包含 `maxConcurrentBackupWalkers` 时，服务端会同时重写全部 3 个字段 — 因此未设置的水位线会被解释为**"无限制"**，而不是"不更改"。若要保持不变，请**同时省略这 3 个字段**。
+
+### 跨云盘复制：本地临时文件缓存
+
+`SystemSettings` 新增字段，让跨云盘复制避免二次下载源文件。启用后，CloudDrive 在计算哈希阶段将源文件缓存到本地临时文件，上传阶段直接读取该临时文件，无需再从源云端下载。若本地临时空间不足则回退为二次下载。
+
+**`SystemSettings` 新增字段:**
+- `useTempFileForCrossCloudCopy`（字段 34）— 默认 `false`。为 `true` 时，跨云盘复制任务在哈希阶段将源文件缓存到本地临时文件，并在上传阶段复用。
+
+### BackupStatus.Status：新增 `Waiting`
+
+`BackupStatus.Status` 新增枚举值 `Waiting = 6`。当备份扫描排队等待 walker 槽位，或 walker 因传输队列高水位而被暂停时，备份进入 `Waiting` 状态。客户端应将其渲染为 **"等待中"**（或等效的本地化标签）。
 
 ---
 
@@ -4517,8 +4544,16 @@ message SystemSettings {
   optional uint64 maxBackupLogSizeBytes = 28; // 备份日志文件轮转前的最大大小
   optional uint32 maxFileLogFiles = 29;       // 保留的轮转日志文件最大数量（默认：10）
   optional uint32 maxBackupLogFiles = 30;     // 保留的轮转备份日志文件最大数量（默认：10）
+  // 备份全量扫描资源上限 — 3 个字段构成一组，SetSystemSettings 时会一起重写
+  optional uint64 backupQueueHighWater = 31;  // 待处理队列达到该大小时暂停 walker（未设置 = 无限制）
+  optional uint64 backupQueueLowWater = 32;   // 队列下降到该大小时恢复 walker
+  optional uint32 maxConcurrentBackupWalkers = 33; // 最大并发扫描数（默认 1，最小 1）
+  // 跨云盘复制：哈希阶段将源文件缓存到本地临时文件，避免上传阶段再次下载
+  optional bool useTempFileForCrossCloudCopy = 34; // 默认：false
 }
 ```
+
+**1.0.13 新增:** `backupQueueHighWater`、`backupQueueLowWater`、`maxConcurrentBackupWalkers` 用于限制备份全量扫描的资源占用。这 3 个字段构成一组 — 当 `SetSystemSettings` 中包含 `maxConcurrentBackupWalkers` 时，服务端会同时重写全部 3 个字段，因此未设置的水位线会被解释为"无限制"而非"不更改"。`useTempFileForCrossCloudCopy` 启用跨云盘复制的本地临时文件缓存（默认：false）。
 
 **1.0.1 新增:** `maxFileLogSizeBytes`、`maxBackupLogSizeBytes`、`maxFileLogFiles` 和 `maxBackupLogFiles` 用于配置日志文件轮转。在 `SetSystemSettings` 中必须同时发送所有 4 个字段。
 
@@ -5623,6 +5658,10 @@ message BackupStatus {
     Disabled = 3;
     Scanned = 4;
     Finished = 5;
+    // 扫描排队/暂停中：等待 walker 槽位或等待传输队列排空
+    //（参见 maxConcurrentBackupWalkers / backupQueueHighWater）。
+    // 客户端渲染为"等待中"。1.0.13+
+    Waiting = 6;
   }
   Backup backup = 1;
   Status status = 2;
@@ -8076,5 +8115,5 @@ class FileManager
 
 ---
 
-*最后更新: 2026-06-26*
+*最后更新: 2026-07-23*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*

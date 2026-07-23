@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.0.11";
+option (version) = "1.0.13";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -1632,6 +1632,27 @@ message SystemSettings {
   // Max number of rotated log files to keep (default: 10)
   optional uint32 maxFileLogFiles = 29;
   optional uint32 maxBackupLogFiles = 30;
+
+  // Backup full-scan resource bounds (issue #462).
+  // These 3 fields form a group: when maxConcurrentBackupWalkers is present in
+  // SetSystemSettings the server rewrites all 3, so an omitted water mark means
+  // "no limit" rather than "don't change". Omit all 3 to leave them unchanged.
+  //
+  // High/low water marks bound the in-memory transfer queue while a backup scan
+  // enqueues tasks (the walker pauses adding at high, resumes at low):
+  //   not set (None) = no limit (unbounded, legacy behavior)
+  //   > 0            = bound the pending-task queue to this size
+  optional uint64 backupQueueHighWater = 31;
+  optional uint64 backupQueueLowWater = 32;
+  // Max backup scans (source walkers) running concurrently (default 1, min 1).
+  // Extra due scans queue until a slot frees.
+  optional uint32 maxConcurrentBackupWalkers = 33;
+
+  // When copying files across cloud storages, spool the source file to a local
+  // temp file during hash calculation so the upload stage doesn't download the
+  // source a second time. Falls back to double download when local temp space
+  // is insufficient. Default: false.
+  optional bool useTempFileForCrossCloudCopy = 34;
 }
 
 // Eviction strategy for disk cache
@@ -2107,6 +2128,9 @@ message BackupStatus {
     Disabled = 3;
     Scanned = 4;
     Finished = 5;
+    // Scan is queued/paused (issue #462): waiting for a walker slot or for the
+    // transfer queue to drain. Clients show this as "Pending".
+    Waiting = 6;
   }
   enum FileWatchStatus {
     WatcherIdle = 0;
