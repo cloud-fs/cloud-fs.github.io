@@ -20,13 +20,18 @@
     <p><strong>核心原则：本应用是一个客户端工具。你的文件不会经过我们的服务器。</strong>浏览、播放、上传、下载与跨云传输均由你的设备直接与你自己的云盘 / 存储服务之间完成。</p>
 
     <h3>2. 我们收集的信息</h3>
-    <p>2.1 <strong>账户信息</strong>：如果你注册 CloudDrive2 账户，我们会收集你的邮箱地址与密码（以加密方式存储），用于身份验证、找回密码，以及记录你的会员 / 订阅状态。</p>
-    <p>2.2 <strong>购买记录</strong>：会员与内购的交易由 Apple App Store、Google Play 或 Meta Horizon Store 处理。我们仅接收用于开通权益所需的交易凭证与产品标识，不会接收你的完整支付卡号或银行信息。</p>
-    <p>2.3 <strong>技术支持信息</strong>：仅当你主动联系我们或主动提交日志时，我们才会收到你提供的日志、截图与设备信息。</p>
+    <p>2.1 <strong>账户信息</strong>：如果你注册 CloudDrive2 账户，我们会收集你的邮箱地址，以及你密码的<strong>哈希值</strong>——<strong>我们不保存你的密码本身</strong>，因此无法读取或还原你的密码。这些信息用于身份验证、找回密码，以及记录你的会员 / 订阅状态。</p>
+
+    <p>2.2 <strong>云盘凭证（加密同步，默认开启）</strong>：为了让你在同一账户的多台设备之间共享已添加的云盘，本应用默认开启「同步数据到云端」。开启时，你添加的云盘账号、密码与 OAuth 令牌会<strong>先在你的设备上用你的密码加密</strong>，再上传保存到我们的服务器。
+      <br>由于我们只保存密码哈希、不保存密码本身，<strong>我们无法解密这些凭证</strong>——只有持有你明文密码的设备才能解密。对我们而言，它们只是无法读取的密文。
+      <br>你可以在登录时取消勾选「同步数据到云端」，此时凭证<strong>仅保存在本机</strong>、不会上传。
+      <br><strong>请注意</strong>：正因为我们无法解密，<strong>如果你忘记密码，已同步的云盘凭证将无法恢复</strong>，需要重新添加云盘。</p>
+    <p>2.3 <strong>购买记录</strong>：会员与内购的交易由 Apple App Store、Google Play 或 Meta Horizon Store 处理。我们仅接收用于开通权益所需的交易凭证与产品标识，不会接收你的完整支付卡号或银行信息。</p>
+    <p>2.4 <strong>技术支持信息</strong>：仅当你主动联系我们或主动提交日志时，我们才会收到你提供的日志、截图与设备信息。</p>
 
     <h3>3. 我们不收集的信息</h3>
     <p>3.1 <strong>你的文件内容</strong>：本应用不会将你的文件、照片、视频、音乐或文档上传到我们的服务器。</p>
-    <p>3.2 <strong>云盘凭证</strong>：你添加的各家云盘的账号、密码与 OAuth 令牌保存在<strong>你的设备本地</strong>（或你自建的 CloudDrive 服务端），不会发送给我们。</p>
+    <p>3.2 <strong>可读的云盘凭证</strong>：我们<strong>无法读取</strong>你的云盘账号、密码与 OAuth 令牌。它们在离开你的设备之前就已用你的密码加密（见 2.2）；我们只持有无法解密的密文。如果你关闭「同步数据到云端」，它们根本不会离开你的设备。</p>
     <p>3.3 <strong>广告与追踪</strong>：本应用不含广告 SDK、不含第三方分析或崩溃统计 SDK，不读取广告标识符（Advertising ID），不进行跨应用追踪。</p>
     <p>3.4 <strong>位置信息</strong>：本应用不请求也不收集位置信息。</p>
 
@@ -44,9 +49,9 @@
     <p>5.3 <strong>Emby / Jellyfin</strong>：你填写的媒体服务器地址与凭证仅保存在本地，用于直接连接你自己的服务器。</p>
 
     <h3>6. 数据存储与安全</h3>
-    <p>6.1 账户密码以加密方式存储；与我们服务器之间的所有通信均使用 HTTPS / TLS 加密传输。</p>
-    <p>6.2 云盘凭证与应用设置保存在设备的应用私有存储空间内。</p>
-    <p>6.3 卸载本应用会清除设备上保存的本地设置与云盘凭证。</p>
+    <p>6.1 账户密码以<strong>哈希</strong>形式保存，我们不保存密码原文；与我们服务器之间的所有通信均使用 HTTPS / TLS 加密传输。</p>
+    <p>6.2 云盘凭证保存在设备的应用私有存储空间内；若开启同步，另有一份用你的密码加密后的密文保存在我们的服务器上（见 2.2）。应用设置保存在本机。</p>
+    <p>6.3 卸载本应用会清除设备上保存的本地设置与云盘凭证。若你曾开启同步，服务器上的加密副本会保留，直到你删除账户（见 7.2）。</p>
 
     <h3>7. 你的权利</h3>
     <p>7.1 <strong>查询与更正</strong>：你可以在应用内或通过邮件联系我们，查询或更正你的账户信息。</p>
@@ -78,20 +83,33 @@
 
     <h3>2. Information we collect</h3>
     <p>2.1 <strong>Account information.</strong> If you register a CloudDrive2 account we collect your email
-      address and password (stored encrypted), used for authentication, password recovery, and to record your
+      address and a <strong>hash</strong> of your password — <strong>we do not store your password itself</strong>,
+      so we cannot read or recover it. This is used for authentication, password recovery, and to record your
       membership or subscription status.</p>
-    <p>2.2 <strong>Purchase records.</strong> Membership and in-app purchases are processed by the Apple App
+    <p>2.2 <strong>Cloud credentials (encrypted sync, on by default).</strong> So that the clouds you add are
+      available on every device signed in to the same account, the app enables "sync data to cloud" by default.
+      When it is on, the account details, passwords and OAuth tokens for the clouds you add are
+      <strong>encrypted on your device using your password</strong> before being uploaded to our servers.
+      <br>Because we hold only a password hash and never your password, <strong>we cannot decrypt these
+      credentials</strong> — only a device holding your plaintext password can. To us they are unreadable
+      ciphertext.
+      <br>You can untick "sync data to cloud" when signing in, in which case credentials
+      <strong>never leave your device</strong>.
+      <br><strong>Please note:</strong> precisely because we cannot decrypt them, <strong>if you forget your
+      password the synced cloud credentials cannot be recovered</strong> and the clouds must be added again.</p>
+    <p>2.3 <strong>Purchase records.</strong> Membership and in-app purchases are processed by the Apple App
       Store, Google Play or the Meta Horizon Store. We receive only the transaction receipt and product
       identifier needed to grant entitlements — never your full card or bank details.</p>
-    <p>2.3 <strong>Support information.</strong> We receive logs, screenshots and device details only when you
+    <p>2.4 <strong>Support information.</strong> We receive logs, screenshots and device details only when you
       choose to send them to us.</p>
 
     <h3>3. Information we do not collect</h3>
     <p>3.1 <strong>Your file content.</strong> The app never uploads your files, photos, videos, music or
       documents to our servers.</p>
-    <p>3.2 <strong>Cloud credentials.</strong> The account details, passwords and OAuth tokens for the cloud
-      services you add are stored <strong>locally on your device</strong> (or on your own self-hosted
-      CloudDrive server) and are never sent to us.</p>
+    <p>3.2 <strong>Readable cloud credentials.</strong> We <strong>cannot read</strong> the account details,
+      passwords or OAuth tokens for the clouds you add. They are encrypted with your password before they leave
+      your device (see 2.2), and we hold only ciphertext we are unable to decrypt. With "sync data to cloud"
+      turned off, they never leave your device at all.</p>
     <p>3.3 <strong>Advertising and tracking.</strong> The app contains no advertising SDK, no third-party
       analytics or crash-reporting SDK, does not read the Advertising ID, and performs no cross-app tracking.
     </p>
@@ -125,9 +143,12 @@
       used only to connect to your own server.</p>
 
     <h3>6. Storage and security</h3>
-    <p>6.1 Account passwords are stored encrypted; all communication with our servers uses HTTPS / TLS.</p>
-    <p>6.2 Cloud credentials and app settings are kept in the app's private storage on the device.</p>
-    <p>6.3 Uninstalling the app removes the locally stored settings and cloud credentials.</p>
+    <p>6.1 Account passwords are stored as a <strong>hash</strong> — we never store the password itself. All
+      communication with our servers uses HTTPS / TLS.</p>
+    <p>6.2 Cloud credentials are kept in the app's private storage on the device; if sync is enabled, a copy
+      encrypted with your password is also held on our servers (see 2.2). App settings stay on the device.</p>
+    <p>6.3 Uninstalling the app removes the locally stored settings and cloud credentials. If you enabled sync,
+      the encrypted copy on our servers remains until you delete your account (see 7.2).</p>
 
     <h3>7. Your rights</h3>
     <p>7.1 <strong>Access and correction.</strong> You can review or correct your account information in the
