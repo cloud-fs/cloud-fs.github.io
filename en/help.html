@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive2 help — install, sign in, add clouds and WebDAV</title>
-  <meta name="description" content="The CloudDrive2 user guide: installing and running on Windows, Linux, Arch Linux, macOS, Android and Docker, registering and signing in, adding cloud storage, managing files, using the built-in WebDAV service and resetting a forgotten password.">
+  <title>CloudDrive2 help — install, register, add clouds, WebDAV</title>
+  <meta name="description" content="The CloudDrive2 manual: installing and running it on Windows, Linux, Arch Linux, macOS, Android and Docker, registering and signing in, adding cloud storage, managing files, using the built-in WebDAV service, and what to do if you forget your password.">
   <link rel="canonical" href="https://www.clouddrive2.com/en/help.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/help.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/help.html">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CloudDrive2">
   <meta property="og:title" content="CloudDrive2 help">
-  <meta property="og:description" content="Installing and running, registering and signing in, adding cloud storage, managing files, the WebDAV service, and what to do about a forgotten password.">
+  <meta property="og:description" content="Installing and running, registering and signing in, adding cloud storage, managing files, the WebDAV service, and forgotten passwords.">
   <meta property="og:url" content="https://www.clouddrive2.com/en/help.html">
   <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -25,7 +25,7 @@
 </head>
 
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
+  <a class="skip-link" href="#main">Skip to main content</a>
 
   <header class="site-header">
     <nav class="site-nav container" aria-label="Main">
@@ -53,46 +53,73 @@
   <main id="main">
 
     <section class="hero">
-      <div class="container">
-        <p class="eyebrow">User guide</p>
-        <h1>CloudDrive2 help</h1>
-        <p class="hero-lede">
-          From installing the service and creating an account to connecting your first cloud and
-          sharing it back out over WebDAV. Each section below opens on its own — read only the part you need.
-        </p>
-        <div class="btn-row">
-          <a class="btn btn-primary" href="/en/download.html">Get the installer</a>
-          <a class="btn btn-ghost" href="/docker.html">Docker deployment guide</a>
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">User guide</p>
+          <h1>Install it, then connect your first cloud</h1>
+          <p class="hero-lede">
+            From installing the service on your computer, NAS or phone to creating an account, adding
+            cloud storage and sharing it back out over WebDAV. Read the section for the system you use.
+          </p>
+          <ul class="chips">
+            <li><a class="chip chip-cloud" href="#install">Installing</a></li>
+            <li><a class="chip chip-cloud" href="#start">Account and clouds</a></li>
+            <li><a class="chip" href="#files">Managing files</a></li>
+            <li><a class="chip" href="#webdav">WebDAV</a></li>
+            <li><a class="chip" href="#password">Forgotten password</a></li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/en/download.html">Get the installer</a>
+            <a class="btn btn-ghost" href="/en/docker.html">Docker deployment guide</a>
+          </div>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/macos-dashboard.webp" width="1600" height="815" decoding="async"
+               alt="The CloudDrive2 management console: total capacity across the connected clouds, with entries for files, cloud storage, mount points, backup, transfers, WebDAV and API tokens.">
         </div>
       </div>
     </section>
 
-    <section class="band" aria-labelledby="topics-h">
+    <section class="band band-dark band-tight" aria-labelledby="port-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">The first thing to do after installing</p>
+            <h2 id="port-h">Open it in a browser</h2>
+            <p class="port-url">http://&lt;host IP&gt;:19798</p>
+          </div>
+          <p>The CloudDrive2 management interface runs on that port — the same on Windows, Linux, macOS,
+             Android and inside Docker. On the machine itself, use <code>http://localhost:19798</code>.
+             Use a recent version of Edge, Chrome, Safari or Firefox.
+             <strong>Internet Explorer is not supported.</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="install" aria-labelledby="install-h">
       <div class="container container-narrow">
         <header class="band-head">
-          <p class="eyebrow">Contents</p>
-          <h2 id="topics-h">Common questions and step-by-step instructions</h2>
+          <p class="eyebrow">Installing and running</p>
+          <h2 id="install-h">Pick your system</h2>
+          <p>The core service goes on a machine that stays on — a computer, a NAS or a router. The apps
+             for phones, TVs and headsets are installed separately; see "Install the apps" below.</p>
         </header>
 
-        <details class="acc" id="install">
-          <summary>Installing and running</summary>
+        <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</summary>
           <div class="acc-body">
-            <div class="note">
-              <span class="note-title">The first thing to do after installing</span>
-              <p>Open <code>http://&lt;the IP of the host running CloudDrive&gt;:19798</code> in a browser to
-                 reach the management interface. Use a recent version of Edge, Chrome, Safari or Firefox.
-                 <strong>Internet Explorer is not supported.</strong></p>
-            </div>
-
-            <h3>Windows</h3>
             <ol>
               <li>Download the CloudDrive2 installer from our website.</li>
               <li>Run the installer and follow the on-screen prompts.</li>
               <li>When it finishes, a CloudDrive2 shortcut appears on your desktop. Double-click it, or
                   just open <code>http://localhost:19798</code> in a browser.</li>
             </ol>
+          </div>
+        </details>
 
-            <h3>Linux, generic</h3>
+        <details class="acc">
+          <summary><i class="fa-brands fa-linux" aria-hidden="true"></i>Linux, generic</summary>
+          <div class="acc-body">
             <ol>
               <li>Check that your kernel supports FUSE by looking for the <code>/dev/fuse</code> device.
                   Without FUSE support you cannot mount clouds as local directories.</li>
@@ -103,104 +130,112 @@
               <li>Download the archive for your CPU architecture from our website.</li>
               <li>Open a terminal and change into the directory holding the archive.</li>
               <li>Extract it:
-                <pre><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz</code></pre>
+                <div class="code-block"><pre><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz</code></pre></div>
               </li>
               <li>Change into the extracted directory and run:
-                <pre><code>./clouddrive</code></pre>
+                <div class="code-block"><pre><code>./clouddrive</code></pre></div>
               </li>
               <li>You can add clouddrive to your system's startup items or register it as a system service.
                   See your distribution's documentation for how.</li>
             </ol>
+          </div>
+        </details>
 
-            <h3>Arch Linux</h3>
+        <details class="acc">
+          <summary><i class="fa-solid fa-terminal" aria-hidden="true"></i>Arch Linux</summary>
+          <div class="acc-body">
             <ol>
               <li>Arch Linux and its derivatives can install from the
                   <a href="https://aur.archlinux.org/packages/clouddrive" rel="noopener">AUR package</a>
                   or a <a href="https://github.com/taotieren/aur-repo" rel="noopener">third-party repository</a>:
-                <pre><code>yay -Syu clouddrive</code></pre>
+                <div class="code-block"><pre><code>yay -Syu clouddrive</code></pre></div>
               </li>
               <li>Start clouddrive with systemd and enable it at boot:
-                <pre><code># as root
+                <div class="code-block"><pre><code># as root
 systemctl enable --now clouddrive.service
 
 # as your user
-systemctl --user enable --now clouddrive.service</code></pre>
+systemctl --user enable --now clouddrive.service</code></pre></div>
               </li>
               <li>Check that clouddrive is running:
-                <pre><code># as root
+                <div class="code-block"><pre><code># as root
 systemctl status clouddrive.service
 
 # as your user
-systemctl --user status clouddrive.service</code></pre>
+systemctl --user status clouddrive.service</code></pre></div>
               </li>
               <li>Open the management interface in your default browser:
-                <pre><code># recommended
+                <div class="code-block"><pre><code># recommended
 xdg-open http://localhost:19798
 
 # IPv4
 xdg-open http://127.0.0.1:19798
 
 # IPv6
-xdg-open http://[::]:19798</code></pre>
+xdg-open http://[::]:19798</code></pre></div>
               </li>
               <li>If the page loads slowly or stutters, open it in your browser's private or incognito window.</li>
               <li>Mounting a local disk after signing in asks for a UID and GID:
-                <pre><code># current user
+                <div class="code-block"><pre><code># current user
 id -u
 id -g
 
 # another user
 id -u username
-id -g username</code></pre>
+id -g username</code></pre></div>
               </li>
               <li>The AUR package's local disk mount point: <code>/media/clouddrive</code>.</li>
               <li>The AUR package's WebDAV mount point: <code>/media/clouddrive-dav</code>.
                   This one needs the <code>davfs2</code> package.</li>
               <li>Put your WebDAV username and password into <code>/etc/davfs2/secrets</code>, for example:
-                <pre><code>cat &lt;&lt; EOF | sudo tee -a /etc/davfs2/secrets
+                <div class="code-block"><pre><code>cat &lt;&lt; EOF | sudo tee -a /etc/davfs2/secrets
 # personal webdav, application password
 /media/clouddrive-dav user@email.com  mypassword
-EOF</code></pre>
+EOF</code></pre></div>
               </li>
               <li>Start clouddrive-dav with systemd and enable it at boot (as root):
-                <pre><code>systemctl enable --now clouddrive-dav.service</code></pre>
+                <div class="code-block"><pre><code>systemctl enable --now clouddrive-dav.service</code></pre></div>
               </li>
               <li>Check that clouddrive-dav is running (as root):
-                <pre><code>systemctl status clouddrive-dav.service</code></pre>
+                <div class="code-block"><pre><code>systemctl status clouddrive-dav.service</code></pre></div>
               </li>
             </ol>
+          </div>
+        </details>
 
-            <h3>macOS</h3>
+        <details class="acc">
+          <summary><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS</summary>
+          <div class="acc-body">
             <h4>With Homebrew (recommended)</h4>
             <ol>
               <li>Make sure <a href="https://brew.sh/" rel="noopener">Homebrew</a> is installed.</li>
               <li>Install <a href="https://osxfuse.github.io/" rel="noopener">macFUSE</a> before running
                   CloudDrive2, and grant it permission in System Settings when prompted. Homebrew can
                   install it too:
-                <pre><code>brew install --cask macfuse</code></pre>
+                <div class="code-block"><pre><code>brew install --cask macfuse</code></pre></div>
               </li>
               <li>Install CloudDrive2:
-                <pre><code>brew tap cloud-fs/clouddrive2
-brew install clouddrive2</code></pre>
+                <div class="code-block"><pre><code>brew tap cloud-fs/clouddrive2
+brew install clouddrive2</code></pre></div>
               </li>
               <li>Start CloudDrive2:
-                <pre><code>brew services start clouddrive2</code></pre>
+                <div class="code-block"><pre><code>brew services start clouddrive2</code></pre></div>
                 This creates a background service that starts again the next time you log in.
               </li>
               <li>Open <a href="http://localhost:19798" rel="noopener">http://localhost:19798</a> in a
                   browser to reach the management interface.</li>
               <li>Stop CloudDrive2:
-                <pre><code>brew services stop clouddrive2</code></pre>
+                <div class="code-block"><pre><code>brew services stop clouddrive2</code></pre></div>
               </li>
               <li>Uninstall CloudDrive2:
-                <pre><code>brew services stop clouddrive2
-brew uninstall clouddrive2</code></pre>
+                <div class="code-block"><pre><code>brew services stop clouddrive2
+brew uninstall clouddrive2</code></pre></div>
               </li>
               <li>Upgrade CloudDrive2:
-                <pre><code>brew services stop clouddrive2
+                <div class="code-block"><pre><code>brew services stop clouddrive2
 brew update
 brew upgrade clouddrive2
-brew services start clouddrive2</code></pre>
+brew services start clouddrive2</code></pre></div>
               </li>
             </ol>
 
@@ -211,63 +246,84 @@ brew services start clouddrive2</code></pre>
               <li>Download the archive for your CPU architecture from our website.</li>
               <li>Open a terminal and change into the directory holding the archive.</li>
               <li>Extract it:
-                <pre><code>tar zxvf clouddrive-2-macos-$ARCH-$VERSION.tgz</code></pre>
+                <div class="code-block"><pre><code>tar zxvf clouddrive-2-macos-$ARCH-$VERSION.tgz</code></pre></div>
               </li>
               <li>Change into the extracted directory and run:
-                <pre><code>./clouddrive</code></pre>
+                <div class="code-block"><pre><code>./clouddrive</code></pre></div>
               </li>
               <li>You can add clouddrive to your login items or register it as a system service. See the
                   macOS documentation for how.</li>
             </ol>
 
-            <h3>Android</h3>
+            <p class="chip-note">For what differs between the Mac App Store build and the direct download,
+               see <a href="/en/apps/macos.html">CloudDrive2 for macOS</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-android" aria-hidden="true"></i>Android</summary>
+          <div class="acc-body">
             <ol>
               <li>Download the <code>.apk</code>, install it and open it.</li>
               <li><strong>An un-rooted device cannot mount clouds into the local file system.</strong>
                   Everything else still works, including multi-cloud backup and the WebDAV service.</li>
             </ol>
-
-            <h3>Docker</h3>
-            <p>To run it in a container on a NAS or server, see the
-               <a href="/docker.html">Docker deployment guide</a>.</p>
           </div>
         </details>
 
-        <details class="acc" id="account">
-          <summary>Registering and signing in</summary>
+        <details class="acc">
+          <summary><i class="fa-brands fa-docker" aria-hidden="true"></i>Docker, NAS, Synology and QNAP</summary>
           <div class="acc-body">
+            <p>To run it in a container on a NAS or server, the image is <code>cloudnas/clouddrive2</code>.
+               Shared mounts have to be enabled on the host first; the full steps and a configuration you
+               can copy as it stands are in the
+               <a href="/en/docker.html">Docker deployment guide</a>.</p>
+            <p>The fnOS fpk package and the third-party Synology and QNAP packages are on the
+               <a href="/en/download.html">download page</a>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="start" aria-labelledby="start-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Getting started</p>
+          <h2 id="start-h">Once you are in the console</h2>
+          <p>Register, sign in, connect your first cloud. Three steps.</p>
+        </header>
+
+        <ol class="steps">
+          <li id="account">
             <h3>Register</h3>
-            <ol>
-              <li>The first time you run CloudDrive2, click Register in the top right corner.</li>
-              <li>Enter your email address and a password, then click Register.</li>
-              <li>A verification email is sent to that address. Follow the instructions in it.</li>
-              <li>Once verified, you are taken to the sign-in page.</li>
-            </ol>
-
+            <p>The first time you run CloudDrive2, click Register in the top right corner and enter your
+               email address and a password. A verification email is sent to that address; follow the
+               instructions in it, and once verified you are taken to the sign-in page.</p>
+          </li>
+          <li>
             <h3>Sign in</h3>
-            <ol>
-              <li>Open CloudDrive2 and click Sign in in the top right corner.</li>
-              <li>Enter your email address and password, then click Sign in.</li>
-              <li>If your account is verified, you land on the CloudDrive2 home page.</li>
-            </ol>
-          </div>
-        </details>
+            <p>Click Sign in in the top right corner and enter the same email address and password.
+               If your account is verified, you land on the CloudDrive2 home page.</p>
+          </li>
+          <li id="add-cloud">
+            <h3>Add cloud storage</h3>
+            <p>Choose Add Cloud Storage, pick your provider from the list, enter your account details and
+               press OK. CloudDrive2 verifies the account, and once it passes, that cloud storage appears
+               in CloudDrive2.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
 
-        <details class="acc" id="add-cloud">
-          <summary>Adding cloud storage</summary>
-          <div class="acc-body">
-            <ol>
-              <li>Open CloudDrive2 and choose Add Cloud Storage.</li>
-              <li>Pick your cloud storage provider from the list.</li>
-              <li>Enter your account details and press OK.</li>
-              <li>CloudDrive2 verifies the account. Once it passes, that cloud storage appears in
-                  CloudDrive2.</li>
-            </ol>
-          </div>
-        </details>
+    <section class="band" aria-labelledby="more-h">
+      <div class="container container-narrow">
+        <header class="band-head">
+          <p class="eyebrow">Day to day</p>
+          <h2 id="more-h">A few things you will need later</h2>
+        </header>
 
         <details class="acc" id="files">
-          <summary>Managing files</summary>
+          <summary><i class="fa-solid fa-folder-tree" aria-hidden="true"></i>Managing files</summary>
           <div class="acc-body">
             <ol>
               <li>Inside CloudDrive2 you can work on the files in your cloud storage directly: upload,
@@ -284,20 +340,22 @@ brew services start clouddrive2</code></pre>
         </details>
 
         <details class="acc" id="webdav">
-          <summary>WebDAV service</summary>
+          <summary><i class="fa-solid fa-server" aria-hidden="true"></i>WebDAV service</summary>
           <div class="acc-body">
-            <h3>Connecting to the CloudDrive2 WebDAV service</h3>
+            <p>CloudDrive2 serves every cloud you have connected back out as a single WebDAV service, so
+               any software that speaks WebDAV can connect to it.</p>
             <ul>
               <li><strong>Server address:</strong> <code>http://&lt;ip&gt;:19798/dav</code></li>
               <li><strong>Username:</strong> the email address you sign in to CloudDrive2 with. The local
                   part alone works too — everything before the <code>@</code>.</li>
               <li><strong>Password:</strong> your CloudDrive2 password.</li>
             </ul>
+            <p><a class="arrow-link" href="/en/features.html#webdav">More about the WebDAV service</a></p>
           </div>
         </details>
 
         <details class="acc" id="password">
-          <summary>Forgotten password</summary>
+          <summary><i class="fa-solid fa-key" aria-hidden="true"></i>Forgotten password</summary>
           <div class="acc-body">
             <p>The account information stored in the cloud is encrypted with your own password, and we do
                not keep a copy of that password. If you forget it, click Reset on the sign-in screen and
@@ -310,7 +368,6 @@ brew services start clouddrive2</code></pre>
             </div>
           </div>
         </details>
-
       </div>
     </section>
 
@@ -331,8 +388,19 @@ brew services start clouddrive2</code></pre>
             <span><b>Google Play</b><span>Available now</span></span>
           </a></li>
         </ul>
-        <p>For what each platform can do, see <a href="/en/apps/">all the apps</a>. For installers and
+        <p>For what each platform can do, see <a href="/en/apps/">all apps</a>; for installers and
            per-architecture archives, see the <a href="/en/download.html">download page</a>.</p>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>Still stuck?</h2>
+        <p>There are people in the Telegram group, or you can email us directly.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">Email us</a>
+        </div>
       </div>
     </section>
 
@@ -358,7 +426,7 @@ brew services start clouddrive2</code></pre>
           <h2>Support</h2>
           <ul>
             <li><a href="/en/help.html">Help and setup</a></li>
-            <li><a href="/docker.html">Docker deployment</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
             <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
             <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
           </ul>

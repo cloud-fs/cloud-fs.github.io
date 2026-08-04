@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docker deployment guide — CloudDrive2</title>
+  <meta name="description" content="Run CloudDrive2 in Docker: supported architectures, the shared-mount propagation fuse3 needs, complete Docker Compose and Docker CLI configurations, and how to reach the web console once the container is up.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/docker.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/docker.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/docker.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/docker.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Docker deployment guide — CloudDrive2">
+  <meta property="og:description" content="Image, architectures, shared mount propagation, and the full Compose and CLI configurations.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/docker.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img src="/img/clouddrive-h.svg" alt="CloudDrive2" width="150" height="46"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/docker.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container container-narrow">
+        <p class="eyebrow">Deployment guide</p>
+        <h1>Running CloudDrive2 in Docker</h1>
+        <p class="hero-lede">
+          The image is <code>cloudnas/clouddrive2</code>. For mounts made inside the container to be
+          visible on the host, shared mount propagation has to be enabled before you start —
+          that is what this page is about, plus a configuration you can copy as it stands.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://hub.docker.com/r/cloudnas/clouddrive2" rel="noopener">Image on Docker Hub</a>
+          <a class="btn btn-ghost" href="/en/help.html">Installing on other systems</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="arch-h">
+      <div class="container container-narrow">
+        <header class="band-head">
+          <p class="eyebrow">Image</p>
+          <h2 id="arch-h">Supported architectures</h2>
+          <p>Three architectures under the same image name. Pick the tag that matches the host CPU.</p>
+        </header>
+
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">Architectures supported by the CloudDrive2 Docker image and their tags</caption>
+            <thead>
+              <tr><th scope="col">Architecture</th><th scope="col">Tag</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">x86-64</th><td><code>amd64</code></td></tr>
+              <tr><th scope="row">arm64</th><td><code>arm64</code></td></tr>
+              <tr><th scope="row">armv7</th><td><code>arm32</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note note-warn">
+          <span class="note-title">If the image will not update</span>
+          <p>When Docker refuses to pull the newest version of the image, try disabling your Docker
+             registry mirror and pulling from the official source directly.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="prep-h">
+      <div class="container container-narrow">
+        <header class="band-head">
+          <p class="eyebrow">Before you run it</p>
+          <h2 id="prep-h">Enable shared mounts first</h2>
+          <p>This step cannot be skipped. Without shared mounts, mounting inside the container fails
+             outright with a permission denied error.</p>
+        </header>
+
+        <p>CloudDrive uses fuse3 to mount cloud storage. Mounting cloud storage with fuse3 inside a
+           Docker container requires shared mounts to be enabled on the host system, which you can do
+           either by setting the <code>MountFlags</code> option in the Docker service configuration or
+           by running <code>mount --make-shared</code> on the host. This is because fuse3 needs shared
+           mounts to work; without them, mounting fails with a permission denied error. With shared
+           mounts enabled, the fuse3 mounts can be shared between the Docker container and the host
+           system, giving seamless access to the cloud storage.</p>
+
+        <p>Two options — pick the one that matches how Docker runs on your host.</p>
+
+        <h3>Option 1 · Docker runs as a systemd service</h3>
+        <p>Enable <code>MountFlags</code> in the Docker service:</p>
+        <div class="code-block">
+          <pre><code>sudo mkdir -p /etc/systemd/system/docker.service.d/
+sudo cat &lt;&lt;EOF &gt; /etc/systemd/system/docker.service.d/clear_mount_propagation_flags.conf
+[Service]
+MountFlags=shared
+EOF
+sudo systemctl restart docker.service</code></pre>
+        </div>
+
+        <h3>Option 2 · Docker does not run as a systemd service</h3>
+        <p>Enable the shared mount option on the host directly:</p>
+        <div class="code-block">
+          <pre><code>sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
+        </div>
+
+        <div class="note note-warn">
+          <span class="note-title">Option 2 does not survive a reboot</span>
+          <p><code>mount --make-shared</code> only applies to the running system and has to be repeated
+             after a restart. If you want CloudDrive to come back up automatically, add the command to
+             your system's startup items.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="run-h">
+      <div class="container container-narrow">
+        <header class="band-head">
+          <p class="eyebrow">Usage</p>
+          <h2 id="run-h">Starting the container</h2>
+          <p>The Compose and CLI forms are equivalent. Use whichever you prefer.</p>
+        </header>
+
+        <h3>Docker Compose</h3>
+        <div class="code-block">
+          <pre><code>version: "2.1"
+services:
+  cloudnas:
+    image: cloudnas/clouddrive2
+    container_name: clouddrive2
+    environment:
+      - TZ=Asia/Shanghai
+      - CLOUDDRIVE_HOME=/Config
+    volumes:
+      - &lt;path to accept cloud mounts&gt;:/CloudNAS:shared
+      - &lt;path to app data&gt;:/Config
+      - &lt;other local shared path&gt;:/media:shared #optional media path of host
+    devices:
+      - /dev/fuse:/dev/fuse
+    restart: unless-stopped
+    pid: "host"
+    privileged: true
+    network_mode: "host"</code></pre>
+        </div>
+
+        <h3>Docker CLI</h3>
+        <div class="code-block">
+          <pre><code>docker run -d \
+    --name clouddrive \
+    --restart unless-stopped \
+    --env CLOUDDRIVE_HOME=/Config \
+    -v &lt;path to accept cloud mounts&gt;:/CloudNAS:shared \
+    -v &lt;path to app data&gt;:/Config \
+    -v &lt;other local shared path&gt;:/media:shared \
+    --network host \
+    --pid host \
+    --privileged \
+    --device /dev/fuse:/dev/fuse \
+    cloudnas/clouddrive2</code></pre>
+        </div>
+
+        <h3>The three paths you fill in</h3>
+        <ul class="stack-list">
+          <li>
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <div>
+              <b><code>&lt;path to accept cloud mounts&gt;</code> → <code>/CloudNAS:shared</code></b>
+              <p>Where cloud mounts appear. The <code>shared</code> flag is what lets them propagate back to the host.</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-database" aria-hidden="true"></i>
+            <div>
+              <b><code>&lt;path to app data&gt;</code> → <code>/Config</code></b>
+              <p>Configuration and data, matching <code>CLOUDDRIVE_HOME=/Config</code>. Without this volume, your setup is gone the moment the container is recreated.</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+            <div>
+              <b><code>&lt;other local shared path&gt;</code> → <code>/media:shared</code></b>
+              <p>Optional. Any other local directory on the host you want to manage from CloudDrive alongside your clouds.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-dark" aria-labelledby="config-h">
+      <div class="container container-narrow">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">Configuration</p>
+            <h2 id="config-h">Open the console</h2>
+            <p class="port-url">http://&lt;ip&gt;:19798</p>
+          </div>
+          <p>Once the container is running, open that address on the host in a browser to register an
+             account, add cloud storage and set up mount points. Everything else happens in that
+             console — see <a href="/en/help.html">Help</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>Installing somewhere else?</h2>
+        <p>Windows, Linux, macOS, Android and Synology/QNAP are all covered on these two pages.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/download.html">Downloads</a>
+          <a class="btn btn-ghost" href="/en/apps/desktop.html">Desktop and NAS</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/img/clouddrive-h.svg" alt="" width="130" height="40">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/docker.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

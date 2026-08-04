@@ -53,45 +53,71 @@
   <main id="main">
 
     <section class="hero">
-      <div class="container">
-        <p class="eyebrow">用户手册</p>
-        <h1>CloudDrive2 帮助</h1>
-        <p class="hero-lede">
-          从装好、注册、连上第一个云盘，到把云盘再以 WebDAV 分享出去。
-          下面每一节都可以单独展开，需要哪一段看哪一段。
-        </p>
-        <div class="btn-row">
-          <a class="btn btn-primary" href="/download.html">下载安装包</a>
-          <a class="btn btn-ghost" href="/docker.html">Docker 部署指南</a>
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">用户手册</p>
+          <h1>装好，然后连上第一个云盘</h1>
+          <p class="hero-lede">
+            从装到你的电脑、NAS 或手机上，到注册、添加云存储，再到把云盘以 WebDAV 分享出去。
+            按你用的系统选一节看即可。
+          </p>
+          <ul class="chips">
+            <li><a class="chip chip-cloud" href="#install">安装与运行</a></li>
+            <li><a class="chip chip-cloud" href="#start">注册与添加云盘</a></li>
+            <li><a class="chip" href="#files">文件管理</a></li>
+            <li><a class="chip" href="#webdav">WebDAV 服务</a></li>
+            <li><a class="chip" href="#password">忘记密码</a></li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/download.html">下载安装包</a>
+            <a class="btn btn-ghost" href="/docker.html">Docker 部署指南</a>
+          </div>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/macos-dashboard.webp" width="1600" height="815" decoding="async"
+               alt="CloudDrive2 的管理界面：已连接云盘的总容量，以及文件、云存储、挂载点、备份、传输、WebDAV、API 令牌等入口。">
         </div>
       </div>
     </section>
 
-    <section class="band" aria-labelledby="topics-h">
+    <section class="band band-dark band-tight" aria-labelledby="port-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">装好之后第一件事</p>
+            <h2 id="port-h">在浏览器里打开</h2>
+            <p class="port-url">http://&lt;主机 IP&gt;:19798</p>
+          </div>
+          <p>CloudDrive2 的管理界面跑在这个端口上——无论装在 Windows、Linux、macOS、Android
+             还是 Docker 里都一样。装在本机就用 <code>http://localhost:19798</code>。
+             建议使用最新版的 Edge、Chrome、Safari 或 Firefox，<strong>不支持 Internet Explorer</strong>。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="install" aria-labelledby="install-h">
       <div class="container container-narrow">
         <header class="band-head">
-          <p class="eyebrow">目录</p>
-          <h2 id="topics-h">常见问题与操作步骤</h2>
+          <p class="eyebrow">安装与运行</p>
+          <h2 id="install-h">按系统选一节</h2>
+          <p>核心服务装在一台常开的机器上——电脑、NAS 或路由器都行。手机、电视和头显上的应用另装，见下面的「安装应用」。</p>
         </header>
 
-        <details class="acc" id="install">
-          <summary>安装与运行</summary>
+        <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</summary>
           <div class="acc-body">
-            <div class="note">
-              <span class="note-title">装好之后第一件事</span>
-              <p>用浏览器打开 <code>http://&lt;安装 CloudDrive 的主机 IP&gt;:19798</code> 进入管理界面。
-                 建议使用最新版的 Edge、Chrome、Safari 或 Firefox，<strong>不支持 Internet Explorer</strong>。</p>
-            </div>
-
-            <h3>Windows</h3>
             <ol>
               <li>到官网下载 CloudDrive2 安装包。</li>
               <li>打开安装包，按屏幕上的提示完成安装。</li>
               <li>安装完成后，桌面上会出现 CloudDrive2 快捷方式。双击它，或者直接在浏览器里打开
                   <code>http://localhost:19798</code>。</li>
             </ol>
+          </div>
+        </details>
 
-            <h3>Linux 通用</h3>
+        <details class="acc">
+          <summary><i class="fa-brands fa-linux" aria-hidden="true"></i>Linux 通用</summary>
+          <div class="acc-body">
             <ol>
               <li>确认内核支持 FUSE。看一下 <code>/dev/fuse</code> 这个设备是否存在即可；
                   内核不支持 FUSE 就无法把云盘挂载到本地目录。</li>
@@ -102,103 +128,111 @@
               <li>到官网下载对应 CPU 架构的压缩包。</li>
               <li>打开终端，进入压缩包所在的目录。</li>
               <li>展开压缩包：
-                <pre><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz</code></pre>
+                <div class="code-block"><pre><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz</code></pre></div>
               </li>
               <li>进入展开后的目录并运行：
-                <pre><code>./clouddrive</code></pre>
+                <div class="code-block"><pre><code>./clouddrive</code></pre></div>
               </li>
               <li>可以把 clouddrive 加入开机自启动，或者注册成系统服务。
                   具体做法请参考所用发行版的文档。</li>
             </ol>
+          </div>
+        </details>
 
-            <h3>Arch Linux</h3>
+        <details class="acc">
+          <summary><i class="fa-solid fa-terminal" aria-hidden="true"></i>Arch Linux</summary>
+          <div class="acc-body">
             <ol>
               <li>Arch Linux 及其衍生版可以通过
                   <a href="https://aur.archlinux.org/packages/clouddrive" rel="noopener">AUR 包</a>
                   或<a href="https://github.com/taotieren/aur-repo" rel="noopener">第三方源</a>安装：
-                <pre><code>yay -Syu clouddrive</code></pre>
+                <div class="code-block"><pre><code>yay -Syu clouddrive</code></pre></div>
               </li>
               <li>用 systemd 启动 clouddrive 并设为自启：
-                <pre><code># root 权限
+                <div class="code-block"><pre><code># root 权限
 systemctl enable --now clouddrive.service
 
 # 用户权限
-systemctl --user enable --now clouddrive.service</code></pre>
+systemctl --user enable --now clouddrive.service</code></pre></div>
               </li>
               <li>查看 clouddrive 的运行状态：
-                <pre><code># root 权限
+                <div class="code-block"><pre><code># root 权限
 systemctl status clouddrive.service
 
 # 用户权限
-systemctl --user status clouddrive.service</code></pre>
+systemctl --user status clouddrive.service</code></pre></div>
               </li>
               <li>用默认浏览器打开管理界面：
-                <pre><code># 推荐
+                <div class="code-block"><pre><code># 推荐
 xdg-open http://localhost:19798
 
 # IPv4
 xdg-open http://127.0.0.1:19798
 
 # IPv6
-xdg-open http://[::]:19798</code></pre>
+xdg-open http://[::]:19798</code></pre></div>
               </li>
               <li>如果浏览器打开很慢或者卡顿，改用浏览器的无痕模式访问。</li>
               <li>登录后挂载本地磁盘时需要填 UID 和 GID：
-                <pre><code># 当前用户
+                <div class="code-block"><pre><code># 当前用户
 id -u
 id -g
 
 # 其他用户
 id -u username
-id -g username</code></pre>
+id -g username</code></pre></div>
               </li>
               <li>AUR 包预设的本地磁盘挂载位置：<code>/media/clouddrive</code>。</li>
               <li>AUR 包预设的 WebDAV 挂载位置：<code>/media/clouddrive-dav</code>，
                   这个功能依赖 <code>davfs2</code> 包。</li>
               <li>把 WebDAV 的用户名和密码写进 <code>/etc/davfs2/secrets</code>，例如：
-                <pre><code>cat &lt;&lt; EOF | sudo tee -a /etc/davfs2/secrets
+                <div class="code-block"><pre><code>cat &lt;&lt; EOF | sudo tee -a /etc/davfs2/secrets
 # personal webdav, application password
 /media/clouddrive-dav user@email.com  mypassword
-EOF</code></pre>
+EOF</code></pre></div>
               </li>
               <li>用 systemd 启动 clouddrive-dav 并设为自启（root 权限）：
-                <pre><code>systemctl enable --now clouddrive-dav.service</code></pre>
+                <div class="code-block"><pre><code>systemctl enable --now clouddrive-dav.service</code></pre></div>
               </li>
               <li>查看 clouddrive-dav 的运行状态（root 权限）：
-                <pre><code>systemctl status clouddrive-dav.service</code></pre>
+                <div class="code-block"><pre><code>systemctl status clouddrive-dav.service</code></pre></div>
               </li>
             </ol>
+          </div>
+        </details>
 
-            <h3>macOS</h3>
+        <details class="acc">
+          <summary><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS</summary>
+          <div class="acc-body">
             <h4>用 Homebrew 安装（推荐）</h4>
             <ol>
               <li>先确认系统里装好了 <a href="https://brew.sh/" rel="noopener">Homebrew</a>。</li>
               <li>运行前必须安装 <a href="https://osxfuse.github.io/" rel="noopener">macFUSE</a>，
                   并按提示在「系统设置」里给它授权。也可以用 Homebrew 装：
-                <pre><code>brew install --cask macfuse</code></pre>
+                <div class="code-block"><pre><code>brew install --cask macfuse</code></pre></div>
               </li>
               <li>安装 CloudDrive2：
-                <pre><code>brew tap cloud-fs/clouddrive2
-brew install clouddrive2</code></pre>
+                <div class="code-block"><pre><code>brew tap cloud-fs/clouddrive2
+brew install clouddrive2</code></pre></div>
               </li>
               <li>启动 CloudDrive2：
-                <pre><code>brew services start clouddrive2</code></pre>
+                <div class="code-block"><pre><code>brew services start clouddrive2</code></pre></div>
                 启动成功后会自动创建后台服务，下次登录系统时自动运行。
               </li>
               <li>用浏览器打开 <a href="http://localhost:19798" rel="noopener">http://localhost:19798</a>
                   进入管理界面。</li>
               <li>停止 CloudDrive2：
-                <pre><code>brew services stop clouddrive2</code></pre>
+                <div class="code-block"><pre><code>brew services stop clouddrive2</code></pre></div>
               </li>
               <li>卸载 CloudDrive2：
-                <pre><code>brew services stop clouddrive2
-brew uninstall clouddrive2</code></pre>
+                <div class="code-block"><pre><code>brew services stop clouddrive2
+brew uninstall clouddrive2</code></pre></div>
               </li>
               <li>升级 CloudDrive2：
-                <pre><code>brew services stop clouddrive2
+                <div class="code-block"><pre><code>brew services stop clouddrive2
 brew update
 brew upgrade clouddrive2
-brew services start clouddrive2</code></pre>
+brew services start clouddrive2</code></pre></div>
               </li>
             </ol>
 
@@ -209,60 +243,78 @@ brew services start clouddrive2</code></pre>
               <li>到官网下载对应 CPU 架构的压缩包。</li>
               <li>打开终端，进入压缩包所在的目录。</li>
               <li>展开压缩包：
-                <pre><code>tar zxvf clouddrive-2-macos-$ARCH-$VERSION.tgz</code></pre>
+                <div class="code-block"><pre><code>tar zxvf clouddrive-2-macos-$ARCH-$VERSION.tgz</code></pre></div>
               </li>
               <li>进入展开后的目录并运行：
-                <pre><code>./clouddrive</code></pre>
+                <div class="code-block"><pre><code>./clouddrive</code></pre></div>
               </li>
               <li>可以把 clouddrive 加入开机自启动，或者注册成系统服务，具体做法参考系统文档。</li>
             </ol>
 
-            <h3>Android</h3>
+            <p class="chip-note">Mac App Store 版与官网直接下载版的功能差异，见 <a href="/apps/macos.html">macOS 版</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-android" aria-hidden="true"></i>Android</summary>
+          <div class="acc-body">
             <ol>
               <li>下载后缀为 <code>.apk</code> 的安装包，安装后打开即可。</li>
               <li><strong>没有 root 的系统无法把云盘挂载到本地文件系统。</strong>
                   其余功能不受影响，多云盘备份、WebDAV 服务等照常可用。</li>
             </ol>
-
-            <h3>Docker</h3>
-            <p>在 NAS 或服务器上用容器跑，请看 <a href="/docker.html">Docker 版本安装指南</a>。</p>
           </div>
         </details>
 
-        <details class="acc" id="account">
-          <summary>注册与登录</summary>
+        <details class="acc">
+          <summary><i class="fa-brands fa-docker" aria-hidden="true"></i>Docker、NAS 与群晖/威联通</summary>
           <div class="acc-body">
+            <p>在 NAS 或服务器上用容器跑，镜像是 <code>cloudnas/clouddrive2</code>。
+               启动前需要先在宿主机上打开共享挂载，完整步骤和可直接复制的启动配置见
+               <a href="/docker.html">Docker 部署指南</a>。</p>
+            <p>飞牛 fnOS 的 fpk 安装包、群晖与威联通的第三方套件，都在<a href="/download.html">下载页</a>。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="start" aria-labelledby="start-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">上手</p>
+          <h2 id="start-h">进了管理界面之后</h2>
+          <p>注册、登录、连上第一个云盘，三步。</p>
+        </header>
+
+        <ol class="steps">
+          <li id="account">
             <h3>注册</h3>
-            <ol>
-              <li>第一次运行 CloudDrive2 后，点击右上角的「注册」按钮。</li>
-              <li>填入你的邮箱地址和密码，点击「注册」。</li>
-              <li>系统会往这个邮箱发一封验证邮件，按邮件里的提示完成验证。</li>
-              <li>验证成功后会自动跳转到登录页面。</li>
-            </ol>
-
+            <p>第一次运行 CloudDrive2 后，点击右上角的「注册」按钮，填入邮箱地址和密码。
+               系统会往这个邮箱发一封验证邮件，按邮件里的提示完成验证；验证成功后会自动跳转到登录页面。</p>
+          </li>
+          <li>
             <h3>登录</h3>
-            <ol>
-              <li>打开 CloudDrive2，点击右上角的「登录」按钮。</li>
-              <li>填入邮箱地址和密码，点击「登录」。</li>
-              <li>账号已经通过验证的话，就会跳转到 CloudDrive2 的主页。</li>
-            </ol>
-          </div>
-        </details>
+            <p>点击右上角的「登录」按钮，填入同一组邮箱地址和密码。
+               账号已经通过验证的话，就会跳转到 CloudDrive2 的主页。</p>
+          </li>
+          <li id="add-cloud">
+            <h3>添加云存储</h3>
+            <p>选择「添加云存储」，在列表里选择你的云存储服务商，填入账号信息后按「确定」。
+               系统会验证这个账号，验证通过后，该云存储就会出现在 CloudDrive2 里。</p>
+          </li>
+        </ol>
+      </div>
+    </section>
 
-        <details class="acc" id="add-cloud">
-          <summary>添加云存储</summary>
-          <div class="acc-body">
-            <ol>
-              <li>打开 CloudDrive2，选择「添加云存储」。</li>
-              <li>在列表里选择你的云存储服务商。</li>
-              <li>填入账号信息，然后按「确定」。</li>
-              <li>系统会验证这个账号，验证通过后，该云存储就会出现在 CloudDrive2 里。</li>
-            </ol>
-          </div>
-        </details>
+    <section class="band" aria-labelledby="more-h">
+      <div class="container container-narrow">
+        <header class="band-head">
+          <p class="eyebrow">日常使用</p>
+          <h2 id="more-h">还会用到的几件事</h2>
+        </header>
 
         <details class="acc" id="files">
-          <summary>文件管理</summary>
+          <summary><i class="fa-solid fa-folder-tree" aria-hidden="true"></i>文件管理</summary>
           <div class="acc-body">
             <ol>
               <li>在 CloudDrive2 里可以直接操作云存储中的文件：上传、下载、删除、移动等等。</li>
@@ -278,20 +330,22 @@ brew services start clouddrive2</code></pre>
         </details>
 
         <details class="acc" id="webdav">
-          <summary>WebDAV 服务</summary>
+          <summary><i class="fa-solid fa-server" aria-hidden="true"></i>WebDAV 服务</summary>
           <div class="acc-body">
-            <h3>访问 CloudDrive2 的 WebDAV 服务</h3>
+            <p>CloudDrive2 会把所有已连接的云盘再以一个 WebDAV 服务对外提供，
+               任何支持 WebDAV 的软件都能连上来。</p>
             <ul>
               <li><strong>服务器地址：</strong><code>http://&lt;ip&gt;:19798/dav</code></li>
               <li><strong>用户名：</strong>登录 CloudDrive2 的邮箱；
                   也可以只填邮箱的用户名部分，即 <code>@</code> 之前的那一段。</li>
               <li><strong>密码：</strong>登录 CloudDrive2 的密码。</li>
             </ul>
+            <p><a class="arrow-link" href="/features.html#webdav">WebDAV 的完整说明</a></p>
           </div>
         </details>
 
         <details class="acc" id="password">
-          <summary>忘记密码</summary>
+          <summary><i class="fa-solid fa-key" aria-hidden="true"></i>忘记密码</summary>
           <div class="acc-body">
             <p>存在云端的用户信息是用你的本地密码加密的，我们不保存你的密码。
                忘记密码时，可以在登录界面点击「重置」按钮，按提示重置。</p>
@@ -302,7 +356,6 @@ brew services start clouddrive2</code></pre>
             </div>
           </div>
         </details>
-
       </div>
     </section>
 
@@ -325,6 +378,17 @@ brew services start clouddrive2</code></pre>
         </ul>
         <p>想知道每个平台各能做什么，看<a href="/apps/">全部应用</a>；
            要拿安装包和各架构的压缩包，看<a href="/download.html">下载页</a>。</p>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>还是没解决？</h2>
+        <p>Telegram 群里有人在，也可以直接发邮件。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">发邮件</a>
+        </div>
       </div>
     </section>
 

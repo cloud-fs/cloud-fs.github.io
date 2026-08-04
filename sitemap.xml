@@ -157,4 +157,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/help.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/help.html"/>
   </url>
+  <url>
+    <loc>https://www.clouddrive2.com/docker.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/docker.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/docker.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/docker.html"/>
+  </url>
+  <url>
+    <loc>https://www.clouddrive2.com/en/docker.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/docker.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/docker.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/docker.html"/>
+  </url>
 </urlset>
