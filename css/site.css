@@ -547,6 +547,28 @@ a.card:hover {
   margin: 0; max-width: none;
 }
 
+/* ── time-limited promotion panel ─────────────────────────────────────── */
+.promo {
+  padding: clamp(var(--s5), 1.5rem + 2vw, var(--s7));
+  border: 1px solid var(--border-strong);
+  border-color: color-mix(in srgb, var(--brand) 45%, var(--border));
+  border-radius: var(--r-l);
+  background: var(--brand-soft);
+}
+.promo > :last-child { margin-bottom: 0; }
+.promo h2 { font-size: clamp(1.35rem, 1.1rem + 1.3vw, 2rem); margin-bottom: var(--s4); }
+.promo p { color: var(--text); }
+.promo .btn-row { margin-top: var(--s5); margin-bottom: 0; }
+.promo-deadline {
+  display: inline-flex; align-items: center; gap: .5em;
+  padding: .45em .8em; margin-bottom: var(--s4);
+  border-radius: var(--r-pill);
+  background: var(--brand); color: var(--on-brand);
+  font: 600 .76rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase;
+}
+:lang(zh-CN) .promo-deadline { font-family: var(--font); letter-spacing: .04em; text-transform: none; }
+.price-list .fa-gift { color: var(--brand); }
+
 /* ── numbered steps (only where the content really is a sequence) ─────── */
 .steps { counter-reset: step; list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s4); }
 @media (min-width: 860px) { .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
