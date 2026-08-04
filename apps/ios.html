@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>iPhone 与 iPad 版 CloudDrive2 — 云盘、影音与 AI 字幕</title>
+  <meta name="description" content="iPhone 与 iPad 上的 CloudDrive2：统一管理所有云盘，串流播放蓝光原盘、杜比视界与 DSD 音乐，内置 Emby / Jellyfin 客户端与 AI 字幕翻译，并深度集成「文件」应用。">
+  <link rel="canonical" href="https://www.clouddrive2.com/apps/ios.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/ios.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/ios.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/ios.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="iPhone 与 iPad 版 CloudDrive2">
+  <meta property="og:description" content="所有网盘，一个应用。串流电影、音乐与蓝光原盘，还有 Emby / Jellyfin 客户端与 AI 字幕翻译。">
+  <meta property="og:url" content="https://www.clouddrive2.com/apps/ios.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "iOS, iPadOS",
+    "url": "https://www.clouddrive2.com/apps/ios.html",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "iPhone 与 iPad 上的多云盘管理与影院级影音播放。",
+    "offers": {
+      "@type": "Offer",
+      "name": "App Pro",
+      "price": "19.99",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img src="/img/clouddrive-h.svg" alt="CloudDrive2" width="150" height="46"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/" aria-current="page">应用</a></li>
+        <li><a href="/features.html">功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/apps/ios.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">iPhone · iPad</p>
+          <h1>所有网盘，装进口袋</h1>
+          <p class="hero-lede">
+            串流电影、音乐与蓝光原盘（含 HDMV 菜单），支持杜比视界、最高 DSD1024，
+            超大 PDF 边下边读无需下载，还有 Emby / Jellyfin 客户端与 AI 字幕翻译。
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/download.html">获取应用</a>
+            <a class="btn btn-ghost" href="/pricing.html">App Pro 说明</a>
+          </div>
+          <ul class="chips">
+            <li><span class="chip chip-video">杜比视界 P7</span></li>
+            <li><span class="chip chip-disc">HDMV 原盘菜单</span></li>
+            <li><span class="chip chip-audio">DSD1024 · DoP</span></li>
+            <li><span class="chip chip-subs">端侧 AI 字幕</span></li>
+            <li><span class="chip chip-cloud">「文件」应用集成</span></li>
+          </ul>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/iphone-dashboard.webp" width="553" height="1035" decoding="async"
+               alt="iPhone 上的 CloudDrive2 仪表盘：容量卡片，以及文件、云存储、备份、任务、WebDAV、令牌、影视、设置八个快捷入口。">
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="cloud-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">云盘</p>
+          <h2 id="cloud-h">统一云盘管理</h2>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>一站式连接所有云账号</h3>
+            <p>Google Drive、OneDrive、阿里云盘、百度网盘、115、S3、WebDAV 等等，全部连到一处。
+               在一个清爽的界面里跨云浏览、搜索、复制、移动、重命名和整理文件。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">跨云搜索</span></li>
+              <li><span class="chip chip-cloud">S3 · WebDAV · SFTP</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/iphone-providers.webp" width="553" height="1200" loading="lazy" decoding="async"
+                 alt="iPhone 上的「添加云账号」列表，包含 OneDrive、Google Drive、百度网盘、迅雷云盘、123云盘、阿里云盘、115、天翼云盘，以及 WebDAV、S3、SFTP 等。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>iPad 上的分栏视图与检查器</h3>
+            <p>iPad 版提供 Finder 风格的分栏视图和文件检查器面板，配合外接键盘，
+               再大的文件库也能一层层点进去、一眼看清属性。列表、网格、画廊、分栏四种视图随时切换。</p>
+            <ul class="chips">
+              <li><span class="chip">分栏视图</span></li>
+              <li><span class="chip">检查器面板</span></li>
+              <li><span class="chip">画廊缩略图</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/ipad-dashboard.webp" width="1050" height="690" loading="lazy" decoding="async"
+                 alt="iPad 上的 CloudDrive2 仪表盘：容量卡片、活动传输，以及八个快捷入口与系统状态面板。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>深度集成「文件」应用</h3>
+            <p>完整的 File Provider 扩展，让你在 iOS / iPadOS 的「文件」应用里，
+               以及任何调用文档选择器的应用里，直接访问云端文件。
+               CloudDrive2 也可以通过 <code>clouddrive://</code> URL 方案，作为其他应用的外部播放器。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">File Provider</span></li>
+              <li><span class="chip chip-cloud">clouddrive:// 外部播放器</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/ipad-providers.webp" width="1050" height="1400" loading="lazy" decoding="async"
+                 alt="iPad 上的「添加云账号」面板，列出全部支持的云服务商与本地/网络存储类型。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark" aria-labelledby="media-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">影音</p>
+          <h2 id="media-h">影院级播放，直接从云端</h2>
+          <p>不用先把几十 GB 的原盘拖回手机。播放器直接从云端读取，解码、菜单、音轨、字幕一样不少。</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Emby / Jellyfin 客户端，直连串流</h3>
+            <p>连接你自己的 Emby 或 Jellyfin 服务器，海报墙、演职人员、继续观看一应俱全。
+               当本机 CloudDrive 能访问同一个文件时，「直连串流」会直接从云端拉流播放，
+               绕过服务器转码——服务器转不动的格式也能原画质播放，观看记录仍与服务器同步。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Direct Stream</span></li>
+              <li><span class="chip chip-cloud">观看记录同步</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/iphone-direct_stream_setup.webp" width="553" height="1200" loading="lazy" decoding="async"
+                 alt="iPhone 上的「添加服务器」界面，开启了直连串流，并把服务器媒体路径映射到 CloudDrive 目录。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>强大的媒体播放器</h3>
+            <p>硬件加速解码 H.264、H.265/HEVC、AV1，支持 HDR10、HDR10+ 与杜比视界——
+               包括 Profile 7 蓝光内容的真·杜比视界播放。画中画、音频与字幕独立延迟调节、
+               字幕样式与 HDR 字幕亮度调节，都在播放器里。</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">杜比视界 P5 / 7 / 8</span></li>
+              <li><span class="chip chip-video">HDR10+ · HLG</span></li>
+              <li><span class="chip chip-video">画中画</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/iphone-player_dv.webp" width="553" height="1200" loading="lazy" decoding="async"
+                 alt="iPhone 竖屏播放器正在播放一段 4K 演示片，画面上方显示 HDR10 与 HEVC 格式角标。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>蓝光 ISO，原盘菜单直接用</h3>
+            <p>直接从云存储播放蓝光 ISO 镜像，并进入原生的原盘菜单：场景选择、彩色快捷键、
+               菜单内音轨与字幕设置，甚至 2D+3D 合装碟。</p>
+            <p class="chip-note">原盘菜单适用于 HDMV 光盘。BD-J（Java）光盘在 Apple 平台会直接播放正片；如需 BD-J 菜单，请看 <a href="/apps/android.html">Android 版</a>。</p>
+            <ul class="chips">
+              <li><span class="chip chip-disc">HDMV 菜单</span></li>
+              <li><span class="chip chip-disc">2D + 3D 合装碟</span></li>
+              <li><span class="chip chip-disc">场景选择</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/ipad-player_dv.webp" width="1050" height="1400" loading="lazy" decoding="async"
+                 alt="iPad 全屏播放器正在播放 4K 演示片，界面显示 3840×2160、59.9 fps 与 HDR10、4K、HEVC 角标。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>AI 字幕翻译</h3>
+            <p>为任何视频生成翻译字幕：优先翻译已有字幕轨（包括通过端侧 OCR 识别的 PGS 图形字幕），
+               没有字幕时自动回退到语音识别。可以使用 Apple 的端侧翻译模型——免费，而且音频不出设备——
+               也可以接入你自己的 API。生成的字幕保存在视频旁边，换台设备就能直接复用。</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">Apple 端侧模型</span></li>
+              <li><span class="chip chip-subs">PGS OCR</span></li>
+              <li><span class="chip chip-subs">字幕存档复用</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/iphone-ai_subtitles.webp" width="553" height="1200" loading="lazy" decoding="async"
+                 alt="iPhone 上的「实时翻译」设置：AI 字幕开关已开启，可选择语言与转写模型。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>多声道、杜比全景声与发烧级 DSD</h3>
+            <p>杜比全景声（杜比数字+）可经 HDMI 比特流直通到功放。TrueHD、DTS-HD Master Audio 与 DTS
+               完整解码，以 5.1 或 7.1 输出到多声道 USB 解码器、HDMI 转接器和 AirPlay 2，绝不强制下混成立体声；
+               AirPods Pro / Max 则启用带头部追踪的空间音频。</p>
+            <p>DSD 文件（.dsf、.dff）和 SACD ISO 直接从云端播放，包括真正的 5.1 多声道 DSD，
+               经 DoP 比特完美送到兼容解码器。锁屏之后音乐照常继续。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
+              <li><span class="chip chip-audio">SACD ISO</span></li>
+              <li><span class="chip chip-audio">TrueHD · DTS-HD MA</span></li>
+              <li><span class="chip chip-audio">后台播放</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/iphone-audio_settings.webp" width="553" height="1200" loading="lazy" decoding="async"
+                 alt="iPhone 播放器设置：已连接的 USB 解码器 AE8 显示采样率范围、32 位与 DoP 支持的 DSD64 至 DSD1024 档位。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="more-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">更多</p>
+          <h2 id="more-h">日常会用到的其余部分</h2>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-file-pdf card-icon" aria-hidden="true"></i>
+            <h3>流式 PDF 阅读器</h3>
+            <p>云端 PDF 边下边读，不必完整下载。支持缩放、页面缩略图、书签与阅读位置记忆。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-film card-icon" aria-hidden="true"></i>
+            <h3>影库元数据</h3>
+            <p>自动读取本地 .nfo 文件与海报、剧照、Logo（Plex / Jellyfin / Emby 命名规范）。不联网抓取，影库完全私有。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
+            <h3>跨云传输</h3>
+            <p>在不同服务商之间复制或移动文件。传输管理器支持暂停、恢复、重试、限速与并发控制，也支持整个文件夹递归上传。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-cloud-arrow-up card-icon" aria-hidden="true"></i>
+            <h3>备份与同步</h3>
+            <p>创建带定时计划的自动备份任务，照片图库也可以整体备份上云。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>共享与安全</h3>
+            <p>两步验证、加密文件夹与活动会话监控。内置 WebDAV 服务器可把云端文件共享给同一网络下的设备，API 令牌可授予限定权限和有效期的访问。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-sliders card-icon" aria-hidden="true"></i>
+            <h3>还有这些</h3>
+            <p>可配置淘汰策略的磁盘缓存与离线访问、四种视图模式、用 Infuse / VLC / nPlayer 等第三方播放器打开、后台音频播放、深色与浅色主题、中英文界面。</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="get-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">获取</p>
+          <h2 id="get-h">如何安装</h2>
+        </header>
+        <ul class="store-badges">
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>
+            <span><b>App Store</b><span>即将上架</span></span>
+          </span></li>
+          <li><a class="store-badge" href="/download.html">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span><b>全部下载方式</b><span>各平台安装包</span></span>
+          </a></li>
+        </ul>
+        <div class="note">
+          <span class="note-title">关于 App Pro</span>
+          <p>浏览云盘、管理文件、传输与备份、基础播放都不需要额外购买。
+             Emby / Jellyfin 客户端、AI 字幕、蓝光原盘播放、DSD / SACD 这几项进阶播放功能，
+             需要一次性的 <strong>App Pro</strong> 内购。在 Apple 平台买过一次，
+             iPhone、iPad、Mac、Apple TV 与 Vision Pro 通用。详见<a href="/pricing.html">会员与价格</a>。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-tight" aria-labelledby="other-h">
+      <div class="container">
+        <h2 id="other-h" class="eyebrow strip-title">其他平台</h2>
+        <ul class="platform-strip">
+          <li><a href="/apps/macos.html"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</a></li>
+          <li><a href="/apps/tvos.html"><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV</a></li>
+          <li><a href="/apps/visionos.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Vision Pro</a></li>
+          <li><a href="/apps/android.html"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</a></li>
+          <li><a href="/apps/quest.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Meta Quest</a></li>
+          <li><a href="/apps/desktop.html"><i class="fa-solid fa-server" aria-hidden="true"></i>电脑 · NAS</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/img/clouddrive-h.svg" alt="" width="130" height="40">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/apps/ios.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

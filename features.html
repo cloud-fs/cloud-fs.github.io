@@ -1,600 +1,510 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 功能</title>
-  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
-  <link rel="stylesheet" href="css/site.css">
-  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/site.js"></script>
-  <link rel="stylesheet" href="css/download.css">
+  <title>核心功能 — CloudDrive2 服务端能做什么</title>
+  <meta name="description" content="CloudDrive2 服务端的完整功能说明：把云盘挂载成本地磁盘、统一的多云盘 Web 管理、WebDAV 服务、跨云盘快速复制、文件变更通知、加密文件系统、访问权限控制与多云盘备份。">
+  <link rel="canonical" href="https://www.clouddrive2.com/features.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/features.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/features.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/features.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="CloudDrive2 核心功能">
+  <meta property="og:description" content="本地挂载、统一管理、WebDAV、跨云盘快速复制、文件变更通知、加密文件系统与多云盘备份——运行在你自己的机器上。">
+  <meta property="og:url" content="https://www.clouddrive2.com/features.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
 </head>
-<style>
-  .navbar-collapse {
-    background-color: rgba(234, 242, 248, 0.9);
-    padding: 10px;
-  }
-
-  body {
-    background-color: #f8f9fa;
-    color: #212529;
-  }
-
-  .feature-card {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    margin-bottom: 20px;
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-  }
-
-  .feature-card i {
-    color: #2184bf;
-    margin-right: 10px;
-  }
-
-  .feature-icon {
-    font-size: 24px;
-    margin-right: 10px;
-    color: #2184bf;
-  }
-
-  .feature-content {
-    margin-left: 8px;
-    flex-grow: 1;
-    /* Fill remaining space */
-  }
-
-  .feature-title {
-    display: flex;
-    font-size: 35px;
-    font-weight: bold;
-    background-color: #e8f3f8;
-    justify-content: center;
-    align-items: center;
-    /* Light blue background color */
-    padding: 5px 10px;
-    border-radius: 4px;
-    flex-grow: 1;
-  }
-
-  .feature-description {
-    margin-top: 10px;
-    margin-bottom: 0;
-    background-color: #f3f8fb;
-    /* Very light blue background color */
-    padding: 5px 10px;
-    border-radius: 4px;
-    text-align: left;
-    /* Left align the description */
-    flex-grow: 1;
-    /* Fill remaining space */
-  }
-</style>
 
 <body>
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
-      <div class="container">
-        <a class="navbar-brand" href="index.html">
-          <img src="img/clouddrive-h.png" height="80">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">主页</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="features.html">功能</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="pricing.html">会员</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="help.html">帮助</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/api/CloudDrive2_gRPC_API_Guide.html">API</a>
-            </li>
-          </ul>
-          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
-        </div>
-      </div>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img src="/img/clouddrive-h.svg" alt="CloudDrive2" width="150" height="46"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html" aria-current="page">功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/features.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
     </nav>
   </header>
 
-  <div class="container mt-4">
-    <h1 class="hero-title">CloudDrive - 功能</h1>
-    <div class="feature-card" id="local-mount">
-      <div class="feature-content">
-        <div class="feature-title">
-          <div class="icon-container">
-            <i class="fas fa-laptop-file"></i>
-          </div>云盘本地挂载
-        </div>
-        <div class="feature-description">
-          <p>CloudDrive的“云盘本地挂载”功能允许用户将云盘或者云盘中的某个目录挂载成本地磁盘，就像将USB闪存盘插入电脑一样。用户可以直接访问和操作挂载后的云盘文件，无需事先下载，非常方便。</p>
-          <p>此外，云盘本地挂载不仅可以单独挂载某个云盘，也可以将多个云盘统一挂载，形成一个统一的文件系统。这样，用户可以方便地在多个云盘之间切换和管理文件，提高工作效率。</p>
-          <p>CloudDrive访问云盘文件时，采用多线程下载机制，读取速度成倍提升，在网络带宽保证的情况下，几乎和本地磁盘一样的体验。</p>
-          <p>更为重要的是，云盘本地挂载支持完全的随机读写操作，任何本地应用程序都可以像访问本地磁盘一样访问云盘，无论是办公软件还是媒体播放器，都可以直接读取和写入云盘文件，极大地提高了云盘的使用便利性。</p>
-          <p>CloudDrive的“云盘本地挂载”功能，让云盘使用起来就像本地磁盘一样，无论是数据读取、文件管理还是应用程序的使用，都变得更加简单直观。</p>
-          <p>
-            CloudDrive的"云盘本地挂载"功能还有一个重要的优势，那就是能够方便地实现跨设备数据同步。用户在一个设备上修改的文件，可以通过CloudDrive立即同步到云盘，然后在另一个设备上直接打开最新版本的文件。这样，无论用户在哪个设备上工作，都能保证文件的实时更新和数据的一致性。
-          </p>
-          <p>这种跨设备的数据同步功能，对于多设备用户来说，尤其有用。无论是在家里的电脑上，公司的电脑上，还是在移动设备上，用户都可以随时访问和编辑最新版本的文件，无需担心版本不一致或数据丢失的问题。</p>
-          <p>因此，CloudDrive的“云盘本地挂载”功能，不仅可以像使用本地硬盘一样方便地访问和管理云盘文件，还可以实现跨设备的数据同步，大大提高了云盘的使用便利性和效率。</p>
-        </div>
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">核心功能</p>
+        <h1>CloudDrive2 服务端能做什么</h1>
+        <p class="hero-lede">
+          这一页讲的是运行在你自己电脑或 NAS 上的那个服务：它把云盘挂载成本地磁盘，
+          在一个界面里管理所有云盘账户，对外提供 WebDAV，并负责跨云复制、加密与备份。
+          下面十项逐条展开。
+        </p>
+        <ul class="chips">
+          <li><a class="chip chip-cloud" href="#local-mount">云盘本地挂载</a></li>
+          <li><a class="chip chip-cloud" href="#unified-web-management">统一的多云盘管理</a></li>
+          <li><a class="chip chip-cloud" href="#one-login">一次登录，到处使用</a></li>
+          <li><a class="chip chip-cloud" href="#webdav">WebDAV 服务</a></li>
+          <li><a class="chip" href="#inter-cloud-copy">跨云盘快速复制</a></li>
+          <li><a class="chip" href="#file-notification">文件变更通知</a></li>
+          <li><a class="chip" href="#encrypted-filesystem">加密文件系统</a></li>
+          <li><a class="chip" href="#file-access-control">访问监控与权限</a></li>
+          <li><a class="chip chip-cloud" href="#service-vendor-friendly">云盘服务商友好</a></li>
+          <li><a class="chip chip-backup" href="#multicloud-backup">多云盘备份</a></li>
+        </ul>
       </div>
-    </div>
+    </section>
 
-    <div class="feature-card" id="unified-web-management">
-      <div class="feature-content">
-        <div class="feature-title">
-          <div class="icon-container">
-            <i class="fas fa-people-roof"></i>
-          </div>统一的多云盘管理
-        </div>
-        <div class="feature-description">
-          CloudDrive的“统一的多云盘Web管理界面”功能为用户提供了一个集中管理所有云盘的平台。在这个界面上，用户可以完成所有云盘的所有文件操作，包括列出文件目录、浏览图片、播放视频和音频等。更重要的是，它甚至可以调用第三方播放器播放音频和视频，包括PotPlayer、VLC
-          Player、Infuse、iina和nPlayer。</p>
-          <p>用户还可以在这个界面上完成创建文件夹、重命名、删除文件、移动文件位置、上传本地文件等操作。所有的这些操作都可以在一个界面里完成，无需在不同的云盘App间切换，大大提高了效率。</p>
-          <p>CloudDrive的"统一的多云盘Web管理界面"功能，实现了真正的一站式云盘管理，让用户的云盘使用体验更加方便，更加高效。</p>
-          <p>CloudDrive目前支持的网盘：</p>
-          <!-- add a list of cloud storage services with logo-->
-          <div class="row">
-            <div class="col-md-12">
-              <table class="table table-responsive">
-                <thead class="thead-dark" style="display:none;">
-                  <tr>
-                    <th>Icon</th>
-                    <th>Link</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><a style="color: inherit; text-decoration: none;" href="https://www.123pan.com/"
-                        target="_blank"><img class="cloud-logo" src="img/cloud123.png">123云盘</a></td>
-                    <td><a style="color: inherit; text-decoration: none;" href="https://www.aliyundrive.com"
-                        target="_blank"><img class="cloud-logo" src="img/cloudaliyundrive.png">阿里云盘</a></td>
-                  </tr>
-                  <tr>
-                    <td><a style="color: inherit; text-decoration: none;" href="https://pan.baidu.com"
-                        target="_blank"><img class="cloud-logo" src="img/cloudbaidu.png">百度网盘</a></td>
-                    <td><a style="color: inherit; text-decoration: none;" href="https://cloud.189.cn"
-                        target="_blank"><img class="cloud-logo" src="img/cloud189.png">天翼云盘</a></td>
-                  </tr>
-                  <tr>
-                    <td><a style="color: inherit; text-decoration: none;" href="https://www.115.com"
-                        target="_blank"><img class="cloud-logo" src="img/cloud115.png">115网盘</a></td>
-                    <td><a style="color: inherit; text-decoration: none;" href="https://drive.google.com"
-                        target="_blank"><img class="cloud-logo" src="img/cloudgoogledrive.png">Google Drive</a></td>
-                  </tr>
-                  <tr>
-                    <td><a style="color: inherit; text-decoration: none;" href="https://pan.xunlei.com/"
-                      target="_blank"><img class="cloud-logo" src="img/cloudxunlei.png">迅雷云盘</a></td>
-                    <!-- <td><a style="color: inherit; text-decoration: none;" href="https://mypikpak.com"
-                        target="_blank"><img class="cloud-logo" src="img/pikpak.png">PikPak</a></td> -->
-                    <td><img class="cloud-logo" src="img/webdav.png">WebDAV服务器</td>
-                  </tr>
-                  <tr>
-                    <td><a style="color: inherit; text-decoration: none;" href="https://onedrive.live.com/"
-                        target="_blank"><img class="cloud-logo" src="img/cloudonedrive.png">OneDrive</a></td>
-                    
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+    <div class="band">
+      <div class="container">
 
-          <style>
-            .cloud-services {
-              display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-              grid-gap: 1rem;
-            }
-
-            .cloud-service {
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              background-color: #f5f5f5;
-              border-radius: 5px;
-              padding: 1rem;
-            }
-
-            .cloud-service img {
-              max-height: 50px;
-              max-width: 100%;
-            }
-
-            .cloud-service-name {
-              margin-top: 0.5rem;
-              font-size: 0.8rem;
-              text-align: center;
-            }
-          </style>
-
-        </div>
-      </div>
-    </div>
-    <div class="feature-card" id="one-login">
-      <div class="feature-content">
-        <div class="feature-title">
-          <div class="icon-container">
-            <i class="fas fa-sign-in-alt"></i>
-          </div>一次登录，到处使用
-        </div>
-        <div class="feature-description">
-          <p>
-            CloudDrive提供的云盘账户云同步服务，允许用户在一个地方登录所有的云盘账户，并在任何设备上使用这些账户。这意味着用户可以在不同的设备上访问他们的云盘文件，而无需每次都登录不同的账户。</p>
-          <p>CloudDrive的“一次登录，到处使用”功能，不仅可以方便地访问云盘文件，还可以保护用户的账户安全。用户只需要在一个地方登录所有的云盘账户，就可以避免在不同设备上输入账户密码的风险。</p>
-          <p>这种“一次登录，到处使用”的功能，对于经常需要在不同设备上使用云盘的用户来说，尤其有用。用户只需要在一个设备上登录一次，就可以在任何设备上使用云盘，无需重复登录，大大提高了用户的使用便利性。</p>
-          <p>CloudDrive的“一次登录，到处使用”功能，让用户可以随时随地使用云盘，无论是在家里的电脑上，还是在公司的电脑上，都可以方便地访问和管理云盘文件。</p>
-          <div class="alert alert-warning" role="alert">
-            <i class="fas fa-exclamation-triangle"></i>
-            <strong>我们保护你的隐私：</strong>当通过用户的云端账户同步云盘账户时，云盘账户信息会使用用户的密码进行高强度加密。这种加密方式确保只有用户自己才能解密其账户信息。我们的服务器不存储用户的密码，仅保存密码的哈希值用于登录时校验。这种设计从理论上保证了用户保存在我们服务器上的云盘账户信息无法被任何人解密，从而保护用户的隐私。
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="feature-card" id="webdav">
-      <div class="feature-content">
-        <div class="feature-title">
-          <div class="icon-container">
-            <i class="fas fa-cloud-upload-alt"></i>
-          </div>WebDAV服务
-        </div>
-        <div class="feature-description">
-          <p>
-            WebDAV是一种基于HTTP协议的文件传输协议，它可以让用户通过HTTP协议访问和管理远程文件，就像访问本地文件一样。WebDAV协议的出现，极大地方便了用户对远程文件的访问和管理，因此被广泛应用于云盘、网盘、NAS等领域。，它的主要优势在于：
-          </p>
-          <p>WebDAV具有极强的兼容性，许多操作系统（包括Windows、macOS、Linux等）和应用程序（如Microsoft Office、Adobe Creative
-            Suite等）都内置了对WebDAV的支持。通过WebDAV，用户可以方便地在不同设备之间共享文件，而无需使用特定的应用程序或平台。</p>
-          <p>CloudDrive通过封装所有云盘为一个统一的WebDAV服务，使得用户可以在任何支持WebDAV的客户端上方便地访问和管理所有的云盘文件，大大提高了云盘使用的便利性和效率。</p>
-          
-          <h5><i class="fas fa-cogs"></i> 强大的WebDAV服务管理</h5>
-          <p>CloudDrive提供了完善的WebDAV服务管理功能，用户可以在系统设置界面灵活控制WebDAV服务的各项设置：</p>
-          <ul>
-            <li><strong>服务控制：</strong>可以随时打开或关闭CloudDrive2的WebDAV服务</li>
-            <li><strong>账号访问管理：</strong>允许或禁止以CloudDrive账号访问WebDAV，并可设置WebDAV的根目录位置和是否只读</li>
-            <li><strong>匿名访问控制：</strong>允许或禁止以匿名身份访问WebDAV服务，并可独立设置匿名访问的根目录位置和访问权限</li>
+        <section class="prose-section" id="local-mount">
+          <h2>云盘本地挂载</h2>
+          <p>CloudDrive2 可以把一个云盘，或者云盘里的某个目录，挂载成本地磁盘——就像往电脑上插了一个 U 盘。
+             挂载之后，云端文件不需要事先下载就能直接打开、编辑和保存。</p>
+          <p>既可以只挂载单个云盘，也可以把多个云盘挂载成一个统一的文件系统。
+             这样在不同云盘之间切换和整理文件时，不必再一个个打开各家的客户端。</p>
+          <p>读取云盘文件时采用多线程下载，速度成倍提升；在带宽足够的情况下，使用体验接近本地磁盘。</p>
+          <p>更重要的是，挂载出来的盘支持完整的随机读写。任何本地程序都可以像访问本地磁盘一样访问它，
+             无论是办公软件直接保存文档，还是媒体播放器拖动进度条，都不需要先把整个文件拉下来。</p>
+          <p>挂载盘也是一条方便的跨设备同步通道：在一台设备上改完文件，内容会写回云盘，
+             另一台设备打开时拿到的就是最新版本，不必担心版本不一致或漏改。</p>
+          <ul class="chips">
+            <li><span class="chip chip-cloud">完整随机读写</span></li>
+            <li><span class="chip chip-cloud">多线程读取</span></li>
+            <li><span class="chip chip-cloud">多云盘统一挂载</span></li>
           </ul>
-          
-          <h5><i class="fas fa-users"></i> 独立WebDAV用户管理</h5>
-          <p>CloudDrive支持创建任意多个独立的WebDAV用户，每个用户都可以独立设置根目录位置和是否只读，为不同用户提供个性化的访问体验和权限控制。</p>
-          
-          <div class="alert alert-info" role="alert">
-            <i class="fas fa-crown"></i>
-            <strong>会员功能：</strong>创建独立WebDAV用户是会员功能，月费、年费、终身和轻享终身会员可以使用，基础会员无此功能。
+        </section>
+
+        <section class="prose-section" id="unified-web-management">
+          <h2>统一的多云盘管理</h2>
+          <p>CloudDrive2 自带一个 Web 管理界面，所有云盘的文件操作都在这里完成：
+             浏览目录、看图片、在线播放视频和音频，以及新建文件夹、重命名、删除、移动位置、上传本地文件。
+             不用在各家云盘的 App 之间来回切换。</p>
+          <p>网页里的音视频也可以交给第三方播放器打开，包括 PotPlayer、VLC Player、Infuse、iina 和 nPlayer。</p>
+
+          <h3>目前支持的云盘</h3>
+          <div class="table-scroll">
+            <table class="matrix-table">
+              <caption class="sr-only">CloudDrive2 支持的云盘服务及其官网</caption>
+              <thead>
+                <tr>
+                  <th scope="col">云盘</th>
+                  <th scope="col">官网</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row"><img src="/img/cloud123.png" width="40" height="40" loading="lazy" decoding="async" alt="123云盘 标志">123云盘</th>
+                  <td><a href="https://www.123pan.com/" target="_blank" rel="noopener">www.123pan.com</a></td>
+                </tr>
+                <tr>
+                  <th scope="row"><img src="/img/cloudaliyundrive.png" width="40" height="40" loading="lazy" decoding="async" alt="阿里云盘 标志">阿里云盘</th>
+                  <td><a href="https://www.aliyundrive.com" target="_blank" rel="noopener">www.aliyundrive.com</a></td>
+                </tr>
+                <tr>
+                  <th scope="row"><img src="/img/cloudbaidu.png" width="40" height="40" loading="lazy" decoding="async" alt="百度网盘 标志">百度网盘</th>
+                  <td><a href="https://pan.baidu.com" target="_blank" rel="noopener">pan.baidu.com</a></td>
+                </tr>
+                <tr>
+                  <th scope="row"><img src="/img/cloud189.png" width="40" height="40" loading="lazy" decoding="async" alt="天翼云盘 标志">天翼云盘</th>
+                  <td><a href="https://cloud.189.cn" target="_blank" rel="noopener">cloud.189.cn</a></td>
+                </tr>
+                <tr>
+                  <th scope="row"><img src="/img/cloud115.png" width="40" height="40" loading="lazy" decoding="async" alt="115网盘 标志">115网盘</th>
+                  <td><a href="https://www.115.com" target="_blank" rel="noopener">www.115.com</a></td>
+                </tr>
+                <tr>
+                  <th scope="row"><img src="/img/cloudgoogledrive.png" width="40" height="40" loading="lazy" decoding="async" alt="Google Drive 标志">Google Drive</th>
+                  <td><a href="https://drive.google.com" target="_blank" rel="noopener">drive.google.com</a></td>
+                </tr>
+                <tr>
+                  <th scope="row"><img src="/img/cloudxunlei.png" width="40" height="40" loading="lazy" decoding="async" alt="迅雷云盘 标志">迅雷云盘</th>
+                  <td><a href="https://pan.xunlei.com/" target="_blank" rel="noopener">pan.xunlei.com</a></td>
+                </tr>
+                <tr>
+                  <th scope="row"><img src="/img/cloudonedrive.png" width="40" height="40" loading="lazy" decoding="async" alt="OneDrive 标志">OneDrive</th>
+                  <td><a href="https://onedrive.live.com/" target="_blank" rel="noopener">onedrive.live.com</a></td>
+                </tr>
+                <tr>
+                  <th scope="row"><img src="/img/webdav.png" width="40" height="40" loading="lazy" decoding="async" alt="WebDAV 标志">WebDAV服务器</th>
+                  <td>任何标准 WebDAV 服务</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="feature-card" id="inter-cloud-copy">
-      <div class="feature-content">
-        <div class="feature-title">
-          <div class="icon-container">
-            <i class="fas fa-people-carry"></i>
-            <div class="badge">Pro</div>
-          </div>跨云盘文件快速复制
-        </div>
-        <div class="feature-description">
-          <p>
-            在处理大量数据时，云盘之间的迁移是一个常见但又复杂的问题。许多用户因为需要更换云盘服务或者希望在多个云盘服务之间同步数据，而需要进行云盘之间的迁移。然而，由于每个云盘服务都有其特定的API和数据格式，云盘之间的迁移往往需要用户进行繁琐的手动操作，而且速度往往受到网络带宽的限制，如果数据量大，迁移的时间可能会非常长。
-          </p>
-          <p>
-            CloudDrive的云盘之间迁移功解决了这个问题。CloudDrive充分利用云盘的秒传机制，尽最大可能实现秒迁移。秒传机制是一种可以快速完成文件传输的技术，它的工作原理是在上传文件前先获取文件的哈希值，然后将哈希值发送到服务器，服务器根据哈希值检查文件是否已经存在。如果文件已经存在，服务器就不需要再接收文件数据，而是直接创建一个新的文件记录，指向已存在的文件数据，从而实现秒传。这种方式无需重新计算文件的哈希，尤其适用于使用相同哈希算法的不同云盘之间，或者相同云盘不同账号之间的迁移，能够做到真正的秒传。
-          </p>
-          <p>
-            CloudDrive可以直接从云盘中获取文件哈希值，如果目标云盘使用和源云盘相同的哈希算法，那么计算哈希值的过程可以被跳过，从而实现真正的快速复制。这种方式不仅可以提高复制速度，还可以减少网络带宽的占用，降低用户的成本。
-          </p>
-          <p>
-            通过使用秒传机制，CloudDrive可以在云盘之间迅速迁移数据，大大提高了迁移效率，节省了用户的时间。而且，CloudDrive的云盘之间迁移功能支持多个云盘服务，无论用户使用的是哪种云盘服务，都可以方便地进行迁移。
-          </p>
-          <p>
-            当然，不是所有的文件都可以使用秒传机制。对于这些文件，CloudDrive仍然提供了高效的迁移方案。CloudDrive可以直接将文件从一个云盘下载并上传到另一个云盘，而无需先将文件下载到本地。这样，用户就无需担心本地存储空间不足的问题，也无需担心下载和上传过程中的网络问题。
-          </p>
-          <p>
-            总的来说，CloudDrive的云盘之间迁移功能提供了一种方便快捷的解决方案，让用户可以更轻松地管理和移动他们的云数据。无论是需要迁移大量数据，还是需要在多个云盘服务之间同步数据，用户都可以信赖CloudDrive，得到满意的结果。
-          </p>
-        </div>
-
-        <!-- add a title to this table here-->
-        <h2>跨网盘快速复制支持矩阵</h2>
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>源👇🏻 / 目标 👉🏻</th>
-              <th>阿里云盘</th>
-              <th>百度网盘</th>
-              <th>115网盘</th>
-              <th>天翼云盘</th>
-              <th>123云盘</th>
-              <!-- <th>pikpak</th> -->
-              <th>OneDrive</th>
-              <th>Google Drive</th>
-              <th>迅雷云盘</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>阿里云盘</td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <!-- <td><i class="fas fa-times text-danger"></i></td> -->
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-            </tr>
-            <tr>
-              <td>百度网盘</td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <!-- <td><i class="fas fa-times text-danger"></i></td> -->
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-                <td><i class="fas fa-times text-danger"></i></td>
-            </tr>
-            <tr>
-              <td>115网盘</td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <!-- <td><i class="fas fa-times text-danger"></i></td> -->
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-            </tr>
-            <tr>
-              <td>天翼云盘</td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <!-- <td><i class="fas fa-times text-danger"></i></td> -->
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-            </tr>
-            <tr>
-              <td>123云盘</td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <!-- <td><i class="fas fa-times text-danger"></i></td> -->
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-            </tr>
-            <!-- <tr>
-              <td>pikpak</td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-            </tr>
-            <tr> -->
-              <td>OneDrive</td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-check text-check"></i></td>
-              <!-- <td><i class="fas fa-times text-danger"></i></td> -->
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-            </tr>
-            <tr>
-              <td>Google Drive</td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <td><i class="fas fa-check text-success"></i></td>
-              <!-- <td><i class="fas fa-times text-danger"></i></td> -->
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-            </tr>
-            <tr>
-              <td>迅雷云盘</td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <!-- <td><i class="fas fa-check text-success"></i></td> -->
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-              <td><i class="fas fa-times text-danger"></i></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="feature-card" id="file-notification">
-      <div class="feature-content">
-        <div class="feature-title">
-          <div class="icon-container">
-            <i class="fas fa-bell"></i>
-            <div class="badge">Pro</div>
-          </div>文件变更通知
-        </div>
-        <div class="feature-description">
-          <p>
-            文件变更通知是操作系统提供的一种机制，当文件系统中的文件或目录发生变化时，操作系统会生成一个事件通知。这些变化可能包括文件的创建、删除、移动、重命名，以及文件内容的修改等。应用程序可以订阅这些事件，以便在文件或目录发生变化时及时得到通知，从而可以执行相应的处理。
-          </p>
-          <p>
-            CloudDrive的"文件变更通知"功能，就是利用了这一机制，使得挂载的云盘文件系统可以支持文件变更通知。当挂载的文件系统发生文件改变时（如创建文件，删除文件，重命名文件、修改文件等），支持FileSystemWatcher或者FileNotify的第三方应用程序就会及时收到操作系统的通知。例如，Emby、Jellyfin、Plex等媒体管理程序就可以利用这个特性来监视媒体文件夹的变化。
-          </p>
-          <p>不仅如此，CloudDrive还在这一机制的基础上做了进一步的扩展。不仅支持通过挂载文件系统产生的文件变化，还支持通过Web界面修改文件，通过WebDAV
-            Server修改文件，或者通过CloudDrive导入离线文件下载产生的文件变化。这些所有的文件变动，CloudDrive都会生成正确的文件变更通知，确保了第三方应用程序可以实时获取文件的最新状态。</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="feature-card" id="file-access-control">
-      <div class="feature-content">
-        <div class="feature-title">
-          <div class="icon-container">
-            <i class="fas fa-lock"></i>
-            <div class="badge">Pro</div>
-          </div>文件访问监控和权限控制
-        </div>
-        <div class="feature-description">
-          <p>
-            CloudDrive的"文件访问监控和权限控制"功能为用户提供了详细的文件系统访问监控，这是普通文件系统所不能比拟的。</p>
-          <p>CloudDrive可以实时显示当前哪个进程正在访问哪个文件，包括显示访问进程的路径和文件的路径，以及访问网盘文件时的下载速度。这样，用户可以非常方便地了解到每一个进程的文件访问情况，以及访问的性能状况。
-          </p>
-          <p>
-            而且，CloudDrive还提供了权限控制功能，用户可以设定哪些进程可以访问挂载的文件系统，哪些进程不能访问。被加入黑名单的进程将无法打开CloudDrive挂载的文件。这为用户提供了极高的安全性，有效防止了恶意进程访问用户的文件。
-          </p>
-          <p>通过这一功能，用户可以更好地管理和保护自己的文件，避免数据泄露和不必要的麻烦。无论是对于个人用户还是企业用户，CloudDrive的这一功能都极具价值。</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="feature-card" id="service-vendor-friendly">
-      <div class="feature-content">
-        <div class="feature-title">
-          <div class="icon-container">
-            <i class="fas fa-handshake"></i>
-          </div>云盘服务商友好
-        </div>
-        <div class="feature-description">
-          <p>CloudDrive旨在最大程度地保障云盘服务商的利益，同时保持用户的流畅体验。</p>
-          <p>CloudDrive使用本地缓存的文件元数据来减少文件列表请求，最大程度减少使用过程中对网盘服务的请求次数，用户可按自己的需求为每个目录定制独特的缓存时间，最大限度平衡了数据的时效性和网络请求频度。</p>
-          <p>CloudDrive的快速跨网盘复制功能充分利用网盘文件元数据，最大限度避免重新计算文件哈希，节省大量的网络资源。</p>
-          <p>
-            CloudDrive读取文件时，下载速度被精确地控制着，以刚刚好满足读取速度的要求，不会占用大量网络带宽。这一功能不仅为用户节省了大量的网络资源，同时也减少了网络拥堵，提高了网络的使用效率。
-          </p>
-        </div>
-      </div>
-    </div>
-    <!-- generate 云盘服务商友好 feature card-->
-
-    <!-- <div class="feature-card" id="service-vendor-friendly">
-      <div class="feature-content">
-        <div class="feature-title">
-          <div class="icon-container">
-            <i class="fas fa-handshake"></i>
-          </div>云盘服务商友好
-        </div>
-      </div>
-      <div class="feature-description">
-        <p>CloudDrive旨在最大程度地保障云盘服务商的利益，同时保持用户的流畅体验。</p>
-        <p>CloudDrive使用本地缓存的文件元数据来减少文件列表请求，最大程度减少使用过程中对网盘服务的请求次数，用户可按自己的需求为每个目录定制独特的缓存时间，最大限度平衡了数据的时效性和资源</p>
-        <p></p>
-      </div>
-    </div> -->
-
-    <div class="feature-card" id="multicloud-backup">
-      <div class="feature-content">
-        <div class="feature-title">
-          <div class="icon-container">
-            <i class="fas fa-database"></i>
-            <div class="badge">Pro</div>
-          </div>多云盘备份<span style="color: #f8b500; font-size: 14px;"></span>
-        </div>
-        <div class="feature-description">
-          <p>在面对重要数据的保护和备份时，多重备份是一个非常有效的策略。多重备份可以提高数据的安全性，避免单点故障，保证数据的完整性和可访问性。</p>
-          <p>
-            CloudDrive的“多云盘备份”功能就是为了满足这个需求。用户可以指定需要备份的本地文件夹或者网盘文件夹，CloudDrive会自动将指定文件夹的内容备份到指定的多个本地或者网盘文件夹。这样，用户的数据就有了多重保障，即使某个云盘服务出现问题，也不会影响到用户的数据安全。
-          </p>
-          <p>
-            更为重要的是，CloudDrive的“多云盘备份”功能支持实时更新。当备份文件夹内的文件发生修改时，这些修改会被实时更新到所有的备份目的文件夹。这样，无论用户何时查看他们的备份数据，都可以看到最新的文件状态，不会遗漏任何修改。
-          </p>
-          <p>当源文件或文件夹被删除或者被更新时，每个目标文件夹内对应的文件或文件夹可以选择保留、删除或者保留无限多个历史版本，后续版本会支持从任意历史版本恢复文件或文件夹</p>
-          <p>CloudDrive的“多云盘备份”功能，为用户提供了极致的数据安全性。用户无需担心数据丢失或者数据过时，只需简单的设置，就可以实现本地或者网盘数据与多个本地或网盘之间的自动同步和备份，让数据保护变得轻松简单。
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="feature-card" id="encrypted-filesystem">
-      <div class="feature-content">
-        <div class="feature-title">
-          <div class="icon-container">
-            <i class="fas fa-shield-alt"></i>
-            <div class="badge">Pro</div>
-          </div>加密文件系统
-        </div>
-        <div class="feature-description">
-          <div class="alert alert-warning" role="alert">
-            <i class="fas fa-exclamation-triangle"></i>
-            <strong>重要声明：</strong>使用加密功能时请务必遵守各网盘相关的用户协议，CloudDrive不对因滥用加密功能导致网盘账号被封承担任何责任。
-          </div>
-          
-          <p>CloudDrive的加密文件系统功能为用户提供了企业级的文件加密保护，确保敏感数据在云端存储时的绝对安全。</p>
-          
-          <h5><i class="fas fa-folder-plus"></i> 灵活的加密文件夹创建</h5>
-          <p>用户可以在任意网盘或添加到CloudDrive2的本地文件夹内任意位置创建任意多个加密文件夹。每个加密文件夹都可以设置独立的密码，创建时默认会在本机保存密码。如果选择不保存密码，CloudDrive2重启后需要重新输入密码才能正常访问该文件夹。</p>
-          
-          <h5><i class="fas fa-lock"></i> 强大的加密保护</h5>
-          <p>所有写入加密文件夹的文件，文件名和内容都会被加密保存到网盘或本地文件夹。密码只会在本地加密保存，不会同步到CloudDrive2的服务器。当你从不同地点登录同账号的CloudDrive2时，访问加密目录都需要重新输入密码来解锁。</p>
-          
-          <div class="alert alert-danger" role="alert">
-            <i class="fas fa-key"></i>
-            <strong>密码安全提醒：</strong>请务必记住设置的密码，如遗忘密码，文件将无法访问并且无法恢复。
-          </div>
-          
-          <h5><i class="fas fa-unlock-alt"></i> 便捷的访问控制</h5>
-          <p>选择根加密目录后可以在文件属性页点击锁定按钮来重新锁定目录，下次访问时需要重新输入密码解锁。通过CloudDrive2访问解锁后的加密文件和访问正常的文件完全相同，支持所有文件操作，可以随机读写文件，可以在线播放视频等。</p>
-          
-          <h5><i class="fas fa-copy"></i> 智能的文件传输</h5>
-          <p>从未加密的目录向解锁后的加密目录复制或移动文件时，文件会被自动加密后复制到加密目录；从解锁后的加密目录向未加密目录复制或移动文件时，文件会被自动解密后复制到目标目录。如果需要快速秒传加密后的原始文件到其它目录，可以先将加密目录锁定，变成原始文件形态，再按传统的文件传输方式传输。</p>
-          
-          <h5><i class="fas fa-code"></i> 商用级加密算法</h5>
-          <ul>
-            <li><strong>文件名加密：</strong>使用AES加密后UTF8编码，保存到网盘的文件名长度限制和未加密的文件名基本一致</li>
-            <li><strong>文件内容加密：</strong>采用chacha20-poly1305算法，每个文件的加密密钥都是根据密码动态生成的，确保每个文件都不相同</li>
-            <li><strong>开源透明：</strong>加密算法完全开源，解密工具源代码：<a href="https://github.com/cloud-fs/clouddrive-decrypt" target="_blank" rel="noopener noreferrer">https://github.com/cloud-fs/clouddrive-decrypt</a></li>
+          <ul class="chips">
+            <li><span class="chip chip-cloud">跨云盘文件操作</span></li>
+            <li><span class="chip chip-video">在线播放</span></li>
+            <li><span class="chip">第三方播放器调用</span></li>
           </ul>
-          
-          <h5><i class="fas fa-backup"></i> 加密备份支持</h5>
-          <p>备份功能也可设置目的目录为解锁后的加密目录来实现加密备份，为重要数据提供双重保护。</p>
-          
-          <div class="alert alert-info" role="alert">
-            <i class="fas fa-info-circle"></i>
-            <strong>文件大小限制：</strong>为防止加密功能被滥用，年费会员和月费会员保存到网盘的加密文件单个文件大小上限为200MB，终身会员不受此限制，保存到本地文件夹的加密文件不受此限制。网盘加密文件大小上限后续将会根据实际情况做出适当调整。
+        </section>
+
+        <section class="prose-section" id="one-login">
+          <h2>一次登录，到处使用</h2>
+          <p>CloudDrive2 提供云盘账户的云端同步：你只需要在一个地方登录所有云盘账户，
+             之后在任何设备上的 CloudDrive2 都能直接使用这些账户，不必在每台设备上重新走一遍登录流程。</p>
+          <p>对于经常换设备的人，这省掉的不只是时间——账号密码输入的次数越少，泄露的机会也越少。
+             家里的电脑、公司的电脑、NAS，用的都是同一套已经登录好的账户。</p>
+          <div class="note">
+            <span class="note-title">我们保护你的隐私</span>
+            <p>同步云盘账户时，账户信息会用你自己的密码做高强度加密之后才上传。
+               我们的服务器不保存你的密码，只保存密码的哈希值用于登录校验。
+               也就是说，服务器手里没有解密所需的密钥，存放在服务器上的云盘账户信息无法被任何人解开。</p>
           </div>
-        </div>
+        </section>
+
+        <section class="prose-section" id="webdav">
+          <h2>WebDAV 服务</h2>
+          <p>WebDAV 是一种基于 HTTP 的文件传输协议，可以像访问本地文件一样访问和管理远程文件，
+             在云盘、网盘和 NAS 领域被广泛使用。</p>
+          <p>它最大的优势是兼容性：Windows、macOS、Linux 等操作系统，
+             以及 Microsoft Office、Adobe Creative Suite 等应用程序，都内置了 WebDAV 支持。
+             不用装专门的客户端，就能在不同设备之间共享文件。</p>
+          <p>CloudDrive2 把你所有的云盘封装成一个统一的 WebDAV 服务，
+             任何支持 WebDAV 的客户端都可以通过它访问和管理全部云盘文件。</p>
+
+          <h3>强大的 WebDAV 服务管理</h3>
+          <p>在系统设置界面里，WebDAV 服务的各项设置都可以单独控制：</p>
+          <ul>
+            <li><strong>服务控制：</strong>随时打开或关闭 CloudDrive2 的 WebDAV 服务。</li>
+            <li><strong>账号访问管理：</strong>允许或禁止用 CloudDrive 账号访问 WebDAV，并可以指定这条访问的根目录位置，以及是否只读。</li>
+            <li><strong>匿名访问控制：</strong>允许或禁止匿名访问，匿名访问有自己独立的根目录位置和访问权限设置。</li>
+          </ul>
+
+          <h3>独立 WebDAV 用户管理</h3>
+          <p>可以创建任意多个独立的 WebDAV 用户，每个用户单独设置自己的根目录位置和是否只读。
+             把某一个目录分享给别人时，不需要交出自己的账号。</p>
+
+          <div class="note">
+            <span class="note-title">这是付费功能</span>
+            <p>创建独立 WebDAV 用户属于会员功能：月费、年费、轻享终身和终身会员都可以使用，
+               免费的基础会员没有这一项。各档位的具体差别见<a href="/pricing.html">会员与价格</a>。</p>
+          </div>
+        </section>
+
+        <section class="prose-section" id="inter-cloud-copy">
+          <h2>跨云盘文件快速复制 <span class="chip chip-cloud">PRO</span></h2>
+          <p>换云盘服务，或者想在几个云盘之间保留同一份数据，都要面对同一个麻烦：
+             每家云盘的接口和数据格式都不一样，搬家往往要手动操作，速度还受本地带宽限制。
+             数据量一大，时间就长得离谱。</p>
+          <p>CloudDrive2 的做法是尽最大可能利用云盘的秒传机制。秒传的原理是：
+             上传前先算出文件的哈希值发给服务器，服务器发现这个文件已经存在，
+             就不再接收文件数据，而是直接建一条新的文件记录指向已有的数据。</p>
+          <p>关键在于，CloudDrive2 可以直接从云盘取到文件现成的哈希值。
+             如果目标云盘和源云盘用的是同一种哈希算法，连计算哈希这一步都可以跳过，
+             于是真正做到秒传。使用相同哈希算法的不同云盘之间，或者同一云盘不同账号之间，效果最明显——
+             既省时间，也几乎不占用网络带宽。</p>
+          <p>不是所有文件都能走秒传。走不了的时候，CloudDrive2 会直接把文件从一个云盘边下边传到另一个云盘，
+             不在本地磁盘落地。所以本地空间不够、或者中途网络抖动，都不再是问题。</p>
+
+          <h3>跨云盘快速复制支持矩阵</h3>
+          <div class="table-scroll">
+            <table class="matrix-table">
+              <caption class="sr-only">各云盘之间是否支持基于哈希的快速复制</caption>
+              <thead>
+                <tr>
+                  <th scope="col">源 ↓ / 目标 →</th>
+                  <th scope="col">阿里云盘</th>
+                  <th scope="col">百度网盘</th>
+                  <th scope="col">115网盘</th>
+                  <th scope="col">天翼云盘</th>
+                  <th scope="col">123云盘</th>
+                  <th scope="col">OneDrive</th>
+                  <th scope="col">Google Drive</th>
+                  <th scope="col">迅雷云盘</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">阿里云盘</th>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">百度网盘</th>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">115网盘</th>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">天翼云盘</th>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">123云盘</th>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">OneDrive</th>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">Google Drive</th>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="yes">✓</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">迅雷云盘</th>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                  <td class="c"><span class="no">—</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="chip-note">表中的「—」只表示这一对组合走不了哈希秒传，不表示不能复制：CloudDrive2 依然会在两个云盘之间直接传输数据，只是需要花时间。矩阵取决于各家云盘接口当前的能力，会随服务商的调整而变化。</p>
+          <ul class="chips">
+            <li><span class="chip">基于哈希的秒传</span></li>
+            <li><span class="chip">不占用本地磁盘</span></li>
+          </ul>
+        </section>
+
+        <section class="prose-section" id="file-notification">
+          <h2>文件变更通知 <span class="chip chip-cloud">PRO</span></h2>
+          <p>文件变更通知是操作系统提供的一种机制：文件系统里的文件或目录发生变化时，
+             操作系统会生成一个事件。变化包括创建、删除、移动、重命名以及内容修改。
+             应用程序订阅这些事件，就能在文件变动时立刻做出反应。</p>
+          <p>CloudDrive2 让挂载出来的云盘文件系统也支持这套机制。
+             挂载盘里创建、删除、重命名或修改文件时，使用 FileSystemWatcher 或 FileNotify 的第三方程序都会收到通知。
+             Emby、Jellyfin、Plex 这类媒体管理程序，就是靠它来发现媒体目录里多了新片子。</p>
+          <p>CloudDrive2 还在此之上做了扩展。除了挂载文件系统上的操作，
+             通过 Web 界面修改文件、通过 WebDAV 服务修改文件，
+             以及通过 CloudDrive2 导入离线下载产生的文件变化，同样会生成正确的变更通知。
+             无论文件是从哪条路径进来的，监视目录的程序看到的状态都是最新的。</p>
+        </section>
+
+        <section class="prose-section" id="encrypted-filesystem">
+          <h2>加密文件系统 <span class="chip chip-cloud">PRO</span></h2>
+          <p>加密文件系统让你在云盘上存放敏感数据：文件名和文件内容都加密之后才写到云端，
+             解锁之后用起来又和普通文件夹没有区别。</p>
+
+          <div class="note note-warn">
+            <span class="note-title">重要声明</span>
+            <p>使用加密功能时请务必遵守各网盘相关的用户协议。
+               因滥用加密功能导致网盘账号被封，CloudDrive 不承担任何责任。</p>
+          </div>
+
+          <h3>灵活的加密文件夹创建</h3>
+          <p>可以在任意网盘、或者添加到 CloudDrive2 的本地文件夹里，
+             在任意位置创建任意多个加密文件夹。每个加密文件夹都有自己独立的密码。
+             创建时默认会把密码保存在本机；如果选择不保存，CloudDrive2 重启之后需要重新输入密码才能访问这个文件夹。</p>
+
+          <h3>强大的加密保护</h3>
+          <p>写入加密文件夹的所有文件，文件名和内容都会加密之后再保存到网盘或本地文件夹。
+             密码只在本地加密保存，不会同步到 CloudDrive2 的服务器。
+             因此换一台机器登录同一个账号时，访问加密目录需要重新输入密码解锁。</p>
+
+          <div class="note note-danger">
+            <span class="note-title">密码丢了就找不回来</span>
+            <p>请务必记住你设置的密码。密码一旦遗忘，文件将无法访问，也无法恢复——没有任何人可以帮你找回。</p>
+          </div>
+
+          <h3>便捷的访问控制</h3>
+          <p>选中根加密目录后，可以在文件属性页点击锁定按钮把目录重新锁上，下次访问时需要再次输入密码解锁。</p>
+          <p>解锁之后，通过 CloudDrive2 访问加密文件和访问普通文件完全一样：
+             支持所有文件操作，可以随机读写，也可以直接在线播放视频。</p>
+
+          <h3>智能的文件传输</h3>
+          <p>从未加密的目录往解锁后的加密目录复制或移动文件时，文件会被自动加密后写入；
+             反过来，从解锁后的加密目录往未加密目录复制或移动时，文件会被自动解密后写出。</p>
+          <p>如果你想快速秒传加密后的原始文件到别处，可以先把加密目录锁定——
+             此时它呈现的就是加密后的原始文件形态，再按普通的文件传输方式操作即可。</p>
+
+          <h3>商用级加密算法</h3>
+          <ul>
+            <li><strong>文件名加密：</strong>使用 AES 加密后再做 UTF-8 编码，保存到网盘的文件名长度限制和未加密时基本一致。</li>
+            <li><strong>文件内容加密：</strong>采用 chacha20-poly1305 算法，每个文件的加密密钥都根据密码动态生成，各不相同。</li>
+            <li><strong>开源透明：</strong>加密算法完全开源，解密工具源代码见
+              <a href="https://github.com/cloud-fs/clouddrive-decrypt" target="_blank" rel="noopener">github.com/cloud-fs/clouddrive-decrypt</a>。</li>
+          </ul>
+
+          <h3>加密备份支持</h3>
+          <p>备份任务的目的目录也可以设成解锁后的加密目录，这样备份出来的就是加密数据，
+             为重要数据加一层保护。</p>
+
+          <div class="note">
+            <span class="note-title">文件大小限制</span>
+            <p>为防止加密功能被滥用，月费会员和年费会员保存到网盘的加密文件，单个文件大小上限为 200 MB；
+               终身会员不受此限制；保存到本地文件夹的加密文件也不受此限制。
+               网盘加密文件的大小上限后续会根据实际情况做出适当调整。会员档位的差别见<a href="/pricing.html">会员与价格</a>。</p>
+          </div>
+
+          <ul class="chips">
+            <li><span class="chip">文件名 AES</span></li>
+            <li><span class="chip">内容 chacha20-poly1305</span></li>
+            <li><span class="chip">解密工具开源</span></li>
+          </ul>
+        </section>
+
+        <section class="prose-section" id="file-access-control">
+          <h2>文件访问监控和权限控制 <span class="chip chip-cloud">PRO</span></h2>
+          <p>CloudDrive2 能告诉你挂载盘上正在发生什么，这是普通文件系统给不了的信息。</p>
+          <p>界面里实时显示当前是哪个进程正在访问哪个文件，包括进程的完整路径、文件的完整路径，
+             以及读取网盘文件时的下载速度。哪个程序在偷偷扫盘、哪个任务把带宽吃光了，一眼就能看出来。</p>
+          <p>在此之上还有权限控制：你可以设定哪些进程允许访问挂载的文件系统，哪些不允许。
+             被加入黑名单的进程无法打开 CloudDrive2 挂载的文件。
+             这能有效阻止不该碰你文件的程序去碰它们，个人用户和企业用户都用得上。</p>
+        </section>
+
+        <section class="prose-section" id="service-vendor-friendly">
+          <h2>云盘服务商友好</h2>
+          <p>CloudDrive2 在保证使用流畅的前提下，尽量少占用云盘服务商的资源。这不是客套话，而是几条具体的设计。</p>
+          <p>文件元数据在本地缓存，用来减少列目录请求，从而降低使用过程中对网盘接口的调用次数。
+             每个目录的缓存时间可以按需要单独设置，你自己在数据时效性和请求频度之间取平衡。</p>
+          <p>跨云盘快速复制充分利用云盘已有的文件元数据，尽可能避免重新计算文件哈希，省下大量网络传输。</p>
+          <p>读取文件时，下载速度被精确控制在刚好满足读取需要的水平，不会一上来就把带宽占满。
+             这既省了你的网络资源，也减少了对服务商的冲击。</p>
+        </section>
+
+        <section class="prose-section" id="multicloud-backup">
+          <h2>多云盘备份 <span class="chip chip-cloud">PRO</span></h2>
+          <p>重要数据只有一份备份是不够的。多处备份能避免单点故障，
+             某一个云盘服务出问题时，数据仍然是完整、可取回的。</p>
+          <p>多云盘备份就是干这件事：指定要备份的本地文件夹或网盘文件夹，
+             CloudDrive2 会自动把里面的内容备份到你指定的多个本地文件夹或网盘文件夹。</p>
+          <p>备份是实时的。源文件夹里的文件发生修改时，改动会实时更新到所有备份目的文件夹，
+             任何时候查看备份数据，看到的都是最新状态。</p>
+          <p>源文件或文件夹被删除、被更新时，每个目标文件夹里对应的文件可以选择保留、删除，
+             或者保留无限多个历史版本。后续版本会支持从任意历史版本恢复文件或文件夹。</p>
+          <ul class="chips">
+            <li><span class="chip chip-backup">多目标同时备份</span></li>
+            <li><span class="chip chip-backup">实时增量更新</span></li>
+            <li><span class="chip chip-backup">无限历史版本</span></li>
+          </ul>
+        </section>
+
       </div>
     </div>
-  </div>
-  <footer>
+
+    <section class="band band-alt cta-band" aria-labelledby="apps-h">
+      <div class="container">
+        <p class="eyebrow">还有客户端</p>
+        <h2 id="apps-h">以上都跑在你自己的机器上</h2>
+        <p>这一页讲的是服务端。手机、平板、电视和头显上那些负责浏览与播放的应用，是另一套东西。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/apps/">看看各平台的应用</a>
+          <a class="btn btn-ghost" href="/download.html">下载 CloudDrive2</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
     <div class="container">
-      <p>&copy; 2025 CloudDrive. All rights reserved.</p>
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/img/clouddrive-h.svg" alt="" width="130" height="40">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/features.html">English</a></p>
+      </div>
     </div>
   </footer>
 </body>

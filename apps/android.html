@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Android 版 CloudDrive2 — 多云盘聚合与发烧级播放器</title>
+  <meta name="description" content="Android 手机、平板与电视盒子上的 CloudDrive2：多云盘统一管理，云端直接串流蓝光原盘（HDMV 与 BD-J 菜单）、杜比视界与 DSD / SACD，内置 AI 实时字幕翻译与 Emby / Jellyfin 客户端。">
+  <link rel="canonical" href="https://www.clouddrive2.com/apps/android.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/android.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/android.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/android.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Android 版 CloudDrive2">
+  <meta property="og:description" content="多云盘聚合 + 发烧级播放器：蓝光原盘菜单（含 BD-J）、杜比视界、DSD / SACD，云端直接串流。">
+  <meta property="og:url" content="https://www.clouddrive2.com/apps/android.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Android",
+    "url": "https://www.clouddrive2.com/apps/android.html",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "Android 手机、平板与电视盒子上的多云盘管理与发烧级影音播放。"
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img src="/img/clouddrive-h.svg" alt="CloudDrive2" width="150" height="46"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/" aria-current="page">应用</a></li>
+        <li><a href="/features.html">功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/apps/android.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Android · 平板 · 电视盒子</p>
+          <h1>各家云盘，统一到一处</h1>
+          <p class="hero-lede">
+            多云盘聚合，加一个可以直连云端串流的发烧级播放器：蓝光原盘菜单（HDMV 与 BD-J 都支持）、
+            杜比视界、DSD / SACD，无需先下载，打开就能放。
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.clouddrive2.CloudDrive2" rel="noopener">在 Google Play 获取</a>
+            <a class="btn btn-ghost" href="/download.html">直接下载 APK</a>
+          </div>
+          <ul class="chips">
+            <li><span class="chip chip-disc">HDMV + BD-J 菜单</span></li>
+            <li><span class="chip chip-video">杜比视界 P5 / 7 / 8</span></li>
+            <li><span class="chip chip-audio">原生 DSD · DSD1024</span></li>
+            <li><span class="chip chip-subs">端侧 AI 字幕</span></li>
+            <li><span class="chip chip-cloud">Android TV</span></li>
+          </ul>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/android-files_browser.webp" width="676" height="1200" decoding="async"
+               alt="Android 手机上的文件浏览界面，面包屑显示「123云盘 > 我的资料库」，下面是电影、电视剧、纪录片、音乐、照片、文档、备份、HDR演示等文件夹。">
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="cloud-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">云盘</p>
+          <h2 id="cloud-h">多云盘聚合</h2>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>所有网盘，一个应用</h3>
+            <p>115、阿里云盘、百度网盘、123云盘、迅雷云盘、天翼云盘、光鸭云盘、
+               S3 与兼容对象存储、Google Drive、OneDrive、WebDAV、SMB、FTP/SFTP、
+               远程 CloudDrive 服务端、本机文件夹等等，全部连到一处。跨云盘统一的列表与网格视图、
+               排序、搜索、多选；上传（含文件夹递归上传）、下载、复制、移动、重命名、删除与新建文件夹，
+               都是跨云盘操作，而不只是在单个云盘内。</p>
+            <p>添加账号时支持扫码与 OAuth 授权登录。界面上写得很清楚：
+               「我们只保存密码哈希，无法解密您的凭据」。</p>
+            <p class="chip-note">把云盘挂载为本机目录属于「挂载管理」，在手机上需要 Root 权限；未获取 Root 时，应用会直接给出提示。日常浏览、播放与传输都不需要 Root。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">跨云搜索</span></li>
+              <li><span class="chip chip-cloud">扫码 / OAuth 登录</span></li>
+              <li><span class="chip chip-cloud">S3 · WebDAV · SMB</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/android-providers.webp" width="676" height="1200" loading="lazy" decoding="async"
+                 alt="「添加云盘」面板：115网盘（扫码 / OAuth）、阿里云盘、百度网盘、天翼云盘、Google 云端硬盘（OAuth）、光鸭云盘、OneDrive（OAuth），页面上标注「我们只保存密码哈希，无法解密您的凭据」。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark" aria-labelledby="media-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">影音</p>
+          <h2 id="media-h">发烧级播放器，直连云端</h2>
+          <p>基于 FFmpeg 与 Media3 / ExoPlayer，几十 GB 的原盘不用先下载，也不用挂载，直接从云端串流。</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>蓝光原盘光碟菜单，HDMV 与 BD-J 都支持</h3>
+            <p>直接播放云端的蓝光 ISO 镜像或 BDMV 文件夹，并进入真正的光碟菜单。
+               HDMV 与 Java（BD-J）两种菜单都能用——BD-J 靠应用内置的 OpenJDK 运行时实现，
+               这是 Android 版独有的一点：Apple 平台只支持 HDMV。</p>
+            <p>菜单导航、选段、Play All 都在；可以在菜单会话内直接播放正片，所选音轨与字幕带入正片。
+               彩色快捷键、会话内 PGS 字幕渲染、外挂 .ass / .srt 字幕，以及合并的「继续观看 / 光碟菜单」选择器一应俱全。
+               截断或不完整的镜像会自动跳过菜单、直接播放完整正片。MVC 3D 立体蓝光同样支持。</p>
+            <ul class="chips">
+              <li><span class="chip chip-disc">BD-J（内置 OpenJDK）</span></li>
+              <li><span class="chip chip-disc">HDMV 菜单</span></li>
+              <li><span class="chip chip-disc">ISO 与 BDMV 文件夹</span></li>
+              <li><span class="chip chip-disc">MVC 3D 蓝光</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/android-video_settings.webp" width="676" height="1200" loading="lazy" decoding="async"
+                 alt="视频播放器设置页：蓝光光盘菜单设为「每张光盘都询问」，HDMI 直通为「自动（USB DAC → PCM，HDMI → 直通）」并注明含 Dolby Atmos，下面还有硬件解码与 HDR 模式选项。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>HDR、杜比视界与解码</h3>
+            <p>HDR10、HDR10+ 与 Dolby Vision（含 P5 / P7 / P8）。TS / M2TS 重封装的片源也能正确识别 HDR 与帧率，
+               不会因为换了封装就丢掉动态元数据。4K、8K 与 AV1 都能播；硬件解码器啃不动的 H.264 High Profile
+               会自动回退到 FFmpeg 解码。</p>
+            <p class="chip-note">真杜比视界（含 Profile 7）输出取决于设备：需要电视或盒子本身支持杜比视界输出。不具备这个能力的机器上会以 HDR10 等格式播放。</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">HDR10 · HDR10+</span></li>
+              <li><span class="chip chip-video">杜比视界 P5 / 7 / 8</span></li>
+              <li><span class="chip chip-video">8K · AV1</span></li>
+              <li><span class="chip chip-video">FFmpeg 回退解码</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/android-inspector.webp" width="676" height="1200" loading="lazy" decoding="async"
+                 alt="文件检查器面板正在查看演示片源「HDR10 演示片段.ts」，显示文件大小 1014.0 MB 与其他属性。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>AI 实时字幕翻译</h3>
+            <p>边看边译。优先翻译已有字幕轨（包括通过 OCR 识别的 PGS 图形字幕），没有字幕轨时才使用语音识别。
+               可以完全在设备端跑——whisper.cpp 负责转写、ML Kit 负责翻译，音频不出手机——
+               也可以接远程 API：OpenAI、Groq、Qwen，或你自建的 Speaches / MTranServer。</p>
+            <p>生成的字幕可以存回云盘，换台设备直接复用。</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">端侧 whisper.cpp</span></li>
+              <li><span class="chip chip-subs">端侧 ML Kit 翻译</span></li>
+              <li><span class="chip chip-subs">PGS OCR</span></li>
+              <li><span class="chip chip-subs">字幕存回云盘</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/android-ai_subtitles.webp" width="676" height="1200" loading="lazy" decoding="async"
+                 alt="「实时翻译」设置页：转写选择「设备端（whisper）」并使用 Base（推荐）模型，翻译选择「设备端（ML Kit）」。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>USB 解码器与 DSD / SACD</h3>
+            <p>插上 USB DAC，应用会自动识别设备能力：采样率范围、位深，以及 DoP 支持到哪一档。
+               内置的 USB 音频驱动（USBFS）与 DST 解码绕过 Android 混音器，直接输出比特完美的信号。</p>
+            <p>DSF、DFF 与 SACD ISO 都能直接从云端播放，支持 DoP 输出、USB DAC 原生 DSD 直推与多声道 DSD。
+               HDMI 上则有 Dolby Atmos / TrueHD 直通与多声道输出。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
+              <li><span class="chip chip-audio">USBFS 比特完美</span></li>
+              <li><span class="chip chip-audio">SACD ISO · DST</span></li>
+              <li><span class="chip chip-audio">Atmos / TrueHD 直通</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/android-audio_dac_dsd1024.webp" width="675" height="1200" loading="lazy" decoding="async"
+                 alt="音频设置自动识别出 USB 解码器「AE8」：UAC2、32 位、2822kHz，DoP 支持 DSD64 至 DSD1024，并列出原生 DSD 与比特完美模式（USB 直连）开关。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>音乐播放器</h3>
+            <p>Now Playing 界面、媒体通知与锁屏控制、cue 表支持，以及多声道 DSD 播放。
+               整张 SACD ISO 或一堆 DSF 放在云盘上，点开就听，不必先同步到本地。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">原生 DSD</span></li>
+              <li><span class="chip chip-audio">cue 表</span></li>
+              <li><span class="chip chip-audio">锁屏控制</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/android-now_playing_native_dsd.webp" width="675" height="1200" loading="lazy" decoding="async"
+                 alt="正在播放界面显示一首曲目，右上角带有 DSF 与「原生 DSD」两个角标。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="android-tv" aria-labelledby="tv-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Android TV</p>
+          <h2 id="tv-h">电视与电视盒子</h2>
+          <p>同一个应用，装到 Android TV 或电视盒子上就换成以焦点为核心的电视界面，完整适配 D-pad 遥控器。</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>遥控器优先的电视界面</h3>
+            <p>面包屑、焦点框与返回键都按遥控器的操作习惯做过适配，横屏仪表盘一屏放下容量卡片和常用入口，
+               不用在电视上戳一个为触摸设计的界面。</p>
+            <ul class="chips">
+              <li><span class="chip">D-pad 导航</span></li>
+              <li><span class="chip">横屏仪表盘</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/androidtv-dashboard.webp" width="1600" height="776" loading="lazy" decoding="async"
+                 alt="Android TV 上的横屏仪表盘：左侧容量卡片，右侧十个快捷入口磁贴。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Emby / Jellyfin 客户端与直连串流</h3>
+            <p>在应用内浏览并播放 Emby 或 Jellyfin 媒体库，按类型、评分、标签筛选。
+               配置好路径映射之后，「直连串流」会经本机 CloudDrive 直接从云端拉流，
+               避免每字节都经过媒体服务器——服务器转不动的格式也能原画质播放。AI 生成的字幕还能回传媒体服务器。</p>
+            <p>手机、平板和电视上都能用，不是电视端专属。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Direct Stream</span></li>
+              <li><span class="chip chip-cloud">路径映射</span></li>
+              <li><span class="chip chip-subs">字幕回传服务器</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/androidtv-direct_stream.webp" width="1600" height="901" loading="lazy" decoding="async"
+                 alt="Android TV 上的「添加服务器」流程，正在询问「直接从 CloudDrive 串流?」，说明文字写着「避免每字节都经过媒体服务器」。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>HDMI 直通与显示模式匹配</h3>
+            <p>电视端有独立的音频引擎，可以切换音轨、把 SACD 多声道经 HDMI 输出，
+               Dolby Atmos 与 TrueHD 直通到功放。在 Amlogic 盒子上还支持 HDMI HDR 直通，
+               以及按片源自动匹配帧率与显示模式——24p 的电影就按 24p 输出，不再多一层插帧。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">HDMI 音频直通</span></li>
+              <li><span class="chip chip-video">自动匹配帧率</span></li>
+              <li><span class="chip chip-video">HDR 直通（Amlogic）</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/androidtv-video_settings.webp" width="1600" height="901" loading="lazy" decoding="async"
+                 alt="Android TV 的设置界面停在「视频播放器」一项，右侧列出 HDMI 音频直通与各项播放选项。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>大屏上的 AI 字幕</h3>
+            <p>字幕翻译在电视上同样可用，转写可以完全跑在盒子本地（whisper），
+               看外语片时不用先去找字幕文件。字幕样式、字号与位置、HDR 字幕亮度都能在电视端调。</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">端侧 whisper 转写</span></li>
+              <li><span class="chip chip-subs">HDR 字幕亮度</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/androidtv-ai_subtitles.webp" width="1600" height="901" loading="lazy" decoding="async"
+                 alt="Android TV 设置的左右分栏界面，右侧打开「实时翻译」，转写使用设备端 whisper。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>双栏浏览与文件检查器</h3>
+            <p>电视上的文件浏览采用左右双栏：左边目录，右边检查器，选中哪个文件就能看清它的编码、
+               大小与轨道信息，遥控器点几下就能确认这个片源到底是什么。</p>
+            <ul class="chips">
+              <li><span class="chip">双栏浏览</span></li>
+              <li><span class="chip">检查器面板</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/androidtv-files_inspector.webp" width="1600" height="901" loading="lazy" decoding="async"
+                 alt="Android TV 的双栏文件浏览界面，左侧是文件列表，右侧检查器显示选中文件的详细属性。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="more-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">更多</p>
+          <h2 id="more-h">日常会用到的其余部分</h2>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-images card-icon" aria-hidden="true"></i>
+            <h3>图库与图片查看</h3>
+            <p>全分辨率 1:1 查看、EXIF 方向自动校正、幻灯片播放与亮度记忆。照片放在云盘上，翻起来跟本地一样顺。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-file-pdf card-icon" aria-hidden="true"></i>
+            <h3>流式 PDF 阅读器</h3>
+            <p>云端的大部头 PDF 边下边读，不必完整下载完再打开。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-cloud-arrow-up card-icon" aria-hidden="true"></i>
+            <h3>备份与传输</h3>
+            <p>多目标自动备份任务，支持定时扫描与过滤规则，可自动创建目标子文件夹。跨云盘复制与移动，传输管理器支持暂停、恢复、重试、限速与并发控制。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-closed-captioning card-icon" aria-hidden="true"></i>
+            <h3>字幕与画面调节</h3>
+            <p>外挂 ASS / SRT / VTT、内嵌文本轨，以及用 libass 渲染的 PGS 图形字幕。字幕样式、字号与位置、HDR 字幕亮度，音频与字幕的延迟可以分别调。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-arrows-rotate card-icon" aria-hidden="true"></i>
+            <h3>应用内更新</h3>
+            <p>直接安装 APK 的用户也不会漏掉新版本：应用会自动检查更新并提示。从 Google Play 安装则由商店负责更新。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-sliders card-icon" aria-hidden="true"></i>
+            <h3>还有这些</h3>
+            <p>深色与浅色主题、中英文界面，以及与 CloudDrive 服务端、网页端、Apple 与 Meta Quest 版本对齐的功能集。</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="get-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">获取</p>
+          <h2 id="get-h">如何安装</h2>
+        </header>
+        <ul class="store-badges">
+          <li><a class="store-badge" href="https://play.google.com/store/apps/details?id=com.clouddrive2.CloudDrive2" rel="noopener">
+            <i class="fa-brands fa-google-play" aria-hidden="true"></i>
+            <span><b>Google Play</b><span>已上架</span></span>
+          </a></li>
+          <li><a class="store-badge" href="/download.html">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span><b>直接下载 APK</b><span>通用安装包</span></span>
+          </a></li>
+        </ul>
+        <div class="note">
+          <span class="note-title">安装说明</span>
+          <p>通用版本，覆盖 arm64-v8a 与 armeabi-v7a，需要 Android 7.0 或更高版本。
+             同一个安装包同时适配手机、平板与 Android TV / 电视盒子。
+             会员与购买说明见<a href="/pricing.html">会员与价格</a>。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-tight" aria-labelledby="other-h">
+      <div class="container">
+        <h2 id="other-h" class="eyebrow strip-title">其他平台</h2>
+        <ul class="platform-strip">
+          <li><a href="/apps/ios.html"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone · iPad</a></li>
+          <li><a href="/apps/macos.html"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</a></li>
+          <li><a href="/apps/tvos.html"><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV</a></li>
+          <li><a href="/apps/visionos.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Vision Pro</a></li>
+          <li><a href="/apps/quest.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Meta Quest</a></li>
+          <li><a href="/apps/desktop.html"><i class="fa-solid fa-server" aria-hidden="true"></i>电脑 · NAS</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/img/clouddrive-h.svg" alt="" width="130" height="40">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/apps/android.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
