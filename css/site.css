@@ -1,6 +1,7 @@
 /* CloudDrive2 — site design system
-   Two registers: "paper" bands for server/core material, "cinema" bands (.band-dark)
-   for the media stack. Spec chips carry real capability values in both. */
+   Plain bands carry the server/core material; .band-dark is the accent surface for
+   the media stack and follows the active theme. Spec chips carry real capability
+   values throughout. */
 
 /* ── tokens ───────────────────────────────────────────────────────────── */
 :root {
@@ -26,6 +27,9 @@
   --t-disc: #b4283c;
   --t-backup: #007a41;
   --t-cloud: #0066e0;
+
+  --band-accent: #e8eef7;
+  --band-accent-glow: rgb(0 102 224 / .09);
 
   --shadow-s: 0 1px 2px rgb(11 14 20 / .06), 0 2px 8px rgb(11 14 20 / .05);
   --shadow-m: 0 2px 6px rgb(11 14 20 / .07), 0 14px 40px rgb(11 14 20 / .09);
@@ -65,6 +69,9 @@
   --t-backup: #4fca8c;
   --t-cloud: #4d9dff;
 
+  --band-accent: #141a25;
+  --band-accent-glow: rgb(77 157 255 / .13);
+
   --shadow-s: 0 1px 2px rgb(0 0 0 / .5);
   --shadow-m: 0 2px 6px rgb(0 0 0 / .45), 0 18px 50px rgb(0 0 0 / .5);
 }
@@ -91,6 +98,9 @@
     --t-disc: #ee8090;
     --t-backup: #4fca8c;
     --t-cloud: #4d9dff;
+
+    --band-accent: #141a25;
+    --band-accent-glow: rgb(77 157 255 / .13);
 
     --shadow-s: 0 1px 2px rgb(0 0 0 / .5);
     --shadow-m: 0 2px 6px rgb(0 0 0 / .45), 0 18px 50px rgb(0 0 0 / .5);
@@ -171,24 +181,11 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
 .band-alt { background: var(--bg-alt); }
 .band-tight { padding-block: clamp(2rem, 1.2rem + 3vw, 3.25rem); }
 
-/* the cinema register: always dark, in both themes */
+/* the media register: a distinct accent surface, following the active theme */
 .band-dark {
-  --surface: #151a23;
-  --surface-2: #1b212c;
-  --text: #eef1f6;
-  --text-muted: #a7b0be;
-  --border: #262d3a;
-  --border-strong: #3a4353;
-  --brand: #4d9dff;
-  --brand-strong: #8dc0ff;
-  --brand-soft: #13243c;
-  --on-brand: #06111f;
-  --t-video: #b294ea; --t-audio: #dcb04a; --t-subs: #4cc7d4;
-  --t-disc: #ee8090;  --t-backup: #4fca8c; --t-cloud: #4d9dff;
-  background: var(--ink);
-  color: var(--text);
+  background: var(--band-accent);
   background-image:
-    radial-gradient(120% 70% at 50% -10%, rgb(77 157 255 / .13), transparent 60%);
+    radial-gradient(120% 70% at 50% -10%, var(--band-accent-glow), transparent 60%);
 }
 
 /* anchored sections clear the sticky header when jumped to */
