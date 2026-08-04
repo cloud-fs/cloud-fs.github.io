@@ -121,15 +121,70 @@
           </div>
         </div>
 
+        <div class="split">
+          <div>
+            <h3>A real file system, not a read-only mirror</h3>
+            <p>Most tools that mount cloud storage locally give you a view you can browse and copy from:
+               attributes are fixed values chosen at mount time, <code>chmod</code> will not stick, and
+               extended attributes are not supported at all. Writing is more limited still — with the
+               default settings, appending a single line to a file already in the cloud fails outright.
+               Making it work means turning on a local disk cache, and the cache has a price: the whole
+               file has to come back down before it can be changed. CloudDrive2's mount is not that.</p>
+            <p>On Linux and macOS the mount is a complete POSIX file system: permission bits, owner and
+               group, all three timestamps and extended attributes (xattr). On Windows, security
+               descriptors are supported in full, so ACLs read and write normally. Cloud storage cannot
+               hold any of this itself, so CloudDrive2 persists it locally — set it once and it is still
+               there after a restart.</p>
+            <p>Writes are genuinely random. Object storage can only replace a whole object, since an
+               upload has to carry the file's hash, so a change still produces a new object. The
+               difference is that CloudDrive2 never downloads the original to build it: it streams the
+               untouched ranges straight from the cloud, splices in what you wrote locally, and uploads
+               the result. Changing a few bytes in the middle of a 40 GB file does not begin with an hour
+               of downloading.</p>
+            <p>As far as we know, CloudDrive2 is the only cloud mount that does both.</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Full POSIX semantics</span></li>
+              <li><span class="chip chip-cloud">Extended attributes</span></li>
+              <li><span class="chip chip-cloud">Windows security descriptors</span></li>
+              <li><span class="chip chip-cloud">Random writes</span></li>
+            </ul>
+          </div>
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-key" aria-hidden="true"></i>
+                <div><b>Permissions and ownership</b><p>Permission bits, owner and group are real. <code>chmod</code> and <code>chown</code> stick instead of being quietly dropped — the attributes are persisted locally, so they do not depend on the cloud being able to store them.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-tags" aria-hidden="true"></i>
+                <div><b>Extended attributes</b><p>Anything that leans on xattr keeps working — Finder tags on macOS, backup tool metadata, tagging utilities of every kind.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                <div><b>Windows ACLs</b><p>Security descriptors are preserved in full, so permissions behave as expected on domain-joined and multi-user machines.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                <div><b>Edit without downloading first</b><p>Database files, editing projects and disk images are written in place, with no need to pull tens of gigabytes back down before you can change them.</p></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
         <div class="note">
           <span class="note-title">Which platforms can mount</span>
-          <p>Presenting a cloud as a disk in the system file system needs the operating system to allow it.
-             The builds that can: Windows, the macOS build downloaded from this site (with macFUSE),
-             Linux / NAS / Docker, and Android on a rooted device.</p>
-          <p>The Mac App Store build, iPhone and iPad, Apple TV, Vision Pro and Meta Quest cannot — a
-             platform restriction rather than a missing feature. Everything else on this page works the
-             same on those platforms, and on iPhone and iPad the Files app integration covers most of the
-             same ground.</p>
+          <p>Presenting a cloud as a disk in the system file system needs the operating system to allow it.</p>
+          <p><b>Can mount:</b> Windows; the macOS build downloaded from this site (with macFUSE);
+             Linux / NAS / Docker; Android on a rooted device.</p>
+          <p><b>Cannot mount:</b> the Mac App Store build (it runs fully sandboxed); iPhone and iPad,
+             Apple TV, Vision Pro and Meta Quest (a platform restriction); Android without root; and Linux
+             running as a non-root user without <code>user_allow_other</code> enabled in
+             <code>/etc/fuse.conf</code> — that last one is a configuration change away, described on the
+             <a href="/en/help.html#install">help page</a>.</p>
+          <p>Everything else on this page works the same on all of them. On iPhone, iPad and Vision Pro the
+             File Provider extension puts your clouds inside the system Files app; on Android, the Storage
+             Access Framework (SAF) lets other apps browse and open your cloud files straight from the
+             system file picker.</p>
         </div>
       </div>
     </section>
@@ -261,6 +316,9 @@
                devices needs no special client.</p>
             <p>CloudDrive2 wraps all of your clouds into a single unified WebDAV service, so any
                WebDAV-capable client can browse and manage every one of your cloud files through it.</p>
+            <p>Every platform carries that server. The app on a phone, tablet, computer, TV or headset can
+               each switch it on and feed the clouds it has connected to third-party apps on the same
+               network.</p>
           </div>
           <figure>
             <img src="/img/shots/androidtv-dashboard.webp" width="1600" height="776" loading="lazy" decoding="async"

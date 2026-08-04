@@ -117,13 +117,63 @@
           </div>
         </div>
 
+        <div class="split">
+          <div>
+            <h3>一个真正的文件系统，不是只读的镜像</h3>
+            <p>大多数把云盘挂到本地的工具，给出的是一个「能看能拷」的视图：文件属性是挂载时统一设定的
+               固定值，<code>chmod</code> 改不动，扩展属性根本不支持。写入更受限——默认配置下，
+               往一个已经在云端的文件后面追加一行都会失败；要让它成功，得先打开本地磁盘缓存，
+               而缓存的代价是：改动之前必须把整个文件下载回本地。CloudDrive2 的挂载不是这样。</p>
+            <p>在 Linux 与 macOS 上，挂出来的是完整的 POSIX 文件系统：权限位、所有者与用户组、
+               三个时间戳、扩展属性（xattr），一样不少。在 Windows 上，安全描述符
+               （Security Descriptor）同样完整支持，ACL 照常读写。云盘本身存不下这些东西，
+               所以 CloudDrive2 把它们持久化在本地——改完就在那里，重启之后还在。</p>
+            <p>写入是真正的随机写。对象存储只能整份替换（上传要带文件哈希），所以改动最终仍然会生成
+               一个新对象；区别在于 CloudDrive2 不需要先把原文件下载回来：它一边从云端取还没改动的那些
+               片段，一边接上你本地写进去的部分，直接拼成新文件传上去。几十 GB 的文件改中间几个字节，
+               不用先花一小时把它拉下来。</p>
+            <p>就我们所知，把这两件事同时做到的云盘挂载工具，目前只有 CloudDrive2。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">完整 POSIX 语义</span></li>
+              <li><span class="chip chip-cloud">扩展属性 xattr</span></li>
+              <li><span class="chip chip-cloud">Windows 安全描述符</span></li>
+              <li><span class="chip chip-cloud">随机写入</span></li>
+            </ul>
+          </div>
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-key" aria-hidden="true"></i>
+                <div><b>权限与归属</b><p>权限位、所有者与用户组都真实存在，<code>chmod</code>、<code>chown</code> 改完不会被丢掉——属性持久化在本地，不依赖云盘能不能存。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-tags" aria-hidden="true"></i>
+                <div><b>扩展属性</b><p>依赖 xattr 的程序照常工作——macOS 的 Finder 标记、备份工具的元数据、各类打标签的工具都不会失灵。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                <div><b>Windows ACL</b><p>安全描述符完整保留，域环境和多用户机器上的权限设置照常生效。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                <div><b>改一段，不必先下载</b><p>数据库文件、剪辑工程、磁盘镜像这类要就地改写的文件，改动之前不必把几十 GB 先拉回本地。</p></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
         <div class="note">
           <span class="note-title">哪些平台可以挂载</span>
-          <p>把云盘挂成系统里的一块本地磁盘，需要操作系统本身放行。可以挂载的是：Windows 版、
-             macOS 官网下载版（需 macFUSE）、Linux / NAS / Docker 版，以及已 root 的 Android 设备。</p>
-          <p>Mac App Store 版、iPhone 与 iPad、Apple TV、Vision Pro 与 Meta Quest 上没有这一项，
-             这是系统限制。本页其余的核心功能在这些平台上一样不少；在 iPhone 与 iPad 上，
-             「文件」应用集成可以覆盖大部分同样的用法。</p>
+          <p>把云盘挂成系统里的一块本地磁盘，需要操作系统本身放行。</p>
+          <p><b>可以挂载：</b>Windows 版；macOS 官网下载版（需 macFUSE）；Linux / NAS / Docker 版；
+             已 root 的 Android 设备。</p>
+          <p><b>不能挂载：</b>Mac App Store 版（运行在完整沙盒中）；iPhone 与 iPad、Apple TV、
+             Vision Pro 与 Meta Quest（系统限制）；未 root 的 Android 设备；以及以非 root 用户运行、
+             又没有在 <code>/etc/fuse.conf</code> 里打开 <code>user_allow_other</code> 的 Linux——
+             最后这一条改一下配置就能挂载，做法见<a href="/help.html#install">帮助页</a>。</p>
+          <p>本页其余的核心功能在这些平台上一样不少。iPhone、iPad 与 Vision Pro 上，File Provider 扩展
+             把云盘接进系统的「文件」应用；Android 上，存储访问框架（SAF）让其他应用直接在系统文件
+             选择器里浏览和打开云端文件。</p>
         </div>
       </div>
     </section>
@@ -249,6 +299,8 @@
                不用装专门的客户端，就能在不同设备之间共享文件。</p>
             <p>CloudDrive2 把你所有的云盘封装成一个统一的 WebDAV 服务，
                任何支持 WebDAV 的客户端都可以通过它访问和管理全部云盘文件。</p>
+            <p>每个平台都带着这台服务器：手机、平板、电脑、电视和头显上的应用都能各自开启，
+               把本机连接的云盘喂给同一网络里的第三方应用。</p>
           </div>
           <figure>
             <img src="/img/shots/androidtv-dashboard.webp" width="1600" height="776" loading="lazy" decoding="async"
