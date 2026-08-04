@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudDrive2 for desktop and NAS — Windows, Linux, Docker and the web UI</title>
+  <meta name="description" content="The CloudDrive2 core service: runs on Windows, Linux, macOS, NAS boxes and Docker, mounts every cloud as a local disk, and serves a browser-based UI and a built-in WebDAV server on port 19798.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/apps/desktop.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/desktop.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/desktop.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/desktop.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="CloudDrive2 for desktop and NAS">
+  <meta property="og:description" content="Mount every cloud as a local disk. A browser-based UI, a built-in WebDAV server, and builds for Windows, Linux, macOS, NAS and Docker.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/apps/desktop.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Windows, Linux, macOS",
+    "url": "https://www.clouddrive2.com/en/apps/desktop.html",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "Cloud mounting and management running on your own computer, NAS or Docker host."
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img src="/img/clouddrive-h.svg" alt="CloudDrive2" width="150" height="46"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/" aria-current="page">Apps</a></li>
+        <li><a href="/en/features.html">Features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/apps/desktop.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Windows · Linux · NAS · Docker</p>
+        <h1>The piece everything else connects to</h1>
+        <p class="hero-lede">
+          At the centre of CloudDrive2 is a background service. It connects all of your cloud accounts,
+          mounts them as local disks, serves a management interface in your browser, and is itself a
+          WebDAV server. The apps on your phone, TV and headset all talk to this.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/download.html">Download the service</a>
+          <a class="btn btn-ghost" href="/en/features.html">Core features in detail</a>
+        </div>
+        <ul class="chips">
+          <li><span class="chip chip-cloud">Local mounting</span></li>
+          <li><span class="chip chip-cloud">Web UI on :19798</span></li>
+          <li><span class="chip chip-cloud">WebDAV server</span></li>
+          <li><span class="chip">Docker · NAS</span></li>
+          <li><span class="chip">Windows · Linux · macOS</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="mount-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Local mounting</p>
+          <h2 id="mount-h">Mount every cloud as a local disk</h2>
+          <p>Once mounted, a cloud drive is just a drive. Any program — an office suite, a video editor,
+             Emby, Plex — reads it the way it reads a local file. Nothing has to be downloaded first.</p>
+        </header>
+
+        <div class="split">
+          <div>
+            <p>Several clouds can be merged into one directory tree, or mounted as separate drives, and
+               you can mount a single folder from a cloud instead of the whole thing. Reads use multiple
+               threads, so with enough bandwidth it feels close to a local disk.</p>
+            <p>Writes are fully random-access, not "re-upload the whole file". Metadata cache lifetime is
+               set per folder, so you decide the balance between freshness and request volume.</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Multi-threaded reads</span></li>
+              <li><span class="chip chip-cloud">Random read and write</span></li>
+              <li><span class="chip chip-cloud">Per-folder cache lifetime</span></li>
+            </ul>
+            <p><a class="arrow-link" href="/en/features.html#local-mount">How local mounting works</a></p>
+          </div>
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                <div>
+                  <b>Unified mounting</b>
+                  <p>Combine several cloud accounts into one filesystem, and moving a file between clouds becomes an ordinary copy and paste.</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                <div>
+                  <b>File change notifications</b>
+                  <p>Changes on a mounted drive raise real filesystem events, so library watchers in Emby,
+                     Jellyfin and Plex keep working. Changes made through the web UI, WebDAV or offline
+                     downloads raise them too.</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                <div>
+                  <b>Access monitoring and permissions</b>
+                  <p>See which process is reading which file and how fast it is downloading, and allow or block access per program.</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                <div>
+                  <b>Encrypted folders</b>
+                  <p>Create encrypted folders in any cloud or local directory. Filenames use AES, contents
+                     use chacha20-poly1305, and the password stays on the machine. Unlocked, they behave
+                     like any other folder.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="chip-note">Linux needs a kernel with FUSE (check for /dev/fuse); macOS needs macFUSE installed first; Android without root cannot mount a local filesystem, though everything else still works.</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="web-ui" aria-labelledby="webui-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Web UI</p>
+          <h2 id="webui-h">The browser is the console</h2>
+          <p>There is no separate desktop client to install. Open a browser and everything —
+             setup and daily use — happens on one page.</p>
+        </header>
+
+        <pre><code>http://localhost:19798        # on the machine itself
+http://&lt;host&gt;:19798           # from anything else on the network</code></pre>
+
+        <div class="split">
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                <div>
+                  <b>Cloud accounts</b>
+                  <p>Add, authorise and remove accounts — Aliyun Drive, Baidu Pan, 115, Tianyi, 123 Pan,
+                     OneDrive, Google Drive, Xunlei, WebDAV and local folders are all in the list.</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+                <div>
+                  <b>File management</b>
+                  <p>Create folders, rename, delete, move, upload local files and copy between clouds,
+                     without switching between each provider's own client.</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-play" aria-hidden="true"></i>
+                <div>
+                  <b>Playback and preview</b>
+                  <p>Play video, audio and images in the browser, or hand a file to PotPlayer, VLC,
+                     Infuse, IINA or nPlayer.</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                <div>
+                  <b>Everything else</b>
+                  <p>Mount points, backup jobs, the transfer queue, WebDAV settings and API tokens all live in the same interface.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p>The web UI is the only console this service has: the desktop shortcut on Windows opens it,
+               and on a NAS or in Docker, where there is no graphical desktop at all, it is still the
+               same page.</p>
+            <p>The CloudDrive2 apps on phones, tablets, TVs and headsets connect to the same service, so a
+               setting changed in one place shows up everywhere.</p>
+            <p class="chip-note">Use a recent Edge, Chrome, Safari or Firefox. Internet Explorer is not supported.</p>
+            <p><a class="arrow-link" href="/en/features.html#unified-web-management">One place for every cloud</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="dav-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">WebDAV</p>
+          <h2 id="dav-h">A WebDAV server of its own</h2>
+          <p>CloudDrive2 re-serves your combined cloud storage over WebDAV. Map Network Drive on Windows,
+             Connect to Server on macOS, an office suite, an editing app, a player on a TV box — anything
+             that speaks WebDAV can reach it.</p>
+        </header>
+
+        <pre><code>Server     http://&lt;host&gt;:19798/dav
+Username   your CloudDrive2 account email (or just the part before the @)
+Password   your CloudDrive2 account password</code></pre>
+
+        <ul class="stack-list">
+          <li>
+            <i class="fa-solid fa-toggle-on" aria-hidden="true"></i>
+            <div>
+              <b>Service switch</b>
+              <p>Turn the WebDAV service on or off whenever you want.</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-user" aria-hidden="true"></i>
+            <div>
+              <b>Account access</b>
+              <p>Allow or block access with your CloudDrive2 account, and set which folder is the root and whether it is read-only.</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-user-secret" aria-hidden="true"></i>
+            <div>
+              <b>Anonymous access</b>
+              <p>Allow or block anonymous access, with its own root folder and its own permissions.</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-users" aria-hidden="true"></i>
+            <div>
+              <b>Separate WebDAV users</b>
+              <p>Create as many standalone users as you need, each with its own root folder and read-only
+                 flag, so family and colleagues get their own view. This is a membership feature — see
+                 <a href="/en/pricing.html">plans and pricing</a>.</p>
+            </div>
+          </li>
+        </ul>
+
+        <p><a class="arrow-link" href="/en/features.html#webdav">More about the WebDAV server</a></p>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="docker-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Docker · NAS</p>
+          <h2 id="docker-h">Living on the NAS</h2>
+          <p>The image is <code>cloudnas/clouddrive2</code>, built for amd64, arm64 and armv7. Once it is
+             running, open <code>http://&lt;host&gt;:19798</code> in a browser to configure it.</p>
+        </header>
+
+        <p>Mounts made inside the container have to propagate back to the host, which means the host needs
+           shared mount propagation enabled. FUSE depends on it, and without it mounting fails with
+           "permission denied". This is the step people miss.</p>
+
+        <details class="acc">
+          <summary>Docker Compose</summary>
+          <div class="acc-body">
+<pre><code>services:
+  cloudnas:
+    image: cloudnas/clouddrive2
+    container_name: clouddrive2
+    environment:
+      - TZ=Asia/Shanghai
+      - CLOUDDRIVE_HOME=/Config
+    volumes:
+      - &lt;path to accept cloud mounts&gt;:/CloudNAS:shared
+      - &lt;path to app data&gt;:/Config
+      - &lt;other local shared path&gt;:/media:shared
+    devices:
+      - /dev/fuse:/dev/fuse
+    restart: unless-stopped
+    pid: "host"
+    privileged: true
+    network_mode: "host"</code></pre>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary>Enabling shared mounts on the host</summary>
+          <div class="acc-body">
+            <p>When Docker runs as a systemd service, give it <code>MountFlags=shared</code>:</p>
+<pre><code>sudo mkdir -p /etc/systemd/system/docker.service.d/
+sudo tee /etc/systemd/system/docker.service.d/clear_mount_propagation_flags.conf &lt;&lt;EOF
+[Service]
+MountFlags=shared
+EOF
+sudo systemctl restart docker.service</code></pre>
+            <p>If it does not run under systemd, mark the mount point holding your target directory as shared:</p>
+<pre><code>sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
+            <p class="chip-note">mount --make-shared only lasts until the next reboot. If CloudDrive should start automatically, add this command to your startup scripts as well.</p>
+          </div>
+        </details>
+
+        <div class="split">
+          <div>
+            <h3>Ready-made NAS packages</h3>
+            <p>Synology and QNAP have third-party packages, Unraid has a community template, and fnOS
+               installs from an fpk package for your architecture. Any NAS that can run Docker can also
+               just run the image above.</p>
+            <ul class="chips">
+              <li><span class="chip">Synology</span></li>
+              <li><span class="chip">QNAP</span></li>
+              <li><span class="chip">Unraid</span></li>
+              <li><span class="chip">fnOS</span></li>
+            </ul>
+            <p class="chip-note">The NAS packages come from third parties, and we cannot vouch for their security or stability. Take images and installers from official channels.</p>
+          </div>
+          <div>
+            <h3>Ports and paths</h3>
+            <ul class="chips">
+              <li><span class="chip">Port 19798</span></li>
+              <li><span class="chip">/Config for app data</span></li>
+              <li><span class="chip">/CloudNAS:shared for mounts</span></li>
+              <li><span class="chip">/dev/fuse</span></li>
+            </ul>
+            <p>Every flag explained, the plain CLI version and the usual problems are in the deployment guide.</p>
+            <p><a class="arrow-link" href="/docker.html">Docker deployment guide</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="linux-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Headless Linux</p>
+          <h2 id="linux-h">A machine with no desktop is fine</h2>
+          <p>The service needs no graphical environment. Download the archive for your architecture,
+             unpack it, run it, and connect from a browser on any other machine.</p>
+        </header>
+
+        <pre><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz
+cd clouddrive-2-linux-$ARCH-$VERSION
+./clouddrive</code></pre>
+
+        <ul class="stack-list">
+          <li>
+            <i class="fa-solid fa-microchip" aria-hidden="true"></i>
+            <div>
+              <b>Check the kernel has FUSE</b>
+              <p>Look for <code>/dev/fuse</code>. Without FUSE you cannot mount local directories, but the
+                 web UI, backups and the WebDAV server still work.</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+            <div>
+              <b>Running as a non-root user</b>
+              <p>Install fuse3 the way your distribution expects, confirm <code>fusermount3</code> runs,
+                 then edit <code>/etc/fuse.conf</code> and remove the <code>#</code> in front of
+                 <code>user_allow_other</code>.</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-terminal" aria-hidden="true"></i>
+            <div>
+              <b>Starting at boot</b>
+              <p>Add clouddrive to your startup items or register it as a systemd service; your distribution's documentation has the details.</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-brands fa-linux" aria-hidden="true"></i>
+            <div>
+              <b>Arch Linux</b>
+              <p>There is an AUR package: <code>yay -Syu clouddrive</code>, then
+                 <code>systemctl enable --now clouddrive.service</code> to start it — or the same command
+                 with <code>--user</code> to run it as your own user.</p>
+            </div>
+          </li>
+        </ul>
+
+        <p><a class="arrow-link" href="/en/help.html">Install steps for each platform</a></p>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="platforms-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Platforms</p>
+          <h2 id="platforms-h">Supported systems and architectures</h2>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th scope="col">Platform</th>
+                <th scope="col">Architectures</th>
+                <th scope="col">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Windows</th>
+                <td>x64 · Arm64</td>
+                <td>Installer; a desktop shortcut opens localhost:19798</td>
+              </tr>
+              <tr>
+                <th scope="row">Linux</th>
+                <td>x86_64 · aarch64 · armv7</td>
+                <td>tgz archive; Arch Linux and derivatives also have an AUR package</td>
+              </tr>
+              <tr>
+                <th scope="row">macOS</th>
+                <td>x86_64 · aarch64</td>
+                <td>Homebrew is the easy route, or unpack the tgz by hand; macFUSE required</td>
+              </tr>
+              <tr>
+                <th scope="row">Docker</th>
+                <td>amd64 · arm64 · armv7</td>
+                <td>cloudnas/clouddrive2, with shared mounts enabled on the host</td>
+              </tr>
+              <tr>
+                <th scope="row">fnOS</th>
+                <td>x86_64 · aarch64</td>
+                <td>fpk package for your architecture, installed manually</td>
+              </tr>
+              <tr>
+                <th scope="row">Android</th>
+                <td>x86_64 · aarch64 · armv7</td>
+                <td>No local filesystem mounting without root; everything else works</td>
+              </tr>
+              <tr>
+                <th scope="row">Synology · QNAP · Unraid</th>
+                <td>Depends on the model</td>
+                <td>Third-party packages and community templates, or just the Docker image</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="get-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Get it</p>
+          <h2 id="get-h">How to install</h2>
+        </header>
+        <ul class="store-badges">
+          <li><a class="store-badge" href="https://hub.docker.com/r/cloudnas/clouddrive2" rel="noopener">
+            <i class="fa-brands fa-docker" aria-hidden="true"></i>
+            <span><b>Docker Hub</b><span>cloudnas/clouddrive2</span></span>
+          </a></li>
+          <li><a class="store-badge" href="/en/download.html">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span><b>All download options</b><span>Every platform</span></span>
+          </a></li>
+        </ul>
+        <div class="note">
+          <span class="note-title">Once it's running</span>
+          <p>Open <code>http://&lt;host&gt;:19798</code>, register or sign in, then add your cloud accounts
+             and set up mount points. Per-platform install steps are in
+             <a href="/en/help.html">help and setup</a>, and every Docker flag is covered in the
+             <a href="/docker.html">Docker deployment guide</a>.</p>
+          <p>Mounting clouds, the web UI and the basic WebDAV service cost nothing.
+             Fast cross-cloud copying, multi-cloud backup, file change notifications, the encrypted
+             filesystem, per-application permissions and separate WebDAV users are membership features —
+             see <a href="/en/pricing.html">plans and pricing</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-tight" aria-labelledby="other-h">
+      <div class="container">
+        <h2 id="other-h" class="eyebrow strip-title">Other platforms</h2>
+        <ul class="platform-strip">
+          <li><a href="/en/apps/ios.html"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone · iPad</a></li>
+          <li><a href="/en/apps/macos.html"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</a></li>
+          <li><a href="/en/apps/tvos.html"><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV</a></li>
+          <li><a href="/en/apps/visionos.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Vision Pro</a></li>
+          <li><a href="/en/apps/android.html"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</a></li>
+          <li><a href="/en/apps/quest.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Meta Quest</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/img/clouddrive-h.svg" alt="" width="130" height="40">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/apps/desktop.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Apple TV 版 CloudDrive2 — 客厅里的云端影音中心</title>
+  <meta name="description" content="Apple TV 上的 CloudDrive2：连接所有云盘，把电影、剧集与音乐直接串流到大屏幕。蓝光原盘 HDMV 菜单、真·杜比视界、杜比全景声、最高 DSD1024，还有支持直连串流的 Emby / Jellyfin 客户端。">
+  <link rel="canonical" href="https://www.clouddrive2.com/apps/tvos.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/tvos.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/tvos.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/tvos.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Apple TV 版 CloudDrive2">
+  <meta property="og:description" content="客厅里的云端影音中心。蓝光原盘 HDMV 菜单、杜比视界与全景声、最高 DSD1024 无损音乐，还有支持直连串流的 Emby / Jellyfin 客户端。">
+  <meta property="og:url" content="https://www.clouddrive2.com/apps/tvos.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "tvOS",
+    "url": "https://www.clouddrive2.com/apps/tvos.html",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "Apple TV 上的云端影音中心：直接从云盘串流电影、剧集与无损音乐。",
+    "offers": {
+      "@type": "Offer",
+      "name": "App Pro",
+      "price": "19.99",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img src="/img/clouddrive-h.svg" alt="CloudDrive2" width="150" height="46"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/" aria-current="page">应用</a></li>
+        <li><a href="/features.html">功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/apps/tvos.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Apple TV</p>
+          <h1>客厅里的云端影音中心</h1>
+          <p class="hero-lede">
+            连接所有云盘，把电影、剧集与音乐直接串流到大屏幕：蓝光原盘 HDMV 菜单、
+            杜比视界与杜比全景声、最高 DSD1024 的无损音乐。无需下载，也不需要 NAS。
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/download.html">获取应用</a>
+            <a class="btn btn-ghost" href="/pricing.html">App Pro 说明</a>
+          </div>
+          <ul class="chips">
+            <li><span class="chip chip-video">真·杜比视界 P7</span></li>
+            <li><span class="chip chip-disc">HDMV 原盘菜单</span></li>
+            <li><span class="chip chip-audio">杜比全景声</span></li>
+            <li><span class="chip chip-audio">DSD1024 · SACD ISO</span></li>
+            <li><span class="chip chip-cloud">直连串流</span></li>
+          </ul>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/tvos-dashboard.webp" width="1600" height="660" decoding="async"
+               alt="Apple TV 上的 CloudDrive2 仪表盘：容量卡片、文件与云存储等快捷入口，以及 CPU、内存和吞吐量仪表。">
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark" aria-labelledby="media-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">影音</p>
+          <h2 id="media-h">影院级播放，直接从云端</h2>
+          <p>不用先把几十 GB 的原盘下载到本地，也不用架一台 NAS。播放器直接从云端读取，
+             解码、菜单、音轨、字幕一样不少。</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>影院级播放与蓝光原盘</h3>
+            <p>H.264、H.265/HEVC、AV1 硬件加速解码，支持 HDR10、HDR10+ 输出信号与杜比视界——
+               包括 Profile 7 蓝光内容的真·杜比视界播放。帧率匹配消除画面抖动，
+               进度条带缩略图预览，看到一半退出后可以断点续播。</p>
+            <p>蓝光 ISO 直接从云存储播放，并进入原生的原盘菜单：场景选择、遥控器上的彩色快捷键、
+               菜单内音轨与字幕设置，以及 2D+3D 合装碟。</p>
+            <p class="chip-note">原盘菜单适用于 HDMV 光盘。BD-J（Java）光盘在 Apple 平台会直接播放正片；如需 BD-J 菜单，请看 <a href="/apps/android.html">Android 版</a>。</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">杜比视界 P5 / 7 / 8</span></li>
+              <li><span class="chip chip-video">HDR10+ · 帧率匹配</span></li>
+              <li><span class="chip chip-disc">HDMV 原盘菜单</span></li>
+              <li><span class="chip chip-disc">2D + 3D 合装碟</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/tvos-player_dv.webp" width="1600" height="900" loading="lazy" decoding="async"
+                 alt="Apple TV 上的播放器正在播放一段 4K 演示片，画面上方显示 HDR10、4K 与 HEVC 角标。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>字幕体验拉满</h3>
+            <p>SRT、ASS/SSA、VTT 与 PGS 图形字幕，支持样式调节、独立延迟和 HDR 亮度调节。</p>
+            <p>AI 字幕翻译在 Apple TV 上通过你自己的 API 生成。更省事的做法是：
+               先在 iPhone 或 Mac 上生成字幕——它会保存在云端视频旁边——
+               Apple TV 打开同一个文件时直接复用，不必在电视上重新跑一遍。</p>
+            <p class="chip-note">tvOS 没有 Apple 的端侧翻译模型，因此电视上的 AI 字幕只能接入你自己的 API；端侧模型请在 iPhone、iPad 或 Mac 上使用。</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">接入自有 API</span></li>
+              <li><span class="chip chip-subs">跨设备复用字幕</span></li>
+              <li><span class="chip chip-subs">PGS 图形字幕</span></li>
+              <li><span class="chip chip-subs">HDR 字幕亮度</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/tvos-ai_subtitles.webp" width="1600" height="900" loading="lazy" decoding="async"
+                 alt="Apple TV 上的「实时翻译」设置：AI 实时字幕开关已开启，翻译源设为「自动（优先字幕）」。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>无损音乐、杜比全景声与多声道环绕</h3>
+            <p>Apple TV 上的完整音频播放器：FLAC、WAV、ALAC、APE，DSD 最高支持 DSD1024，
+               还支持 SACD ISO 播放。专辑封面、无缝播放和后台播放——浏览文件时音乐不间断，
+               遥控器上可用「正在播放」控制。</p>
+            <p>杜比全景声（杜比数字+）通过 HDMI 以比特流直通输出到功放或回音壁。TrueHD、
+               DTS-HD Master Audio 和 DTS 音轨完整解码，经 HDMI 以 5.1 或 7.1 多声道输出——
+               绝不强制下混成立体声。多声道 DSD 同样如此：5.1 声道的 SACD ISO、.dsf 与 .dff
+               通过功放以真正的环绕声播放。完整环绕声场始终保留，所以 AirPods Pro / Max 可享受带头部追踪的空间音频，
+               立体声设备则采用标准 ITU-R BS.775 下混。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
+              <li><span class="chip chip-audio">SACD ISO</span></li>
+              <li><span class="chip chip-audio">杜比全景声比特流</span></li>
+              <li><span class="chip chip-audio">后台播放</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/tvos-audio_player.webp" width="1600" height="900" loading="lazy" decoding="async"
+                 alt="Apple TV 上的全屏音频播放器正在播放一首 DSD1024 测试曲目，界面显示 DSD1024 与 PCM 角标。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="more-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">更多</p>
+          <h2 id="more-h">日常会用到的其余部分</h2>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-tv card-icon" aria-hidden="true"></i>
+            <h3>云端影音中心</h3>
+            <p>Google Drive、OneDrive、阿里云盘、百度网盘、115、S3、WebDAV 等等，全部连到一处。用为 Siri Remote 优化的电视界面在沙发上浏览所有云盘，网格与列表视图、缩略图预览，数千文件的文件夹也能快速导航。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-photo-film card-icon" aria-hidden="true"></i>
+            <h3>Emby / Jellyfin 客户端</h3>
+            <p>连接你自己的 Emby 或 Jellyfin 服务器，海报墙、演职人员、继续观看一应俱全。本机 CloudDrive 能访问同一文件时，「直连串流」直接从云端拉流，绕过服务器转码，观看记录仍与服务器同步。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-film card-icon" aria-hidden="true"></i>
+            <h3>影库元数据</h3>
+            <p>自动读取本地 .nfo 文件与海报图片（Plex / Jellyfin / Emby 命名规范），打造丰富且私有的影库——不联网抓取。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-file-pdf card-icon" aria-hidden="true"></i>
+            <h3>PDF 与文档</h3>
+            <p>全屏查看云端 PDF，翻页与缩放都为遥控器做了适配。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>共享与安全</h3>
+            <p>使用 CloudDrive 账号登录，两步验证与活动会话监控守护你的数据。内置 WebDAV 服务器可把云端文件共享给同一网络下的其他设备，API 令牌可授予限定权限和有效期的访问。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-sliders card-icon" aria-hidden="true"></i>
+            <h3>还有这些</h3>
+            <p>网格与列表视图随时切换、缩略图进度预览与断点续播、遥控器上的「正在播放」控制、深色与浅色主题、中英文界面。</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="get-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">获取</p>
+          <h2 id="get-h">如何安装</h2>
+        </header>
+        <ul class="store-badges">
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>
+            <span><b>App Store</b><span>即将上架</span></span>
+          </span></li>
+          <li><a class="store-badge" href="/download.html">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span><b>全部下载方式</b><span>各平台安装包</span></span>
+          </a></li>
+        </ul>
+        <div class="note">
+          <span class="note-title">关于 App Pro</span>
+          <p>浏览云盘、管理文件、基础播放都不需要额外购买。
+             Emby / Jellyfin 客户端、AI 字幕、蓝光原盘播放、DSD / SACD 这几项进阶播放功能，
+             需要一次性的 <strong>App Pro</strong> 内购，价格 <strong>$19.99</strong>。
+             在 Apple 平台买过一次，iPhone、iPad、Mac、Apple TV 与 Vision Pro 通用。详见<a href="/pricing.html">会员与价格</a>。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-tight" aria-labelledby="other-h">
+      <div class="container">
+        <h2 id="other-h" class="eyebrow strip-title">其他平台</h2>
+        <ul class="platform-strip">
+          <li><a href="/apps/ios.html"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone · iPad</a></li>
+          <li><a href="/apps/macos.html"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</a></li>
+          <li><a href="/apps/visionos.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Vision Pro</a></li>
+          <li><a href="/apps/android.html"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</a></li>
+          <li><a href="/apps/quest.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Meta Quest</a></li>
+          <li><a href="/apps/desktop.html"><i class="fa-solid fa-server" aria-hidden="true"></i>电脑 · NAS</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/img/clouddrive-h.svg" alt="" width="130" height="40">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/apps/tvos.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

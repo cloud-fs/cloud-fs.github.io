@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Apple Vision Pro 版 CloudDrive2 — 沉浸式播放与云端影音</title>
+  <meta name="description" content="Vision Pro 上的 CloudDrive2：直接从云端串流 180°/360° VR、Apple 空间视频、MVC 3D 蓝光与 8K AV1，支持杜比视界与最高 DSD1024，内置 Emby / Jellyfin 客户端、AI 字幕翻译与「文件」应用集成。">
+  <link rel="canonical" href="https://www.clouddrive2.com/apps/visionos.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/visionos.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/visionos.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/visionos.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Apple Vision Pro 版 CloudDrive2">
+  <meta property="og:description" content="Vision Pro 上的私人影院。直接从云端串流 180°/360° VR、Apple 空间视频、MVC 3D 蓝光与 8K AV1，无需下载。">
+  <meta property="og:url" content="https://www.clouddrive2.com/apps/visionos.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "visionOS",
+    "url": "https://www.clouddrive2.com/apps/visionos.html",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "Apple Vision Pro 上的多云盘管理与沉浸式影音播放。",
+    "offers": {
+      "@type": "Offer",
+      "name": "App Pro",
+      "price": "19.99",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img src="/img/clouddrive-h.svg" alt="CloudDrive2" width="150" height="46"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/" aria-current="page">应用</a></li>
+        <li><a href="/features.html">功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/apps/visionos.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Apple Vision Pro</p>
+          <h1>戴上头显，就是私人影院</h1>
+          <p class="hero-lede">
+            直接从云端串流 180°/360° VR、Apple 空间视频、MVC 3D 蓝光、真·杜比视界、
+            最高 DSD1024 与超大 PDF——无需下载。
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/download.html">获取应用</a>
+            <a class="btn btn-ghost" href="/pricing.html">App Pro 说明</a>
+          </div>
+          <ul class="chips">
+            <li><span class="chip chip-video">180° / 360° VR</span></li>
+            <li><span class="chip chip-video">Apple 空间视频</span></li>
+            <li><span class="chip chip-disc">MVC 3D 蓝光</span></li>
+            <li><span class="chip chip-video">8K AV1</span></li>
+            <li><span class="chip chip-subs">头部锁定字幕</span></li>
+          </ul>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/visionos-immersive.webp" width="1600" height="900" decoding="async"
+               alt="客厅里的沉浸式播放：一块巨幅虚拟屏幕悬停在沙发对面，正在播放 4K HDR 画面。">
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="cloud-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">云盘</p>
+          <h2 id="cloud-h">统一云盘管理</h2>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>所有云存储，一个空间</h3>
+            <p>Google Drive、OneDrive、阿里云盘、百度网盘、115、S3、WebDAV、SFTP、FTP、SMB 等等，
+               全部连到一处。跨云浏览、搜索、复制、移动、重命名和整理文件；跨云传输可暂停与恢复，
+               自动备份任务、文件夹递归上传和流式 PDF 阅读器也都在同一个应用里。</p>
+            <p>完整的 File Provider 扩展，让云端文件直接出现在 visionOS 的「文件」应用，
+               以及任何调用文档选择器的应用里。窗口可以并排摆开，边整理文件边放着电影。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">跨云搜索</span></li>
+              <li><span class="chip chip-cloud">S3 · WebDAV · SMB</span></li>
+              <li><span class="chip chip-cloud">File Provider</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/visionos-dashboard.webp" width="1600" height="610" loading="lazy" decoding="async"
+                 alt="悬浮在客厅中的 CloudDrive2 仪表盘面板：左侧容量卡片，中间一排快捷入口磁贴，右侧系统状态。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark" aria-labelledby="media-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">影音</p>
+          <h2 id="media-h">从平面电影到全沉浸 VR</h2>
+          <p>几十 GB 的原盘不必先拖回本地。播放器直接从云端读取，解码、菜单、音轨、字幕一样不少。</p>
+          <p>在沉浸空间里可以观看 180°/360° VR 视频、Apple 空间视频（MV-HEVC）、左右与上下立体 3D、
+             鱼眼和 EAC 立方体贴图内容，保留透视画面更舒适。头部锁定字幕跟随视线，自动匹配景深——
+             即使物体离得很近也能舒适阅读。</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>影院级平面播放与蓝光原盘</h3>
+            <p>H.264、H.265/HEVC、AV1——包括 8K AV1 实时播放——支持 HDR10、HDR10+ 和杜比视界，
+               包括 Profile 7 蓝光内容的真·杜比视界播放。屏幕想放多大就放多大，坐在哪儿都是正对着看。</p>
+            <p>蓝光 ISO 直接从云端播放，并进入原生的原盘菜单：场景选择、彩色快捷键、菜单内音轨与字幕设置，
+               甚至 2D+3D 合装碟。ISO 里的 MVC 3D 蓝光原生解码左右眼画面，跨进度跳转、章节和片段切换都保持立体 3D。</p>
+            <p class="chip-note">原盘菜单适用于 HDMV 光盘。BD-J（Java）光盘在 Apple 平台会直接播放正片；如需 BD-J 菜单，请看 <a href="/apps/android.html">Android 版</a>。</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">8K AV1</span></li>
+              <li><span class="chip chip-video">杜比视界 P5 / 7 / 8</span></li>
+              <li><span class="chip chip-disc">HDMV 菜单</span></li>
+              <li><span class="chip chip-disc">MVC 3D 蓝光</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/visionos-player_dv.webp" width="1600" height="900" loading="lazy" decoding="async"
+                 alt="巨幅虚拟屏幕上正在播放 4K 竹林画面，画面上方显示 HDR10 与 4K 角标。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>AI 字幕翻译</h3>
+            <p>为任何视频生成翻译字幕：优先翻译已有字幕轨（包括通过端侧 OCR 识别的 PGS 图形字幕），
+               没有字幕时才回退到语音识别。可以使用 Apple 的端侧翻译模型——免费，音频也不出设备——
+               也可以接入你自己的 API。</p>
+            <p>生成的字幕保存在视频旁边，换台设备就能直接复用；在沉浸模式下同样跟随视线呈现。</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">Apple 端侧模型</span></li>
+              <li><span class="chip chip-subs">PGS OCR</span></li>
+              <li><span class="chip chip-subs">字幕存档复用</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/visionos-ai_subtitles.webp" width="1600" height="612" loading="lazy" decoding="async"
+                 alt="悬浮在房间里的设置面板，正打开「实时翻译」一页，可选择语言与转写模型。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>多声道与发烧级音频</h3>
+            <p>杜比全景声、TrueHD、DTS-HD Master Audio 和 DTS 音轨以完整 5.1 或 7.1 解码，
+               再渲染为带头部追踪的空间音频——整个环绕声场摆在你周围，而不是下混成立体声。
+               Vision Pro 自带扬声器和 AirPods Pro / Max 都可以。</p>
+            <p>多声道 DSD 同样如此：5.1 声道 SACD ISO、.dsf 与 .dff 以真正的环绕声播放。
+               此外还支持 FLAC、WAV、ALAC，DSD 播放最高支持 DSD1024，并支持 DoP 输出。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
+              <li><span class="chip chip-audio">多声道 SACD ISO</span></li>
+              <li><span class="chip chip-audio">TrueHD · DTS-HD MA</span></li>
+              <li><span class="chip chip-audio">头部追踪空间音频</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/visionos-audio_player.webp" width="900" height="900" loading="lazy" decoding="async"
+                 alt="悬浮的音频播放器卡片正在播放一首 DSD1024 曲目，卡片上显示 DSD1024 与 PCM 角标。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="more-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">更多</p>
+          <h2 id="more-h">日常会用到的其余部分</h2>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-photo-film card-icon" aria-hidden="true"></i>
+            <h3>Emby / Jellyfin 客户端</h3>
+            <p>连接你自己的 Emby 或 Jellyfin 服务器，海报墙、演职人员、继续观看一应俱全。当本机 CloudDrive 能访问同一个文件时，「直连串流」直接从云端拉流播放，服务器转不动的格式也能原画质播放，观看记录仍与服务器同步。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-vr-cardboard card-icon" aria-hidden="true"></i>
+            <h3>支持的沉浸格式</h3>
+            <p>180° 与 360° VR 视频、Apple 空间视频（MV-HEVC）、左右与上下立体 3D、鱼眼、EAC 立方体贴图，以及 ISO 里的 MVC 3D 蓝光。播放时可保留透视画面，看久了也不闷。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-file-pdf card-icon" aria-hidden="true"></i>
+            <h3>流式 PDF 阅读器</h3>
+            <p>云端 PDF 边下边读，不必完整下载。放大、页面缩略图、书签与阅读位置记忆都在，窗口想摆多大摆多大。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
+            <h3>跨云传输与备份</h3>
+            <p>在不同服务商之间复制或移动文件，传输可暂停与恢复。自动备份任务按计划运行，文件夹递归上传一次搞定。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>共享与安全</h3>
+            <p>两步验证、加密文件夹与活动会话监控。内置 WebDAV 服务器可把云端文件共享给同一网络下的其他设备，API 令牌可授予限定权限和有效期的访问。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-sliders card-icon" aria-hidden="true"></i>
+            <h3>还有这些</h3>
+            <p>影库读取本地 .nfo 与海报（Plex / Jellyfin / Emby 命名规范，不联网抓取）、可配置淘汰策略的磁盘缓存、音频与字幕独立延迟调节、深色与浅色主题、中英文界面。</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="get-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">获取</p>
+          <h2 id="get-h">如何安装</h2>
+        </header>
+        <ul class="store-badges">
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>
+            <span><b>App Store</b><span>即将上架</span></span>
+          </span></li>
+          <li><a class="store-badge" href="/download.html">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span><b>全部下载方式</b><span>各平台安装包</span></span>
+          </a></li>
+        </ul>
+        <div class="note">
+          <span class="note-title">关于 App Pro</span>
+          <p>浏览云盘、管理文件、传输与备份、基础播放都不需要额外购买。
+             Emby / Jellyfin 客户端、AI 字幕、蓝光原盘播放、DSD / SACD，
+             以及 VR / 沉浸式播放这几项，需要一次性的 <strong>App Pro</strong> 内购，
+             价格 <strong>$19.99</strong>。在 Apple 平台买过一次，
+             iPhone、iPad、Mac、Apple TV 与 Vision Pro 通用。详见<a href="/pricing.html">会员与价格</a>。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-tight" aria-labelledby="other-h">
+      <div class="container">
+        <h2 id="other-h" class="eyebrow strip-title">其他平台</h2>
+        <ul class="platform-strip">
+          <li><a href="/apps/ios.html"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone · iPad</a></li>
+          <li><a href="/apps/macos.html"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</a></li>
+          <li><a href="/apps/tvos.html"><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV</a></li>
+          <li><a href="/apps/android.html"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</a></li>
+          <li><a href="/apps/quest.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Meta Quest</a></li>
+          <li><a href="/apps/desktop.html"><i class="fa-solid fa-server" aria-hidden="true"></i>电脑 · NAS</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/img/clouddrive-h.svg" alt="" width="130" height="40">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/apps/visionos.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

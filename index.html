@@ -1,326 +1,392 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - Home</title>
-  <link rel="canonical" href="https://www.clouddrive2.com" />
-  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
-  <link rel="stylesheet" href="css/site.css">
-  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/site.js"></script>
+  <title>CloudDrive2 — 所有网盘，一个应用，每块屏幕</title>
+  <meta name="description" content="CloudDrive2 把你的每一个云盘挂载成本地磁盘，并在手机、电脑、电视与头显上直接串流播放云端影音：真·杜比视界、蓝光原盘菜单、DSD1024、AI 字幕翻译。">
+  <link rel="canonical" href="https://www.clouddrive2.com/">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="CloudDrive2 — 所有网盘，一个应用，每块屏幕">
+  <meta property="og:description" content="把每一个云盘挂载成本地磁盘，并在你拥有的每块屏幕上以影院级画质直接播放云端影音。">
+  <meta property="og:url" content="https://www.clouddrive2.com/">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "iOS, iPadOS, macOS, tvOS, visionOS, Android, Windows, Linux",
+    "url": "https://www.clouddrive2.com/",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "多云盘管理、本地挂载与影院级影音播放。"
+  }
+  </script>
 </head>
-<style>
-  .navbar-collapse {
-    background-color: rgba(234, 242, 248, 0.9);
-    padding: 10px;
-  }
-
-  .banner {
-    background-color: #f8f9fa;
-    text-align: center;
-    padding: 20px 0;
-  }
-</style>
 
 <body>
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
-      <div class="container">
-        <a class="navbar-brand" href="index.html">
-          <img src="img/clouddrive-h.png" height="80">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">主页</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="features.html">功能</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="pricing.html">会员</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="help.html">帮助</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/api/CloudDrive2_gRPC_API_Guide.html">API</a>
-            </li>
-          </ul>
-          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
-        </div>
-      </div>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img src="/img/clouddrive-h.svg" alt="CloudDrive2" width="150" height="46"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/" aria-current="page">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
     </nav>
   </header>
-  <div class="container mt-4">
-    <h1 class="hero-title">CloudDrive - 解锁云存储的无限可能</h1>
-    <p class="tagline">CloudDrive是一个强大的多云盘管理工具，为用户提供包含云盘本地挂载的一站式的多云盘解决方案。</p>
-    <div class="container">
-      <!-- <div class="banner">
-        <a href="https://item.jd.com/10061560869846.html" target="_blank"><img src="img/cloudrive-banner.gif" width="95%" height="auto" alt="banner"/></a>
-      </div> -->
-      <div class="alert alert-warning" role="alert">
-        <strong>致视力障碍用户:</strong>
-        <p>自CloudDrive上线以来，我们荣幸地得到了来自各个用户群体的支持和肯定。</p>
-        <p>
-          近期，我们收到了很多视力障碍朋友的来信。不仅表达了对CloudDrive的喜爱，更为我们提供了关于无障碍用户界面的诸多宝贵建议。我们为此深感荣幸，并意识到身上肩负的责任更为重大。在此，我们郑重承诺，未来的UI设计中，我们将充分考虑并优化无障碍的需求，努力为视障朋友提供更为舒适和便捷的使用体验。
+
+  <main id="main">
+
+    <!-- ── hero ─────────────────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">多云盘 · 影音播放 · 全平台</p>
+          <h1>所有网盘，一个应用，每块屏幕</h1>
+          <p class="hero-lede">
+            CloudDrive2 把你的每一个云盘挂载成本地磁盘，再把盘里的影音，
+            以影院级画质直接串流到手机、电脑、电视和头显上——不用先下载。
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/download.html">下载 CloudDrive2</a>
+            <a class="btn btn-ghost" href="/apps/">查看应用</a>
+          </div>
+          <ul class="chips">
+            <li><span class="chip chip-video">真·杜比视界 P7</span></li>
+            <li><span class="chip chip-disc">蓝光原盘菜单</span></li>
+            <li><span class="chip chip-audio">DSD1024</span></li>
+            <li><span class="chip chip-subs">AI 字幕翻译</span></li>
+            <li><span class="chip chip-cloud">Emby · Jellyfin 直连</span></li>
+          </ul>
+        </div>
+        <div class="hero-stack">
+          <img class="shot-wide" src="/img/shots/macos-dashboard.webp" width="1600" height="815"
+               decoding="async" alt="CloudDrive2 的 Mac 仪表盘：显示已连接云盘的总容量，以及文件、云存储、挂载点、备份、传输、WebDAV 等快捷入口。">
+          <img class="shot-phone" src="/img/shots/iphone-dashboard.webp" width="553" height="1035"
+               decoding="async" alt="iPhone 上的 CloudDrive2 仪表盘：容量卡片，以及文件、云存储、备份、任务、WebDAV、令牌、影视、设置八个快捷入口。">
+        </div>
+      </div>
+    </section>
+
+    <!-- ── platform strip ───────────────────────────────────────────── -->
+    <section class="band band-tight band-alt" aria-labelledby="platforms-h">
+      <div class="container">
+        <h2 id="platforms-h" class="sr-only">支持的平台</h2>
+        <ul class="platform-strip">
+          <li><a href="/apps/ios.html"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone · iPad</a></li>
+          <li><a href="/apps/macos.html"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</a></li>
+          <li><a href="/apps/tvos.html"><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV</a></li>
+          <li><a href="/apps/visionos.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Vision Pro</a></li>
+          <li><a href="/apps/android.html"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</a></li>
+          <li><a href="/apps/android.html#android-tv"><i class="fa-solid fa-tv" aria-hidden="true"></i>Android TV</a></li>
+          <li><a href="/apps/quest.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Meta Quest</a></li>
+          <li><a href="/apps/desktop.html"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</a></li>
+          <li><a href="/apps/desktop.html"><i class="fa-brands fa-linux" aria-hidden="true"></i>Linux · NAS</a></li>
+          <li><a href="/docker.html"><i class="fa-brands fa-docker" aria-hidden="true"></i>Docker</a></li>
+          <li><a href="/apps/desktop.html#web-ui"><i class="fa-solid fa-globe" aria-hidden="true"></i>Web 界面</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── core features ────────────────────────────────────────────── -->
+    <section class="band" aria-labelledby="core-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">核心服务</p>
+          <h2 id="core-h">跑在你自己的服务器上</h2>
+          <p>CloudDrive2 的核心是一个运行在你电脑或 NAS 上的服务：它统一管理你所有的云盘账户，
+             把它们挂载成本地磁盘，并对外提供 WebDAV。以下每一项都可以点开细读。</p>
+        </header>
+        <ul class="card-grid">
+          <li><a class="card" href="/features.html#local-mount">
+            <i class="fa-solid fa-laptop-file card-icon" aria-hidden="true"></i>
+            <h3>云盘本地挂载</h3>
+            <p>把多个云盘挂载成本地驱动器，像使用电脑硬盘一样使用它们。告别「先下载再打开」。</p>
+          </a></li>
+          <li><a class="card" href="/features.html#unified-web-management">
+            <i class="fa-solid fa-people-roof card-icon" aria-hidden="true"></i>
+            <h3>统一的多云盘管理</h3>
+            <p>在一个界面里管理全部云盘账户：整理文件、同步文件夹、跨服务商搜索。阿里云盘、百度网盘、115、天翼云盘、123云盘、OneDrive、Google Drive、迅雷云盘、WebDAV 与本地文件夹都在其中。</p>
+          </a></li>
+          <li><a class="card" href="/features.html#one-login">
+            <i class="fa-solid fa-right-to-bracket card-icon" aria-hidden="true"></i>
+            <h3>一次登录，到处使用</h3>
+            <p>云盘账户登录一次即可在任何设备上使用。账户信息以你的密码加密，服务器只保存密码哈希，无法解密。</p>
+          </a></li>
+          <li><a class="card" href="/features.html#webdav">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>WebDAV 服务</h3>
+            <p>CloudDrive2 本身就是一台 WebDAV 服务器，可以把聚合后的云盘提供给任何 WebDAV 客户端。</p>
+          </a></li>
+          <li><a class="card" href="/features.html#inter-cloud-copy">
+            <span class="badge-pro">PRO</span>
+            <i class="fa-solid fa-people-carry-box card-icon" aria-hidden="true"></i>
+            <h3>跨云盘文件快速复制</h3>
+            <p>在云盘之间直接传输文件，无需先下载到本地。省时间，也省带宽。</p>
+          </a></li>
+          <li><a class="card" href="/features.html#file-notification">
+            <span class="badge-pro">PRO</span>
+            <i class="fa-solid fa-bell card-icon" aria-hidden="true"></i>
+            <h3>文件变更通知</h3>
+            <p>云端文件发生变化时实时通知，可与文件系统监视类应用无缝配合。</p>
+          </a></li>
+          <li><a class="card" href="/features.html#encrypted-filesystem">
+            <span class="badge-pro">PRO</span>
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>加密文件系统</h3>
+            <p>在任意云盘或本地文件夹里创建加密目录。文件名用 AES 加密、内容用 chacha20-poly1305 加密，密码永不上传。解锁后与普通文件夹用起来完全一样。</p>
+          </a></li>
+          <li><a class="card" href="/features.html#file-access-control">
+            <span class="badge-pro">PRO</span>
+            <i class="fa-solid fa-lock card-icon" aria-hidden="true"></i>
+            <h3>应用级权限控制</h3>
+            <p>按程序定义和管理文件访问权限，精细控制哪个应用能读写哪些文件。</p>
+          </a></li>
+          <li><a class="card" href="/features.html#service-vendor-friendly">
+            <i class="fa-solid fa-handshake card-icon" aria-hidden="true"></i>
+            <h3>云盘服务商友好</h3>
+            <p>在保证使用流畅的前提下，尽可能减少对网盘运营商资源的占用。用 CloudDrive2，不做网盘吸血鬼。</p>
+          </a></li>
+          <li><a class="card" href="/features.html#multicloud-backup">
+            <span class="badge-pro">PRO</span>
+            <i class="fa-solid fa-cloud-arrow-up card-icon" aria-hidden="true"></i>
+            <h3>多云盘备份</h3>
+            <p>把任意本地磁盘或云盘同时备份到多个目标，自动检测变化并增量备份，覆盖与删除都可保留无限历史版本。</p>
+          </a></li>
+          <li><a class="card" href="/apps/desktop.html">
+            <i class="fa-solid fa-globe card-icon" aria-hidden="true"></i>
+            <h3>在任何设备上运行</h3>
+            <p>电脑 Windows / Linux / macOS，NAS 群晖 / QNAP / Unraid / 飞牛，电视与手机 Android，以及 OpenWRT 路由器。</p>
+          </a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── media showcase (cinema register) ─────────────────────────── -->
+    <section class="band band-dark" aria-labelledby="media-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">影音</p>
+          <h2 id="media-h">云盘里的电影，就在云盘里看</h2>
+          <p>CloudDrive2 的播放器直接从云端读取，不必先把几十 GB 的原盘拖回本地。
+             解码、菜单、音轨、字幕，一样不少。</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Emby / Jellyfin 客户端，直连串流</h3>
+            <p>登录你的 Emby 或 Jellyfin 服务器，浏览媒体库、续播、看元数据。
+               如果服务器的媒体目录本来就在 CloudDrive 上，播放器会绕过服务器转码，
+               直接从云端拉流——服务器不再为每一个字节做中转。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Direct Stream</span></li>
+              <li><span class="chip chip-cloud">绕过服务器转码</span></li>
+            </ul>
+            <a class="arrow-link" href="/apps/ios.html">看看它在 iPhone 与 iPad 上的样子</a>
+          </div>
+          <figure>
+            <img src="/img/shots/iphone-direct_stream_setup.webp" width="553" height="1200" loading="lazy" decoding="async"
+                 alt="iPhone 上的「添加服务器」界面，开启了直连串流，并把服务器媒体路径映射到 CloudDrive 目录。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>真·杜比视界与 HDR10+</h3>
+            <p>硬件加速解码 HEVC、AV1 与 H.264，支持杜比视界 Profile 5 / 7 / 8 与 HDR10、HDR10+、HLG。
+               Profile 7 的蓝光内容按真正的双层方式播放，而不是降级成 HDR10。</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">DV P5 / 7 / 8</span></li>
+              <li><span class="chip chip-video">HDR10+ · HLG</span></li>
+              <li><span class="chip chip-video">HEVC · AV1</span></li>
+            </ul>
+            <a class="arrow-link" href="/apps/macos.html">看看它在 Mac 上的样子</a>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-player_hdr10.webp" width="1600" height="901" loading="lazy" decoding="async"
+                 alt="Mac 全屏播放器正在播放一段 4K 演示片，右上角显示 HDR10、4K、HEVC 三个格式角标。">
+          </figure>
+        </div>
+
+        <!-- no screenshot exists for disc menus; presented as a spec block -->
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>蓝光原盘 ISO，连光碟菜单一起</h3>
+            <p>直接打开云盘里的蓝光 ISO 和 DVD ISO，进入原生的光碟菜单：选章节、选音轨、选字幕、
+               彩色快捷键，全部可用。镜像不完整时自动跳过菜单直接播放正片。</p>
+            <p class="chip-note">Apple 平台支持 HDMV 菜单；BD-J（Java）菜单为 Android 版独有，Apple 平台遇到 BD-J 光碟会直接播放正片。</p>
+            <ul class="chips">
+              <li><span class="chip chip-disc">HDMV 菜单</span></li>
+              <li><span class="chip chip-disc">BD-J 菜单（Android）</span></li>
+              <li><span class="chip chip-disc">DVD ISO</span></li>
+              <li><span class="chip chip-audio">TrueHD · DTS-HD MA</span></li>
+            </ul>
+            <a class="arrow-link" href="/apps/android.html">看看 Android 版的光碟菜单</a>
+          </div>
+          <figure>
+            <img src="/img/shots/androidtv-video_settings.webp" width="1600" height="901" loading="lazy" decoding="async"
+                 alt="Android TV 的视频播放器设置页，可选择蓝光光碟菜单行为、HDMI 音频直通与硬件解码。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>AI 字幕翻译，在设备上完成</h3>
+            <p>没有字幕的片子，可以直接转写并翻译成你的语言；有外语字幕的，也能整轨翻译。
+               转写与翻译都在设备本地进行，不会把音频传到任何服务器。
+               生成的字幕会存在视频旁边，换一台设备也能直接用。</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">设备端转写</span></li>
+              <li><span class="chip chip-subs">整轨翻译</span></li>
+              <li><span class="chip chip-subs">SRT 存档复用</span></li>
+            </ul>
+            <a class="arrow-link" href="/apps/macos.html">看看字幕设置</a>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-ai_subtitles.webp" width="1600" height="1053" loading="lazy" decoding="async"
+                 alt="Mac 上的「实时翻译」设置页：默认口语语言为意大利语、目标语言为简体中文，转写模型为设备端 Apple 模型。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>发烧级音频：DSD、SACD、比特完美</h3>
+            <p>直接播放云端的 DSD 与 SACD ISO，经 DoP 输出到你的 USB 解码器，最高 DSD1024。
+               应用会读出解码器自己声明的能力，你看到的采样率、位深和 DSD 档位都是它真实支持的。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
+              <li><span class="chip chip-audio">DoP 1.1</span></li>
+              <li><span class="chip chip-audio">SACD ISO</span></li>
+              <li><span class="chip chip-audio">杜比全景声</span></li>
+            </ul>
+            <a class="arrow-link" href="/apps/android.html">看看 Android 上的原生 DSD</a>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-audio_settings.webp" width="1600" height="1044" loading="lazy" decoding="async"
+                 alt="Mac 播放器设置：已连接的 USB 解码器 AE8 显示采样率 44.1 kHz–2822.4 kHz、32 位，DoP 支持 DSD64 至 DSD1024。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Vision Pro 与 Quest 上的私人影院</h3>
+            <p>180°/360° VR 视频、Apple 空间视频、MVC 3D 蓝光，直接从云端串流。
+               在 Vision Pro 上，字幕会自动贴合画面景深；在 Quest 上，你可以挑一个影厅环境，
+               把银幕拉到合适的距离和弧度。</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">180° / 360°</span></li>
+              <li><span class="chip chip-video">MVC 3D</span></li>
+              <li><span class="chip chip-video">Apple 空间视频</span></li>
+            </ul>
+            <a class="arrow-link" href="/apps/visionos.html">看看 Vision Pro 版</a>
+          </div>
+          <figure>
+            <img src="/img/shots/visionos-immersive.webp" width="1600" height="900" loading="lazy" decoding="async"
+                 alt="Vision Pro 上的沉浸式播放：一块巨大的虚拟银幕悬浮在客厅中，正在播放 4K HDR 画面。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── accessibility programme ──────────────────────────────────── -->
+    <section class="band" aria-labelledby="a11y-h">
+      <div class="container container-narrow">
+        <p class="eyebrow">致视力障碍用户</p>
+        <h2 id="a11y-h">299 元终身会员，以及一个承诺</h2>
+        <p>自 CloudDrive 上线以来，我们收到了很多视力障碍朋友的来信——不只是喜爱，
+           还有关于无障碍界面的许多具体建议。我们郑重承诺，未来的界面设计会充分考虑并持续优化无障碍需求。</p>
+        <p>从这些来信中我们了解到，对视力障碍的朋友来说，逐个操作多个网盘客户端格外吃力。
+           把所有网盘统一挂载成一个系统盘，恰好能省掉这一层麻烦——这正是 CloudDrive 在做的事。</p>
+        <p>因此，在终身会员恢复原价 499 元的同时，我们保留一档 <strong>299 元的特价终身会员</strong>。
+           请通过邮件提供视力残疾证上的姓名与证件编号，我们审核后会第一时间发送优惠码。</p>
+        <p class="btn-row">
+          <a class="btn btn-primary" href="mailto:waytechcloudfs@gmail.com">发邮件申请优惠码</a>
+          <a class="btn btn-ghost" href="/pricing.html">查看全部会员方案</a>
         </p>
-        <p>
-          从你们的来信中，我们意识到，对于视力障碍朋友而言，日常使用电子设备需要克服许多不便，特别是在管理多个网盘的应用时，操作诸多网盘客户端有各种不便。我们也很欣慰地得知，CloudDrive的出现，可以帮助你们减少这种困扰，让视力障碍的朋友能在系统挂载盘里统一管理所有网盘，从而避免频繁操作不同应用带来的麻烦。
-        </p>
-        <p>
-          为了进一步表达我们对视力障碍朋友的支持和感谢，我们决定在CloudDrive终身会员恢复原价499元的同时，推出一个特价版终身会员活动，价格为299元。只需您通过邮件向我们提供视力残疾证的姓名和编号，我们审核后将为您发送优惠码，您便可以299元价格购买CloudDrive的终身会员特权。
-        </p>
-        <p>我们真诚地希望这一小小的举措能为您带来更多便利，也表达我们对视力障碍群体的尊重和关心。</p>
-        <p>请将相关证明邮寄至：<a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a> ，我们会在审核后第一时间为您发送优惠码。</p>
-        <p>感谢您的理解与支持！期待与您共同创造更多美好！</p>
+        <p>感谢您的理解与支持，也感谢您让我们把产品做得更好。</p>
       </div>
-      <!-- <div class="alert alert-warning" role="alert">
-        <strong>终身会员价格调整及会员推荐码上线:</strong>
-        <p>终身会员299元优惠价格已于2023年9月23日0:00结束，正式上线会员推荐码。</p>
-        <p>月费与年费会员，被推荐人获得10%折扣，推荐人获得10%余额</p>
-        <p>终身会员，被推荐人获得20%折扣，推荐人获得20%余额</p>
-      </div> -->
-    </div>
-    <!-- add a brief introduction content here with h2 title-->
-    <h2>CloudDrive是什么？</h2>
-    <div style="color: #333; padding: 20px;">
-      <p style="font-size: 24px; margin-bottom: 20px;">
-      <ul>
-        <li>CloudDrive是一个全方位的云存储管理平台，旨在无缝集成多个云存储服务，将它们统一整合到一个界面中。</li>
-        <li>使用CloudDrive，您可以轻松管理和访问所有云存储服务，无需在不同的应用程序和界面之间来回切换。</li>
-        <li>CloudDrive最引人注目的特点是其能够将多个云存储服务挂载为本地磁盘，直接访问文件而无需预先下载。想象一下，您可以将云存储服务当作本地文件系统的一部分来使用，带来的便利性不言而喻。</li>
-        <li>但这还不是全部 -
-          CloudDrive还提供了高级功能，如快速的云端文件传输、实时的云文件通知和应用级别的权限控制。无论您是高级用户还是普通云存储用户，CloudDrive都能以卓越的效率和易用性让您充分发挥云存储资源的潜力。</li>
-      </ul>
-      <p>尽享云存储管理的未来，请选择<strong>CloudDrive</strong>。</p>
-      </p>
-    </div>
-    <h2>CloudDrive的主要特性</h2>
-    <div class="row">
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#local-mount'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-laptop-file fa-4x mb-3"></i>
-            <h5 class="card-title">云盘本地挂载</h5>
-            <p class="card-text">将多个云盘挂载到本地驱动器，就像它们是计算机文件系统的一部分。告别从云端下载文件的麻烦。</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#unified-unified-web-management'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-people-roof fa-4x mb-3"
-              onclick="window.location.href='features.html#unified-unified-web-management'"></i>
-            <h5 class="card-title">
-              统一的多云盘管理</h5>
-            <!-- -->
-            <p class="card-text">
-              在一个地方管理所有云盘账户。轻松组织文件，同步文件夹，并跨不同云服务进行高级搜索。目前支持阿里云盘、百度网盘、115网盘、天翼云盘、123云盘、OneDrive、Google
-              Drive、迅雷云盘、WebDAV和本地文件夹。
-            </p>
-            <!-- <ul>
-              <li><img class="cloud-logo" src="img/cloudaliyundrive.png">阿里云盘</li>
-              <li><img class="cloud-logo" src="img/cloud115.png">115网盘</li>
-              <li><img class="cloud-logo" src="img/cloud189.png">天翼云盘</li>
-              <li><img class="cloud-logo" src="img/folder-00.png">本地文件夹</li>
-              <li><img class="cloud-logo" src="img/webdav.png">WebDAV服务</li>
+    </section>
 
-            </ul> -->
-          </div>
+    <!-- ── bottom CTA ───────────────────────────────────────────────── -->
+    <section class="band band-alt cta-band">
+      <div class="container">
+        <h2>把云盘装进每一块屏幕</h2>
+        <p>核心服务在电脑、NAS、Docker 上免费开始；应用在 App Store、Google Play 与直接下载中获取。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/download.html">前往下载</a>
+          <a class="btn btn-ghost" href="/pricing.html">会员与价格</a>
         </div>
       </div>
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#one-login'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-sign-in-alt fa-4x mb-3"></i>
-            <h5 class="card-title">一次登录，到处使用</h5>
-            <p class="card-text">在一个地方登录所有的云盘账户，并在任何设备上使用，无需每次都要登录不同的账户。</p>
-            <p class="card-text">云盘账户同步机制是安全的。</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#webdav'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-cloud-upload-alt fa-4x mb-3"></i>
-            <h5 class="card-title">WebDAV服务</h5>
-            <p class="card-text">CloudDrive作为一个WebDAV服务器，可以向其他WebDAV客户端提供WebDAV服务。</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#inter-cloud-copy'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-people-carry fa-4x mb-3"></i>
-            <h5 class="card-title">跨云盘文件快速复制</h5>
-            <p class="card-text">在云盘之间快速直接地传输文件，无需中间下载。通过 CloudDrive 的优化文件传输功能节省时间和带宽。</p>
-            <div class="pro-logo">Pro</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#file-notification'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-bell fa-4x mb-3"></i>
-            <h5 class="card-title">文件变更通知</h5>
-            <p class="card-text">接收关于云文件变更的实时通知。与文件系统监视器应用无缝集成，实现无缝协作。</p>
-            <div class="pro-logo">Pro</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#encrypted-filesystem'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-shield-alt fa-4x mb-3"></i>
-            <h5 class="card-title">加密文件系统</h5>
-            <p class="card-text">企业级文件加密保护，在任意网盘或本地文件夹创建加密目录。解锁后的加密文件夹使用体验与普通文件夹完全相同，支持所有文件操作、在线播放等功能。采用AES文件名加密和chacha20-poly1305内容加密，确保敏感数据的绝对安全。</p>
-            <div class="pro-logo">Pro</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#file-access-control'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-lock fa-4x mb-3"></i>
-            <h5 class="card-title">应用级权限控制</h5>
-            <p class="card-text">精细控制文件的访问权限。在程序级别定义和管理访问权限，确保安全共享和协作。</p>
-            <div class="pro-logo">Pro</div>
-          </div>
-        </div>
-      </div>
-      <!-- add 云盘服务商友好 feature card-->
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#service-vendor-friendly'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-handshake fa-4x mb-3"></i>
-            <h5 class="card-title">云盘服务商友好</h5>
-            <p class="card-text">使用CloudDrive，不再做网盘吸血鬼。</p>
-            <p class="card-text">我们保证用户体验流畅，同时最大程度地减少网盘运营商的资源占用。</p>
-          </div>
-        </div>
-      </div>
-      <!-- add 多云盘备份 feature card-->
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='features.html#multicloud-backup'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-cloud-upload-alt fa-4x mb-3"></i>
-            <h5 class="card-title">多云盘备份<span style="font-size: 14px;"></span></h5>
-            <p class="card-text">将任意本地磁盘或网盘同时备份到多个网盘或者本地磁盘。</p>
-            <p class="card-text">自动检测文件变化，自动增量备份。</p>
-            <p class="card-text">覆盖或删除文件可保留无限多个历史版本备份。</p>
-            <p class="card-text">多云备份，数据无忧。</p>
-            <div class="pro-logo">Pro</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='#using-clouddrive'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-globe fa-4x mb-3"></i>
-            <h5 class="card-title">在任何设备上运行</h5>
-            <!-- list operating systems and archs CloudDrive supported-->
-            <p class="card-text">电脑：Windows, Linux, macOS</p>
-            <p class="card-text">NAS：Synology, QNAP...</p>
-            <p class="card-text">电视手机：Android, LibreElec, CoreElec</p>
-            <p class="card-text">路由器：OpenWRT路由器</p>
+    </section>
 
-          </div>
-        </div>
-      </div>
-    </div>
-    <h2 id="using-clouddrive">使用CloudDrive</h2>
-    <div class="row">
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='download.html'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-laptop fa-4x mb-3"></i>
-            <h5 class="card-title">电脑</h5>
-            <!-- FILEPATH: c:\Develop\rust\clouddrive\website\index.html -->
-            <p class="card-text">下载并安装CloudDrive的最新版本，您可以在计算机上拥有统一的云存储管理中心，并且将你的云盘扩展成你电脑的本地硬盘。</p>
-            <p class="card-text">CloudDrive目前支持Windows x64、Linux、macOS，支持x86_64、arm64、armv7等架构的电脑。</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='download.html'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-server fa-4x mb-3"></i>
-            <h5 class="card-title">NAS</h5>
-            <p class="card-text">在你的NAS上安装最新版本的CloudDrive，可以把你的NAS变成统一的云盘管理中心，将你的云盘扩展成你NAS的磁盘。</p>
-            <p>
-              CloudDrive目前支持Synology、Unraid、Qnap等主流NAS平台，支持x86_64、arm64、armv7等架构的NAS，可直接安装、通过docker安装，Synology和Qnap还可以直接安装第三方提供的CloudDrive插件。
-            </p>
-          </div>
-        </div>
-      </div>
-      <!-- add a new card for 手机-->
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='download.html'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <!-- FILEPATH: c:\Develop\rust\clouddrive\website\index.html -->
-            <i class="fas fa-mobile-alt fa-4x mb-3"></i>
-            <h5 class="card-title">手机</h5>
-            <p class="card-text">
-              CloudDrive可以在Android手机上运行，将您的云盘扩展到本地存储。使用CloudDrive，您可以将多个云盘整合到一个统一的存储空间中，用户安装的所有app都直接访问本地挂载的云盘文件。
-            </p>
-            <p class="card-text">CloudDrive支持Android 7.0及以上版本，需要root权限才能在安卓系统上使用本地挂载功能。</p>
-          </div>
-        </div>
-      </div>
+  </main>
 
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='download.html'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-tv fa-4x mb-3"></i>
-            <h5 class="card-title">电视</h5>
-            <p class="card-text">
-              CloudDrive可以在电视或机顶盒上运行，将您的云盘扩展到本地存储。使用CloudDrive，您可以将多个云盘整合到一个统一的存储空间中，并通过机顶盒内置的播放器直接调用本地挂载的云盘文件进行播放。
-            </p>
-            <p class="card-text">
-              CloudDrive支持LibreElec、CoreElec等基于Linux系统，以及基于Android系统的电视或机顶盒（需要root权限才能在安卓系统上使用本地挂载功能）。</p>
-          </div>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/img/clouddrive-h.svg" alt="" width="130" height="40">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
         </div>
       </div>
-      <div class="col-md-6 col-lg-4 mb-4" onclick="window.location.href='download.html'">
-        <div class="card feature-card">
-          <div class="card-body">
-            <i class="fas fa-wifi fa-4x mb-3"></i>
-            <h5 class="card-title">路由器</h5>
-            <p class="card-text">CloudDrive可以在OpenWRT路由器上运行，将路由器变成一个以您的云盘为内容的NAS。您可以通过简单的配置将它们整合到一个统一的存储空间中。</p>
-            <p class="card-text">CloudDrive支持x86_64、arm64、armv7架构的OpenWRT路由器，可以直接下载运行，或者通过docker运行。</p>
-          </div>
-        </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/">English</a></p>
       </div>
-    </div>
-  </div>
-  <div class="container text-center" style="margin-bottom: 20px;">
-    <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;" href="download.html">下载CloudDrive</a>
-  </div>
-  <footer>
-    <!-- add contact us: Email to waytechcloudfs@gmail.com -->
-
-    <div class="container">
-      <p><a href="eula.html">隐私与使用条款</a></p>
-    </div>
-    <div class="container">
-      <p>如果您有任何问题或建议，请随时联系我们。</p>
-      <p><a href="mailto:waytechcloudfs@gmail.com">发送邮件</a> | <a href="https://t.me/cloudnaschat">Telegram</a></p>
-    </div>
-    <div class="container">
-      <p>友情链接：
-      </p>
-    </div>
-    <div class="container">
-      <p>&copy; 2025 CloudDrive. All rights reserved.</p>
     </div>
   </footer>
 </body>

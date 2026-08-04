@@ -1,174 +1,337 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 会员</title>
-  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
-  <link rel="stylesheet" href="css/site.css">
-  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/site.js"></script>
-  <link rel="stylesheet" href="css/download.css">
+  <title>会员与价格 — CloudDrive2</title>
+  <meta name="description" content="CloudDrive2 的核心会员方案（免费、月费 ¥4.99、年费 ¥49.99、轻享终身 ¥199、终身 ¥499、视障用户终身 ¥299），以及应用内购 App Pro 与终极套餐的说明。">
+  <link rel="canonical" href="https://www.clouddrive2.com/pricing.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/pricing.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/pricing.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/pricing.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="会员与价格 — CloudDrive2">
+  <meta property="og:description" content="核心会员方案与应用内购的完整说明，包括升级路径和购买渠道。">
+  <meta property="og:url" content="https://www.clouddrive2.com/pricing.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
 </head>
-<style>
-  .navbar-collapse {
-    background-color: rgba(234, 242, 248, 0.9);
-    padding: 10px;
-  }
-
-  .card-title {
-    background-color: #e7f3ff;
-    color: #1c4966;
-    border-bottom: 1px solid #b3d7ff;
-    padding: 10px;
-  }
-</style>
 
 <body>
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
-      <div class="container">
-        <a class="navbar-brand" href="index.html">
-          <img src="img/clouddrive-h.png" height="80">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">主页</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="features.html">功能</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="pricing.html">会员</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="help.html">帮助</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/api/CloudDrive2_gRPC_API_Guide.html">API</a>
-            </li>
-          </ul>
-          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
-        </div>
-      </div>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img src="/img/clouddrive-h.svg" alt="CloudDrive2" width="150" height="46"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">功能</a></li>
+        <li><a href="/pricing.html" aria-current="page">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/pricing.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
     </nav>
   </header>
 
-  <!-- Page Content -->
-  <div class="container mt-4">
-    <h1 class="hero-title">CloudDrive - 会员</h1>
-    <p class="tagline">选择一个适合你的会员，点击下载CloudDrive，在软件内完成购买</p>
-    <!-- Pricing Cards -->
-    <div class="row">
-      <!-- Basic Plan -->
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">基础会员</h5>
-            <h6 class="card-subtitle mb-3 text-muted">免费</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 最多添加2个网盘</li>
-              <li><i class="fas fa-check"></i> 最多添加1个本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时2台设备在线(暂不执行)</li>
-              <li><i class="fas fa-xmark"></i> 无Pro功能</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+  <main id="main">
 
-      <!-- Standard Plan -->
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">月费会员</h5>
-            <h6 class="card-subtitle mb-3" style="color: #FFA500; font-size: 20px; font-weight: bold;">¥4.99</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 无限添加网盘</li>
-              <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时5台设备在线(暂不执行)</li>
-              <li><i class="fas fa-check"></i> 解锁Pro功能</li>
-            </ul>
-          </div>
-        </div>
+    <section class="hero">
+      <div class="container container-narrow">
+        <p class="eyebrow">会员与价格</p>
+        <h1>两件事，分开买</h1>
+        <p class="hero-lede">
+          <strong>核心会员</strong>属于你的 CloudDrive 账号，决定服务端能做什么——挂载几个云盘、
+          能不能跨云秒传、能不能建加密文件夹。<strong>App Pro</strong> 是应用内购，
+          解锁设备上的进阶播放功能。两者互不包含，按需购买即可。
+        </p>
       </div>
+    </section>
 
-      <!-- Premium Plan -->
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">年费会员</h5>
-            <h6 class="card-subtitle mb-3" style="color: #008000; font-size: 20px; font-weight: bold;">¥49.99</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 无限添加网盘</li>
-              <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时5台设备在线(暂不执行)</li>
-              <li><i class="fas fa-check"></i> 解锁Pro功能</li>
+    <section class="band" aria-labelledby="core-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">核心会员</p>
+          <h2 id="core-h">跑在你服务器上的那一半</h2>
+          <p>在应用内用 CloudDrive 账号购买。会员绑定账号，在任何设备上登录同一账号都生效。</p>
+        </header>
+
+        <ul class="price-grid">
+          <li><div class="price-card">
+            <h3>基础会员</h3>
+            <p class="price-tag">免费</p>
+            <ul class="price-list">
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>最多 2 个云盘</span></li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>最多 1 个本地挂载</span></li>
+              <li><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>不含 Pro 功能</span></li>
             </ul>
+          </div></li>
+
+          <li><div class="price-card">
+            <h3>核心会员 · 月度</h3>
+            <p class="price-tag">¥4.99<span class="price-unit"> / 月</span></p>
+            <ul class="price-list">
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>云盘与本地挂载不限数量</span></li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>全部 Pro 功能</span></li>
+            </ul>
+          </div></li>
+
+          <li><div class="price-card">
+            <h3>核心会员 · 年度</h3>
+            <p class="price-tag">¥49.99<span class="price-unit"> / 年</span></p>
+            <ul class="price-list">
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>云盘与本地挂载不限数量</span></li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>全部 Pro 功能</span></li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>比按月划算</span></li>
+            </ul>
+          </div></li>
+
+          <li><div class="price-card">
+            <h3>核心终身 · 轻享版</h3>
+            <p class="price-tag">¥199<span class="price-unit"> 一次性</span></p>
+            <ul class="price-list">
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>云盘与本地挂载不限数量</span></li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>传输不限速、保留本地缓存目录</span></li>
+              <li><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>不含 Pro 功能</span></li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>可补差价升级为完整终身版</span></li>
+            </ul>
+          </div></li>
+
+          <li><div class="price-card is-featured">
+            <h3>核心终身版</h3>
+            <p class="price-tag">¥499<span class="price-unit"> 一次性</span></p>
+            <ul class="price-list">
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>云盘与本地挂载不限数量</span></li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>全部 Pro 功能，终身有效</span></li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>加密文件上传云端不受 200 MB 单文件限制</span></li>
+            </ul>
+          </div></li>
+
+          <li><div class="price-card">
+            <h3>视障用户终身版</h3>
+            <p class="price-tag"><span class="price-was">¥499</span>¥299<span class="price-unit"> 一次性</span></p>
+            <ul class="price-list">
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>与核心终身版功能完全相同</span></li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>凭视力残疾证的姓名与编号申请优惠码</span></li>
+            </ul>
+            <p class="price-foot"><a class="arrow-link" href="mailto:waytechcloudfs@gmail.com">发邮件申请</a></p>
+          </div></li>
+        </ul>
+
+        <div class="note">
+          <span class="note-title">关于轻享终身版</span>
+          <p>轻享版包含全部基础能力，但不含 Pro 功能。它可以和月费或年费会员叠加：
+             叠加期间你同时拥有轻享版的终身权益和订阅带来的 Pro 功能。
+             之后如果想一步到位，也可以补差价升级为完整的核心终身版，或直接升级为终极套餐。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="app-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">应用内购</p>
+          <h2 id="app-h">跑在你设备上的那一半</h2>
+          <p>浏览云盘、管理文件、传输、备份和基础播放，本来就不需要额外购买。
+             下面这些是设备端的进阶播放功能。</p>
+        </header>
+
+        <ul class="card-grid card-grid-2">
+          <li><div class="card">
+            <h3>App 专业版（App Pro）</h3>
+            <p class="acc-meta">Apple 平台 $19.99 · 一次性</p>
+            <p>解锁 Emby / Jellyfin 客户端、AI 字幕翻译、蓝光原盘播放、DSD / SACD 发烧级音频，
+               以及 Vision Pro 上的沉浸式与 3D 播放。</p>
+            <p>在 Apple 平台买过一次，iPhone、iPad、Mac、Apple TV 与 Vision Pro 全部通用。</p>
+          </div></li>
+          <li><div class="card">
+            <h3>终极套餐</h3>
+            <p class="acc-meta">核心终身版 ＋ App 专业版</p>
+            <p>把服务端的终身权益和设备端的全部进阶播放功能一次买齐。
+               已经持有轻享终身版的用户，也可以直接升级到这个套餐。</p>
+            <p>当前价格请在应用内查看。</p>
+          </div></li>
+        </ul>
+
+        <h3>升级路径</h3>
+        <ul class="stack-list">
+          <li>
+            <i class="fa-solid fa-arrow-up-right-dots" aria-hidden="true"></i>
+            <div>
+              <b>轻享终身版 → 核心终身版</b>
+              <p>补差价升级，原来的轻享版购买会被计入。</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-arrow-up-right-dots" aria-hidden="true"></i>
+            <div>
+              <b>轻享终身版 → 终极套餐</b>
+              <p>一步升级为「核心终身版 ＋ App 专业版」。</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+            <div>
+              <b>轻享终身版 ＋ 月费 / 年费</b>
+              <p>两者可以叠加。订阅有效期内，你同时拥有终身基础权益与 Pro 功能。</p>
+            </div>
+          </li>
+        </ul>
+
+        <p class="chip-note">Meta Quest 平台的 Pro 功能不通过 App 专业版解锁，而是绑定终身会员，并提供 10 秒免费试看。详见 <a href="/apps/quest.html">Meta Quest 版</a>。</p>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="buy-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">购买与恢复</p>
+          <h2 id="buy-h">在哪里买，怎么恢复</h2>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3>购买渠道</h3>
+            <p>两种方式，选一种即可：</p>
+            <ul>
+              <li>在应用内用 CloudDrive 账号直接购买；</li>
+              <li>如果应用是从 App Store、Google Play 或 Meta 商店安装的，也可以走商店内购。</li>
+            </ul>
+            <p>通过商店购买时，应用内显示的是你所在地区的当地货币价格，
+               可能与本页列出的人民币价格不同。以应用内显示的为准。</p>
+          </div>
+          <div>
+            <h3>恢复购买</h3>
+            <p>核心会员绑定 CloudDrive 账号：换电脑、换手机、重装系统，只要用同一个账号登录，会员就在。</p>
+            <p>通过应用商店购买的项目，用同一个商店账号在新设备上登录后即可恢复。</p>
+            <h3>退款</h3>
+            <p>通过应用商店购买的，按对应商店的退款政策处理。
+               其他情况请<a href="mailto:waytechcloudfs@gmail.com">发邮件联系我们</a>。</p>
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">轻享终身会员</h5>
-            <h6 class="card-subtitle mb-3" style="color: #008000; font-size: 20px; font-weight: bold;">¥199</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 无限添加网盘</li>
-              <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时5台设备在线(暂不执行)</li>
-              <li><i class="fas fa-xmark"></i> 无Pro功能</li>
-              <p>赠送传输限速和缓存目录本地持久化两项Pro功能，可以补差价升级到终身会员，可以叠加购买年费和月费会员，年费和月费会员有效期内拥有全部Pro功能</p>
-            </ul>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="faq-h">
+      <div class="container container-narrow">
+        <header class="band-head">
+          <p class="eyebrow">常见问题</p>
+          <h2 id="faq-h">哪些功能需要付费</h2>
+        </header>
+
+        <details class="acc">
+          <summary>核心 Pro 功能包括哪些？</summary>
+          <div class="acc-body">
+            <p>跨云盘文件快速复制、文件变更通知、加密文件系统、应用级权限控制、多云盘备份，
+               以及独立 WebDAV 用户管理。这些都在服务端运行，由核心会员决定。
+               详见<a href="/features.html">核心功能</a>。</p>
           </div>
+        </details>
+
+        <details class="acc">
+          <summary>App 专业版解锁哪些功能？</summary>
+          <div class="acc-body">
+            <p>Emby / Jellyfin 客户端与直连串流、AI 字幕翻译、蓝光原盘光碟菜单播放、
+               DSD 与 SACD 音频，以及 Vision Pro 和 Quest 上的沉浸式播放。
+               这些都在设备上运行，与核心会员相互独立。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary>免费版能做什么？</summary>
+          <div class="acc-body">
+            <p>连接最多 2 个云盘、创建 1 个本地挂载，浏览、播放、传输和备份都可以用。
+               Pro 功能不包含在内。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary>加密文件的 200 MB 限制是怎么回事？</summary>
+          <div class="acc-body">
+            <p>为防止滥用，月费与年费会员上传到云端的加密文件，单个文件上限为 200 MB；
+               终身会员不受此限制；存放在本地文件夹里的加密文件没有大小限制。
+               这个限制未来可能调整。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary>我需要同时买核心会员和 App 专业版吗？</summary>
+          <div class="acc-body">
+            <p>不一定。只想把云盘挂载成本地磁盘、跨云复制、做加密备份——买核心会员即可。
+               只想在手机或电视上看蓝光原盘、听 DSD——买 App 专业版即可。两者都要的，可以看终极套餐。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>先用起来</h2>
+        <p>核心服务免费开始，需要时再升级。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/download.html">前往下载</a>
+          <a class="btn btn-ghost" href="/features.html">看看核心功能</a>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">终身会员</h5>
-            <h6 class="card-subtitle mb-3" style="color: #008000; font-size: 20px; font-weight: bold;">¥499</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 无限添加网盘</li>
-              <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时5台设备在线(暂不执行)</li>
-              <li><i class="fas fa-check"></i> 解锁Pro功能</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">视障用户终身会员</h5>
-            <h6 class="card-subtitle mb-3" style="color: #0000FF; font-size: 20px; font-weight: bold;"><del>¥499</del>
-              ¥299</h6>
-            <ul class="list-unstyled mb-4">
-              <li><i class="fas fa-check"></i> 无限添加网盘</li>
-              <li><i class="fas fa-check"></i> 无限添加本地挂载</li>
-              <li><i class="fas fa-check"></i> 最多同时5台设备在线(暂不执行)</li>
-              <li><i class="fas fa-check"></i> 解锁Pro功能</li>
-              <p>视障用户请凭姓名和残疾证编号<a href="mailto:waytechcloudfs@gmail.com">联系我们</a>获取优惠码</p>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container text-center" style="margin-bottom: 20px;">
-    <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;" href="download.html">下载CloudDrive</a>
-  </div>
-  <!-- Footer -->
-  <footer class="footer text-center bg-light py-4">
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
     <div class="container">
-      <p>&copy; 2025 CloudDrive. All rights reserved.</p>
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/img/clouddrive-h.svg" alt="" width="130" height="40">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/pricing.html">English</a></p>
+      </div>
     </div>
   </footer>
 </body>
