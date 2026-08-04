@@ -102,11 +102,19 @@
             <p>Several clouds can be merged into one directory tree, or mounted as separate drives, and
                you can mount a single folder from a cloud instead of the whole thing. Reads use multiple
                threads, so with enough bandwidth it feels close to a local disk.</p>
-            <p>Writes are fully random-access, not "re-upload the whole file". Metadata cache lifetime is
-               set per folder, so you decide the balance between freshness and request volume.</p>
+            <p>Writes are genuinely random-access: change a stretch in the middle without pulling the
+               whole file down first — CloudDrive2 streams the untouched ranges from the cloud, splices in
+               what you wrote, and uploads the result. Metadata cache lifetime is set per folder, so you
+               decide the balance between freshness and request volume.</p>
+            <p>What you get is a real file system too: full POSIX semantics on Linux and macOS, with
+               permission bits, owner and group, timestamps and extended attributes (xattr); and full
+               security descriptor support on Windows, so ACLs read and write normally. Those attributes
+               are persisted locally, so it does not matter that the cloud cannot store them.</p>
             <ul class="chips">
               <li><span class="chip chip-cloud">Multi-threaded reads</span></li>
-              <li><span class="chip chip-cloud">Random read and write</span></li>
+              <li><span class="chip chip-cloud">Genuine random writes</span></li>
+              <li><span class="chip chip-cloud">Full POSIX semantics</span></li>
+              <li><span class="chip chip-cloud">Windows security descriptors</span></li>
               <li><span class="chip chip-cloud">Per-folder cache lifetime</span></li>
             </ul>
             <p><a class="arrow-link" href="/en/features.html#local-mount">How local mounting works</a></p>

@@ -102,11 +102,17 @@
             <p>多个云盘可以合并挂载成一棵统一的目录树，也可以各挂各的盘符；
                只挂某个云盘下的某个目录同样可以。读取采用多线程下载，
                带宽跟得上的时候，体验和本地盘相差不大。</p>
-            <p>写入是完全的随机读写，不是「只能整个文件重传」。
+            <p>写入是真正的随机写：改文件中间的一段，不必先把整个文件下载回本地——CloudDrive2 从云端
+               取未改动的片段，接上你写进去的部分，直接拼成新文件上传。
                每个目录的元数据缓存时长可以单独设置，在数据时效性和请求频度之间自己拿捏。</p>
+            <p>挂出来的也是一个完整的文件系统：Linux 与 macOS 上是完整 POSIX 语义，权限位、
+               所有者与用户组、时间戳和扩展属性（xattr）一样不少；Windows 上完整支持安全描述符，
+               ACL 照常读写。这些属性持久化在本地，云盘存不下也不影响。</p>
             <ul class="chips">
               <li><span class="chip chip-cloud">多线程读取</span></li>
-              <li><span class="chip chip-cloud">完全随机读写</span></li>
+              <li><span class="chip chip-cloud">真正的随机写</span></li>
+              <li><span class="chip chip-cloud">完整 POSIX 语义</span></li>
+              <li><span class="chip chip-cloud">Windows 安全描述符</span></li>
               <li><span class="chip chip-cloud">目录级缓存时长</span></li>
             </ul>
             <p><a class="arrow-link" href="/features.html#local-mount">本地挂载的完整说明</a></p>
