@@ -53,15 +53,35 @@
   <main id="main">
 
     <section class="hero">
-      <div class="container container-narrow">
+      <div class="container">
         <p class="eyebrow">Plans and pricing</p>
         <h1>Two things, bought separately</h1>
         <p class="hero-lede">
-          <strong>Core membership</strong> belongs to your CloudDrive account and decides what the server
-          side can do — how many clouds you can mount, whether cross-cloud instant copy is available,
-          whether you can create encrypted folders. <strong>App Pro</strong> is an in-app purchase that
-          unlocks the advanced playback features on your devices. Neither includes the other; buy what you need.
+          Paying for CloudDrive2 splits in two: one half decides what your server can do, the other
+          decides what your devices can play. Neither includes the other, and both are held by the same
+          CloudDrive account.
         </p>
+
+        <div class="halves">
+          <div class="half">
+            <p class="half-kicker">Server side</p>
+            <h2>Core membership</h2>
+            <p>Runs on the computer or NAS where CloudDrive is installed. It decides how many clouds you
+               can mount, whether cross-cloud instant copy is available and whether you can create
+               encrypted folders.</p>
+            <p class="half-foot">Free to start · ¥4.99 monthly · ¥499 lifetime</p>
+          </div>
+          <p class="halves-join" aria-hidden="true">＋</p>
+          <div class="half">
+            <p class="half-kicker">Device side</p>
+            <h2>App Pro</h2>
+            <p>Runs on the device you actually watch and listen on. It unlocks Emby and Jellyfin direct
+               streaming, Blu-ray discs, DSD, AI subtitles and immersive playback.</p>
+            <p class="half-foot">One-time purchase · $19.99 on Apple platforms</p>
+          </div>
+        </div>
+
+        <p class="chip-note">Both are recorded against your CloudDrive account — not a device, not a platform, not a store.</p>
       </div>
     </section>
 
@@ -136,6 +156,45 @@
           </div></li>
         </ul>
 
+        <h3>The same thing, side by side</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">What each Core membership tier includes</caption>
+            <thead>
+              <tr>
+                <th scope="col">Capability</th>
+                <th scope="col">Basic (free)</th>
+                <th scope="col">Monthly / Yearly</th>
+                <th scope="col">Lifetime Lite</th>
+                <th scope="col">Lifetime</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Cloud drives</th>
+                <td class="c">Up to 2</td><td class="c">Unlimited</td><td class="c">Unlimited</td><td class="c">Unlimited</td>
+              </tr>
+              <tr>
+                <th scope="row">Local mounts</th>
+                <td class="c">1</td><td class="c">Unlimited</td><td class="c">Unlimited</td><td class="c">Unlimited</td>
+              </tr>
+              <tr>
+                <th scope="row">Unthrottled transfers · persistent cache directory</th>
+                <td class="c no">—</td><td class="c yes">✓</td><td class="c yes">✓</td><td class="c yes">✓</td>
+              </tr>
+              <tr>
+                <th scope="row">All Pro features</th>
+                <td class="c no">—</td><td class="c yes">✓</td><td class="c no">—</td><td class="c yes">✓</td>
+              </tr>
+              <tr>
+                <th scope="row">Term</th>
+                <td class="c">Ongoing</td><td class="c">While subscribed</td><td class="c">Lifetime</td><td class="c">Lifetime</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">Pro features are cross-cloud instant copy, file change notification, the encrypted file system, access monitoring and permissions, multi-cloud backup, and separate WebDAV user management.</p>
+
         <div class="note">
           <span class="note-title">About Lifetime Lite</span>
           <p>Lifetime Lite covers everything in the base tier but no Pro features. It stacks with a monthly
@@ -146,7 +205,7 @@
       </div>
     </section>
 
-    <section class="band band-alt" aria-labelledby="app-h">
+    <section class="band band-dark" aria-labelledby="app-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">In-app purchases</p>
@@ -155,12 +214,21 @@
              These are the advanced playback features.</p>
         </header>
 
+        <ul class="chips">
+          <li><span class="chip chip-video">Emby / Jellyfin direct streaming</span></li>
+          <li><span class="chip chip-disc">Blu-ray disc menus</span></li>
+          <li><span class="chip chip-audio">DSD / SACD audio</span></li>
+          <li><span class="chip chip-subs">AI subtitle translation</span></li>
+          <li><span class="chip chip-video">Immersive and 3D playback</span></li>
+        </ul>
+
         <ul class="card-grid card-grid-2">
           <li><div class="card">
             <h3>App Pro</h3>
             <p class="acc-meta">Listed at $19.99 on Apple platforms · one-time</p>
-            <p>Unlocks the Emby and Jellyfin client, AI subtitle translation, Blu-ray disc playback,
-               DSD and SACD audio, and immersive and 3D playback on Vision Pro and Meta Quest.</p>
+            <p>Opens all of the above at once: the Emby and Jellyfin client, AI subtitle translation,
+               Blu-ray disc playback, DSD and SACD audio, and immersive and 3D playback on Vision Pro
+               and Meta Quest.</p>
             <p>Like membership, App Pro is tied to your CloudDrive account rather than to a device or a
                store. Buy it once and every device signed in with that account has it — Apple devices,
                Android and Meta Quest alike.</p>
@@ -324,7 +392,7 @@
           <h2>Support</h2>
           <ul>
             <li><a href="/en/help.html">Help and setup</a></li>
-            <li><a href="/docker.html">Docker deployment</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
             <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
             <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
           </ul>

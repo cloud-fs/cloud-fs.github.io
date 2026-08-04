@@ -53,14 +53,33 @@
   <main id="main">
 
     <section class="hero">
-      <div class="container container-narrow">
+      <div class="container">
         <p class="eyebrow">会员与价格</p>
         <h1>两件事，分开买</h1>
         <p class="hero-lede">
-          <strong>核心会员</strong>属于你的 CloudDrive 账号，决定服务端能做什么——挂载几个云盘、
-          能不能跨云秒传、能不能建加密文件夹。<strong>App Pro</strong> 是应用内购，
-          解锁设备上的进阶播放功能。两者互不包含，按需购买即可。
+          CloudDrive2 的付费分成两半：一半决定你那台服务器能做什么，一半决定你手上的设备能播什么。
+          两者互不包含，各买各的，都绑定同一个 CloudDrive 账号。
         </p>
+
+        <div class="halves">
+          <div class="half">
+            <p class="half-kicker">服务端</p>
+            <h2>核心会员</h2>
+            <p>跑在装了 CloudDrive 的那台电脑或 NAS 上。能挂载几个云盘、能不能跨云秒传、
+               能不能建加密文件夹，由它决定。</p>
+            <p class="half-foot">免费起步 · 月费 ¥4.99 · 终身 ¥499</p>
+          </div>
+          <p class="halves-join" aria-hidden="true">＋</p>
+          <div class="half">
+            <p class="half-kicker">设备端</p>
+            <h2>App 专业版</h2>
+            <p>跑在你看片、听歌的那台设备上。Emby / Jellyfin 直连、蓝光原盘、DSD、AI 字幕、
+               沉浸式播放，由它解锁。</p>
+            <p class="half-foot">一次性购买 · Apple 平台 $19.99</p>
+          </div>
+        </div>
+
+        <p class="chip-note">两者都记在 CloudDrive 账号上，不绑设备、不绑平台、不绑应用商店。</p>
       </div>
     </section>
 
@@ -134,6 +153,45 @@
           </div></li>
         </ul>
 
+        <h3>横着看一遍</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">核心会员各档位的能力对比</caption>
+            <thead>
+              <tr>
+                <th scope="col">能力</th>
+                <th scope="col">基础（免费）</th>
+                <th scope="col">月费 / 年费</th>
+                <th scope="col">轻享终身</th>
+                <th scope="col">终身</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">可添加的云盘</th>
+                <td class="c">最多 2 个</td><td class="c">不限</td><td class="c">不限</td><td class="c">不限</td>
+              </tr>
+              <tr>
+                <th scope="row">本地挂载</th>
+                <td class="c">最多 1 个</td><td class="c">不限</td><td class="c">不限</td><td class="c">不限</td>
+              </tr>
+              <tr>
+                <th scope="row">传输不限速 · 本地缓存目录</th>
+                <td class="c no">—</td><td class="c yes">✓</td><td class="c yes">✓</td><td class="c yes">✓</td>
+              </tr>
+              <tr>
+                <th scope="row">全部 Pro 功能</th>
+                <td class="c no">—</td><td class="c yes">✓</td><td class="c no">—</td><td class="c yes">✓</td>
+              </tr>
+              <tr>
+                <th scope="row">有效期</th>
+                <td class="c">长期</td><td class="c">订阅期内</td><td class="c">终身</td><td class="c">终身</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">Pro 功能指跨云盘快速复制、文件变更通知、加密文件系统、访问监控与权限、多云盘备份，以及独立 WebDAV 用户管理。</p>
+
         <div class="note">
           <span class="note-title">关于轻享终身版</span>
           <p>轻享版包含全部基础能力，但不含 Pro 功能。它可以和月费或年费会员叠加：
@@ -143,7 +201,7 @@
       </div>
     </section>
 
-    <section class="band band-alt" aria-labelledby="app-h">
+    <section class="band band-dark" aria-labelledby="app-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">应用内购</p>
@@ -152,12 +210,20 @@
              下面这些是设备端的进阶播放功能。</p>
         </header>
 
+        <ul class="chips">
+          <li><span class="chip chip-video">Emby / Jellyfin 直连串流</span></li>
+          <li><span class="chip chip-disc">蓝光原盘光碟菜单</span></li>
+          <li><span class="chip chip-audio">DSD / SACD 发烧级音频</span></li>
+          <li><span class="chip chip-subs">AI 字幕翻译</span></li>
+          <li><span class="chip chip-video">沉浸式与 3D 播放</span></li>
+        </ul>
+
         <ul class="card-grid card-grid-2">
           <li><div class="card">
             <h3>App 专业版（App Pro）</h3>
             <p class="acc-meta">Apple 平台标价 $19.99 · 一次性</p>
-            <p>解锁 Emby / Jellyfin 客户端、AI 字幕翻译、蓝光原盘播放、DSD / SACD 发烧级音频，
-               以及 Vision Pro 与 Meta Quest 上的沉浸式与 3D 播放。</p>
+            <p>上面这些功能一次全开：Emby / Jellyfin 客户端、AI 字幕翻译、蓝光原盘播放、
+               DSD / SACD 发烧级音频，以及 Vision Pro 与 Meta Quest 上的沉浸式与 3D 播放。</p>
             <p>和会员一样，App Pro 绑定的是你的 CloudDrive 账号，不是设备也不是商店。
                买过一次，登录同一账号的每一台设备都已解锁——Apple 设备、Android 与 Meta Quest 一视同仁。</p>
           </div></li>

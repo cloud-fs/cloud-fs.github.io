@@ -524,6 +524,71 @@ a.card:hover {
 .price-list .fa-xmark { color: var(--text-muted); opacity: .6; }
 .price-foot { margin-top: auto; padding-top: var(--s4); }
 
+/* The two halves of the product, side by side: what runs on the server and
+   what runs on the device. Used on the pricing hero. */
+.halves { display: grid; gap: var(--s4); margin-bottom: var(--s5); }
+@media (min-width: 880px) { .halves { grid-template-columns: 1fr auto 1fr; gap: var(--s5); } }
+.half {
+  padding: var(--s5); background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--r-l);
+  box-shadow: var(--shadow-s);
+}
+.half h2, .half h3 { font-size: 1.15rem; margin-bottom: var(--s2); }
+.half p { color: var(--text-muted); font-size: .95rem; }
+.half > :last-child { margin-bottom: 0; }
+.half-kicker {
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--brand); margin-bottom: var(--s2);
+}
+.half-foot { font-size: .88rem; color: var(--text-muted); margin-top: var(--s4); }
+.halves-join {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 300; color: var(--text-muted);
+  margin: 0; max-width: none;
+}
+
+/* ── numbered steps (only where the content really is a sequence) ─────── */
+.steps { counter-reset: step; list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s4); }
+@media (min-width: 860px) { .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.steps > li {
+  counter-increment: step; margin: 0;
+  padding: var(--s5); background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--r-m);
+}
+.steps > li::before {
+  content: counter(step, decimal-leading-zero);
+  display: block; margin-bottom: var(--s3);
+  font-family: var(--mono); font-size: .8rem; font-weight: 600;
+  letter-spacing: .12em; color: var(--brand);
+}
+.steps h3 { font-size: 1.05rem; margin-bottom: var(--s2); }
+.steps p { color: var(--text-muted); font-size: .94rem; }
+.steps > li > :last-child { margin-bottom: 0; }
+
+/* ── the address you open after installing ────────────────────────────── */
+.port-card { display: grid; gap: var(--s4); }
+@media (min-width: 820px) { .port-card { grid-template-columns: minmax(0, auto) minmax(0, 1fr); gap: var(--s7); align-items: center; } }
+.port-url {
+  font-family: var(--mono); font-weight: 650; color: var(--brand);
+  font-size: clamp(1rem, .72rem + 1.25vw, 1.6rem);
+  letter-spacing: -.01em; margin: 0; overflow-wrap: anywhere;
+}
+.port-card p { margin-bottom: 0; }
+
+/* ── copy-to-clipboard on code blocks (button injected by js/site.js) ─── */
+.code-block { position: relative; margin-bottom: var(--s5); }
+.code-block pre { margin-bottom: 0; }
+.js .code-block pre { padding-right: 3.4rem; }
+.copy-btn {
+  position: absolute; top: var(--s3); right: var(--s3);
+  padding: .35em .6em; border-radius: var(--r-s); cursor: pointer;
+  font: 600 .74rem/1 var(--mono); letter-spacing: .06em;
+  color: #c9d3e2; background: rgb(255 255 255 / .09);
+  border: 1px solid rgb(255 255 255 / .2);
+}
+.copy-btn:hover { background: rgb(255 255 255 / .18); color: #fff; }
+.copy-btn[data-copied] { color: #8ee0ac; border-color: rgb(142 224 172 / .5); }
+
 /* ── details / accordion ──────────────────────────────────────────────── */
 .acc { border: 1px solid var(--border); border-radius: var(--r-m); background: var(--surface); margin-bottom: var(--s3); }
 .acc > summary {

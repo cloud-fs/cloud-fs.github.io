@@ -40,6 +40,39 @@
     });
   }
 
+  /* ── copy buttons on code blocks ────────────────────────────────────── */
+  /* Injected rather than authored into the markup, so a page without
+     scripting never shows a button that cannot do anything. */
+  var blocks = document.querySelectorAll('.code-block > pre');
+
+  if (blocks.length && navigator.clipboard) {
+    var zh = (document.documentElement.lang || '').toLowerCase().indexOf('zh') === 0;
+    var LABEL = zh ? '复制' : 'Copy';
+    var DONE = zh ? '已复制' : 'Copied';
+    var ARIA = zh ? '复制这段代码' : 'Copy this code';
+
+    Array.prototype.forEach.call(blocks, function (pre) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-btn';
+      btn.textContent = LABEL;
+      btn.setAttribute('aria-label', ARIA);
+
+      btn.addEventListener('click', function () {
+        navigator.clipboard.writeText(pre.textContent).then(function () {
+          btn.textContent = DONE;
+          btn.setAttribute('data-copied', '');
+          setTimeout(function () {
+            btn.textContent = LABEL;
+            btn.removeAttribute('data-copied');
+          }, 1800);
+        });
+      });
+
+      pre.parentNode.appendChild(btn);
+    });
+  }
+
   /* ── latest release ─────────────────────────────────────────────────── */
   /* Upgrades the hard-coded download links to whatever the newest GitHub
      release ships. If anything fails, the static links stay as authored. */
