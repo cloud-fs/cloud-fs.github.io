@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Core features — what the CloudDrive2 service does</title>
-  <meta name="description" content="A full account of the CloudDrive2 service: mount clouds as local disks, manage every provider from one web interface, serve WebDAV, copy between clouds by hash, emit file change notifications, encrypt folders, control per-process access and back up to several destinations.">
+  <title>Core features — what the CloudDrive2 core does</title>
+  <meta name="description" content="A full account of the CloudDrive2 core: manage every provider from one interface, mount clouds as local disks, serve WebDAV, copy between clouds by hash, emit file change notifications, encrypt folders, control per-process access and back up to several destinations. The same core ships in the server build and inside every platform app.">
   <link rel="canonical" href="https://www.clouddrive2.com/en/features.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/features.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/features.html">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CloudDrive2">
   <meta property="og:title" content="CloudDrive2 core features">
-  <meta property="og:description" content="Local mounting, unified management, WebDAV, hash-based cross-cloud copying, file change notifications, encrypted folders and multi-cloud backup — all on a machine you own.">
+  <meta property="og:description" content="Unified management, local mounting, WebDAV, hash-based cross-cloud copying, file change notifications, encrypted folders and multi-cloud backup — one core, in the server build and inside every platform app.">
   <meta property="og:url" content="https://www.clouddrive2.com/en/features.html">
   <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -56,11 +56,13 @@
       <div class="container hero-grid">
         <div>
           <p class="eyebrow">Core features</p>
-          <h1>What the server does</h1>
+          <h1>What the core does</h1>
           <p class="hero-lede">
-            This page is about the service that runs on your own computer or NAS. It mounts your clouds
-            as local disks, manages every cloud account from one interface, serves them over WebDAV,
-            and handles cross-cloud copying, encryption and backup.
+            This page is about the CloudDrive2 core: managing every cloud account from one interface,
+            cross-cloud copying, encryption, backup and WebDAV. It is the background service you install
+            on a computer, NAS or Docker host, and it is also built into every platform app in full —
+            phones, TVs and headsets need no server of their own. Only
+            <a href="#local-mount">local mounting</a> depends on the platform.
           </p>
           <ul class="chips">
             <li><a class="chip chip-cloud" href="#local-mount">Mount as local disks</a></li>
@@ -117,6 +119,17 @@
               </li>
             </ul>
           </div>
+        </div>
+
+        <div class="note">
+          <span class="note-title">Which platforms can mount</span>
+          <p>Presenting a cloud as a disk in the system file system needs the operating system to allow it.
+             The builds that can: Windows, the macOS build downloaded from this site (with macFUSE),
+             Linux / NAS / Docker, and Android on a rooted device.</p>
+          <p>The Mac App Store build, iPhone and iPad, Apple TV, Vision Pro and Meta Quest cannot — a
+             platform restriction rather than a missing feature. Everything else on this page works the
+             same on those platforms, and on iPhone and iPad the Files app integration covers most of the
+             same ground.</p>
         </div>
       </div>
     </section>
@@ -673,10 +686,10 @@
 
     <section class="band cta-band" aria-labelledby="apps-h">
       <div class="container">
-        <p class="eyebrow">The other half</p>
-        <h2 id="apps-h">All of this runs on a machine you control</h2>
-        <p>This page covers the service. The apps that browse and play your files on phones, tablets,
-           TVs and headsets are a separate thing.</p>
+        <p class="eyebrow">Apps</p>
+        <h2 id="apps-h">All of this, on every platform</h2>
+        <p>The same core ships inside every app. On top of it, each platform app adds playback: direct
+           streaming, Blu-ray discs, audiophile audio and AI subtitles.</p>
         <div class="btn-row">
           <a class="btn btn-primary" href="/en/apps/">See the apps</a>
           <a class="btn btn-ghost" href="/en/download.html">Download CloudDrive2</a>

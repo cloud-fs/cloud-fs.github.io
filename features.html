@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>核心功能 — CloudDrive2 服务端能做什么</title>
-  <meta name="description" content="CloudDrive2 服务端的完整功能说明：把云盘挂载成本地磁盘、统一的多云盘 Web 管理、WebDAV 服务、跨云盘快速复制、文件变更通知、加密文件系统、访问权限控制与多云盘备份。">
+  <title>核心功能 — CloudDrive2 的核心能做什么</title>
+  <meta name="description" content="CloudDrive2 核心功能的完整说明：统一的多云盘管理、把云盘挂载成本地磁盘、WebDAV 服务、跨云盘快速复制、文件变更通知、加密文件系统、访问权限控制与多云盘备份。这套核心在服务器版和每个平台的应用里都是同一份。">
   <link rel="canonical" href="https://www.clouddrive2.com/features.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/features.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/features.html">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CloudDrive2">
   <meta property="og:title" content="CloudDrive2 核心功能">
-  <meta property="og:description" content="本地挂载、统一管理、WebDAV、跨云盘快速复制、文件变更通知、加密文件系统与多云盘备份——运行在你自己的机器上。">
+  <meta property="og:description" content="统一管理、本地挂载、WebDAV、跨云盘快速复制、文件变更通知、加密文件系统与多云盘备份——同一套核心，在服务器版和每个平台的应用里。">
   <meta property="og:url" content="https://www.clouddrive2.com/features.html">
   <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -56,10 +56,11 @@
       <div class="container hero-grid">
         <div>
           <p class="eyebrow">核心功能</p>
-          <h1>服务端能做什么</h1>
+          <h1>核心能做什么</h1>
           <p class="hero-lede">
-            这一页讲的是运行在你自己电脑或 NAS 上的那个服务：它把云盘挂载成本地磁盘，
-            在一个界面里管理所有云盘账户，对外提供 WebDAV，并负责跨云复制、加密与备份。
+            这一页讲的是 CloudDrive2 的核心：统一管理所有云盘账户、跨云复制、加密、备份、对外提供 WebDAV。
+            它既是装在电脑、NAS 或 Docker 上的那个后台服务，也完整内置在每一个平台的应用里——
+            手机、电视、头显上不需要另外架一台服务器。只有<a href="#local-mount">本地挂载</a>受系统限制。
           </p>
           <ul class="chips">
             <li><a class="chip chip-cloud" href="#local-mount">云盘本地挂载</a></li>
@@ -114,6 +115,15 @@
               </li>
             </ul>
           </div>
+        </div>
+
+        <div class="note">
+          <span class="note-title">哪些平台可以挂载</span>
+          <p>把云盘挂成系统里的一块本地磁盘，需要操作系统本身放行。可以挂载的是：Windows 版、
+             macOS 官网下载版（需 macFUSE）、Linux / NAS / Docker 版，以及已 root 的 Android 设备。</p>
+          <p>Mac App Store 版、iPhone 与 iPad、Apple TV、Vision Pro 与 Meta Quest 上没有这一项，
+             这是系统限制。本页其余的核心功能在这些平台上一样不少；在 iPhone 与 iPad 上，
+             「文件」应用集成可以覆盖大部分同样的用法。</p>
         </div>
       </div>
     </section>
@@ -630,9 +640,10 @@
 
     <section class="band cta-band" aria-labelledby="apps-h">
       <div class="container">
-        <p class="eyebrow">还有客户端</p>
-        <h2 id="apps-h">以上都跑在你自己的机器上</h2>
-        <p>这一页讲的是服务端。手机、平板、电视和头显上那些负责浏览与播放的应用，是另一套东西。</p>
+        <p class="eyebrow">应用</p>
+        <h2 id="apps-h">以上这些，每个平台都有</h2>
+        <p>同一套核心装进了每一个应用。各平台的应用在此之上再加影音播放：直连串流、蓝光原盘、
+           发烧级音频与 AI 字幕。</p>
         <div class="btn-row">
           <a class="btn btn-primary" href="/apps/">看看各平台的应用</a>
           <a class="btn btn-ghost" href="/download.html">下载 CloudDrive2</a>
