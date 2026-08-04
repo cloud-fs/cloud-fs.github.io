@@ -53,58 +53,97 @@
   <main id="main">
 
     <section class="hero">
-      <div class="container">
-        <p class="eyebrow">核心功能</p>
-        <h1>CloudDrive2 服务端能做什么</h1>
-        <p class="hero-lede">
-          这一页讲的是运行在你自己电脑或 NAS 上的那个服务：它把云盘挂载成本地磁盘，
-          在一个界面里管理所有云盘账户，对外提供 WebDAV，并负责跨云复制、加密与备份。
-          下面十项逐条展开。
-        </p>
-        <ul class="chips">
-          <li><a class="chip chip-cloud" href="#local-mount">云盘本地挂载</a></li>
-          <li><a class="chip chip-cloud" href="#unified-web-management">统一的多云盘管理</a></li>
-          <li><a class="chip chip-cloud" href="#one-login">一次登录，到处使用</a></li>
-          <li><a class="chip chip-cloud" href="#webdav">WebDAV 服务</a></li>
-          <li><a class="chip" href="#inter-cloud-copy">跨云盘快速复制</a></li>
-          <li><a class="chip" href="#file-notification">文件变更通知</a></li>
-          <li><a class="chip" href="#encrypted-filesystem">加密文件系统</a></li>
-          <li><a class="chip" href="#file-access-control">访问监控与权限</a></li>
-          <li><a class="chip chip-cloud" href="#service-vendor-friendly">云盘服务商友好</a></li>
-          <li><a class="chip chip-backup" href="#multicloud-backup">多云盘备份</a></li>
-        </ul>
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">核心功能</p>
+          <h1>服务端能做什么</h1>
+          <p class="hero-lede">
+            这一页讲的是运行在你自己电脑或 NAS 上的那个服务：它把云盘挂载成本地磁盘，
+            在一个界面里管理所有云盘账户，对外提供 WebDAV，并负责跨云复制、加密与备份。
+          </p>
+          <ul class="chips">
+            <li><a class="chip chip-cloud" href="#local-mount">云盘本地挂载</a></li>
+            <li><a class="chip chip-cloud" href="#unified-web-management">统一的多云盘管理</a></li>
+            <li><a class="chip chip-cloud" href="#one-login">一次登录，到处使用</a></li>
+            <li><a class="chip chip-cloud" href="#webdav">WebDAV 服务</a></li>
+            <li><a class="chip" href="#inter-cloud-copy">跨云盘快速复制</a></li>
+            <li><a class="chip" href="#file-notification">文件变更通知</a></li>
+            <li><a class="chip" href="#encrypted-filesystem">加密文件系统</a></li>
+            <li><a class="chip" href="#file-access-control">访问监控与权限</a></li>
+            <li><a class="chip chip-cloud" href="#service-vendor-friendly">云盘服务商友好</a></li>
+            <li><a class="chip chip-backup" href="#multicloud-backup">多云盘备份</a></li>
+          </ul>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/macos-dashboard.webp" width="1600" height="815" decoding="async"
+               alt="CloudDrive2 的管理界面：已连接云盘的总容量，以及文件、云存储、挂载点、备份、传输、WebDAV、API 令牌等入口。">
+        </div>
       </div>
     </section>
 
-    <div class="band">
+    <!-- 1 ── local-mount ─────────────────────────────────────────────── -->
+    <section class="band" id="local-mount" aria-labelledby="local-mount-h">
       <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">挂载</p>
+          <h2 id="local-mount-h">云盘本地挂载</h2>
+        </header>
+        <div class="feature-row">
+          <div class="feature-text">
+            <p>CloudDrive2 可以把一个云盘，或者云盘里的某个目录，挂载成本地磁盘——就像往电脑上插了一个 U 盘。
+               挂载之后，云端文件不需要事先下载就能直接打开、编辑和保存。</p>
+            <p>既可以只挂载单个云盘，也可以把多个云盘挂载成一个统一的文件系统。
+               这样在不同云盘之间切换和整理文件时，不必再一个个打开各家的客户端。</p>
+            <p>更重要的是，挂载出来的盘支持完整的随机读写。任何本地程序都可以像访问本地磁盘一样访问它，
+               无论是办公软件直接保存文档，还是媒体播放器拖动进度条，都不需要先把整个文件拉下来。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">完整随机读写</span></li>
+              <li><span class="chip chip-cloud">多线程读取</span></li>
+              <li><span class="chip chip-cloud">多云盘统一挂载</span></li>
+            </ul>
+          </div>
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+                <div><b>多线程读取</b><p>读取云盘文件时采用多线程下载，速度成倍提升；在带宽足够的情况下，使用体验接近本地磁盘。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                <div><b>顺带成了同步通道</b><p>在一台设备上改完文件，内容会写回云盘，另一台设备打开时拿到的就是最新版本，不必担心版本不一致或漏改。</p></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        <section class="prose-section" id="local-mount">
-          <h2>云盘本地挂载</h2>
-          <p>CloudDrive2 可以把一个云盘，或者云盘里的某个目录，挂载成本地磁盘——就像往电脑上插了一个 U 盘。
-             挂载之后，云端文件不需要事先下载就能直接打开、编辑和保存。</p>
-          <p>既可以只挂载单个云盘，也可以把多个云盘挂载成一个统一的文件系统。
-             这样在不同云盘之间切换和整理文件时，不必再一个个打开各家的客户端。</p>
-          <p>读取云盘文件时采用多线程下载，速度成倍提升；在带宽足够的情况下，使用体验接近本地磁盘。</p>
-          <p>更重要的是，挂载出来的盘支持完整的随机读写。任何本地程序都可以像访问本地磁盘一样访问它，
-             无论是办公软件直接保存文档，还是媒体播放器拖动进度条，都不需要先把整个文件拉下来。</p>
-          <p>挂载盘也是一条方便的跨设备同步通道：在一台设备上改完文件，内容会写回云盘，
-             另一台设备打开时拿到的就是最新版本，不必担心版本不一致或漏改。</p>
-          <ul class="chips">
-            <li><span class="chip chip-cloud">完整随机读写</span></li>
-            <li><span class="chip chip-cloud">多线程读取</span></li>
-            <li><span class="chip chip-cloud">多云盘统一挂载</span></li>
-          </ul>
-        </section>
+    <!-- 2 ── unified-web-management ──────────────────────────────────── -->
+    <section class="band band-alt" id="unified-web-management" aria-labelledby="unified-web-management-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">管理</p>
+          <h2 id="unified-web-management-h">统一的多云盘管理</h2>
+        </header>
+        <div class="feature-row">
+          <div class="feature-text">
+            <p>CloudDrive2 自带一个 Web 管理界面，所有云盘的文件操作都在这里完成：
+               浏览目录、看图片、在线播放视频和音频，以及新建文件夹、重命名、删除、移动位置、上传本地文件。
+               不用在各家云盘的 App 之间来回切换。</p>
+            <p>网页里的音视频也可以交给第三方播放器打开，包括 PotPlayer、VLC Player、Infuse、iina 和 nPlayer。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">跨云盘文件操作</span></li>
+              <li><span class="chip chip-video">在线播放</span></li>
+              <li><span class="chip">第三方播放器调用</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-providers.webp" width="1600" height="1547" loading="lazy" decoding="async"
+                 alt="「添加云账号」对话框，列出 OneDrive、Google Drive、百度网盘、迅雷云盘、123云盘、阿里云盘、115、天翼云盘，以及 WebDAV、S3、SFTP、FTP、SMB 与本地文件夹。">
+          </figure>
+        </div>
 
-        <section class="prose-section" id="unified-web-management">
-          <h2>统一的多云盘管理</h2>
-          <p>CloudDrive2 自带一个 Web 管理界面，所有云盘的文件操作都在这里完成：
-             浏览目录、看图片、在线播放视频和音频，以及新建文件夹、重命名、删除、移动位置、上传本地文件。
-             不用在各家云盘的 App 之间来回切换。</p>
-          <p>网页里的音视频也可以交给第三方播放器打开，包括 PotPlayer、VLC Player、Infuse、iina 和 nPlayer。</p>
-
-          <h3>目前支持的云盘</h3>
+        <h3>目前支持的云盘</h3>
           <div class="table-scroll">
             <table class="matrix-table">
               <caption class="sr-only">CloudDrive2 支持的云盘服务及其官网</caption>
@@ -153,74 +192,127 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-          <ul class="chips">
-            <li><span class="chip chip-cloud">跨云盘文件操作</span></li>
-            <li><span class="chip chip-video">在线播放</span></li>
-            <li><span class="chip">第三方播放器调用</span></li>
-          </ul>
-        </section>
+          </div>      </div>
+    </section>
 
-        <section class="prose-section" id="one-login">
-          <h2>一次登录，到处使用</h2>
-          <p>CloudDrive2 提供云盘账户的云端同步：你只需要在一个地方登录所有云盘账户，
-             之后在任何设备上的 CloudDrive2 都能直接使用这些账户，不必在每台设备上重新走一遍登录流程。</p>
-          <p>对于经常换设备的人，这省掉的不只是时间——账号密码输入的次数越少，泄露的机会也越少。
-             家里的电脑、公司的电脑、NAS，用的都是同一套已经登录好的账户。</p>
-          <div class="note">
-            <span class="note-title">我们保护你的隐私</span>
-            <p>同步云盘账户时，账户信息会用你自己的密码做高强度加密之后才上传。
-               我们的服务器不保存你的密码，只保存密码的哈希值用于登录校验。
-               也就是说，服务器手里没有解密所需的密钥，存放在服务器上的云盘账户信息无法被任何人解开。</p>
+    <!-- 3 ── one-login ──────────────────────────────────────────────── -->
+    <section class="band" id="one-login" aria-labelledby="one-login-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">账户</p>
+          <h2 id="one-login-h">一次登录，到处使用</h2>
+        </header>
+        <div class="feature-row">
+          <div class="feature-text">
+            <p>CloudDrive2 提供云盘账户的云端同步：你只需要在一个地方登录所有云盘账户，
+               之后在任何设备上的 CloudDrive2 都能直接使用这些账户，不必在每台设备上重新走一遍登录流程。</p>
+            <p>对于经常换设备的人，这省掉的不只是时间——账号密码输入的次数越少，泄露的机会也越少。
+               家里的电脑、公司的电脑、NAS，用的都是同一套已经登录好的账户。</p>
+            <div class="note">
+              <span class="note-title">我们保护你的隐私</span>
+              <p>同步云盘账户时，账户信息会用你自己的密码做高强度加密之后才上传。
+                 我们的服务器不保存你的密码，只保存密码的哈希值用于登录校验。
+                 也就是说，服务器手里没有解密所需的密钥，存放在服务器上的云盘账户信息无法被任何人解开。</p>
+            </div>
           </div>
-        </section>
+          <figure>
+            <img src="/img/shots/android-providers.webp" width="676" height="1200" loading="lazy" decoding="async"
+                 alt="添加云盘的界面，底部写着「我们只保存密码哈希，无法解密您的凭据」。">
+          </figure>
+        </div>
+      </div>
+    </section>
 
-        <section class="prose-section" id="webdav">
-          <h2>WebDAV 服务</h2>
+    <!-- 4 ── webdav ─────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="webdav" aria-labelledby="webdav-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">协议</p>
+          <h2 id="webdav-h">WebDAV 服务</h2>
           <p>WebDAV 是一种基于 HTTP 的文件传输协议，可以像访问本地文件一样访问和管理远程文件，
              在云盘、网盘和 NAS 领域被广泛使用。</p>
-          <p>它最大的优势是兼容性：Windows、macOS、Linux 等操作系统，
-             以及 Microsoft Office、Adobe Creative Suite 等应用程序，都内置了 WebDAV 支持。
-             不用装专门的客户端，就能在不同设备之间共享文件。</p>
-          <p>CloudDrive2 把你所有的云盘封装成一个统一的 WebDAV 服务，
-             任何支持 WebDAV 的客户端都可以通过它访问和管理全部云盘文件。</p>
-
-          <h3>强大的 WebDAV 服务管理</h3>
-          <p>在系统设置界面里，WebDAV 服务的各项设置都可以单独控制：</p>
-          <ul>
-            <li><strong>服务控制：</strong>随时打开或关闭 CloudDrive2 的 WebDAV 服务。</li>
-            <li><strong>账号访问管理：</strong>允许或禁止用 CloudDrive 账号访问 WebDAV，并可以指定这条访问的根目录位置，以及是否只读。</li>
-            <li><strong>匿名访问控制：</strong>允许或禁止匿名访问，匿名访问有自己独立的根目录位置和访问权限设置。</li>
-          </ul>
-
-          <h3>独立 WebDAV 用户管理</h3>
-          <p>可以创建任意多个独立的 WebDAV 用户，每个用户单独设置自己的根目录位置和是否只读。
-             把某一个目录分享给别人时，不需要交出自己的账号。</p>
-
-          <div class="note">
-            <span class="note-title">这是付费功能</span>
-            <p>创建独立 WebDAV 用户属于会员功能：月费、年费、轻享终身和终身会员都可以使用，
-               免费的基础会员没有这一项。各档位的具体差别见<a href="/pricing.html">会员与价格</a>。</p>
+        </header>
+        <div class="feature-row">
+          <div class="feature-text">
+            <p>它最大的优势是兼容性：Windows、macOS、Linux 等操作系统，
+               以及 Microsoft Office、Adobe Creative Suite 等应用程序，都内置了 WebDAV 支持。
+               不用装专门的客户端，就能在不同设备之间共享文件。</p>
+            <p>CloudDrive2 把你所有的云盘封装成一个统一的 WebDAV 服务，
+               任何支持 WebDAV 的客户端都可以通过它访问和管理全部云盘文件。</p>
           </div>
-        </section>
+          <figure>
+            <img src="/img/shots/androidtv-dashboard.webp" width="1600" height="776" loading="lazy" decoding="async"
+                 alt="仪表盘上的快捷入口，其中「WebDAV 服务器」显示为已启用。">
+          </figure>
+        </div>
 
-        <section class="prose-section" id="inter-cloud-copy">
-          <h2>跨云盘文件快速复制 <span class="chip chip-cloud">PRO</span></h2>
-          <p>换云盘服务，或者想在几个云盘之间保留同一份数据，都要面对同一个麻烦：
-             每家云盘的接口和数据格式都不一样，搬家往往要手动操作，速度还受本地带宽限制。
-             数据量一大，时间就长得离谱。</p>
-          <p>CloudDrive2 的做法是尽最大可能利用云盘的秒传机制。秒传的原理是：
-             上传前先算出文件的哈希值发给服务器，服务器发现这个文件已经存在，
-             就不再接收文件数据，而是直接建一条新的文件记录指向已有的数据。</p>
-          <p>关键在于，CloudDrive2 可以直接从云盘取到文件现成的哈希值。
-             如果目标云盘和源云盘用的是同一种哈希算法，连计算哈希这一步都可以跳过，
-             于是真正做到秒传。使用相同哈希算法的不同云盘之间，或者同一云盘不同账号之间，效果最明显——
-             既省时间，也几乎不占用网络带宽。</p>
-          <p>不是所有文件都能走秒传。走不了的时候，CloudDrive2 会直接把文件从一个云盘边下边传到另一个云盘，
-             不在本地磁盘落地。所以本地空间不够、或者中途网络抖动，都不再是问题。</p>
+        <div class="split">
+          <div>
+            <h3>强大的 WebDAV 服务管理</h3>
+            <p>在系统设置界面里，WebDAV 服务的各项设置都可以单独控制：</p>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-power-off" aria-hidden="true"></i>
+                <div><b>服务控制</b><p>随时打开或关闭 CloudDrive2 的 WebDAV 服务。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-user-lock" aria-hidden="true"></i>
+                <div><b>账号访问管理</b><p>允许或禁止用 CloudDrive 账号访问 WebDAV，并可以指定这条访问的根目录位置，以及是否只读。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-user-secret" aria-hidden="true"></i>
+                <div><b>匿名访问控制</b><p>允许或禁止匿名访问，匿名访问有自己独立的根目录位置和访问权限设置。</p></div>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3>独立 WebDAV 用户管理</h3>
+            <p>可以创建任意多个独立的 WebDAV 用户，每个用户单独设置自己的根目录位置和是否只读。
+               把某一个目录分享给别人时，不需要交出自己的账号。</p>
+            <div class="note">
+              <span class="note-title">这是付费功能</span>
+              <p>创建独立 WebDAV 用户属于会员功能：月费、年费、轻享终身和终身会员都可以使用，
+                 免费的基础会员没有这一项。各档位的具体差别见<a href="/pricing.html">会员与价格</a>。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          <h3>跨云盘快速复制支持矩阵</h3>
-          <div class="table-scroll">
+    <!-- 5 ── inter-cloud-copy ────────────────────────────────────────── -->
+    <section class="band" id="inter-cloud-copy" aria-labelledby="inter-cloud-copy-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">传输</p>
+          <h2 id="inter-cloud-copy-h">跨云盘文件快速复制 <span class="chip chip-solid">PRO</span></h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>问题</h3>
+            <p>换云盘服务，或者想在几个云盘之间保留同一份数据，都要面对同一个麻烦：
+               每家云盘的接口和数据格式都不一样，搬家往往要手动操作，速度还受本地带宽限制。
+               数据量一大，时间就长得离谱。</p>
+            <p>不是所有文件都能走秒传。走不了的时候，CloudDrive2 会直接把文件从一个云盘边下边传到另一个云盘，
+               不在本地磁盘落地。所以本地空间不够、或者中途网络抖动，都不再是问题。</p>
+          </div>
+          <div>
+            <h3>做法</h3>
+            <p>CloudDrive2 的做法是尽最大可能利用云盘的秒传机制。秒传的原理是：
+               上传前先算出文件的哈希值发给服务器，服务器发现这个文件已经存在，
+               就不再接收文件数据，而是直接建一条新的文件记录指向已有的数据。</p>
+            <p>关键在于，CloudDrive2 可以直接从云盘取到文件现成的哈希值。
+               如果目标云盘和源云盘用的是同一种哈希算法，连计算哈希这一步都可以跳过，
+               于是真正做到秒传。使用相同哈希算法的不同云盘之间，或者同一云盘不同账号之间，效果最明显——
+               既省时间，也几乎不占用网络带宽。</p>
+            <ul class="chips">
+              <li><span class="chip">基于哈希的秒传</span></li>
+              <li><span class="chip">不占用本地磁盘</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>跨云盘快速复制支持矩阵</h3>
+<div class="table-scroll">
             <table class="matrix-table">
               <caption class="sr-only">各云盘之间是否支持基于哈希的快速复制</caption>
               <thead>
@@ -327,132 +419,216 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-          <p class="chip-note">表中的「—」只表示这一对组合走不了哈希秒传，不表示不能复制：CloudDrive2 依然会在两个云盘之间直接传输数据，只是需要花时间。矩阵取决于各家云盘接口当前的能力，会随服务商的调整而变化。</p>
-          <ul class="chips">
-            <li><span class="chip">基于哈希的秒传</span></li>
-            <li><span class="chip">不占用本地磁盘</span></li>
-          </ul>
-        </section>
+          </div>        <p class="chip-note">表中的「—」只表示这一对组合走不了哈希秒传，不表示不能复制：CloudDrive2 依然会在两个云盘之间直接传输数据，只是需要花时间。矩阵取决于各家云盘接口当前的能力，会随服务商的调整而变化。</p>
+      </div>
+    </section>
 
-        <section class="prose-section" id="file-notification">
-          <h2>文件变更通知 <span class="chip chip-cloud">PRO</span></h2>
+    <!-- 6 ── file-notification ───────────────────────────────────────── -->
+    <section class="band band-alt" id="file-notification" aria-labelledby="file-notification-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">事件</p>
+          <h2 id="file-notification-h">文件变更通知 <span class="chip chip-solid">PRO</span></h2>
           <p>文件变更通知是操作系统提供的一种机制：文件系统里的文件或目录发生变化时，
              操作系统会生成一个事件。变化包括创建、删除、移动、重命名以及内容修改。
              应用程序订阅这些事件，就能在文件变动时立刻做出反应。</p>
-          <p>CloudDrive2 让挂载出来的云盘文件系统也支持这套机制。
-             挂载盘里创建、删除、重命名或修改文件时，使用 FileSystemWatcher 或 FileNotify 的第三方程序都会收到通知。
-             Emby、Jellyfin、Plex 这类媒体管理程序，就是靠它来发现媒体目录里多了新片子。</p>
-          <p>CloudDrive2 还在此之上做了扩展。除了挂载文件系统上的操作，
-             通过 Web 界面修改文件、通过 WebDAV 服务修改文件，
-             以及通过 CloudDrive2 导入离线下载产生的文件变化，同样会生成正确的变更通知。
-             无论文件是从哪条路径进来的，监视目录的程序看到的状态都是最新的。</p>
-        </section>
+        </header>
+        <div class="split">
+          <div>
+            <h3>挂载盘也有这套机制</h3>
+            <p>CloudDrive2 让挂载出来的云盘文件系统也支持这套机制。
+               挂载盘里创建、删除、重命名或修改文件时，使用 FileSystemWatcher 或 FileNotify 的第三方程序都会收到通知。
+               Emby、Jellyfin、Plex 这类媒体管理程序，就是靠它来发现媒体目录里多了新片子。</p>
+          </div>
+          <div>
+            <h3>不只是挂载盘</h3>
+            <p>CloudDrive2 还在此之上做了扩展。除了挂载文件系统上的操作，
+               通过 Web 界面修改文件、通过 WebDAV 服务修改文件，
+               以及通过 CloudDrive2 导入离线下载产生的文件变化，同样会生成正确的变更通知。
+               无论文件是从哪条路径进来的，监视目录的程序看到的状态都是最新的。</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        <section class="prose-section" id="encrypted-filesystem">
-          <h2>加密文件系统 <span class="chip chip-cloud">PRO</span></h2>
+    <!-- 7 ── encrypted-filesystem ────────────────────────────────────── -->
+    <section class="band" id="encrypted-filesystem" aria-labelledby="encrypted-filesystem-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">加密</p>
+          <h2 id="encrypted-filesystem-h">加密文件系统 <span class="chip chip-solid">PRO</span></h2>
           <p>加密文件系统让你在云盘上存放敏感数据：文件名和文件内容都加密之后才写到云端，
              解锁之后用起来又和普通文件夹没有区别。</p>
+        </header>
 
-          <div class="note note-warn">
-            <span class="note-title">重要声明</span>
-            <p>使用加密功能时请务必遵守各网盘相关的用户协议。
-               因滥用加密功能导致网盘账号被封，CloudDrive 不承担任何责任。</p>
-          </div>
+        <div class="note note-warn">
+          <span class="note-title">重要声明</span>
+          <p>使用加密功能时请务必遵守各网盘相关的用户协议。
+             因滥用加密功能导致网盘账号被封，CloudDrive 不承担任何责任。</p>
+        </div>
 
-          <h3>灵活的加密文件夹创建</h3>
-          <p>可以在任意网盘、或者添加到 CloudDrive2 的本地文件夹里，
-             在任意位置创建任意多个加密文件夹。每个加密文件夹都有自己独立的密码。
-             创建时默认会把密码保存在本机；如果选择不保存，CloudDrive2 重启之后需要重新输入密码才能访问这个文件夹。</p>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-folder-plus card-icon" aria-hidden="true"></i>
+            <h3>灵活的加密文件夹创建</h3>
+            <p>可以在任意网盘、或者添加到 CloudDrive2 的本地文件夹里，在任意位置创建任意多个加密文件夹。
+               每个加密文件夹都有自己独立的密码。创建时默认会把密码保存在本机；如果选择不保存，
+               CloudDrive2 重启之后需要重新输入密码才能访问这个文件夹。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>强大的加密保护</h3>
+            <p>写入加密文件夹的所有文件，文件名和内容都会加密之后再保存到网盘或本地文件夹。
+               密码只在本地加密保存，不会同步到 CloudDrive2 的服务器。
+               因此换一台机器登录同一个账号时，访问加密目录需要重新输入密码解锁。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-unlock-keyhole card-icon" aria-hidden="true"></i>
+            <h3>便捷的访问控制</h3>
+            <p>选中根加密目录后，可以在文件属性页点击锁定按钮把目录重新锁上，下次访问时需要再次输入密码解锁。</p>
+            <p>解锁之后，通过 CloudDrive2 访问加密文件和访问普通文件完全一样：
+               支持所有文件操作，可以随机读写，也可以直接在线播放视频。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
+            <h3>智能的文件传输</h3>
+            <p>从未加密的目录往解锁后的加密目录复制或移动文件时，文件会被自动加密后写入；
+               反过来，从解锁后的加密目录往未加密目录复制或移动时，文件会被自动解密后写出。</p>
+            <p>如果你想快速秒传加密后的原始文件到别处，可以先把加密目录锁定——
+               此时它呈现的就是加密后的原始文件形态，再按普通的文件传输方式操作即可。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-key card-icon" aria-hidden="true"></i>
+            <h3>商用级加密算法</h3>
+            <p><strong>文件名加密：</strong>使用 AES 加密后再做 UTF-8 编码，保存到网盘的文件名长度限制和未加密时基本一致。</p>
+            <p><strong>文件内容加密：</strong>采用 chacha20-poly1305 算法，每个文件的加密密钥都根据密码动态生成，各不相同。</p>
+            <p><strong>开源透明：</strong>加密算法完全开源，解密工具源代码见
+              <a href="https://github.com/cloud-fs/clouddrive-decrypt" target="_blank" rel="noopener">github.com/cloud-fs/clouddrive-decrypt</a>。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-box-archive card-icon" aria-hidden="true"></i>
+            <h3>加密备份支持</h3>
+            <p>备份任务的目的目录也可以设成解锁后的加密目录，这样备份出来的就是加密数据，
+               为重要数据加一层保护。</p>
+          </div></li>
+        </ul>
 
-          <h3>强大的加密保护</h3>
-          <p>写入加密文件夹的所有文件，文件名和内容都会加密之后再保存到网盘或本地文件夹。
-             密码只在本地加密保存，不会同步到 CloudDrive2 的服务器。
-             因此换一台机器登录同一个账号时，访问加密目录需要重新输入密码解锁。</p>
-
+        <div class="split">
           <div class="note note-danger">
             <span class="note-title">密码丢了就找不回来</span>
             <p>请务必记住你设置的密码。密码一旦遗忘，文件将无法访问，也无法恢复——没有任何人可以帮你找回。</p>
           </div>
-
-          <h3>便捷的访问控制</h3>
-          <p>选中根加密目录后，可以在文件属性页点击锁定按钮把目录重新锁上，下次访问时需要再次输入密码解锁。</p>
-          <p>解锁之后，通过 CloudDrive2 访问加密文件和访问普通文件完全一样：
-             支持所有文件操作，可以随机读写，也可以直接在线播放视频。</p>
-
-          <h3>智能的文件传输</h3>
-          <p>从未加密的目录往解锁后的加密目录复制或移动文件时，文件会被自动加密后写入；
-             反过来，从解锁后的加密目录往未加密目录复制或移动时，文件会被自动解密后写出。</p>
-          <p>如果你想快速秒传加密后的原始文件到别处，可以先把加密目录锁定——
-             此时它呈现的就是加密后的原始文件形态，再按普通的文件传输方式操作即可。</p>
-
-          <h3>商用级加密算法</h3>
-          <ul>
-            <li><strong>文件名加密：</strong>使用 AES 加密后再做 UTF-8 编码，保存到网盘的文件名长度限制和未加密时基本一致。</li>
-            <li><strong>文件内容加密：</strong>采用 chacha20-poly1305 算法，每个文件的加密密钥都根据密码动态生成，各不相同。</li>
-            <li><strong>开源透明：</strong>加密算法完全开源，解密工具源代码见
-              <a href="https://github.com/cloud-fs/clouddrive-decrypt" target="_blank" rel="noopener">github.com/cloud-fs/clouddrive-decrypt</a>。</li>
-          </ul>
-
-          <h3>加密备份支持</h3>
-          <p>备份任务的目的目录也可以设成解锁后的加密目录，这样备份出来的就是加密数据，
-             为重要数据加一层保护。</p>
-
           <div class="note">
             <span class="note-title">文件大小限制</span>
             <p>为防止加密功能被滥用，月费会员和年费会员保存到网盘的加密文件，单个文件大小上限为 200 MB；
                终身会员不受此限制；保存到本地文件夹的加密文件也不受此限制。
                网盘加密文件的大小上限后续会根据实际情况做出适当调整。会员档位的差别见<a href="/pricing.html">会员与价格</a>。</p>
           </div>
+        </div>
 
-          <ul class="chips">
-            <li><span class="chip">文件名 AES</span></li>
-            <li><span class="chip">内容 chacha20-poly1305</span></li>
-            <li><span class="chip">解密工具开源</span></li>
-          </ul>
-        </section>
+        <ul class="chips">
+          <li><span class="chip">文件名 AES</span></li>
+          <li><span class="chip">内容 chacha20-poly1305</span></li>
+          <li><span class="chip">解密工具开源</span></li>
+        </ul>
+      </div>
+    </section>
 
-        <section class="prose-section" id="file-access-control">
-          <h2>文件访问监控和权限控制 <span class="chip chip-cloud">PRO</span></h2>
+    <!-- 8 ── file-access-control ─────────────────────────────────────── -->
+    <section class="band band-alt" id="file-access-control" aria-labelledby="file-access-control-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">监控</p>
+          <h2 id="file-access-control-h">文件访问监控和权限控制 <span class="chip chip-solid">PRO</span></h2>
           <p>CloudDrive2 能告诉你挂载盘上正在发生什么，这是普通文件系统给不了的信息。</p>
-          <p>界面里实时显示当前是哪个进程正在访问哪个文件，包括进程的完整路径、文件的完整路径，
-             以及读取网盘文件时的下载速度。哪个程序在偷偷扫盘、哪个任务把带宽吃光了，一眼就能看出来。</p>
-          <p>在此之上还有权限控制：你可以设定哪些进程允许访问挂载的文件系统，哪些不允许。
-             被加入黑名单的进程无法打开 CloudDrive2 挂载的文件。
-             这能有效阻止不该碰你文件的程序去碰它们，个人用户和企业用户都用得上。</p>
-        </section>
+        </header>
+        <ul class="card-grid card-grid-2">
+          <li><div class="card">
+            <i class="fa-solid fa-eye card-icon" aria-hidden="true"></i>
+            <h3>看得见谁在读你的盘</h3>
+            <p>界面里实时显示当前是哪个进程正在访问哪个文件，包括进程的完整路径、文件的完整路径，
+               以及读取网盘文件时的下载速度。哪个程序在偷偷扫盘、哪个任务把带宽吃光了，一眼就能看出来。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-ban card-icon" aria-hidden="true"></i>
+            <h3>不该碰的就别碰</h3>
+            <p>你可以设定哪些进程允许访问挂载的文件系统，哪些不允许。
+               被加入黑名单的进程无法打开 CloudDrive2 挂载的文件。
+               这能有效阻止不该碰你文件的程序去碰它们，个人用户和企业用户都用得上。</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
 
-        <section class="prose-section" id="service-vendor-friendly">
-          <h2>云盘服务商友好</h2>
-          <p>CloudDrive2 在保证使用流畅的前提下，尽量少占用云盘服务商的资源。这不是客套话，而是几条具体的设计。</p>
-          <p>文件元数据在本地缓存，用来减少列目录请求，从而降低使用过程中对网盘接口的调用次数。
-             每个目录的缓存时间可以按需要单独设置，你自己在数据时效性和请求频度之间取平衡。</p>
-          <p>跨云盘快速复制充分利用云盘已有的文件元数据，尽可能避免重新计算文件哈希，省下大量网络传输。</p>
-          <p>读取文件时，下载速度被精确控制在刚好满足读取需要的水平，不会一上来就把带宽占满。
-             这既省了你的网络资源，也减少了对服务商的冲击。</p>
-        </section>
+    <!-- 9 ── service-vendor-friendly ─────────────────────────────────── -->
+    <section class="band" id="service-vendor-friendly" aria-labelledby="service-vendor-friendly-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">克制</p>
+          <h2 id="service-vendor-friendly-h">云盘服务商友好</h2>
+          <p>CloudDrive2 在保证使用流畅的前提下，尽量少占用云盘服务商的资源。
+             这不是客套话，而是几条具体的设计。</p>
+        </header>
+        <ul class="stack-list">
+          <li>
+            <i class="fa-solid fa-database" aria-hidden="true"></i>
+            <div><b>元数据本地缓存</b>
+              <p>文件元数据在本地缓存，用来减少列目录请求，从而降低使用过程中对网盘接口的调用次数。
+                 每个目录的缓存时间可以按需要单独设置，你自己在数据时效性和请求频度之间取平衡。</p></div>
+          </li>
+          <li>
+            <i class="fa-solid fa-fingerprint" aria-hidden="true"></i>
+            <div><b>复用已有的哈希</b>
+              <p>跨云盘快速复制充分利用云盘已有的文件元数据，尽可能避免重新计算文件哈希，省下大量网络传输。</p></div>
+          </li>
+          <li>
+            <i class="fa-solid fa-gauge" aria-hidden="true"></i>
+            <div><b>按需下载，不抢带宽</b>
+              <p>读取文件时，下载速度被精确控制在刚好满足读取需要的水平，不会一上来就把带宽占满。
+                 这既省了你的网络资源，也减少了对服务商的冲击。</p></div>
+          </li>
+        </ul>
+      </div>
+    </section>
 
-        <section class="prose-section" id="multicloud-backup">
-          <h2>多云盘备份 <span class="chip chip-cloud">PRO</span></h2>
+    <!-- 10 ── multicloud-backup ──────────────────────────────────────── -->
+    <section class="band band-alt" id="multicloud-backup" aria-labelledby="multicloud-backup-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">备份</p>
+          <h2 id="multicloud-backup-h">多云盘备份 <span class="chip chip-solid">PRO</span></h2>
           <p>重要数据只有一份备份是不够的。多处备份能避免单点故障，
              某一个云盘服务出问题时，数据仍然是完整、可取回的。</p>
-          <p>多云盘备份就是干这件事：指定要备份的本地文件夹或网盘文件夹，
-             CloudDrive2 会自动把里面的内容备份到你指定的多个本地文件夹或网盘文件夹。</p>
-          <p>备份是实时的。源文件夹里的文件发生修改时，改动会实时更新到所有备份目的文件夹，
-             任何时候查看备份数据，看到的都是最新状态。</p>
-          <p>源文件或文件夹被删除、被更新时，每个目标文件夹里对应的文件可以选择保留、删除，
-             或者保留无限多个历史版本。后续版本会支持从任意历史版本恢复文件或文件夹。</p>
-          <ul class="chips">
-            <li><span class="chip chip-backup">多目标同时备份</span></li>
-            <li><span class="chip chip-backup">实时增量更新</span></li>
-            <li><span class="chip chip-backup">无限历史版本</span></li>
-          </ul>
-        </section>
-
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-clone card-icon" aria-hidden="true"></i>
+            <h3>一份源，多个目标</h3>
+            <p>指定要备份的本地文件夹或网盘文件夹，CloudDrive2 会自动把里面的内容
+               备份到你指定的多个本地文件夹或网盘文件夹。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-bolt card-icon" aria-hidden="true"></i>
+            <h3>实时增量</h3>
+            <p>源文件夹里的文件发生修改时，改动会实时更新到所有备份目的文件夹，
+               任何时候查看备份数据，看到的都是最新状态。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-clock-rotate-left card-icon" aria-hidden="true"></i>
+            <h3>历史版本</h3>
+            <p>源文件或文件夹被删除、被更新时，每个目标文件夹里对应的文件可以选择保留、删除，
+               或者保留无限多个历史版本。后续版本会支持从任意历史版本恢复文件或文件夹。</p>
+          </div></li>
+        </ul>
+        <ul class="chips">
+          <li><span class="chip chip-backup">多目标同时备份</span></li>
+          <li><span class="chip chip-backup">实时增量更新</span></li>
+          <li><span class="chip chip-backup">无限历史版本</span></li>
+        </ul>
       </div>
-    </div>
+    </section>
 
-    <section class="band band-alt cta-band" aria-labelledby="apps-h">
+    <section class="band cta-band" aria-labelledby="apps-h">
       <div class="container">
         <p class="eyebrow">还有客户端</p>
         <h2 id="apps-h">以上都跑在你自己的机器上</h2>

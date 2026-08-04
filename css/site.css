@@ -191,7 +191,11 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
     radial-gradient(120% 70% at 50% -10%, rgb(77 157 255 / .13), transparent 60%);
 }
 
+/* anchored sections clear the sticky header when jumped to */
+:target { scroll-margin-top: 84px; }
+
 .band-head { margin-bottom: var(--s7); max-width: 760px; }
+.band-head h2 { display: flex; align-items: center; gap: .55em; flex-wrap: wrap; }
 .band-head p { color: var(--text-muted); font-size: 1.07rem; margin-bottom: 0; }
 .band-head > :last-child { margin-bottom: 0; }
 
@@ -231,6 +235,10 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
 .chip-disc   { color: var(--t-disc);   border-color: color-mix(in srgb, var(--t-disc) 45%, transparent); }
 .chip-backup { color: var(--t-backup); border-color: color-mix(in srgb, var(--t-backup) 45%, transparent); }
 .chip-cloud  { color: var(--t-cloud);  border-color: color-mix(in srgb, var(--t-cloud) 45%, transparent); }
+.chip-solid {
+  background: var(--brand); color: var(--on-brand); border-color: var(--brand);
+  font-size: .68rem; letter-spacing: .1em; padding: .45em .6em;
+}
 a.chip { text-decoration: none; }
 a.chip:hover { border-color: currentColor; }
 
