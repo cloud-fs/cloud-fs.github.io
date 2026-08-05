@@ -154,13 +154,13 @@
           </figure>
         </div>
 
-        <div class="feature-row">
+        <div class="feature-row feature-row-solo">
           <div class="feature-text">
             <h3>HDR、杜比视界与解码</h3>
             <p>HDR10、HDR10+ 与 Dolby Vision（含 P5 / P7 / P8）。TS / M2TS 重封装的片源也能正确识别 HDR 与帧率，
                不会因为换了封装就丢掉动态元数据。4K、8K 与 AV1 都能播；硬件解码器啃不动的 H.264 High Profile
                会自动回退到 FFmpeg 解码。</p>
-            <p class="chip-note">真杜比视界（含 Profile 7）输出取决于设备：需要电视或盒子本身支持杜比视界输出。不具备这个能力的机器上会以 HDR10 等格式播放。</p>
+            <p class="chip-note">杜比视界（含 Profile 7）输出取决于设备：需要电视或盒子本身支持杜比视界输出。不具备这个能力的机器上会以 HDR10 等格式播放。Profile 7 的碟片带两层画面，两层都会读，但双层输出同样要设备支持，多数设备上以单层杜比视界呈现。</p>
             <ul class="chips">
               <li><span class="chip chip-video">HDR10 · HDR10+</span></li>
               <li><span class="chip chip-video">杜比视界 P5 / 7 / 8</span></li>
@@ -168,10 +168,6 @@
               <li><span class="chip chip-video">FFmpeg 回退解码</span></li>
             </ul>
           </div>
-          <figure>
-            <img src="/img/shots/android-inspector.webp" width="676" height="1200" loading="lazy" decoding="async"
-                 alt="文件检查器面板正在查看演示片源「HDR10 演示片段.ts」，显示文件大小 1014.0 MB 与其他属性。">
-          </figure>
         </div>
 
         <div class="feature-row">
@@ -201,6 +197,7 @@
                内置的 USB 音频驱动（USBFS）与 DST 解码绕过 Android 混音器，直接输出比特完美的信号。</p>
             <p>DSF、DFF 与 SACD ISO 都能直接从云端播放，支持 DoP 输出、USB DAC 原生 DSD 直推与多声道 DSD。
                HDMI 上则有 Dolby Atmos / TrueHD 直通与多声道输出。</p>
+            <p class="chip-note">DSD64 到 DSD1024 都支持。DoP 与原生 DSD 实际能走到哪一档，取决于所连解码器的能力——应用按解码器自己声明的规格输出，它接不了的档位会转成 PCM。</p>
             <ul class="chips">
               <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
               <li><span class="chip chip-audio">USBFS 比特完美</span></li>
@@ -412,6 +409,11 @@
           <p>App Pro 绑定的是你的 CloudDrive 账号，不是设备也不是商店。买过一次，
              在任何平台上登录同一账号都已解锁——Android、Apple 设备与 Meta Quest 一视同仁。
              详见<a href="/pricing.html">会员与价格</a>。</p>
+        </div>
+        <div class="note">
+          <span class="note-title">关于这些功能</span>
+          <p>本页写的是应用当前的功能。CloudDrive2 仍在持续开发，云服务商与各平台的限制也在变，所以功能可能调整，也可能在不另行通知的情况下移除。</p>
+          <p>欢迎提功能需求、报 bug——下一个版本做什么，很大程度上就是这么定的。可以写信到 <a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a>，或者加入 <a href="https://t.me/cloudnaschat" rel="noopener">Telegram 群</a>。</p>
         </div>
       </div>
     </section>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CloudDrive VR for Meta Quest — cloud cinema, 360 video and native DSD</title>
-  <meta name="description" content="CloudDrive VR on Meta Quest: browse every cloud from inside the headset and put your cloud movies on a virtual screen. Up to 8K hardware decoding, Blu-ray and DVD ISOs, 360 and VR180, passthrough VR, and native DSD up to DSD1024.">
+  <meta name="description" content="CloudDrive VR on Meta Quest: browse every cloud from inside the headset and put your cloud movies on a virtual screen. Up to 8K hardware decoding, Blu-ray and DVD ISOs, 360 and VR180, passthrough VR, AI subtitle translation, an Emby and Jellyfin client, and native DSD up to DSD1024.">
   <link rel="canonical" href="https://www.clouddrive2.com/en/apps/quest.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/quest.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/quest.html">
@@ -71,8 +71,8 @@
           <h1>Your clouds, inside the headset</h1>
           <p class="hero-lede">
             Browse every cloud drive you own from Quest and put the films on a screen the size of a wall.
-            Up to 8K hardware decoding, Blu-ray and DVD ISOs read in place, 360 and VR180,
-            and native DSD up to DSD1024 — none of it downloaded to the headset first.
+            Up to 8K hardware decoding, Blu-ray and DVD ISOs read in place, 360 and VR180, AI subtitle
+            translation and native DSD up to DSD1024 — none of it downloaded to the headset first.
           </p>
           <div class="btn-row">
             <a class="btn btn-primary" href="/en/download.html">Get the app</a>
@@ -83,6 +83,7 @@
             <li><span class="chip chip-video">360 · VR180 · fisheye</span></li>
             <li><span class="chip chip-disc">Blu-ray ISO in place</span></li>
             <li><span class="chip chip-audio">Native DSD1024</span></li>
+            <li><span class="chip chip-subs">AI subtitles</span></li>
             <li><span class="chip chip-cloud">Full CloudDrive2</span></li>
           </ul>
         </div>
@@ -157,7 +158,7 @@
           </div></li>
         </ul>
 
-        <p class="chip-note">Dolby Vision needs a Quest 3, Quest 3S or Quest Pro. Quest 2 hardware does not support Dolby Vision.</p>
+        <p class="chip-note">Dolby Vision needs a Quest 3, Quest 3S or Quest Pro. Quest 2 hardware does not support Dolby Vision. A Profile 7 disc carries two picture layers and both are read, but dual-layer output needs a device that supports it; in the headset the picture arrives as single-layer Dolby Vision.</p>
 
         <div class="feature-row">
           <div class="feature-text">
@@ -168,7 +169,11 @@
                and passthrough VR with alpha blending, packed alpha (DeoVR) or chroma key.</p>
             <p>When you open a file the projection is taken from the video metadata, and falls back to a
                filename heuristic when there is none. If it guesses wrong, change it from the player.</p>
+            <p>In VR video, subtitles take on the depth of the picture automatically, so your eyes never have
+               to refocus between the text and the scene. Flat video has no depth to follow, so its subtitles
+               stay on the screen plane.</p>
             <ul class="chips">
+              <li><span class="chip chip-subs">Subtitles follow picture depth</span></li>
               <li><span class="chip chip-video">360 mono / stereo</span></li>
               <li><span class="chip chip-video">VR180 half-SBS / half-OU</span></li>
               <li><span class="chip chip-video">Fisheye auto FOV</span></li>
@@ -202,7 +207,8 @@
             <h3>Audiophile audio, up to DSD1024</h3>
             <p>FLAC, ALAC, APE, DSD (DSF and DFF), SACD ISO, WAV, AIFF, MP3, AAC, OGG and more stream
                straight from the cloud. A USB DAC gets bit-perfect output in either DSD over PCM (DoP)
-               or Native DSD mode, and DSD64 through DSD1024 play natively without a PCM conversion.</p>
+               or Native DSD mode, and DSD64 through DSD1024 play natively.</p>
+            <p class="chip-note">DSD64 through DSD1024 are all supported. How far DoP and Native DSD actually go is set by the DAC you connect — the app outputs to what the DAC itself reports, and anything beyond that is converted to PCM.</p>
             <p>Gapless playback, ReplayGain and CUE sheets are all supported. In cinema mode, 5.1 and 7.1
                content becomes head-tracked spatial audio, so the soundstage stays with the screen when
                you turn your head.</p>
@@ -219,6 +225,37 @@
                  alt="The CloudDrive VR Audio Player settings panel, showing DSD Output Mode set to Auto, Resampling set to Auto, and rows for Preferred Sample Rate, Gapless Playback, ReplayGain and Auto Resume.">
           </figure>
         </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>AI subtitle translation</h3>
+            <p>Generate translated subtitles for any video. CloudDrive VR translates the existing subtitle
+               track first — including PGS bitmap subtitles read by OCR — and falls back to speech
+               recognition only when there is none. Generated subtitles are saved next to the video, so the
+               work you do once in the headset is there on your phone and your Mac too.</p>
+            <p class="chip-note">On Quest, bring your own translation API for the best results. There are no
+               platform translation models in the headset to fall back on.</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">Bring your own API</span></li>
+              <li><span class="chip chip-subs">PGS OCR</span></li>
+              <li><span class="chip chip-subs">Saved for reuse</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>A multi-gigabyte PDF, open in seconds</h3>
+            <p>The streaming PDF reader never pulls the whole book down. It fetches only the byte range the
+               pages on screen actually need, so a multi-gigabyte art book typically goes from open to first
+               page in seconds — no waiting for a download, and no complete copy left on the headset.</p>
+            <p>The reader is a panel like any other, at whatever size and distance suits you. Turning pages,
+               zooming and jumping through the outline all fetch on demand, with page thumbnails, bookmarks
+               and reading-position memory.</p>
+            <ul class="chips">
+              <li><span class="chip">Fetches pages on demand</span></li>
+              <li><span class="chip">No full download</span></li>
+              <li><span class="chip">Bookmarks and position</span></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -230,14 +267,29 @@
         </header>
         <ul class="card-grid">
           <li><div class="card">
+            <i class="fa-solid fa-photo-film card-icon" aria-hidden="true"></i>
+            <h3>Emby and Jellyfin client</h3>
+            <p>Connect your own Emby or Jellyfin servers and browse libraries with posters, cast and Continue Watching, all inside the headset. When your CloudDrive can reach the same file, Direct Stream plays it straight from the cloud at full quality — including formats servers can't transcode — while watch history stays in sync.</p>
+          </div></li>
+          <li><div class="card">
             <i class="fa-solid fa-arrow-up-right-from-square card-icon" aria-hidden="true"></i>
-            <h3>External player for Jellyfin and Emby</h3>
-            <p>CloudDrive VR registers through the Android intent API, so Jellyfin, Emby and other media servers can hand playback straight to it. Resume position syncs back to the server, and remote Blu-ray ISO streams are detected automatically.</p>
+            <h3>Or launched from another app</h3>
+            <p>CloudDrive VR also registers through the Android intent API, so Jellyfin, Emby and other media servers can hand playback straight to it. Resume position syncs back to the server, and remote Blu-ray ISO streams are detected automatically.</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-gamepad card-icon" aria-hidden="true"></i>
             <h3>Controllers and hands</h3>
             <p>Drive the interface with controllers or hand tracking. Thumbstick seeking accelerates exponentially and shows a thumbnail preview, so finding a scene takes one pass.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
+            <h3>Transfers and backup</h3>
+            <p>Copy or move files between providers, with transfers you can pause and resume. Automated backup tasks run on a schedule, and whole folders upload recursively — the headset keeps them going while you watch something else.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>Security</h3>
+            <p>Two-factor authentication, encrypted folders and active session monitoring, with API tokens that grant scoped, expiring access.</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
@@ -285,6 +337,15 @@
              store — buy it on an iPhone, a Mac or an Android phone, then sign in on the headset with the
              same account and it is already unlocked. See
              <a href="/en/pricing.html">plans and pricing</a>.</p>
+        </div>
+        <div class="note">
+          <span class="note-title">About this feature list</span>
+          <p>Everything on this page is what the app does today. CloudDrive2 is under active
+             development, and what cloud providers and platforms allow changes too, so features can
+             change or be withdrawn without notice.</p>
+          <p>Feature requests and bug reports are genuinely welcome — they are how the next release gets
+             decided. Write to <a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a> or
+             join the <a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>.</p>
         </div>
       </div>
     </section>

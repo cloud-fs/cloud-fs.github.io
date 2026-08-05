@@ -289,8 +289,9 @@
           <div class="feature-text">
             <h3>True Dolby Vision and HDR10+</h3>
             <p>Hardware-accelerated HEVC, AV1 and H.264 decoding, with Dolby Vision Profiles 5, 7 and 8
-               alongside HDR10, HDR10+ and HLG. Profile 7 Blu-ray content plays as genuine dual-layer
-               Dolby Vision rather than falling back to HDR10.</p>
+               alongside HDR10, HDR10+ and HLG. Profile 7 Blu-ray content plays as Dolby Vision rather
+               than falling back to HDR10.</p>
+            <p class="chip-note">A Profile 7 disc carries two picture layers and CloudDrive2 reads both, but dual-layer output needs a device that supports it. On most devices the picture arrives as single-layer Dolby Vision — still Dolby Vision, not an HDR10 fallback.</p>
             <ul class="chips">
               <li><span class="chip chip-video">DV P5 / 7 / 8</span></li>
               <li><span class="chip chip-video">HDR10+ · HLG</span></li>
@@ -381,6 +382,7 @@
               <li><span class="chip chip-audio">Dolby Atmos</span></li>
             </ul>
             <p class="chip-note">Native DSD straight to the DAC needs Android, the macOS build downloaded from this site, or Windows with your DAC's ASIO driver installed. Everywhere else it goes over DoP, which is equally bit-perfect.</p>
+            <p class="chip-note">DSD64 through DSD1024 are all supported. How far DoP and Native DSD actually go is set by the DAC you connect — the app outputs to what the DAC itself reports, and anything beyond that is converted to PCM.</p>
             <a class="arrow-link" href="/en/apps/android.html">See the audio settings on Android</a>
           </div>
           <figure>
@@ -393,9 +395,10 @@
         <div class="feature-row">
           <div class="feature-text">
             <h3>A private cinema on Vision Pro and Quest</h3>
-            <p>180°/360° VR video, Apple Spatial video and MVC 3D Blu-ray, streamed from the cloud.
-               On Vision Pro subtitles follow the depth of the picture automatically; on Quest you pick a
-               cinema environment and set the screen's distance and curvature.</p>
+            <p>180°/360° VR video, Apple Spatial video and MVC 3D Blu-ray, streamed from the cloud. In VR
+               video, subtitles on both Vision Pro and Quest take on the depth of the picture automatically;
+               flat video has no depth to follow, so its subtitles stay on the screen plane. On Quest you can
+               also pick a cinema environment and set the screen's distance and curvature.</p>
             <ul class="chips">
               <li><span class="chip chip-video">180° / 360°</span></li>
               <li><span class="chip chip-video">MVC 3D</span></li>
