@@ -143,6 +143,230 @@
       </div>
     </section>
 
+    <section class="band band-alt" id="compare" aria-labelledby="compare-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">逐项对照</p>
+          <h2 id="compare-h">各个应用之间的差别</h2>
+          <p>同一套核心装进了每个应用，所以云盘相关的能力到处都一样；差别集中在需要系统放行的挂载，
+             和依赖硬件或驱动的影音输出。</p>
+        </header>
+
+        <h3>核心：云盘与文件</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">各平台应用的核心能力对照</caption>
+            <thead>
+              <tr>
+                <th scope="col">能力</th>
+                <th scope="col">Windows</th>
+                <th scope="col">macOS 下载版</th>
+                <th scope="col">macOS App Store</th>
+                <th scope="col">iPhone · iPad</th>
+                <th scope="col">Apple TV</th>
+                <th scope="col">Vision Pro</th>
+                <th scope="col">Android</th>
+                <th scope="col">Meta Quest</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">连接云盘与跨云文件操作</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">本地挂载为磁盘</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span><br><span class="cell-note">需 root</span></td>
+                <td class="c"><span class="no">—</span></td>
+              </tr>
+              <tr>
+                <th scope="row">内置 WebDAV 服务器</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">跨云传输与备份任务</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">系统文件集成</th>
+                <td class="c"><span class="cell-note">挂载盘符</span></td>
+                <td class="c"><span class="cell-note">Finder · macFUSE 挂载</span></td>
+                <td class="c"><span class="cell-note">Finder</span></td>
+                <td class="c"><span class="cell-note">「文件」应用</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="cell-note">「文件」应用</span></td>
+                <td class="c"><span class="cell-note">SAF · FUSE（需 root）</span></td>
+                <td class="c"><span class="no">—</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>影音播放</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">各平台应用的影音播放能力对照</caption>
+            <thead>
+              <tr>
+                <th scope="col">能力</th>
+                <th scope="col">Windows</th>
+                <th scope="col">macOS 下载版</th>
+                <th scope="col">macOS App Store</th>
+                <th scope="col">iPhone · iPad</th>
+                <th scope="col">Apple TV</th>
+                <th scope="col">Vision Pro</th>
+                <th scope="col">Android</th>
+                <th scope="col">Meta Quest</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">HDR 与杜比视界</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span><br><span class="cell-note">视设备而定</span></td>
+                <td class="c"><span class="yes">✓</span><br><span class="cell-note">Quest 3 / 3S / Pro</span></td>
+              </tr>
+              <tr>
+                <th scope="row">蓝光 / DVD ISO 直读</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">HDMV 光碟菜单</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">BD-J（Java）光碟菜单</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">DSD / SACD 播放</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">原生 DSD 直推</th>
+                <td class="c"><span class="yes">✓</span><br><span class="cell-note">需 ASIO 驱动</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">AI 字幕翻译</th>
+                <td class="c"><span class="yes">✓</span><br><span class="cell-note">建议自备 API</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span><br><span class="cell-note">需自备 API</span></td>
+                <td class="c"><span class="yes">✓</span><br><span class="cell-note">需 Apple Intelligence 或自备 API</span></td>
+                <td class="c"><span class="yes">✓</span><br><span class="cell-note">建议自备 API</span></td>
+                <td class="c"><span class="yes">✓</span><br><span class="cell-note">建议自备 API</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Emby / Jellyfin 客户端</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">VR / 沉浸式播放</th>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">流式 PDF 阅读器</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="chip-note">影音播放中的进阶项属于一次性内购的 <a href="/pricing.html">App 专业版</a>；
+           云盘数量与 Pro 能力由<a href="/pricing.html">核心会员</a>决定。
+           这里只对比各平台的应用，不含<a href="/apps/desktop.html">跑在 Linux / NAS / Docker 上的核心服务</a>。</p>
+      </div>
+    </section>
+
     <section class="band band-alt" aria-labelledby="account-h">
       <div class="container">
         <header class="band-head">

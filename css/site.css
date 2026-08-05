@@ -246,6 +246,9 @@ a.chip:hover { border-color: currentColor; }
   margin: calc(var(--s2) * -1) 0 var(--s4);
 }
 .chip-note::before { content: "△ "; color: var(--brand); }
+/* a note explaining the table above it should run to the table's width,
+   not stop at the reading measure */
+.table-scroll ~ .chip-note { max-width: none; }
 
 /* ── buttons ──────────────────────────────────────────────────────────── */
 .btn {
@@ -493,6 +496,11 @@ a.card:hover {
 .matrix-table tbody th { font-weight: 600; white-space: nowrap; }
 .matrix-table tbody tr:hover { background: var(--surface-2); }
 .matrix-table td.c { text-align: center; }
+.matrix-table .cell-note {
+  display: inline-block; font-family: var(--mono); font-size: .68rem;
+  line-height: 1.25; color: var(--text-muted); white-space: normal; max-width: 11ch;
+}
+:lang(zh-CN) .matrix-table .cell-note { font-family: var(--font); font-size: .72rem; max-width: 8em; }
 .yes { color: var(--t-backup); font-weight: 700; }
 .no  { color: var(--text-muted); }
 .matrix-table img { display: inline-block; vertical-align: middle; height: 20px; width: auto; margin-right: .5em; }
