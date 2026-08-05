@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Meta Quest 版 CloudDrive VR — 云端影院、360 视频与原生 DSD</title>
-  <meta name="description" content="Meta Quest 上的 CloudDrive VR：在头显里管理全部云盘，把云端的电影直接投进虚拟影院。最高 8K 硬解、蓝光与 DVD ISO 直读、360 与 VR180、透视 VR，以及 DSD1024 原生输出。">
+  <meta name="description" content="Meta Quest 上的 CloudDrive VR：在头显里管理全部云盘，把云端的电影直接投进虚拟影院。最高 8K 硬解、蓝光与 DVD ISO 直读、360 与 VR180、透视 VR、AI 字幕翻译、Emby / Jellyfin 客户端，以及 DSD1024 原生输出。">
   <link rel="canonical" href="https://www.clouddrive2.com/apps/quest.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/quest.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/quest.html">
@@ -71,7 +71,7 @@
           <h1>把云盘搬进头显</h1>
           <p class="hero-lede">
             在 Quest 里浏览你的全部网盘，把云端的片子直接投进虚拟影院。
-            最高 8K 硬件解码、蓝光与 DVD ISO 直读、360 与 VR180，还有到 DSD1024 的原生输出——
+            最高 8K 硬件解码、蓝光与 DVD ISO 直读、360 与 VR180、AI 字幕翻译，还有到 DSD1024 的原生输出——
             都不用先下载到头显里。
           </p>
           <div class="btn-row">
@@ -83,6 +83,7 @@
             <li><span class="chip chip-video">360 · VR180 · 鱼眼</span></li>
             <li><span class="chip chip-disc">蓝光 ISO 直读</span></li>
             <li><span class="chip chip-audio">DSD1024 原生</span></li>
+            <li><span class="chip chip-subs">AI 字幕</span></li>
             <li><span class="chip chip-cloud">完整 CloudDrive2</span></li>
           </ul>
         </div>
@@ -156,7 +157,7 @@
           </div></li>
         </ul>
 
-        <p class="chip-note">杜比视界需要 Quest 3、Quest 3S 或 Quest Pro；Quest 2 的硬件不支持杜比视界。</p>
+        <p class="chip-note">杜比视界需要 Quest 3、Quest 3S 或 Quest Pro；Quest 2 的硬件不支持杜比视界。Profile 7 的碟片带两层画面，两层都会读，但双层输出需要设备本身支持，在头显上以单层杜比视界呈现。</p>
 
         <div class="feature-row">
           <div class="feature-text">
@@ -167,7 +168,9 @@
                以及带 Alpha 混合、压缩 Alpha（DeoVR）和色度键抠像的透视 VR。</p>
             <p>打开文件时会先读视频元数据判断投影类型，读不到就按文件名做启发式匹配。
                认错了随时手动改。</p>
+            <p>播放 VR 视频时，字幕会自动跟随画面的景深，眼睛不必在文字和画面之间反复对焦。平面视频没有景深可跟，字幕就停在屏幕平面上。</p>
             <ul class="chips">
+              <li><span class="chip chip-subs">字幕跟随景深</span></li>
               <li><span class="chip chip-video">360 单目 / 立体</span></li>
               <li><span class="chip chip-video">VR180 半 SBS / 半 OU</span></li>
               <li><span class="chip chip-video">鱼眼自动 FOV</span></li>
@@ -200,7 +203,8 @@
             <h3>发烧级音频，一路到 DSD1024</h3>
             <p>FLAC、ALAC、APE、DSD（DSF/DFF）、SACD ISO、WAV、AIFF、MP3、AAC、OGG
                等格式直接从云端播放。接上 USB 解码器可以做比特完美输出，
-               DSD over PCM（DoP）和原生 DSD 两种模式都在，DSD64 到 DSD1024 原生播放，不转成 PCM。</p>
+               DSD over PCM（DoP）和原生 DSD 两种模式都在，DSD64 到 DSD1024 原生播放。</p>
+            <p class="chip-note">DSD64 到 DSD1024 都支持。DoP 与原生 DSD 实际能走到哪一档，取决于所连解码器的能力——应用按解码器自己声明的规格输出，它接不了的档位会转成 PCM。</p>
             <p>无缝播放、ReplayGain 与 CUE 分轨都支持。影院模式下，
                5.1 / 7.1 内容会转成带头部追踪的空间音频——转头时声场跟着银幕走。</p>
             <ul class="chips">
@@ -216,6 +220,29 @@
                  alt="CloudDrive VR 的音频播放器设置面板：DSD 输出模式为「自动」、重采样为「自动」，下面依次是首选采样率、无缝播放、ReplayGain 和自动续播等开关。">
           </figure>
         </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>AI 字幕翻译</h3>
+            <p>为任何视频生成翻译字幕：优先翻译已有字幕轨（包括经 OCR 识别的 PGS 图形字幕），没有字幕时才回退到语音识别。生成的字幕会保存在视频旁边，在头显里做过一次，手机和 Mac 上也能直接用。</p>
+            <p class="chip-note">Quest 上建议自带翻译 API，效果最好——头显里没有可供回退的系统翻译模型。</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">自带 API</span></li>
+              <li><span class="chip chip-subs">PGS OCR</span></li>
+              <li><span class="chip chip-subs">生成后可复用</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>几个 GB 的 PDF，几秒钟打开</h3>
+            <p>流式 PDF 阅读器不会把整本书拉下来，只读当前这几页真正需要的那一段字节。几个 GB 的大画册，通常从点开到看见第一页只要几秒——不用等下载，本地也不留完整副本。</p>
+            <p>阅读器和其他面板一样，大小和距离都随你摆。翻页、缩放、按目录跳转都是按需取数据，并有页面缩略图、书签和阅读位置记忆。</p>
+            <ul class="chips">
+              <li><span class="chip">按需取页</span></li>
+              <li><span class="chip">不下载整本</span></li>
+              <li><span class="chip">书签与阅读位置</span></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -227,14 +254,29 @@
         </header>
         <ul class="card-grid">
           <li><div class="card">
+            <i class="fa-solid fa-photo-film card-icon" aria-hidden="true"></i>
+            <h3>Emby / Jellyfin 客户端</h3>
+            <p>连上自己的 Emby 或 Jellyfin 服务器，在头显里直接浏览媒体库，海报、演员、继续观看都在。只要 CloudDrive 能访问到同一个文件，就用 Direct Stream 从云端原画质播放——包括服务器转不动的格式——观看记录照常同步。</p>
+          </div></li>
+          <li><div class="card">
             <i class="fa-solid fa-arrow-up-right-from-square card-icon" aria-hidden="true"></i>
-            <h3>当 Jellyfin / Emby 的外部播放器</h3>
-            <p>通过 Android 的 Intent 接口与 Jellyfin、Emby 等媒体服务器对接，在它们的客户端里直接调起 CloudDrive VR 播放。续播位置会同步回服务器，远程的蓝光 ISO 流也能自动识别。</p>
+            <h3>也能被其他应用调起</h3>
+            <p>CloudDrive VR 同时通过 Android 的 Intent 接口注册，Jellyfin、Emby 等媒体服务器的客户端可以直接调它来播放。续播位置会同步回服务器，远程的蓝光 ISO 流也能自动识别。</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-gamepad card-icon" aria-hidden="true"></i>
             <h3>手柄与手势</h3>
             <p>手柄和手势追踪都能操作界面。摇杆拖动进度带指数加速，同时显示缩略图预览，找一个镜头不用来回试。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
+            <h3>传输与备份</h3>
+            <p>云盘之间复制、移动文件，传输可暂停可续传。自动备份任务按计划运行，整个文件夹递归上传——头显在你看片的时候把这些活儿接着干完。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>安全</h3>
+            <p>两步验证、加密文件夹与登录会话监控，API 令牌可限定权限范围并设置有效期。</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
@@ -279,6 +321,11 @@
              App Pro 绑定的是你的 CloudDrive 账号，不是设备也不是商店——
              在 iPhone、Mac 或 Android 上买过，戴上头显登录同一个账号，这些功能就已经是解锁状态。
              详见<a href="/pricing.html">会员与价格</a>。</p>
+        </div>
+        <div class="note">
+          <span class="note-title">关于这些功能</span>
+          <p>本页写的是应用当前的功能。CloudDrive2 仍在持续开发，云服务商与各平台的限制也在变，所以功能可能调整，也可能在不另行通知的情况下移除。</p>
+          <p>欢迎提功能需求、报 bug——下一个版本做什么，很大程度上就是这么定的。可以写信到 <a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a>，或者加入 <a href="https://t.me/cloudnaschat" rel="noopener">Telegram 群</a>。</p>
         </div>
       </div>
     </section>

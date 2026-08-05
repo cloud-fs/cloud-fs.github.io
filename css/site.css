@@ -218,6 +218,9 @@ a.chip:hover { border-color: currentColor; }
 /* a note explaining the table above it should run to the table's width,
    not stop at the reading measure */
 .table-scroll ~ .chip-note { max-width: none; }
+/* the pull-up above is tuned for a chips list, which carries its own bottom
+   margin. a card grid has none, so the note lands inside the last card. */
+.card-grid + .chip-note { margin-top: var(--s5); }
 
 /* ── buttons ──────────────────────────────────────────────────────────── */
 .btn {
@@ -429,6 +432,11 @@ a.card:hover {
 @media (min-width: 880px) {
   .feature-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: var(--s8); }
   .feature-row:nth-of-type(even) > figure { order: -1; }
+  /* some claims have no screenshot that shows them. such a row keeps the
+     rhythm of the others but drops the split, rather than filling the gap
+     with a picture of something else. */
+  .feature-row-solo { grid-template-columns: minmax(0, 1fr); }
+  .feature-row-solo .feature-text { max-width: 74ch; }
 }
 
 /* ── prose sections (features/help/legal-style content) ───────────────── */
