@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudDrive2 for Windows — clouds as a drive letter, cinema-grade playback</title>
+  <meta name="description" content="CloudDrive2 on Windows: every cloud in one native window, mounted as a drive letter in File Explorer with full NTFS semantics and security descriptors, streaming Blu-ray ISOs, true Dolby Vision and DSD1024, with an Emby/Jellyfin client and AI subtitle translation.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/apps/windows.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/windows.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/windows.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/windows.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="CloudDrive2 for Windows">
+  <meta property="og:description" content="Every cloud in one Windows app. Mount them as a drive letter, and stream Blu-ray ISOs, true Dolby Vision and DSD1024.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/apps/windows.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Windows",
+    "url": "https://www.clouddrive2.com/en/apps/windows.html",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "Multi-cloud management, drive-letter mounting and cinema-grade playback on Windows."
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img src="/img/clouddrive-h.svg" alt="CloudDrive2" width="150" height="46"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/" aria-current="page">Apps</a></li>
+        <li><a href="/en/features.html">Features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/apps/windows.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Windows · x64 and Arm64</p>
+          <h1>Every cloud, one Windows app</h1>
+          <p class="hero-lede">
+            Mount your clouds as a drive letter in File Explorer and every program on the machine treats
+            them like an internal disk — or stay in the app to watch and listen: Blu-ray disc menus,
+            true Dolby Vision, DSD up to DSD1024, and gigabyte PDFs opened straight from the cloud.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/en/download.html">Download for Windows</a>
+            <a class="btn btn-ghost" href="/en/pricing.html">What App Pro unlocks</a>
+          </div>
+          <ul class="chips">
+            <li><span class="chip chip-cloud">Mounts as a drive</span></li>
+            <li><span class="chip chip-video">True Dolby Vision P7</span></li>
+            <li><span class="chip chip-disc">HDMV + BD-J menus</span></li>
+            <li><span class="chip chip-audio">DSD1024 · DoP</span></li>
+            <li><span class="chip chip-subs">On-device AI subtitles</span></li>
+          </ul>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/windows-dashboard.webp" width="1600" height="964" decoding="async"
+               alt="The CloudDrive2 dashboard on Windows: total storage across 14 connected clouds, with quick access to files, clouds, mounts, backups, tasks, WebDAV, tokens and media.">
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="cloud-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Clouds</p>
+          <h2 id="cloud-h">Every cloud in one place</h2>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>One window for every account</h3>
+            <p>OneDrive, Google Drive, Aliyun Drive, Baidu Pan, 115, 123 Pan, Tianyi Cloud, Xunlei Cloud
+               and GuangYa Pan, plus S3, WebDAV, SFTP, FTP, SMB and local folders — all connected in one
+               place. List, grid and columns views, sorting, filtering and search, uploads and downloads,
+               copy, move, rename and new folder: every one of them works across clouds rather than
+               inside a single one.</p>
+            <p>The properties panel opens beside the list: type, modified and created times, path, which
+               cloud a file lives on and how much space it takes.</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Cross-cloud search</span></li>
+              <li><span class="chip chip-cloud">Properties inspector</span></li>
+              <li><span class="chip chip-cloud">Four view modes</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-files_inspector.webp" width="1600" height="964" loading="lazy" decoding="async"
+                 alt="The file browser on Windows: navigation for dashboard, files, media, cloud storages, mounts, tasks, backups, WebDAV and API tokens on the left, a file list in the middle, and a properties panel showing type, times, path and space usage.">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="mount" aria-labelledby="mount-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Local mounting</p>
+          <h2 id="mount-h">Give it a drive letter and let Windows do the rest</h2>
+          <p>Pick a free letter and it is mounted in seconds. From then on the cloud is just a drive —
+             File Explorer, a video editor, Office, Emby, Plex, anything reads it directly.</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>In This PC, it is a local disk</h3>
+            <p>Mount to a drive letter or into an empty folder, mount automatically at startup, or mount
+               read-only. Several clouds can be merged into one directory tree, or each given its own
+               drive.</p>
+            <p>What you get is a real file system, not a read-only mirror: security descriptors are
+               supported in full, so ACLs read and write normally, and writes are genuinely random —
+               changing a stretch in the middle of a file does not mean pulling the whole thing down
+               first. Those attributes are persisted locally, so it does not matter that the cloud cannot
+               store them.</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Windows security descriptors</span></li>
+              <li><span class="chip chip-cloud">Random writes</span></li>
+              <li><span class="chip chip-cloud">Mount at startup</span></li>
+            </ul>
+            <p><a class="arrow-link" href="/en/features.html#local-mount">How local mounting works</a></p>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-add_mount.webp" width="1600" height="964" loading="lazy" decoding="async"
+                 alt="The Add Mount Point dialog: display name, the cloud folder to mount, and the mount point G:/, with auto-mount and read-only switches below.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>However Windows sees a disk, it sees this</h3>
+            <p>Once mounted, the drive appears in This PC, and its properties sheet reports capacity and
+               used space like any local disk. Command scripts, backup software and older programs that
+               insist on a real path all carry on working.</p>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-explorer_mount.webp" width="1600" height="1132" loading="lazy" decoding="async"
+                 alt="CloudDrive2 (G:) in Windows File Explorer under This PC, with the properties dialog showing type Local Disk, file system NTFS, and petabyte-scale capacity and used space.">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark" aria-labelledby="media-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Media</p>
+          <h2 id="media-h">Cinema-grade playback, straight from the cloud</h2>
+          <p>No dragging a forty-gigabyte disc image back down first. The player reads from the cloud as
+             it goes, with decoding, menus, audio tracks and subtitles all intact.</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>The built-in player and Blu-ray ISOs</h3>
+            <p>Hardware-accelerated decoding for H.264, H.265/HEVC and AV1, with HDR10, HDR10+ and Dolby
+               Vision — including true Dolby Vision playback of Profile 7 Blu-ray content. Blu-ray and DVD
+               ISO images play without extraction, and both HDMV and BD-J (Java) disc menus work, with
+               scene selection, coloured shortcut keys and in-menu audio and subtitle setup.</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">HDR10 · HDR10+ · DV</span></li>
+              <li><span class="chip chip-video">4K · 8K · AV1</span></li>
+              <li><span class="chip chip-disc">HDMV + BD-J menus</span></li>
+              <li><span class="chip chip-disc">Blu-ray / DVD ISO</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-player_hdr10.webp" width="1600" height="939" loading="lazy" decoding="async"
+                 alt="A 4K HDR10 video playing full screen, with HDR10, 4K and HEVC badges in the top corner and the transport controls along the bottom.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>AI subtitles, recognised on this machine</h3>
+            <p>Generate translated subtitles for any video: an existing subtitle track is translated where
+               there is one, and speech recognition fills in where there is not. The recognition model is
+               downloaded and runs on your own machine rather than sending audio away, and you can plug in
+               your own API instead. Generated subtitles are saved next to the video, ready to reuse on
+               your other devices.</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">On-device recognition</span></li>
+              <li><span class="chip chip-subs">Subtitles saved alongside</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-ai_subtitles.webp" width="1600" height="964" loading="lazy" decoding="async"
+                 alt="The Live Translation settings page: an AI subtitles switch, spoken and target language pickers, translation source, and where speech recognition runs with its model download state.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Audiophile-grade audio</h3>
+            <p>DSD files (.dsf, .dff) and SACD ISO images stream straight from the cloud, up to DSD1024,
+               with both DoP and native DSD output, and multichannel DSD in true 5.1. TrueHD, DTS-HD
+               Master Audio and DTS decode in full, and multichannel is never folded down to stereo.</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">DSD1024</span></li>
+              <li><span class="chip chip-audio">DoP · native DSD</span></li>
+              <li><span class="chip chip-audio">SACD ISO</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-audio_dsd1024.webp" width="667" height="1200" loading="lazy" decoding="async"
+                 alt="The audio player, with DSD1024 and DoP badges under the album artwork and the current track and position below.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Gigabyte PDFs, open in seconds</h3>
+            <p>The streaming PDF reader does not pull the whole book down. It reads only the stretch of
+               the file the current pages need, so a several-gigabyte, several-thousand-page volume takes
+               a few seconds from tapping it in the cloud to seeing the first page — with no complete
+               copy left on your disk.</p>
+            <p>Paging, zooming and jumping through the outline all fetch on demand. Page thumbnails,
+               outline navigation, bookmarks and remembering where you stopped are all there.</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">Reads on demand</span></li>
+              <li><span class="chip chip-audio">Outline and thumbnails</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-pdf_reader.webp" width="1400" height="1055" loading="lazy" decoding="async"
+                 alt="The streaming PDF reader with a 3.31 GB document open in two-page spread view, the scrubber showing page 4038 of 5892.">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="more-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">More</p>
+          <h2 id="more-h">The rest of what you'll use daily</h2>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-clapperboard card-icon" aria-hidden="true"></i>
+            <h3>Emby and Jellyfin client</h3>
+            <p>Connect your own Emby or Jellyfin server, with posters, cast and Continue Watching. When this machine's CloudDrive can reach the same file, Direct Stream plays it straight from the cloud, bypassing the server transcoder, and your watch history still syncs back.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
+            <h3>Transfers and backup</h3>
+            <p>Copy or move files between any connected providers, with a transfer manager that supports pause, resume, retry, throttling and concurrency control. Backup jobs support schedules, file system monitoring and several destinations at once.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>A WebDAV server of its own</h3>
+            <p>This Windows machine is itself a WebDAV server: every cloud you have connected is served
+               over a standard protocol, so third-party apps on the same network — players, file managers,
+               backup tools — read your cloud content directly without signing in to each provider
+               again.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-globe card-icon" aria-hidden="true"></i>
+            <h3>Browser console</h3>
+            <p>The core also serves a web console. Open <code>http://localhost:19798</code> in a browser
+               to manage it, or reach it from another machine on your network.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>Security</h3>
+            <p>Two-factor authentication, encrypted folders, scoped API tokens and session monitoring protect your data.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-sliders card-icon" aria-hidden="true"></i>
+            <h3>And these</h3>
+            <p>A disk cache with configurable eviction, gallery and image viewing, tray residency and start at login, dark and light themes, English and Chinese interfaces, and native builds for x64 and Arm64.</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="get-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Getting it</p>
+          <h2 id="get-h">Installing</h2>
+          <p>Download the installer from this site and follow the prompts. What mounting needs is included
+             in the installer; there is nothing to prepare separately.</p>
+        </header>
+
+        <ul class="store-badges">
+          <li><a class="store-badge" href="/en/download.html">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows installer</b><span>x64 · Arm64</span></span>
+          </a></li>
+        </ul>
+
+        <div class="note">
+          <span class="note-title">The same features as the Mac direct download</span>
+          <p>The Windows build and the macOS build downloaded from this site carry the same feature set:
+             cloud management, local mounting, media playback, AI subtitles, WebDAV and backup. The Mac
+             App Store build is sandboxed and has no local mounting; see
+             <a href="/en/apps/macos.html">CloudDrive2 for macOS</a> for what differs.</p>
+        </div>
+
+        <div class="note">
+          <span class="note-title">About App Pro</span>
+          <p>Browsing clouds, managing files, transfers, backup and basic playback need no extra purchase.
+             The advanced playback features — HDR and Dolby Vision, DSD, ISO disc playback (Blu-ray, DVD
+             and SACD), AI subtitle translation and the media client (Emby and Jellyfin) — need the
+             one-time <strong>App Pro</strong> in-app purchase.</p>
+          <p>App Pro is tied to your CloudDrive account, not to a device or a store. Buy it once and it is
+             unlocked wherever you sign in with that account — Windows, Apple devices, Android and Meta
+             Quest alike. See <a href="/en/pricing.html">plans and pricing</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-tight" aria-labelledby="other-h">
+      <div class="container">
+        <h2 id="other-h" class="eyebrow strip-title">Other platforms</h2>
+        <ul class="platform-strip">
+          <li><a href="/en/apps/ios.html"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone · iPad</a></li>
+          <li><a href="/en/apps/macos.html"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</a></li>
+          <li><a href="/en/apps/tvos.html"><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV</a></li>
+          <li><a href="/en/apps/visionos.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Vision Pro</a></li>
+          <li><a href="/en/apps/android.html"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</a></li>
+          <li><a href="/en/apps/quest.html"><i class="fa-brands fa-meta" aria-hidden="true"></i>Meta Quest</a></li>
+          <li><a href="/en/apps/desktop.html"><i class="fa-solid fa-server" aria-hidden="true"></i>Linux · NAS</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/img/clouddrive-h.svg" alt="" width="130" height="40">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/apps/windows.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

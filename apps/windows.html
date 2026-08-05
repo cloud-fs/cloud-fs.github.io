@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Windows 版 CloudDrive2 — 云盘挂成盘符与影院级播放</title>
+  <meta name="description" content="Windows 上的 CloudDrive2：把所有云盘汇聚到一个原生窗口，挂载成资源管理器里的盘符（完整 NTFS 语义与安全描述符），串流蓝光原盘、真·杜比视界与 DSD1024，还有 Emby / Jellyfin 客户端与 AI 字幕翻译。">
+  <link rel="canonical" href="https://www.clouddrive2.com/apps/windows.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/windows.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/windows.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/windows.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Windows 版 CloudDrive2">
+  <meta property="og:description" content="所有云盘，一款 Windows 应用。挂成资源管理器里的盘符，串流蓝光原盘、真·杜比视界与 DSD1024。">
+  <meta property="og:url" content="https://www.clouddrive2.com/apps/windows.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Windows",
+    "url": "https://www.clouddrive2.com/apps/windows.html",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "Windows 上的多云盘管理、本地盘符挂载与影院级影音播放。"
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img src="/img/clouddrive-h.svg" alt="CloudDrive2" width="150" height="46"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/" aria-current="page">应用</a></li>
+        <li><a href="/features.html">功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/apps/windows.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Windows · x64 与 Arm64</p>
+          <h1>所有云盘，一款 Windows 应用</h1>
+          <p class="hero-lede">
+            把云盘挂成资源管理器里的一个盘符，任何程序都能像用本地硬盘一样用它；
+            也可以留在应用里看片听歌——蓝光原盘菜单、真·杜比视界、最高 DSD1024，
+            GB 级 PDF 直接从云端打开。
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/download.html">下载 Windows 版</a>
+            <a class="btn btn-ghost" href="/pricing.html">App Pro 说明</a>
+          </div>
+          <ul class="chips">
+            <li><span class="chip chip-cloud">挂成盘符</span></li>
+            <li><span class="chip chip-video">真·杜比视界 P7</span></li>
+            <li><span class="chip chip-disc">HDMV + BD-J 菜单</span></li>
+            <li><span class="chip chip-audio">DSD1024 · DoP</span></li>
+            <li><span class="chip chip-subs">本机 AI 字幕</span></li>
+          </ul>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/windows-dashboard.webp" width="1600" height="964" decoding="async"
+               alt="Windows 上的 CloudDrive2 仪表盘：跨 14 个已连接云盘的总容量卡片，下方是文件、云存储、挂载点、备份、任务、WebDAV、令牌、影视等快捷入口。">
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="cloud-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">云盘</p>
+          <h2 id="cloud-h">统一云盘管理</h2>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>一站式连接所有云账号</h3>
+            <p>OneDrive、Google Drive、阿里云盘、百度网盘、115、123云盘、天翼云盘、迅雷云盘、光鸭云盘，
+               以及 S3、WebDAV、SFTP、FTP、SMB 与本机文件夹，全部连到一处。
+               跨云盘的列表、网格、分栏视图，排序、筛选与搜索，上传下载、复制移动、重命名与新建，
+               都是跨云盘操作，而不只是在单个云盘内。</p>
+            <p>属性面板随时展开：类型、修改与创建时间、路径、所属云盘与空间占用一目了然。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">跨云搜索</span></li>
+              <li><span class="chip chip-cloud">属性检查器</span></li>
+              <li><span class="chip chip-cloud">四种视图</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-files_inspector.webp" width="1600" height="964" loading="lazy" decoding="async"
+                 alt="Windows 版的文件浏览界面：左侧是仪表盘、文件、媒体、云存储、挂载点、任务、备份、WebDAV、API 令牌等导航，中间是文件列表，右侧属性面板显示类型、时间、路径与空间占用。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="mount" aria-labelledby="mount-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">本地挂载</p>
+          <h2 id="mount-h">挂成一个盘符，剩下的交给 Windows</h2>
+          <p>选一个没用过的盘符，几秒钟就挂好。之后云盘在系统里就是一块盘——
+             资源管理器、剪辑软件、Office、Emby、Plex，谁都能直接读。</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>在「此电脑」里，它就是一块本地磁盘</h3>
+            <p>挂载点可以是盘符，也可以是某个空文件夹；开机自动挂载，也可以设成只读。
+               多个云盘可以合并挂载成一棵目录树，也可以各挂各的。</p>
+            <p>挂出来的是完整的文件系统，不是只读镜像：安全描述符完整支持，ACL 照常读写；
+               写入是真正的随机写，改文件中间的一段不必先把整份下载回本地。
+               这些属性持久化在本机，云盘存不下也不影响。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Windows 安全描述符</span></li>
+              <li><span class="chip chip-cloud">随机写入</span></li>
+              <li><span class="chip chip-cloud">开机自动挂载</span></li>
+            </ul>
+            <p><a class="arrow-link" href="/features.html#local-mount">本地挂载的完整说明</a></p>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-add_mount.webp" width="1600" height="964" loading="lazy" decoding="async"
+                 alt="「添加挂载点」对话框：填写显示名称、要挂载的云端目录，以及挂载点盘符 G:/，下方是开机自动挂载与只读开关。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>系统怎么看它，就怎么用它</h3>
+            <p>挂好之后，这块盘出现在「此电脑」里，右键属性能看到容量与已用空间，
+               和任何一块本地磁盘没有区别。命令行、批处理、备份软件、
+               需要真实路径的老程序，全都能照常工作。</p>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-explorer_mount.webp" width="1600" height="1132" loading="lazy" decoding="async"
+                 alt="Windows 资源管理器的「此电脑」中出现 CloudDrive2 (G:)，属性对话框显示类型为本地磁盘、文件系统 NTFS，以及 PB 级的容量与已用空间。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark" aria-labelledby="media-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">影音</p>
+          <h2 id="media-h">影院级播放，直接从云端</h2>
+          <p>不用先把几十 GB 的原盘拖回本地。播放器直接从云端读取，解码、菜单、音轨、字幕一样不少。</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>内置播放器与蓝光原盘</h3>
+            <p>硬件加速解码 H.264、H.265/HEVC、AV1，支持 HDR10、HDR10+ 与杜比视界，
+               包括 Profile 7 蓝光内容的真·杜比视界播放。蓝光与 DVD 的 ISO 镜像不解压直接播，
+               HDMV 与 BD-J（Java）两种光碟菜单都能用：场景选择、彩色快捷键、
+               菜单内音轨与字幕设置一应俱全。</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">HDR10 · HDR10+ · DV</span></li>
+              <li><span class="chip chip-video">4K · 8K · AV1</span></li>
+              <li><span class="chip chip-disc">HDMV + BD-J 菜单</span></li>
+              <li><span class="chip chip-disc">蓝光 / DVD ISO</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-player_hdr10.webp" width="1600" height="939" loading="lazy" decoding="async"
+                 alt="全屏播放中的 4K HDR10 视频，右上角显示 HDR10、4K 与 HEVC 标记，底部是进度条与播放控制。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>AI 字幕翻译，识别在本机跑</h3>
+            <p>为任何视频生成翻译字幕：有字幕轨就优先翻译已有字幕，没有就回退到语音识别。
+               语音识别模型下载到本机运行，不必把音频交给云端；也可以接入你自己的 API。
+               生成的字幕保存在视频旁边，换台设备就能直接复用。</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">本机语音识别</span></li>
+              <li><span class="chip chip-subs">字幕存档复用</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-ai_subtitles.webp" width="1600" height="964" loading="lazy" decoding="async"
+                 alt="设置里的「实时翻译」页：AI 字幕开关、源语言与目标语言选择、翻译来源，以及语音识别的运行位置与模型下载状态。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>发烧级音频</h3>
+            <p>DSD 文件（.dsf、.dff）与 SACD ISO 直接从云端播放，最高 DSD1024，
+               DoP 与原生 DSD 输出都支持，多声道 DSD 也能以真 5.1 播出。
+               TrueHD、DTS-HD Master Audio 与 DTS 完整解码，多声道不会被折叠成立体声。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">DSD1024</span></li>
+              <li><span class="chip chip-audio">DoP · 原生 DSD</span></li>
+              <li><span class="chip chip-audio">SACD ISO</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-audio_dsd1024.webp" width="667" height="1200" loading="lazy" decoding="async"
+                 alt="音频播放界面：专辑封面下方标注 DSD1024 与 DoP，显示当前曲目与播放进度。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>几 GB 的 PDF，几秒钟打开</h3>
+            <p>流式 PDF 阅读器不把整本书拖下来。它只读文件里当前这几页所需的那一段，
+               所以一本几个 GB、几千页的大部头，从云端点开到看见第一页，通常只要几秒——
+               本地不留完整副本，也不占硬盘。</p>
+            <p>翻页、缩放、跳转目录都是按需取数据。页面缩略图、大纲导航、书签，
+               以及记住你读到哪一页，一应俱全。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">按需读取</span></li>
+              <li><span class="chip chip-audio">大纲与缩略图</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-pdf_reader.webp" width="1400" height="1055" loading="lazy" decoding="async"
+                 alt="流式 PDF 阅读器打开一本 3.31 GB 的文档，双页对开显示，底部进度条显示当前在第 4038 页、全书共 5892 页。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="more-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">更多</p>
+          <h2 id="more-h">日常会用到的其余部分</h2>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-clapperboard card-icon" aria-hidden="true"></i>
+            <h3>Emby / Jellyfin 客户端</h3>
+            <p>连接你自己的 Emby 或 Jellyfin 服务器，海报墙、演职人员、继续观看一应俱全。本机 CloudDrive 能访问同一文件时，「直连串流」直接从云端拉流，绕过服务器转码，观看记录仍与服务器同步。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
+            <h3>跨云传输与自动备份</h3>
+            <p>在任意已连接的服务商之间复制或移动文件，传输管理器支持暂停、恢复、重试、限速与并发控制。备份任务支持定时计划、文件系统监控与多目标冗余。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>自带 WebDAV 服务器</h3>
+            <p>这台 Windows 本身就是一台 WebDAV 服务器：所有已连接的云盘以标准协议对外提供，
+               同一网络下的第三方应用——播放器、文件管理器、备份工具——直接连上来就能读到云端内容，
+               不必再各自登录一遍云盘。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-globe card-icon" aria-hidden="true"></i>
+            <h3>浏览器管理界面</h3>
+            <p>核心同时提供网页控制台，浏览器打开 <code>http://localhost:19798</code> 就能管理，
+               从局域网里的另一台机器访问也可以。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>安全</h3>
+            <p>两步验证、加密文件夹、细粒度权限的 API 令牌与活动会话监控守护你的数据。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-sliders card-icon" aria-hidden="true"></i>
+            <h3>还有这些</h3>
+            <p>可配置淘汰策略的磁盘缓存、图库与图片查看、托盘常驻与开机自启、深色与浅色主题、中英文界面，以及 x64 与 Arm64 的原生版本。</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="get-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">获取</p>
+          <h2 id="get-h">如何安装</h2>
+          <p>从官网下载安装包，按提示装完即可。挂载所需的组件包含在安装包里，不用另外准备。</p>
+        </header>
+
+        <ul class="store-badges">
+          <li><a class="store-badge" href="/download.html">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows 安装包</b><span>x64 · Arm64</span></span>
+          </a></li>
+        </ul>
+
+        <div class="note">
+          <span class="note-title">和 Mac 直接下载版功能一致</span>
+          <p>Windows 版与 macOS 官网直接下载版是同一套功能：云盘管理、本地挂载、
+             影音播放、AI 字幕、WebDAV 与备份都在。Mac App Store 版受沙盒限制没有本地挂载，
+             两版差异见 <a href="/apps/macos.html">macOS 版</a>。</p>
+        </div>
+
+        <div class="note">
+          <span class="note-title">关于 App Pro</span>
+          <p>浏览云盘、管理文件、传输与备份、基础播放都不需要额外购买。
+             HDR 与杜比视界、DSD、ISO 光盘播放（蓝光 / DVD / SACD）、AI 字幕翻译，
+             以及媒体客户端（Emby / Jellyfin）这几项进阶播放功能，
+             需要一次性的 <strong>App Pro</strong> 内购。</p>
+          <p>App Pro 绑定的是你的 CloudDrive 账号，不是设备也不是商店。买过一次，
+             在任何平台上登录同一账号都已解锁——Windows、Apple 设备、Android 与 Meta Quest 一视同仁。
+             详见<a href="/pricing.html">会员与价格</a>。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-tight" aria-labelledby="other-h">
+      <div class="container">
+        <h2 id="other-h" class="eyebrow strip-title">其他平台</h2>
+        <ul class="platform-strip">
+          <li><a href="/apps/ios.html"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone · iPad</a></li>
+          <li><a href="/apps/macos.html"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</a></li>
+          <li><a href="/apps/tvos.html"><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV</a></li>
+          <li><a href="/apps/visionos.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Vision Pro</a></li>
+          <li><a href="/apps/android.html"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</a></li>
+          <li><a href="/apps/quest.html"><i class="fa-brands fa-meta" aria-hidden="true"></i>Meta Quest</a></li>
+          <li><a href="/apps/desktop.html"><i class="fa-solid fa-server" aria-hidden="true"></i>Linux · NAS</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="/img/clouddrive-h.svg" alt="" width="130" height="40">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/apps/windows.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
