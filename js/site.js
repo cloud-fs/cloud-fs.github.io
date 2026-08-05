@@ -30,15 +30,22 @@
   if (themeBtn) {
     themeBtn.addEventListener('click', function () {
       var root = document.documentElement;
-      var current = root.getAttribute('data-theme');
-      if (!current) {
-        current = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
+      var current = root.getAttribute('data-theme') || 'light';
       var next = current === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', next);
       try { localStorage.setItem('cd2-theme', next); } catch (e) {}
     });
   }
+
+  /* ── remember a deliberate language choice ──────────────────────────── */
+  /* Only the two home pages auto-redirect on browser language, and only
+     until someone picks a language for themselves. After that, their pick
+     wins on every visit. */
+  Array.prototype.forEach.call(document.querySelectorAll('a[hreflang]'), function (link) {
+    link.addEventListener('click', function () {
+      try { localStorage.setItem('cd2-lang', link.getAttribute('hreflang')); } catch (e) {}
+    });
+  });
 
   /* ── copy buttons on code blocks ────────────────────────────────────── */
   /* Injected rather than authored into the markup, so a page without

@@ -20,7 +20,7 @@
   <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
   <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
   <link rel="stylesheet" href="/css/site.css">
-  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t;if(!localStorage.getItem("cd2-lang")&&!/^zh/i.test(navigator.language||""))location.replace("/en/")}catch(e){}</script>
   <script src="/js/site.js" defer></script>
   <script type="application/ld+json">
   {
