@@ -98,6 +98,18 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/quest.html"/>
   </url>
   <url>
+    <loc>https://www.clouddrive2.com/apps/windows.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/windows.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/windows.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/windows.html"/>
+  </url>
+  <url>
+    <loc>https://www.clouddrive2.com/en/apps/windows.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/windows.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/windows.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/windows.html"/>
+  </url>
+  <url>
     <loc>https://www.clouddrive2.com/apps/desktop.html</loc>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/desktop.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/desktop.html"/>
