@@ -560,6 +560,7 @@ a.card:hover {
 .promo h2 { font-size: clamp(1.35rem, 1.1rem + 1.3vw, 2rem); margin-bottom: var(--s4); }
 .promo p { color: var(--text); }
 .promo .btn-row { margin-top: var(--s5); margin-bottom: 0; }
+.pill,
 .promo-deadline {
   display: inline-flex; align-items: center; gap: .5em;
   padding: .45em .8em; margin-bottom: var(--s4);
@@ -567,6 +568,7 @@ a.card:hover {
   background: var(--brand); color: var(--on-brand);
   font: 600 .76rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase;
 }
+:lang(zh-CN) .pill,
 :lang(zh-CN) .promo-deadline { font-family: var(--font); letter-spacing: .04em; text-transform: none; }
 .price-list .fa-gift { color: var(--brand); }
 
