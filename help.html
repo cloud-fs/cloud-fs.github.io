@@ -58,8 +58,7 @@
           <p class="eyebrow">用户手册</p>
           <h1>装好，然后连上第一个云盘</h1>
           <p class="hero-lede">
-            从装到你的电脑、NAS 或手机上，到注册、添加云存储，再到把云盘以 WebDAV 分享出去。
-            按你用的系统选一节看即可。
+            从装到你的电脑、NAS 或手机上，到注册、添加云存储，再到把云盘以 WebDAV 分享出去。按你用的系统选一节看即可。
           </p>
           <ul class="chips">
             <li><a class="chip chip-cloud" href="#install">安装与运行</a></li>
@@ -89,8 +88,7 @@
             <p class="port-url">http://&lt;主机 IP&gt;:19798</p>
           </div>
           <p>CloudDrive2 的管理界面跑在这个端口上——无论装在 Windows、Linux、macOS、Android
-             还是 Docker 里都一样。装在本机就用 <code>http://localhost:19798</code>。
-             建议使用最新版的 Edge、Chrome、Safari 或 Firefox，<strong>不支持 Internet Explorer</strong>。</p>
+             还是 Docker 里都一样。装在本机就用 <code>http://localhost:19798</code>。建议使用最新版的 Edge、Chrome、Safari 或 Firefox，<strong>不支持 Internet Explorer</strong>。</p>
         </div>
       </div>
     </section>
@@ -100,8 +98,7 @@
         <header class="band-head">
           <p class="eyebrow">安装与运行</p>
           <h2 id="install-h">按系统选一节</h2>
-          <p>这一节讲的是把核心装成后台服务：电脑、NAS 或路由器都行。手机、电视和头显上的应用自带同一套核心，
-             从各自的商店安装，见下面的「安装应用」。</p>
+          <p>这一节讲的是把核心装成后台服务：电脑、NAS 或路由器都行。手机、电视和头显上的应用自带同一套核心，从各自的商店安装，见下面的「安装应用」。</p>
         </header>
 
         <details class="acc">
@@ -120,12 +117,8 @@
           <summary><i class="fa-brands fa-linux" aria-hidden="true"></i>Linux 通用</summary>
           <div class="acc-body">
             <ol>
-              <li>确认内核支持 FUSE。看一下 <code>/dev/fuse</code> 这个设备是否存在即可；
-                  内核不支持 FUSE 就无法把云盘挂载到本地目录。</li>
-              <li>如果打算用非 root 用户运行 CloudDrive2，请按所用发行版的手册安装 fuse3，
-                  装好后确认 <code>fusermount3</code> 命令可以运行，
-                  并编辑 <code>/etc/fuse.conf</code>，把 <code>user_allow_other</code> 这一行前面的
-                  注释符 <code>#</code> 删掉。</li>
+              <li>确认内核支持 FUSE。看一下 <code>/dev/fuse</code> 这个设备是否存在即可；内核不支持 FUSE 就无法把云盘挂载到本地目录。</li>
+              <li>如果打算用非 root 用户运行 CloudDrive2，请按所用发行版的手册安装 fuse3，装好后确认 <code>fusermount3</code> 命令可以运行，并编辑 <code>/etc/fuse.conf</code>，把 <code>user_allow_other</code> 这一行前面的注释符 <code>#</code> 删掉。</li>
               <li>到官网下载对应 CPU 架构的压缩包。</li>
               <li>打开终端，进入压缩包所在的目录。</li>
               <li>展开压缩包：
@@ -134,8 +127,7 @@
               <li>进入展开后的目录并运行：
                 <div class="code-block"><pre><code>./clouddrive</code></pre></div>
               </li>
-              <li>可以把 clouddrive 加入开机自启动，或者注册成系统服务。
-                  具体做法请参考所用发行版的文档。</li>
+              <li>可以把 clouddrive 加入开机自启动，或者注册成系统服务。具体做法请参考所用发行版的文档。</li>
             </ol>
           </div>
         </details>
@@ -184,8 +176,7 @@ id -u username
 id -g username</code></pre></div>
               </li>
               <li>AUR 包预设的本地磁盘挂载位置：<code>/media/clouddrive</code>。</li>
-              <li>AUR 包预设的 WebDAV 挂载位置：<code>/media/clouddrive-dav</code>，
-                  这个功能依赖 <code>davfs2</code> 包。</li>
+              <li>AUR 包预设的 WebDAV 挂载位置：<code>/media/clouddrive-dav</code>，这个功能依赖 <code>davfs2</code> 包。</li>
               <li>把 WebDAV 的用户名和密码写进 <code>/etc/davfs2/secrets</code>，例如：
                 <div class="code-block"><pre><code>cat &lt;&lt; EOF | sudo tee -a /etc/davfs2/secrets
 # personal webdav, application password
@@ -208,8 +199,7 @@ EOF</code></pre></div>
             <h4>用 Homebrew 安装（推荐）</h4>
             <ol>
               <li>先确认系统里装好了 <a href="https://brew.sh/" rel="noopener">Homebrew</a>。</li>
-              <li>运行前必须安装 <a href="https://osxfuse.github.io/" rel="noopener">macFUSE</a>，
-                  并按提示在「系统设置」里给它授权。也可以用 Homebrew 装：
+              <li>运行前必须安装 <a href="https://osxfuse.github.io/" rel="noopener">macFUSE</a>，并按提示在「系统设置」里给它授权。也可以用 Homebrew 装：
                 <div class="code-block"><pre><code>brew install --cask macfuse</code></pre></div>
               </li>
               <li>安装 CloudDrive2：
@@ -239,8 +229,7 @@ brew services start clouddrive2</code></pre></div>
 
             <h4>手动安装</h4>
             <ol>
-              <li>运行前必须安装 <a href="https://osxfuse.github.io/" rel="noopener">macFUSE</a>，
-                  并按提示正确授权。</li>
+              <li>运行前必须安装 <a href="https://osxfuse.github.io/" rel="noopener">macFUSE</a>，并按提示正确授权。</li>
               <li>到官网下载对应 CPU 架构的压缩包。</li>
               <li>打开终端，进入压缩包所在的目录。</li>
               <li>展开压缩包：
@@ -270,8 +259,7 @@ brew services start clouddrive2</code></pre></div>
         <details class="acc">
           <summary><i class="fa-brands fa-docker" aria-hidden="true"></i>Docker、NAS 与群晖/威联通</summary>
           <div class="acc-body">
-            <p>在 NAS 或服务器上用容器跑，镜像是 <code>cloudnas/clouddrive2</code>。
-               启动前需要先在宿主机上打开共享挂载，完整步骤和可直接复制的启动配置见
+            <p>在 NAS 或服务器上用容器跑，镜像是 <code>cloudnas/clouddrive2</code>。启动前需要先在宿主机上打开共享挂载，完整步骤和可直接复制的启动配置见
                <a href="/docker.html">Docker 部署指南</a>。</p>
             <p>飞牛 fnOS 的 fpk 安装包、群晖与威联通的第三方套件，都在<a href="/download.html">下载页</a>。</p>
           </div>
@@ -290,18 +278,15 @@ brew services start clouddrive2</code></pre></div>
         <ol class="steps">
           <li id="account">
             <h3>注册</h3>
-            <p>第一次运行 CloudDrive2 后，点击右上角的「注册」按钮，填入邮箱地址和密码。
-               系统会往这个邮箱发一封验证邮件，按邮件里的提示完成验证；验证成功后会自动跳转到登录页面。</p>
+            <p>第一次运行 CloudDrive2 后，点击右上角的「注册」按钮，填入邮箱地址和密码。系统会往这个邮箱发一封验证邮件，按邮件里的提示完成验证；验证成功后会自动跳转到登录页面。</p>
           </li>
           <li>
             <h3>登录</h3>
-            <p>点击右上角的「登录」按钮，填入同一组邮箱地址和密码。
-               账号已经通过验证的话，就会跳转到 CloudDrive2 的主页。</p>
+            <p>点击右上角的「登录」按钮，填入同一组邮箱地址和密码。账号已经通过验证的话，就会跳转到 CloudDrive2 的主页。</p>
           </li>
           <li id="add-cloud">
             <h3>添加云存储</h3>
-            <p>选择「添加云存储」，在列表里选择你的云存储服务商，填入账号信息后按「确定」。
-               系统会验证这个账号，验证通过后，该云存储就会出现在 CloudDrive2 里。</p>
+            <p>选择「添加云存储」，在列表里选择你的云存储服务商，填入账号信息后按「确定」。系统会验证这个账号，验证通过后，该云存储就会出现在 CloudDrive2 里。</p>
           </li>
         </ol>
       </div>
@@ -324,8 +309,7 @@ brew services start clouddrive2</code></pre></div>
             </ol>
             <div class="note note-danger">
               <span class="note-title">删除操作不可撤销</span>
-              <p>在 CloudDrive2 里删除文件，删的就是云存储上的真实文件。
-                 一旦删除，可能无法恢复，请先确认再动手。</p>
+              <p>在 CloudDrive2 里删除文件，删的就是云存储上的真实文件。一旦删除，可能无法恢复，请先确认再动手。</p>
             </div>
           </div>
         </details>
@@ -333,12 +317,10 @@ brew services start clouddrive2</code></pre></div>
         <details class="acc" id="webdav">
           <summary><i class="fa-solid fa-server" aria-hidden="true"></i>WebDAV 服务</summary>
           <div class="acc-body">
-            <p>CloudDrive2 会把所有已连接的云盘再以一个 WebDAV 服务对外提供，
-               任何支持 WebDAV 的软件都能连上来。</p>
+            <p>CloudDrive2 会把所有已连接的云盘再以一个 WebDAV 服务对外提供，任何支持 WebDAV 的软件都能连上来。</p>
             <ul>
               <li><strong>服务器地址：</strong><code>http://&lt;ip&gt;:19798/dav</code></li>
-              <li><strong>用户名：</strong>登录 CloudDrive2 的邮箱；
-                  也可以只填邮箱的用户名部分，即 <code>@</code> 之前的那一段。</li>
+              <li><strong>用户名：</strong>登录 CloudDrive2 的邮箱；也可以只填邮箱的用户名部分，即 <code>@</code> 之前的那一段。</li>
               <li><strong>密码：</strong>登录 CloudDrive2 的密码。</li>
             </ul>
             <p><a class="arrow-link" href="/features.html#webdav">WebDAV 的完整说明</a></p>
@@ -348,12 +330,10 @@ brew services start clouddrive2</code></pre></div>
         <details class="acc" id="password">
           <summary><i class="fa-solid fa-key" aria-hidden="true"></i>忘记密码</summary>
           <div class="acc-body">
-            <p>存在云端的用户信息是用你的本地密码加密的，我们不保存你的密码。
-               忘记密码时，可以在登录界面点击「重置」按钮，按提示重置。</p>
+            <p>存在云端的用户信息是用你的本地密码加密的，我们不保存你的密码。忘记密码时，可以在登录界面点击「重置」按钮，按提示重置。</p>
             <div class="note note-warn">
               <span class="note-title">重置会清空云端账号信息</span>
-              <p>重置会清空你保存在云端的云存储账号信息并重置密码，重置后需要重新添加云存储。
-                 会员计划不受影响。</p>
+              <p>重置会清空你保存在云端的云存储账号信息并重置密码，重置后需要重新添加云存储。会员计划不受影响。</p>
             </div>
           </div>
         </details>
@@ -377,8 +357,7 @@ brew services start clouddrive2</code></pre></div>
             <span><b>Google Play</b><span>已上架</span></span>
           </a></li>
         </ul>
-        <p>想知道每个平台各能做什么，看<a href="/apps/">全部应用</a>；
-           要拿安装包和各架构的压缩包，看<a href="/download.html">下载页</a>。</p>
+        <p>想知道每个平台各能做什么，看<a href="/apps/">全部应用</a>；要拿安装包和各架构的压缩包，看<a href="/download.html">下载页</a>。</p>
       </div>
     </section>
 

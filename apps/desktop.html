@@ -69,10 +69,7 @@
         <p class="eyebrow">Windows · Linux · NAS · Docker</p>
         <h1>装在常开的那台机器上</h1>
         <p class="hero-lede">
-          在这里，CloudDrive2 的核心以后台服务的形式运行：连接你全部的云盘账户，把它们挂成本地磁盘，
-          提供一个浏览器管理界面，同时自己就是一台 WebDAV 服务器。
-          手机、电视和头显上的应用自带同一套核心，各自独立可用；
-          需要时也可以把这台当成一个云盘连过来。
+          在这里，CloudDrive2 的核心以后台服务的形式运行：连接你全部的云盘账户，把它们挂成本地磁盘，提供一个浏览器管理界面，同时自己就是一台 WebDAV 服务器。手机、电视和头显上的应用自带同一套核心，各自独立可用；需要时也可以把这台当成一个云盘连过来。
         </p>
         <div class="btn-row">
           <a class="btn btn-primary" href="/download.html">下载核心服务</a>
@@ -101,14 +98,9 @@
 
         <div class="split">
           <div>
-            <p>多个云盘可以合并挂载成一棵统一的目录树，也可以各挂各的盘符；
-               只挂某个云盘下的某个目录同样可以。读取采用多线程下载，
-               带宽跟得上的时候，体验和本地盘相差不大。</p>
-            <p>写入是真正的随机写：改文件中间的一段，不必先把整个文件下载回本地——CloudDrive2 从云端
-               取未改动的片段，接上你写进去的部分，直接拼成新文件上传。
-               每个目录的元数据缓存时长可以单独设置，在数据时效性和请求频度之间自己拿捏。</p>
-            <p>挂出来的也是一个完整的文件系统：Linux 与 macOS 上是完整 POSIX 语义，权限位、
-               所有者与用户组、时间戳和扩展属性（xattr）一样不少；Windows 上完整支持安全描述符，
+            <p>多个云盘可以合并挂载成一棵统一的目录树，也可以各挂各的盘符；只挂某个云盘下的某个目录同样可以。读取采用多线程下载，带宽跟得上的时候，体验和本地盘相差不大。</p>
+            <p>写入是真正的随机写：改文件中间的一段，不必先把整个文件下载回本地——CloudDrive2 从云端取未改动的片段，接上你写进去的部分，直接拼成新文件上传。每个目录的元数据缓存时长可以单独设置，在数据时效性和请求频度之间自己拿捏。</p>
+            <p>挂出来的也是一个完整的文件系统：Linux 与 macOS 上是完整 POSIX 语义，权限位、所有者与用户组、时间戳和扩展属性（xattr）一样不少；Windows 上完整支持安全描述符，
                ACL 照常读写。这些属性持久化在本地，云盘存不下也不影响。</p>
             <ul class="chips">
               <li><span class="chip chip-cloud">多线程读取</span></li>
@@ -132,8 +124,7 @@
                 <i class="fa-solid fa-bell" aria-hidden="true"></i>
                 <div>
                   <b>文件变更通知</b>
-                  <p>挂载盘上的增删改会产生系统级通知，Emby、Jellyfin、Plex 的媒体库监控照常工作。
-                     通过 Web 界面、WebDAV 或离线下载产生的变化同样会通知。</p>
+                  <p>挂载盘上的增删改会产生系统级通知，Emby、Jellyfin、Plex 的媒体库监控照常工作。通过 Web 界面、WebDAV 或离线下载产生的变化同样会通知。</p>
                 </div>
               </li>
               <li>
@@ -147,8 +138,7 @@
                 <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
                 <div>
                   <b>加密文件夹</b>
-                  <p>在任意云盘或本地目录里创建加密文件夹，文件名用 AES、内容用 chacha20-poly1305 加密，
-                     密码只留在本机。解锁之后用起来和普通文件夹一样。</p>
+                  <p>在任意云盘或本地目录里创建加密文件夹，文件名用 AES、内容用 chacha20-poly1305 加密，密码只留在本机。解锁之后用起来和普通文件夹一样。</p>
                 </div>
               </li>
             </ul>
@@ -209,8 +199,7 @@ http://&lt;主机 IP&gt;:19798          # 局域网里的其它设备</code></pr
           <div>
             <p>Web 界面是这台服务的唯一控制台：Windows 上双击桌面快捷方式打开的是它，
                NAS 和 Docker 上没有图形界面，用的也是它。</p>
-            <p>手机、平板、电视和头显上的 CloudDrive2 应用连接的是同一个服务，
-               在哪一端改的设置，另一端都能看到。</p>
+            <p>手机、平板、电视和头显上的 CloudDrive2 应用连接的是同一个服务，在哪一端改的设置，另一端都能看到。</p>
             <p class="chip-note">建议使用较新版本的 Edge、Chrome、Safari 或 Firefox。不支持 IE。</p>
             <p><a class="arrow-link" href="/features.html#unified-web-management">统一的多云盘管理</a></p>
           </div>
@@ -224,8 +213,7 @@ http://&lt;主机 IP&gt;:19798          # 局域网里的其它设备</code></pr
           <p class="eyebrow">WebDAV</p>
           <h2 id="dav-h">自己就是一台 WebDAV 服务器</h2>
           <p>CloudDrive2 把聚合后的云盘再以 WebDAV 的形式提供出去。
-             Windows 的「映射网络驱动器」、macOS 的「连接服务器」、Office、剪辑软件、
-             电视盒子上的播放器——任何支持 WebDAV 的客户端都能直接连。</p>
+             Windows 的「映射网络驱动器」、macOS 的「连接服务器」、Office、剪辑软件、电视盒子上的播放器——任何支持 WebDAV 的客户端都能直接连。</p>
         </header>
 
         <pre><code>服务器地址   http://&lt;主机 IP&gt;:19798/dav
@@ -258,8 +246,7 @@ http://&lt;主机 IP&gt;:19798          # 局域网里的其它设备</code></pr
             <i class="fa-solid fa-users" aria-hidden="true"></i>
             <div>
               <b>独立 WebDAV 用户</b>
-              <p>可以创建任意多个独立用户，每个用户单独设置根目录和只读权限，给家人和同事分别开一份。
-                 这是会员功能，详见<a href="/pricing.html">会员与价格</a>。</p>
+              <p>可以创建任意多个独立用户，每个用户单独设置根目录和只读权限，给家人和同事分别开一份。这是会员功能，详见<a href="/pricing.html">会员与价格</a>。</p>
             </div>
           </li>
         </ul>
@@ -273,8 +260,7 @@ http://&lt;主机 IP&gt;:19798          # 局域网里的其它设备</code></pr
         <header class="band-head">
           <p class="eyebrow">Docker · NAS</p>
           <h2 id="docker-h">在 NAS 上常驻</h2>
-          <p>官方镜像是 <code>cloudnas/clouddrive2</code>，提供 amd64、arm64 和 armv7 三种架构。
-             跑起来之后，浏览器打开 <code>http://&lt;主机 IP&gt;:19798</code> 就能配置。</p>
+          <p>官方镜像是 <code>cloudnas/clouddrive2</code>，提供 amd64、arm64 和 armv7 三种架构。跑起来之后，浏览器打开 <code>http://&lt;主机 IP&gt;:19798</code> 就能配置。</p>
         </header>
 
         <p>容器里的挂载需要能传回宿主机，所以宿主机必须开启共享挂载（shared mount）——
@@ -322,9 +308,7 @@ sudo systemctl restart docker.service</code></pre>
         <div class="split">
           <div>
             <h3>现成的 NAS 装法</h3>
-            <p>群晖 Synology 和威联通 QNAP 有第三方套件，Unraid 有社区模板，
-               飞牛 fnOS 可以下载对应架构的 fpk 包手动安装。
-               任何能跑 Docker 的 NAS，也都可以直接用上面的镜像。</p>
+            <p>群晖 Synology 和威联通 QNAP 有第三方套件，Unraid 有社区模板，飞牛 fnOS 可以下载对应架构的 fpk 包手动安装。任何能跑 Docker 的 NAS，也都可以直接用上面的镜像。</p>
             <ul class="chips">
               <li><span class="chip">Synology</span></li>
               <li><span class="chip">QNAP</span></li>
@@ -353,8 +337,7 @@ sudo systemctl restart docker.service</code></pre>
         <header class="band-head">
           <p class="eyebrow">无头 Linux</p>
           <h2 id="linux-h">没有桌面的机器一样能装</h2>
-          <p>服务本身不需要图形界面。下载对应架构的压缩包，展开，运行，
-             然后从任意一台机器的浏览器连过去就行。</p>
+          <p>服务本身不需要图形界面。下载对应架构的压缩包，展开，运行，然后从任意一台机器的浏览器连过去就行。</p>
         </header>
 
         <pre><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz
@@ -366,16 +349,14 @@ cd clouddrive-2-linux-$ARCH-$VERSION
             <i class="fa-solid fa-microchip" aria-hidden="true"></i>
             <div>
               <b>先确认内核支持 FUSE</b>
-              <p>看看 <code>/dev/fuse</code> 在不在。不支持 FUSE 的内核无法挂载本地目录，
-                 但 Web 界面、备份和 WebDAV 服务仍然可用。</p>
+              <p>看看 <code>/dev/fuse</code> 在不在。不支持 FUSE 的内核无法挂载本地目录，但 Web 界面、备份和 WebDAV 服务仍然可用。</p>
             </div>
           </li>
           <li>
             <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
             <div>
               <b>以非 root 用户运行</b>
-              <p>按发行版的方式装好 fuse3，确认 <code>fusermount3</code> 能跑，
-                 再编辑 <code>/etc/fuse.conf</code>，把 <code>user_allow_other</code> 前面的 <code>#</code> 删掉。</p>
+              <p>按发行版的方式装好 fuse3，确认 <code>fusermount3</code> 能跑，再编辑 <code>/etc/fuse.conf</code>，把 <code>user_allow_other</code> 前面的 <code>#</code> 删掉。</p>
             </div>
           </li>
           <li>
@@ -389,9 +370,7 @@ cd clouddrive-2-linux-$ARCH-$VERSION
             <i class="fa-brands fa-linux" aria-hidden="true"></i>
             <div>
               <b>Arch Linux</b>
-              <p>有现成的 AUR 包：<code>yay -Syu clouddrive</code>，
-                 然后 <code>systemctl enable --now clouddrive.service</code> 起服务，
-                 也可以用 <code>--user</code> 以用户身份运行。</p>
+              <p>有现成的 AUR 包：<code>yay -Syu clouddrive</code>，然后 <code>systemctl enable --now clouddrive.service</code> 起服务，也可以用 <code>--user</code> 以用户身份运行。</p>
             </div>
           </li>
         </ul>
@@ -475,12 +454,9 @@ cd clouddrive-2-linux-$ARCH-$VERSION
         </ul>
         <div class="note">
           <span class="note-title">装好之后</span>
-          <p>用浏览器打开 <code>http://&lt;主机 IP&gt;:19798</code> 注册或登录，
-             然后添加云盘账户、设置挂载点。逐平台的安装步骤见<a href="/help.html">帮助与安装</a>，
+          <p>用浏览器打开 <code>http://&lt;主机 IP&gt;:19798</code> 注册或登录，然后添加云盘账户、设置挂载点。逐平台的安装步骤见<a href="/help.html">帮助与安装</a>，
              Docker 的完整参数见 <a href="/docker.html">Docker 部署指南</a>。</p>
-          <p>挂载云盘、Web 界面和 WebDAV 基础服务不需要付费。
-             跨云盘快速复制、多云盘备份、文件变更通知、加密文件系统、应用级权限控制
-             和独立 WebDAV 用户属于会员功能，详见<a href="/pricing.html">会员与价格</a>。</p>
+          <p>挂载云盘、Web 界面和 WebDAV 基础服务不需要付费。跨云盘快速复制、多云盘备份、文件变更通知、加密文件系统、应用级权限控制和独立 WebDAV 用户属于会员功能，详见<a href="/pricing.html">会员与价格</a>。</p>
         </div>
         <div class="note">
           <span class="note-title">关于这些功能</span>

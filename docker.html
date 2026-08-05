@@ -57,9 +57,7 @@
         <p class="eyebrow">部署指南</p>
         <h1>在 Docker 里跑 CloudDrive2</h1>
         <p class="hero-lede">
-          镜像是 <code>cloudnas/clouddrive2</code>。容器里的挂载要能在宿主机上看见，
-          启动之前需要先把共享挂载传播打开——这一页从头到尾就是这件事，
-          以及一份可以直接复制的启动配置。
+          镜像是 <code>cloudnas/clouddrive2</code>。容器里的挂载要能在宿主机上看见，启动之前需要先把共享挂载传播打开——这一页从头到尾就是这件事，以及一份可以直接复制的启动配置。
         </p>
         <div class="btn-row">
           <a class="btn btn-primary" href="https://hub.docker.com/r/cloudnas/clouddrive2" rel="noopener">Docker Hub 镜像</a>
@@ -92,8 +90,7 @@
 
         <div class="note note-warn">
           <span class="note-title">镜像拉不到最新版本时</span>
-          <p>如果遇到 Docker 镜像无法更新到最新版本的情况，请尝试禁止使用 Docker 镜像服务器（加速器），
-             改为直接从官方源拉取。</p>
+          <p>如果遇到 Docker 镜像无法更新到最新版本的情况，请尝试禁止使用 Docker 镜像服务器（加速器），改为直接从官方源拉取。</p>
         </div>
       </div>
     </section>
@@ -108,8 +105,7 @@
 
         <p>CloudDrive 用 fuse3 挂载云存储。在 Docker 容器里使用 fuse3 时，需要在宿主机上启用共享挂载——
            可以在 Docker 服务配置里设置 <code>MountFlags</code>，也可以在宿主机上执行
-           <code>mount --make-shared</code>。这是因为 fuse3 需要共享挂载才能正常工作，
-           没有共享挂载时挂载会失败并显示「权限被拒绝」的错误。启用共享挂载之后，
+           <code>mount --make-shared</code>。这是因为 fuse3 需要共享挂载才能正常工作，没有共享挂载时挂载会失败并显示「权限被拒绝」的错误。启用共享挂载之后，
            fuse3 的挂载点就能在 Docker 容器和宿主机之间共享，云存储也就能被无缝访问。</p>
 
         <p>两个选项，按 Docker 的运行方式选一个即可。</p>
@@ -133,8 +129,7 @@ sudo systemctl restart docker.service</code></pre>
 
         <div class="note note-warn">
           <span class="note-title">选项 2 重启后会失效</span>
-          <p><code>mount --make-shared</code> 只在当前运行的系统中生效，重启后需要重新执行。
-             如需重启后自动运行 CloudDrive，请把这条命令加入系统启动项。</p>
+          <p><code>mount --make-shared</code> 只在当前运行的系统中生效，重启后需要重新执行。如需重启后自动运行 CloudDrive，请把这条命令加入系统启动项。</p>
         </div>
       </div>
     </section>
@@ -220,8 +215,7 @@ services:
             <h2 id="config-h">打开管理界面</h2>
             <p class="port-url">http://&lt;ip&gt;:19798</p>
           </div>
-          <p>容器跑起来之后，用浏览器访问宿主机的这个地址，就能注册账号、添加云存储、
-             设置挂载点。后面所有事情都在这个界面里完成，详见<a href="/help.html">帮助</a>。</p>
+          <p>容器跑起来之后，用浏览器访问宿主机的这个地址，就能注册账号、添加云存储、设置挂载点。后面所有事情都在这个界面里完成，详见<a href="/help.html">帮助</a>。</p>
         </div>
       </div>
     </section>
