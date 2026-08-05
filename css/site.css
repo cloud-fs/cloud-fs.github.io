@@ -76,37 +76,6 @@
   --shadow-m: 0 2px 6px rgb(0 0 0 / .45), 0 18px 50px rgb(0 0 0 / .5);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --brand: #4d9dff;
-    --brand-strong: #7cb8ff;
-    --brand-soft: #12233d;
-    --on-brand: #06111f;
-
-    --bg: #0b0e14;
-    --bg-alt: #10141c;
-    --surface: #151a23;
-    --surface-2: #1b212c;
-    --text: #eef1f6;
-    --text-muted: #a4adbb;
-    --border: #262d3a;
-    --border-strong: #37404f;
-
-    --t-video: #b294ea;
-    --t-audio: #dcb04a;
-    --t-subs: #4cc7d4;
-    --t-disc: #ee8090;
-    --t-backup: #4fca8c;
-    --t-cloud: #4d9dff;
-
-    --band-accent: #141a25;
-    --band-accent-glow: rgb(77 157 255 / .13);
-
-    --shadow-s: 0 1px 2px rgb(0 0 0 / .5);
-    --shadow-m: 0 2px 6px rgb(0 0 0 / .45), 0 18px 50px rgb(0 0 0 / .5);
-  }
-}
-
 /* ── base ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -287,9 +256,6 @@ a.chip:hover { border-color: currentColor; }
 .brand { display: inline-flex; align-items: center; flex: none; text-decoration: none; }
 .brand img { height: 30px; width: auto; }
 [data-theme="dark"] .brand img { filter: brightness(0) invert(1); }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .brand img { filter: brightness(0) invert(1); }
-}
 
 .nav-toggle {
   display: none; margin-left: auto;
@@ -569,7 +535,9 @@ a.card:hover {
 .promo p { color: var(--text); }
 .promo .btn-row { margin-top: var(--s5); margin-bottom: 0; }
 .pill,
-.promo-deadline {
+.promo-deadline,
+p.pill,
+p.promo-deadline {
   display: inline-flex; align-items: center; gap: .5em;
   padding: .45em .8em; margin-bottom: var(--s4);
   border-radius: var(--r-pill);
@@ -731,9 +699,6 @@ pre code { font-size: inherit; }
 .footer-top { display: flex; flex-wrap: wrap; gap: var(--s5) var(--s7); justify-content: space-between; }
 .footer-brand img { height: 26px; width: auto; margin-bottom: var(--s3); }
 [data-theme="dark"] .footer-brand img { filter: brightness(0) invert(1); }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .footer-brand img { filter: brightness(0) invert(1); }
-}
 .footer-brand p { color: var(--text-muted); font-size: .88rem; max-width: 30ch; margin: 0; }
 .footer-col h2 { font-size: .78rem; font-family: var(--mono); letter-spacing: .1em;
   text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--s3); font-weight: 600; }
