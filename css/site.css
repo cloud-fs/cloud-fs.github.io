@@ -496,6 +496,7 @@ a.card:hover {
 .yes { color: var(--t-backup); font-weight: 700; }
 .no  { color: var(--text-muted); }
 .matrix-table img { display: inline-block; vertical-align: middle; height: 20px; width: auto; margin-right: .5em; }
+.matrix-table th > i { display: inline-block; width: 20px; text-align: center; margin-right: .5em; color: var(--text-muted); }
 
 /* ── pricing ──────────────────────────────────────────────────────────── */
 .price-grid {
