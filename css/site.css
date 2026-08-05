@@ -146,7 +146,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
 .skip-link:focus { top: 0; color: var(--on-brand); }
 
 /* ── section bands ────────────────────────────────────────────────────── */
-.band { padding-block: clamp(3rem, 1.5rem + 6vw, 6rem); }
+.band { padding-block: clamp(2.5rem, 1.25rem + 4vw, 4.25rem); }
 .band-alt { background: var(--bg-alt); }
 .band-tight { padding-block: clamp(2rem, 1.2rem + 3vw, 3.25rem); }
 
@@ -168,17 +168,17 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
 /* eyebrow: latin gets tracked-out mono caps, CJK gets a bracketed mark
    (uppercase/tracking are meaningless in Chinese) */
 .eyebrow {
-  display: flex; align-items: center; gap: var(--s3);
-  font-family: var(--mono); font-size: .74rem; font-weight: 600;
+  display: flex; align-items: center; flex-wrap: wrap; gap: var(--s3);
+  font-family: var(--mono); font-size: .86rem; font-weight: 650;
   letter-spacing: .16em; text-transform: uppercase;
   color: var(--brand); margin: 0 0 var(--s3); max-width: none;
 }
 .eyebrow::before {
-  content: ""; width: 26px; height: 2px; background: currentColor; flex: none;
+  content: ""; width: 30px; height: 2px; background: currentColor; flex: none;
 }
 :lang(zh-CN) .eyebrow, .eyebrow:lang(zh-CN) {
   font-family: var(--font); letter-spacing: .04em; text-transform: none;
-  font-size: .84rem;
+  font-size: .95rem;
 }
 
 /* ── the signature: spec chips ────────────────────────────────────────── */
@@ -254,8 +254,14 @@ a.chip:hover { border-color: currentColor; }
 .site-nav { display: flex; align-items: center; gap: var(--s4); min-height: 62px; }
 
 .brand { display: inline-flex; align-items: center; flex: none; text-decoration: none; }
-.brand img { height: 30px; width: auto; }
-[data-theme="dark"] .brand img { filter: brightness(0) invert(1); }
+.brand img { height: 32px; width: auto; }
+
+/* two files rather than a filter: inverting the single logo flattened the mark
+   into a white disc, because the cloud glyph inside it is already white. the
+   dark file keeps the gradient mark and lifts only the wordmark. */
+.brand-mark-dark { display: none; }
+[data-theme="dark"] .brand-mark { display: none; }
+[data-theme="dark"] .brand-mark-dark { display: inline-block; }
 
 .nav-toggle {
   display: none; margin-left: auto;
@@ -301,8 +307,11 @@ a.chip:hover { border-color: currentColor; }
 /* ── hero ─────────────────────────────────────────────────────────────── */
 .hero {
   position: relative; overflow: hidden;
-  padding-block: clamp(3rem, 1.5rem + 7vw, 6.5rem);
+  padding-block: clamp(2.75rem, 1.25rem + 5vw, 4.25rem);
 }
+/* the hero's own padding sets the gap to the next band — a trailing paragraph
+   margin on top of it just reads as dead space */
+.hero .container > :last-child { margin-bottom: 0; }
 .hero h1 { margin-bottom: var(--s4); }
 .hero-lede {
   font-size: clamp(1.05rem, .98rem + .35vw, 1.22rem);
@@ -697,8 +706,7 @@ pre code { font-size: inherit; }
   font-size: .92rem;
 }
 .footer-top { display: flex; flex-wrap: wrap; gap: var(--s5) var(--s7); justify-content: space-between; }
-.footer-brand img { height: 26px; width: auto; margin-bottom: var(--s3); }
-[data-theme="dark"] .footer-brand img { filter: brightness(0) invert(1); }
+.footer-brand img { height: 28px; width: auto; margin-bottom: var(--s3); }
 .footer-brand p { color: var(--text-muted); font-size: .88rem; max-width: 30ch; margin: 0; }
 .footer-col h2 { font-size: .78rem; font-family: var(--mono); letter-spacing: .1em;
   text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--s3); font-weight: 600; }
