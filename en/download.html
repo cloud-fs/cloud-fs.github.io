@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Download CloudDrive2 — Windows, Linux, macOS, Android, NAS</title>
-  <meta name="description" content="Download CloudDrive2 for Windows, Linux, macOS, Android and fnOS, plus the Docker image and app-store links. Includes mirror downloads and the full changelog.">
+  <meta name="description" content="Download CloudDrive2: store links plus direct macOS and Android app builds, and the core service for Windows, Linux, macOS, Android and fnOS with the Docker image. Includes mirrors and the full changelog.">
   <link rel="canonical" href="https://www.clouddrive2.com/en/download.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/download.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/download.html">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CloudDrive2">
   <meta property="og:title" content="Download CloudDrive2">
-  <meta property="og:description" content="Installers for every platform, the Docker image, mirror downloads and the full changelog.">
+  <meta property="og:description" content="The app and the core service, released separately: store links, direct builds, installers for every platform, the Docker image and the full changelog.">
   <meta property="og:url" content="https://www.clouddrive2.com/en/download.html">
   <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -53,21 +53,32 @@
   <main id="main" data-release>
 
     <section class="hero">
-      <div class="container container-narrow">
+      <div class="container">
         <p class="eyebrow">Download</p>
         <h1>Install it wherever it belongs</h1>
         <p class="hero-lede">
-          The same core, installed two ways: as a background service on a computer, NAS or Docker host,
-          or as the app on a phone, tablet, TV or headset. Sign in with the same CloudDrive account.
+          The same core, installed two ways: as the app on a phone, tablet, TV or headset,
+          or as a background service on a computer, NAS or Docker host. Sign in with the same CloudDrive account.
         </p>
+        <ul class="chips">
+          <li><a class="chip chip-cloud" href="#apps">App stores</a></li>
+          <li><a class="chip chip-cloud" href="#app">Direct app downloads</a></li>
+          <li><a class="chip chip-cloud" href="#core">Core service packages</a></li>
+          <li><a class="chip" href="#mirrors">Cloud-drive mirrors</a></li>
+          <li><a class="chip" href="#nas">NAS and Docker</a></li>
+          <li><a class="chip" href="#plugin">Emby / Jellyfin plugin</a></li>
+          <li><a class="chip" href="#changelog">Changelog</a></li>
+        </ul>
       </div>
     </section>
 
-    <section class="band band-tight" aria-labelledby="stores-h">
+    <section class="band band-alt" id="apps" aria-labelledby="stores-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">App stores</p>
           <h2 id="stores-h">Phones, tablets, TVs and headsets</h2>
+          <p>Install from the store and sign in with the same CloudDrive account. Core membership and App Pro
+             both live on the account, so they follow you across devices and platforms.</p>
         </header>
         <ul class="store-badges">
           <li><span class="store-badge" aria-disabled="true">
@@ -82,23 +93,66 @@
             <i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>
             <span><b>Meta Horizon</b><span>Quest — in alpha</span></span>
           </span></li>
-          <li><a class="store-badge" href="https://hub.docker.com/r/cloudnas/clouddrive2" rel="noopener">
-            <i class="fa-brands fa-docker" aria-hidden="true"></i>
-            <span><b>Docker Hub</b><span>cloudnas/clouddrive2</span></span>
-          </a></li>
         </ul>
+        <p class="chip-note">What each platform can do, what it requires and what it looks like is on the
+           <a href="/en/apps/">apps pages</a>.</p>
       </div>
     </section>
 
-    <section class="band" aria-labelledby="direct-h">
+    <section class="band" id="app" aria-labelledby="app-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">The app</p>
+          <h2 id="app-h">Direct app downloads</h2>
+          <p>The app and the core service are separate packages, released separately and versioned separately.
+             These are the app builds that do not go through a store: a notarised dmg for macOS and a universal
+             APK for Android. Both check for their own updates in-app.</p>
+          <p class="release-line">Current release 1.0.12 (build 3) ·
+             <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/app-v1.0.12-3" rel="noopener">GitHub release</a></p>
+        </header>
+
+        <ul class="dl-grid">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.12-3/CloudDrive2-1.0.12-3-DeveloperID.dmg">
+            <i class="fa-brands fa-apple" aria-hidden="true"></i>
+            <span><b>macOS direct download</b><span>CloudDrive2-1.0.12-3-DeveloperID.dmg</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.12-3/CloudDrive2-1.0.12-321-android.apk">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android universal APK</b><span>CloudDrive2-1.0.12-321-android.apk</span></span>
+          </a></li>
+          <li><span class="dl-item" aria-disabled="true">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows</b><span>Not yet released</span></span>
+          </span></li>
+        </ul>
+
+        <div class="note">
+          <span class="note-title">What they need</span>
+          <p>macOS 12 or later, universal for Apple silicon and Intel. This build is notarised by Apple, so it
+             opens without a security warning, and it runs outside the sandbox — local mounting (which needs
+             <a href="https://macfuse.github.io" rel="noopener">macFUSE</a>), Blu-ray BD-J disc menus and USB
+             Native DSD exist only here. The full comparison is on the <a href="/en/apps/macos.html">macOS page</a>.</p>
+          <p>Android 7.0 or later, one package for phones, tablets and Android TV. The universal APK covers
+             arm64-v8a and armeabi-v7a (32-bit ARM); there is no x86_64 build.</p>
+        </div>
+
+        <p class="chip-note">iPhone, iPad, Apple TV, Vision Pro and Meta Quest install from their own stores —
+           see <a href="#apps">above</a>. On Windows you can run the <a href="#core">core service</a> today and
+           manage your clouds from a browser.</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="core" aria-labelledby="direct-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">The core service</p>
-          <h2 id="direct-h">Direct downloads</h2>
-          <p class="release-line">Current release: <span data-release-version>1.0.13</span> ·
+          <h2 id="direct-h">Core service packages</h2>
+          <p>The core service runs in the background on a computer, NAS or Android device, and does the actual
+             work: connecting clouds, mounting, cross-cloud copying, backup and WebDAV. Once it is installed, open
+             <code>http://&lt;host-ip&gt;:19798</code> in a browser to reach the management interface. Step-by-step
+             instructions are on the <a href="/en/help.html">help page</a>.</p>
+          <p class="release-line">Current release <span data-release-version>1.0.13</span> ·
              <a data-release-link href="https://github.com/cloud-fs/cloud-fs.github.io/releases/latest" rel="noopener">GitHub releases</a></p>
-          <p>Once it is installed, open <code>http://&lt;host-ip&gt;:19798</code> in a browser to reach the
-             management interface. Step-by-step instructions are on the <a href="/en/help.html">help page</a>.</p>
         </header>
 
         <h3>Windows</h3>
@@ -143,8 +197,10 @@
         </ul>
 
         <h3>Android</h3>
-        <p>Phones and tablets need the APK. The tgz archives run the core service on an Android device.
-           Local mounting on a phone requires root; browsing, playback, backup and WebDAV do not.</p>
+        <p>The APK here wraps the core service as an Android app, with its own web management interface; the tgz
+           archives run the core service inside an existing Android environment. The CloudDrive2 app with the
+           player is a different package, in the <a href="#app">section above</a>. Local mounting on a phone
+           requires root; browsing, playback, backup and WebDAV do not.</p>
         <ul class="dl-grid">
           <li><a class="dl-item" data-asset="android-apk" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-android-universal-1.0.13-219.apk">
             <i class="fa-brands fa-android" aria-hidden="true"></i>
@@ -179,7 +235,84 @@
       </div>
     </section>
 
-    <section class="band band-alt" aria-labelledby="plugin-h">
+
+    <section class="band" id="mirrors" aria-labelledby="mirror-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Mirrors</p>
+          <h2 id="mirror-h">Download from a cloud drive</h2>
+          <p>The same packages as above. Use these when GitHub is slow.</p>
+        </header>
+        <ul class="dl-grid">
+          <li><a class="dl-item" href="https://115cdn.com/s/swso4wr3zde?password=i9a4&amp;" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>115</b><span>Access code i9a4</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://www.123pan.com/s/adWkjv-nxz0h.html" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>123 Pan</b><span>No access code</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://pan.baidu.com/s/1KTDKYu4aCAH41TncNm5XEg?pwd=cdr2" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>Baidu Pan</b><span>Access code cdr2</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://www.aliyundrive.com/s/AHYFMyu8LTR/folder/64c93bd53de2f8fbd3aa41eeb8d0340583dd2425" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>Aliyun Drive</b><span>Windows build only, due to sharing limits</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://cloud.189.cn/web/share?code=jiM3aeUZFRja" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>Tianyi Cloud</b><span>Access code 1otn</span></span>
+          </a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="nas" aria-labelledby="nas-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">NAS and containers</p>
+          <h2 id="nas-h">Running it on a NAS</h2>
+          <p>A NAS runs the same core service, by either of two routes: pull the Docker image, or install the
+             package for its architecture from the list above.</p>
+        </header>
+        <ul class="card-grid">
+          <li><a class="card" href="/en/docker.html">
+            <i class="fa-brands fa-docker card-icon" aria-hidden="true"></i>
+            <h3>Docker deployment guide</h3>
+            <p>For mounts to be visible outside the container, shared mount propagation has to be configured first. The full compose setup and the common pitfalls are on that page.</p>
+          </a></li>
+          <li><a class="card" href="https://hub.docker.com/r/cloudnas/clouddrive2" rel="noopener">
+            <i class="fa-brands fa-docker card-icon" aria-hidden="true"></i>
+            <h3>Docker Hub image</h3>
+            <p><code>cloudnas/clouddrive2</code>, covering amd64, arm64 and armv7, published alongside every release.</p>
+          </a></li>
+          <li><a class="card" href="/en/apps/desktop.html">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>Synology, QNAP, Unraid, fnOS</h3>
+            <p>All the mainstream NAS platforms work, with packages for x86_64, arm64 and armv7.</p>
+          </a></li>
+        </ul>
+
+        <h3>Third-party NAS packages</h3>
+        <div class="note note-warn">
+          <span class="note-title">Please note</span>
+          <p>These NAS packages come from third parties. Judge them for yourself before downloading — we cannot vouch for their security or stability.</p>
+        </div>
+        <ul class="dl-grid">
+          <li><a class="dl-item" href="https://imnks.com/3653.html" rel="noopener">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>Synology package</b><span>DSM 6 and DSM 7</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://www.naslab.club/524.html" rel="noopener">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>QNAP package</b><span>Packaged by a third party</span></span>
+          </a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" id="plugin" aria-labelledby="plugin-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Plugin</p>
@@ -228,80 +361,12 @@
       </div>
     </section>
 
-    <section class="band" aria-labelledby="mirror-h">
-      <div class="container">
-        <header class="band-head">
-          <p class="eyebrow">Mirrors</p>
-          <h2 id="mirror-h">Download from a cloud drive</h2>
-          <p>When GitHub is slow, these cloud-drive mirrors carry the same files.</p>
-        </header>
-        <ul class="dl-grid">
-          <li><a class="dl-item" href="https://115cdn.com/s/swso4wr3zde?password=i9a4&amp;" rel="noopener">
-            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
-            <span><b>115</b><span>Access code i9a4</span></span>
-          </a></li>
-          <li><a class="dl-item" href="https://www.123pan.com/s/adWkjv-nxz0h.html" rel="noopener">
-            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
-            <span><b>123 Pan</b><span>No access code</span></span>
-          </a></li>
-          <li><a class="dl-item" href="https://pan.baidu.com/s/1KTDKYu4aCAH41TncNm5XEg?pwd=cdr2" rel="noopener">
-            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
-            <span><b>Baidu Pan</b><span>Access code cdr2</span></span>
-          </a></li>
-          <li><a class="dl-item" href="https://www.aliyundrive.com/s/AHYFMyu8LTR/folder/64c93bd53de2f8fbd3aa41eeb8d0340583dd2425" rel="noopener">
-            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
-            <span><b>Aliyun Drive</b><span>Windows build only, due to sharing limits</span></span>
-          </a></li>
-          <li><a class="dl-item" href="https://cloud.189.cn/web/share?code=jiM3aeUZFRja" rel="noopener">
-            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
-            <span><b>Tianyi Cloud</b><span>Access code 1otn</span></span>
-          </a></li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="band band-alt" aria-labelledby="nas-h">
-      <div class="container">
-        <header class="band-head">
-          <p class="eyebrow">NAS and containers</p>
-          <h2 id="nas-h">Running it on a NAS</h2>
-        </header>
-        <ul class="card-grid">
-          <li><a class="card" href="/en/docker.html">
-            <i class="fa-brands fa-docker card-icon" aria-hidden="true"></i>
-            <h3>Docker deployment</h3>
-            <p>The <code>cloudnas/clouddrive2</code> image covers amd64, arm64 and armv7. For mounts to be visible outside the container, shared mount propagation has to be configured first.</p>
-          </a></li>
-          <li><a class="card" href="/apps/desktop.html">
-            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
-            <h3>Synology, QNAP, Unraid, fnOS</h3>
-            <p>All the mainstream NAS platforms work, with packages for x86_64, arm64 and armv7.</p>
-          </a></li>
-        </ul>
-
-        <h3>Third-party NAS packages</h3>
-        <div class="note note-warn">
-          <span class="note-title">Please note</span>
-          <p>These NAS packages come from third parties. Judge them for yourself before downloading — we cannot vouch for their security or stability.</p>
-        </div>
-        <ul class="dl-grid">
-          <li><a class="dl-item" href="https://imnks.com/3653.html" rel="noopener">
-            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
-            <span><b>Synology package</b><span>DSM 6 and DSM 7</span></span>
-          </a></li>
-          <li><a class="dl-item" href="https://www.naslab.club/524.html" rel="noopener">
-            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
-            <span><b>QNAP package</b><span>Packaged by a third party</span></span>
-          </a></li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="band" aria-labelledby="log-h">
+    <section class="band band-alt" id="changelog" aria-labelledby="log-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Changelog</p>
           <h2 id="log-h">What changed in each release</h2>
+          <p>Release notes for the core service and the web interface, newest first.</p>
         </header>
       <details class="acc" open>
         <summary>1.0.13(Web3.0.13)</summary>
