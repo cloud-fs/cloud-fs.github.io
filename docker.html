@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Docker 部署指南 — CloudDrive2</title>
-  <meta name="description" content="在 Docker 中部署 CloudDrive2：支持的架构、fuse3 共享挂载的准备工作、Docker Compose 与 Docker CLI 的完整启动参数，以及装好之后如何进入管理界面。">
+  <meta name="description" content="在 Docker 中部署 CloudDrive2：支持的架构、如何确认宿主机的共享挂载传播（LibreELEC、CoreELEC、飞牛 fnOS 默认已开）、必要时如何开启，Docker Compose 与 Docker CLI 的完整启动参数，以及装好之后如何进入管理界面。">
   <link rel="canonical" href="https://www.clouddrive2.com/docker.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/docker.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/docker.html">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CloudDrive2">
   <meta property="og:title" content="Docker 部署指南 — CloudDrive2">
-  <meta property="og:description" content="镜像、架构、共享挂载传播的准备工作，以及 Docker Compose 与 CLI 的完整启动参数。">
+  <meta property="og:description" content="镜像、架构、共享挂载传播怎么查怎么开，以及 Docker Compose 与 CLI 的完整启动参数。">
   <meta property="og:url" content="https://www.clouddrive2.com/docker.html">
   <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -57,7 +57,7 @@
         <p class="eyebrow">部署指南</p>
         <h1>在 Docker 里跑 CloudDrive2</h1>
         <p class="hero-lede">
-          镜像是 <code>cloudnas/clouddrive2</code>。容器里的挂载要能在宿主机上看见，启动之前需要先把共享挂载传播打开——这一页从头到尾就是这件事，以及一份可以直接复制的启动配置。
+          镜像是 <code>cloudnas/clouddrive2</code>。容器里的挂载要能在宿主机上看见，宿主机的挂载传播得是 shared——很多系统默认就是，先查一下。这一页讲怎么查、必要时怎么开，以及一份可以直接复制的启动配置。
         </p>
         <div class="btn-row">
           <a class="btn btn-primary" href="https://hub.docker.com/r/cloudnas/clouddrive2" rel="noopener">Docker Hub 镜像</a>
@@ -99,15 +99,28 @@
       <div class="container container-narrow">
         <header class="band-head">
           <p class="eyebrow">运行前准备</p>
-          <h2 id="prep-h">先打开共享挂载</h2>
-          <p>这一步不能跳过。没有共享挂载，容器里的挂载会直接失败并报「权限被拒绝」。</p>
+          <h2 id="prep-h">先确认共享挂载是不是已经开着</h2>
+          <p>容器里的挂载要能在宿主机上看见，宿主机那个目录的挂载传播必须是 <code>shared</code>。不少系统出厂就是开着的，先查一遍再决定要不要动。</p>
         </header>
 
-        <p>CloudDrive 用 fuse3 挂载云存储。在 Docker 容器里使用 fuse3 时，需要在宿主机上启用共享挂载——
-           可以在 Docker 服务配置里设置 <code>MountFlags</code>，也可以在宿主机上执行
-           <code>mount --make-shared</code>。这是因为 fuse3 需要共享挂载才能正常工作，没有共享挂载时挂载会失败并显示「权限被拒绝」的错误。启用共享挂载之后，
-           fuse3 的挂载点就能在 Docker 容器和宿主机之间共享，云存储也就能被无缝访问。</p>
+        <p>CloudDrive 用 fuse3 挂载云存储。fuse3 要在 Docker 容器和宿主机之间共享挂载点，靠的就是这个传播属性；不是 <code>shared</code> 的话，容器里的挂载会直接失败并报「权限被拒绝」。</p>
 
+        <h3>先查</h3>
+        <p>把下面的路径换成你准备给容器用的那个目录：</p>
+        <div class="code-block">
+          <pre><code>findmnt -o TARGET,PROPAGATION /path/to/dir</code></pre>
+        </div>
+        <p><code>PROPAGATION</code> 那一列写着 <code>shared</code> 就说明已经开了，这一节可以整节跳过，直接看下面的启动配置。精简系统里没有 <code>findmnt</code> 的话，也可以直接看 <code>/proc</code>——输出里带 <code>shared:</code> 就是开着的：</p>
+        <div class="code-block">
+          <pre><code>grep ' / ' /proc/self/mountinfo</code></pre>
+        </div>
+
+        <div class="note">
+          <span class="note-title">这些系统默认就开着</span>
+          <p>据我们所知，<strong>LibreELEC</strong>、<strong>CoreELEC</strong> 和<strong>飞牛 fnOS</strong> 不需要再做这一步。查一下确认即可，别白改。</p>
+        </div>
+
+        <h3>没开的话怎么开</h3>
         <p>两个选项，按 Docker 的运行方式选一个即可。</p>
 
         <h3>选项 1 · Docker 以 systemd service 运行</h3>
@@ -122,7 +135,7 @@ sudo systemctl restart docker.service</code></pre>
         </div>
 
         <h3>选项 2 · Docker 不是以 systemd service 运行</h3>
-        <p>在宿主机上直接启用共享挂载选项：</p>
+        <p>在宿主机上直接启用共享挂载选项。<strong>把 <code>/path/to/dir</code> 换成你准备给容器用的那个目录</strong>——和上面查的是同一个；<code>df</code> 会找出它所在的挂载点，<code>mount --make-shared</code> 再把那个挂载点设为共享：</p>
         <div class="code-block">
           <pre><code>sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
         </div>

@@ -264,8 +264,7 @@ http://&lt;主机 IP&gt;:19798          # 局域网里的其它设备</code></pr
           <p>官方镜像是 <code>cloudnas/clouddrive2</code>，提供 amd64、arm64 和 armv7 三种架构。跑起来之后，浏览器打开 <code>http://&lt;主机 IP&gt;:19798</code> 就能配置。</p>
         </header>
 
-        <p>容器里的挂载需要能传回宿主机，所以宿主机必须开启共享挂载（shared mount）——
-           FUSE 依赖它，没有开会直接以「权限被拒绝」挂载失败。这是部署时最常见的坑。</p>
+        <p>容器里的挂载需要能传回宿主机，所以宿主机那个目录的挂载传播必须是共享的（shared mount）——FUSE 依赖它，不是共享的话会直接以「权限被拒绝」挂载失败。这是部署时最常见的坑，不过不少系统出厂就开着（LibreELEC、CoreELEC、飞牛 fnOS 都是），先查一下再动手。</p>
 
         <details class="acc">
           <summary>Docker Compose 配置</summary>
@@ -291,7 +290,7 @@ http://&lt;主机 IP&gt;:19798          # 局域网里的其它设备</code></pr
         </details>
 
         <details class="acc">
-          <summary>在宿主机上开启共享挂载</summary>
+          <summary>查一下，没开再开</summary>
           <div class="acc-body">
             <p>Docker 以 systemd 服务运行时，给它加一段 <code>MountFlags=shared</code>：</p>
 <pre><code>sudo mkdir -p /etc/systemd/system/docker.service.d/
@@ -300,7 +299,7 @@ sudo tee /etc/systemd/system/docker.service.d/clear_mount_propagation_flags.conf
 MountFlags=shared
 EOF
 sudo systemctl restart docker.service</code></pre>
-            <p>不是 systemd 服务的话，直接把目标目录所在的挂载点设为共享：</p>
+            <p>不是 systemd 服务的话，直接把目标目录所在的挂载点设为共享。把 <code>/path/to/dir</code> 换成你准备给容器用的那个目录：</p>
 <pre><code>sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
             <p class="chip-note">mount --make-shared 只在本次运行期间有效，重启后需要重新执行。要开机自动跑 CloudDrive，请把这条命令一并加进启动项。</p>
           </div>

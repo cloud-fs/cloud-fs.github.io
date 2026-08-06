@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Docker deployment guide — CloudDrive2</title>
-  <meta name="description" content="Run CloudDrive2 in Docker: supported architectures, the shared-mount propagation fuse3 needs, complete Docker Compose and Docker CLI configurations, and how to reach the web console once the container is up.">
+  <meta name="description" content="Run CloudDrive2 in Docker: supported architectures, how to check the host's shared mount propagation (LibreELEC, CoreELEC and fnOS already have it) and enable it if needed, complete Docker Compose and Docker CLI configurations, and how to reach the web console once the container is up.">
   <link rel="canonical" href="https://www.clouddrive2.com/en/docker.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/docker.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/docker.html">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CloudDrive2">
   <meta property="og:title" content="Docker deployment guide — CloudDrive2">
-  <meta property="og:description" content="Image, architectures, shared mount propagation, and the full Compose and CLI configurations.">
+  <meta property="og:description" content="Image, architectures, how to check and enable shared mount propagation, and the full Compose and CLI configurations.">
   <meta property="og:url" content="https://www.clouddrive2.com/en/docker.html">
   <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -58,8 +58,9 @@
         <h1>Running CloudDrive2 in Docker</h1>
         <p class="hero-lede">
           The image is <code>cloudnas/clouddrive2</code>. For mounts made inside the container to be
-          visible on the host, shared mount propagation has to be enabled before you start —
-          that is what this page is about, plus a configuration you can copy as it stands.
+          visible on the host, the host's mount propagation has to be shared — which many systems already
+          are, so check before you change anything. This page covers the check, the fix when one is needed,
+          and a configuration you can copy as it stands.
         </p>
         <div class="btn-row">
           <a class="btn btn-primary" href="https://hub.docker.com/r/cloudnas/clouddrive2" rel="noopener">Image on Docker Hub</a>
@@ -102,19 +103,36 @@
       <div class="container container-narrow">
         <header class="band-head">
           <p class="eyebrow">Before you run it</p>
-          <h2 id="prep-h">Enable shared mounts first</h2>
-          <p>This step cannot be skipped. Without shared mounts, mounting inside the container fails
-             outright with a permission denied error.</p>
+          <h2 id="prep-h">Check whether shared mounts are already on</h2>
+          <p>For mounts inside the container to be visible on the host, the host directory's mount
+             propagation has to be <code>shared</code>. Plenty of systems ship that way already, so check
+             before changing anything.</p>
         </header>
 
-        <p>CloudDrive uses fuse3 to mount cloud storage. Mounting cloud storage with fuse3 inside a
-           Docker container requires shared mounts to be enabled on the host system, which you can do
-           either by setting the <code>MountFlags</code> option in the Docker service configuration or
-           by running <code>mount --make-shared</code> on the host. This is because fuse3 needs shared
-           mounts to work; without them, mounting fails with a permission denied error. With shared
-           mounts enabled, the fuse3 mounts can be shared between the Docker container and the host
-           system, giving seamless access to the cloud storage.</p>
+        <p>CloudDrive uses fuse3 to mount cloud storage, and that propagation setting is what lets a fuse3
+           mount point be shared between the container and the host. Without it, mounting inside the
+           container fails outright with a permission denied error.</p>
 
+        <h3>Check first</h3>
+        <p>Replace the path with the directory you intend to give the container:</p>
+        <div class="code-block">
+          <pre><code>findmnt -o TARGET,PROPAGATION /path/to/dir</code></pre>
+        </div>
+        <p>If the <code>PROPAGATION</code> column reads <code>shared</code>, it is already on and you can
+           skip this whole section and go straight to the configuration below. On a minimal system without
+           <code>findmnt</code>, read <code>/proc</code> instead — a <code>shared:</code> in the output means
+           it is on:</p>
+        <div class="code-block">
+          <pre><code>grep ' / ' /proc/self/mountinfo</code></pre>
+        </div>
+
+        <div class="note">
+          <span class="note-title">Systems that already have it on</span>
+          <p>As far as we know, <strong>LibreELEC</strong>, <strong>CoreELEC</strong> and
+             <strong>fnOS</strong> need none of this. Check to confirm, then leave them alone.</p>
+        </div>
+
+        <h3>Turning it on if it is off</h3>
         <p>Two options — pick the one that matches how Docker runs on your host.</p>
 
         <h3>Option 1 · Docker runs as a systemd service</h3>
@@ -129,7 +147,10 @@ sudo systemctl restart docker.service</code></pre>
         </div>
 
         <h3>Option 2 · Docker does not run as a systemd service</h3>
-        <p>Enable the shared mount option on the host directly:</p>
+        <p>Enable the shared mount option on the host directly. <strong>Replace <code>/path/to/dir</code>
+           with the directory you intend to give the container</strong> — the same one you checked above.
+           <code>df</code> finds the mount point it sits on, and <code>mount --make-shared</code> marks that
+           mount point shared:</p>
         <div class="code-block">
           <pre><code>sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
         </div>

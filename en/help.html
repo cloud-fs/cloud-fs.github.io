@@ -304,8 +304,8 @@ brew services start clouddrive2</code></pre></div>
           <summary><i class="fa-brands fa-docker" aria-hidden="true"></i>Docker, NAS, Synology and QNAP</summary>
           <div class="acc-body">
             <p>To run it in a container on a NAS or server, the image is <code>cloudnas/clouddrive2</code>.
-               Shared mounts have to be enabled on the host first; the full steps and a configuration you
-               can copy as it stands are in the
+               The host needs shared mount propagation, which many systems already have. How to check it,
+               how to enable it when needed, and a configuration you can copy as it stands are all in the
                <a href="/en/docker.html">Docker deployment guide</a>.</p>
             <p>The third-party Synology and QNAP packages are on the
                <a href="/en/download.html#nas">download page</a>.</p>

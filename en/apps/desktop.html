@@ -285,9 +285,10 @@ Password   your CloudDrive2 account password</code></pre>
              running, open <code>http://&lt;host&gt;:19798</code> in a browser to configure it.</p>
         </header>
 
-        <p>Mounts made inside the container have to propagate back to the host, which means the host needs
-           shared mount propagation enabled. FUSE depends on it, and without it mounting fails with
-           "permission denied". This is the step people miss.</p>
+        <p>Mounts made inside the container have to propagate back to the host, which means that host
+           directory's mount propagation has to be shared. FUSE depends on it, and without it mounting fails
+           with "permission denied" — the step people miss. Plenty of systems ship with it on, though
+           (LibreELEC, CoreELEC and fnOS among them), so check before changing anything.</p>
 
         <details class="acc">
           <summary>Docker Compose</summary>
@@ -313,7 +314,7 @@ Password   your CloudDrive2 account password</code></pre>
         </details>
 
         <details class="acc">
-          <summary>Enabling shared mounts on the host</summary>
+          <summary>Checking, and enabling it if it is off</summary>
           <div class="acc-body">
             <p>When Docker runs as a systemd service, give it <code>MountFlags=shared</code>:</p>
 <pre><code>sudo mkdir -p /etc/systemd/system/docker.service.d/
@@ -322,7 +323,7 @@ sudo tee /etc/systemd/system/docker.service.d/clear_mount_propagation_flags.conf
 MountFlags=shared
 EOF
 sudo systemctl restart docker.service</code></pre>
-            <p>If it does not run under systemd, mark the mount point holding your target directory as shared:</p>
+            <p>If it does not run under systemd, mark the mount point holding your target directory as shared. Replace <code>/path/to/dir</code> with the directory you intend to give the container:</p>
 <pre><code>sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
             <p class="chip-note">mount --make-shared only lasts until the next reboot. If CloudDrive should start automatically, add this command to your startup scripts as well.</p>
           </div>
