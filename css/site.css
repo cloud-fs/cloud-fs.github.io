@@ -163,6 +163,8 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
 .band-head { margin-bottom: var(--s7); max-width: 760px; }
 .band-head h2 { display: flex; align-items: center; gap: .55em; flex-wrap: wrap; }
 .band-head p { color: var(--text-muted); font-size: 1.07rem; margin-bottom: 0; }
+/* the rule above zeroes every paragraph, so stacked ones would run together */
+.band-head p + p { margin-top: var(--s3); }
 .band-head > :last-child { margin-bottom: 0; }
 
 /* eyebrow: latin gets tracked-out mono caps, CJK gets a bracketed mark
@@ -218,6 +220,7 @@ a.chip:hover { border-color: currentColor; }
 /* a note explaining the table above it should run to the table's width,
    not stop at the reading measure */
 .table-scroll ~ .chip-note { max-width: none; }
+.code-block + .chip-note { max-width: none; }
 /* the pull-up above is tuned for a chips list, which carries its own bottom
    margin. a card grid has none, so the note lands inside the last card. */
 .card-grid + .chip-note { margin-top: var(--s5); }

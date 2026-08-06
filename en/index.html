@@ -418,6 +418,50 @@
       </div>
     </section>
 
+    <!-- ── open gRPC API ────────────────────────────────────────────── -->
+    <section class="band band-alt" aria-labelledby="api-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Open interface</p>
+          <h2 id="api-h">Our own apps are just clients of this API</h2>
+          <p>The core service exposes a complete gRPC API — not a handful of read-only endpoints held out
+             as a gesture. Every CloudDrive2 platform app, and the management interface in your browser,
+             is built entirely on it. There is no private route we kept for ourselves.</p>
+          <p>Which means a third-party developer can build anything we can. The interface is open to all
+             of them.</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-diagram-project card-icon" aria-hidden="true"></i>
+            <h3>It reaches everywhere</h3>
+            <p>File operations, mount point management, transfer tasks, cloud accounts, backup, the WebDAV service, API tokens, two-factor authentication and session management — over two hundred RPC methods, all of them available. Filesystem changes arrive in real time over a server stream.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-code card-icon" aria-hidden="true"></i>
+            <h3>Take the proto and start</h3>
+            <p>gRPC over HTTP/2, or gRPC-Web from a browser. Download the proto file and generate a client in whatever language you work in — the developer's guide walks through C#, Java, Go and Python.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-key card-icon" aria-hidden="true"></i>
+            <h3>You decide what it may touch</h3>
+            <p>Authorise with an API token, tick only the permissions it needs, and give it an expiry. Handing a third-party program a read-only token is a different act from handing it everything.</p>
+          </div></li>
+        </ul>
+
+        <div class="code-block">
+          <pre><code>curl https://www.clouddrive2.com/api/clouddrive.proto -o clouddrive.proto</code></pre>
+        </div>
+
+        <p class="chip-note">Not a promise on paper: the <a href="/en/download.html#plugin-h">Emby and Jellyfin companion plugin</a> on this site talks to CloudDrive2 through this same interface, by the same route any third-party program would take.</p>
+
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/api/CloudDrive2_gRPC_API_Guide.html">Read the API developer's guide</a>
+          <a class="btn btn-ghost" href="/api/clouddrive.proto">Download the proto file</a>
+        </div>
+      </div>
+    </section>
+
     <!-- ── accessibility programme ──────────────────────────────────── -->
     <section class="band" aria-labelledby="a11y-h">
       <div class="container container-narrow">
