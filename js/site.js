@@ -80,6 +80,31 @@
     });
   }
 
+  /* ── the media-server plugin's latest release ───────────────────────── */
+  /* Its assets carry the version in the filename, so there is no stable URL
+     to point at. The authored links go to the releases page, which always
+     works; this upgrades them to the actual files when it can. */
+  if (window.fetch && document.querySelector('[data-plugin-asset]')) {
+    fetch('https://api.github.com/repos/cloud-fs/clouddrive-mediaserver-plugin/releases/latest', {
+      headers: { Accept: 'application/vnd.github+json' }
+    })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function (release) {
+        Array.prototype.forEach.call(document.querySelectorAll('[data-plugin-asset]'), function (link) {
+          var want = link.getAttribute('data-plugin-asset');
+          var match = null;
+          (release.assets || []).forEach(function (asset) {
+            if (asset.name.toLowerCase().indexOf(want) !== -1) match = asset;
+          });
+          if (!match) return;
+          link.href = match.browser_download_url;
+          var name = link.querySelector('[data-plugin-asset-name]');
+          if (name) name.textContent = match.name;
+        });
+      })
+      .catch(function () { /* the releases-page links remain in place */ });
+  }
+
   /* ── latest release ─────────────────────────────────────────────────── */
   /* Upgrades the hard-coded download links to whatever the newest GitHub
      release ships. If anything fails, the static links stay as authored. */

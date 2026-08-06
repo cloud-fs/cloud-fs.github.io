@@ -176,7 +176,55 @@
       </div>
     </section>
 
-    <section class="band band-alt" aria-labelledby="mirror-h">
+    <section class="band band-alt" aria-labelledby="plugin-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">插件</p>
+          <h2 id="plugin-h">Emby / Jellyfin 伴侣插件</h2>
+          <p>装在媒体服务器那一侧，让 Emby 或 Jellyfin 与同一台主机上的 CloudDrive2 协同工作。一套源码，两个版本。</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-rotate card-icon" aria-hidden="true"></i>
+            <h3>媒体库实时更新，实时监控可以全关</h3>
+            <p>插件订阅 CloudDrive2 的<a href="/features.html#file-notification">文件变更通知</a>，把每条变化直接交给服务器的定向刷新入口。刮削器（tinyMediaManager、MoviePilot、MDCx 等）在挂载目录里改完，影片自动出现在库里——不必开「实时监控」，也就没有开机时的递归遍历和云端列目录风暴，更不用靠整库扫描，而整库扫描正是触发网盘风控的主要原因。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-gauge-high card-icon" aria-hidden="true"></i>
+            <h3>按播放行为预热</h3>
+            <p>起播时预热文件头尾（moov / EBML 头与 MKV cues），接近片尾时预热同一目录里的下一个文件，停止播放时立刻收回读取器。所有客户端一并受益，不限于 CloudDrive2 App。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-route card-icon" aria-hidden="true"></i>
+            <h3>免配置路径映射</h3>
+            <p>直连播放要知道服务器上的媒体目录对应本机哪个网盘目录，过去得手写规则。插件把挂载点和网盘账号身份暴露出来，App 登录后自己算——按账号身份匹配，不按文件夹名，因为同一个 115 账号两端常常叫不同的名字。</p>
+          </div></li>
+        </ul>
+
+        <h3>下载</h3>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-plugin-asset="emby" href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin/releases/latest">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>Emby 版</b><span data-plugin-asset-name>最新发布</span></span>
+          </a></li>
+          <li><a class="dl-item" data-plugin-asset="jellyfin" href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin/releases/latest">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>Jellyfin 版</b><span data-plugin-asset-name>最新发布</span></span>
+          </a></li>
+        </ul>
+        <p class="chip-note">Jellyfin 把 DLL、<code>meta.json</code> 与 <code>thumb.png</code> 一起放进插件目录下的 <code>CloudDrive</code> 子文件夹；Emby 只需把 DLL 放进插件目录，不要子文件夹。装在容器里更新 DLL 后请重启容器，服务器自带的「重启」按钮不够。完整的安装与配置说明见 <a href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin" rel="noopener">插件仓库</a>。</p>
+
+        <div class="note">
+          <span class="note-title">环境要求</span>
+          <p>服务器最低版本：<strong>Emby 4.8.0.80</strong> 或 <strong>Jellyfin 10.11</strong>。已在 Emby 4.9.5 与 Jellyfin 10.11.11 上验证。</p>
+          <p>前两项功能是纯服务端的，装上插件、填好 CloudDrive2 地址就能用，不需要安装 CloudDrive2 App。其中<strong>媒体库实时更新依赖文件变更通知，属于会员（Pro）功能</strong>。免配置路径映射则需要 <strong>CloudDrive2 App 1.0.14</strong> 或更高版本。</p>
+          <p>插件在 CloudDrive2 里用 API 令牌连接。新建令牌时<strong>「推送消息」与「获取挂载点」默认没有勾选，必须手动勾上</strong>——少了它们，插件能连上、状态也正常，但媒体库永远不会自动更新。插件不写入、不删除、不修改任何文件。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="mirror-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">镜像</p>
@@ -208,7 +256,7 @@
       </div>
     </section>
 
-    <section class="band" aria-labelledby="nas-h">
+    <section class="band band-alt" aria-labelledby="nas-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">NAS 与容器</p>
@@ -245,7 +293,7 @@
       </div>
     </section>
 
-    <section class="band band-alt" aria-labelledby="log-h">
+    <section class="band" aria-labelledby="log-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">更新日志</p>
