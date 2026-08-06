@@ -388,6 +388,47 @@
       </div>
     </section>
 
+    <!-- ── open gRPC API ────────────────────────────────────────────── -->
+    <section class="band band-alt" aria-labelledby="api-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">开放接口</p>
+          <h2 id="api-h">我们自己的应用，也只是这套 API 的客户端</h2>
+          <p>核心服务对外提供一整套 gRPC API，能力完整——不是挑几个只读接口开放出来的那种。CloudDrive2 的每一个平台应用，以及浏览器里的管理界面，全都完全建立在这套 API 之上：我们没有留一条自己才能走的后门。</p>
+          <p>这也意味着，第三方开发者能做的事和我们一样多。这套接口对所有开发者开放。</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-diagram-project card-icon" aria-hidden="true"></i>
+            <h3>覆盖到每一个角落</h3>
+            <p>文件操作、挂载点管理、传输任务、云盘账号、备份、WebDAV 服务、API 令牌、两步验证、会话管理，两百多个 RPC 方法，全部可用。文件系统变化通过服务端流式推送实时送达。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-code card-icon" aria-hidden="true"></i>
+            <h3>拿到 proto 就能开工</h3>
+            <p>gRPC 走 HTTP/2，浏览器端走 gRPC-Web。下载 proto 文件，用你惯用的语言生成客户端即可——开发指南里给了 C#、Java、Go 与 Python 的完整步骤。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-key card-icon" aria-hidden="true"></i>
+            <h3>权限自己说了算</h3>
+            <p>用 API 令牌授权，权限范围可按需勾选，还能设置有效期。给第三方程序开一个只读令牌，和给它完整权限，是两件不同的事。</p>
+          </div></li>
+        </ul>
+
+        <div class="code-block">
+          <pre><code>curl https://www.clouddrive2.com/api/clouddrive.proto -o clouddrive.proto</code></pre>
+        </div>
+
+        <p class="chip-note">这不是纸上承诺：本站提供的 <a href="/download.html#plugin-h">Emby / Jellyfin 伴侣插件</a>就是通过这套接口和 CloudDrive2 通信的，和任何第三方程序走的是同一条路。</p>
+
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/api/CloudDrive2_gRPC_API_Guide.html">阅读 API 开发者指南</a>
+          <a class="btn btn-ghost" href="/api/clouddrive.proto">下载 proto 文件</a>
+        </div>
+      </div>
+    </section>
+
     <!-- ── accessibility programme ──────────────────────────────────── -->
     <section class="band" aria-labelledby="a11y-h">
       <div class="container container-narrow">
