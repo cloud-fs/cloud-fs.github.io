@@ -179,7 +179,56 @@
       </div>
     </section>
 
-    <section class="band band-alt" aria-labelledby="mirror-h">
+    <section class="band band-alt" aria-labelledby="plugin-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Plugin</p>
+          <h2 id="plugin-h">The Emby and Jellyfin companion plugin</h2>
+          <p>This one installs on the media server, and makes Emby or Jellyfin work with the CloudDrive2
+             on the same host. One source tree, two builds.</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-rotate card-icon" aria-hidden="true"></i>
+            <h3>Live library updates, with monitoring off</h3>
+            <p>The plugin subscribes to CloudDrive2's <a href="/en/features.html#file-notification">file-change notifications</a> and hands each one to the server's targeted-refresh entry point. A scraper — tinyMediaManager, MoviePilot, MDCx — finishes in the mounted folder and the film turns up in the library on its own, with real-time monitoring switched off. No recursive walk at startup, no burst of cloud listings, and no reliance on full scans, which are the single biggest cause of cloud-provider rate limiting.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-gauge-high card-icon" aria-hidden="true"></i>
+            <h3>Playback-aware prefetch</h3>
+            <p>At playback start it warms the head and tail of the file — the moov atom or EBML header a player needs for the first frame, and the MKV cues a seek reaches for. Near the end it warms the next file in the same folder, and on stop it closes the reader straight away. Every client benefits, not just the CloudDrive2 App.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-route card-icon" aria-hidden="true"></i>
+            <h3>Zero-config path mapping</h3>
+            <p>Direct play needs to know which local cloud folder a server's media path corresponds to, and that used to be a hand-written rule. The plugin exposes the mounts and cloud-account identities, and the App works the mapping out itself — matching on account identity rather than folder name, because the same 115 account is rarely named the same on both machines.</p>
+          </div></li>
+        </ul>
+
+        <h3>Download</h3>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-plugin-asset="emby" href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin/releases/latest">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>For Emby</b><span data-plugin-asset-name>Latest release</span></span>
+          </a></li>
+          <li><a class="dl-item" data-plugin-asset="jellyfin" href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin/releases/latest">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>For Jellyfin</b><span data-plugin-asset-name>Latest release</span></span>
+          </a></li>
+        </ul>
+        <p class="chip-note">Jellyfin takes the DLL, <code>meta.json</code> and <code>thumb.png</code> together in a <code>CloudDrive</code> subfolder of its plugin directory; Emby takes the DLL on its own, no subfolder. Replacing the DLL inside a container needs the container restarted — the server's own restart button is not enough. Full install and configuration notes are in the <a href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin" rel="noopener">plugin repository</a>.</p>
+
+        <div class="note">
+          <span class="note-title">What it needs</span>
+          <p>Server minimum: <strong>Emby 4.8.0.80</strong> or <strong>Jellyfin 10.11</strong>. Verified on Emby 4.9.5 and Jellyfin 10.11.11.</p>
+          <p>The first two features are server-side only — install the plugin, point it at CloudDrive2, done, with no CloudDrive2 App involved. <strong>Live library updates rely on file-change notification, which is a membership (Pro) feature.</strong> Zero-config path mapping needs <strong>CloudDrive2 App 1.0.14</strong> or later.</p>
+          <p>The plugin connects to CloudDrive2 with an API token. When you create one, <strong>Push Messages and Get Mounts are off by default and have to be ticked by hand</strong> — without them the plugin connects, reports healthy, and never updates the library. It never writes, deletes or modifies a file.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="mirror-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Mirrors</p>
@@ -211,7 +260,7 @@
       </div>
     </section>
 
-    <section class="band" aria-labelledby="nas-h">
+    <section class="band band-alt" aria-labelledby="nas-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">NAS and containers</p>
@@ -248,7 +297,7 @@
       </div>
     </section>
 
-    <section class="band band-alt" aria-labelledby="log-h">
+    <section class="band" aria-labelledby="log-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Changelog</p>

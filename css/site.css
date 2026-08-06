@@ -393,6 +393,11 @@ a.card:hover {
 }
 .card h3 { margin-bottom: var(--s2); font-size: 1.08rem; }
 .card p { color: var(--text-muted); font-size: .94rem; margin-bottom: 0; max-width: none; }
+/* a note inside a card sits under a paragraph that has no bottom margin, so it
+   needs its own gap rather than the pull-up it uses elsewhere */
+.card p + .chip-note { margin-top: var(--s3); }
+/* the grid carries no bottom margin, so a heading after it would touch a card */
+.card-grid + h3 { margin-top: var(--s7); }
 .card > i, .card-icon {
   font-size: 1.3rem; color: var(--brand); margin-bottom: var(--s3); display: block;
 }
