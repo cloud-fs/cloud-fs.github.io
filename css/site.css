@@ -651,11 +651,18 @@ pre code { font-size: inherit; }
 }
 
 /* ── store badges / download slots ────────────────────────────────────── */
-.store-badges { display: flex; flex-wrap: wrap; gap: var(--s3); list-style: none; padding: 0; margin: 0 0 var(--s5); }
-.store-badges li { margin: 0; }
+/* auto-fill, not auto-fit: an under-filled last row keeps the column width the
+   groups above it use, so every badge and slot on the page is the same size */
+.store-badges {
+  display: grid; gap: var(--s3);
+  grid-template-columns: repeat(auto-fill, minmax(266px, 1fr));
+  list-style: none; padding: 0; margin: 0 0 var(--s5);
+}
+.store-badges li { margin: 0; display: flex; }
+.store-badges:last-child { margin-bottom: 0; }
 .store-badge {
-  display: flex; align-items: center; gap: var(--s3);
-  padding: var(--s3) var(--s5); min-width: 200px;
+  display: flex; align-items: center; gap: var(--s4);
+  width: 100%; padding: var(--s4) var(--s5);
   border: 1px solid var(--border-strong); border-radius: var(--r-m);
   background: var(--surface); color: var(--text); text-decoration: none;
 }
@@ -667,21 +674,28 @@ pre code { font-size: inherit; }
 
 .dl-grid {
   display: grid; gap: var(--s3);
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(266px, 1fr));
   list-style: none; padding: 0; margin: 0 0 var(--s5);
 }
-.dl-grid > li { margin: 0; }
+.dl-grid > li { margin: 0; display: flex; }
+.dl-grid:last-child { margin-bottom: 0; }
+/* the platform groups read as one list unless each heading gets its own air */
+.dl-grid + h3 { margin-top: var(--s6); }
 .dl-item {
   display: flex; align-items: center; gap: var(--s4);
-  padding: var(--s4) var(--s5);
+  width: 100%; padding: var(--s4) var(--s5);
   border: 1px solid var(--border); border-radius: var(--r-m);
   background: var(--surface); color: inherit; text-decoration: none; height: 100%;
 }
 .dl-item:hover { border-color: var(--brand); color: inherit; }
+.dl-item[aria-disabled="true"] { opacity: .62; pointer-events: none; }
 .dl-item i { font-size: 1.5rem; color: var(--text-muted); flex: none; }
 .dl-item:hover i { color: var(--brand); }
 .dl-item b { display: block; font-weight: 650; }
-.dl-item span { font-family: var(--mono); font-size: .74rem; color: var(--text-muted); word-break: break-all; }
+.dl-item span { font-family: var(--mono); font-size: .74rem; color: var(--text-muted); }
+/* the text column is a flex item, so it needs min-width:0 before a long asset
+   name will wrap at all; anywhere (not break-all) keeps it whole when it fits */
+.dl-item > span, .store-badge > span { min-width: 0; overflow-wrap: anywhere; }
 
 .release-line {
   font-family: var(--mono); font-size: .82rem; color: var(--text-muted);
