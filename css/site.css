@@ -634,6 +634,9 @@ p.promo-deadline {
 .acc > summary:hover { color: var(--brand); }
 .acc-body { padding: var(--s5); }
 .acc-body > :last-child { margin-bottom: 0; }
+/* the panel spans the container, but its prose keeps a readable measure —
+   paragraphs already do, lists have to be told */
+.acc-body ol, .acc-body ul { max-width: 72ch; }
 .acc-body h4 { margin-top: var(--s5); }
 .acc-body h4:first-child { margin-top: 0; }
 .acc-meta { font-family: var(--mono); font-size: .78rem; color: var(--text-muted); font-weight: 500; }
