@@ -210,7 +210,7 @@ EOF</code></pre></div>
             <h4>用 Homebrew 安装（推荐）</h4>
             <ol>
               <li>先确认系统里装好了 <a href="https://brew.sh/" rel="noopener">Homebrew</a>。</li>
-              <li>运行前必须安装 <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>，并按提示在「系统设置」里给它授权。也可以用 Homebrew 装：
+              <li>运行前必须安装 <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>，并在「系统设置」里放行它的内核扩展——Apple 芯片的 Mac 还要先进一次恢复模式，完整步骤见<a href="/macfuse.html">给 macFUSE 放行</a>。也可以用 Homebrew 装：
                 <div class="code-block"><pre><code>brew install --cask macfuse</code></pre></div>
               </li>
               <li>安装 CloudDrive2：
@@ -240,7 +240,7 @@ brew services start clouddrive2</code></pre></div>
 
             <h4>手动安装</h4>
             <ol>
-              <li>运行前必须安装 <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>，并按提示正确授权。</li>
+              <li>运行前必须安装 <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>，并按<a href="/macfuse.html">给 macFUSE 放行</a>里的步骤授权。</li>
               <li>到<a href="/download.html#core">下载页</a>拿对应 CPU 架构的压缩包。</li>
               <li>打开终端，进入压缩包所在的目录。</li>
               <li>展开压缩包：
@@ -346,7 +346,7 @@ brew services start clouddrive2</code></pre></div>
               </tr>
               <tr>
                 <th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS</th>
-                <td><a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>，装完要在「系统设置 → 隐私与安全性」里放行它的系统扩展</td>
+                <td><a href="/macfuse.html">macFUSE 与内核扩展放行</a>；Apple 芯片的 Mac 要先进恢复模式</td>
                 <td>一个空目录</td>
               </tr>
               <tr>
@@ -601,7 +601,7 @@ brew services start clouddrive2</code></pre></div>
         <details class="acc">
           <summary><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS 启动报 libfuse.2.dylib 缺失</summary>
           <div class="acc-body">
-            <p>这是没有安装 macFUSE。挂载功能依赖它提供 <code>libfuse.2.dylib</code>。到 <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a> 下载安装，装完在「系统设置 → 隐私与安全性」里允许对应的系统扩展（可能需要重启一次），然后再启动 CloudDrive2。</p>
+            <p>这是没有安装 macFUSE。挂载功能依赖它提供 <code>libfuse.2.dylib</code>。到 <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a> 下载安装，再按<a href="/macfuse.html">给 macFUSE 放行</a>里的步骤在系统设置里允许它的内核扩展——Apple 芯片的 Mac 还要进一次恢复模式。</p>
           </div>
         </details>
 

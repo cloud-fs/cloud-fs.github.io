@@ -231,9 +231,10 @@ EOF</code></pre></div>
             <h4>With Homebrew (recommended)</h4>
             <ol>
               <li>Make sure <a href="https://brew.sh/" rel="noopener">Homebrew</a> is installed.</li>
-              <li>Install <a href="https://osxfuse.github.io/" rel="noopener">macFUSE</a> before running
-                  CloudDrive2, and grant it permission in System Settings when prompted. Homebrew can
-                  install it too:
+              <li>Install <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a> before running
+                  CloudDrive2, and approve its kernel extension in System Settings — an Apple silicon Mac
+                  needs a trip to Recovery first, described in
+                  <a href="/en/macfuse.html">letting macFUSE through</a>. Homebrew can install it too:
                 <div class="code-block"><pre><code>brew install --cask macfuse</code></pre></div>
               </li>
               <li>Install CloudDrive2:
@@ -263,8 +264,8 @@ brew services start clouddrive2</code></pre></div>
 
             <h4>Manual install</h4>
             <ol>
-              <li>Install <a href="https://osxfuse.github.io/" rel="noopener">macFUSE</a> first and grant
-                  it permission when prompted.</li>
+              <li>Install <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a> first and approve it
+                  as described in <a href="/en/macfuse.html">letting macFUSE through</a>.</li>
               <li>Download the archive for your CPU architecture from the <a href="/en/download.html#core">download page</a>.</li>
               <li>Open a terminal and change into the directory holding the archive.</li>
               <li>Extract it:
@@ -394,8 +395,8 @@ brew services start clouddrive2</code></pre></div>
               </tr>
               <tr>
                 <th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS</th>
-                <td><a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>, then allow its system
-                    extension under System Settings → Privacy &amp; Security</td>
+                <td><a href="/en/macfuse.html">macFUSE and its kernel extension approval</a>; Apple silicon needs
+                    a trip to Recovery first</td>
                 <td>An empty directory</td>
               </tr>
               <tr>
@@ -721,9 +722,10 @@ brew services start clouddrive2</code></pre></div>
           <summary><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS says libfuse.2.dylib is missing</summary>
           <div class="acc-body">
             <p>macFUSE is not installed. Mounting depends on it for <code>libfuse.2.dylib</code>. Install it
-               from <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a>, allow its
-               system extension under System Settings → Privacy &amp; Security (this may need one restart),
-               then start CloudDrive2 again.</p>
+               from <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a>, then approve
+               its kernel extension as described in
+               <a href="/en/macfuse.html">letting macFUSE through</a> — an Apple silicon Mac also needs a
+               trip to Recovery.</p>
           </div>
         </details>
 
