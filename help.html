@@ -89,8 +89,11 @@
             <h2 id="port-h">在浏览器里打开</h2>
             <p class="port-url">http://&lt;主机 IP&gt;:19798</p>
           </div>
-          <p>CloudDrive2 的管理界面跑在这个端口上——无论装在 Windows、Linux、macOS、Android
-             还是 Docker 里都一样。装在本机就用 <code>http://localhost:19798</code>。建议使用最新版的 Edge、Chrome、Safari 或 Firefox，<strong>不支持 Internet Explorer</strong>。</p>
+          <div>
+            <p>核心服务的管理界面跑在 <strong>19798</strong> 上——无论装在 Windows、Linux、macOS、Android 还是 Docker 里都一样。装在本机就用 <code>http://localhost:19798</code>。建议使用最新版的 Edge、Chrome、Safari 或 Firefox，<strong>不支持 Internet Explorer</strong>。</p>
+            <p>另有一个 HTTPS 端口 <strong>19799</strong>，默认关闭，要在设置里打开并配置证书。</p>
+            <p>应用自带的核心监听 <strong>29798</strong>，和核心服务错开——同一台机器上两个一起装，端口不会冲突。</p>
+          </div>
         </div>
       </div>
     </section>

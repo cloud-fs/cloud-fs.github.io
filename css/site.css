@@ -602,6 +602,8 @@ p.promo-deadline {
   letter-spacing: -.01em; margin: 0; overflow-wrap: anywhere;
 }
 .port-card p { margin-bottom: 0; }
+/* the rule above zeroes every paragraph, so stacked ones would run together */
+.port-card p + p { margin-top: var(--s3); }
 
 /* ── copy-to-clipboard on code blocks (button injected by js/site.js) ─── */
 .code-block { position: relative; margin-bottom: var(--s5); }

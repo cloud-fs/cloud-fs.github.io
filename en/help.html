@@ -91,10 +91,16 @@
             <h2 id="port-h">Open it in a browser</h2>
             <p class="port-url">http://&lt;host IP&gt;:19798</p>
           </div>
-          <p>The CloudDrive2 management interface runs on that port — the same on Windows, Linux, macOS,
-             Android and inside Docker. On the machine itself, use <code>http://localhost:19798</code>.
-             Use a recent version of Edge, Chrome, Safari or Firefox.
-             <strong>Internet Explorer is not supported.</strong></p>
+          <div>
+            <p>The core service's management interface runs on <strong>19798</strong> — the same on Windows,
+               Linux, macOS, Android and inside Docker. On the machine itself, use
+               <code>http://localhost:19798</code>. Use a recent version of Edge, Chrome, Safari or Firefox.
+               <strong>Internet Explorer is not supported.</strong></p>
+            <p>There is an HTTPS port too, <strong>19799</strong>. It is off by default — turn it on and
+               configure a certificate under Settings.</p>
+            <p>The core inside the apps listens on <strong>29798</strong> instead. The two are deliberately
+               different, so a machine running both the core service and an app has no port conflict.</p>
+          </div>
         </div>
       </div>
     </section>
