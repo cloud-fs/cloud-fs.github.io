@@ -483,7 +483,9 @@ a.card:hover {
 :lang(zh-CN) .matrix-table thead th { font-family: var(--font); letter-spacing: .02em; text-transform: none; font-size: .82rem; }
 .matrix-table tbody th { font-weight: 600; white-space: nowrap; }
 .matrix-table tbody tr:hover { background: var(--surface-2); }
-.matrix-table td.c { text-align: center; }
+/* a column header sits over its own values: both opt into centring with .c,
+   so the provider and docker-tag tables keep their left-aligned columns */
+.matrix-table td.c, .matrix-table th.c { text-align: center; }
 .matrix-table .cell-note {
   display: inline-block; font-family: var(--mono); font-size: .68rem;
   line-height: 1.25; color: var(--text-muted); white-space: normal; max-width: 11ch;
