@@ -401,6 +401,7 @@ a.card:hover {
 .card p + .chip-note { margin-top: var(--s3); }
 /* the grid carries no bottom margin, so a heading after it would touch a card */
 .card-grid + h3 { margin-top: var(--s7); }
+.steps + h3 { margin-top: var(--s7); }
 .card > i, .card-icon {
   font-size: 1.3rem; color: var(--brand); margin-bottom: var(--s3); display: block;
 }
@@ -592,6 +593,30 @@ p.promo-deadline {
 .steps h3 { font-size: 1.05rem; margin-bottom: var(--s2); }
 .steps p { color: var(--text-muted); font-size: .94rem; }
 .steps > li > :last-child { margin-bottom: 0; }
+
+/* ── schematic of a system dialog, drawn rather than screenshotted so it
+      follows the theme and carries no third-party UI ───────────────────── */
+.ui-sketch {
+  display: block; width: 100%; height: auto;
+  /* below this the 12px labels inside the drawing stop being readable, so the
+     wrapping .table-scroll scrolls it instead of shrinking it further */
+  min-width: 560px;
+  margin-bottom: var(--s3);
+  border: 1px solid var(--border); border-radius: var(--r-m);
+  background: var(--surface);
+}
+.table-scroll + .figure-caption { margin-top: calc(var(--s5) * -1 + var(--s3)); }
+.ui-sketch text { font-family: var(--font); }
+.ui-sketch .sk-chrome { fill: var(--surface-2); }
+.ui-sketch .sk-rule { stroke: var(--border); }
+.ui-sketch .sk-label { fill: var(--text); font-size: 15px; }
+.ui-sketch .sk-title { fill: var(--text); font-size: 14px; font-weight: 650; }
+.ui-sketch .sk-sub { fill: var(--text-muted); font-size: 12px; }
+.ui-sketch .sk-off { fill: none; stroke: var(--border-strong); stroke-width: 1.5; }
+.ui-sketch .sk-on { fill: var(--brand); }
+.ui-sketch .sk-on-stroke { fill: none; stroke: var(--brand); stroke-width: 1.5; }
+.ui-sketch .sk-btn-text { fill: var(--on-brand); font-size: 13px; font-weight: 650; }
+.ui-sketch .sk-tick { fill: none; stroke: var(--on-brand); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ── the address you open after installing ────────────────────────────── */
 .port-card { display: grid; gap: var(--s4); }

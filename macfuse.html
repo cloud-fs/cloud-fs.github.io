@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>在 Mac 上给 macFUSE 放行 — CloudDrive2</title>
+  <meta name="description" content="在 macOS 上让 CloudDrive2 挂载云盘：安装 macFUSE，在系统设置里放行它的内核扩展，Apple 芯片的 Mac 如何进恢复模式把安全策略降到「降低安全性」，以及验证与常见问题。">
+  <link rel="canonical" href="https://www.clouddrive2.com/macfuse.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/macfuse.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/macfuse.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/macfuse.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="在 Mac 上给 macFUSE 放行 — CloudDrive2">
+  <meta property="og:description" content="安装 macFUSE、在系统设置里放行内核扩展，以及 Apple 芯片的 Mac 需要的恢复模式步骤。">
+  <meta property="og:url" content="https://www.clouddrive2.com/macfuse.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/macfuse.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">macOS 本地挂载</p>
+        <h1>在 Mac 上给 macFUSE 放行</h1>
+        <p class="hero-lede">
+          CloudDrive2 要把云盘挂成本地磁盘，靠的是 macFUSE，而 macFUSE 要装一个内核扩展。Intel Mac 点一下「允许」就完事；Apple 芯片的 Mac 还得先进恢复模式把安全策略降一档。两条路这一页都走一遍。
+        </p>
+        <ul class="chips">
+          <li><a class="chip chip-cloud" href="#why">为什么要这一步</a></li>
+          <li><a class="chip chip-cloud" href="#chip">先看芯片</a></li>
+          <li><a class="chip" href="#silicon">Apple 芯片</a></li>
+          <li><a class="chip" href="#intel">Intel</a></li>
+          <li><a class="chip" href="#verify">验证</a></li>
+          <li><a class="chip" href="#faq">常见问题</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://macfuse.github.io/" rel="noopener">下载 macFUSE</a>
+          <a class="btn btn-ghost" href="/help.html#mount">回到挂载说明</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="scope-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">先说清楚适用范围</p>
+            <h2 id="scope-h">谁需要这一页</h2>
+          </div>
+          <div>
+            <p>要在 Mac 上把云盘挂成磁盘的人：<strong>官网直接下载的核心服务</strong>（含 Homebrew 装的），以及 <strong>macOS 应用的直接下载版</strong>。</p>
+            <p>Mac App Store 版跑在完整沙盒里，本身就不含本地挂载，也就用不上 macFUSE——浏览、播放、传输和备份都不受影响。两版差异见 <a href="/apps/macos.html">macOS 版</a>。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="why" aria-labelledby="why-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">背景</p>
+          <h2 id="why-h">为什么非要动系统设置</h2>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3>挂载要经过内核</h3>
+            <p>把一块云盘变成访达里的磁盘，意味着系统每一次读目录、打开文件、写回内容，都要有人接住。macFUSE 的内核扩展就是接住这些请求的那一层，CloudDrive2 通过它把请求转成云盘 API 调用。没有它，挂载这件事在 macOS 上做不到。</p>
+            <p>其余功能都不经过它：浏览、播放、跨云复制、备份、WebDAV，没装 macFUSE 一样能用。</p>
+          </div>
+          <div>
+            <h3>Apple 芯片默认不加载第三方内核扩展</h3>
+            <p>Apple 芯片的 Mac 出厂是「完全安全性」，任何第三方内核扩展都不会加载，装了也不会。要让它加载，得进恢复模式把安全策略降到「降低安全性」，并勾上允许用户管理内核扩展。</p>
+            <p>Intel Mac 没有这一层，装完直接在系统设置里点「允许」即可。</p>
+          </div>
+        </div>
+
+        <div class="note">
+          <span class="note-title">「降低安全性」降的是哪一档</span>
+          <p>它只是允许加载<strong>由 Apple 认可的开发者签名</strong>的内核扩展，而且每一个扩展仍然要你在系统设置里逐个放行。它<strong>不等于</strong>关闭 SIP（系统完整性保护），也<strong>不等于</strong>关闭 Gatekeeper——这两样都不用动，macFUSE 的安装包本身就经过 Apple 签名与公证。</p>
+          <p>这套动作每台机器只做一次。做完之后，以后升级 macFUSE 或者 CloudDrive2 都不必再来。</p>
+        </div>
+
+        <p class="chip-note">有人会问：macFUSE 新版不是有个不用内核扩展的 FSKit 后端吗？有，但它只对 libfuse3 接口开放，挂载点还只能落在 <code>/Volumes</code> 下面，I/O 性能也不及内核后端。CloudDrive2 走的是内核后端，所以这一步省不掉。</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="chip" aria-labelledby="chip-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">第一步</p>
+          <h2 id="chip-h">先看你的 Mac 是哪种芯片</h2>
+          <p>两条路差很多，先确认一下。点屏幕左上角的苹果菜单 →「关于本机」，看「芯片」那一行。</p>
+        </header>
+
+        <ul class="card-grid card-grid-2">
+          <li><a class="card" href="#silicon">
+            <i class="fa-solid fa-microchip card-icon" aria-hidden="true"></i>
+            <h3>写着 Apple M 系列</h3>
+            <p>M1 及以后的所有机型。要进一次恢复模式，全程两次重启。</p>
+          </a></li>
+          <li><a class="card" href="#intel">
+            <i class="fa-solid fa-microchip card-icon" aria-hidden="true"></i>
+            <h3>写着 Intel</h3>
+            <p>2020 年之前的大部分机型。不用进恢复模式，一次重启就好。</p>
+          </a></li>
+        </ul>
+
+        <p>也可以在「终端」里问一句，<code>arm64</code> 是 Apple 芯片，<code>x86_64</code> 是 Intel：</p>
+        <div class="code-block"><pre><code>uname -m</code></pre></div>
+      </div>
+    </section>
+
+    <section class="band" id="silicon" aria-labelledby="silicon-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Apple 芯片</p>
+          <h2 id="silicon-h">三段流程，两次重启</h2>
+          <p>顺序不能换：先在系统设置里开个头，再进恢复模式改策略，回到桌面之后才轮到那个「允许」按钮。</p>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>装 macFUSE，然后按提示开个头</h3>
+            <p>从 <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a> 下载安装包装上。系统会弹一条「系统扩展已被阻止」，点<strong>「打开系统设置」</strong>——如果没弹，自己去「系统设置 → 隐私与安全性」，往下拉到底。</p>
+            <p>在那里点<strong>「启用系统扩展…」</strong>，输入登录密码，然后点<strong>「关机」</strong>。这一步是在告诉系统：等下要进恢复模式改策略。</p>
+          </li>
+          <li>
+            <h3>进恢复模式，把安全策略降一档</h3>
+            <p>Mac 完全关机之后，<strong>按住电源键（或触控 ID 键）不松手</strong>，直到屏幕上出现「正在载入启动选项」。点<strong>「选项」</strong>，再点<strong>「继续」</strong>，选择启动磁盘和一个管理员账号，输入密码。</p>
+            <p>进入恢复界面后，在顶部菜单栏选<strong>「实用工具 → 启动安全性实用工具」</strong>。选中你的系统磁盘，点<strong>「安全策略…」</strong>，选<strong>「降低安全性」</strong>，勾上<strong>「允许用户管理来自被认可开发者的内核扩展」</strong>，点「好」，输入密码，重新启动。窗口长什么样见下图。</p>
+          </li>
+          <li>
+            <h3>回到桌面，点那个「允许」</h3>
+            <p>重启回到 macOS，打开<strong>「系统设置 → 隐私与安全性」</strong>，往下拉，会看到一条被拦下的记录，右边有<strong>「允许」</strong>按钮。点它，输入登录密码。</p>
+            <p>然后<strong>再重启一次</strong>。这一次之后，内核扩展才真正加载。</p>
+          </li>
+        </ol>
+
+        <h3>第 2 步里那个窗口长这样</h3>
+        <div class="table-scroll">
+        <svg class="ui-sketch" viewBox="0 0 680 268" role="img" aria-labelledby="sk1-t sk1-d">
+          <title id="sk1-t">启动安全性实用工具的示意图</title>
+          <desc id="sk1-d">窗口标题为「启动安全性实用工具」。下方两个单选项：「完全安全性」未选中，「降低安全性」已选中。「降低安全性」下面有一个已勾选的复选框，写着「允许用户管理来自被认可开发者的内核扩展」。右下角是「好」按钮。</desc>
+          <rect class="sk-chrome" x="0" y="0" width="680" height="38"/>
+          <line class="sk-rule" x1="0" y1="38" x2="680" y2="38"/>
+          <text class="sk-title" x="24" y="25">启动安全性实用工具</text>
+
+          <circle class="sk-off" cx="40" cy="76" r="8"/>
+          <text class="sk-label" x="60" y="81">完全安全性</text>
+          <text class="sk-sub" x="60" y="101">只允许当前系统，或 Apple 目前信任的已签名系统软件运行。</text>
+
+          <circle class="sk-on-stroke" cx="40" cy="140" r="8"/>
+          <circle class="sk-on" cx="40" cy="140" r="4"/>
+          <text class="sk-label" x="60" y="145">降低安全性</text>
+          <text class="sk-sub" x="60" y="165">允许任何 Apple 曾经信任过的已签名系统软件运行。</text>
+
+          <rect class="sk-on" x="60" y="185" width="16" height="16" rx="4"/>
+          <path class="sk-tick" d="M64 193 l3.5 4 l5-7"/>
+          <text class="sk-sub" x="86" y="198">允许用户管理来自被认可开发者的内核扩展</text>
+
+          <rect class="sk-on" x="584" y="214" width="72" height="30" rx="8"/>
+          <text class="sk-btn-text" x="620" y="234" text-anchor="middle">好</text>
+        </svg>
+        </div>
+        <p class="figure-caption">示意图，非截图。选「降低安全性」，勾上那个复选框，点「好」，输入密码，重新启动。</p>
+
+        <h3>第 3 步里要找的那一条</h3>
+        <div class="table-scroll">
+        <svg class="ui-sketch" viewBox="0 0 680 150" role="img" aria-labelledby="sk2-t sk2-d">
+          <title id="sk2-t">系统设置隐私与安全性里被阻止的系统扩展示意图</title>
+          <desc id="sk2-d">窗口标题为「隐私与安全性」。中间一行写着「已阻止载入来自开发者的系统软件」，行末是一个「允许」按钮。</desc>
+          <rect class="sk-chrome" x="0" y="0" width="680" height="38"/>
+          <line class="sk-rule" x1="0" y1="38" x2="680" y2="38"/>
+          <text class="sk-title" x="24" y="25">隐私与安全性</text>
+
+          <text class="sk-label" x="24" y="86">已阻止载入来自开发者的系统软件。</text>
+          <text class="sk-sub" x="24" y="108">macFUSE 的开发者签名会显示在这里。</text>
+
+          <rect class="sk-on" x="566" y="72" width="90" height="30" rx="8"/>
+          <text class="sk-btn-text" x="611" y="92" text-anchor="middle">允许</text>
+        </svg>
+        </div>
+        <p class="figure-caption">示意图，非截图。这条记录在「隐私与安全性」页面靠下的位置，和「允许以下来源的应用程序」在同一区。</p>
+
+        <div class="note note-warn">
+          <span class="note-title">找不到「允许」按钮？</span>
+          <p>这个按钮只在系统刚拦下扩展之后才出现。如果那一栏是空的，回 CloudDrive2 里再试一次挂载，让系统重新拦一次，然后马上回到「隐私与安全性」看。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="intel" aria-labelledby="intel-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Intel</p>
+          <h2 id="intel-h">一次放行，一次重启</h2>
+          <p>Intel Mac 不需要恢复模式，也不用改安全策略。</p>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>装 macFUSE</h3>
+            <p>从 <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a> 下载安装包装上。</p>
+          </li>
+          <li>
+            <h3>放行</h3>
+            <p>系统弹出提示时点「打开系统设置」，在「隐私与安全性」里点<strong>「允许」</strong>。macOS 12 及更早版本在「系统偏好设置 → 安全性与隐私」，要先点左下角的锁解开才能点「允许」。</p>
+          </li>
+          <li>
+            <h3>重启</h3>
+            <p>重启一次，内核扩展就加载了。</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="band" id="verify" aria-labelledby="verify-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">收尾</p>
+          <h2 id="verify-h">确认它真的加载了</h2>
+          <p>在「终端」里跑这一句：</p>
+        </header>
+
+        <div class="code-block"><pre><code>kmutil showloaded --list-only | grep -i macfuse</code></pre></div>
+        <p>打印出一行带 <code>io.macfuse.filesystems.macfuse</code> 的，就说明内核扩展已经在跑了。什么都没有，说明还没放行成功，回上面对一遍步骤。</p>
+        <p>装的是哪一版 macFUSE，可以在「系统设置」侧边栏最下面的 <strong>macFUSE</strong> 一栏里看到，更新也在那里检查。</p>
+        <p>确认之后回到 CloudDrive2 的管理界面，进「挂载点」页添加一个挂载点，挂载点填一个空目录。整个流程见<a href="/help.html#mount">帮助页的挂载一节</a>。</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">排错</p>
+          <h2 id="faq-h">没走通的时候</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>启动时报 libfuse.2.dylib 缺失</summary>
+          <div class="acc-body">
+            <p>macFUSE 没装。挂载功能依赖它提供这个库。到 <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a> 下载安装，再按本页的流程放行，然后重新启动 CloudDrive2。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-rotate-right" aria-hidden="true"></i>升级 macOS 之后又挂不上了</summary>
+          <div class="acc-body">
+            <p>两种可能，按顺序排查。</p>
+            <ol>
+              <li><strong>手里这版 macFUSE 还不认识新系统。</strong>macFUSE 是给每个 macOS 大版本单独打包一份内核扩展的——你装的那一版发布时如果还没有你现在这个系统，包里就没有对应的那一份，自然加载不了。打开「系统设置」，在侧边栏最下面找到 <strong>macFUSE</strong> 那一栏，看一眼版本号并检查更新；有新版就装上，装完重启。</li>
+              <li><strong>启动安全策略被重置了。</strong>大版本升级有可能把它恢复成「完全安全性」，第三方内核扩展就又不加载了。按<a href="#silicon">上面 Apple 芯片的流程</a>再走一遍即可，恢复模式那一步依然只是勾回同一个选项。</li>
+            </ol>
+            <p>动手之前先用<a href="#verify">上面那句命令</a>确认一下扩展到底加载没有，能省掉白折腾。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i>想把安全策略改回「完全安全性」</summary>
+          <div class="acc-body">
+            <p>可以，再进一次恢复模式，在「启动安全性实用工具」里选回「完全安全性」即可。</p>
+            <p>但改回去之后 macFUSE 的内核扩展就不再加载，本地挂载也就没有了。CloudDrive2 的其余功能不受影响。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>Mac App Store 版为什么没有挂载</summary>
+          <div class="acc-body">
+            <p>App Store 版运行在完整沙盒里，按规则不能加载内核扩展，所以不含本地挂载，也不需要 macFUSE。要挂载就用官网直接下载版——两版共用同一套账号，随时可以换。差异对照见 <a href="/apps/macos.html">macOS 版</a>，安装包在<a href="/download.html#app">下载页</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-terminal" aria-hidden="true"></i>用 Homebrew 装的核心服务也要这一套吗</summary>
+          <div class="acc-body">
+            <p>要。Homebrew 换的只是 CloudDrive2 的安装方式，macFUSE 该装还得装，该放行还得放行，流程完全一样。也可以用 Homebrew 装 macFUSE：</p>
+            <div class="code-block"><pre><code>brew install --cask macfuse</code></pre></div>
+            <p>装完仍然要按本页的流程在系统设置里放行。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>还是没解决？</h2>
+        <p>Telegram 群里有人在，也可以直接发邮件。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">发邮件</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/macfuse.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

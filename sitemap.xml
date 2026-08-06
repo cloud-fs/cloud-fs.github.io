@@ -181,4 +181,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/docker.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/docker.html"/>
   </url>
+  <url>
+    <loc>https://www.clouddrive2.com/macfuse.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/macfuse.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/macfuse.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/macfuse.html"/>
+  </url>
+  <url>
+    <loc>https://www.clouddrive2.com/en/macfuse.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/macfuse.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/macfuse.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/macfuse.html"/>
+  </url>
 </urlset>
