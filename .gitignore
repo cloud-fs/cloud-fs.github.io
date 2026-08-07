@@ -1,0 +1,6 @@
+# Internal working notes for the site rebuild. Never publish: this repo is
+# public and GitHub Pages serves it.
+.handoff/
+
+# macOS
+.DS_Store
