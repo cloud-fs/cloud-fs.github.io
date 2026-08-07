@@ -278,12 +278,17 @@
             <p>Sign in to your Emby or Jellyfin server to browse libraries, resume playback and read metadata.
                When the server's media folder lives on CloudDrive anyway, the player skips the server's
                transcoder and pulls from the cloud directly — your server stops relaying every byte.</p>
+            <p>From there the file is opened by the CloudDrive2 App's own player, so what plays is decided
+               by the player and not by the server: Blu-ray ISOs with their HDMV disc menus, true Dolby
+               Vision Profile 7, DSD and SACD ISOs — none of which Emby or Jellyfin support at all — open
+               straight from the library, and your watch history still syncs back to the server.</p>
             <p>On the server side there is also a <a href="/en/download.html#plugin-h">companion plugin</a>: live
                library updates without real-time monitoring, playback-aware prefetch, and path mappings you
                no longer write by hand.</p>
             <ul class="chips">
               <li><span class="chip chip-cloud">Direct Stream</span></li>
               <li><span class="chip chip-cloud">No server transcode</span></li>
+              <li><span class="chip chip-disc">Disc ISOs with menus</span></li>
               <li><span class="chip chip-cloud">Server companion plugin</span></li>
             </ul>
             <a class="arrow-link" href="/en/apps/ios.html">See it on iPhone and iPad</a>
