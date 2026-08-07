@@ -90,9 +90,10 @@
             <p class="port-url">http://&lt;主机 IP&gt;:19798</p>
           </div>
           <div>
-            <p>核心服务的管理界面跑在 <strong>19798</strong> 上——无论装在 Windows、Linux、macOS、Android 还是 Docker 里都一样。装在本机就用 <code>http://localhost:19798</code>。建议使用最新版的 Edge、Chrome、Safari 或 Firefox，<strong>不支持 Internet Explorer</strong>。</p>
+            <p>核心服务的管理界面跑在 <strong>19798</strong> 上——无论装在 Windows、Linux、macOS、Android 还是 Docker 里都一样。装在本机就用 <code>http://localhost:19798</code>。</p>
             <p>另有一个 HTTPS 端口 <strong>19799</strong>，默认关闭，要在设置里打开并配置证书。</p>
             <p>应用自带的核心监听 <strong>29798</strong>，和核心服务错开——同一台机器上两个一起装，端口不会冲突。</p>
+            <p>管理界面整个是一个 WebAssembly 应用，所以浏览器必须支持 WebAssembly，不支持的直接白屏，不是「部分功能用不了」。电脑上用较新版本的 Edge、Chrome、Safari 或 Firefox 都可以，手机和平板上的主流浏览器也可以。<strong>Internet Explorer 不行；电视自带的浏览器、以及一些机顶盒、电子书和车机上的精简浏览器也多半不行</strong>——那些设备请改用手机或电脑打开，或者直接装对应平台的应用。</p>
           </div>
         </div>
       </div>
