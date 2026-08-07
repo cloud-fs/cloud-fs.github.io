@@ -689,6 +689,41 @@
         </div>
         <p class="chip-note">Tianyi Cloud only allows instant transfer for older files — ones uploaded some time ago. Newly uploaded files no longer qualify.</p>
         <p class="chip-note">A dash means that pair cannot use hash-based instant transfer — not that it cannot be copied. CloudDrive2 still moves the data directly between the two clouds; it just takes time. The matrix reflects what each provider's API currently allows and changes when they do.</p>
+
+        <h3>How to run a copy</h3>
+        <ol class="steps">
+          <li>
+            <h4>Pick the source</h4>
+            <p>In My Files, select the files or folders you want to copy and click
+               <b>Move/Copy to…</b> in the toolbar.</p>
+          </li>
+          <li>
+            <h4>Pick the destination</h4>
+            <p>Choose a destination folder in the directory tree and click <b>Copy</b>. It can be another
+               cloud, or another account on the same cloud.</p>
+          </li>
+          <li>
+            <h4>Let it run</h4>
+            <p>The task starts immediately and runs in the background. Watch it on the Tasks page — it
+               appears under both <b>Copy Tasks</b> and <b>Upload Tasks</b>.</p>
+          </li>
+        </ol>
+
+        <h3>Local folders work as both source and destination</h3>
+        <p>On the Cloud Storages page, click <b>Add Cloud Storage</b>, then pick <b>Local Folder</b> under
+           Local Storages and add a directory from the machine. It shows up in My Files alongside the
+           clouds, and a copy can use it as the source or as the destination.</p>
+        <p class="chip-note">Cloud-to-cloud copying is a Core Pro feature. As long as one end is a local
+           folder — pulling files down from a cloud, or pushing local files up to one — every account can
+           run it, free accounts included.</p>
+
+        <div class="note">
+          <span class="note-title">Copying to a local folder still shows up as an upload task</span>
+          <p>CloudDrive2 runs every copy through one pipeline: read the source, write the destination, and
+             the writing half is always recorded as an upload task. So a copy from a cloud into a local
+             folder appears under Upload Tasks — nothing is backwards, the data really is coming down from
+             the cloud. “Upload” is just what the second half of the pipeline is called.</p>
+        </div>
       </div>
     </section>
 

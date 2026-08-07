@@ -593,7 +593,8 @@ p.promo-deadline {
   font-family: var(--mono); font-size: .8rem; font-weight: 600;
   letter-spacing: .12em; color: var(--brand);
 }
-.steps h3 { font-size: 1.05rem; margin-bottom: var(--s2); }
+/* h4 where the steps sit under a section h3, h3 where they sit under the h2 */
+.steps h3, .steps h4 { font-size: 1.05rem; margin-bottom: var(--s2); }
 .steps p { color: var(--text-muted); font-size: .94rem; }
 .steps > li > :last-child { margin-bottom: 0; }
 

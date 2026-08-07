@@ -548,8 +548,19 @@ brew services start clouddrive2</code></pre></div>
                already known there, the copy is instant — the server just records a pointer to data it
                already holds and nothing moves. If the algorithms differ or the hash is not found, the data
                streams cloud to cloud without touching your local disk, at whatever your bandwidth allows.</p>
+            <p>You run it from My Files: select the files or folders, click <b>Move/Copy to…</b>, choose a
+               destination folder in the directory tree and click <b>Copy</b>. The task runs in the
+               background, so you can walk away; progress shows on the Tasks page, under both
+               <b>Copy Tasks</b> and <b>Upload Tasks</b>.</p>
             <p class="chip-note">Fast cross-cloud copying is a core membership feature. The slow path is
                not a fault — it means the destination has nothing to match against.</p>
+            <p>On the Cloud Storages page, <b>Add Cloud Storage</b> → <b>Local Folder</b> under Local
+               Storages adds a directory from the machine, and a copy can use it as the source or the
+               destination. As long as one end is a local folder — pulling files down from a cloud, or
+               pushing local files up — free accounts can copy too, with no membership needed.</p>
+            <p class="chip-note">Copying into a local folder appears under Upload Tasks. Nothing is
+               backwards: CloudDrive2 runs every copy as one pipeline — read the source, write the
+               destination — and the writing half is always called an upload.</p>
             <p><a class="arrow-link" href="/en/features.html#inter-cloud-copy">More about cross-cloud copying</a></p>
           </div>
         </details>
