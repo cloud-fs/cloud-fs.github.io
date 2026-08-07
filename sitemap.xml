@@ -193,4 +193,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/macfuse.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/macfuse.html"/>
   </url>
+  <url>
+    <loc>https://www.clouddrive2.com/partners.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/partners.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/partners.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/partners.html"/>
+  </url>
+  <url>
+    <loc>https://www.clouddrive2.com/en/partners.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/partners.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/partners.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/partners.html"/>
+  </url>
 </urlset>
