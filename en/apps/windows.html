@@ -294,7 +294,8 @@
             <i class="fa-solid fa-globe card-icon" aria-hidden="true"></i>
             <h3>Browser console</h3>
             <p>The core also serves a web console. Open <code>http://localhost:19798</code> in a browser
-               to manage it, or reach it from another machine on your network.</p>
+               to manage it, or reach it from another machine on your network — for that, Windows Firewall
+               has to allow the port first.</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
@@ -325,6 +326,19 @@
             <span><b>Windows installer</b><span>x64 · Arm64</span></span>
           </a></li>
         </ul>
+
+        <div class="note">
+          <span class="note-title">Service, firewall and antivirus</span>
+          <p>The core service registers as a Windows system service, starts with the machine and runs
+             whether or not anyone is logged in; the app is an ordinary application that starts with your
+             account. They listen on different ports — <strong>19798</strong> for the core (plus
+             <strong>19799</strong> if you enable HTTPS) and <strong>29798</strong> for the app. To reach
+             either from another machine, Windows Firewall has to allow that port.</p>
+          <p>The installer, the service and the WinFSP driver are all code-signed, and some antivirus
+             products still block one of them — the service will not start, the mounted drive never
+             appears, or the app is closed outright. Add CloudDrive2's install directory and WinFSP to the
+             allowlist; more on the <a href="/en/help.html#install">help page</a>.</p>
+        </div>
 
         <div class="note">
           <span class="note-title">The same features as the Mac direct download</span>

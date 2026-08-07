@@ -265,7 +265,7 @@
           <li><div class="card">
             <i class="fa-solid fa-globe card-icon" aria-hidden="true"></i>
             <h3>浏览器管理界面</h3>
-            <p>核心同时提供网页控制台，浏览器打开 <code>http://localhost:19798</code> 就能管理，从局域网里的另一台机器访问也可以。</p>
+            <p>核心同时提供网页控制台，浏览器打开 <code>http://localhost:19798</code> 就能管理，从局域网里的另一台机器访问也可以——那种情况要先让 Windows 防火墙放行这个端口。</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
@@ -295,6 +295,12 @@
             <span><b>Windows 安装包</b><span>x64 · Arm64</span></span>
           </a></li>
         </ul>
+
+        <div class="note">
+          <span class="note-title">服务、防火墙与杀毒软件</span>
+          <p>核心服务装完注册成 Windows 系统服务，开机自启，不用登录桌面也在跑；应用则是普通应用，跟着你的账户启动。两者监听的端口不同：核心是 <strong>19798</strong>（开了 HTTPS 再加 <strong>19799</strong>），应用是 <strong>29798</strong>。要从别的设备连过来，Windows 防火墙得放行对应端口。</p>
+          <p>安装包、服务和 WinFSP 驱动都经过代码签名，但个别杀毒软件仍可能拦下其中之一——服务起不来、挂载盘出不来，或者应用被直接关掉。把 CloudDrive2 的安装目录和 WinFSP 一起加进白名单即可，详见<a href="/help.html#install">帮助页</a>。</p>
+        </div>
 
         <div class="note">
           <span class="note-title">和 Mac 直接下载版功能一致</span>

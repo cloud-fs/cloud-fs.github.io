@@ -116,9 +116,17 @@
                   <code>http://localhost:19798</code>。</li>
             </ol>
             <div class="note note-warn">
-              <span class="note-title">升级请用完整安装包，不要用应用内 OTA</span>
-              <p>1.0.7 起随包升级了 WinFSP 驱动，修复了旧版 WinFSP 的安全漏洞
-                 <a href="https://github.com/winfsp/winfsp/releases/tag/v2.2B1" rel="noopener">CVE-2026-3006</a>。应用内 OTA 只替换 CloudDrive2 的程序文件，不会重新安装驱动。请下载完整安装包重新运行安装程序，并按向导提示重启系统。</p>
+              <span class="note-title">上次跑完整安装包时早于 1.0.7 的，要再跑一次</span>
+              <p>1.0.7 把随包的 WinFSP 驱动升到了 2026 beta1，修掉旧版 WinFSP 的安全漏洞
+                 <a href="https://github.com/winfsp/winfsp/releases/tag/v2.2B1" rel="noopener">CVE-2026-3006</a>。应用内 OTA 只替换 CloudDrive2 自己的程序文件，从不碰驱动。</p>
+              <p>所以看的不是你现在是哪个版本，而是<strong>上一次跑完整安装包时是哪个版本</strong>。那次要是早于 1.0.7，哪怕之后一路 OTA 升到了最新版，驱动也仍然是旧的——请下载完整安装包重新运行安装程序，并按向导提示重启系统。记不清就再跑一次，没有副作用。</p>
+              <p>上次完整安装的是 1.0.7 或更高版本的，驱动已经是修好的那一版，之后的升级用应用内 OTA 就行。</p>
+            </div>
+            <div class="note">
+              <span class="note-title">它以系统服务的方式在跑</span>
+              <p>核心服务装完就注册成 Windows 系统服务，开机自启，不用登录桌面也在跑。<a href="/download.html#app">Windows 应用</a>不一样，它是普通应用，跟着你的账户启动。</p>
+              <p>安装包、服务和 WinFSP 驱动都经过代码签名，但个别杀毒软件仍可能拦下其中之一——服务起不来、挂载盘出不来，或者应用直接被关掉。遇到这种情况，把 CloudDrive2 的安装目录和 WinFSP 一起加进杀软白名单。管理界面打不开时的完整排查顺序见<a href="#faq">常见问题</a>。</p>
+              <p>要从局域网里的别的设备访问，Windows 防火墙得放行对应端口：核心服务是 <strong>19798</strong>（开了 HTTPS 再加 <strong>19799</strong>），应用是 <strong>29798</strong>。装的时候通常会弹一次「允许访问」，点掉了的话到「Windows 安全中心 → 防火墙和网络保护 → 允许应用通过防火墙」补上。</p>
             </div>
             <p class="chip-note">Windows 7 已停止支持——系统自带的 TLS 和运行库满足不了当前版本的要求。旧设备可以改用 Linux 或 Docker 版本。</p>
           </div>
@@ -621,9 +629,24 @@ brew services start clouddrive2</code></pre></div>
         </details>
 
         <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows 上打不开 19798</summary>
+          <div class="acc-body">
+            <p>按这个顺序查，多数问题在第一步就露馅了。</p>
+            <ol>
+              <li><strong>服务在不在跑。</strong>按 Win+R 打开 <code>services.msc</code>，找 <strong>CloudDrive2 Service</strong>（服务名 <code>CloudDrive2</code>）。状态应该是「正在运行」，启动类型应该是「自动」。停着就右键启动它；启动类型被改成「手动」或「禁用」的，右键 →「属性」改回「自动」，否则下次开机它不会自己起来。命令行同样能看：
+                <div class="code-block"><pre><code>sc query CloudDrive2</code></pre></div>
+              </li>
+              <li><strong>服务在跑，但别的机器连不上。</strong>那是 Windows 防火墙没放行端口——核心服务 <strong>19798</strong>，开了 HTTPS 再加 <strong>19799</strong>。本机用 <code>http://localhost:19798</code> 能开、别的机器打不开，基本就是这一条。</li>
+              <li><strong>服务起不来，或者刚起来就停。</strong>多半是被杀毒软件拦了。把 CloudDrive2 的安装目录和 WinFSP 一起加进白名单再试。</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="acc">
           <summary><i class="fa-solid fa-shield-virus" aria-hidden="true"></i>杀毒软件报安装包有毒</summary>
           <div class="acc-body">
             <p>这是误报。安装包经过代码签名，被检出的 <code>is-XXXX.tmp</code> 只是 Inno Setup 安装器解包时的临时文件，被启发式引擎误判。可以把安装目录和安装包加进杀软白名单，并向厂商提交误报反馈。</p>
+            <p>装完之后也可能被拦：服务起不来、挂载盘出不来，或者应用被直接关掉。签名齐全也挡不住启发式引擎，把 CloudDrive2 的安装目录和 WinFSP 一并加进白名单即可。</p>
           </div>
         </details>
 

@@ -126,12 +126,35 @@
                   just open <code>http://localhost:19798</code> in a browser.</li>
             </ol>
             <div class="note note-warn">
-              <span class="note-title">Upgrade with the full installer, not the in-app updater</span>
-              <p>Since 1.0.7 the package also upgrades the WinFSP driver, which fixes
+              <span class="note-title">Last full install older than 1.0.7? Run the installer again</span>
+              <p>1.0.7 raised the bundled WinFSP driver to 2026 beta1, fixing
                  <a href="https://github.com/winfsp/winfsp/releases/tag/v2.2B1" rel="noopener">CVE-2026-3006</a>
                  in older WinFSP builds. The in-app OTA updater only replaces CloudDrive2's own files and
-                 will not reinstall the driver. Download the full installer, run it again, and restart when
-                 the wizard asks you to.</p>
+                 never touches the driver.</p>
+              <p>So what matters is not the version you are on now, but <strong>the version you last ran a
+                 full installer for</strong>. If that was older than 1.0.7, your driver is still the old one
+                 even if OTA has since carried you to the newest release — download the full installer, run
+                 it again, and restart when the wizard asks you to. If you cannot remember, just run it;
+                 there is no harm in doing so.</p>
+              <p>If your last full install was 1.0.7 or later, the driver is already the fixed one and the
+                 in-app updater handles every upgrade from there.</p>
+            </div>
+            <div class="note">
+              <span class="note-title">It runs as a Windows service</span>
+              <p>The core service registers itself as a Windows system service, starts with the machine and
+                 keeps running whether or not anyone is logged in. The
+                 <a href="/en/download.html#app">Windows app</a> is different — an ordinary application that
+                 starts with your account.</p>
+              <p>The installer, the service and the WinFSP driver are all code-signed, and some antivirus
+                 products still block one of them: the service will not start, the mounted drive never
+                 appears, or the app is closed outright. When that happens, add CloudDrive2's install
+                 directory and WinFSP to your antivirus allowlist. If the console will not open at all,
+                 <a href="#faq">common problems</a> has the full checklist.</p>
+              <p>To reach it from another machine on the network, Windows Firewall has to allow the port:
+                 <strong>19798</strong> for the core service (plus <strong>19799</strong> if you enable
+                 HTTPS), and <strong>29798</strong> for the app. Windows usually prompts once during
+                 installation; if that prompt was dismissed, add it under Windows Security → Firewall &amp;
+                 network protection → Allow an app through firewall.</p>
             </div>
             <p class="chip-note">Windows 7 is no longer supported — the TLS stack and runtime it ships with
                cannot meet what the current version needs. Older machines can run the Linux or Docker build
@@ -753,12 +776,39 @@ brew services start clouddrive2</code></pre></div>
         </details>
 
         <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Nothing answers on 19798 on Windows</summary>
+          <div class="acc-body">
+            <p>Work through these in order — most cases give themselves away at the first step.</p>
+            <ol>
+              <li><strong>Check the service is running.</strong> Press Win+R, open
+                  <code>services.msc</code> and find <strong>CloudDrive2 Service</strong> (service name
+                  <code>CloudDrive2</code>). Status should be Running and Startup type should be Automatic.
+                  If it is stopped, right-click and start it; if the startup type has been changed to Manual
+                  or Disabled, put it back to Automatic under right-click → Properties, or it will not come
+                  back after a reboot. The command line shows the same thing:
+                <div class="code-block"><pre><code>sc query CloudDrive2</code></pre></div>
+              </li>
+              <li><strong>Running, but unreachable from another machine.</strong> That is Windows Firewall
+                  not allowing the port — <strong>19798</strong> for the core service, plus
+                  <strong>19799</strong> if you enabled HTTPS. If <code>http://localhost:19798</code> works
+                  on the machine itself and nothing else can reach it, this is almost always why.</li>
+              <li><strong>The service will not start, or stops right after starting.</strong> Usually
+                  antivirus. Add CloudDrive2's install directory and WinFSP to the allowlist and try
+                  again.</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="acc">
           <summary><i class="fa-solid fa-shield-virus" aria-hidden="true"></i>Antivirus flags the installer</summary>
           <div class="acc-body">
             <p>It is a false positive. The installer is code-signed, and the <code>is-XXXX.tmp</code> file
                being flagged is just Inno Setup's temporary unpacking file, misjudged by a heuristic
                engine. Add the installer and its target directory to your antivirus allowlist, and report
                the false positive to the vendor.</p>
+            <p>It can also be blocked after installation: the service does not start, the mounted drive
+               never appears, or the app is closed outright. Signatures do not stop a heuristic engine, so
+               add CloudDrive2's install directory and WinFSP to the allowlist as well.</p>
           </div>
         </details>
 
