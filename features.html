@@ -363,12 +363,12 @@
         <header class="band-head">
           <p class="eyebrow">分享</p>
           <h2 id="clouddrive-sharing-h">用 API 令牌把整台 CloudDrive 接出去</h2>
-          <p>在一台 CloudDrive2 上建一个 API 令牌，另一台就能用地址加令牌，把它当成一个云存储添加进来——「添加云存储」列表里那个叫 <b>CloudDrive</b> 的选项就是它。</p>
+          <p>在一台 CloudDrive2 上建一个 API 令牌，任何实现了 CloudDrive API 的客户端，凭地址加令牌就能接进来。另一台 CloudDrive2 是其中一种——「添加云存储」列表里那个叫 <b>CloudDrive</b> 的选项就是它；第三方软件走的是同一套<a href="/api/CloudDrive2_gRPC_API_Guide.html">开放的 gRPC API</a>，能力一样不少。</p>
         </header>
 
         <div class="feature-row feature-row-top">
           <div class="feature-text">
-            <p>接进来之后，那台机器上连着的所有云盘，在这一台看来就是一个普通的云存储：浏览、播放、复制、备份，跟本机直连的云盘走同一套流程。</p>
+            <p>接进来之后，那台机器上连着的所有云盘，在对方看来就是一个普通的云存储：浏览、播放、复制、备份，跟本机直连的云盘走同一套流程。</p>
             <p>差别在于「像」到什么程度。WebDAV 是通用协议，代价是只剩文件本身——列目录、读写字节，能力到此为止。走 CloudDrive 令牌，两端说的是同一种语言，云盘的能力就能原样传过来。</p>
             <ul class="chips">
               <li><span class="chip chip-cloud">缩略图与预览</span></li>
@@ -434,17 +434,18 @@
               <tr><th scope="row">容量信息</th><td class="c">—</td><td class="c">✓</td></tr>
               <tr><th scope="row">直链</th><td class="c">—</td><td class="c">✓</td></tr>
               <tr><th scope="row">授权范围</th><td class="c">按用户设根目录与只读</td><td class="c">按令牌设根目录、逐项权限与有效期</td></tr>
-              <tr><th scope="row">第三方软件通用</th><td class="c">✓</td><td class="c">—</td></tr>
+              <tr><th scope="row">第三方软件</th><td class="c">任何 WebDAV 客户端，开箱即用</td><td class="c">任何实现了 CloudDrive API 的客户端</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="chip-note">两者不是替代关系。要给 Office、Infuse 这类第三方软件用，WebDAV 仍然是那个到处都认的协议；要把一整台 CloudDrive 的能力交给另一台 CloudDrive，令牌这条路能传过去的东西多得多。</p>
+        <p class="chip-note">两者不是替代关系。Office、Infuse 这类软件本来就不认识 CloudDrive，给它们用 WebDAV 最省事；愿意对接 CloudDrive API 的客户端——我们自己的应用，或者任何第三方——走令牌这条路能拿到的东西多得多。</p>
 
         <div class="split">
           <div>
             <h3>授权范围你自己划</h3>
             <p>令牌不是万能钥匙。建的时候可以限定它能访问的根目录、有效期，以及每一类操作能不能做——文件读取、写入、修改、系统操作、云存储操作、账号操作，每一大项下面还能逐条勾。给别人的那个令牌，可以只让它看某一个文件夹。</p>
             <p><a class="arrow-link" href="/help.html#token">怎么建 API 令牌</a></p>
+            <p><a class="arrow-link" href="/api/CloudDrive2_gRPC_API_Guide.html">CloudDrive API 开发者指南</a></p>
           </div>
           <div>
             <h3>直链要两端都开</h3>
