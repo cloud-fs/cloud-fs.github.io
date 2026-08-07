@@ -66,6 +66,7 @@
             <li><a class="chip chip-cloud" href="#unified-web-management">统一的多云盘管理</a></li>
             <li><a class="chip chip-cloud" href="#one-login">一次登录，到处使用</a></li>
             <li><a class="chip chip-cloud" href="#webdav">WebDAV 服务</a></li>
+            <li><a class="chip chip-cloud" href="#clouddrive-sharing">API 令牌分享</a></li>
             <li><a class="chip" href="#inter-cloud-copy">跨云盘快速复制</a></li>
             <li><a class="chip" href="#file-notification">文件变更通知</a></li>
             <li><a class="chip" href="#encrypted-filesystem">加密文件系统</a></li>
@@ -356,8 +357,109 @@
       </div>
     </section>
 
-    <!-- 5 ── inter-cloud-copy ────────────────────────────────────────── -->
-    <section class="band" id="inter-cloud-copy" aria-labelledby="inter-cloud-copy-h">
+    <!-- 5 ── clouddrive-sharing ──────────────────────────────────────── -->
+    <section class="band" id="clouddrive-sharing" aria-labelledby="clouddrive-sharing-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">分享</p>
+          <h2 id="clouddrive-sharing-h">用 API 令牌把整台 CloudDrive 接出去</h2>
+          <p>在一台 CloudDrive2 上建一个 API 令牌，另一台就能用地址加令牌，把它当成一个云存储添加进来——「添加云存储」列表里那个叫 <b>CloudDrive</b> 的选项就是它。</p>
+        </header>
+
+        <div class="feature-row feature-row-top">
+          <div class="feature-text">
+            <p>接进来之后，那台机器上连着的所有云盘，在这一台看来就是一个普通的云存储：浏览、播放、复制、备份，跟本机直连的云盘走同一套流程。</p>
+            <p>差别在于「像」到什么程度。WebDAV 是通用协议，代价是只剩文件本身——列目录、读写字节，能力到此为止。走 CloudDrive 令牌，两端说的是同一种语言，云盘的能力就能原样传过来。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">缩略图与预览</span></li>
+              <li><span class="chip chip-cloud">云端搜索</span></li>
+              <li><span class="chip chip-cloud">离线下载</span></li>
+              <li><span class="chip chip-cloud">秒传</span></li>
+              <li><span class="chip chip-cloud">容量信息</span></li>
+              <li><span class="chip chip-cloud">直链</span></li>
+              <li><span class="chip chip-cloud">精细授权与有效期</span></li>
+            </ul>
+          </div>
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-images" aria-hidden="true"></i>
+                <div><b>缩略图与预览地址</b><p>远端云盘给出的缩略图和预览地址原样传过来，瀑布流和图库照常出图，不必为了一张缩略图把原文件拉一遍。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <div><b>搜索交给云端做</b><p>搜索请求转发到远端，再由它交给各家云盘的搜索接口。在几十万个文件里找一个名字，不需要把目录树遍历一遍。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+                <div><b>离线下载照常用</b><p>磁力链接和种子文件仍然直接交给远端的云盘去下，任务的添加、查看和清理都能在本机操作。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                <div><b>哈希传过来，秒传才成立</b><p>文件哈希跟着一起传，所以往这个云存储复制文件时同样可能命中秒传。WebDAV 没有哈希这个概念，每一次复制都只能老老实实搬字节。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-gauge" aria-hidden="true"></i>
+                <div><b>真实的容量数字</b><p>总容量、已用、可用都从远端取，不是一个占位值——挂载出来之后，系统里显示的剩余空间也就是对的。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-link" aria-hidden="true"></i>
+                <div><b>直链，绕开中转</b><p>打开之后，本机拿到的是云盘的直连地址，数据不再经过远端那台机器转发。</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                <div><b>逐项授权，还能设有效期</b><p>能力多不等于全交出去。每个令牌单独设根目录、有效期，以及每一类操作允不允许——读、写、改、系统、云存储、账号，逐条勾。WebDAV 用户能划的只有根目录和只读两项，也没有到期这回事。</p></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>和 WebDAV 比</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">通过 WebDAV 与通过 CloudDrive API 令牌接入远程 CloudDrive 的能力对比</caption>
+            <thead>
+              <tr>
+                <th scope="col">能力</th>
+                <th scope="col" class="c">WebDAV</th>
+                <th scope="col" class="c">CloudDrive 令牌</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">浏览目录、读写文件</th><td class="c">✓</td><td class="c">✓</td></tr>
+              <tr><th scope="row">缩略图与预览地址</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">云端搜索</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">离线下载</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">文件哈希与秒传</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">容量信息</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">直链</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">授权范围</th><td class="c">按用户设根目录与只读</td><td class="c">按令牌设根目录、逐项权限与有效期</td></tr>
+              <tr><th scope="row">第三方软件通用</th><td class="c">✓</td><td class="c">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">两者不是替代关系。要给 Office、Infuse 这类第三方软件用，WebDAV 仍然是那个到处都认的协议；要把一整台 CloudDrive 的能力交给另一台 CloudDrive，令牌这条路能传过去的东西多得多。</p>
+
+        <div class="split">
+          <div>
+            <h3>授权范围你自己划</h3>
+            <p>令牌不是万能钥匙。建的时候可以限定它能访问的根目录、有效期，以及每一类操作能不能做——文件读取、写入、修改、系统操作、云存储操作、账号操作，每一大项下面还能逐条勾。给别人的那个令牌，可以只让它看某一个文件夹。</p>
+            <p><a class="arrow-link" href="/help.html#token">怎么建 API 令牌</a></p>
+          </div>
+          <div>
+            <h3>直链要两端都开</h3>
+            <p>直链默认关闭。要用的话，提供方那台在对应云盘的设置里打开「支持直链」；两端还都需要有效的会员——月费、年费、轻享终身和终身都可以。</p>
+            <div class="note note-warn">
+              <span class="note-title">直链里可能带着凭据</span>
+              <p>云盘的直接下载链接可能包含用户 ID、访问令牌等敏感信息。请不要公开分享这些链接，也不要交给不可信的第三方；由此产生的后果需要你自己承担。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 ── inter-cloud-copy ────────────────────────────────────────── -->
+    <section class="band band-alt" id="inter-cloud-copy" aria-labelledby="inter-cloud-copy-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">传输</p>
@@ -516,8 +618,8 @@
       </div>
     </section>
 
-    <!-- 6 ── file-notification ───────────────────────────────────────── -->
-    <section class="band band-alt" id="file-notification" aria-labelledby="file-notification-h">
+    <!-- 7 ── file-notification ───────────────────────────────────────── -->
+    <section class="band" id="file-notification" aria-labelledby="file-notification-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">事件</p>
@@ -539,8 +641,8 @@
       </div>
     </section>
 
-    <!-- 7 ── encrypted-filesystem ────────────────────────────────────── -->
-    <section class="band" id="encrypted-filesystem" aria-labelledby="encrypted-filesystem-h">
+    <!-- 8 ── encrypted-filesystem ────────────────────────────────────── -->
+    <section class="band band-alt" id="encrypted-filesystem" aria-labelledby="encrypted-filesystem-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">加密</p>
@@ -612,8 +714,8 @@
       </div>
     </section>
 
-    <!-- 8 ── file-access-control ─────────────────────────────────────── -->
-    <section class="band band-alt" id="file-access-control" aria-labelledby="file-access-control-h">
+    <!-- 9 ── file-access-control ─────────────────────────────────────── -->
+    <section class="band" id="file-access-control" aria-labelledby="file-access-control-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">监控</p>
@@ -635,8 +737,8 @@
       </div>
     </section>
 
-    <!-- 9 ── service-vendor-friendly ─────────────────────────────────── -->
-    <section class="band" id="service-vendor-friendly" aria-labelledby="service-vendor-friendly-h">
+    <!-- 10 ── service-vendor-friendly ─────────────────────────────────── -->
+    <section class="band band-alt" id="service-vendor-friendly" aria-labelledby="service-vendor-friendly-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">克制</p>
@@ -663,8 +765,8 @@
       </div>
     </section>
 
-    <!-- 10 ── multicloud-backup ──────────────────────────────────────── -->
-    <section class="band band-alt" id="multicloud-backup" aria-labelledby="multicloud-backup-h">
+    <!-- 11 ── multicloud-backup ──────────────────────────────────────── -->
+    <section class="band" id="multicloud-backup" aria-labelledby="multicloud-backup-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">备份</p>
@@ -696,7 +798,7 @@
       </div>
     </section>
 
-    <section class="band cta-band" aria-labelledby="apps-h">
+    <section class="band band-alt cta-band" aria-labelledby="apps-h">
       <div class="container">
         <p class="eyebrow">应用</p>
         <h2 id="apps-h">以上这些，每个平台都有</h2>
