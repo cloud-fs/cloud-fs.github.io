@@ -417,16 +417,17 @@
         <header class="band-head">
           <p class="eyebrow">Sharing</p>
           <h2 id="clouddrive-sharing-h">Hand a whole CloudDrive over with an API token</h2>
-          <p>Create an API token on one CloudDrive2, and another one can add it as cloud storage using
-             just the address and that token — it is the entry called <b>CloudDrive</b> in the Add Cloud
-             Storage list.</p>
+          <p>Create an API token on a CloudDrive2, and any client that speaks the CloudDrive API can connect
+             to it with just the address and that token. Another CloudDrive2 is one such client — the entry
+             called <b>CloudDrive</b> in its Add Cloud Storage list. Third-party software goes through the
+             same <a href="/api/CloudDrive2_gRPC_API_Guide.html">open gRPC API</a>, and gets exactly as much.</p>
         </header>
 
         <div class="feature-row feature-row-top">
           <div class="feature-text">
-            <p>Once it is in, every cloud connected on that machine looks like an ordinary cloud storage
-               on this one: browsing, playback, copying and backup all take the same path as a directly
-               connected cloud.</p>
+            <p>Once connected, every cloud on that machine looks like an ordinary cloud storage to the client:
+               browsing, playback, copying and backup all take the same path as a directly connected
+               cloud.</p>
             <p>What differs is how far the resemblance goes. WebDAV is a universal protocol, and the price
                of that is that only the file survives the trip — list a directory, read and write bytes, and
                there it ends. Over a CloudDrive token both ends speak the same language, so a cloud's
@@ -495,17 +496,18 @@
               <tr><th scope="row">Capacity information</th><td class="c">—</td><td class="c">✓</td></tr>
               <tr><th scope="row">Direct links</th><td class="c">—</td><td class="c">✓</td></tr>
               <tr><th scope="row">Scoping what the other side may do</th><td class="c">Root directory and read-only, per user</td><td class="c">Root directory, per-operation permissions and an expiry, per token</td></tr>
-              <tr><th scope="row">Works with third-party software</th><td class="c">✓</td><td class="c">—</td></tr>
+              <tr><th scope="row">Third-party software</th><td class="c">Any WebDAV client, out of the box</td><td class="c">Any client that implements the CloudDrive API</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="chip-note">These are not alternatives to each other. For third-party software — Office, Infuse and the rest — WebDAV is still the protocol everything already speaks. For handing one CloudDrive's abilities to another CloudDrive, far more survives the token route.</p>
+        <p class="chip-note">These are not alternatives to each other. Office, Infuse and the like know nothing about CloudDrive, and WebDAV is the least trouble for them. For a client willing to implement the CloudDrive API — ours, or anyone else's — far more survives the token route.</p>
 
         <div class="split">
           <div>
             <h3>You draw the boundary</h3>
             <p>A token is not a skeleton key. When you create one you can limit the root directory it reaches, give it an expiry, and set whether each class of operation is allowed at all — file read, write and modify, system operations, cloud storage operations and account operations, each with its own sub-items. A token you hand to someone else can see exactly one folder.</p>
             <p><a class="arrow-link" href="/en/help.html#token">Creating an API token</a></p>
+            <p><a class="arrow-link" href="/api/CloudDrive2_gRPC_API_Guide.html">The CloudDrive API developer guide</a></p>
           </div>
           <div>
             <h3>Direct links need both ends</h3>
