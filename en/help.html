@@ -94,12 +94,17 @@
           <div>
             <p>The core service's management interface runs on <strong>19798</strong> — the same on Windows,
                Linux, macOS, Android and inside Docker. On the machine itself, use
-               <code>http://localhost:19798</code>. Use a recent version of Edge, Chrome, Safari or Firefox.
-               <strong>Internet Explorer is not supported.</strong></p>
+               <code>http://localhost:19798</code>.</p>
             <p>There is an HTTPS port too, <strong>19799</strong>. It is off by default — turn it on and
                configure a certificate under Settings.</p>
             <p>The core inside the apps listens on <strong>29798</strong> instead. The two are deliberately
                different, so a machine running both the core service and an app has no port conflict.</p>
+            <p>The whole interface is a WebAssembly application, so the browser has to support WebAssembly.
+               One that does not shows a blank page — this is not a matter of losing a few features. Any
+               recent Edge, Chrome, Safari or Firefox on a computer works, as do the mainstream browsers on
+               phones and tablets. <strong>Internet Explorer does not, and neither do most of the browsers
+               built into TVs, set-top boxes, e-readers and cars</strong> — on those, open it from a phone
+               or a computer instead, or install the app for that platform.</p>
           </div>
         </div>
       </div>
