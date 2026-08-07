@@ -422,6 +422,39 @@ a.card:hover {
   background: var(--brand); color: var(--on-brand);
 }
 
+/* ── partner logo wall ────────────────────────────────────────────────── */
+/* Third-party brand marks always sit on a light tile: most of them are dark
+   wordmarks that would disappear against the dark theme's background. */
+.logo-wall {
+  display: grid; gap: var(--s3);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  list-style: none; padding: 0; margin: 0 0 var(--s5);
+}
+/* the auto-fit minimum would drop to a single column on a phone */
+@media (max-width: 560px) { .logo-wall { grid-template-columns: repeat(2, 1fr); } }
+.logo-wall > li { margin: 0; display: flex; }
+/* Fixed height, never flex: 1 — inside a card the tile is a column flex item, so
+   flex-growing would let it absorb the leftover height and every card with short
+   copy would push its heading further down than its neighbours. */
+.logo-tile {
+  flex: none; display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 78px; padding: var(--s3);
+  background: #fff; border: 1px solid var(--border); border-radius: var(--r-m);
+}
+/* Every source file is cropped to its own ink box, so these heights land on the
+   artwork itself. Equal box heights do NOT look equal: a bare wordmark is all
+   cap-height, while a lockup spends most of its box on the icon and renders its
+   letters at half the size. The three tiers even out the optical size. */
+.logo-tile img { max-height: 32px; max-width: 86%; width: auto; height: auto; }
+.logo-tile img.logo-mark { max-height: 42px; }   /* square or icon-led lockup */
+.logo-tile img.logo-word { max-height: 24px; }   /* bare wordmark, no icon */
+/* stand-in for a partner whose official logo file we don't have */
+.logo-tile b {
+  font-size: .97rem; font-weight: 650; line-height: 1.25;
+  color: #1d1d1f; text-align: center; letter-spacing: -.01em;
+}
+.card > .logo-tile { margin-bottom: var(--s4); }
+
 /* ── alternating feature rows ─────────────────────────────────────────── */
 .feature-row {
   display: grid; gap: var(--s6); align-items: center;
