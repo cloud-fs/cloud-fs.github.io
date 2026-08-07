@@ -68,6 +68,7 @@
             <li><a class="chip chip-cloud" href="#unified-web-management">One place for every cloud</a></li>
             <li><a class="chip chip-cloud" href="#one-login">Sign in once</a></li>
             <li><a class="chip chip-cloud" href="#webdav">WebDAV service</a></li>
+            <li><a class="chip chip-cloud" href="#clouddrive-sharing">Sharing by API token</a></li>
             <li><a class="chip" href="#inter-cloud-copy">Cross-cloud copying</a></li>
             <li><a class="chip" href="#file-notification">Change notifications</a></li>
             <li><a class="chip" href="#encrypted-filesystem">Encrypted filesystem</a></li>
@@ -410,8 +411,116 @@
       </div>
     </section>
 
-    <!-- 5 ── inter-cloud-copy ────────────────────────────────────────── -->
-    <section class="band" id="inter-cloud-copy" aria-labelledby="inter-cloud-copy-h">
+    <!-- 5 ── clouddrive-sharing ──────────────────────────────────────── -->
+    <section class="band" id="clouddrive-sharing" aria-labelledby="clouddrive-sharing-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Sharing</p>
+          <h2 id="clouddrive-sharing-h">Hand a whole CloudDrive over with an API token</h2>
+          <p>Create an API token on one CloudDrive2, and another one can add it as cloud storage using
+             just the address and that token — it is the entry called <b>CloudDrive</b> in the Add Cloud
+             Storage list.</p>
+        </header>
+
+        <div class="feature-row feature-row-top">
+          <div class="feature-text">
+            <p>Once it is in, every cloud connected on that machine looks like an ordinary cloud storage
+               on this one: browsing, playback, copying and backup all take the same path as a directly
+               connected cloud.</p>
+            <p>What differs is how far the resemblance goes. WebDAV is a universal protocol, and the price
+               of that is that only the file survives the trip — list a directory, read and write bytes, and
+               there it ends. Over a CloudDrive token both ends speak the same language, so a cloud's
+               capabilities come through intact.</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Thumbnails and previews</span></li>
+              <li><span class="chip chip-cloud">Search on the cloud</span></li>
+              <li><span class="chip chip-cloud">Offline downloads</span></li>
+              <li><span class="chip chip-cloud">Rapid upload</span></li>
+              <li><span class="chip chip-cloud">Real capacity</span></li>
+              <li><span class="chip chip-cloud">Direct links</span></li>
+              <li><span class="chip chip-cloud">Per-operation permissions and expiry</span></li>
+            </ul>
+          </div>
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-images" aria-hidden="true"></i>
+                <div><b>Thumbnail and preview URLs</b><p>The URLs the remote cloud provides are passed through as they are, so gallery and waterfall views still show images without pulling the original file down for each one.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <div><b>Search happens on the cloud</b><p>The query is forwarded to the remote machine, which hands it to each provider's own search. Finding one name among hundreds of thousands of files does not mean walking the directory tree.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+                <div><b>Offline downloads still work</b><p>Magnet links and torrent files still go to the remote cloud to fetch, and adding, watching and clearing those tasks all happen from here.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                <div><b>Hashes travel, so rapid upload can happen</b><p>File hashes come across too, so copying into this cloud storage can still hit an instant server-side copy. WebDAV has no notion of a hash, so every copy there moves every byte.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-gauge" aria-hidden="true"></i>
+                <div><b>Capacity that is real</b><p>Total, used and free are read from the remote side rather than filled in with a placeholder — so once mounted, the free space your system reports is the true one.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-link" aria-hidden="true"></i>
+                <div><b>Direct links skip the relay</b><p>With it enabled, this machine gets the provider's own download URL and the data stops passing through the remote machine on its way.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                <div><b>Granted item by item, and it can expire</b><p>More capability does not mean handing over all of it. Each token gets its own root directory, its own expiry, and its own answer for every class of operation — read, write, modify, system, cloud storage, account. A WebDAV user can only be given a root directory and read-only, and never expires.</p></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Against WebDAV</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">What comes through over WebDAV compared with a CloudDrive API token</caption>
+            <thead>
+              <tr>
+                <th scope="col">Capability</th>
+                <th scope="col" class="c">WebDAV</th>
+                <th scope="col" class="c">CloudDrive token</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Browse directories, read and write files</th><td class="c">✓</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Thumbnail and preview URLs</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Search on the cloud</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Offline downloads</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">File hashes and rapid upload</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Capacity information</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Direct links</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Scoping what the other side may do</th><td class="c">Root directory and read-only, per user</td><td class="c">Root directory, per-operation permissions and an expiry, per token</td></tr>
+              <tr><th scope="row">Works with third-party software</th><td class="c">✓</td><td class="c">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">These are not alternatives to each other. For third-party software — Office, Infuse and the rest — WebDAV is still the protocol everything already speaks. For handing one CloudDrive's abilities to another CloudDrive, far more survives the token route.</p>
+
+        <div class="split">
+          <div>
+            <h3>You draw the boundary</h3>
+            <p>A token is not a skeleton key. When you create one you can limit the root directory it reaches, give it an expiry, and set whether each class of operation is allowed at all — file read, write and modify, system operations, cloud storage operations and account operations, each with its own sub-items. A token you hand to someone else can see exactly one folder.</p>
+            <p><a class="arrow-link" href="/en/help.html#token">Creating an API token</a></p>
+          </div>
+          <div>
+            <h3>Direct links need both ends</h3>
+            <p>Direct links are off by default. To use them, the machine providing the storage turns on Support Direct Link in that cloud's settings, and both ends need an active membership — monthly, yearly, Lifetime Lite and Lifetime all qualify.</p>
+            <div class="note note-warn">
+              <span class="note-title">A direct link may carry credentials</span>
+              <p>A provider's direct download URL can contain sensitive data including your user ID and access tokens. Do not share these links publicly or with third parties you do not trust; the consequences of doing so are yours to carry.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 ── inter-cloud-copy ────────────────────────────────────────── -->
+    <section class="band band-alt" id="inter-cloud-copy" aria-labelledby="inter-cloud-copy-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Transfer</p>
@@ -581,8 +690,8 @@
       </div>
     </section>
 
-    <!-- 6 ── file-notification ───────────────────────────────────────── -->
-    <section class="band band-alt" id="file-notification" aria-labelledby="file-notification-h">
+    <!-- 7 ── file-notification ───────────────────────────────────────── -->
+    <section class="band" id="file-notification" aria-labelledby="file-notification-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Events</p>
@@ -614,8 +723,8 @@
       </div>
     </section>
 
-    <!-- 7 ── encrypted-filesystem ────────────────────────────────────── -->
-    <section class="band" id="encrypted-filesystem" aria-labelledby="encrypted-filesystem-h">
+    <!-- 8 ── encrypted-filesystem ────────────────────────────────────── -->
+    <section class="band band-alt" id="encrypted-filesystem" aria-labelledby="encrypted-filesystem-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Encryption</p>
@@ -711,8 +820,8 @@
       </div>
     </section>
 
-    <!-- 8 ── file-access-control ─────────────────────────────────────── -->
-    <section class="band band-alt" id="file-access-control" aria-labelledby="file-access-control-h">
+    <!-- 9 ── file-access-control ─────────────────────────────────────── -->
+    <section class="band" id="file-access-control" aria-labelledby="file-access-control-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Monitoring</p>
@@ -741,8 +850,8 @@
       </div>
     </section>
 
-    <!-- 9 ── service-vendor-friendly ─────────────────────────────────── -->
-    <section class="band" id="service-vendor-friendly" aria-labelledby="service-vendor-friendly-h">
+    <!-- 10 ── service-vendor-friendly ─────────────────────────────────── -->
+    <section class="band band-alt" id="service-vendor-friendly" aria-labelledby="service-vendor-friendly-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Restraint</p>
@@ -775,8 +884,8 @@
       </div>
     </section>
 
-    <!-- 10 ── multicloud-backup ──────────────────────────────────────── -->
-    <section class="band band-alt" id="multicloud-backup" aria-labelledby="multicloud-backup-h">
+    <!-- 11 ── multicloud-backup ──────────────────────────────────────── -->
+    <section class="band" id="multicloud-backup" aria-labelledby="multicloud-backup-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Backup</p>
@@ -816,7 +925,7 @@
       </div>
     </section>
 
-    <section class="band cta-band" aria-labelledby="apps-h">
+    <section class="band band-alt cta-band" aria-labelledby="apps-h">
       <div class="container">
         <p class="eyebrow">Apps</p>
         <h2 id="apps-h">All of this, on every platform</h2>

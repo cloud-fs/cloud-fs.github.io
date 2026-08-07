@@ -429,6 +429,9 @@ a.card:hover {
   padding-block: var(--s6);
 }
 .feature-row + .feature-row { border-top: 1px solid var(--border); }
+/* centring is right for a text-beside-image row; when the second column is a
+   long list it strands the text in the middle instead */
+.feature-row-top { align-items: start; }
 .feature-row > figure { margin: 0; text-align: center; }
 .feature-row img {
   width: auto; max-width: 100%; max-height: 600px;
