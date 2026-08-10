@@ -427,7 +427,7 @@ a.card:hover {
    wordmarks that would disappear against the dark theme's background. */
 .logo-wall {
   display: grid; gap: var(--s3);
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
   list-style: none; padding: 0; margin: 0 0 var(--s5);
 }
 /* the auto-fit minimum would drop to a single column on a phone */
