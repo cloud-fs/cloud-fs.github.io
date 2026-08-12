@@ -912,6 +912,21 @@ brew services start clouddrive2</code></pre></div>
         </details>
 
         <details class="acc">
+          <summary><i class="fa-solid fa-hard-drive" aria-hidden="true"></i>Mounting fails with "IO Error: mount point is not empty"</summary>
+          <div class="acc-body">
+            <p>The mount point directory has to be empty. This error is most common right after a reboot:
+               some program that also uses the path — Emby, a download tool, a backup script — started
+               before the CloudDrive2 service and wrote into the directory before it was actually mounted,
+               and CloudDrive2 refuses to mount over a non-empty directory.</p>
+            <p>To fix it, stop whatever is writing there and clear out what was left in the mount point
+               directory — those files are on the local disk, not in the cloud, so check whether anything
+               needs keeping first — then mount again. To stop it recurring, make the programs that depend
+               on the path start after CloudDrive2: set their service to depend on the CloudDrive2 service,
+               or give them a delayed start.</p>
+          </div>
+        </details>
+
+        <details class="acc">
           <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>It will not install or sign in on Windows 7</summary>
           <div class="acc-body">
             <p>Windows 7 is no longer supported: the TLS stack and runtime libraries it ships with cannot
