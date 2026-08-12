@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudDrive2 help — install, mount, back up, encrypt, troubleshoot</title>
+  <meta name="description" content="The CloudDrive2 manual: installing and running it on Windows, Linux, macOS, Android, NAS and Docker, adding cloud storage, mounting a cloud as a local disk, cross-cloud copying, backup, encrypted folders, WebDAV and API tokens, plus fixes for reverse proxies, macFUSE and Google Drive authorisation.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/help.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/help.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/help.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/help.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="CloudDrive2 help">
+  <meta property="og:description" content="Installing and running, connecting your first cloud, mounting it as a local disk, everyday use, account security, and the questions we are asked most.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/help.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html" aria-current="page">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/help.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">User guide</p>
+          <h1>Install it, then connect your first cloud</h1>
+          <p class="hero-lede">
+            From installing the service on your computer, NAS or phone to creating an account, adding
+            cloud storage, mounting a cloud as a local disk, and on to backup, encryption and WebDAV.
+            Read the section for the device in front of you.
+          </p>
+          <ul class="chips">
+            <li><a class="chip chip-cloud" href="#install">Installing</a></li>
+            <li><a class="chip chip-cloud" href="#start">Your first cloud</a></li>
+            <li><a class="chip" href="#mount">Mounting as a disk</a></li>
+            <li><a class="chip" href="#apps">On phones and TVs</a></li>
+            <li><a class="chip" href="#daily">Everyday use</a></li>
+            <li><a class="chip" href="#account">Account and security</a></li>
+            <li><a class="chip" href="#faq">Common problems</a></li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/en/download.html">Get the installer</a>
+            <a class="btn btn-ghost" href="/en/docker.html">Docker deployment guide</a>
+          </div>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/macos-dashboard.webp" width="1600" height="815" decoding="async"
+               alt="The CloudDrive2 console: total capacity across the connected clouds, with entries for files, cloud storage, mounts, backups, tasks, WebDAV, API tokens and devices.">
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="port-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">The first thing to do after installing</p>
+            <h2 id="port-h">Open it in a browser</h2>
+            <p class="port-url">http://&lt;host IP&gt;:19798</p>
+          </div>
+          <div>
+            <p>The core service's management interface runs on <strong>19798</strong> — the same on Windows,
+               Linux, macOS, Android and inside Docker. On the machine itself, use
+               <code>http://localhost:19798</code>.</p>
+            <p>There is an HTTPS port too, <strong>19799</strong>. It is off by default — turn it on and
+               configure a certificate under Settings.</p>
+            <p>The core inside the apps listens on <strong>29798</strong> instead. The two are deliberately
+               different, so a machine running both the core service and an app has no port conflict.</p>
+            <p>The whole interface is a WebAssembly application, so the browser has to support WebAssembly.
+               One that does not shows a blank page — this is not a matter of losing a few features. Any
+               recent Edge, Chrome, Safari or Firefox on a computer works, as do the mainstream browsers on
+               phones and tablets. <strong>Internet Explorer does not, and neither do most of the browsers
+               built into TVs, set-top boxes, e-readers and cars</strong> — on those, open it from a phone
+               or a computer instead, or install the app for that platform.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="install" aria-labelledby="install-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Step one</p>
+          <h2 id="install-h">Installing and running</h2>
+          <p>This section covers installing the core as a background service — on a computer, a NAS or a
+             router. The apps for phones, TVs and headsets carry the same core and need no server of their
+             own; see <a href="#apps">On phones, TVs and headsets</a>.</p>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</summary>
+          <div class="acc-body">
+            <ol>
+              <li>Get the installer for your architecture (x64 or Arm64) from the
+                  <a href="/en/download.html#core">download page</a>.</li>
+              <li>Run the installer and follow the on-screen prompts.</li>
+              <li>When it finishes, a CloudDrive2 shortcut appears on your desktop. Double-click it, or
+                  just open <code>http://localhost:19798</code> in a browser.</li>
+            </ol>
+            <div class="note note-warn">
+              <span class="note-title">Last full install older than 1.0.7? Run the installer again</span>
+              <p>1.0.7 raised the bundled WinFSP driver to 2026 beta1, fixing
+                 <a href="https://github.com/winfsp/winfsp/releases/tag/v2.2B1" rel="noopener">CVE-2026-3006</a>
+                 in older WinFSP builds. The in-app OTA updater only replaces CloudDrive2's own files and
+                 never touches the driver.</p>
+              <p>So what matters is not the version you are on now, but <strong>the version you last ran a
+                 full installer for</strong>. If that was older than 1.0.7, your driver is still the old one
+                 even if OTA has since carried you to the newest release — download the full installer, run
+                 it again, and restart when the wizard asks you to. If you cannot remember, just run it;
+                 there is no harm in doing so.</p>
+              <p>If your last full install was 1.0.7 or later, the driver is already the fixed one and the
+                 in-app updater handles every upgrade from there.</p>
+            </div>
+            <div class="note">
+              <span class="note-title">It runs as a Windows service</span>
+              <p>The core service registers itself as a Windows system service, starts with the machine and
+                 keeps running whether or not anyone is logged in. The
+                 <a href="/en/download.html#app">Windows app</a> is different — an ordinary application that
+                 starts with your account.</p>
+              <p>The installer, the service and the WinFSP driver are all code-signed, and some antivirus
+                 products still block one of them: the service will not start, the mounted drive never
+                 appears, or the app is closed outright. When that happens, add CloudDrive2's install
+                 directory and WinFSP to your antivirus allowlist. If the console will not open at all,
+                 <a href="#faq">common problems</a> has the full checklist.</p>
+              <p>To reach it from another machine on the network, Windows Firewall has to allow the port:
+                 <strong>19798</strong> for the core service (plus <strong>19799</strong> if you enable
+                 HTTPS), and <strong>29798</strong> for the app. Windows usually prompts once during
+                 installation; if that prompt was dismissed, add it under Windows Security → Firewall &amp;
+                 network protection → Allow an app through firewall.</p>
+            </div>
+            <p class="chip-note">Windows 7 is no longer supported — the TLS stack and runtime it ships with
+               cannot meet what the current version needs. Older machines can run the Linux or Docker build
+               instead.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-linux" aria-hidden="true"></i>Linux, generic</summary>
+          <div class="acc-body">
+            <ol>
+              <li>Check that your kernel supports FUSE by looking for the <code>/dev/fuse</code> device.
+                  Without FUSE support you cannot mount clouds as local directories.</li>
+              <li>To run CloudDrive2 as a non-root user, install fuse3 the way your distribution's manual
+                  describes, confirm that the <code>fusermount3</code> command runs, then edit
+                  <code>/etc/fuse.conf</code> and remove the leading <code>#</code> from the
+                  <code>user_allow_other</code> line.</li>
+              <li>Download the archive for your CPU architecture from the <a href="/en/download.html#core">download page</a>.</li>
+              <li>Open a terminal and change into the directory holding the archive.</li>
+              <li>Extract it:
+                <div class="code-block"><pre><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz</code></pre></div>
+              </li>
+              <li>Change into the extracted directory and run:
+                <div class="code-block"><pre><code>./clouddrive</code></pre></div>
+              </li>
+              <li>You can add clouddrive to your system's startup items or register it as a system service.
+                  See your distribution's documentation for how.</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-terminal" aria-hidden="true"></i>Arch Linux</summary>
+          <div class="acc-body">
+            <ol>
+              <li>Arch Linux and its derivatives can install from the
+                  <a href="https://aur.archlinux.org/packages/clouddrive" rel="noopener">AUR package</a>
+                  or a <a href="https://github.com/taotieren/aur-repo" rel="noopener">third-party repository</a>:
+                <div class="code-block"><pre><code>yay -Syu clouddrive</code></pre></div>
+              </li>
+              <li>Start clouddrive with systemd and enable it at boot:
+                <div class="code-block"><pre><code># as root
+systemctl enable --now clouddrive.service
+
+# as your user
+systemctl --user enable --now clouddrive.service</code></pre></div>
+              </li>
+              <li>Check that clouddrive is running:
+                <div class="code-block"><pre><code># as root
+systemctl status clouddrive.service
+
+# as your user
+systemctl --user status clouddrive.service</code></pre></div>
+              </li>
+              <li>Open the management interface in your default browser:
+                <div class="code-block"><pre><code># recommended
+xdg-open http://localhost:19798
+
+# IPv4
+xdg-open http://127.0.0.1:19798
+
+# IPv6
+xdg-open http://[::]:19798</code></pre></div>
+              </li>
+              <li>If the page loads slowly or stutters, open it in your browser's private or incognito window.</li>
+              <li>Mounting a local disk after signing in asks for a UID and GID:
+                <div class="code-block"><pre><code># current user
+id -u
+id -g
+
+# another user
+id -u username
+id -g username</code></pre></div>
+              </li>
+              <li>The AUR package's local disk mount point: <code>/media/clouddrive</code>.</li>
+              <li>The AUR package's WebDAV mount point: <code>/media/clouddrive-dav</code>.
+                  This one needs the <code>davfs2</code> package.</li>
+              <li>Put your WebDAV username and password into <code>/etc/davfs2/secrets</code>, for example:
+                <div class="code-block"><pre><code>cat &lt;&lt; EOF | sudo tee -a /etc/davfs2/secrets
+# personal webdav, application password
+/media/clouddrive-dav user@email.com  mypassword
+EOF</code></pre></div>
+              </li>
+              <li>Start clouddrive-dav with systemd and enable it at boot (as root):
+                <div class="code-block"><pre><code>systemctl enable --now clouddrive-dav.service</code></pre></div>
+              </li>
+              <li>Check that clouddrive-dav is running (as root):
+                <div class="code-block"><pre><code>systemctl status clouddrive-dav.service</code></pre></div>
+              </li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS</summary>
+          <div class="acc-body">
+            <h4>With Homebrew (recommended)</h4>
+            <ol>
+              <li>Make sure <a href="https://brew.sh/" rel="noopener">Homebrew</a> is installed.</li>
+              <li>Install <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a> before running
+                  CloudDrive2, and approve its kernel extension in System Settings — an Apple silicon Mac
+                  needs a trip to Recovery first, described in
+                  <a href="/en/macfuse.html">letting macFUSE through</a>. Homebrew can install it too:
+                <div class="code-block"><pre><code>brew install --cask macfuse</code></pre></div>
+              </li>
+              <li>Install CloudDrive2:
+                <div class="code-block"><pre><code>brew tap cloud-fs/clouddrive2
+brew install clouddrive2</code></pre></div>
+              </li>
+              <li>Start CloudDrive2:
+                <div class="code-block"><pre><code>brew services start clouddrive2</code></pre></div>
+                This creates a background service that starts again the next time you log in.
+              </li>
+              <li>Open <a href="http://localhost:19798" rel="noopener">http://localhost:19798</a> in a
+                  browser to reach the management interface.</li>
+              <li>Stop CloudDrive2:
+                <div class="code-block"><pre><code>brew services stop clouddrive2</code></pre></div>
+              </li>
+              <li>Uninstall CloudDrive2:
+                <div class="code-block"><pre><code>brew services stop clouddrive2
+brew uninstall clouddrive2</code></pre></div>
+              </li>
+              <li>Upgrade CloudDrive2:
+                <div class="code-block"><pre><code>brew services stop clouddrive2
+brew update
+brew upgrade clouddrive2
+brew services start clouddrive2</code></pre></div>
+              </li>
+            </ol>
+
+            <h4>Manual install</h4>
+            <ol>
+              <li>Install <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a> first and approve it
+                  as described in <a href="/en/macfuse.html">letting macFUSE through</a>.</li>
+              <li>Download the archive for your CPU architecture from the <a href="/en/download.html#core">download page</a>.</li>
+              <li>Open a terminal and change into the directory holding the archive.</li>
+              <li>Extract it:
+                <div class="code-block"><pre><code>tar zxvf clouddrive-2-macos-$ARCH-$VERSION.tgz</code></pre></div>
+              </li>
+              <li>Change into the extracted directory and run:
+                <div class="code-block"><pre><code>./clouddrive</code></pre></div>
+              </li>
+              <li>You can add clouddrive to your login items or register it as a system service. See the
+                  macOS documentation for how.</li>
+            </ol>
+
+            <p class="chip-note">For what differs between the Mac App Store build and the direct download,
+               see <a href="/en/apps/macos.html">CloudDrive2 for macOS</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-android" aria-hidden="true"></i>Android</summary>
+          <div class="acc-body">
+            <ol>
+              <li>Take the <code>.apk</code> from the "core service" section of the
+                  <a href="/en/download.html#core">download page</a>, install it and open it. It carries its
+                  own web management interface.</li>
+              <li><strong>An un-rooted device cannot mount clouds into the local file system.</strong>
+                  Everything else still works, including multi-cloud backup and the WebDAV service. Without
+                  root you can also go through Android's Storage Access Framework, which lets any SAF-aware
+                  app read and write files in CloudDrive2 directly.</li>
+            </ol>
+            <p class="chip-note">The CloudDrive2 app with the player is a different package — from Google
+               Play or the <a href="/en/download.html#app">app section of the download page</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-docker" aria-hidden="true"></i>Docker, NAS, Synology and QNAP</summary>
+          <div class="acc-body">
+            <p>To run it in a container on a NAS or server, the image is <code>cloudnas/clouddrive2</code>.
+               The host needs shared mount propagation, which many systems already have. How to check it,
+               how to enable it when needed, and a configuration you can copy as it stands are all in the
+               <a href="/en/docker.html">Docker deployment guide</a>.</p>
+            <p>The third-party Synology and QNAP packages are on the
+               <a href="/en/download.html#nas">download page</a>.</p>
+            <div class="note">
+              <span class="note-title">On fnOS use the native package, not Docker</span>
+              <p>Mounting over FUSE inside a container runs into fnOS's namespace limits and fails with
+                 <code>mount syscall failed in pid 1 namespace</code>. The native fpk package does not have
+                 that problem; it is on the <a href="/en/download.html#core">download page</a>.</p>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="start" aria-labelledby="start-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Step two</p>
+          <h2 id="start-h">Connect your first cloud</h2>
+          <p>Register, sign in, add cloud storage. All three happen in the management console in your
+             browser, and the flow inside the apps is the same.</p>
+        </header>
+
+        <ol class="steps">
+          <li id="register">
+            <h3>Register</h3>
+            <p>The first time you run CloudDrive2, click Register in the top right corner and enter your
+               email address and a password. A verification email goes out to that address; follow the
+               instructions in it, and you are taken to the sign-in page.</p>
+          </li>
+          <li>
+            <h3>Sign in</h3>
+            <p>Click Sign in in the top right corner and enter the same email address and password. If the
+               account is verified, you land on the CloudDrive2 home page.</p>
+          </li>
+          <li id="add-cloud">
+            <h3>Add cloud storage</h3>
+            <p>Go to Cloud Storages, click Add Cloud Storage, pick your provider from the list, and either
+               scan the code or fill in the account details. Once it verifies, that cloud appears in My
+               Files alongside the others.</p>
+          </li>
+        </ol>
+
+        <p class="chip-note">A free account connects 2 clouds and creates 1 local mount; core membership
+           lifts both limits. See <a href="/en/pricing.html">pricing</a> for what each tier includes.</p>
+      </div>
+    </section>
+
+    <section class="band" id="mount" aria-labelledby="mount-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Step three, optional</p>
+          <h2 id="mount-h">Mounting a cloud as a local disk</h2>
+          <p>Once it is mounted, a cloud is an ordinary disk in Explorer, in Finder and on the command
+             line. Any program can open the files in it directly, with no download first. This is where
+             CloudDrive2 parts company with a cloud provider's own client.</p>
+        </header>
+
+        <h3>Creating a mount point</h3>
+        <ol>
+          <li>Go to Mount Points and click Add Mount Point.</li>
+          <li><strong>Mount Name</strong>: anything you like; it is a display name.</li>
+          <li><strong>Source Directory</strong>: the directory to expose. It can be a cloud's root or any
+              folder inside it; <code>/</code> mounts every connected cloud at once.</li>
+          <li><strong>Mount Point</strong>: a drive letter on Windows, an empty directory on Linux and macOS.</li>
+          <li><strong>Options</strong>: Read Only guards against accidental writes and deletions;
+              Auto-mount on startup brings it back up with the service.</li>
+          <li>Linux and macOS also have Advanced Settings for the UID, GID and permissions
+              (<code>0755</code> by default), which decide who owns the mounted files.</li>
+        </ol>
+
+        <h3>What each system needs</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th scope="col">System</th>
+                <th scope="col">Prerequisite</th>
+                <th scope="col">What goes in Mount Point</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</th>
+                <td>WinFSP — the Mount Points page has a one-click install button, once per machine</td>
+                <td>A drive letter, e.g. <code>X:</code></td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS</th>
+                <td><a href="/en/macfuse.html">macFUSE and its kernel extension approval</a>; Apple silicon needs
+                    a trip to Recovery first</td>
+                <td>An empty directory</td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-brands fa-linux" aria-hidden="true"></i>Linux</th>
+                <td>FUSE support in the kernel; running as non-root also needs fuse3 and
+                    <code>user_allow_other</code></td>
+                <td>An empty directory</td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-brands fa-docker" aria-hidden="true"></i>Docker</th>
+                <td>The container needs FUSE privileges, and the mount path needs <code>shared</code>
+                    propagation to be visible on the host</td>
+                <td>A directory inside the container</td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</th>
+                <td>Local mounting requires root</td>
+                <td>An empty directory</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">On Windows a mount can be presented as a Local or a Network drive. Some
+           programs only recognise one of the two, so if a mount fails or an application cannot see it,
+           try the other type.</p>
+
+        <div class="note note-warn">
+          <span class="note-title">Mounted inside Docker but invisible on the host?</span>
+          <p>That is almost always shared mount propagation. Start the container with
+             <code>--cap-add SYS_ADMIN --device /dev/fuse --security-opt apparmor:unconfined</code> (or
+             plain <code>--privileged</code>), and map the mount directory with <code>:shared</code>. The
+             full configuration is in the <a href="/en/docker.html">Docker deployment guide</a>.</p>
+        </div>
+
+        <p><a class="arrow-link" href="/en/features.html#local-mount">More about local mounting</a></p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="apps" aria-labelledby="apps-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">The apps</p>
+          <h2 id="apps-h">On phones, TVs and headsets</h2>
+          <p>The app is not a remote control for the server above. It carries the whole core: install it,
+             sign in, add a cloud, done — no server needed. If you already run one, the app can connect to
+             it instead.</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-mobile-screen card-icon" aria-hidden="true"></i>
+            <h3>On its own</h3>
+            <p>Register or sign in to the same CloudDrive account inside the app, then add cloud storage —
+               exactly the steps you would take in a browser. A phone with no server anywhere can still
+               browse, play and back up.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>Against an existing server</h3>
+            <p>If CloudDrive2 already runs on your NAS, create an API token there and add that server in
+               the app using its address and the token. Offline downloads, search and cross-cloud copying
+               are then available from the app directly.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-key card-icon" aria-hidden="true"></i>
+            <h3>Membership and App Pro</h3>
+            <p>Core membership and App Pro both live on your CloudDrive account, not on a device and not in
+               a store. Whichever platform you bought on, signing in on another one finds them already
+               unlocked.</p>
+          </div></li>
+        </ul>
+
+        <h3>Installing the apps</h3>
+        <ul class="store-badges">
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>
+            <span><b>App Store</b><span>Coming soon</span></span>
+          </span></li>
+          <li><a class="store-badge" href="https://play.google.com/store/apps/details?id=com.clouddrive2.CloudDrive2" rel="noopener">
+            <i class="fa-brands fa-google-play" aria-hidden="true"></i>
+            <span><b>Google Play</b><span>Available now</span></span>
+          </a></li>
+          <li><a class="store-badge" href="/en/download.html#app">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span><b>Direct download</b><span>macOS dmg · Android APK</span></span>
+          </a></li>
+        </ul>
+        <p class="chip-note">What each platform can do and what it requires is on the
+           <a href="/en/apps/">apps pages</a>.</p>
+      </div>
+    </section>
+
+    <section class="band" id="daily" aria-labelledby="daily-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Everyday use</p>
+          <h2 id="daily-h">What you will reach for next</h2>
+        </header>
+
+        <details class="acc" id="files">
+          <summary><i class="fa-solid fa-folder-tree" aria-hidden="true"></i>Managing files</summary>
+          <div class="acc-body">
+            <p>My Files puts every connected cloud side by side. Uploading, downloading, renaming, moving,
+               deleting and creating folders all work across clouds, not just within one. There are list,
+               grid and waterfall views, with sorting, search and multi-select.</p>
+            <p>Once a cloud is mounted as a local disk, the same files behave like local files in Explorer,
+               in Finder or in any other program.</p>
+            <div class="note note-danger">
+              <span class="note-title">Deleting cannot be undone</span>
+              <p>Deleting a file in CloudDrive2 deletes the real file on the cloud storage. Once it is
+                 gone it may not be recoverable, so check before you act.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="acc" id="copy">
+          <summary><i class="fa-solid fa-right-left" aria-hidden="true"></i>Copying between clouds</summary>
+          <div class="acc-body">
+            <p>Drag a file from one cloud to another the way you would within a single cloud. The hash is
+               read from the source; if the destination uses the same hash algorithm and the hash is
+               already known there, the copy is instant — the server just records a pointer to data it
+               already holds and nothing moves. If the algorithms differ or the hash is not found, the data
+               streams cloud to cloud without touching your local disk, at whatever your bandwidth allows.</p>
+            <p>You run it from My Files: select the files or folders, click <b>Move/Copy to…</b>, choose a
+               destination folder in the directory tree and click <b>Copy</b>. The task runs in the
+               background, so you can walk away; progress shows on the Tasks page, under both
+               <b>Copy Tasks</b> and <b>Upload Tasks</b>.</p>
+            <p class="chip-note">Fast cross-cloud copying is a core membership feature. The slow path is
+               not a fault — it means the destination has nothing to match against.</p>
+            <p>On the Cloud Storages page, <b>Add Cloud Storage</b> → <b>Local Folder</b> under Local
+               Storages adds a directory from the machine, and a copy can use it as the source or the
+               destination. As long as one end is a local folder — pulling files down from a cloud, or
+               pushing local files up — free accounts can copy too, with no membership needed.</p>
+            <p class="chip-note">Copying into a local folder appears under Upload Tasks. Nothing is
+               backwards: CloudDrive2 runs every copy as one pipeline — read the source, write the
+               destination — and the writing half is always called an upload.</p>
+            <p><a class="arrow-link" href="/en/features.html#inter-cloud-copy">More about cross-cloud copying</a></p>
+          </div>
+        </details>
+
+        <details class="acc" id="backup">
+          <summary><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>Backup</summary>
+          <div class="acc-body">
+            <ol>
+              <li>Go to Backups, click Add Backup, and use the wizard to pick a source directory and one or
+                  more destinations. Local folders and cloud directories can each be either.</li>
+              <li>Set the file filter rules (by extension or by name, applied to files and folders
+                  independently) and the completion rules — deleting the source file after upload, for
+                  instance.</li>
+              <li>Backup works from real-time filesystem monitoring: a change in the source propagates as
+                  it happens. You can also schedule full scans to reconcile periodically.</li>
+            </ol>
+            <div class="note">
+              <span class="note-title">Why a deletion did not propagate</span>
+              <p>There are two paths. A deletion caught by real-time monitoring is unambiguous, and is
+                 applied to the destination according to your delete rule. A full scan can only observe
+                 "present in the destination, absent in the source" — which may not be a deletion at all,
+                 but a file moved elsewhere, and acting on it is risky. So whether a full scan may delete
+                 is left to you, in its "sync deletions" option.</p>
+              <p>That option matters most when the source is itself a mounted cloud, where real-time delete
+                 events do not always fire.</p>
+            </div>
+            <p class="chip-note">Full scans are resource-hungry. Backup Resource Limits sets the maximum
+               number of concurrent scans (1 by default) and high and low water marks for the upload queue,
+               so scanning a large tree does not pile up thousands of upload tasks.</p>
+          </div>
+        </details>
+
+        <details class="acc" id="encrypt">
+          <summary><i class="fa-solid fa-lock" aria-hidden="true"></i>Encrypted folders</summary>
+          <div class="acc-body">
+            <p>Right-click any cloud directory and choose Create Encrypted Folder, then set a password.
+               Files you put inside are encrypted locally — names and contents both — before they are
+               uploaded, so the provider stores only ciphertext. Once unlocked, reading and writing is no
+               different from an ordinary folder.</p>
+            <p>Lock it when you are done and the next access asks for the password again. Tick Save
+               Password at creation and you will not have to enter it after a restart.</p>
+            <div class="note note-danger">
+              <span class="note-title">The password cannot be recovered</span>
+              <p>An encrypted folder's password can neither be changed nor recovered. Forget it and the
+                 contents are permanently inaccessible — to us as well.</p>
+            </div>
+            <p><a class="arrow-link" href="/en/features.html#encrypted-filesystem">More about the encrypted filesystem</a></p>
+          </div>
+        </details>
+
+        <details class="acc" id="webdav">
+          <summary><i class="fa-solid fa-server" aria-hidden="true"></i>The WebDAV service</summary>
+          <div class="acc-body">
+            <p>CloudDrive2 serves every connected cloud back out over WebDAV, so any WebDAV-capable
+               software can connect to it.</p>
+            <ul>
+              <li><strong>Server address:</strong> <code>http://&lt;ip&gt;:19798/dav</code></li>
+              <li><strong>Username:</strong> the email address you sign in with — or just the part before
+                  the <code>@</code>.</li>
+              <li><strong>Password:</strong> the password you sign in with.</li>
+            </ul>
+            <p>Core membership also lets you create separate WebDAV users on the WebDAV page, each scoped
+               to a directory and each read-only or not, so you never have to hand out the main password.</p>
+            <p><a class="arrow-link" href="/en/features.html#webdav">More about WebDAV</a></p>
+          </div>
+        </details>
+
+        <details class="acc" id="token">
+          <summary><i class="fa-solid fa-id-badge" aria-hidden="true"></i>API tokens</summary>
+          <div class="acc-body">
+            <p>Third-party applications reach CloudDrive2 with an API token rather than your account
+               password. On the API Tokens page, click Create Token; you can scope it to a root directory,
+               give it an expiry, and set permissions per operation — file read, write and modify, system
+               operations, cloud storage operations and account operations, each with its own sub-items.</p>
+            <div class="note note-warn">
+              <span class="note-title">A token for the Emby / Jellyfin plugin needs two extra boxes ticked</span>
+              <p>Push Messages and Get Mounts are off by default and have to be ticked by hand. Without
+                 them the plugin connects, reports healthy, and never updates the library.</p>
+            </div>
+            <p><a class="arrow-link" href="/en/download.html#plugin">The Emby and Jellyfin companion plugin</a></p>
+          </div>
+        </details>
+
+        <details class="acc" id="offline">
+          <summary><i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>Offline downloads</summary>
+          <div class="acc-body">
+            <p>In a supported cloud's directory, choose Offline download and hand a magnet link or a
+               <code>.torrent</code> file to the provider to fetch. It lands directly in the cloud, using
+               none of your bandwidth and none of your disk. A <code>.torrent</code> can be dragged
+               straight in — it is parsed into a magnet link and added.</p>
+            <p>115 also has an offline download manager for copying links, deleting tasks, restarting them,
+               or clearing them in bulk by status.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="account" aria-labelledby="account-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Account</p>
+          <h2 id="account-h">Account and security</h2>
+          <p>The cloud storage credentials held on our servers are encrypted with your password, and we do
+             not store that password. Everything in this section follows from that.</p>
+        </header>
+
+        <details class="acc" id="password">
+          <summary><i class="fa-solid fa-key" aria-hidden="true"></i>Forgotten password</summary>
+          <div class="acc-body">
+            <p>Click Reset on the sign-in screen and follow the instructions — a reset code goes to your
+               email address.</p>
+            <div class="note note-warn">
+              <span class="note-title">A reset clears the stored account information</span>
+              <p>Resetting clears the cloud storage credentials held on our servers and resets your
+                 password. You will have to add your cloud storage again afterwards. Your membership is
+                 unaffected.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="acc" id="change-password">
+          <summary><i class="fa-solid fa-user-pen" aria-hidden="true"></i>Changing your email or password</summary>
+          <div class="acc-body">
+            <p>Both live on the Profile page. Changing your email sends a verification code first and takes
+               effect once you enter it. Changing your password does not disturb the cloud storage you have
+               already added.</p>
+            <p class="chip-note">Accounts signed in through Xunlei or a partner device can change only the
+               parts the system allows; the page spells out which.</p>
+          </div>
+        </details>
+
+        <details class="acc" id="2fa">
+          <summary><i class="fa-solid fa-shield-halved" aria-hidden="true"></i>Two-factor authentication</summary>
+          <div class="acc-body">
+            <p>Turn it on from the Profile page. Scan the code with any TOTP authenticator app; once it is
+               bound you get a set of recovery codes. Keep them somewhere separate — they are how you sign
+               in if you lose the authenticator.</p>
+            <div class="note">
+              <span class="note-title">If the authenticator and the recovery codes are both gone</span>
+              <p>On the sign-in screen choose "Lost your authenticator? Disable 2FA by email". A
+                 verification code goes to the account's email address; that code plus your password turns
+                 two-factor off, and you sign in with email and password as before. The code is valid for
+                 30 minutes.</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="acc" id="devices">
+          <summary><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Detaching a device</summary>
+          <div class="acc-body">
+            <p>An account registered automatically by a partner device can be detached from that device
+               once you have changed the email address and password. If a device is lost or sold,
+               detaching it keeps the account out of someone else's hands.</p>
+            <p class="chip-note">An offline device may still hold saved credentials, so change your
+               password once more after detaching to close that path for good.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Troubleshooting</p>
+          <h2 id="faq-h">Common problems</h2>
+          <p>The ones we are asked about most, answered as we answered them on GitHub issues.</p>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-plug-circle-exclamation" aria-hidden="true"></i>Behind a reverse proxy, the interface hangs on "Connecting…"</summary>
+          <div class="acc-body">
+            <p>The cause is the reverse proxy buffering the PushMessage gRPC-Web stream: the response
+               headers never arrive, so the front end waits forever, and the dashboard's task count stops
+               refreshing along with it. Turn buffering off for CloudDrive2's location and raise the read
+               timeout:</p>
+            <div class="code-block"><pre><code>location / {
+    proxy_pass http://127.0.0.1:19798;   # your CD2 HTTP port
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    # the important part: a streaming gRPC-Web call must not be buffered
+    proxy_buffering off;
+    proxy_request_buffering off;
+    chunked_transfer_encoding on;
+    proxy_set_header Connection "";
+
+    # PushMessage is a long-lived connection, so the read timeout has to be generous
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+}</code></pre></div>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS says libfuse.2.dylib is missing</summary>
+          <div class="acc-body">
+            <p>macFUSE is not installed. Mounting depends on it for <code>libfuse.2.dylib</code>. Install it
+               from <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a>, then approve
+               its kernel extension as described in
+               <a href="/en/macfuse.html">letting macFUSE through</a> — an Apple silicon Mac also needs a
+               trip to Recovery.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-google-drive" aria-hidden="true"></i>Adding Google Drive says "This app has been blocked"</summary>
+          <div class="acc-body">
+            <p>Use your own Google OAuth credentials and the block does not apply. In the Google Cloud
+               Console, create a project, enable the Google Drive API, configure the OAuth consent screen
+               and add yourself as a test user, then create an OAuth client ID for its client_id and
+               client_secret. Enter those when you add Google Drive in CloudDrive2, and the authorisation
+               runs through your own application.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>The 115 QR scan succeeds but the cloud never appears</summary>
+          <div class="acc-body">
+            <p>The old private "115" interface has been retired: the scan succeeds but the connection
+               cannot be made. Switch to <strong>115open</strong> — remove the existing 115, add 115open,
+               then rename it back to the old name. The mount path stays the same, so your existing mount
+               points and backups need no changes.</p>
+            <p class="chip-note">If instead you get a network error, the machine probably cannot reach the
+               115 or Tianyi sign-in endpoint. Check DNS and any proxy, then try again.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Nothing answers on 19798 on Windows</summary>
+          <div class="acc-body">
+            <p>Work through these in order — most cases give themselves away at the first step.</p>
+            <ol>
+              <li><strong>Check the service is running.</strong> Press Win+R, open
+                  <code>services.msc</code> and find <strong>CloudDrive2 Service</strong> (service name
+                  <code>CloudDrive2</code>). Status should be Running and Startup type should be Automatic.
+                  If it is stopped, right-click and start it; if the startup type has been changed to Manual
+                  or Disabled, put it back to Automatic under right-click → Properties, or it will not come
+                  back after a reboot. The command line shows the same thing:
+                <div class="code-block"><pre><code>sc query CloudDrive2</code></pre></div>
+              </li>
+              <li><strong>Running, but unreachable from another machine.</strong> That is Windows Firewall
+                  not allowing the port — <strong>19798</strong> for the core service, plus
+                  <strong>19799</strong> if you enabled HTTPS. If <code>http://localhost:19798</code> works
+                  on the machine itself and nothing else can reach it, this is almost always why.</li>
+              <li><strong>The service will not start, or stops right after starting.</strong> Usually
+                  antivirus. Add CloudDrive2's install directory and WinFSP to the allowlist and try
+                  again.</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-shield-virus" aria-hidden="true"></i>Antivirus flags the installer</summary>
+          <div class="acc-body">
+            <p>It is a false positive. The installer is code-signed, and the <code>is-XXXX.tmp</code> file
+               being flagged is just Inno Setup's temporary unpacking file, misjudged by a heuristic
+               engine. Add the installer and its target directory to your antivirus allowlist, and report
+               the false positive to the vendor.</p>
+            <p>It can also be blocked after installation: the service does not start, the mounted drive
+               never appears, or the app is closed outright. Signatures do not stop a heuristic engine, so
+               add CloudDrive2's install directory and WinFSP to the allowlist as well.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>It will not install or sign in on Windows 7</summary>
+          <div class="acc-body">
+            <p>Windows 7 is no longer supported: the TLS stack and runtime libraries it ships with cannot
+               meet what the current version requires for secure connections and its dependencies. Use
+               Windows 10 or 11; if the hardware has to stay, consider the Linux or Docker build instead.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band band-alt cta-band">
+      <div class="container">
+        <h2>Still stuck?</h2>
+        <p>Bugs and feature requests are best filed as GitHub issues, where they stay on the record. Someone is usually around in the Telegram group, or write to us directly.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">Open an issue on GitHub</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">Send an email</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/help.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

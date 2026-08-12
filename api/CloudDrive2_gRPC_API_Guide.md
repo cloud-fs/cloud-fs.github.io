@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.0.13
+Version: 1.0.14
 
 ## Table of Contents
 
+- [What's New in 1.0.14](#whats-new-in-1014)
 - [What's New in 1.0.13](#whats-new-in-1013)
 - [What's New in 1.0.11](#whats-new-in-1011)
 - [What's New in 1.0.9](#whats-new-in-109)
@@ -34,10 +35,71 @@ Version: 1.0.13
   - [Token Management](#token-management)
   - [Two-Factor Authentication (2FA)](#two-factor-authentication-2fa)
   - [Session Management](#session-management)
+  - [Account Deletion](#account-deletion)
   - [Remote Upload Protocol](#remote-upload-protocol)
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.0.14
+
+### Account Deletion API
+
+CloudDrive2 1.0.14 adds a two-step, self-service account deletion flow. Step 1 emails a one-time code and returns everything the confirmation screen needs to show; step 2 spends that code together with the account password to permanently delete the account.
+
+> **Irreversible.** There is no grace period and no undo. Treat `DeleteAccount` as a destructive operation and require an explicit, unambiguous confirmation before calling it.
+
+**New RPCs (authorized):**
+- **`SendDeleteAccountEmail`** — Emails a one-time deletion code to the account's registered address and returns a `DeleteAccountPreflightResult`. Calling it again inside the validity window re-sends the same code.
+- **`DeleteAccount`** — Permanently deletes the signed-in account.
+
+**New Messages:**
+```protobuf
+message DeleteAccountPreflightResult {
+  string email = 1;                 // registered address the code was sent to
+  double balance = 2;               // remaining balance; > 0 requires forfeit_balance
+  bool has_active_subscription = 3; // always false on success
+  uint32 bound_device_count = 4;    // devices that will be released
+  uint32 expires_in_minutes = 5;    // lifetime of the emailed code
+}
+
+message DeleteAccountRequest {
+  string delete_code = 1;        // one-time code from the deletion email
+  string password = 2;           // clear-text account password; hashed by the backend
+  optional string totp_code = 3; // required only when 2FA is enabled
+  bool forfeit_balance = 4;      // must be true when the account holds a balance
+}
+```
+
+Both RPCs require the `allow_modify_account` token permission. See [Account Deletion](#account-deletion) for the full flow, preconditions and examples.
+
+### `CLOUD_API_CHANGE` Push Message
+
+`CloudDrivePushMessage` gains a ninth message type. The server now emits a dedicated event whenever a cloud storage account is added, removed, or has its mount path renamed at runtime, so clients no longer have to infer cloud-list changes from a root-level `FILE_SYSTEM_CHANGE`.
+
+**New enum value and oneof field on `CloudDrivePushMessage`:**
+- `MessageType.CLOUD_API_CHANGE = 9`
+- `CloudApiChange cloudApiChange = 9;`
+
+**New Message:**
+```protobuf
+message CloudApiChange {
+  enum Action {
+    ADD = 0;
+    REMOVE = 1;
+    RENAME = 2;
+  }
+  Action action = 1;
+  string cloudName = 2;
+  string userName = 3;
+  string mountPath = 4;
+  optional string newMountPath = 5; // only set for RENAME
+}
+```
+
+See [CLOUD_API_CHANGE](#8-cloud_api_change) for delivery semantics.
 
 ---
 
@@ -785,6 +847,26 @@ Session management lets users view and control active refresh-token sessions acr
 - Enhance security by clearing all other sessions after password change
 - Monitor account access patterns
 
+#### Account Deletion
+
+Self-service deletion of the signed-in account, gated behind an emailed one-time code.
+
+**Account Deletion Methods:**
+- **`SendDeleteAccountEmail`** - Email a one-time deletion code and return the confirmation-screen data
+- **`DeleteAccount`** - Permanently delete the account (irreversible)
+
+**Preconditions:**
+- Both RPCs require the `allow_modify_account` token permission
+- An active auto-renewing store subscription (Apple / Google / Meta) fails the preflight — the user must cancel it in the store first
+- A remaining balance requires explicit consent (`forfeit_balance = true`); the balance is forfeited, not refunded
+- The account password is always required; a TOTP code is additionally required when 2FA is enabled
+
+**Client Responsibilities:**
+- Show the preflight result (email address, balance, bound device count) before asking for confirmation
+- On success, return to the login screen and clear stored credentials — the server has already wiped local login state
+
+**New in 1.0.14**
+
 ### Security Best Practices
 
 1. **Enable 2FA** on all production accounts to prevent unauthorized access
@@ -899,7 +981,7 @@ The `clouddrive.proto` file contains:
 
 ### Version Compatibility
 
-**Current Version:** 0.9.19
+**Current Version:** 1.0.14
 
 Always use the proto file from the same version as your CloudDrive2 server to ensure compatibility. You can check your server version using the `GetRuntimeInfo` method.
 
@@ -3173,6 +3255,8 @@ Removes all completed copy tasks.
 
 ### Cloud API Management
 
+> **1.0.14+:** adding, removing or renaming a cloud account raises a [`CLOUD_API_CHANGE`](#8-cloud_api_change) push message. Subscribe to it instead of polling `GetAllCloudApis` to keep a cloud list current.
+
 #### OAuth Login Process
 
 Many cloud storage providers use OAuth 2.0 for secure authentication. The OAuth flow allows users to authorize CloudDrive2 to access their cloud storage without sharing passwords.
@@ -3868,7 +3952,7 @@ message LoginGuangYaPanQRCodeRequest {
 
 #### APILoginGuangYaPanOAuth
 
-> **Not yet supported in 1.0.11.** The RPC and `LoginGuangYaPanOAuthRequest` are reserved in the proto for the planned web PKCE OAuth login. Calling this RPC in 1.0.11 will fail. Use [`APILoginGuangYaPanQRCode`](#apilogguangyapanqrcode-server-streaming) to add GuangYaPan in this release.
+> **Not yet supported in 1.0.11.** The RPC and `LoginGuangYaPanOAuthRequest` are reserved in the proto for the planned web PKCE OAuth login. Calling this RPC in 1.0.11 will fail. Use [`APILoginGuangYaPanQRCode`](#apiloginguangyapanqrcode-server-streaming) to add GuangYaPan in this release.
 
 When enabled in a future release, this will add GuangYaPan (光鸭云盘) with the ready-made tokens delivered by the oauth_callback server after a web PKCE exchange. The client will trigger the web flow via `CreateOAuthState` (passing the PKCE `code_verifier`); the callback server will return the tokens via the same delivery mechanism as the other OAuth providers.
 
@@ -5636,6 +5720,132 @@ Console.WriteLine("All other sessions have been logged out");
 
 ---
 
+### Account Deletion
+
+Permanently deletes the signed-in CloudDrive2 account. **New in 1.0.14.**
+
+> **Irreversible.** There is no grace period and no undo. The account, its membership and any remaining balance are gone the moment `DeleteAccount` returns. Never call it from an automated path — require an explicit user confirmation every time.
+
+Deletion is a two-step flow:
+
+1. `SendDeleteAccountEmail` — runs the preflight checks and emails a one-time code.
+2. `DeleteAccount` — spends the code together with the account password.
+
+Both RPCs require the `allow_modify_account` token permission.
+
+#### SendDeleteAccountEmail
+
+Emails a one-time deletion code to the account's registered address and returns the data a confirmation screen needs. Calling it again while the code is still valid re-sends the same code rather than issuing a new one.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `DeleteAccountPreflightResult`
+```protobuf
+message DeleteAccountPreflightResult {
+  // registered address the one-time code was sent to
+  string email = 1;
+  // remaining balance; when > 0 the user must consent and DeleteAccountRequest
+  // must carry forfeit_balance = true
+  double balance = 2;
+  // always false on success; an active subscription fails the preflight instead
+  bool has_active_subscription = 3;
+  // devices that will be released (detached, not deleted) by the deletion
+  uint32 bound_device_count = 4;
+  // lifetime of the emailed code, in minutes
+  uint32 expires_in_minutes = 5;
+}
+```
+
+**Preflight failures:**
+- **Active store subscription** — an auto-renewing Apple / Google / Meta subscription fails this call. The user must cancel the subscription in the store before the account can be deleted; a failed preflight means no code was sent.
+- **Not signed in** — the RPC operates on the signed-in account only; there is no way to delete another account.
+
+**Example (C#):**
+```csharp
+var preflight = await client.SendDeleteAccountEmailAsync(new Empty(), callOptions);
+
+Console.WriteLine($"A deletion code was sent to {preflight.Email}");
+Console.WriteLine($"It expires in {preflight.ExpiresInMinutes} minutes");
+
+if (preflight.Balance > 0)
+{
+    Console.WriteLine($"Deleting forfeits your remaining balance of {preflight.Balance}");
+}
+
+if (preflight.BoundDeviceCount > 0)
+{
+    Console.WriteLine($"{preflight.BoundDeviceCount} bound device(s) will be released");
+}
+```
+
+---
+
+#### DeleteAccount
+
+Permanently deletes the signed-in account.
+
+**Request:** `DeleteAccountRequest`
+```protobuf
+message DeleteAccountRequest {
+  string delete_code = 1;        // one-time code from the deletion email
+  string password = 2;           // clear-text account password; MD5-hashed by the backend
+  optional string totp_code = 3; // required only when 2FA is enabled
+  bool forfeit_balance = 4;      // must be true when the account holds a balance
+}
+```
+
+**Response:** `google.protobuf.Empty`
+
+**Field notes:**
+- `delete_code` — the code from the email sent by `SendDeleteAccountEmail`. Single use, and only valid inside the window reported by `expires_in_minutes`.
+- `password` — send the password in clear text over the (TLS-protected) channel, exactly as with `GetToken`. The backend applies the same hashing as login; do not pre-hash it.
+- `totp_code` — omit unless the account has 2FA enabled. Recovery codes are **not** accepted here.
+- `forfeit_balance` — must be `true` whenever the preflight reported `balance > 0`, and only after the user has explicitly agreed to forfeit it. The server rejects the deletion otherwise. The balance is forfeited, never refunded.
+
+**After a successful call:**
+
+The server wipes local login state for this CloudDrive2 instance, exactly as an explicit sign-out would, and drops the stored gRPC tokens. Every connected client is pushed back to the login screen. Your client must:
+
+1. Discard its JWT and refresh token — they are worthless and will not refresh.
+2. Clear any cached account data.
+3. Navigate to the login screen. Do not retry the call or attempt to re-authenticate with the deleted credentials.
+
+**Example (C#):**
+```csharp
+var request = new DeleteAccountRequest
+{
+    DeleteCode = codeFromEmail,
+    Password = password,
+    ForfeitBalance = preflight.Balance > 0 && userAgreedToForfeitBalance,
+};
+
+if (twoFactorEnabled)
+{
+    request.TotpCode = totpCode;
+}
+
+try
+{
+    await client.DeleteAccountAsync(request, callOptions);
+
+    // The account is gone and the server already cleared local login state.
+    ClearStoredCredentials();
+    NavigateToLogin();
+}
+catch (RpcException ex)
+{
+    // Wrong or expired code, wrong password, missing/incorrect TOTP code, or a
+    // balance the user has not agreed to forfeit.
+    ShowError(ex.Status.Detail);
+}
+```
+
+**Use Cases:**
+- A "delete my account" control in your own client's settings screen
+- Regulatory data-deletion requests handled in-app
+
+---
+
 ### Backup Management
 
 #### BackupGetAll
@@ -5959,6 +6169,7 @@ message CloudDrivePushMessage {
     COPY_TASK_COUNT = 6;       // Copy/move task count changed
     LOG_MESSAGE = 7;           // Server log message
     MERGE_TASKS = 8;           // Folder merge task update
+    CLOUD_API_CHANGE = 9;      // Cloud account added, removed or renamed (1.0.14+)
   }
   MessageType messageType = 1;
   oneof data {
@@ -5969,6 +6180,7 @@ message CloudDrivePushMessage {
     MountPointChange mountPointChange = 6;
     LogMessage logMessage = 7;
     MergeTaskUpdate mergeTaskUpdate = 8;
+    CloudApiChange cloudApiChange = 9;
   }
 }
 ```
@@ -6233,6 +6445,49 @@ case CloudDrivePushMessage.Types.MessageType.MergeTasks:
     break;
 ```
 
+#### 8. CLOUD_API_CHANGE
+
+**Purpose**: Notify clients when a cloud storage account is added, removed, or has its mount path renamed at runtime. **New in 1.0.14.**
+
+**Data**: `CloudApiChange`
+- `action`: `ADD`, `REMOVE` or `RENAME`
+- `cloudName`: Cloud provider name (e.g. `115`, `AliyunDrive`)
+- `userName`: Account identifier on that cloud
+- `mountPath`: The account's path in the CloudDrive virtual filesystem. For `RENAME` this is the old path.
+- `newMountPath`: Set for `RENAME` only — the new path
+
+**Delivery semantics:**
+- Each change also emits a `FILE_SYSTEM_CHANGE` on the root directory, so clients written before 1.0.14 keep working unchanged. If you handle both, guard against refreshing twice.
+- These events are suppressed while the server loads saved accounts at startup. You will not receive an `ADD` per account on boot — enumerate with `GetAllCloudApis` after connecting, then keep the list current from this stream.
+
+**Use Case**: Keep a cloud-account list or storage picker current without polling `GetAllCloudApis`
+
+**Example**:
+```csharp
+case CloudDrivePushMessage.Types.MessageType.CloudApiChange:
+    var apiChange = message.CloudApiChange;
+
+    switch (apiChange.Action)
+    {
+        case CloudApiChange.Types.Action.Add:
+            Console.WriteLine($"Cloud added: {apiChange.CloudName}/{apiChange.UserName} " +
+                             $"at {apiChange.MountPath}");
+            AddCloudToUI(apiChange);
+            break;
+
+        case CloudApiChange.Types.Action.Remove:
+            Console.WriteLine($"Cloud removed: {apiChange.MountPath}");
+            RemoveCloudFromUI(apiChange.MountPath);
+            break;
+
+        case CloudApiChange.Types.Action.Rename:
+            Console.WriteLine($"Cloud renamed: {apiChange.MountPath} -> {apiChange.NewMountPath}");
+            RenameCloudInUI(apiChange.MountPath, apiChange.NewMountPath);
+            break;
+    }
+    break;
+```
+
 ### Complete Push Message Example
 
 ```csharp
@@ -6275,6 +6530,10 @@ public async Task MonitorPushMessagesAsync(CancellationToken cancellationToken)
 
                 case CloudDrivePushMessage.Types.MessageType.MergeTasks:
                     HandleMergeTasks(message.MergeTaskUpdate);
+                    break;
+
+                case CloudDrivePushMessage.Types.MessageType.CloudApiChange:
+                    HandleCloudApiChange(message.CloudApiChange);
                     break;
             }
         }
@@ -8050,9 +8309,9 @@ This guide covers the complete CloudDrive2 gRPC API with:
 - ✅ **Security guidelines**
 - ✅ **Complete working examples**
 
-**API Version:** 0.9.18
+**API Version:** 1.0.14
 
 ---
 
-*Last Updated: 2026-07-23*
+*Last Updated: 2026-08-12*
 *Copyright © 2026 CloudDrive. All rights reserved.*

@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.0.13
+版本: 1.0.14
 
 ## 目录
 
+- [1.0.14 版本新特性](#1014-版本新特性)
 - [1.0.13 版本新特性](#1013-版本新特性)
 - [1.0.11 版本新特性](#1011-版本新特性)
 - [1.0.9 版本新特性](#109-版本新特性)
@@ -34,10 +35,71 @@
   - [令牌管理](#令牌管理)
   - [双因素认证 (2FA)](#双因素认证-2fa)
   - [会话管理](#会话管理)
+  - [账户注销](#账户注销)
   - [远程上传协议](#远程上传协议)
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.0.14 版本新特性
+
+### 账户注销 API
+
+CloudDrive2 1.0.14 新增两步式的账户自助注销流程。第一步向账户注册邮箱发送一次性验证码，并返回确认界面需要展示的全部信息；第二步用这个验证码加上账户密码，永久删除该账户。
+
+> **不可撤销。** 没有缓冲期，也没有任何撤销手段。请把 `DeleteAccount` 当作破坏性操作对待，调用前必须拿到用户明确无歧义的确认。
+
+**新增 RPC（需授权）:**
+- **`SendDeleteAccountEmail`** — 向账户注册邮箱发送一次性注销验证码，并返回 `DeleteAccountPreflightResult`。在有效期内重复调用会重发同一个验证码。
+- **`DeleteAccount`** — 永久删除当前登录的账户。
+
+**新增消息:**
+```protobuf
+message DeleteAccountPreflightResult {
+  string email = 1;                 // 验证码发往的注册邮箱
+  double balance = 2;               // 剩余余额；大于 0 时必须带 forfeit_balance
+  bool has_active_subscription = 3; // 成功时恒为 false
+  uint32 bound_device_count = 4;    // 将被解绑的设备数
+  uint32 expires_in_minutes = 5;    // 验证码有效期（分钟）
+}
+
+message DeleteAccountRequest {
+  string delete_code = 1;        // 注销邮件里的一次性验证码
+  string password = 2;           // 账户明文密码，由后端哈希
+  optional string totp_code = 3; // 仅在启用 2FA 时需要
+  bool forfeit_balance = 4;      // 账户有余额时必须为 true
+}
+```
+
+两个 RPC 都需要令牌具备 `allow_modify_account` 权限。完整流程、前置条件与示例见 [账户注销](#账户注销)。
+
+### `CLOUD_API_CHANGE` 推送消息
+
+`CloudDrivePushMessage` 新增第九种消息类型。云存储账户在运行期被添加、移除或改挂载路径时，服务端会推送一条专门的事件，客户端不必再从根目录的 `FILE_SYSTEM_CHANGE` 里反推云盘列表变化。
+
+**`CloudDrivePushMessage` 新增枚举值与 oneof 字段:**
+- `MessageType.CLOUD_API_CHANGE = 9`
+- `CloudApiChange cloudApiChange = 9;`
+
+**新增消息:**
+```protobuf
+message CloudApiChange {
+  enum Action {
+    ADD = 0;
+    REMOVE = 1;
+    RENAME = 2;
+  }
+  Action action = 1;
+  string cloudName = 2;
+  string userName = 3;
+  string mountPath = 4;
+  optional string newMountPath = 5; // 仅 RENAME 时设置
+}
+```
+
+投递细节见 [CLOUD_API_CHANGE](#8-cloud_api_change)。
 
 ---
 
@@ -76,7 +138,7 @@ CloudDrive2 1.0.11 新增对光鸭云盘的支持，通过 QR（设备码）扫�
 > **注意：** Web PKCE OAuth 登录（`APILoginGuangYaPanOAuth`）在 1.0.11 中**暂不支持**。该 RPC、`LoginGuangYaPanOAuthRequest` 消息以及 `CreateOAuthStateRequest.code_verifier` 字段已在 proto 中预留，将在后续版本启用。在 1.0.11 中请使用 `APILoginGuangYaPanQRCode` 添加光鸭云盘。
 
 **新增 RPC:**
-- **`APILoginGuangYaPanQRCode`** *（服务器流式）* — 通过 QR / 设备码扫描添加光鸭云盘。流式协议与其他 QR 登录 RPC 一致（参见 [QRCode 登录流程](#qrcode-登录流程)）。
+- **`APILoginGuangYaPanQRCode`** *（服务器流式）* — 通过 QR / 设备码扫描添加光鸭云盘。流式协议与其他 QR 登录 RPC 一致（参见 [二维码登录流程](#二维码登录流程)）。
 - **`APILoginGuangYaPanOAuth`** — *预留，暂不可用。* 后续版本将接受 oauth_callback 服务器完成 Web PKCE 后回传的现成 token 来添加光鸭云盘。
 
 **新增消息:**
@@ -783,6 +845,26 @@ CloudDrive2 支持业界标准的基于时间的一次性密码 (TOTP) 双因素
 - 更改密码后清除所有其他会话以增强安全性
 - 监控账户访问模式
 
+#### 账户注销
+
+当前登录账户的自助注销，需要邮箱一次性验证码才能执行。
+
+**账户注销方法:**
+- **`SendDeleteAccountEmail`** - 发送一次性注销验证码，并返回确认界面所需的数据
+- **`DeleteAccount`** - 永久删除账户（不可撤销）
+
+**前置条件:**
+- 两个 RPC 都需要令牌具备 `allow_modify_account` 权限
+- 存在自动续费的商店订阅（Apple / Google / Meta）时预检会失败，用户必须先在商店里取消订阅
+- 账户仍有余额时需要用户明确同意（`forfeit_balance = true`），余额作废，不予退还
+- 账户密码始终必填；启用 2FA 的账户还需要额外提供 TOTP 验证码
+
+**客户端要做的事:**
+- 在请求用户确认之前，先把预检返回的信息（邮箱、余额、绑定设备数）展示出来
+- 调用成功后回到登录界面并清除本地凭据——服务端已经清空了本机登录状态
+
+**1.0.14 新增**
+
 ### 安全最佳实践
 
 1. **在所有生产账户上启用 2FA** 以防止未经授权的访问
@@ -897,7 +979,7 @@ python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. clouddrive.pr
 
 ### 版本兼容性
 
-**当前版本:** 0.9.19
+**当前版本:** 1.0.14
 
 始终使用与 CloudDrive2 服务器相同版本的 proto 文件以确保兼容性。您可以使用 `GetRuntimeInfo` 方法检查服务器版本。
 
@@ -3174,6 +3256,8 @@ message CopyTaskRequest {
 
 ### 云 API 管理
 
+> **1.0.14+:** 添加、移除或重命名云盘账户会触发 [`CLOUD_API_CHANGE`](#8-cloud_api_change) 推送消息。订阅它来维护云盘列表，不用再轮询 `GetAllCloudApis`。
+
 #### OAuth 登录流程
 
 许多云存储提供商使用 OAuth 2.0 进行安全身份验证。OAuth 流程允许用户授权 CloudDrive2 访问其云存储,而无需共享密码。
@@ -3848,7 +3932,7 @@ await foreach (var message in call.ResponseStream.ReadAllAsync(cancellationToken
 
 #### APILoginGuangYaPanQRCode (服务器流式传输)
 
-通过 QR（设备码）扫描添加光鸭云盘。流式协议与其他 QR 登录 RPC 一致，详见 [QRCode 登录流程](#qrcode-登录流程)。
+通过 QR（设备码）扫描添加光鸭云盘。流式协议与其他 QR 登录 RPC 一致，详见 [二维码登录流程](#二维码登录流程)。
 
 **请求:** `LoginGuangYaPanQRCodeRequest`
 ```protobuf
@@ -3868,7 +3952,7 @@ message LoginGuangYaPanQRCodeRequest {
 
 #### APILoginGuangYaPanOAuth
 
-> **1.0.11 中暂不支持。** 该 RPC 和 `LoginGuangYaPanOAuthRequest` 已在 proto 中为后续的 Web PKCE OAuth 登录预留。在 1.0.11 中调用该 RPC 会失败。本版本请使用 [`APILoginGuangYaPanQRCode`](#apilogguangyapanqrcode-服务器流式传输) 添加光鸭云盘。
+> **1.0.11 中暂不支持。** 该 RPC 和 `LoginGuangYaPanOAuthRequest` 已在 proto 中为后续的 Web PKCE OAuth 登录预留。在 1.0.11 中调用该 RPC 会失败。本版本请使用 [`APILoginGuangYaPanQRCode`](#apiloginguangyapanqrcode-服务器流式传输) 添加光鸭云盘。
 
 后续版本启用后，该方法将使用 oauth_callback 服务器完成 Web PKCE token 交换后回传的现成 token 添加光鸭云盘。客户端通过 `CreateOAuthState`（传入 PKCE `code_verifier`）触发 Web 流程；回调服务器以与其他 OAuth 提供方相同的方式回传 token。
 
@@ -5636,6 +5720,132 @@ Console.WriteLine("所有其他会话已注销");
 
 ---
 
+### 账户注销
+
+永久删除当前登录的 CloudDrive2 账户。**1.0.14 新增。**
+
+> **不可撤销。** 没有缓冲期，也没有任何撤销手段。`DeleteAccount` 一旦返回成功，账户、会员资格以及剩余余额就都没有了。不要把它放进任何自动化流程，每次调用前都必须拿到用户的明确确认。
+
+注销分两步：
+
+1. `SendDeleteAccountEmail` — 执行预检并发送一次性验证码到注册邮箱。
+2. `DeleteAccount` — 用这个验证码加上账户密码完成注销。
+
+两个 RPC 都需要令牌具备 `allow_modify_account` 权限。
+
+#### SendDeleteAccountEmail
+
+向账户注册邮箱发送一次性注销验证码，并返回确认界面需要的数据。验证码仍在有效期内时重复调用，会重发同一个验证码，而不是签发新的。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `DeleteAccountPreflightResult`
+```protobuf
+message DeleteAccountPreflightResult {
+  // 验证码发往的注册邮箱
+  string email = 1;
+  // 剩余余额；大于 0 时必须取得用户同意，并在 DeleteAccountRequest 中带上
+  // forfeit_balance = true
+  double balance = 2;
+  // 成功时恒为 false；存在有效订阅时预检直接失败
+  bool has_active_subscription = 3;
+  // 注销会解绑（而不是删除）的设备数
+  uint32 bound_device_count = 4;
+  // 验证码有效期（分钟）
+  uint32 expires_in_minutes = 5;
+}
+```
+
+**预检失败的情况:**
+- **存在自动续费订阅** — 账户还有 Apple / Google / Meta 的自动续费订阅时本调用失败。用户必须先在对应商店取消订阅才能注销；预检失败意味着验证码根本没有发出。
+- **未登录** — 该 RPC 只作用于当前登录的账户，无法用它注销别的账户。
+
+**示例 (C#):**
+```csharp
+var preflight = await client.SendDeleteAccountEmailAsync(new Empty(), callOptions);
+
+Console.WriteLine($"注销验证码已发送至 {preflight.Email}");
+Console.WriteLine($"验证码将在 {preflight.ExpiresInMinutes} 分钟后失效");
+
+if (preflight.Balance > 0)
+{
+    Console.WriteLine($"注销将作废剩余余额 {preflight.Balance}");
+}
+
+if (preflight.BoundDeviceCount > 0)
+{
+    Console.WriteLine($"将解绑 {preflight.BoundDeviceCount} 台设备");
+}
+```
+
+---
+
+#### DeleteAccount
+
+永久删除当前登录的账户。
+
+**请求:** `DeleteAccountRequest`
+```protobuf
+message DeleteAccountRequest {
+  string delete_code = 1;        // 注销邮件里的一次性验证码
+  string password = 2;           // 账户明文密码，由后端做 MD5 哈希
+  optional string totp_code = 3; // 仅在启用 2FA 时需要
+  bool forfeit_balance = 4;      // 账户有余额时必须为 true
+}
+```
+
+**响应:** `google.protobuf.Empty`
+
+**字段说明:**
+- `delete_code` — `SendDeleteAccountEmail` 所发邮件里的验证码。一次性使用，且只在 `expires_in_minutes` 报告的时间窗内有效。
+- `password` — 与 `GetToken` 一样，在（受 TLS 保护的）通道上直接传明文密码。后端会做与登录相同的哈希处理，不要自行预先哈希。
+- `totp_code` — 账户未启用 2FA 时不要填。这里**不接受**恢复码。
+- `forfeit_balance` — 预检报告 `balance > 0` 时必须为 `true`，并且只有在用户明确同意作废余额之后才能这样填，否则服务端会拒绝注销。余额是作废，不是退款。
+
+**调用成功之后:**
+
+服务端会像执行一次显式退出登录那样清空本机的登录状态，并丢弃已存储的 gRPC 令牌，所有已连接的客户端都会被踢回登录界面。你的客户端必须：
+
+1. 丢弃自己的 JWT 和 refresh token——它们已经失效，也无法再续期。
+2. 清除缓存的账户数据。
+3. 跳转到登录界面。不要重试本调用，也不要再拿已注销的凭据去登录。
+
+**示例 (C#):**
+```csharp
+var request = new DeleteAccountRequest
+{
+    DeleteCode = codeFromEmail,
+    Password = password,
+    ForfeitBalance = preflight.Balance > 0 && userAgreedToForfeitBalance,
+};
+
+if (twoFactorEnabled)
+{
+    request.TotpCode = totpCode;
+}
+
+try
+{
+    await client.DeleteAccountAsync(request, callOptions);
+
+    // 账户已删除，服务端也已清空本机登录状态。
+    ClearStoredCredentials();
+    NavigateToLogin();
+}
+catch (RpcException ex)
+{
+    // 验证码错误或已过期、密码错误、缺少或填错 TOTP 验证码，
+    // 或者账户仍有余额而用户没有同意作废。
+    ShowError(ex.Status.Detail);
+}
+```
+
+**使用场景:**
+- 在自有客户端的设置页里提供「注销账户」入口
+- 在应用内处理合规要求的数据删除请求
+
+---
+
 ### 备份管理
 
 #### BackupGetAll
@@ -5959,6 +6169,7 @@ message CloudDrivePushMessage {
     COPY_TASK_COUNT = 6;
     LOG_MESSAGE = 7;
     MERGE_TASKS = 8;
+    CLOUD_API_CHANGE = 9; // 云盘账户增删改（1.0.14+）
   }
   MessageType messageType = 1;
   oneof data {
@@ -5969,6 +6180,7 @@ message CloudDrivePushMessage {
     MountPointChange mountPointChange = 6;
     LogMessage logMessage = 7;
     MergeTaskUpdate mergeTaskUpdate = 8;
+    CloudApiChange cloudApiChange = 9;
   }
 }
 ```
@@ -6240,6 +6452,49 @@ case CloudDrivePushMessage.Types.MessageType.MergeTasks:
     break;
 ```
 
+#### 8. CLOUD_API_CHANGE
+
+**目的**: 云存储账户在运行期被添加、移除或改挂载路径时通知客户端。**1.0.14 新增。**
+
+**数据**: `CloudApiChange`
+- `action`: `ADD`、`REMOVE` 或 `RENAME`
+- `cloudName`: 云盘类型名（如 `115`、`AliyunDrive`）
+- `userName`: 该云盘上的账户标识
+- `mountPath`: 该账户在 CloudDrive 虚拟文件系统里的路径。`RENAME` 时这里是旧路径。
+- `newMountPath`: 仅 `RENAME` 时设置，表示新路径
+
+**投递细节:**
+- 每次变化同时还会在根目录上触发一条 `FILE_SYSTEM_CHANGE`，所以 1.0.14 之前写的客户端不用改也能继续工作。如果两者都处理，注意别刷新两次。
+- 服务端启动加载已保存的云盘账户期间不会发这些事件，也就是说开机时不会为每个账户各来一条 `ADD`。连接后先用 `GetAllCloudApis` 枚举一次，再靠这个流保持列表最新。
+
+**使用场景**: 无需轮询 `GetAllCloudApis` 即可让云盘列表或存储选择器保持最新
+
+**示例 (C#):**
+```csharp
+case CloudDrivePushMessage.Types.MessageType.CloudApiChange:
+    var apiChange = message.CloudApiChange;
+
+    switch (apiChange.Action)
+    {
+        case CloudApiChange.Types.Action.Add:
+            Console.WriteLine($"新增云盘: {apiChange.CloudName}/{apiChange.UserName} " +
+                             $"挂载于 {apiChange.MountPath}");
+            AddCloudToUI(apiChange);
+            break;
+
+        case CloudApiChange.Types.Action.Remove:
+            Console.WriteLine($"移除云盘: {apiChange.MountPath}");
+            RemoveCloudFromUI(apiChange.MountPath);
+            break;
+
+        case CloudApiChange.Types.Action.Rename:
+            Console.WriteLine($"云盘改名: {apiChange.MountPath} -> {apiChange.NewMountPath}");
+            RenameCloudInUI(apiChange.MountPath, apiChange.NewMountPath);
+            break;
+    }
+    break;
+```
+
 ### 完整示例 - 处理所有推送消息类型
 
 ```csharp
@@ -6282,6 +6537,10 @@ public async Task ListenToPushMessagesAsync(CancellationToken cancellationToken)
 
                 case CloudDrivePushMessage.Types.MessageType.MergeTasks:
                     await HandleMergeTaskUpdateAsync(message.MergeTaskUpdate);
+                    break;
+
+                case CloudDrivePushMessage.Types.MessageType.CloudApiChange:
+                    await HandleCloudApiChangeAsync(message.CloudApiChange);
                     break;
 
                 default:
@@ -8111,9 +8370,9 @@ class FileManager
 - ✅ **安全准则**
 - ✅ **完整的工作示例**
 
-**API 版本:** 0.9.18
+**API 版本:** 1.0.14
 
 ---
 
-*最后更新: 2026-07-23*
+*最后更新: 2026-08-12*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*

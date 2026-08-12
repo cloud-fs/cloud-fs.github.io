@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudDrive2 for Mac — clouds, Finder integration and cinema-grade playback</title>
+  <meta name="description" content="CloudDrive2 on the Mac: every cloud in one native window, a Finder-style Columns view and full keyboard control, Blu-ray ISOs, Dolby Vision and DSD streamed from the cloud, plus an Emby/Jellyfin client and AI subtitle translation. Available from the App Store or as a direct download.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/apps/macos.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/macos.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/macos.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/macos.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="CloudDrive2 for Mac">
+  <meta property="og:description" content="Every cloud in one Mac app. Stream Blu-ray ISOs with HDMV menus, true Dolby Vision and DSD1024, plus Emby/Jellyfin and AI subtitle translation.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/apps/macos.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "macOS",
+    "url": "https://www.clouddrive2.com/en/apps/macos.html",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "Multi-cloud management, Finder integration and cinema-grade playback on the Mac.",
+    "offers": {
+      "@type": "Offer",
+      "name": "App Pro",
+      "price": "19.99",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/" aria-current="page">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/apps/macos.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Mac · Apple silicon and Intel</p>
+          <h1>Every cloud you use, in one Mac app</h1>
+          <p class="hero-lede">
+            Stream Blu-ray ISOs with HDMV menus, true Dolby Vision, DSD up to DSD1024 and huge PDFs
+            straight from the cloud — no downloads. Plus an Emby/Jellyfin client and AI subtitle translation.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/en/download.html#app">Get the Mac app</a>
+            <a class="btn btn-ghost" href="/en/pricing.html">What App Pro unlocks</a>
+          </div>
+          <ul class="chips">
+            <li><span class="chip chip-video">True Dolby Vision P7 FEL</span></li>
+            <li><span class="chip chip-disc">HDMV disc menus</span></li>
+            <li><span class="chip chip-audio">DSD1024 · DoP</span></li>
+            <li><span class="chip chip-subs">On-device AI subtitles</span></li>
+            <li><span class="chip chip-cloud">Finder integration</span></li>
+          </ul>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/macos-dashboard.webp" width="1600" height="815" decoding="async"
+               alt="The CloudDrive2 dashboard on a Mac, with a card totalling storage across every connected cloud and quick-access tiles for files, clouds, backups, tasks, WebDAV, tokens, media and settings.">
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="cloud-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Clouds</p>
+          <h2 id="cloud-h">Unified cloud management</h2>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Connect every account in one place</h3>
+            <p>Google Drive, OneDrive, S3, Aliyun Drive, Baidu Pan, 115, WebDAV, SFTP, FTP, SMB and more,
+               all in one app. Browse, search, copy, move, rename and organise files across clouds with an
+               interface designed for the Mac: a Finder-style Columns view, sortable headers with inline
+               filtering, a file inspector with inline preview, and drag-and-drop between any two clouds.</p>
+            <p>The direct-download build can also mount a cloud as a disk on your Mac, so you can browse it
+               in the Finder like a local drive and open it from other apps and the command line.</p>
+            <p class="chip-note">Local mounting depends on macFUSE and ships only in the direct-download build; the App Store build runs fully sandboxed and does not include it. See the <a href="#get-h">comparison below</a>.</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Search across clouds</span></li>
+              <li><span class="chip chip-cloud">Columns and inspector</span></li>
+              <li><span class="chip chip-cloud">Drag between clouds</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-providers.webp" width="1600" height="1547" loading="lazy" decoding="async"
+                 alt="The Add Cloud Account dialog on a Mac, listing OneDrive, GoogleDrive, Baidu, Xunlei, 123 Pan, Aliyun Drive Open, 115open, Tianyi and Guangya alongside WebDAV, CloudDrive, S3, SFTP, FTP, SMB and a local folder.">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark" aria-labelledby="media-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Media</p>
+          <h2 id="media-h">Cinema-grade playback, straight from the cloud</h2>
+          <p>A 60 GB disc image never has to come down to your drive. The player reads from the cloud, and
+             decoding, menus, audio tracks and subtitles all come with it.</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>The built-in player, including Blu-ray ISOs</h3>
+            <p>VideoToolbox-accelerated decoding of H.264, H.265/HEVC and AV1, with HDR10, HDR10+ and Dolby
+               Vision — including Dolby Vision playback of Profile 7 Blu-ray content, full enhancement layer (FEL) included. Subtitles cover
+               SRT, ASS/SSA, VTT and PGS, with per-track delay, styling and HDR brightness control. Movie
+               info comes from your local .nfo files, posters and logo artwork.</p>
+            <p class="chip-note">A Profile 7 disc carries two picture layers. CloudDrive2 reads both and composes the enhancement layer into the final picture, full enhancement layer (FEL) sources included — what you get is the complete dual-layer Dolby Vision picture, not a base-layer-only render and not an HDR10 fallback. The direct download has this today; the App Store build gets it in app 1.0.15, which is in review.</p>
+            <p>Blu-ray ISOs stream straight from cloud storage into the native disc menu: scene selection,
+               coloured shortcut keys, in-menu audio and subtitle setup, 2D+3D combo discs and chapter
+               navigation.</p>
+            <p class="chip-note">HDMV menus work in both builds. BD-J (Java) menus are in the direct download only; the App Store build plays a BD-J disc as the main feature. See the <a href="#get-h">comparison below</a>.</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">Dolby Vision P5 / 7 / 8</span></li>
+              <li><span class="chip chip-video">HDR10+ · HLG</span></li>
+              <li><span class="chip chip-disc">HDMV menus</span></li>
+              <li><span class="chip chip-disc">2D + 3D combo discs</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-disc_menu.webp" width="1600" height="950" loading="lazy" decoding="async"
+                 alt="A Blu-ray disc's scene selection menu: PLAY, SETTINGS, SCENES and EXTRAS along the bottom, a row of scene thumbnails above, and bookmarks in the corner.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>AI subtitle translation</h3>
+            <p>Generate translated subtitles for any video. CloudDrive2 translates the existing subtitle
+               track first — including PGS bitmap subtitles read by on-device OCR — and falls back to speech
+               recognition when there is none. Use Apple's on-device translation models, which are free and
+               keep the audio on your Mac, or bring your own API. Subtitles are saved next to the video for
+               reuse on your other devices, and whole folders can run in the background.</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">Apple on-device models</span></li>
+              <li><span class="chip chip-subs">PGS OCR</span></li>
+              <li><span class="chip chip-subs">Whole-folder batches</span></li>
+              <li><span class="chip chip-subs">Saved for reuse</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-ai_subtitles.webp" width="1600" height="1053" loading="lazy" decoding="async"
+                 alt="Live Translation settings on a Mac, translating spoken Italian into Simplified Chinese with the transcribe model set to On-device (Apple) and a 0.40 s subtitle delay.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Multichannel and Dolby Atmos</h3>
+            <p>Dolby Atmos (Dolby Digital Plus) bitstreams to your AVR over HDMI. TrueHD, DTS-HD Master Audio
+               and DTS decode in full and go out over HDMI or a multichannel USB DAC as 5.1 or 7.1 — never
+               folded down to stereo. Multichannel DSD does the same: 5.1 SACD ISO, .dsf and .dff play in
+               true surround.</p>
+            <p>Stereo outputs get a proper ITU-R BS.775 downmix, and AirPods Pro and Max get head-tracked
+               spatial audio instead.</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">Atmos bitstream</span></li>
+              <li><span class="chip chip-audio">TrueHD · DTS-HD MA</span></li>
+              <li><span class="chip chip-audio">5.1 · 7.1, no downmix</span></li>
+              <li><span class="chip chip-audio">Spatial audio</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-audio_settings.webp" width="1600" height="1044" loading="lazy" decoding="async"
+                 alt="Player settings on a Mac showing a connected AE8 USB DAC with a 44.1 kHz to 2822.4 kHz sample-rate range, 32-bit depth, DoP DSD64 to DSD1024 and a DoP 1.1 (DSD512/DSD1024) option.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Audiophile playback</h3>
+            <p>DSD up to DSD1024, plus SACD ISO, FLAC, WAV, ALAC and 25+ other formats. DoP output and
+               per-device output pinning deliver a bit-perfect signal to your USB DAC, with gapless
+               transitions, a persistent audio player window and pitch-corrected variable speed.</p>
+            <p class="chip-note">Native DSD over USB needs the direct-download build; the App Store build sends DSD over DoP, which is equally bit-perfect.</p>
+            <p class="chip-note">DSD64 through DSD1024 are all supported. How far DoP and Native DSD actually go is set by the DAC you connect — the app outputs to what the DAC itself reports, and anything beyond that is converted to PCM.</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
+              <li><span class="chip chip-audio">SACD ISO</span></li>
+              <li><span class="chip chip-audio">Bit-perfect DoP</span></li>
+              <li><span class="chip chip-audio">Gapless</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-audio_player.webp" width="900" height="1487" loading="lazy" decoding="async"
+                 alt="The compact audio player window on a Mac playing a track badged DSD1024 and DoP, with album artwork and transport controls below.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>A multi-gigabyte PDF, open in seconds</h3>
+            <p>The streaming PDF reader never pulls the whole book down. It fetches only the byte range the
+               pages on screen actually need, so a multi-gigabyte art book typically goes from double-click to
+               first page in seconds — no waiting for a download, and no complete copy left on your disk.</p>
+            <p>The reader opens in a standalone window. Turning pages, zooming and jumping through the outline
+               all fetch on demand, with page thumbnails, outline navigation, bookmarks and reading-position
+               memory.</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">Fetches pages on demand</span></li>
+              <li><span class="chip chip-audio">No full download</span></li>
+              <li><span class="chip chip-audio">Outline navigation</span></li>
+              <li><span class="chip chip-audio">Bookmarks and position</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-pdf_reader.webp" width="1600" height="1336" loading="lazy" decoding="async"
+                 alt="A standalone CloudDrive reader window on a Mac showing a full two-page spread of a large-format illustrated book.">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="more-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">More</p>
+          <h2 id="more-h">The rest of what you'll use daily</h2>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-keyboard card-icon" aria-hidden="true"></i>
+            <h3>Full keyboard control</h3>
+            <p>Arrow-key navigation, Space quick-look, F2 rename, letter-prefix jump, and complete player control — seek, volume, fullscreen, next episode, audio and subtitle cycling, frame stepping and the media keys. Press ⌘⇧/ for the shortcut cheat sheet.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-photo-film card-icon" aria-hidden="true"></i>
+            <h3>Emby and Jellyfin client</h3>
+            <p>Connect your own Emby or Jellyfin servers and browse libraries with posters, cast and Continue Watching. When your CloudDrive can reach the same file, Direct Stream plays it straight from the cloud, bypassing the server transcoder, with watch history kept in sync.</p>
+            <p class="chip-note">On the server side there is also an <a href="/en/download.html#plugin-h">Emby and Jellyfin companion plugin</a>: live library updates, playback-aware prefetch, and path mappings that configure themselves.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-folder-open card-icon" aria-hidden="true"></i>
+            <h3>Finder integration</h3>
+            <p>A File Provider extension exposes connected clouds as Finder locations, so any Mac app can browse and open them. CloudDrive2 can also act as the external player through Open With and the <code>clouddrive://</code> URL scheme.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
+            <h3>Transfers and backup</h3>
+            <p>Copy or move files between any connected providers. The transfer manager handles pause, resume, retry, throttling and concurrency, and uploads whole folders recursively. Backup tasks add file watching, full-scan intervals and multiple destinations.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>Security</h3>
+            <p>Two-factor authentication, encrypted folders, scoped API tokens and session monitoring protect your data.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>A WebDAV server of its own</h3>
+            <p>Your Mac is itself a WebDAV server: every cloud you have connected is served over a
+               standard protocol, so third-party apps on the same network — players, file managers,
+               backup tools — read your cloud content directly without signing in to each provider
+               again.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-sliders card-icon" aria-hidden="true"></i>
+            <h3>And these</h3>
+            <p>Disk cache with configurable eviction for offline access, a gallery view with thumbnail previews, an image viewer with RAW support (CR2/NEF/ARW/RAF), Picture-in-Picture, background audio, AirPlay 2 multi-room, dark and light themes, English and Chinese interfaces, and a universal binary that runs natively on Apple silicon and Intel.</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="get-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Get it</p>
+          <h2 id="get-h">How to install</h2>
+          <p>There are two Mac builds. The App Store build suits most people; the direct download (Developer ID, notarised by Apple) is for people who want local mounting. Both share the same account, so you can switch at any time.</p>
+        </header>
+        <ul class="store-badges">
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>
+            <span><b>App Store</b><span>Coming soon</span></span>
+          </span></li>
+          <li><a class="store-badge" href="/en/download.html#app">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span><b>Direct download</b><span>Notarised · with local mounting</span></span>
+          </a></li>
+        </ul>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col" class="c">App Store build</th>
+                <th scope="col" class="c">Direct download</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Cloud browsing and file operations</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Player (video and audio)</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Backup and auto sync</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Built-in WebDAV server</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">API tokens</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Mount as a local disk (macFUSE)</th>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">BD-J (Java) disc menus</th>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Dolby Vision P7 FEL</th>
+                <td class="c"><span class="no">—</span><br><span class="cell-note">from 1.0.15</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Automatic updates</th>
+                <td class="c">App Store</td>
+                <td class="c">In-app</td>
+              </tr>
+              <tr>
+                <th scope="row">Sandbox</th>
+                <td class="c">Fully sandboxed</td>
+                <td class="c">Not sandboxed</td>
+              </tr>
+              <tr>
+                <th scope="row">In-app purchases</th>
+                <td class="c">Apple</td>
+                <td class="c">Our own channel (a later release)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">Local mounting needs <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a> installed first, and its kernel extension approved — on Apple silicon that includes a trip to Recovery, described in <a href="/en/macfuse.html">letting macFUSE through</a>. Without it the rest of the direct-download build works as usual.</p>
+        <div class="note">
+          <span class="note-title">About App Pro</span>
+          <p>Browsing clouds, managing files, transfers, backup and basic playback need no extra purchase.
+             The advanced playback features — HDR and Dolby Vision, DSD, ISO disc playback (Blu-ray, DVD and SACD), AI subtitle translation and the media client (Emby and Jellyfin) —
+             need the one-time <strong>App Pro</strong> in-app purchase, listed at <strong>USD $19.99</strong> in every store. App Pro is tied to your CloudDrive account, not to a device or a store.
+             Buy it once and it is unlocked wherever you sign in with that account — iPhone, iPad,
+             Mac, Apple TV, Vision Pro, Android and Meta Quest alike. See
+             <a href="/en/pricing.html">plans and pricing</a>.</p>
+        </div>
+        <div class="note">
+          <span class="note-title">About this feature list</span>
+          <p>Everything on this page is what the app does today. CloudDrive2 is under active
+             development, and what cloud providers and platforms allow changes too, so features can
+             change or be withdrawn without notice.</p>
+          <p>Feature requests and bug reports are genuinely welcome — they are how the next release gets
+             decided. Best filed as <a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub issues</a>, where they stay on the
+             record; you can also write to
+             <a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a> or join the
+             <a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-tight" aria-labelledby="other-h">
+      <div class="container">
+        <h2 id="other-h" class="eyebrow strip-title">Other platforms</h2>
+        <ul class="platform-strip">
+          <li><a href="/en/apps/ios.html"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone · iPad</a></li>
+          <li><a href="/en/apps/tvos.html"><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV</a></li>
+          <li><a href="/en/apps/visionos.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Vision Pro</a></li>
+          <li><a href="/en/apps/android.html"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</a></li>
+          <li><a href="/en/apps/quest.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Meta Quest</a></li>
+          <li><a href="/en/apps/windows.html"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</a></li>
+          <li><a href="/en/apps/desktop.html"><i class="fa-solid fa-server" aria-hidden="true"></i>Linux · NAS</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/apps/macos.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

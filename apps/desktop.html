@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>电脑与 NAS 版 CloudDrive2 — Windows、Linux、Docker 与 Web 界面</title>
+  <meta name="description" content="CloudDrive2 的核心服务：在 Windows、Linux、macOS、NAS 和 Docker 上运行，把所有云盘挂成本地磁盘，提供浏览器管理界面和内置 WebDAV 服务器，端口 19798。">
+  <link rel="canonical" href="https://www.clouddrive2.com/apps/desktop.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/desktop.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/desktop.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/desktop.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="电脑与 NAS 版 CloudDrive2">
+  <meta property="og:description" content="把所有云盘挂成本地磁盘。浏览器管理界面、内置 WebDAV 服务器，Windows、Linux、macOS、NAS 与 Docker 都能跑。">
+  <meta property="og:url" content="https://www.clouddrive2.com/apps/desktop.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Windows, Linux, macOS",
+    "url": "https://www.clouddrive2.com/apps/desktop.html",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "在电脑、NAS 和 Docker 上运行的云盘挂载与管理服务。"
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/" aria-current="page">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/apps/desktop.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Windows · Linux · NAS · Docker</p>
+        <h1>装在常开的那台机器上</h1>
+        <p class="hero-lede">
+          在这里，CloudDrive2 的核心以后台服务的形式运行：连接你全部的云盘账户，把它们挂成本地磁盘，提供一个浏览器管理界面，同时自己就是一台 WebDAV 服务器。手机、电视和头显上的应用自带同一套核心，各自独立可用；需要时也可以把这台当成一个云盘连过来。
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/download.html">下载核心服务</a>
+          <a class="btn btn-ghost" href="/features.html">核心功能详解</a>
+        </div>
+        <p class="chip-note">这一页讲的是 <b>CloudDrive2 Core</b>——原来的 CloudDrive2，仍在持续开发。</p>
+        <p class="chip-note">用 Windows？现在有原生的桌面应用了，带完整界面与盘符挂载，见 <a href="/apps/windows.html">Windows 版</a>。</p>
+        <ul class="chips">
+          <li><span class="chip chip-cloud">云盘本地挂载</span></li>
+          <li><span class="chip chip-cloud">Web 界面 :19798</span></li>
+          <li><span class="chip chip-cloud">WebDAV 服务器</span></li>
+          <li><span class="chip">Docker · NAS</span></li>
+          <li><span class="chip">Windows · Linux · macOS</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="mount-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">本地挂载</p>
+          <h2 id="mount-h">把云盘挂成一块本地磁盘</h2>
+          <p>挂载之后，云盘在系统里就是一块盘。任何程序——办公软件、剪辑软件、Emby、Plex——
+             都能像读本地文件一样读它，不需要「先下载，再打开」。</p>
+        </header>
+
+        <div class="split">
+          <div>
+            <p>多个云盘可以合并挂载成一棵统一的目录树，也可以各挂各的盘符；只挂某个云盘下的某个目录同样可以。读取采用多线程下载，带宽跟得上的时候，体验和本地盘相差不大。</p>
+            <p>写入是真正的随机写：改文件中间的一段，不必先把整个文件下载回本地——CloudDrive2 从云端取未改动的片段，接上你写进去的部分，直接拼成新文件上传。每个目录的元数据缓存时长可以单独设置，在数据时效性和请求频度之间自己拿捏。</p>
+            <p>挂出来的也是一个完整的文件系统：Linux 与 macOS 上是完整 POSIX 语义，权限位、所有者与用户组、时间戳和扩展属性（xattr）一样不少；Windows 上完整支持安全描述符，
+               ACL 照常读写。这些属性持久化在本地，云盘存不下也不影响。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">多线程读取</span></li>
+              <li><span class="chip chip-cloud">真正的随机写</span></li>
+              <li><span class="chip chip-cloud">完整 POSIX 语义</span></li>
+              <li><span class="chip chip-cloud">Windows 安全描述符</span></li>
+              <li><span class="chip chip-cloud">目录级缓存时长</span></li>
+            </ul>
+            <p><a class="arrow-link" href="/features.html#local-mount">本地挂载的完整说明</a></p>
+          </div>
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                <div>
+                  <b>统一挂载</b>
+                  <p>把多个云盘账户合成一个文件系统，跨云盘搬文件就是普通的复制粘贴。</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                <div>
+                  <b>文件变更通知</b>
+                  <p>挂载盘上的增删改会产生系统级通知，Emby、Jellyfin、Plex 的媒体库监控照常工作。通过 Web 界面、WebDAV 或离线下载产生的变化同样会通知。</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                <div>
+                  <b>访问监控与权限控制</b>
+                  <p>实时看到哪个进程在读哪个文件、下载速度多少，并可以按进程放行或拉黑。</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                <div>
+                  <b>加密文件夹</b>
+                  <p>在任意云盘或本地目录里创建加密文件夹，文件名用 AES、内容用 chacha20-poly1305 加密，密码只留在本机。解锁之后用起来和普通文件夹一样。</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="chip-note">Linux 需要内核支持 FUSE（看看有没有 /dev/fuse）；macOS 需要先安装 macFUSE；未 root 的 Android 无法挂载本地文件系统，其余功能不受影响。</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="web-ui" aria-labelledby="webui-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Web 界面</p>
+          <h2 id="webui-h">浏览器就是控制台</h2>
+          <p>装好之后不用装客户端：打开浏览器，配置和日常操作都在这一个页面里完成。</p>
+        </header>
+
+        <pre><code>http://localhost:19798          # 本机
+http://&lt;主机 IP&gt;:19798          # 局域网里的其它设备</code></pre>
+        <p class="chip-note">另有 HTTPS 端口 <strong>19799</strong>，默认关闭，要在设置里打开并配置证书。手机、平板、电视和头显上的应用自带的核心监听 <strong>29798</strong>，和这里错开，同一台机器上一起装不会撞端口。</p>
+
+        <div class="split">
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                <div>
+                  <b>云盘账户</b>
+                  <p>添加、授权、移除云盘账户，阿里云盘、百度网盘、115、天翼云盘、123云盘、
+                     OneDrive、Google Drive、迅雷云盘、WebDAV 与本地文件夹都在列表里。</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+                <div>
+                  <b>文件管理</b>
+                  <p>新建文件夹、重命名、删除、移动、上传本地文件，以及跨云盘复制——
+                     不必在各家网盘的客户端之间来回切换。</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-play" aria-hidden="true"></i>
+                <div>
+                  <b>在线播放与预览</b>
+                  <p>视频、音频、图片直接在浏览器里放，也可以交给 PotPlayer、VLC、Infuse、
+                     IINA、nPlayer 等第三方播放器打开。</p>
+                </div>
+              </li>
+              <li>
+                <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                <div>
+                  <b>其余全部设置</b>
+                  <p>挂载点、备份任务、传输队列、WebDAV 设置、API 令牌，都在同一个界面里。</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p>Web 界面是这台服务的唯一控制台：Windows 上双击桌面快捷方式打开的是它，
+               NAS 和 Docker 上没有图形界面，用的也是它。</p>
+            <p>手机、平板、电视和头显上的 CloudDrive2 应用连接的是同一个服务，在哪一端改的设置，另一端都能看到。</p>
+            <p class="chip-note">这个界面是一个 WebAssembly 应用，浏览器不支持 WebAssembly 就只有白屏。电脑上用较新版本的 Edge、Chrome、Safari 或 Firefox，手机平板上用主流浏览器都可以；IE 不行，电视和机顶盒自带的精简浏览器也多半不行。</p>
+            <p><a class="arrow-link" href="/features.html#unified-web-management">统一的多云盘管理</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="dav-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">WebDAV</p>
+          <h2 id="dav-h">自己就是一台 WebDAV 服务器</h2>
+          <p>CloudDrive2 把聚合后的云盘再以 WebDAV 的形式提供出去。
+             Windows 的「映射网络驱动器」、macOS 的「连接服务器」、Office、剪辑软件、电视盒子上的播放器——任何支持 WebDAV 的客户端都能直接连。</p>
+        </header>
+
+        <pre><code>服务器地址   http://&lt;主机 IP&gt;:19798/dav
+用户名       CloudDrive2 账号邮箱（也可只填 @ 前面的部分）
+密码         CloudDrive2 账号密码</code></pre>
+
+        <ul class="stack-list">
+          <li>
+            <i class="fa-solid fa-toggle-on" aria-hidden="true"></i>
+            <div>
+              <b>服务开关</b>
+              <p>WebDAV 服务可以随时打开或关闭。</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-user" aria-hidden="true"></i>
+            <div>
+              <b>账号访问</b>
+              <p>允许或禁止用 CloudDrive2 账号访问 WebDAV，并可指定根目录位置与是否只读。</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-user-secret" aria-hidden="true"></i>
+            <div>
+              <b>匿名访问</b>
+              <p>允许或禁止匿名访问，匿名访问的根目录和读写权限单独设置。</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-users" aria-hidden="true"></i>
+            <div>
+              <b>独立 WebDAV 用户</b>
+              <p>可以创建任意多个独立用户，每个用户单独设置根目录和只读权限，给家人和同事分别开一份。这是会员功能，详见<a href="/pricing.html">会员与价格</a>。</p>
+            </div>
+          </li>
+        </ul>
+
+        <p><a class="arrow-link" href="/features.html#webdav">WebDAV 服务的完整说明</a></p>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="docker-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Docker · NAS</p>
+          <h2 id="docker-h">在 NAS 上常驻</h2>
+          <p>官方镜像是 <code>cloudnas/clouddrive2</code>，提供 amd64、arm64 和 armv7 三种架构。跑起来之后，浏览器打开 <code>http://&lt;主机 IP&gt;:19798</code> 就能配置。</p>
+        </header>
+
+        <p>容器里的挂载需要能传回宿主机，所以宿主机那个目录的挂载传播必须是共享的（shared mount）——FUSE 依赖它，不是共享的话会直接以「权限被拒绝」挂载失败。这是部署时最常见的坑，不过不少系统出厂就开着（LibreELEC、CoreELEC、飞牛 fnOS 都是），先查一下再动手。</p>
+
+        <details class="acc">
+          <summary>Docker Compose 配置</summary>
+          <div class="acc-body">
+<pre><code>services:
+  cloudnas:
+    image: cloudnas/clouddrive2
+    container_name: clouddrive2
+    environment:
+      - TZ=Asia/Shanghai
+      - CLOUDDRIVE_HOME=/Config
+    volumes:
+      - &lt;接收云盘挂载的目录&gt;:/CloudNAS:shared
+      - &lt;存放配置的目录&gt;:/Config
+      - &lt;其它需要共享的本地目录&gt;:/media:shared
+    devices:
+      - /dev/fuse:/dev/fuse
+    restart: unless-stopped
+    pid: "host"
+    privileged: true
+    network_mode: "host"</code></pre>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary>查一下，没开再开</summary>
+          <div class="acc-body">
+            <p>Docker 以 systemd 服务运行时，给它加一段 <code>MountFlags=shared</code>：</p>
+<pre><code>sudo mkdir -p /etc/systemd/system/docker.service.d/
+sudo tee /etc/systemd/system/docker.service.d/clear_mount_propagation_flags.conf &lt;&lt;EOF
+[Service]
+MountFlags=shared
+EOF
+sudo systemctl restart docker.service</code></pre>
+            <p>不是 systemd 服务的话，直接把目标目录所在的挂载点设为共享。把 <code>/path/to/dir</code> 换成你准备给容器用的那个目录：</p>
+<pre><code>sudo mount --make-shared $(df -P /path/to/dir | tail -1 | awk '{ print $6 }')</code></pre>
+            <p class="chip-note">mount --make-shared 只在本次运行期间有效，重启后需要重新执行。要开机自动跑 CloudDrive，请把这条命令一并加进启动项。</p>
+          </div>
+        </details>
+
+        <div class="split">
+          <div>
+            <h3>现成的 NAS 装法</h3>
+            <p>群晖 Synology 和威联通 QNAP 有第三方套件，Unraid 有社区模板，飞牛 fnOS 可以下载对应架构的 fpk 包手动安装。任何能跑 Docker 的 NAS，也都可以直接用上面的镜像。</p>
+            <ul class="chips">
+              <li><span class="chip">Synology</span></li>
+              <li><span class="chip">QNAP</span></li>
+              <li><span class="chip">Unraid</span></li>
+              <li><span class="chip">飞牛 fnOS</span></li>
+            </ul>
+            <p class="chip-note">NAS 套件由第三方提供，我们不对其安全性和稳定性负责。镜像和安装包请以官方渠道为准。</p>
+          </div>
+          <div>
+            <h3>端口与目录</h3>
+            <ul class="chips">
+              <li><span class="chip">端口 19798</span></li>
+              <li><span class="chip">/Config 配置</span></li>
+              <li><span class="chip">/CloudNAS:shared 挂载</span></li>
+              <li><span class="chip">/dev/fuse</span></li>
+            </ul>
+            <p>逐条参数说明、CLI 写法和常见问题，都在 Docker 部署指南里。</p>
+            <p><a class="arrow-link" href="/docker.html">Docker 部署指南</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="linux-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">无头 Linux</p>
+          <h2 id="linux-h">没有桌面的机器一样能装</h2>
+          <p>服务本身不需要图形界面。下载对应架构的压缩包，展开，运行，然后从任意一台机器的浏览器连过去就行。</p>
+        </header>
+
+        <pre><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz
+cd clouddrive-2-linux-$ARCH-$VERSION
+./clouddrive</code></pre>
+
+        <ul class="stack-list">
+          <li>
+            <i class="fa-solid fa-microchip" aria-hidden="true"></i>
+            <div>
+              <b>先确认内核支持 FUSE</b>
+              <p>看看 <code>/dev/fuse</code> 在不在。不支持 FUSE 的内核无法挂载本地目录，但 Web 界面、备份和 WebDAV 服务仍然可用。</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+            <div>
+              <b>以非 root 用户运行</b>
+              <p>按发行版的方式装好 fuse3，确认 <code>fusermount3</code> 能跑，再编辑 <code>/etc/fuse.conf</code>，把 <code>user_allow_other</code> 前面的 <code>#</code> 删掉。</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-terminal" aria-hidden="true"></i>
+            <div>
+              <b>开机自启</b>
+              <p>把 clouddrive 加进系统自启动，或者注册成 systemd 服务，具体写法看发行版文档。</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-brands fa-linux" aria-hidden="true"></i>
+            <div>
+              <b>Arch Linux</b>
+              <p>有现成的 AUR 包：<code>yay -Syu clouddrive</code>，然后 <code>systemctl enable --now clouddrive.service</code> 起服务，也可以用 <code>--user</code> 以用户身份运行。</p>
+            </div>
+          </li>
+        </ul>
+
+        <p><a class="arrow-link" href="/help.html">逐平台的安装步骤</a></p>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="platforms-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">平台</p>
+          <h2 id="platforms-h">支持的系统与架构</h2>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th scope="col">平台</th>
+                <th scope="col">架构</th>
+                <th scope="col">说明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Windows</th>
+                <td>x64 · Arm64</td>
+                <td>安装包，装完桌面有快捷方式，浏览器打开 localhost:19798</td>
+              </tr>
+              <tr>
+                <th scope="row">Linux</th>
+                <td>x86_64 · aarch64 · armv7</td>
+                <td>tgz 压缩包；Arch Linux 及衍生版另有 AUR 包</td>
+              </tr>
+              <tr>
+                <th scope="row">macOS</th>
+                <td>x86_64 · aarch64</td>
+                <td>推荐用 Homebrew 安装，也可手动解压 tgz；需要先装 macFUSE</td>
+              </tr>
+              <tr>
+                <th scope="row">Docker</th>
+                <td>amd64 · arm64 · armv7</td>
+                <td>镜像 cloudnas/clouddrive2，宿主机需开启共享挂载</td>
+              </tr>
+              <tr>
+                <th scope="row">飞牛 fnOS</th>
+                <td>x86_64 · aarch64</td>
+                <td>对应架构的 fpk 包，手动安装</td>
+              </tr>
+              <tr>
+                <th scope="row">Android</th>
+                <td>x86_64 · aarch64 · armv7</td>
+                <td>未 root 的系统无法挂载本地文件系统，其余功能可用</td>
+              </tr>
+              <tr>
+                <th scope="row">Synology · QNAP · Unraid</th>
+                <td>视机型而定</td>
+                <td>第三方套件与社区模板，或直接运行 Docker 镜像</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="get-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">获取</p>
+          <h2 id="get-h">如何安装</h2>
+        </header>
+        <ul class="store-badges">
+          <li><a class="store-badge" href="https://hub.docker.com/r/cloudnas/clouddrive2" rel="noopener">
+            <i class="fa-brands fa-docker" aria-hidden="true"></i>
+            <span><b>Docker Hub</b><span>cloudnas/clouddrive2</span></span>
+          </a></li>
+          <li><a class="store-badge" href="/download.html">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span><b>全部下载方式</b><span>各平台安装包</span></span>
+          </a></li>
+        </ul>
+        <div class="note">
+          <span class="note-title">装好之后</span>
+          <p>用浏览器打开 <code>http://&lt;主机 IP&gt;:19798</code> 注册或登录，然后添加云盘账户、设置挂载点。逐平台的安装步骤见<a href="/help.html">帮助与安装</a>，
+             Docker 的完整参数见 <a href="/docker.html">Docker 部署指南</a>。</p>
+          <p>挂载云盘、Web 界面和 WebDAV 基础服务不需要付费。跨云盘快速复制、多云盘备份、文件变更通知、加密文件系统、应用级权限控制和独立 WebDAV 用户属于会员功能，详见<a href="/pricing.html">会员与价格</a>。</p>
+        </div>
+        <div class="note">
+          <span class="note-title">关于这些功能</span>
+          <p>本页写的是应用当前的功能。CloudDrive2 仍在持续开发，云服务商与各平台的限制也在变，所以功能可能调整，也可能在不另行通知的情况下移除。</p>
+          <p>欢迎提功能需求、报 bug——下一个版本做什么，很大程度上就是这么定的。最好提到 <a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub issues</a> 上，有记录也追得到；也可以写信到 <a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a>，或者加入 <a href="https://t.me/cloudnaschat" rel="noopener">Telegram 群</a>。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-tight" aria-labelledby="other-h">
+      <div class="container">
+        <h2 id="other-h" class="eyebrow strip-title">其他平台</h2>
+        <ul class="platform-strip">
+          <li><a href="/apps/ios.html"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone · iPad</a></li>
+          <li><a href="/apps/macos.html"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</a></li>
+          <li><a href="/apps/tvos.html"><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV</a></li>
+          <li><a href="/apps/visionos.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Vision Pro</a></li>
+          <li><a href="/apps/android.html"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</a></li>
+          <li><a href="/apps/quest.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Meta Quest</a></li>
+          <li><a href="/apps/windows.html"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/apps/desktop.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

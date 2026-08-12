@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Letting macFUSE through on a Mac — CloudDrive2</title>
+  <meta name="description" content="Mounting clouds on macOS with CloudDrive2: install macFUSE, approve its kernel extension in System Settings, and on an Apple silicon Mac drop the startup policy to Reduced Security from Recovery. Includes verification and troubleshooting.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/macfuse.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/macfuse.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/macfuse.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/macfuse.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Letting macFUSE through on a Mac — CloudDrive2">
+  <meta property="og:description" content="Installing macFUSE, approving its kernel extension in System Settings, and the Recovery steps an Apple silicon Mac needs.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/macfuse.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/macfuse.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Mounting on macOS</p>
+        <h1>Letting macFUSE through on a Mac</h1>
+        <p class="hero-lede">
+          For CloudDrive2 to mount a cloud as a local disk it needs macFUSE, and macFUSE installs a kernel
+          extension. On an Intel Mac that is one Allow button. On an Apple silicon Mac you first have to
+          drop the startup security policy a notch, from Recovery. This page walks both routes.
+        </p>
+        <ul class="chips">
+          <li><a class="chip chip-cloud" href="#why">Why this is needed</a></li>
+          <li><a class="chip chip-cloud" href="#chip">Which chip you have</a></li>
+          <li><a class="chip" href="#silicon">Apple silicon</a></li>
+          <li><a class="chip" href="#intel">Intel</a></li>
+          <li><a class="chip" href="#verify">Verifying</a></li>
+          <li><a class="chip" href="#faq">When it does not work</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://macfuse.github.io/" rel="noopener">Download macFUSE</a>
+          <a class="btn btn-ghost" href="/en/help.html#mount">Back to mounting</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="scope-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">Who this is for</p>
+            <h2 id="scope-h">Scope, first</h2>
+          </div>
+          <div>
+            <p>Anyone mounting a cloud as a disk on a Mac: the <strong>core service downloaded from this
+               site</strong> (including the Homebrew install), and the <strong>direct-download macOS
+               app</strong>.</p>
+            <p>The Mac App Store build runs fully sandboxed. It has no local mounting to begin with, so it
+               never needs macFUSE — browsing, playback, transfers and backup are unaffected. The full
+               comparison is on the <a href="/en/apps/macos.html">macOS page</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="why" aria-labelledby="why-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Background</p>
+          <h2 id="why-h">Why a system setting has to move</h2>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3>Mounting goes through the kernel</h3>
+            <p>Turning a cloud into a disk in Finder means something has to catch every directory listing,
+               every open, every write the system issues. macFUSE's kernel extension is that layer, and
+               CloudDrive2 turns what it catches into cloud API calls. Without it, mounting is not something
+               macOS can do.</p>
+            <p>Nothing else goes through it. Browsing, playback, cross-cloud copying, backup and WebDAV all
+               work with macFUSE absent.</p>
+          </div>
+          <div>
+            <h3>Apple silicon loads no third-party kernel extensions by default</h3>
+            <p>An Apple silicon Mac ships on Full Security, where no third-party kernel extension loads at
+               all — installing one changes nothing. To let it load you have to enter Recovery, drop the
+               policy to Reduced Security, and tick the box allowing user management of kernel extensions.</p>
+            <p>Intel Macs have no such layer: install, then click Allow in System Settings.</p>
+          </div>
+        </div>
+
+        <div class="note">
+          <span class="note-title">What "Reduced Security" actually reduces</span>
+          <p>It permits kernel extensions <strong>signed by developers Apple has identified</strong> to
+             load, and every single extension still has to be approved by you individually in System
+             Settings. It is <strong>not</strong> disabling SIP (System Integrity Protection), and it is
+             <strong>not</strong> disabling Gatekeeper. Neither of those has to move — macFUSE's installer
+             is itself signed and notarised by Apple.</p>
+          <p>You do this once per machine. Afterwards, upgrading macFUSE or CloudDrive2 does not bring you
+             back here.</p>
+        </div>
+
+        <p class="chip-note">A fair question: doesn't recent macFUSE have an FSKit backend that needs no
+           kernel extension? It does, but it is exposed only through the libfuse3 interface, its mount
+           points can only live under <code>/Volumes</code>, and its I/O does not match the kernel backend.
+           CloudDrive2 uses the kernel backend, so this step cannot be skipped.</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="chip" aria-labelledby="chip-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Step one</p>
+          <h2 id="chip-h">Find out which chip you have</h2>
+          <p>The two routes differ a lot, so check first. Apple menu → About This Mac, and read the Chip
+             line.</p>
+        </header>
+
+        <ul class="card-grid card-grid-2">
+          <li><a class="card" href="#silicon">
+            <i class="fa-solid fa-microchip card-icon" aria-hidden="true"></i>
+            <h3>It says Apple M-something</h3>
+            <p>Every model from the M1 onwards. One trip to Recovery, two restarts in all.</p>
+          </a></li>
+          <li><a class="card" href="#intel">
+            <i class="fa-solid fa-microchip card-icon" aria-hidden="true"></i>
+            <h3>It says Intel</h3>
+            <p>Most models before 2020. No Recovery, one restart.</p>
+          </a></li>
+        </ul>
+
+        <p>Terminal will answer too — <code>arm64</code> is Apple silicon, <code>x86_64</code> is Intel:</p>
+        <div class="code-block"><pre><code>uname -m</code></pre></div>
+      </div>
+    </section>
+
+    <section class="band" id="silicon" aria-labelledby="silicon-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Apple silicon</p>
+          <h2 id="silicon-h">Three stages, two restarts</h2>
+          <p>The order matters: start it in System Settings, change the policy in Recovery, and only then,
+             back on the desktop, does the Allow button come into it.</p>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>Install macFUSE, then start the process</h3>
+            <p>Download and install from <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a>.
+               macOS shows a "System Extension Blocked" notice — click <strong>Open System Settings</strong>.
+               If nothing appears, go to System Settings → Privacy &amp; Security yourself and scroll to the
+               bottom.</p>
+            <p>There, click <strong>Enable System Extensions…</strong>, enter your login password, then click
+               <strong>Shut Down</strong>. This tells the system you are about to change the policy in
+               Recovery.</p>
+          </li>
+          <li>
+            <h3>Enter Recovery and drop the policy a notch</h3>
+            <p>Once the Mac is fully off, <strong>press and hold the power button (or Touch ID button)</strong>
+               until "Loading startup options" appears. Click <strong>Options</strong>, then
+               <strong>Continue</strong>, pick your startup disk and an administrator account, and enter the
+               password.</p>
+            <p>In Recovery, choose <strong>Utilities → Startup Security Utility</strong> from the menu bar.
+               Select your system disk, click <strong>Security Policy…</strong>, choose
+               <strong>Reduced Security</strong>, tick <strong>Allow user management of kernel extensions
+               from identified developers</strong>, click OK, enter your password and restart. The window is
+               sketched below.</p>
+          </li>
+          <li>
+            <h3>Back on the desktop, click Allow</h3>
+            <p>After the restart, open <strong>System Settings → Privacy &amp; Security</strong> and scroll
+               down. There is a blocked entry with an <strong>Allow</strong> button beside it. Click it and
+               enter your login password.</p>
+            <p>Then <strong>restart once more</strong>. Only after this does the kernel extension actually
+               load.</p>
+          </li>
+        </ol>
+
+        <h3>The window in step 2</h3>
+        <div class="table-scroll">
+        <svg class="ui-sketch" viewBox="0 0 680 268" role="img" aria-labelledby="sk1-t sk1-d">
+          <title id="sk1-t">Sketch of the Startup Security Utility</title>
+          <desc id="sk1-d">A window titled Startup Security Utility. Two radio options: Full Security, unselected, and Reduced Security, selected. Under Reduced Security is a ticked checkbox reading "Allow user management of kernel extensions from identified developers". An OK button sits at the bottom right.</desc>
+          <rect class="sk-chrome" x="0" y="0" width="680" height="38"/>
+          <line class="sk-rule" x1="0" y1="38" x2="680" y2="38"/>
+          <text class="sk-title" x="24" y="25">Startup Security Utility</text>
+
+          <circle class="sk-off" cx="40" cy="76" r="8"/>
+          <text class="sk-label" x="60" y="81">Full Security</text>
+          <text class="sk-sub" x="60" y="101">Ensures that only your current OS, or signed operating system software</text>
+          <text class="sk-sub" x="60" y="117">currently trusted by Apple, can run.</text>
+
+          <circle class="sk-on-stroke" cx="40" cy="150" r="8"/>
+          <circle class="sk-on" cx="40" cy="150" r="4"/>
+          <text class="sk-label" x="60" y="155">Reduced Security</text>
+          <text class="sk-sub" x="60" y="175">Allows any version of signed operating system software ever trusted by Apple to run.</text>
+
+          <rect class="sk-on" x="60" y="192" width="16" height="16" rx="4"/>
+          <path class="sk-tick" d="M64 200 l3.5 4 l5-7"/>
+          <text class="sk-sub" x="86" y="205">Allow user management of kernel extensions from identified developers</text>
+
+          <rect class="sk-on" x="584" y="222" width="72" height="30" rx="8"/>
+          <text class="sk-btn-text" x="620" y="242" text-anchor="middle">OK</text>
+        </svg>
+        </div>
+        <p class="figure-caption">A sketch, not a screenshot. Choose Reduced Security, tick the box, click OK, enter your password, restart.</p>
+
+        <h3>The entry to find in step 3</h3>
+        <div class="table-scroll">
+        <svg class="ui-sketch" viewBox="0 0 680 150" role="img" aria-labelledby="sk2-t sk2-d">
+          <title id="sk2-t">Sketch of the blocked system extension in Privacy and Security</title>
+          <desc id="sk2-d">A pane titled Privacy &amp; Security with a row reading "System software from a developer was blocked from loading", and an Allow button at the end of the row.</desc>
+          <rect class="sk-chrome" x="0" y="0" width="680" height="38"/>
+          <line class="sk-rule" x1="0" y1="38" x2="680" y2="38"/>
+          <text class="sk-title" x="24" y="25">Privacy &amp; Security</text>
+
+          <text class="sk-label" x="24" y="86">System software from a developer was blocked from loading.</text>
+          <text class="sk-sub" x="24" y="108">macFUSE's signing developer is named in this row.</text>
+
+          <rect class="sk-on" x="566" y="72" width="90" height="30" rx="8"/>
+          <text class="sk-btn-text" x="611" y="92" text-anchor="middle">Allow</text>
+        </svg>
+        </div>
+        <p class="figure-caption">A sketch, not a screenshot. The row sits low on the Privacy &amp; Security page, in the same group as "Allow applications from".</p>
+
+        <div class="note note-warn">
+          <span class="note-title">No Allow button anywhere?</span>
+          <p>It only appears after the system has just blocked the extension. If that section is empty, go
+             back to CloudDrive2 and try mounting once more so the block happens again, then return to
+             Privacy &amp; Security straight away.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="intel" aria-labelledby="intel-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Intel</p>
+          <h2 id="intel-h">One approval, one restart</h2>
+          <p>Intel Macs need no Recovery trip and no policy change.</p>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>Install macFUSE</h3>
+            <p>Download and install from
+               <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a>.</p>
+          </li>
+          <li>
+            <h3>Approve it</h3>
+            <p>When macOS prompts, click Open System Settings and press <strong>Allow</strong> under Privacy
+               &amp; Security. On macOS 12 and earlier this lives in System Preferences → Security &amp;
+               Privacy, and you have to click the padlock at the lower left before Allow becomes clickable.</p>
+          </li>
+          <li>
+            <h3>Restart</h3>
+            <p>One restart, and the kernel extension is loaded.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="band" id="verify" aria-labelledby="verify-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Finishing up</p>
+          <h2 id="verify-h">Confirm it really loaded</h2>
+          <p>Run this in Terminal:</p>
+        </header>
+
+        <div class="code-block"><pre><code>kmutil showloaded --list-only | grep -i macfuse</code></pre></div>
+        <p>A line containing <code>io.macfuse.filesystems.macfuse</code> means the kernel extension is
+           running. No output means the approval did not take — walk back through the steps above.</p>
+        <p>Which macFUSE you have is shown in the <strong>macFUSE</strong> entry at the bottom of the System
+           Settings sidebar, and that is where you check for updates too.</p>
+        <p>Once it checks out, go back to the CloudDrive2 console, open Mount Points and add one, pointing
+           it at an empty directory. The whole procedure is in the
+           <a href="/en/help.html#mount">mounting section of the help page</a>.</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Troubleshooting</p>
+          <h2 id="faq-h">When it does not work</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>It starts with an error about libfuse.2.dylib</summary>
+          <div class="acc-body">
+            <p>macFUSE is not installed — mounting depends on it for that library. Install it from
+               <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a>, approve it as
+               described on this page, then start CloudDrive2 again.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-rotate-right" aria-hidden="true"></i>Mounting broke after a macOS upgrade</summary>
+          <div class="acc-body">
+            <p>Two possibilities, in the order worth checking.</p>
+            <ol>
+              <li><strong>Your macFUSE build does not know the new system yet.</strong> macFUSE packages a
+                  separate kernel extension for each major macOS release, so a build that shipped before
+                  your current macOS simply has no extension to load. Open System Settings, find
+                  <strong>macFUSE</strong> at the bottom of the sidebar, check the version there and look
+                  for an update. Install it if there is one, then restart.</li>
+              <li><strong>The startup security policy was reset.</strong> A major upgrade can put it back to
+                  Full Security, at which point no third-party kernel extension loads. Walk the
+                  <a href="#silicon">Apple silicon steps</a> again — the Recovery part is still just
+                  re-ticking the same option.</li>
+            </ol>
+            <p>Before doing either, run <a href="#verify">the command above</a> to see whether the extension
+               is actually loaded, so you do not do it for nothing.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i>Putting Full Security back</summary>
+          <div class="acc-body">
+            <p>You can. Enter Recovery again and choose Full Security in Startup Security Utility.</p>
+            <p>After that macFUSE's kernel extension no longer loads and local mounting is gone with it.
+               Everything else in CloudDrive2 carries on as before.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>Why the Mac App Store build cannot mount</summary>
+          <div class="acc-body">
+            <p>It runs fully sandboxed, and the rules do not permit loading a kernel extension — so it has
+               no local mounting and no need for macFUSE. Use the direct download if you want to mount; both
+               builds share one account, so you can switch whenever. The comparison is on the
+               <a href="/en/apps/macos.html">macOS page</a> and the package is on the
+               <a href="/en/download.html#app">download page</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-terminal" aria-hidden="true"></i>Does the Homebrew install need this too</summary>
+          <div class="acc-body">
+            <p>Yes. Homebrew only changes how CloudDrive2 gets onto the machine; macFUSE still has to be
+               installed and still has to be approved, by exactly these steps. Homebrew can install macFUSE
+               as well:</p>
+            <div class="code-block"><pre><code>brew install --cask macfuse</code></pre></div>
+            <p>You still have to approve it in System Settings as described above.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>Still stuck?</h2>
+        <p>Bugs and feature requests are best filed as GitHub issues, where they stay on the record. Someone is usually around in the Telegram group, or write to us directly.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">Open an issue on GitHub</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">Send an email</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/macfuse.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

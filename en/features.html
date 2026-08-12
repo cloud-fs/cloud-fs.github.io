@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Core features — what the CloudDrive2 core does</title>
+  <meta name="description" content="A full account of the CloudDrive2 core: manage every provider from one interface, mount clouds as local disks, serve WebDAV, copy between clouds by hash, emit file change notifications, encrypt folders, control per-process access and back up to several destinations. The same core ships in the server build and inside every platform app.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/features.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/features.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/features.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/features.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="CloudDrive2 core features">
+  <meta property="og:description" content="Unified management, local mounting, WebDAV, hash-based cross-cloud copying, file change notifications, encrypted folders and multi-cloud backup — one core, in the server build and inside every platform app.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/features.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html" aria-current="page">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/features.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">On every platform</p>
+          <h1>Core features</h1>
+          <p class="hero-lede">
+            Managing every cloud account from one interface, cross-cloud copying, encryption, backup and
+            WebDAV. This is the background service you install on a computer, NAS or Docker host, and it
+            is also built into every platform app in full — phones, TVs and headsets need no server of
+            their own. Only <a href="#local-mount">local mounting</a> depends on the platform.
+          </p>
+          <ul class="chips">
+            <li><a class="chip chip-cloud" href="#local-mount">Mount as local disks</a></li>
+            <li><a class="chip chip-cloud" href="#unified-web-management">One place for every cloud</a></li>
+            <li><a class="chip chip-cloud" href="#one-login">Sign in once</a></li>
+            <li><a class="chip chip-cloud" href="#webdav">WebDAV service</a></li>
+            <li><a class="chip chip-cloud" href="#clouddrive-sharing">Sharing by API token</a></li>
+            <li><a class="chip" href="#inter-cloud-copy">Cross-cloud copying</a></li>
+            <li><a class="chip" href="#file-notification">Change notifications</a></li>
+            <li><a class="chip" href="#encrypted-filesystem">Encrypted filesystem</a></li>
+            <li><a class="chip" href="#file-access-control">Access control</a></li>
+            <li><a class="chip chip-cloud" href="#service-vendor-friendly">Fair to providers</a></li>
+            <li><a class="chip chip-backup" href="#multicloud-backup">Multi-cloud backup</a></li>
+          </ul>
+          <p class="chip-note">The core here is <b>CloudDrive2 Core</b> — the original CloudDrive2, still under active development.</p>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/web-dashboard.webp" width="1600" height="899" decoding="async"
+               alt="The CloudDrive2 management interface in a browser: navigation down the left for the dashboard, files, cloud storage, mounts, tasks, backups, WebDAV, API tokens and devices, seven tiles across the middle, and panels for system tasks, performance and connected devices below.">
+        </div>
+      </div>
+    </section>
+
+    <!-- 1 ── local-mount ─────────────────────────────────────────────── -->
+    <section class="band" id="local-mount" aria-labelledby="local-mount-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Mounting</p>
+          <h2 id="local-mount-h">Mount clouds as local disks</h2>
+        </header>
+        <div class="feature-row">
+          <div class="feature-text">
+            <p>CloudDrive2 mounts a cloud drive — or any single folder inside one — as a local disk,
+               much like plugging a USB stick into your computer. Once mounted, cloud files open,
+               edit and save directly. Nothing has to be downloaded first.</p>
+            <p>You can mount one cloud on its own, or combine several clouds into a single unified
+               filesystem. Moving files between providers then stops meaning opening several apps.</p>
+            <p>More importantly, mounted drives support full random read and write. Any local program can
+               use them the way it uses an internal disk: an office application saves a document straight
+               back to the cloud, a media player seeks through a file without pulling the whole thing down.</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Full random read/write</span></li>
+              <li><span class="chip chip-cloud">Multi-threaded reads</span></li>
+              <li><span class="chip chip-cloud">One mount, many clouds</span></li>
+            </ul>
+            <p class="chip-note">How many mount points you get depends on your tier: Basic membership
+               allows 1 local mount, Core membership and every Lifetime tier are unlimited. See
+               <a href="/en/pricing.html">pricing</a>.</p>
+          </div>
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+                <div><b>Multi-threaded reads</b><p>Reads use multi-threaded downloading, which multiplies throughput. With enough bandwidth, a mounted cloud feels close to a local disk.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                <div><b>A sync channel into the bargain</b><p>The mount is also a straightforward way to keep devices in step. Edit a file on one machine and the change goes back to the cloud; open it on another and you get the current version, with no wondering which copy is newer.</p></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="split">
+          <div>
+            <h3>A real file system, not a read-only mirror</h3>
+            <p>Most tools that mount cloud storage locally give you a view you can browse and copy from:
+               attributes are fixed values chosen at mount time, <code>chmod</code> will not stick, and
+               extended attributes are not supported at all. Writing is more limited still — with the
+               default settings, appending a single line to a file already in the cloud fails outright.
+               Making it work means turning on a local disk cache, and the cache has a price: the whole
+               file has to come back down before it can be changed. CloudDrive2's mount is not that.</p>
+            <p>On Linux and macOS the mount is a complete POSIX file system: permission bits, owner and
+               group, all three timestamps and extended attributes (xattr). On Windows, security
+               descriptors are supported in full, so ACLs read and write normally. Cloud storage cannot
+               hold any of this itself, so CloudDrive2 persists it locally — set it once and it is still
+               there after a restart.</p>
+            <p>Writes are genuinely random. Object storage can only replace a whole object, since an
+               upload has to carry the file's hash, so a change still produces a new object. The
+               difference is that CloudDrive2 never downloads the original to build it: it streams the
+               untouched ranges straight from the cloud, splices in what you wrote locally, and uploads
+               the result. Changing a few bytes in the middle of a 40 GB file does not begin with an hour
+               of downloading.</p>
+            <p>As far as we know, CloudDrive2 is the only cloud mount that does both.</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Full POSIX semantics</span></li>
+              <li><span class="chip chip-cloud">Extended attributes</span></li>
+              <li><span class="chip chip-cloud">Windows security descriptors</span></li>
+              <li><span class="chip chip-cloud">Random writes</span></li>
+            </ul>
+          </div>
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-key" aria-hidden="true"></i>
+                <div><b>Permissions and ownership</b><p>Permission bits, owner and group are real. <code>chmod</code> and <code>chown</code> stick instead of being quietly dropped — the attributes are persisted locally, so they do not depend on the cloud being able to store them.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-tags" aria-hidden="true"></i>
+                <div><b>Extended attributes</b><p>Anything that leans on xattr keeps working — Finder tags on macOS, backup tool metadata, tagging utilities of every kind.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                <div><b>Windows ACLs</b><p>Security descriptors are preserved in full, so permissions behave as expected on domain-joined and multi-user machines.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                <div><b>Edit without downloading first</b><p>Database files, editing projects and disk images are written in place, with no need to pull tens of gigabytes back down before you can change them.</p></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="note">
+          <span class="note-title">Which platforms can mount</span>
+          <p>Presenting a cloud as a disk in the system file system needs the operating system to allow it.</p>
+          <p><b>Can mount:</b> Windows; the macOS build downloaded from this site (with macFUSE);
+             Linux / NAS / Docker; Android on a rooted device.</p>
+          <p><b>Cannot mount:</b> the Mac App Store build (it runs fully sandboxed); iPhone and iPad,
+             Apple TV, Vision Pro and Meta Quest (a platform restriction); Android without root; and Linux
+             running as a non-root user without <code>user_allow_other</code> enabled in
+             <code>/etc/fuse.conf</code> — that last one is a configuration change away, described on the
+             <a href="/en/help.html#install">help page</a>.</p>
+          <p>Everything else on this page works the same on all of them. On iPhone, iPad and Vision Pro the
+             File Provider extension puts your clouds inside the system Files app; on Android, the Storage
+             Access Framework (SAF) lets other apps browse and open your cloud files straight from the
+             system file picker.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 ── unified-web-management ──────────────────────────────────── -->
+    <section class="band band-alt" id="unified-web-management" aria-labelledby="unified-web-management-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Management</p>
+          <h2 id="unified-web-management-h">One place for every cloud</h2>
+        </header>
+        <div class="feature-row">
+          <div class="feature-text">
+            <p>CloudDrive2 ships with a web management interface where every file operation on every cloud
+               happens: browsing folders, viewing images, playing video and audio in the browser, and
+               creating folders, renaming, deleting, moving files and uploading local ones.
+               No switching between each provider's own app.</p>
+            <p>Media in the web interface can also be handed to a third-party player, including PotPlayer,
+               VLC Player, Infuse, iina and nPlayer.</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Cross-cloud file operations</span></li>
+              <li><span class="chip chip-video">In-browser playback</span></li>
+              <li><span class="chip">Third-party players</span></li>
+            </ul>
+            <p class="chip-note">How many clouds you can add depends on your tier: Basic membership
+               allows 2, Core membership and every Lifetime tier are unlimited. See
+               <a href="/en/pricing.html">pricing</a>.</p>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-providers.webp" width="1600" height="1547" loading="lazy" decoding="async"
+                 alt="The Add Cloud Account dialog, listing OneDrive, Google Drive, Baidu Pan, Xunlei Cloud, 123 Pan, Aliyun Drive, 115 and Tianyi Cloud, plus WebDAV, S3, SFTP, FTP, SMB and local folders.">
+          </figure>
+        </div>
+
+        <h3>Storage supported today</h3>
+        <p>These are every option in the Add Cloud Storage dialog, grouped the way the app groups them.</p>
+
+        <h4>Cloud drives</h4>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">Cloud services CloudDrive2 supports, with their websites</caption>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Website</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><img src="/img/cloudonedrive.png" width="40" height="40" loading="lazy" decoding="async" alt="">OneDrive</th>
+                <td><a href="https://onedrive.live.com/" target="_blank" rel="noopener">onedrive.live.com</a></td>
+              </tr>
+              <tr>
+                <th scope="row"><img src="/img/cloudgoogledrive.png" width="40" height="40" loading="lazy" decoding="async" alt="">Google Drive</th>
+                <td><a href="https://drive.google.com" target="_blank" rel="noopener">drive.google.com</a></td>
+              </tr>
+              <tr>
+                <th scope="row"><img src="/img/cloudbaidu.png" width="40" height="40" loading="lazy" decoding="async" alt="">Baidu Pan</th>
+                <td><a href="https://pan.baidu.com" target="_blank" rel="noopener">pan.baidu.com</a></td>
+              </tr>
+              <tr>
+                <th scope="row"><img src="/img/cloudxunlei.png" width="40" height="40" loading="lazy" decoding="async" alt="">Xunlei Cloud</th>
+                <td><a href="https://pan.xunlei.com/" target="_blank" rel="noopener">pan.xunlei.com</a></td>
+              </tr>
+              <tr>
+                <th scope="row"><img src="/img/cloud123.png" width="40" height="40" loading="lazy" decoding="async" alt="">123 Pan</th>
+                <td><a href="https://www.123pan.com/" target="_blank" rel="noopener">www.123pan.com</a></td>
+              </tr>
+              <tr>
+                <th scope="row"><img src="/img/cloudaliyundrive.png" width="40" height="40" loading="lazy" decoding="async" alt="">Aliyun Drive Open</th>
+                <td><a href="https://www.aliyundrive.com" target="_blank" rel="noopener">www.aliyundrive.com</a></td>
+              </tr>
+              <tr>
+                <th scope="row"><img src="/img/cloud115.png" width="40" height="40" loading="lazy" decoding="async" alt="">115 open</th>
+                <td><a href="https://www.115.com" target="_blank" rel="noopener">www.115.com</a></td>
+              </tr>
+              <tr>
+                <th scope="row"><img src="/img/cloud189.png" width="40" height="40" loading="lazy" decoding="async" alt="">Tianyi Cloud</th>
+                <td><a href="https://cloud.189.cn" target="_blank" rel="noopener">cloud.189.cn</a></td>
+              </tr>
+              <tr>
+                <th scope="row"><img src="/img/cloudguangya.png" width="40" height="40" loading="lazy" decoding="async" alt="">GuangYa Pan</th>
+                <td><a href="https://www.guangyapan.com" target="_blank" rel="noopener">www.guangyapan.com</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Local and protocol storage</h4>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">Local storage and network protocols CloudDrive2 supports</caption>
+            <thead>
+              <tr><th scope="col">Type</th><th scope="col">What it covers</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><img src="/img/webdav.png" width="40" height="40" loading="lazy" decoding="async" alt="">WebDAV</th>
+                <td>Any standard WebDAV service, Nextcloud and Seafile included</td>
+              </tr>
+              <tr>
+                <th scope="row"><img src="/img/clouddrive.png" width="40" height="40" loading="lazy" decoding="async" alt="">CloudDrive</th>
+                <td>Another CloudDrive, bringing in the clouds connected wherever it runs</td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-solid fa-cube" aria-hidden="true"></i>S3</th>
+                <td>Amazon S3 and S3-compatible object storage</td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-solid fa-network-wired" aria-hidden="true"></i>SFTP</th>
+                <td>Any standard SFTP server</td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-solid fa-network-wired" aria-hidden="true"></i>FTP</th>
+                <td>Any standard FTP server</td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-solid fa-display" aria-hidden="true"></i>SMB</th>
+                <td>SMB/CIFS shares — NAS boxes and Windows shares on your network</td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-solid fa-folder" aria-hidden="true"></i>Local folder</th>
+                <td>A directory on this machine, managed and backed up alongside the clouds</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 ── one-login ──────────────────────────────────────────────── -->
+    <section class="band" id="one-login" aria-labelledby="one-login-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Accounts</p>
+          <h2 id="one-login-h">Sign in once, use anywhere</h2>
+        </header>
+        <div class="feature-row">
+          <div class="feature-text">
+            <p>CloudDrive2 can sync your cloud accounts through your CloudDrive account. Sign in to your
+               cloud providers once, in one place, and every other CloudDrive2 installation you own can
+               use those accounts without repeating the login.</p>
+            <p>If you move between machines a lot this saves more than time: the fewer places you type a
+               cloud password, the fewer places it can leak. The computer at home, the one at work and the
+               NAS all use the same already-authorised accounts.</p>
+            <div class="note">
+              <span class="note-title">How we protect your privacy</span>
+              <p>When cloud account details are synced, they are encrypted with your own password before
+                 they are uploaded. Our server does not store that password — only a hash of it, used to
+                 verify sign-in. The server therefore has no key to decrypt with, and the cloud account
+                 details held there cannot be read by anyone.</p>
+            </div>
+            <p class="chip-note">How many devices may be online at once depends on your tier: 2 on Basic
+               membership, 5 on every other. That limit is <strong>not enforced yet</strong>. See
+               <a href="/en/pricing.html">pricing</a>.</p>
+          </div>
+          <figure>
+            <img src="/img/shots/android-providers.webp" width="676" height="1200" loading="lazy" decoding="async"
+                 alt="The add-cloud screen, whose footer states that only a hash of your password is stored and that your credentials cannot be decrypted.">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 ── webdav ─────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="webdav" aria-labelledby="webdav-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Protocol</p>
+          <h2 id="webdav-h">WebDAV service</h2>
+          <p>WebDAV is a file transfer protocol built on HTTP. It lets you reach and manage remote files
+             as if they were local, which is why cloud drives, storage services and NAS boxes all speak it.</p>
+        </header>
+        <div class="feature-row">
+          <div class="feature-text">
+            <p>Its main strength is compatibility. Windows, macOS and Linux support WebDAV out of the box,
+               as do applications such as Microsoft Office and Adobe Creative Suite. Sharing files between
+               devices needs no special client.</p>
+            <p>CloudDrive2 wraps all of your clouds into a single unified WebDAV service, so any
+               WebDAV-capable client can browse and manage every one of your cloud files through it.</p>
+            <p>Every platform carries that server. The app on a phone, tablet, computer, TV or headset can
+               each switch it on and feed the clouds it has connected to third-party apps on the same
+               network.</p>
+          </div>
+          <figure>
+            <img src="/img/shots/android-webdav.webp" width="540" height="1200" loading="lazy" decoding="async"
+                 alt="The WebDAV Server settings page: the DAV server switched on with its service path at /dav, then CloudDrive account access, root path, a read-only switch, anonymous access, DAV users and the HTTP and HTTPS ports.">
+          </figure>
+        </div>
+
+        <div class="split">
+          <div>
+            <h3>Full control over the WebDAV service</h3>
+            <p>Every part of the WebDAV service is configurable from the system settings screen:</p>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-power-off" aria-hidden="true"></i>
+                <div><b>Service control</b><p>Turn the CloudDrive2 WebDAV service on or off at any time.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-user-lock" aria-hidden="true"></i>
+                <div><b>Account access</b><p>Allow or deny access using your CloudDrive account, and set the root directory that account sees along with whether it is read-only.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-user-secret" aria-hidden="true"></i>
+                <div><b>Anonymous access</b><p>Allow or deny anonymous access, with its own separate root directory and its own permissions.</p></div>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3>Independent WebDAV users</h3>
+            <p>You can create any number of independent WebDAV users, each with its own root directory and
+               its own read-only setting. Sharing one folder with someone no longer means handing over
+               your account.</p>
+            <div class="note">
+              <span class="note-title">This one is a paid feature</span>
+              <p>Creating independent WebDAV users is a membership feature: the Monthly, Yearly,
+                 Lifetime Lite and Lifetime plans all include it, the free Basic plan does not.
+                 See <a href="/en/pricing.html">plans and pricing</a> for what each plan covers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 ── clouddrive-sharing ──────────────────────────────────────── -->
+    <section class="band" id="clouddrive-sharing" aria-labelledby="clouddrive-sharing-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Sharing</p>
+          <h2 id="clouddrive-sharing-h">Hand a whole CloudDrive over with an API token</h2>
+          <p>Create an API token on a CloudDrive2, and any client that speaks the CloudDrive API can connect
+             to it with just the address and that token. Another CloudDrive2 is one such client — the entry
+             called <b>CloudDrive</b> in its Add Cloud Storage list. Third-party software goes through the
+             same <a href="/api/CloudDrive2_gRPC_API_Guide.html">open gRPC API</a>, and gets exactly as much.</p>
+        </header>
+
+        <div class="feature-row feature-row-top">
+          <div class="feature-text">
+            <p>Once connected, every cloud on that machine looks like an ordinary cloud storage to the client:
+               browsing, playback, copying and backup all take the same path as a directly connected
+               cloud.</p>
+            <p>What differs is how far the resemblance goes. WebDAV is a universal protocol, and the price
+               of that is that only the file survives the trip — list a directory, read and write bytes, and
+               there it ends. Over a CloudDrive token both ends speak the same language, so a cloud's
+               capabilities come through intact.</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Thumbnails and previews</span></li>
+              <li><span class="chip chip-cloud">Search on the cloud</span></li>
+              <li><span class="chip chip-cloud">Offline downloads</span></li>
+              <li><span class="chip chip-cloud">Rapid upload</span></li>
+              <li><span class="chip chip-cloud">Real capacity</span></li>
+              <li><span class="chip chip-cloud">Direct links</span></li>
+              <li><span class="chip chip-cloud">Per-operation permissions and expiry</span></li>
+            </ul>
+          </div>
+          <div>
+            <ul class="stack-list">
+              <li>
+                <i class="fa-solid fa-images" aria-hidden="true"></i>
+                <div><b>Thumbnail and preview URLs</b><p>The URLs the remote cloud provides are passed through as they are, so gallery and waterfall views still show images without pulling the original file down for each one.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <div><b>Search happens on the cloud</b><p>The query is forwarded to the remote machine, which hands it to each provider's own search. Finding one name among hundreds of thousands of files does not mean walking the directory tree.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+                <div><b>Offline downloads still work</b><p>Magnet links and torrent files still go to the remote cloud to fetch, and adding, watching and clearing those tasks all happen from here.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                <div><b>Hashes travel, so rapid upload can happen</b><p>File hashes come across too, so copying into this cloud storage can still hit an instant server-side copy. WebDAV has no notion of a hash, so every copy there moves every byte.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-gauge" aria-hidden="true"></i>
+                <div><b>Capacity that is real</b><p>Total, used and free are read from the remote side rather than filled in with a placeholder — so once mounted, the free space your system reports is the true one.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-link" aria-hidden="true"></i>
+                <div><b>Direct links skip the relay</b><p>With it enabled, this machine gets the provider's own download URL and the data stops passing through the remote machine on its way.</p></div>
+              </li>
+              <li>
+                <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                <div><b>Granted item by item, and it can expire</b><p>More capability does not mean handing over all of it. Each token gets its own root directory, its own expiry, and its own answer for every class of operation — read, write, modify, system, cloud storage, account. A WebDAV user can only be given a root directory and read-only, and never expires.</p></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Against WebDAV</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">What comes through over WebDAV compared with a CloudDrive API token</caption>
+            <thead>
+              <tr>
+                <th scope="col">Capability</th>
+                <th scope="col" class="c">WebDAV</th>
+                <th scope="col" class="c">CloudDrive token</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Browse directories, read and write files</th><td class="c">✓</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Thumbnail and preview URLs</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Search on the cloud</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Offline downloads</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">File hashes and rapid upload</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Capacity information</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Direct links</th><td class="c">—</td><td class="c">✓</td></tr>
+              <tr><th scope="row">Scoping what the other side may do</th><td class="c">Root directory and read-only, per user</td><td class="c">Root directory, per-operation permissions and an expiry, per token</td></tr>
+              <tr><th scope="row">Third-party software</th><td class="c">Any WebDAV client, out of the box</td><td class="c">Any client that implements the CloudDrive API</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">These are not alternatives to each other. Office, Infuse and the like know nothing about CloudDrive, and WebDAV is the least trouble for them. For a client willing to implement the CloudDrive API — ours, or anyone else's — far more survives the token route.</p>
+
+        <div class="split">
+          <div>
+            <h3>You draw the boundary</h3>
+            <p>A token is not a skeleton key. When you create one you can limit the root directory it reaches, give it an expiry, and set whether each class of operation is allowed at all — file read, write and modify, system operations, cloud storage operations and account operations, each with its own sub-items. A token you hand to someone else can see exactly one folder.</p>
+            <p><a class="arrow-link" href="/en/help.html#token">Creating an API token</a></p>
+            <p><a class="arrow-link" href="/api/CloudDrive2_gRPC_API_Guide.html">The CloudDrive API developer guide</a></p>
+          </div>
+          <div>
+            <h3>Direct links need both ends</h3>
+            <p>Direct links are off by default. To use them, the machine providing the storage turns on Support Direct Link in that cloud's settings, and both ends need an active membership — monthly, yearly, Lifetime Lite and Lifetime all qualify.</p>
+            <div class="note note-warn">
+              <span class="note-title">A direct link may carry credentials</span>
+              <p>A provider's direct download URL can contain sensitive data including your user ID and access tokens. Do not share these links publicly or with third parties you do not trust; the consequences of doing so are yours to carry.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 ── inter-cloud-copy ────────────────────────────────────────── -->
+    <section class="band band-alt" id="inter-cloud-copy" aria-labelledby="inter-cloud-copy-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Transfer</p>
+          <h2 id="inter-cloud-copy-h">Fast cross-cloud copying <span class="chip chip-solid">PRO</span></h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>The problem</h3>
+            <p>Switching providers, or keeping the same data on more than one cloud, runs into the same
+               obstacle every time: each provider has its own API and its own data format, so moving files
+               usually means manual work, and the speed is capped by your own connection. With a large
+               library, that takes an absurd amount of time.</p>
+            <p>Not every file qualifies. When instant transfer is unavailable, CloudDrive2 streams the file
+               from one cloud to the other directly, without landing it on your disk. Running out of local
+               space, or babysitting a download followed by an upload, stops being your problem.</p>
+          </div>
+          <div>
+            <h3>How it works</h3>
+            <p>CloudDrive2 leans on the instant-transfer mechanism the clouds already have. It works by
+               hash: before uploading, the client computes the file's hash and sends it to the server; if
+               the server already holds a file with that hash, it accepts no data at all and simply creates
+               a new file record pointing at the existing content.</p>
+            <p>The useful part is that CloudDrive2 can read a file's hash straight from the source cloud.
+               When the destination uses the same hash algorithm as the source, even computing the hash is
+               skipped, and the copy really is instant. Between two clouds that share a hash algorithm, or
+               between two accounts on the same cloud, the effect is dramatic — no time spent, and almost
+               no bandwidth used.</p>
+            <ul class="chips">
+              <li><span class="chip">Hash-based instant transfer</span></li>
+              <li><span class="chip">Never lands on your disk</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Cross-cloud instant-copy support matrix</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">Which cloud pairs support hash-based instant copying</caption>
+            <thead>
+              <tr>
+                <th scope="col">Source ↓ / Destination →</th>
+                <th scope="col" class="c">Aliyun Drive</th>
+                <th scope="col" class="c">Baidu Pan</th>
+                <th scope="col" class="c">115</th>
+                <th scope="col" class="c">Tianyi Cloud</th>
+                <th scope="col" class="c">123 Pan</th>
+                <th scope="col" class="c">OneDrive</th>
+                <th scope="col" class="c">Google Drive</th>
+                <th scope="col" class="c">Xunlei Cloud</th>
+                <th scope="col" class="c">GuangYa Pan</th>
+                </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Aliyun Drive</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Baidu Pan</th>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+              </tr>
+              <tr>
+                <th scope="row">115</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Tianyi Cloud</th>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+              </tr>
+              <tr>
+                <th scope="row">123 Pan</th>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+              </tr>
+              <tr>
+                <th scope="row">OneDrive</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Google Drive</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Xunlei Cloud</th>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+              </tr>
+              <tr>
+                <th scope="row">GuangYa Pan</th>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="no">—</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">Tianyi Cloud only allows instant transfer for older files — ones uploaded some time ago. Newly uploaded files no longer qualify.</p>
+        <p class="chip-note">A dash means that pair cannot use hash-based instant transfer — not that it cannot be copied. CloudDrive2 still moves the data directly between the two clouds; it just takes time. The matrix reflects what each provider's API currently allows and changes when they do.</p>
+
+        <h3>How to run a copy</h3>
+        <ol class="steps">
+          <li>
+            <h4>Pick the source</h4>
+            <p>In My Files, select the files or folders you want to copy and click
+               <b>Move/Copy to…</b> in the toolbar.</p>
+          </li>
+          <li>
+            <h4>Pick the destination</h4>
+            <p>Choose a destination folder in the directory tree and click <b>Copy</b>. It can be another
+               cloud, or another account on the same cloud.</p>
+          </li>
+          <li>
+            <h4>Let it run</h4>
+            <p>The task starts immediately and runs in the background. Watch it on the Tasks page — it
+               appears under both <b>Copy Tasks</b> and <b>Upload Tasks</b>.</p>
+          </li>
+        </ol>
+
+        <h3>Local folders work as both source and destination</h3>
+        <p>On the Cloud Storages page, click <b>Add Cloud Storage</b>, then pick <b>Local Folder</b> under
+           Local Storages and add a directory from the machine. It shows up in My Files alongside the
+           clouds, and a copy can use it as the source or as the destination.</p>
+        <p class="chip-note">Cloud-to-cloud copying is a Core Pro feature. As long as one end is a local
+           folder — pulling files down from a cloud, or pushing local files up to one — every account can
+           run it, free accounts included.</p>
+
+        <div class="note">
+          <span class="note-title">Copying to a local folder still shows up as an upload task</span>
+          <p>CloudDrive2 runs every copy through one pipeline: read the source, write the destination, and
+             the writing half is always recorded as an upload task. So a copy from a cloud into a local
+             folder appears under Upload Tasks — nothing is backwards, the data really is coming down from
+             the cloud. “Upload” is just what the second half of the pipeline is called.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 ── file-notification ───────────────────────────────────────── -->
+    <section class="band" id="file-notification" aria-labelledby="file-notification-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Events</p>
+          <h2 id="file-notification-h">File change notifications <span class="chip chip-solid">PRO</span></h2>
+          <p>File change notification is an operating-system mechanism: when a file or directory in a
+             filesystem changes, the OS emits an event. Creation, deletion, moves, renames and content
+             edits all count. Applications subscribe to those events so they can react the moment
+             something changes.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Mounted drives have it too</h3>
+            <p>CloudDrive2 makes mounted cloud filesystems support this mechanism too. Create, delete,
+               rename or modify a file on a mounted drive and any third-party program using
+               FileSystemWatcher or FileNotify is notified. This is exactly how media managers like Emby,
+               Jellyfin and Plex notice that a new film has appeared in a watched folder.</p>
+            <p>Emby and Jellyfin can go one better: with the <a href="/en/download.html#plugin-h">CloudDrive2
+               companion plugin</a> installed, changes go straight to the server's targeted-refresh entry
+               point, and real-time monitoring can be switched off on every library.</p>
+          </div>
+          <div>
+            <h3>Not only the mount</h3>
+            <p>CloudDrive2 goes further than the mount. Files changed through the web interface, files
+               changed through the WebDAV server, and files that appear because an offline download was
+               imported all produce correct change notifications as well. However the file got there,
+               programs watching the folder see the current state.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 ── encrypted-filesystem ────────────────────────────────────── -->
+    <section class="band band-alt" id="encrypted-filesystem" aria-labelledby="encrypted-filesystem-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Encryption</p>
+          <h2 id="encrypted-filesystem-h">Encrypted filesystem <span class="chip chip-solid">PRO</span></h2>
+          <p>The encrypted filesystem lets you keep sensitive data on a cloud drive: both filenames and
+             file contents are encrypted before anything is written to the cloud, and once unlocked the
+             folder behaves like any other folder.</p>
+        </header>
+
+        <div class="note note-warn">
+          <span class="note-title">Please read this first</span>
+          <p>When you use encryption, follow the terms of service of the cloud provider you are storing
+             with. CloudDrive accepts no responsibility for accounts banned as a result of misusing the
+             encryption feature.</p>
+        </div>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-folder-plus card-icon" aria-hidden="true"></i>
+            <h3>Encrypted folders anywhere you want them</h3>
+            <p>You can create any number of encrypted folders, at any location, inside any cloud drive or
+               inside any local folder you have added to CloudDrive2. Each encrypted folder has its own
+               password. By default the password is saved on this machine; if you choose not to save it,
+               you have to enter it again after CloudDrive2 restarts before the folder is accessible.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>Strong protection</h3>
+            <p>Every file written into an encrypted folder has both its name and its contents encrypted
+               before being stored on the cloud or in the local folder. The password is only ever stored
+               locally, encrypted — it is never synced to the CloudDrive2 servers. Sign in to the same
+               account from a different machine and you will be asked for the password again to unlock
+               the folder.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-unlock-keyhole card-icon" aria-hidden="true"></i>
+            <h3>Access control that stays convenient</h3>
+            <p>Select the root encrypted folder and use the lock button on its properties page to lock it
+               again; the next visit will ask for the password.</p>
+            <p>While unlocked, an encrypted folder accessed through CloudDrive2 is indistinguishable from a
+               normal one. Every file operation works, files can be read and written at random offsets, and
+               videos stream directly.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
+            <h3>Smart transfers</h3>
+            <p>Copy or move a file from an unencrypted folder into an unlocked encrypted folder and it is
+               encrypted on the way in. Copy or move it the other way and it is decrypted on the way out.</p>
+            <p>If you want to instant-transfer the encrypted files themselves somewhere else, lock the
+               encrypted folder first. Locked, it presents the raw ciphertext files, which you can then
+               move with an ordinary file transfer.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-key card-icon" aria-hidden="true"></i>
+            <h3>Commercial-grade algorithms</h3>
+            <p><strong>Filenames:</strong> encrypted with AES and then UTF-8 encoded, so the filename
+               length limits on the cloud stay roughly the same as for unencrypted files.</p>
+            <p><strong>File contents:</strong> chacha20-poly1305, with each file's encryption key derived
+               dynamically from the password so that no two files share a key.</p>
+            <p><strong>Open source:</strong> the encryption scheme is fully open. The decryption tool's
+               source is at
+               <a href="https://github.com/cloud-fs/clouddrive-decrypt" target="_blank" rel="noopener">github.com/cloud-fs/clouddrive-decrypt</a>.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-box-archive card-icon" aria-hidden="true"></i>
+            <h3>Encrypted backups</h3>
+            <p>A backup task can use an unlocked encrypted folder as its destination, which means the backup
+               itself is written encrypted — a second layer of protection for data that matters.</p>
+          </div></li>
+        </ul>
+
+        <div class="split">
+          <div class="note note-danger">
+            <span class="note-title">A lost password cannot be recovered</span>
+            <p>Remember the password you set. If you forget it, the files become inaccessible and cannot
+               be recovered — by you, by us, or by anyone else.</p>
+          </div>
+          <div class="note">
+            <span class="note-title">Size limit on cloud-stored encrypted files</span>
+            <p>To keep the encryption feature from being abused, encrypted files written to a cloud drive
+               are limited to 200 MB each for Monthly and Yearly members. Lifetime members are exempt,
+               and encrypted files kept in local folders have no size limit. The cloud limit may be
+               adjusted in future as circumstances change. See
+               <a href="/en/pricing.html">plans and pricing</a> for what each plan covers.</p>
+          </div>
+        </div>
+
+        <ul class="chips">
+          <li><span class="chip">Filenames: AES</span></li>
+          <li><span class="chip">Contents: chacha20-poly1305</span></li>
+          <li><span class="chip">Open-source decrypt tool</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 9 ── file-access-control ─────────────────────────────────────── -->
+    <section class="band" id="file-access-control" aria-labelledby="file-access-control-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Monitoring</p>
+          <h2 id="file-access-control-h">File access monitoring and permissions <span class="chip chip-solid">PRO</span></h2>
+          <p>CloudDrive2 can tell you what is actually happening on a mounted drive, which is more than an
+             ordinary filesystem will give you.</p>
+        </header>
+        <ul class="card-grid card-grid-2">
+          <li><div class="card">
+            <i class="fa-solid fa-eye card-icon" aria-hidden="true"></i>
+            <h3>See who is reading your drive</h3>
+            <p>It shows, in real time, which process is reading which file — the full path of the process,
+               the full path of the file, and the download speed being used to fetch it from the cloud.
+               A program quietly scanning your whole library, or one task eating all your bandwidth, is
+               immediately visible.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-ban card-icon" aria-hidden="true"></i>
+            <h3>Block what shouldn't touch it</h3>
+            <p>On top of that comes permission control. You decide which processes may access the mounted
+               filesystem and which may not; a blacklisted process simply cannot open files on a CloudDrive2
+               mount. It is a practical way to keep programs away from files they have no business reading,
+               for individuals and for companies alike.</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 10 ── service-vendor-friendly ─────────────────────────────────── -->
+    <section class="band band-alt" id="service-vendor-friendly" aria-labelledby="service-vendor-friendly-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Restraint</p>
+          <h2 id="service-vendor-friendly-h">Fair to the cloud providers</h2>
+          <p>CloudDrive2 tries to use as little of a provider's capacity as it can while keeping your
+             experience smooth. That is not a slogan; it comes down to a few specific design decisions.</p>
+        </header>
+        <ul class="stack-list">
+          <li>
+            <i class="fa-solid fa-database" aria-hidden="true"></i>
+            <div><b>Metadata cached locally</b>
+              <p>File metadata is cached locally to cut down on directory-listing requests, which reduces how
+                 often CloudDrive2 has to call a provider's API at all. Cache lifetime is configurable per
+                 directory, so you set your own balance between freshness and request volume.</p></div>
+          </li>
+          <li>
+            <i class="fa-solid fa-fingerprint" aria-hidden="true"></i>
+            <div><b>Reuse the hashes that already exist</b>
+              <p>Fast cross-cloud copying makes full use of the metadata a provider already has, avoiding
+                 recomputing file hashes wherever possible and saving a great deal of transfer.</p></div>
+          </li>
+          <li>
+            <i class="fa-solid fa-gauge" aria-hidden="true"></i>
+            <div><b>Download only as fast as needed</b>
+              <p>When reading a file, download speed is controlled precisely — just fast enough to keep up
+                 with what is being read, rather than saturating the link. That saves your bandwidth and
+                 spares the provider at the same time.</p></div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 11 ── multicloud-backup ──────────────────────────────────────── -->
+    <section class="band" id="multicloud-backup" aria-labelledby="multicloud-backup-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Backup</p>
+          <h2 id="multicloud-backup-h">Multi-cloud backup <span class="chip chip-solid">PRO</span></h2>
+          <p>One copy of a backup is not a backup strategy. Keeping copies in several places removes the
+             single point of failure: if one cloud service has a bad day, your data is still complete and
+             still reachable.</p>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-clone card-icon" aria-hidden="true"></i>
+            <h3>One source, many destinations</h3>
+            <p>Point it at a local folder or a cloud folder you want
+               protected, and CloudDrive2 copies its contents to as many local or cloud destination folders
+               as you name.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-bolt card-icon" aria-hidden="true"></i>
+            <h3>Live and incremental</h3>
+            <p>Backups keep up with changes. When a file in the source folder is modified, the change is
+               propagated to every destination folder, so whenever you look at a backup you are looking at
+               the current state.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-clock-rotate-left card-icon" aria-hidden="true"></i>
+            <h3>Version history</h3>
+            <p>When a source file or folder is deleted or overwritten, each destination can be set to keep
+               the old copy, delete it, or retain an unlimited number of historical versions. Restoring a
+               file or folder from any historical version is planned for a future release.</p>
+          </div></li>
+        </ul>
+        <ul class="chips">
+          <li><span class="chip chip-backup">Many destinations at once</span></li>
+          <li><span class="chip chip-backup">Live incremental updates</span></li>
+          <li><span class="chip chip-backup">Unlimited version history</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt cta-band" aria-labelledby="apps-h">
+      <div class="container">
+        <p class="eyebrow">Apps</p>
+        <h2 id="apps-h">All of this, on every platform</h2>
+        <p>The same core ships inside every app. On top of it, each platform app adds playback: HDR and
+           Dolby Vision, DSD, ISO discs, AI subtitle translation, the Emby and Jellyfin client, and VR
+           video in a headset.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/apps/">See the apps</a>
+          <a class="btn btn-ghost" href="/en/download.html">Download CloudDrive2</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/features.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
