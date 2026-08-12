@@ -713,6 +713,14 @@ brew services start clouddrive2</code></pre></div>
         </details>
 
         <details class="acc">
+          <summary><i class="fa-solid fa-hard-drive" aria-hidden="true"></i>挂载报 IO Error：mount point is not empty</summary>
+          <div class="acc-body">
+            <p>挂载点目录必须是空的。这个错误常见于重启之后：某个也在用这个路径的程序——Emby、下载工具、备份脚本都有可能——比 CloudDrive2 服务先启动，在目录真正被挂载之前往里写了东西，CloudDrive2 就拒绝在非空目录上挂载。</p>
+            <p>处理：先停掉往里写的程序，把挂载点目录里遗留的文件清走——它们在本地磁盘上，不在云盘里，清之前先看看有没有要保留的——然后重新挂载。要断根，就让依赖这个路径的程序晚于 CloudDrive2 启动：把它的服务设成依赖 CloudDrive2 服务，或者给它加一个延迟启动。</p>
+          </div>
+        </details>
+
+        <details class="acc">
           <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows 7 上装不了 / 登录不了</summary>
           <div class="acc-body">
             <p>Windows 7 已停止支持，其系统自带的 TLS 和运行库无法满足当前版本对安全连接和依赖的要求。建议在 Windows 10 / 11 上使用；如果必须在旧设备上跑，可以考虑改用 Linux 或 Docker 版本。</p>
