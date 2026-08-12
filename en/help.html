@@ -727,7 +727,7 @@ brew services start clouddrive2</code></pre></div>
         <header class="band-head">
           <p class="eyebrow">Troubleshooting</p>
           <h2 id="faq-h">Common problems</h2>
-          <p>The ones we are asked about most, answered as we answered them on GitHub issues.</p>
+          <p>The ones we are asked about most, answered as we answered them on GitHub issues and at the support inbox.</p>
         </header>
 
         <details class="acc">
@@ -793,6 +793,47 @@ brew services start clouddrive2</code></pre></div>
         </details>
 
         <details class="acc">
+          <summary><i class="fa-solid fa-gauge-simple-high" aria-hidden="true"></i>115 suddenly slows down, errors out, or shows 0 capacity</summary>
+          <div class="acc-body">
+            <p>Most of the time this is a temporary restriction on 115's side, not a CloudDrive2 problem.
+               Too many requests in a short window trips 115's risk control, which usually lifts itself in
+               about half an hour; downloads pinned to a few MB/s are usually a temporary per-account speed
+               limit that clears within 24 hours. Slow in the evening but fine during the day is 115's own
+               policy — no setting changes that.</p>
+            <p>What you can do: keep the default settings rather than raising concurrency, and use one 115
+               account from one CloudDrive2 machine — the same account accessed from several machines at
+               once trips risk control much more easily.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>123 Pan cannot be added, or authorization fails</summary>
+          <div class="acc-body">
+            <p>123 Pan changed its API endpoint, and older CloudDrive2 releases still talk to the old one.
+               Update to the latest version, then add 123 Pan again.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-user-group" aria-hidden="true"></i>Adding a second account of the same cloud signs into the first one instead</summary>
+          <div class="acc-body">
+            <p>The browser still holds the first account's session on the cloud's own website. Open
+               CloudDrive2 in an incognito (private) window and add from there, or sign out on the cloud's
+               website first. That is how you add two Baidu Pan or two 115 accounts.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-rotate-right" aria-hidden="true"></i>The log keeps printing "too many requests"</summary>
+          <div class="acc-body">
+            <p>Aliyun Drive and some other providers rate-limit API calls, and this is what the refusal
+               looks like. CloudDrive2 waits and retries automatically until it succeeds, so these log
+               lines need no action. They do not interrupt writes on a mounted drive either: writes land in
+               a local temporary file first, and the upload happens asynchronously in the background.</p>
+          </div>
+        </details>
+
+        <details class="acc">
           <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Nothing answers on 19798 on Windows</summary>
           <div class="acc-body">
             <p>Work through these in order — most cases give themselves away at the first step.</p>
@@ -826,6 +867,47 @@ brew services start clouddrive2</code></pre></div>
             <p>It can also be blocked after installation: the service does not start, the mounted drive
                never appears, or the app is closed outright. Signatures do not stop a heuristic engine, so
                add CloudDrive2's install directory and WinFSP to the allowlist as well.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-wifi" aria-hidden="true"></i>Network errors (dns error, connect error) when adding a cloud or checking for updates</summary>
+          <div class="acc-body">
+            <p>Errors carrying "dns error" or "connect error" point at the network of the machine running
+               CloudDrive2: check its DNS and proxy settings, and for Docker deployments check that the
+               container can reach the internet at all. The management page is often open on a different
+               device — your browser being online says nothing about the machine running the service. Test
+               from that machine (or inside the container), for example by curling the URL from the error
+               message.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-docker" aria-hidden="true"></i>Emby / Jellyfin in Docker sees the mount folder but nothing inside it</summary>
+          <div class="acc-body">
+            <p>This is Docker mount propagation: CloudDrive2's FUSE mount appears after the container
+               started, and the default propagation mode hides mounts that arrive later. Add
+               <code>:rslave</code> to the Emby / Jellyfin container's volume mapping — for example
+               <code>-v /mnt:/mnt:rslave</code> — and recreate the container.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-link" aria-hidden="true"></i>Direct links are enabled for 115, but traffic still flows through the server</summary>
+          <div class="acc-body">
+            <p>Direct links work between two CloudDrives: a remote CloudDrive client asks the server for a
+               direct download URL, and only then does the data bypass the server. Browsing files through
+               the web interface does not use direct links — that traffic still passes through the machine
+               running CloudDrive2.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>WebDAV from the iPhone / iPad app will not connect</summary>
+          <div class="acc-body">
+            <p>Check the port first: the service built into the phone and tablet app listens on
+               <strong>29798</strong>, not the core service's 19798. Point your player at
+               <code>http://&lt;device IP&gt;:29798</code> and try again.</p>
           </div>
         </details>
 

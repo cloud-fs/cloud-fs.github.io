@@ -583,7 +583,7 @@ brew services start clouddrive2</code></pre></div>
         <header class="band-head">
           <p class="eyebrow">排错</p>
           <h2 id="faq-h">常见问题</h2>
-          <p>下面这些是被问得最多的几个，答案来自我们在 GitHub issues 上的回复。</p>
+          <p>下面这些是被问得最多的几个，答案来自我们在 GitHub issues 和支持邮箱里的回复。</p>
         </header>
 
         <details class="acc">
@@ -634,6 +634,35 @@ brew services start clouddrive2</code></pre></div>
         </details>
 
         <details class="acc">
+          <summary><i class="fa-solid fa-gauge-simple-high" aria-hidden="true"></i>115 突然变慢、报错，或者容量显示为 0</summary>
+          <div class="acc-body">
+            <p>多数时候这是 115 那边的临时限制，不是 CloudDrive2 出了问题。短时间访问太频繁会触发 115 的风控，一般半小时左右自动恢复；下载被卡在几 MB/s 通常是 115 对账号的临时限速，24 小时内恢复。晚间高峰慢、白天正常，也是 115 的策略，改什么设置都没用。</p>
+            <p>能做的预防：保持默认设置就好，不必调大并发；同一个 115 账号尽量只在一台机器的 CloudDrive2 上用，多台机器同时访问同一账号更容易触发风控。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>123 云盘加不上、授权失败</summary>
+          <div class="acc-body">
+            <p>123 云盘调整过接口地址，老版本的 CloudDrive2 连的还是旧地址。升级到最新版，再重新添加 123 云盘即可。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-user-group" aria-hidden="true"></i>想加同一个网盘的第二个账号，登录页却直接进了第一个</summary>
+          <div class="acc-body">
+            <p>那是浏览器里还留着第一个账号在网盘官网的登录状态。用无痕（隐私）窗口打开 CloudDrive2 再添加，或者先去网盘官网退出登录，就能登第二个账号了。两个百度网盘、两个 115 都是这么加。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-rotate-right" aria-hidden="true"></i>日志里刷 too many requests</summary>
+          <div class="acc-body">
+            <p>阿里云盘等服务商会对 API 调用限流，超了就返回 too many requests。CloudDrive2 会自动等待并重试直到成功，这类日志不需要处理。它也不会打断挂载盘上的写入：写入先落到本地临时文件，上传在后台异步进行。</p>
+          </div>
+        </details>
+
+        <details class="acc">
           <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows 上打不开 19798</summary>
           <div class="acc-body">
             <p>按这个顺序查，多数问题在第一步就露馅了。</p>
@@ -652,6 +681,34 @@ brew services start clouddrive2</code></pre></div>
           <div class="acc-body">
             <p>这是误报。安装包经过代码签名，被检出的 <code>is-XXXX.tmp</code> 只是 Inno Setup 安装器解包时的临时文件，被启发式引擎误判。可以把安装目录和安装包加进杀软白名单，并向厂商提交误报反馈。</p>
             <p>装完之后也可能被拦：服务起不来、挂载盘出不来，或者应用被直接关掉。签名齐全也挡不住启发式引擎，把 CloudDrive2 的安装目录和 WinFSP 一并加进白名单即可。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-wifi" aria-hidden="true"></i>添加云盘、检查更新时报网络错误（dns error、connect error）</summary>
+          <div class="acc-body">
+            <p>错误里带 dns error、connect error 的，问题都出在运行 CloudDrive2 的那台机器的网络上：查它的 DNS 和代理设置，Docker 部署再查容器网络能不能出外网。管理页面往往是在别的设备上打开的，浏览器能上网不代表跑 CloudDrive2 的机器能上网——测试要在跑服务的那台机器或容器里做，比如 curl 一下报错信息里的那个地址。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-docker" aria-hidden="true"></i>Docker 里的 Emby / Jellyfin 只能看到挂载目录，看不到里面的文件</summary>
+          <div class="acc-body">
+            <p>这是 Docker 的挂载传播（mount propagation）问题：CloudDrive2 的 FUSE 挂载发生在容器启动之后，默认的传播模式让 Emby 容器看不到后来出现的挂载。给 Emby / Jellyfin 容器的目录映射加上 <code>:rslave</code> 即可，例如 <code>-v /mnt:/mnt:rslave</code>，重建容器后生效。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-link" aria-hidden="true"></i>开了 115 直链，流量却还是走服务器</summary>
+          <div class="acc-body">
+            <p>直链是两个 CloudDrive 之间的机制：远程的 CloudDrive 客户端向服务端请求直接下载地址，数据才不经过服务器。用浏览器打开网页界面访问文件不走直链，流量仍然经过运行 CloudDrive2 的机器。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone / iPad 应用的 WebDAV 连不上</summary>
+          <div class="acc-body">
+            <p>先查端口：手机与平板应用内置服务的端口是 <strong>29798</strong>，不是核心服务的 19798。在播放器里填 WebDAV 地址时，用 <code>http://&lt;设备 IP&gt;:29798</code> 再试。</p>
           </div>
         </details>
 
