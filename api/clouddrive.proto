@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.0.13";
+option (version) = "1.0.14";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -73,7 +73,19 @@ service CloudDriveFileSrv {
   // Revoke all sessions except the current one
   rpc RevokeOtherSessions(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   // ==================== End Session Management Methods ====================
-  
+
+  // ==================== Account Deletion Methods (Authorized) ====================
+  // Step 1: email a one-time deletion code (valid 30 minutes) to the account's registered
+  // address and return what the confirmation screen needs. Re-sends the same code if called
+  // again inside the window. Fails when an auto-renewing store subscription is still active.
+  rpc SendDeleteAccountEmail(google.protobuf.Empty)
+      returns (DeleteAccountPreflightResult) {}
+  // Step 2: permanently delete the signed-in account. IRREVERSIBLE — no grace period, no undo.
+  // On success the backend also wipes local login state, so clients must return to the
+  // login screen and clear their stored credentials.
+  rpc DeleteAccount(DeleteAccountRequest) returns (google.protobuf.Empty) {}
+  // ==================== End Account Deletion Methods ====================
+
   // get all subfiles by path
   rpc GetSubFiles(ListSubFileRequest) returns (stream SubFilesReply) {}
   // search under path
@@ -1098,6 +1110,21 @@ message LogMessage {
   google.protobuf.Timestamp timestamp = 4;
   map<string, string> fields = 6; // additional fields from the log record
 }
+// Emitted when a cloud storage account is added, removed, or its mount path
+// renamed at runtime.
+message CloudApiChange {
+  enum Action {
+    ADD = 0;
+    REMOVE = 1;
+    RENAME = 2;
+  }
+  Action action = 1;
+  string cloudName = 2;
+  string userName = 3;
+  string mountPath = 4;
+  // only set for RENAME
+  optional string newMountPath = 5;
+}
 message CloudDrivePushMessage {
   enum MessageType {
     DOWNLOADER_COUNT = 0;
@@ -1109,6 +1136,7 @@ message CloudDrivePushMessage {
     COPY_TASK_COUNT = 6;
     LOG_MESSAGE = 7;
     MERGE_TASKS = 8;
+    CLOUD_API_CHANGE = 9;
   }
   MessageType messageType = 1;
   oneof data {
@@ -1119,6 +1147,7 @@ message CloudDrivePushMessage {
     MountPointChange mountPointChange = 6;
     LogMessage logMessage = 7;
     MergeTaskUpdate mergeTaskUpdate = 8;
+    CloudApiChange cloudApiChange = 9;
   }
 }
 // Realtime update for merge tasks (folder recursive merges)
@@ -2625,3 +2654,26 @@ message RevokeSessionRequest {
 }
 
 // ==================== End Session Management Messages ====================
+
+// ==================== Account Deletion Messages ====================
+message DeleteAccountPreflightResult {
+  // registered address the one-time code was sent to
+  string email = 1;
+  // remaining balance; when > 0 the user must consent and DeleteAccountRequest
+  // must carry forfeit_balance = true
+  double balance = 2;
+  // always false on success; an active subscription fails the preflight instead
+  bool has_active_subscription = 3;
+  // devices that will be released (detached, not deleted) by the deletion
+  uint32 bound_device_count = 4;
+  // lifetime of the emailed code, in minutes
+  uint32 expires_in_minutes = 5;
+}
+
+message DeleteAccountRequest {
+  string delete_code = 1;        // one-time code from the deletion email
+  string password = 2;           // clear-text account password; MD5-hashed by the backend
+  optional string totp_code = 3; // required only when 2FA is enabled
+  bool forfeit_balance = 4;      // must be true when the account holds a balance
+}
+// ==================== End Account Deletion Messages ====================
