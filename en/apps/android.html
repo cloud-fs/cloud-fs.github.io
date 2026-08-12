@@ -165,7 +165,7 @@
                detected correctly for HDR and frame rate, so a change of container doesn't cost you the
                dynamic metadata. 4K, 8K and AV1 all play, and H.264 High Profile falls back to FFmpeg
                decoding when the hardware decoder can't handle it.</p>
-            <p class="chip-note">Dolby Vision output depends on the device: the TV or box has to support Dolby Vision output itself, and hardware without it plays the same file in HDR10 or another supported format. A Profile 7 disc carries two picture layers; CloudDrive2 reads both and composes the enhancement layer into the final picture, full enhancement layer (FEL) sources included.</p>
+            <p class="chip-note">Dolby Vision output depends on the device: the TV or box has to support Dolby Vision output itself, and hardware without it plays the same file in HDR10 or another supported format. A Profile 7 disc carries two picture layers; CloudDrive2 reads both and composes the enhancement layer into the final picture, full enhancement layer (FEL) sources included. Known issue: FEL composition does not yet work on Android TV devices — under investigation, to be fixed in a later version. Phones and tablets are unaffected.</p>
             <ul class="chips">
               <li><span class="chip chip-video">HDR10 · HDR10+</span></li>
               <li><span class="chip chip-video">Dolby Vision P5 / 7 / 8</span></li>
