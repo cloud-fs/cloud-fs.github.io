@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mac 版 CloudDrive2 — 云盘、Finder 集成与影院级播放</title>
+  <meta name="description" content="Mac 上的 CloudDrive2：把所有云盘汇聚到一个原生窗口，Finder 风格分栏视图与全键盘操控，串流蓝光原盘、真·杜比视界与 DSD 音乐，还有 Emby / Jellyfin 客户端与 AI 字幕翻译。App Store 版与直接下载版可选。">
+  <link rel="canonical" href="https://www.clouddrive2.com/apps/macos.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/macos.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/macos.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/apps/macos.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Mac 版 CloudDrive2">
+  <meta property="og:description" content="所有云盘，一款 Mac 应用。串流蓝光原盘、真·杜比视界与 DSD1024，还有 Emby / Jellyfin 客户端与 AI 字幕翻译。">
+  <meta property="og:url" content="https://www.clouddrive2.com/apps/macos.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "macOS",
+    "url": "https://www.clouddrive2.com/apps/macos.html",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "Mac 上的多云盘管理、Finder 集成与影院级影音播放。",
+    "offers": {
+      "@type": "Offer",
+      "name": "App Pro",
+      "price": "19.99",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/" aria-current="page">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/apps/macos.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Mac · Apple 芯片与 Intel</p>
+          <h1>所有云盘，一款 Mac 应用</h1>
+          <p class="hero-lede">
+            串流蓝光原盘（含 HDMV 菜单）、真·杜比视界、最高 DSD1024，
+            GB 级 PDF 直接从云端打开——无需整本下载，还有 Emby / Jellyfin 客户端与 AI 字幕翻译。
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/download.html#app">下载 Mac 版</a>
+            <a class="btn btn-ghost" href="/pricing.html">App Pro 说明</a>
+          </div>
+          <ul class="chips">
+            <li><span class="chip chip-video">真·杜比视界 P7 FEL</span></li>
+            <li><span class="chip chip-disc">HDMV 原盘菜单</span></li>
+            <li><span class="chip chip-audio">DSD1024 · DoP</span></li>
+            <li><span class="chip chip-subs">端侧 AI 字幕</span></li>
+            <li><span class="chip chip-cloud">Finder 集成</span></li>
+          </ul>
+        </div>
+        <div>
+          <img class="hero-shot" src="/img/shots/macos-dashboard.webp" width="1600" height="815" decoding="async"
+               alt="Mac 上的 CloudDrive2 仪表盘：汇总所有已连接云盘的总容量卡片，下方是文件、云存储、备份、任务、WebDAV、令牌、影视、设置等快捷入口。">
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="cloud-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">云盘</p>
+          <h2 id="cloud-h">统一云盘管理</h2>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>一站式连接所有云账号</h3>
+            <p>Google Drive、OneDrive、S3、阿里云盘、百度网盘、115、迅雷、WebDAV、SFTP、FTP、SMB
+               等等，全部连到一处。以专为 Mac 设计的清爽界面跨云浏览、搜索、复制、移动、重命名和整理文件：
+               Finder 风格分栏视图、可排序的列表表头与内联筛选、带内联预览的文件检查器，以及任意两个云之间的拖放。</p>
+            <p>直接下载版还能把云盘挂载成 Mac 上的一块磁盘，在 Finder 里像本地硬盘一样浏览，第三方应用和命令行也能直接访问。</p>
+            <p class="chip-note">本地挂载依赖 macFUSE，只在直接下载版中提供；App Store 版运行在完整沙盒中，不含这项功能。两版差异见<a href="#get-h">下方对照表</a>。</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">跨云搜索</span></li>
+              <li><span class="chip chip-cloud">分栏视图与检查器</span></li>
+              <li><span class="chip chip-cloud">跨云拖放</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-providers.webp" width="1600" height="1547" loading="lazy" decoding="async"
+                 alt="Mac 上的「添加云账号」对话框，列出 OneDrive、GoogleDrive、百度网盘、迅雷云盘、123云盘、阿里云盘Open、115open、天翼云盘、光鸭云盘，以及 WebDAV、CloudDrive、S3、SFTP、FTP、SMB 和本地文件夹。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark" aria-labelledby="media-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">影音</p>
+          <h2 id="media-h">影院级播放，直接从云端</h2>
+          <p>不用先把几十 GB 的原盘拖回硬盘。播放器直接从云端读取，解码、菜单、音轨、字幕一样不少。</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>内置播放器与蓝光原盘</h3>
+            <p>VideoToolbox 硬件加速解码 H.264、H.265/HEVC、AV1，支持 HDR10、HDR10+ 与杜比视界——
+               包括 Profile 7 蓝光内容（含完整增强层 FEL）的杜比视界播放。字幕支持 SRT、ASS/SSA、VTT 与 PGS，可独立调节延迟、样式与 HDR 亮度；影片信息自动读取本地 .nfo 元数据与海报、Logo 图片。</p>
+            <p class="chip-note">Profile 7 的碟片带两层画面。CloudDrive2 两层都读，并把增强层合成进最终画面，完整增强层（FEL）的片源同样如此——放出来就是完整的双层杜比视界，既不会只剩基础层，也不会退回 HDR10。直接下载版现已支持；App Store 版随 App 1.0.15 上线，该版本正在审核中。</p>
+            <p>蓝光 ISO 直接从云存储串流，并进入原生的原盘菜单：场景选择、彩色快捷键、菜单内音轨与字幕设置、2D+3D 合装碟与章节导航。</p>
+            <p class="chip-note">HDMV 菜单两个版本都支持。BD-J（Java）菜单只在官网直接下载版里提供；App Store 版遇到 BD-J 光碟会直接播放正片。两版差异见<a href="#get-h">下方对照表</a>。</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">杜比视界 P5 / 7 / 8</span></li>
+              <li><span class="chip chip-video">HDR10+ · HLG</span></li>
+              <li><span class="chip chip-disc">HDMV 原盘菜单</span></li>
+              <li><span class="chip chip-disc">2D + 3D 合装碟</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-disc_menu.webp" width="1600" height="950" loading="lazy" decoding="async"
+                 alt="蓝光原盘的场景选择菜单：底部是 PLAY / SETTINGS / SCENES / EXTRAS 四个入口，上方一排场景缩略图，右上角还有书签。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>AI 字幕翻译</h3>
+            <p>为任何视频生成翻译字幕：优先翻译已有的字幕轨（包括通过端侧 OCR 识别的 PGS 图形字幕），没有字幕时自动回退到语音识别。可以使用 Apple 的端侧翻译模型——免费，而且音频不出设备——
+               也可以接入你自己的 API。生成的字幕保存在视频旁边，换台设备就能直接复用，整个文件夹也可以在后台批量生成。</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">Apple 端侧模型</span></li>
+              <li><span class="chip chip-subs">PGS OCR</span></li>
+              <li><span class="chip chip-subs">整文件夹批量</span></li>
+              <li><span class="chip chip-subs">字幕存档复用</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-ai_subtitles.webp" width="1600" height="1053" loading="lazy" decoding="async"
+                 alt="Mac 上的「实时翻译」设置：源语言为意大利语、译为简体中文，转写模型选择「端侧（Apple）」，字幕延迟 0.40 秒。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>多声道与杜比全景声</h3>
+            <p>杜比全景声（杜比数字+）可通过 HDMI 以比特流直通输出到功放。TrueHD、DTS-HD Master Audio
+               和 DTS 音轨完整解码，以 5.1 或 7.1 多声道经 HDMI 或多声道 USB 解码器输出——绝不强制下混成立体声。多声道 DSD 同样如此：5.1 声道的 SACD ISO、.dsf 与 .dff 以真正的环绕声播放。</p>
+            <p>立体声设备则采用标准 ITU-R BS.775 下混，AirPods Pro / Max 启用带头部追踪的空间音频。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">杜比全景声比特流</span></li>
+              <li><span class="chip chip-audio">TrueHD · DTS-HD MA</span></li>
+              <li><span class="chip chip-audio">5.1 · 7.1 不下混</span></li>
+              <li><span class="chip chip-audio">空间音频</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-audio_settings.webp" width="1600" height="1044" loading="lazy" decoding="async"
+                 alt="Mac 播放器设置：已连接的 USB 解码器 AE8 显示 44.1 kHz 至 2822.4 kHz 采样率、32 位深度，以及 DoP DSD64 至 DSD1024 和「DoP 1.1（DSD512/DSD1024）」选项。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>发烧级音频</h3>
+            <p>DSD 播放最高支持 DSD1024，也支持 SACD ISO、FLAC、WAV、ALAC 等 25 种以上格式。
+               DoP 输出和按设备固定的音频输出，把比特完美的信号送进你的 USB 解码器。无缝播放、重建的常驻音频播放器，以及保持音调的变速播放。</p>
+            <p class="chip-note">USB 原生 DSD（Native DSD）需要直接下载版；App Store 版以 DoP 输出 DSD，同样是比特完美。</p>
+            <p class="chip-note">DSD64 到 DSD1024 都支持。DoP 与原生 DSD 实际能走到哪一档，取决于所连解码器的能力——应用按解码器自己声明的规格输出，它接不了的档位会转成 PCM。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
+              <li><span class="chip chip-audio">SACD ISO</span></li>
+              <li><span class="chip chip-audio">DoP 比特完美</span></li>
+              <li><span class="chip chip-audio">无缝播放</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-audio_player.webp" width="900" height="1487" loading="lazy" decoding="async"
+                 alt="Mac 上的紧凑音频播放器窗口，正在播放一首标有 DSD1024 与 DoP 角标的曲目，下方是专辑封面与播放控制。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>几 GB 的 PDF，几秒钟打开</h3>
+            <p>流式 PDF 阅读器不把整本书拖下来。它只读当前这几页所需的那一段字节，所以一本几个 GB 的画册，从云端点开到看见第一页通常只要几秒——
+               不必等待完整下载，硬盘上也不留完整副本。</p>
+            <p>阅读器在独立窗口中打开。翻页、缩放、跳转目录都是按需取数据，页面缩略图、大纲导航、书签与阅读位置记忆一应俱全。</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">按需读取页面</span></li>
+              <li><span class="chip chip-audio">无需完整下载</span></li>
+              <li><span class="chip chip-audio">大纲导航</span></li>
+              <li><span class="chip chip-audio">书签与阅读位置</span></li>
+            </ul>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-pdf_reader.webp" width="1600" height="1336" loading="lazy" decoding="async"
+                 alt="Mac 上独立的 CloudDrive 阅读器窗口，正满幅显示一本大开本画册的一个跨页。">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="more-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">更多</p>
+          <h2 id="more-h">日常会用到的其余部分</h2>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-keyboard card-icon" aria-hidden="true"></i>
+            <h3>全键盘操控</h3>
+            <p>方向键导航文件、空格快速预览、F2 重命名、字母前缀跳转，以及完整的播放器控制——快进快退、音量、全屏、下一集、音轨与字幕循环切换、逐帧步进和媒体键。按 ⌘⇧/ 查看快捷键速查表。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-photo-film card-icon" aria-hidden="true"></i>
+            <h3>Emby / Jellyfin 客户端</h3>
+            <p>连接你自己的 Emby 或 Jellyfin 服务器，海报墙、演职人员、继续观看一应俱全。本机 CloudDrive 能访问同一文件时，「直连串流」直接从云端拉流，绕过服务器转码，观看记录仍与服务器同步。</p>
+            <p class="chip-note">服务器那一侧还可以装 <a href="/download.html#plugin-h">Emby / Jellyfin 伴侣插件</a>：媒体库实时更新、按播放行为预热，路径映射也会自动配好。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-folder-open card-icon" aria-hidden="true"></i>
+            <h3>Finder 集成</h3>
+            <p>File Provider 扩展把已连接的云账号作为位置显示在 Finder 中，任何 Mac 应用都能浏览和打开云端文件。CloudDrive2 也可以通过「打开方式」和 <code>clouddrive://</code> URL 方案充当视频文件的外部播放器。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
+            <h3>跨云传输与自动备份</h3>
+            <p>在任意已连接的服务商之间复制或移动文件，传输管理器支持暂停、恢复、重试、限速与并发控制，也支持整个文件夹递归上传。备份任务支持文件系统监控、全量扫描间隔与多目标冗余。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>安全</h3>
+            <p>两步验证、加密文件夹、细粒度权限的 API 令牌与活动会话监控守护你的数据。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>自带 WebDAV 服务器</h3>
+            <p>这台 Mac本身就是一台 WebDAV 服务器：所有已连接的云盘以标准协议对外提供，同一网络下的第三方应用——播放器、文件管理器、备份工具——直接连上来就能读到云端内容，不必再各自登录一遍云盘。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-sliders card-icon" aria-hidden="true"></i>
+            <h3>还有这些</h3>
+            <p>可配置淘汰策略的磁盘缓存与离线访问、带缩略图预览的画廊视图、支持 RAW（CR2/NEF/ARW/RAF）的图片查看器、画中画、后台音频播放、AirPlay 2 多房间音频、深色与浅色主题、中英文界面，以及在 Apple 芯片和 Intel Mac 上均原生运行的通用二进制。</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" aria-labelledby="get-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">获取</p>
+          <h2 id="get-h">如何安装</h2>
+          <p>Mac 版有两个版本：App Store 版适合大多数人，直接下载版（Developer ID，已经过 Apple 公证）面向需要本地挂载的进阶用户。两版共用同一套账号体系，可以随时换用。</p>
+        </header>
+        <ul class="store-badges">
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>
+            <span><b>App Store</b><span>即将上架</span></span>
+          </span></li>
+          <li><a class="store-badge" href="/download.html#app">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span><b>直接下载版</b><span>Apple 公证 · 含本地挂载</span></span>
+          </a></li>
+        </ul>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th scope="col">功能 / 项目</th>
+                <th scope="col" class="c">App Store 版</th>
+                <th scope="col" class="c">直接下载版</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">云盘浏览 / 文件操作</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">播放器（视频 / 音频）</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">备份 / 自动同步</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">WebDAV 内置服务器</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">API 令牌</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">本地挂载为磁盘（macFUSE）</th>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">BD-J（Java）光碟菜单</th>
+                <td class="c"><span class="no">—</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">杜比视界 P7 FEL</th>
+                <td class="c"><span class="no">—</span><br><span class="cell-note">1.0.15 起</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">自动更新</th>
+                <td class="c">App Store</td>
+                <td class="c">应用内</td>
+              </tr>
+              <tr>
+                <th scope="row">沙盒</th>
+                <td class="c">完整沙盒</td>
+                <td class="c">非沙盒</td>
+              </tr>
+              <tr>
+                <th scope="row">内购通道</th>
+                <td class="c">Apple</td>
+                <td class="c">自有通道（后续版本提供）</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">本地挂载需要先安装 <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a> 并放行它的内核扩展（Apple 芯片的 Mac 要进一次恢复模式，见<a href="/macfuse.html">给 macFUSE 放行</a>）；没装也不影响直接下载版的其他功能。</p>
+        <div class="note">
+          <span class="note-title">关于 App Pro</span>
+          <p>浏览云盘、管理文件、传输与备份、基础播放都不需要额外购买。
+             HDR 与杜比视界、DSD、ISO 光盘播放（蓝光 / DVD / SACD）、AI 字幕翻译，以及媒体客户端（Emby / Jellyfin）这几项进阶播放功能，需要一次性的 <strong>App Pro</strong> 内购，各商店标价 <strong>USD $19.99</strong>。
+             App Pro 绑定的是你的 CloudDrive 账号，不是设备也不是商店。买过一次，在任何平台上登录同一账号都已解锁——iPhone、iPad、Mac、Apple TV、Vision Pro、Android 与 Meta Quest 一视同仁。详见<a href="/pricing.html">会员与价格</a>。</p>
+        </div>
+        <div class="note">
+          <span class="note-title">关于这些功能</span>
+          <p>本页写的是应用当前的功能。CloudDrive2 仍在持续开发，云服务商与各平台的限制也在变，所以功能可能调整，也可能在不另行通知的情况下移除。</p>
+          <p>欢迎提功能需求、报 bug——下一个版本做什么，很大程度上就是这么定的。最好提到 <a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub issues</a> 上，有记录也追得到；也可以写信到 <a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a>，或者加入 <a href="https://t.me/cloudnaschat" rel="noopener">Telegram 群</a>。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-tight" aria-labelledby="other-h">
+      <div class="container">
+        <h2 id="other-h" class="eyebrow strip-title">其他平台</h2>
+        <ul class="platform-strip">
+          <li><a href="/apps/ios.html"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone · iPad</a></li>
+          <li><a href="/apps/tvos.html"><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV</a></li>
+          <li><a href="/apps/visionos.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Vision Pro</a></li>
+          <li><a href="/apps/android.html"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</a></li>
+          <li><a href="/apps/quest.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Meta Quest</a></li>
+          <li><a href="/apps/windows.html"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</a></li>
+          <li><a href="/apps/desktop.html"><i class="fa-solid fa-server" aria-hidden="true"></i>Linux · NAS</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/apps/macos.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

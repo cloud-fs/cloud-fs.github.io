@@ -1,731 +1,577 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 下载(v1.0.13)</title>
-  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
-  <link rel="stylesheet" href="css/site.css">
-  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/site.js"></script>
+  <title>下载 CloudDrive2 — Windows、Linux、macOS、Android、NAS</title>
+  <meta name="description" content="下载 CloudDrive2：应用的商店链接与 macOS、Android 直接下载版，核心服务的 Windows、Linux、macOS、Android、飞牛 fnOS 安装包与 Docker 镜像。含网盘镜像与完整更新日志。">
+  <link rel="canonical" href="https://www.clouddrive2.com/download.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/download.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/download.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/download.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="下载 CloudDrive2">
+  <meta property="og:description" content="应用与核心服务分开发布：商店链接、直接下载版、各平台安装包、Docker 镜像与完整更新日志。">
+  <meta property="og:url" content="https://www.clouddrive2.com/download.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
 </head>
 
 <body>
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
-      <div class="container">
-        <a class="navbar-brand" href="index.html">
-          <img alt="clouddrive" src="img/clouddrive-h.png" height="80">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">主页</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="features.html">功能</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="pricing.html">会员</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="help.html">帮助</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/api/CloudDrive2_gRPC_API_Guide.html">API</a>
-            </li>
-          </ul>
-          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
-        </div>
-      </div>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html" aria-current="page">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/download.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
     </nav>
   </header>
 
-  <div class="container mt-4">
-    <h1 class="hero-title">下载 CloudDrive(v1.0.13)</h1>
-    <p class="tagline">选择适合你的版本</p>
-    <div class="container">
-      <!-- Latest Version -->
-      <div class="alert alert-warning" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.13"><strong>1.0.13(Web3.0.13):</strong></a>
-        <ol>
-          <li>多网盘备份增加全量扫描资源占用控制功能：
-            <ol type="a">
-              <li>默认并发备份扫描数为1，可以在备份页面修改最大并发数，超过的备份全量扫描会排队等待</li>
-              <li>可以设置上传任务队列上下限，当上传任务数超过设置的上限时，扫描任务会暂停等待，当上传任务数回落到设置的下限时，扫描任务自动恢复，避免因扫描大文件造成太多上传任务堆积，默认为不限制，可以在备份页面修改</li>
-            </ol>
-          </li>
-          <li>跨云盘复制时，可在系统设置下载上传页面设置是否在计算哈希阶段将下载的数据保存到临时文件，上传时将无需再次下载源文件，复制完成后临时文件自动删除，该选项默认为关闭</li>
-          <li>Windows版修复在系统文件管理器对挂载盘图片编辑时可能出错，执行图片旋转后缩略图不自动刷新的问题</li>
-          <li>修复Web界面实时显示的任务数可能不准确的问题</li>
-          <li>Web界面修复把本地文件拖动到根目录会产生一个无法完成的上传任务，并且创建一个无法删除的文件的问题</li>
-        </ol>
-      </div>
+  <main id="main" data-release>
 
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.12"><strong>1.0.12(Web3.0.12):</strong></a>
-        <ol>
-          <li>修复fuse挂载后内存增长的问题：Emby 等媒体服务器扫描百万级文件时，内存不再无限增长</li>
-          <li>修复S3 同端点多账号相互覆盖的问题</li>
-          <li>改进通过http访问文件时的性能，降低cpu和内存使用率</li>
-          <li>WebUI移动端进入多选模式后，增加全选和取消全选选项</li>
-          <li>修复只读文件夹（光鸭云盘）不能作为挂载盘源目录和备份源目录的问题</li>
-          <li>其它性能改进和bug修复</li>
-        </ol>
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">下载</p>
+        <h1>装到你想装的地方</h1>
+        <p class="hero-lede">
+          同一套核心，两种装法：手机、平板、电视和头显上装应用，电脑、NAS 或 Docker 上装成后台服务。用同一个 CloudDrive 账号登录即可。
+        </p>
+        <ul class="chips">
+          <li><a class="chip chip-cloud" href="#apps">应用商店</a></li>
+          <li><a class="chip chip-cloud" href="#app">应用直接下载</a></li>
+          <li><a class="chip chip-cloud" href="#core">核心服务安装包</a></li>
+          <li><a class="chip" href="#mirrors">网盘镜像</a></li>
+          <li><a class="chip" href="#nas">NAS 与 Docker</a></li>
+          <li><a class="chip" href="#plugin">Emby / Jellyfin 插件</a></li>
+          <li><a class="chip" href="#changelog">更新日志</a></li>
+        </ul>
       </div>
+    </section>
 
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.11"><strong>1.0.11(Web3.0.11):</strong></a>
-        <ol>
-          <li>新增支持添加光鸭云盘，目前仅支持只读模式，支持浏览目录和读取文件，无法创建文件夹、删除文件、重命名、移动、上传文件等操作，支持通过光鸭云盘App扫码登录，后续版本会更新完整功能的光鸭云盘</li>
-          <li>S3未填写存储桶名时浏览账户内全部存储桶，自动改用 ListBuckets（GET /），将每个存储桶显示为顶层文件夹；同时支持路径模式与虚拟主机模式、V2/V4 签名。存储桶列表根目录为只读（不支持创建 / 删除存储桶）</li>
-          <li>修复连接到某些不支持http range的webdav服务器读取文件可能失败的问题</li>
-          <li>Web：新增多服务器支持，可以连接到其它CloudDrive2的grpc服务，方便用在桌面浏览器远程管理移动设备的CloudDrive</li>
-          <li>其它bug修复和界面优化</li>
-        </ol>
+    <section class="band band-alt" id="apps" aria-labelledby="stores-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">应用商店</p>
+          <h2 id="stores-h">手机、平板、电视与头显</h2>
+          <p>从商店安装，登录同一个 CloudDrive 账号即可。核心会员和 App 专业版都记在账号上，换设备、换平台都还在。</p>
+        </header>
+        <ul class="store-badges">
+          <li><a class="store-badge" href="https://apps.apple.com/cn/app/id6760897168" rel="noopener">
+            <i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>
+            <span><b>App Store</b><span>Mac · Apple TV · Vision Pro 已上架</span></span>
+          </a></li>
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>
+            <span><b>App Store</b><span>iPhone · iPad，审核中</span></span>
+          </span></li>
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-brands fa-google-play" aria-hidden="true"></i>
+            <span><b>Google Play</b><span>Android 手机与 Android TV，封闭测试中</span></span>
+          </span></li>
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>
+            <span><b>Meta Horizon</b><span>Quest，内测中</span></span>
+          </span></li>
+        </ul>
+        <p class="chip-note">iPhone 与 iPad 版正在 App Store 审核，过审就能装。Android 版目前是封闭测试，还没对所有人开放——但<a href="#app">下方的通用 APK</a> 随时可以装，不受商店进度影响。</p>
+        <p class="chip-note">每个平台的功能差异、系统要求和截图见<a href="/apps/">应用页</a>。</p>
       </div>
+    </section>
 
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.10"><strong>1.0.10(Web3.0.10):</strong></a>
-        <ol>
-          <li>购买终身会员时，如当前帐户还有未到期的年费或者月费会员，未到期的部份会以年费费率自动抵扣需要支付的部份终身会员价格</li>
-          <li>修复1.0.9版本在添加迅雷云盘和以迅雷云盘帐号登录时授权失败的问题</li>
-        </ol>
+    <section class="band" id="app" aria-labelledby="app-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">应用</p>
+          <h2 id="app-h">应用的直接下载版</h2>
+          <p>应用和核心服务是两套安装包，各自发布，版本号也各走各的。这里是不经商店的应用安装包：macOS 用经 Apple 公证的 dmg，Windows 用签过名的安装程序，Android 用通用 APK。它们都能在应用内自动检查更新。</p>
+          <p class="release-line">当前版本 1.0.14 ·
+             <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/app-v1.0.14-7" rel="noopener">GitHub 发布页</a></p>
+        </header>
+
+        <ul class="dl-grid">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-7-DeveloperID.dmg">
+            <i class="fa-brands fa-apple" aria-hidden="true"></i>
+            <span><b>macOS 直接下载版</b><span>CloudDrive2-1.0.14-7-DeveloperID.dmg</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-8-windows-x64.exe">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows x64</b><span>CloudDrive2-1.0.14-8-windows-x64.exe</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-8-windows-arm64.exe">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows Arm64</b><span>CloudDrive2-1.0.14-8-windows-arm64.exe</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-332-android.apk">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android 通用 APK</b><span>CloudDrive2-1.0.14-332-android.apk</span></span>
+          </a></li>
+        </ul>
+
+        <div class="note">
+          <span class="note-title">系统要求</span>
+          <p>macOS 12 或更高版本，Apple 芯片与 Intel 通用。这一版由 Apple 公证，首次打开不会有安全警告，也不在沙盒里运行——本地挂载（需要 <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>）、蓝光 BD-J 光碟菜单和 USB 原生 DSD 只在这一版里有，两版差异见 <a href="/apps/macos.html">macOS 版</a>。</p>
+          <p>Windows 10 1809（内部版本 17763）或更高版本，x64 与 Arm64 各有安装包，选错了安装程序会直接提示。两个安装包都经过代码签名与时间戳。安装需要管理员权限：要写入 Program Files，并装上挂载用的 WinFSP 驱动。</p>
+          <p>Android 7.0 或更高版本，同一个包适配手机、平板与 Android TV。通用 APK 覆盖 arm64-v8a 与 armeabi-v7a（32 位 ARM），不含 x86_64。</p>
+        </div>
+
+        <p class="chip-note">iPhone、iPad、Apple TV、Vision Pro 和 Meta Quest 只能从各自的商店安装，见<a href="#apps">上方</a>。如果只要挂载和网页管理、不需要播放器，装<a href="#core">核心服务</a>就够了。</p>
       </div>
+    </section>
 
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.9"><strong>1.0.9(Web3.0.9):</strong></a>
-        <ol>
-          <li>新增飞牛fnOS安装包下载，飞牛官方应用中心上架正在审核中，目前可下载对应架构的fpk包手动安装</li>
-          <li>Web文件浏览器支持媒体刮削文件(.nfo)，识别文件夹内NFO文件与海报（Kodi/Emby/Jellyfin/Plex兼容），在文件属性面板展示影片信息。该功能只是展示已经刮削的目录，不会主动联网刮削</li>
-          <li>打开2FA双因素验证后，如丢失恢复码和手机app而无法登录时，可以通过向帐号邮箱发送重置码禁止双因素验证，直接用帐号密码登录</li>
-          <li>合作伙伴设备自动注册的帐号修改邮箱密码后，可以与原设备解绑，绑定设备丢失或者出售后可以通过解绑避免帐号泄露</li>
-          <li>在云存储帐号配置中增加复制时使用多线程下载选项，打开后在跨网盘传输和备份时，恢复旧版本的多线程下载</li>
-          <li>对已解密的文件夹执行锁定操作时增加二次确认弹窗，避免误操作导致文件失效</li>
-          <li>修复macos在有多个挂载点时，个边情况下列目录失败，需要重新挂载的问题</li>
-          <li>修复复制文件到加密目录速度慢的问题</li>
-          <li>修复windows下用visual studio code等编辑器在加密文件夹内直接编辑文件时可能上传文件失败的问题</li>
-          <li>修复115网盘的加密目录上直接用Word编辑docx文件可能会遗留一些临时文件的问题</li>
-          <li>修复32位armv7通过http直接访问大文件时可能会下载失败的问题</li>
-          <li>其它性能改进、bug修复</li>
-        </ol>
+    <section class="band band-alt" id="core" aria-labelledby="direct-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">核心服务</p>
+          <h2 id="direct-h">核心服务安装包</h2>
+          <p>核心服务装在电脑、NAS 或 Android 设备上，一直在后台跑：连云盘、挂载、跨云复制、备份和 WebDAV 都由它完成。装完用浏览器打开 <code>http://&lt;主机 IP&gt;:19798</code> 进管理界面，安装步骤见<a href="/help.html">帮助页</a>。</p>
+          <p class="release-line">当前版本 <span data-release-version>1.0.14</span> ·
+             <a data-release-link href="https://github.com/cloud-fs/cloud-fs.github.io/releases/latest" rel="noopener">GitHub 发布页</a></p>
+        </header>
+
+        <h3>Windows</h3>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-asset="win-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/CloudDrive2Setup-X64-1.0.14.exe">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows x64</b><span data-asset-name>CloudDrive2Setup-X64-1.0.14.exe</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="win-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/CloudDrive2Setup-Arm64-1.0.14.exe">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows Arm64</b><span data-asset-name>CloudDrive2Setup-Arm64-1.0.14.exe</span></span>
+          </a></li>
+        </ul>
+
+        <h3>Linux</h3>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-asset="linux-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-linux-x86_64-1.0.14.tgz">
+            <i class="fa-brands fa-linux" aria-hidden="true"></i>
+            <span><b>Linux x86_64</b><span data-asset-name>clouddrive-2-linux-x86_64-1.0.14.tgz</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="linux-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-linux-aarch64-1.0.14.tgz">
+            <i class="fa-brands fa-linux" aria-hidden="true"></i>
+            <span><b>Linux aarch64</b><span data-asset-name>clouddrive-2-linux-aarch64-1.0.14.tgz</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="linux-armv7" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-linux-armv7-1.0.14.tgz">
+            <i class="fa-brands fa-linux" aria-hidden="true"></i>
+            <span><b>Linux armv7</b><span data-asset-name>clouddrive-2-linux-armv7-1.0.14.tgz</span></span>
+          </a></li>
+        </ul>
+
+        <h3>macOS</h3>
+        <p>需要先安装 <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a> 才能把云盘挂载成本地磁盘，装完还要在系统设置里放行它的内核扩展，见<a href="/macfuse.html">给 macFUSE 放行</a>。也可以用 Homebrew 安装，步骤见<a href="/help.html">帮助页</a>。</p>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-asset="macos-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-macos-x86_64-1.0.14.tgz">
+            <i class="fa-brands fa-apple" aria-hidden="true"></i>
+            <span><b>macOS Intel</b><span data-asset-name>clouddrive-2-macos-x86_64-1.0.14.tgz</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="macos-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-macos-aarch64-1.0.14.tgz">
+            <i class="fa-brands fa-apple" aria-hidden="true"></i>
+            <span><b>macOS Apple Silicon</b><span data-asset-name>clouddrive-2-macos-aarch64-1.0.14.tgz</span></span>
+          </a></li>
+        </ul>
+
+        <h3>Android</h3>
+        <p>这里的 APK 是把核心服务打包成 Android 应用，自带 Web 管理界面；tgz 包用于在已有的 Android 环境里跑核心服务。带播放器的 CloudDrive2 应用是另一个安装包，在<a href="#app">上一节</a>。手机上的本地挂载需要 Root；浏览、播放、备份与 WebDAV 不需要。</p>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-asset="android-apk" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-universal-1.0.14-222.apk">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android APK（通用）</b><span data-asset-name>clouddrive-2-android-universal-1.0.14-222.apk</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="android-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-aarch64-1.0.14.tgz">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android aarch64</b><span data-asset-name>clouddrive-2-android-aarch64-1.0.14.tgz</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="android-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-x86_64-1.0.14.tgz">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android x86_64</b><span data-asset-name>clouddrive-2-android-x86_64-1.0.14.tgz</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="android-armv7" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-armv7-1.0.14.tgz">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android armv7</b><span data-asset-name>clouddrive-2-android-armv7-1.0.14.tgz</span></span>
+          </a></li>
+        </ul>
+
+        <h3>飞牛 fnOS</h3>
+        <p>飞牛官方应用中心上架审核中。目前请下载对应架构的 fpk 包手动安装。</p>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-asset="fnos-x86" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive2_1.0.14_x86.fpk">
+            <i class="fa-solid fa-hard-drive" aria-hidden="true"></i>
+            <span><b>fnOS x86_64</b><span data-asset-name>clouddrive2_1.0.14_x86.fpk</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="fnos-arm" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive2_1.0.14_arm.fpk">
+            <i class="fa-solid fa-hard-drive" aria-hidden="true"></i>
+            <span><b>fnOS aarch64</b><span data-asset-name>clouddrive2_1.0.14_arm.fpk</span></span>
+          </a></li>
+        </ul>
       </div>
+    </section>
 
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.8"><strong>1.0.8(Web3.0.8):</strong></a>
-        <ol>
-          <li>跨云盘复制性能改进：
-            <ul>
-              <li>跨云盘复制预处理和上传阶段内存占用大幅下降</li>
-              <li>跨云盘复制到本地文件夹采用多线程下载，提高下载速度</li>
-            </ul>
-          </li>
-          <li>修复通过挂载盘在加密文件夹内直接编辑文件可能失败的问题</li>
-          <li>修复Windows版编辑挂载点时有些情况下更新按钮无法点击的问题</li>
-          <li>修复个别情况下服务长时间运行后 CPU 飙升、内存暴涨的问题</li>
-          <li>其它性能改进、bug修复和界面优化</li>
-        </ol>
+
+    <section class="band" id="mirrors" aria-labelledby="mirror-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">镜像</p>
+          <h2 id="mirror-h">从网盘下载</h2>
+          <p>和上面是同一批安装包。GitHub 下载慢的时候走这里。</p>
+        </header>
+        <ul class="dl-grid">
+          <li><a class="dl-item" href="https://115cdn.com/s/swsyv343zde?password=s0c3&amp;" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>115 网盘</b><span>提取码 s0c3</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://www.123pan.com/s/adWkjv-nxz0h.html" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>123 云盘</b><span>无需提取码</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://pan.baidu.com/s/1KTDKYu4aCAH41TncNm5XEg?pwd=cdr2" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>百度网盘</b><span>提取码 cdr2</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://www.aliyundrive.com/s/AHYFMyu8LTR/folder/64c93bd53de2f8fbd3aa41eeb8d0340583dd2425" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>阿里云盘</b><span>受分享限制，仅 Windows 版</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://cloud.189.cn/web/share?code=jiM3aeUZFRja" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>天翼云盘</b><span>访问码 1otn</span></span>
+          </a></li>
+        </ul>
       </div>
+    </section>
 
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.7"><strong>1.0.7(Web3.0.7):</strong></a>
+    <section class="band band-alt" id="nas" aria-labelledby="nas-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">NAS 与容器</p>
+          <h2 id="nas-h">装在 NAS 上</h2>
+          <p>NAS 上跑的还是同一套核心服务，两条路：拉 Docker 镜像，或者装上面对应架构的安装包。</p>
+        </header>
+        <ul class="card-grid">
+          <li><a class="card" href="/docker.html">
+            <i class="fa-brands fa-docker card-icon" aria-hidden="true"></i>
+            <h3>Docker 部署指南</h3>
+            <p>挂载盘要在容器外可见，宿主机的挂载传播得是共享的——不少系统默认就开着。怎么查、必要时怎么开，连同完整的 compose 配置，都在这一页。</p>
+          </a></li>
+          <li><a class="card" href="https://hub.docker.com/r/cloudnas/clouddrive2" rel="noopener">
+            <i class="fa-brands fa-docker card-icon" aria-hidden="true"></i>
+            <h3>Docker Hub 镜像</h3>
+            <p><code>cloudnas/clouddrive2</code>，支持 amd64、arm64、armv7，跟着每个版本一起发布。</p>
+          </a></li>
+          <li><a class="card" href="/apps/desktop.html">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>群晖、QNAP、Unraid、飞牛</h3>
+            <p>主流 NAS 平台都可以跑，x86_64、arm64、armv7 架构均有安装包。</p>
+          </a></li>
+        </ul>
+
+        <h3>第三方 NAS 套件</h3>
+        <div class="note note-warn">
+          <span class="note-title">注意</span>
+          <p>下面这些 NAS 插件由第三方提供，请自行判断后下载。我们不保证其安全性和稳定性。</p>
+        </div>
+        <ul class="dl-grid">
+          <li><a class="dl-item" href="https://imnks.com/3653.html" rel="noopener">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>群晖套件</b><span>支持 DSM 6 与 DSM 7</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://www.naslab.club/524.html" rel="noopener">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>QNAP 套件</b><span>第三方打包</span></span>
+          </a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" id="plugin" aria-labelledby="plugin-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">插件</p>
+          <h2 id="plugin-h">Emby / Jellyfin 伴侣插件</h2>
+          <p>装在媒体服务器那一侧，让 Emby 或 Jellyfin 与同一台主机上的 CloudDrive2 协同工作。一套源码，两个版本。</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-rotate card-icon" aria-hidden="true"></i>
+            <h3>媒体库实时更新，实时监控可以全关</h3>
+            <p>插件订阅 CloudDrive2 的<a href="/features.html#file-notification">文件变更通知</a>，把每条变化直接交给服务器的定向刷新入口。刮削器（tinyMediaManager、MoviePilot、MDCx 等）在挂载目录里改完，影片自动出现在库里——不必开「实时监控」，也就没有开机时的递归遍历和云端列目录风暴，更不用靠整库扫描，而整库扫描正是触发网盘风控的主要原因。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-gauge-high card-icon" aria-hidden="true"></i>
+            <h3>按播放行为预热</h3>
+            <p>起播时预热文件头尾（moov / EBML 头与 MKV cues），接近片尾时预热同一目录里的下一个文件，停止播放时立刻收回读取器。所有客户端一并受益，不限于 CloudDrive2 App。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-route card-icon" aria-hidden="true"></i>
+            <h3>免配置路径映射</h3>
+            <p>直连播放要知道服务器上的媒体目录对应本机哪个网盘目录，过去得手写规则。插件把挂载点和网盘账号身份暴露出来，App 登录后自己算——按账号身份匹配，不按文件夹名，因为同一个 115 账号两端常常叫不同的名字。</p>
+          </div></li>
+        </ul>
+
+        <h3>下载</h3>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-plugin-asset="emby" href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin/releases/latest">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>Emby 版</b><span data-plugin-asset-name>最新发布</span></span>
+          </a></li>
+          <li><a class="dl-item" data-plugin-asset="jellyfin" href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin/releases/latest">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>Jellyfin 版</b><span data-plugin-asset-name>最新发布</span></span>
+          </a></li>
+        </ul>
+        <p class="chip-note">Jellyfin 把 DLL、<code>meta.json</code> 与 <code>thumb.png</code> 一起放进插件目录下的 <code>CloudDrive</code> 子文件夹；Emby 只需把 DLL 放进插件目录，不要子文件夹。装在容器里更新 DLL 后请重启容器，服务器自带的「重启」按钮不够。完整的安装与配置说明见 <a href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin" rel="noopener">插件仓库</a>。</p>
+
+        <div class="note">
+          <span class="note-title">环境要求</span>
+          <p>服务器最低版本：<strong>Emby 4.8.0.80</strong> 或 <strong>Jellyfin 10.11</strong>。已在 Emby 4.9.5 与 Jellyfin 10.11.11 上验证。</p>
+          <p>前两项功能是纯服务端的，装上插件、填好 CloudDrive2 地址就能用，不需要安装 CloudDrive2 App。其中<strong>媒体库实时更新依赖文件变更通知，属于会员（Pro）功能</strong>。免配置路径映射则需要 <strong>CloudDrive2 App 1.0.14</strong> 或更高版本。</p>
+          <p>插件在 CloudDrive2 里用 API 令牌连接。新建令牌时<strong>「推送消息」与「获取挂载点」默认没有勾选，必须手动勾上</strong>——少了它们，插件能连上、状态也正常，但媒体库永远不会自动更新。插件不写入、不删除、不修改任何文件。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="changelog" aria-labelledby="log-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">更新日志</p>
+          <h2 id="log-h">每个版本改了什么</h2>
+          <p>核心服务与 Web 界面的发布记录，最新的在最上面。这里只列最近 10 个版本，更早的在 GitHub 发布页。</p>
+        </header>
+      <details class="acc" open>
+        <summary>1.0.14(Web3.0.14)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>新增帐号注销功能，在个人资料里可以选择注销帐号，注销帐号需要向注册邮箱发送确认码，输入确认码后方能注销，设备自动注册的帐号和迅雷帐号如需注销帐号，请先在个人资料里修改邮箱及密码后再注销帐号。注销帐号后帐号内的余额和会员权限将全部取消，不支持退款</li>
+        <li>修复高负载下挂载盘卡死 —— 传输繁忙、并发访问较多时，挂载的网盘曾可能长时间无响应（极端情况可达数小时）。现已彻底修复：繁忙时访问平滑排队不再卡死，个别请求异常也会及时返回错误、系统自动恢复</li>
+        <li>限速更平滑，更不易触发 115 等网盘的风控；提高限速设置后立即生效</li>
+        <li>修复 115 新建文件夹后偶发「文件不存在」/同名冲突 —— 刚建好的文件夹因网盘索引有几秒延迟而被误判，现在会自动识别延迟并短暂重试，操作可正常完成</li>
+        <li>备份更可靠 —— 遇网络抖动等临时问题自动重试，不再直接跳过（减少漏备份）</li>
+        <li>修复备份把「文件夹」误当「文件」处理的问题，并自动清理遗留的无效任务</li>
+        <li>会员页支持 CloudDrive2 App 专业版权限说明和链接</li>
+        <li>其它bug修复和性能改进</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.14" rel="noopener">在 GitHub 上查看这个版本</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.13(Web3.0.13)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>多网盘备份增加全量扫描资源占用控制功能：
+        <ol type="a">
+        <li>默认并发备份扫描数为1，可以在备份页面修改最大并发数，超过的备份全量扫描会排队等待</li>
+        <li>可以设置上传任务队列上下限，当上传任务数超过设置的上限时，扫描任务会暂停等待，当上传任务数回落到设置的下限时，扫描任务自动恢复，避免因扫描大文件造成太多上传任务堆积，默认为不限制，可以在备份页面修改</li>
+        </ol>
+        </li>
+        <li>跨云盘复制时，可在系统设置下载上传页面设置是否在计算哈希阶段将下载的数据保存到临时文件，上传时将无需再次下载源文件，复制完成后临时文件自动删除，该选项默认为关闭</li>
+        <li>Windows版修复在系统文件管理器对挂载盘图片编辑时可能出错，执行图片旋转后缩略图不自动刷新的问题</li>
+        <li>修复Web界面实时显示的任务数可能不准确的问题</li>
+        <li>Web界面修复把本地文件拖动到根目录会产生一个无法完成的上传任务，并且创建一个无法删除的文件的问题</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.13" rel="noopener">在 GitHub 上查看这个版本</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.12(Web3.0.12)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>修复fuse挂载后内存增长的问题：Emby 等媒体服务器扫描百万级文件时，内存不再无限增长</li>
+        <li>修复S3 同端点多账号相互覆盖的问题</li>
+        <li>改进通过http访问文件时的性能，降低cpu和内存使用率</li>
+        <li>WebUI移动端进入多选模式后，增加全选和取消全选选项</li>
+        <li>修复只读文件夹（光鸭云盘）不能作为挂载盘源目录和备份源目录的问题</li>
+        <li>其它性能改进和bug修复</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.12" rel="noopener">在 GitHub 上查看这个版本</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.11(Web3.0.11)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>新增支持添加光鸭云盘，目前仅支持只读模式，支持浏览目录和读取文件，无法创建文件夹、删除文件、重命名、移动、上传文件等操作，支持通过光鸭云盘App扫码登录，后续版本会更新完整功能的光鸭云盘</li>
+        <li>S3未填写存储桶名时浏览账户内全部存储桶，自动改用 ListBuckets（GET /），将每个存储桶显示为顶层文件夹；同时支持路径模式与虚拟主机模式、V2/V4 签名。存储桶列表根目录为只读（不支持创建 / 删除存储桶）</li>
+        <li>修复连接到某些不支持http range的webdav服务器读取文件可能失败的问题</li>
+        <li>Web：新增多服务器支持，可以连接到其它CloudDrive2的grpc服务，方便用在桌面浏览器远程管理移动设备的CloudDrive</li>
+        <li>其它bug修复和界面优化</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.11" rel="noopener">在 GitHub 上查看这个版本</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.10(Web3.0.10)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>购买终身会员时，如当前帐户还有未到期的年费或者月费会员，未到期的部份会以年费费率自动抵扣需要支付的部份终身会员价格</li>
+        <li>修复1.0.9版本在添加迅雷云盘和以迅雷云盘帐号登录时授权失败的问题</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.10" rel="noopener">在 GitHub 上查看这个版本</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.9(Web3.0.9)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>新增飞牛fnOS安装包下载，飞牛官方应用中心上架正在审核中，目前可下载对应架构的fpk包手动安装</li>
+        <li>Web文件浏览器支持媒体刮削文件(.nfo)，识别文件夹内NFO文件与海报（Kodi/Emby/Jellyfin/Plex兼容），在文件属性面板展示影片信息。该功能只是展示已经刮削的目录，不会主动联网刮削</li>
+        <li>打开2FA双因素验证后，如丢失恢复码和手机app而无法登录时，可以通过向帐号邮箱发送重置码禁止双因素验证，直接用帐号密码登录</li>
+        <li>合作伙伴设备自动注册的帐号修改邮箱密码后，可以与原设备解绑，绑定设备丢失或者出售后可以通过解绑避免帐号泄露</li>
+        <li>在云存储帐号配置中增加复制时使用多线程下载选项，打开后在跨网盘传输和备份时，恢复旧版本的多线程下载</li>
+        <li>对已解密的文件夹执行锁定操作时增加二次确认弹窗，避免误操作导致文件失效</li>
+        <li>修复macos在有多个挂载点时，个边情况下列目录失败，需要重新挂载的问题</li>
+        <li>修复复制文件到加密目录速度慢的问题</li>
+        <li>修复windows下用visual studio code等编辑器在加密文件夹内直接编辑文件时可能上传文件失败的问题</li>
+        <li>修复115网盘的加密目录上直接用Word编辑docx文件可能会遗留一些临时文件的问题</li>
+        <li>修复32位armv7通过http直接访问大文件时可能会下载失败的问题</li>
+        <li>其它性能改进、bug修复</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.9" rel="noopener">在 GitHub 上查看这个版本</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.8(Web3.0.8)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>跨云盘复制性能改进：
+        <ul>
+        <li>跨云盘复制预处理和上传阶段内存占用大幅下降</li>
+        <li>跨云盘复制到本地文件夹采用多线程下载，提高下载速度</li>
+        </ul>
+        </li>
+        <li>修复通过挂载盘在加密文件夹内直接编辑文件可能失败的问题</li>
+        <li>修复Windows版编辑挂载点时有些情况下更新按钮无法点击的问题</li>
+        <li>修复个别情况下服务长时间运行后 CPU 飙升、内存暴涨的问题</li>
+        <li>其它性能改进、bug修复和界面优化</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.8" rel="noopener">在 GitHub 上查看这个版本</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.7(Web3.0.7)</summary>
+        <div class="acc-body">
         <p><strong>⚠️ 重要安全提示（Windows 用户必读）</strong></p>
         <p>本版本将 WinFSP 升级至 2026 beta1，以修复旧版本 WinFSP 中发现的安全漏洞 <a href="https://github.com/winfsp/winfsp/releases/tag/v2.2B1" target="_blank" rel="noopener">CVE-2026-3006</a>。</p>
         <ul>
-          <li>请务必下载完整安装包重新运行安装程序，并按安装向导提示重启系统。</li>
-          <li>请勿使用应用内 OTA 升级：OTA 仅替换 CloudDrive2 程序文件，不会重新安装 WinFSP 驱动，将无法获得本次安全修复。</li>
+        <li>请务必下载完整安装包重新运行安装程序，并按安装向导提示重启系统。</li>
+        <li>请勿使用应用内 OTA 升级：OTA 仅替换 CloudDrive2 程序文件，不会重新安装 WinFSP 驱动，将无法获得本次安全修复。</li>
         </ul>
         <ol>
-          <li>115网盘配置界面最大下载线程数限制为2，设置的值不能超过2</li>
-          <li>115网盘配置界面增加每秒最大请求数限制，最大不能超过5.0</li>
-          <li>SMB/SFTP/FTP新增支持获取磁盘空间大小（仅部分 FTP 服务端支持，目前已知 Pure-FTPd 与启用 mod_facts 的 ProFTPD 可正确返回，其它服务端将回退为占位值。受协议限制，AVBL 只返回可用字节数，因此总容量与可用相同、已用显示为 0）</li>
-          <li>改进smb服务器和共享发现算法，适应更多场景</li>
-          <li>文件重命名冲突处理方式改进：
-            <ul>
-              <li>核心层(webdav/http/clouddrive共享等)的重命名冲突从原来的直接覆盖旧文件（遵循POSIX重命名行为）改为返回重命名失败</li>
-              <li>Linux和macOS保持原来的遵循Unix重命名覆盖语义-先删除旧文件再重命名，若旧文件为非空目录则返回错误ENOTEMPTY，符合POSIX rename(2)行为</li>
-              <li>Windows由原来的遵循POSIX行为改为循序Win32 MoveFile默认行为，即重命名冲突时返回ERROR_ALREAD_EXISTS错误，资源管理器会弹出"目标已存在"提示</li>
-            </ul>
-          </li>
-          <li>通过迅雷直接登录的帐号和通过合作伙伴设备直接登录的帐号，在个人资料页屏蔽修改密码选项，只保留修改邮箱和密码选项</li>
-          <li>修复web界面复制到剪贴板按钮在非安全上下文(访问cd2的url为http://且非localhost)下工作不正常的问题</li>
-          <li>其它性能改进和bug修复</li>
+        <li>115网盘配置界面最大下载线程数限制为2，设置的值不能超过2</li>
+        <li>115网盘配置界面增加每秒最大请求数限制，最大不能超过5.0</li>
+        <li>SMB/SFTP/FTP新增支持获取磁盘空间大小（仅部分 FTP 服务端支持，目前已知 Pure-FTPd 与启用 mod_facts 的 ProFTPD 可正确返回，其它服务端将回退为占位值。受协议限制，AVBL 只返回可用字节数，因此总容量与可用相同、已用显示为 0）</li>
+        <li>改进smb服务器和共享发现算法，适应更多场景</li>
+        <li>文件重命名冲突处理方式改进：
+        <ul>
+        <li>核心层(webdav/http/clouddrive共享等)的重命名冲突从原来的直接覆盖旧文件（遵循POSIX重命名行为）改为返回重命名失败</li>
+        <li>Linux和macOS保持原来的遵循Unix重命名覆盖语义-先删除旧文件再重命名，若旧文件为非空目录则返回错误ENOTEMPTY，符合POSIX rename(2)行为</li>
+        <li>Windows由原来的遵循POSIX行为改为循序Win32 MoveFile默认行为，即重命名冲突时返回ERROR_ALREAD_EXISTS错误，资源管理器会弹出"目标已存在"提示</li>
+        </ul>
+        </li>
+        <li>通过迅雷直接登录的帐号和通过合作伙伴设备直接登录的帐号，在个人资料页屏蔽修改密码选项，只保留修改邮箱和密码选项</li>
+        <li>修复web界面复制到剪贴板按钮在非安全上下文(访问cd2的url为http://且非localhost)下工作不正常的问题</li>
+        <li>其它性能改进和bug修复</li>
         </ol>
-      </div>
-
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.6"><strong>1.0.6(Web3.0.6):</strong></a>
-        <ol>
-          <li>新增支持添加SFTP/FTP(FTPS)/SMB三种网络文件系统，支持自动发现SMB服务器、自动发现SMB共享目录</li>
-          <li>添加备份时可选不立即执行全量扫描，默认值为添加备份后立即执行全量扫描</li>
-          <li>修复1.0.5在某些系统下运行过程中有可能挂起的问题</li>
-          <li>在文件浏览器根目录中移除云存储可选择是否永久移除，如不永久删除，该云存储只在当前运行中被移除，重启后还会恢复</li>
-          <li>其它性能优化和bug修复</li>
-        </ol>
-      </div>
-
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.5"><strong>1.0.5(Web3.0.5):</strong></a>
-        <ol>
-          <li>macOS全新异步挂载引擎：直接与macfuse内核扩展通信， 支持完全异步并发，文件读取不再阻塞目录浏览，多个文件可同时读写，多线程同时从FUSE设备接收内核请求，避免单线程瓶颈导致的请求挤压，大幅改善Finder在大量文件操作时的流畅度；运行时动态检测macfuse，未安装macfuse时给出错误提示而不是程序无法启动</li>
-          <li>上传任务数据库从PickleDB迁移至SQLite，重启后保持上传任务顺序</li>
-          <li>修复在某些情况下，重启机器后多个备份任务状态被禁用，只能重启服务才能重新允许的问题</li>
-          <li>离线下载支持.torrent文件，可直接拖拽或者上传.torrent文件，.torrent文件会被解析成磁力链接后添加</li>
-          <li>右键菜单新增云盘配置和文件夹磁盘缓存快捷入口，不再需要先打开属性面板才能设置云盘配置和磁盘缓存</li>
-          <li>本地文件夹不再显示云盘配置和磁盘缓存配置</li>
-          <li>其它性能改进、bug修复和界面优化</li>
-        </ol>
-      </div>
-
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.4"><strong>1.0.4(Web3.0.4):</strong></a>
-        <ol>
-          <li>修复以点开头的文件（如 .DS_Store）无法匹配上传和备份忽略扩展名规则的问题</li>
-          <li>修复云存储代理服务器不可用时 FUSE statfs 长时间阻塞的问题，新增 15 秒超时，超时的云盘暂不计入磁盘空间统计，待恢复后会自动更新</li>
-          <li>移动复制时冲突解决对话框中显示冲突文件列表</li>
-          <li>修复备份文件过滤规则页面"添加规则"下拉菜单被裁剪的问题</li>
-          <li>修复面包屑编辑器在有自动补全候选项时按回车无法导航的问题</li>
-          <li>修复日志页面下载链接失效的问题</li>
-          <li>修复 Shift 点击范围选择未考虑当前文件过滤器的问题</li>
-          <li>其它bug修复和性能改进</li>
-        </ol>
-      </div>
-
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.3"><strong>1.0.3(Web3.0.3):</strong></a>
-        <ol>
-          <li>修复对挂载盘上文件直接编辑时，截断文件大小后上传可能失败的问题</li>
-          <li>修复通过挂载盘直接覆盖百度网盘上的文件时文件名会被百度网盘加上日期时间的问题</li>
-          <li>修复添加或者编辑备份时，备份文件过滤规则中扩展名和文件名列表被错误地添加了一个前置空格的问题，已经添加过并且有问题的请删除后重新添加</li>
-          <li>修复从网页上传大量文件时，页面刷新后恢复上传，每个任务单独弹出授权提示需逐一点击的问题，只显示一条"全部授权"提示</li>
-          <li>修复当浏览器缩放至250%时，添加备份向导底部按钮被隐藏不可见的问题</li>
-          <li>修复在某些情况下右键菜单"播放到..."子菜单与主菜单之间存在间隙，鼠标移向子菜单时经过间隙会导致子菜单消失的问题</li>
-        </ol>
-      </div>
-
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.2"><strong>1.0.2(Web3.0.2):</strong></a>
-        <ol>
-          <li>增加日志大小和保留数量设置：设置页面日志标签下新增文件日志和备份日志的单文件最大大小及最大保留文件数设置，最大文件大小提供"无限制"、"不记录日志"、"自定义"三个选项</li>
-          <li>Web界面复制文件后不再清除选中状态，方便连续复制当前选择的文件到多个目标位置</li>
-          <li>修复一些文件夹选择器根目录无法选中的问题</li>
-          <li>修复备份列表加载失败：修复备份数据量较大时 gRPC 消息超过 4MB 默认限制导致加载失败的问题，上限调整为 64MB</li>
-          <li>修复一些从web界面上传文件页面被刷新后续传的问题</li>
-          <li>修复移动端排序菜单未保存偏好的问题</li>
-          <li>网格视图缩略图：显示所有可用缩略图，不再限制为可预览文件类型</li>
-          <li>其它bug修复和界面优化</li>
-        </ol>
-      </div>
-
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.1"><strong>1.0.1(Web3.0.1):</strong></a>
-        <ol>
-          <li>安全加固：修复一个部署在公网的clouddrive2服务在某些情况下可能存在的安全漏洞，强烈建议所有用户升级以避免可能的信息泄露</li>
-          <li>修复Web界面在宽屏显示器上布局不合理的问题</li>
-          <li>Web界面媒体查看器鼠标滚轮平滑导航：鼠标滚轮切换图片时不再瞬间跳转，改为类似拖拽的滑动过渡效果，支持触控板和鼠标滚轮</li>
-          <li>仪表盘最近文件折叠功能：最近文件区域支持展开/折叠</li>
-          <li>全面无障碍访问审计：修复某些组件的无障碍属性缺失的问题</li>
-          <li>其它界面优化</li>
-        </ol>
-      </div>
-
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.24"><strong>0.9.24(Web2.2.7.0):</strong></a>
-        <ol>
-          <li>根据123云盘API变更，移除123云盘的永久删除文件选项，目前只能删除至回收站</li>
-          <li>S3存储增加签名版本选项，默认为V4，可选择V2来兼容老的S3服务</li>
-          <li>修复一个可能会导致web界面显示服务器不可用的问题</li>
-          <li>修复几处在需要输入2FA代码的输入框无法输入恢复码的问题</li>
-          <li>其它性能改进</li>
-        </ol>
-      </div>
-
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.23"><strong>0.9.23(Web2.2.6.0):</strong></a>
-        <ol>
-          <li>支持115open和阿里云盘向123云盘快速复制</li>
-          <li>修复打开本地缓存时某些情况下可能内存占用高的问题</li>
-          <li>其它bug修复</li>
-        </ol>
-      </div>
-
-      <div class="alert alert-info" role="alert">
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.22"><strong>0.9.22(Web2.2.6.0):</strong></a>
-        <ol>
-          <li>增加aws S3及兼容S3 API的对象存储支持</li>
-          <li>其它性能优化</li>
-        </ol>
-      </div>
-
-      <!-- Older Versions (Collapsible) -->
-      <div class="accordion" id="versionHistoryAccordion">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingOlder">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOlder" aria-expanded="false" aria-controls="collapseOlder">
-              <strong>历史版本</strong>
-            </button>
-          </h2>
-          <div id="collapseOlder" class="accordion-collapse collapse" aria-labelledby="headingOlder" data-bs-parent="#versionHistoryAccordion">
-            <div class="accordion-body">
-              <div class="alert alert-secondary" role="alert">
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.13"><strong>0.9.13(Web2.1.3.1):</strong></a>
-        <ol>
-          <li>修复通过浏览器上传小文件到非https或者localhost的地址的115open和阿里云盘open网盘会失败的问题</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.12"><strong>0.9.12(Web2.1.3.0):</strong></a>
-        <ol>
-          <li>访问远程CloudDrive的网盘支持直链功能，服务端的CloudDrive可以在网盘设置界面打开允许远程直链访问的开关（默认为关闭）。打开开关后客户端CloudDrive访问远程CloudDrive的网盘时会用网盘直链访问。直链是会员功能，需要远程和本地的CloudDrive2都有有效的会员（终身、年费、月费和轻享终身会员都支持）。警告：直接下载链接可能包含敏感的隐私数据，包括用户ID、访问令牌和其他凭据。您需要对滥用或误用这些直接下载链接所产生的任何后果承担全部责任。请勿将这些链接公开分享或与不可信的第三方共享</li>
-          <li>Windows挂载盘支持通过应用程序和文件管理器设置文件属性（隐藏、只读、归档等），默认文件属性为归档，解决一些应用程序打开挂载盘上的文件失败的问题（如Microsoft Excel无法打开和编辑.xls文件的问题等），文件属性设置在本地持久化，重启后仍然生效，不能跨设备同步文件权限设置</li>
-          <li>网盘搜索支持是否将搜索结果添加到挂载盘目录选项，默认为打开，搜索时选择禁止则搜索结果只在Web界面内使用，不会在挂载盘内显示</li>
-          <li>添加离线下载支持是否在添加后自动检查文件夹选项，默认为打开，打开时会在添加离线后10秒检查离线是否完成并发出文件变更通知，关闭时则不做检查，也没有文件变更通知</li>
-          <li>在原有每周自动整理缓存数据库的基础上，增加手动整理目录缓存数据库，在设置页面的缓存持久化里可以手动清理数据库</li>
-          <li>Android APK版支持设置暴露给SAF应用的根文件夹路径</li>
-          <li>修复从123网盘和天翼云盘向百度网盘复制文件可能会失败的问题</li>
-          <li>修复及个别情况下向115上传文件失败的问题</li>
-          <li>修复通过浏览器上传大文件时某些情况下会失败的问题</li>
-          <li>优化WebUI在iPad上的使用体验</li>
-          <li>其它性能改进，bug修复和界面优化</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.11"><strong>0.9.11(Web2.1.2.0):</strong></a>
-        <ol>
-          <li>支持从网盘下载强制使用http代替https，在低性能设备上用http下载可以显著降低CPU占用，提高下载速度。该选项默认关闭，可以在网盘设置界面打开http下载开关，目前支持115open、123网盘、百度网盘、天翼云盘、迅雷云盘</li>
-          <li>Android APK版支持自升级，可以选择是否升级Beta版本，可以手动点击检查升级，APK版本升级需要能访问github获取最新版本，目前版本需要手动安装，从下个版本开始可以自动检测下载升级APK</li>
-          <li>修复Windows系统下创建的API令牌的根目录设置无效的问题</li>
-          <li>修复Android APK版本通过SAF访问网盘时，某些应用播放大文件视频失败的问题</li>
-          <li>改进WebUI文件属性栏图片的元数据显示，加载速度更快，增加显示图片分辨率等信息</li>
-          <li>改进WebUI文件夹导航栏(breadcrumb)，增加下拉选择隐藏的目录层级</li>
-          <li>其它性能改善、bug修复和界面优化</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.10"><strong>0.9.10(Web2.1.1.0):</strong></a>
-        <ol>
-          <li>挂载盘支持操作系统设置文件的日期操作，通过设置文件日期，可以解决很多同步或者备份类软件无法正确识别文件更新日期的问题。和设置文件权限一样，设置的文件日期保留在本地，不会通过云端数据同步</li>
-          <li>定期整理缓存数据库(VACUUM database)，目前大概会每周整理一次文件目录缓存数据库，可以有效减少数据库文件大小</li>
-          <li>WebUI保留最近浏览文件目录现场，从其它页面（如系统任务等）点击侧边栏我的文件，会恢复上次浏览的状态，包括路径、浏览位置、已选中的文件等</li>
-          <li>修复在瀑布流模式下从目录树浏览文件时可能出现的文件加载失败的问题</li>
-          <li>其它界面优化</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.9"><strong>0.9.9(Web2.1.0.0):</strong></a>
-        <ol>
-          <li>增加API令牌管理，用户可以创建多个API令牌，第三方应用可以通过用户创建的令牌访问CloudDrive的服务和功能，无需知道CloudDrive的用户名和密码。创建令牌时可以指定允许访问的根目录，有效期，可以为每一项功能设定是否允许访问的权限，包括文件读取、文件写入、文件修改、系统操作、云存储操作、账号操作大项功能等，每格大项功能都分成若干子项目，可以为每个子项目设置权限，具体请参见创建和修改API令牌界面。API文档和开发者指南可以在官网主页访问和下载</li>
-          <li>增加添加远程CloudDrive作为本地云存储的功能：远程CloudDrive创建API令牌后，可以通过CloudDrive访问地址和令牌，将远程的CloudDrive存储添加到本地作为一个云存储，在有授权的前提下，CloudDrive云存储和本地添加的云存储具有一样的功能，包括添加管理离线下载、搜索、文件夹统计，跨设备跨网盘快速复制等</li>
-          <li>支持配置CloudDrive2的WebServer，包括http和https监听端口，是否打开https，https设置支持输入自己的证书文件路径、支持粘贴PEM格式的证书字符串，支持生成自签名的证书</li>
-          <li>支持对WebDAV和API Token的访问设置访问日志，需要在WebDAV Server和API Token设置页面打开日志功能，打开日志后就可以在日志管理界面查看和下载远程访问WebDAV和API Token的行为日志</li>
-          <li>完全重构通过浏览器向CloudDrive上传文件的流程：
-            <ol type="a">
-              <li>支持通过点击菜单或者从文件管理器拖拽上传文件和文件夹</li>
-              <li>取消浏览器上传文件最大10GB的限制</li>
-              <li>从浏览器上传文件不再创建临时文件，支持在浏览器本地计算秒传所需的哈希</li>
-              <li>支持部分浏览器上传文件在页面重新加载或者关闭重新打开后续传，续传的具体要求和限制请参考 <a href="https://www.clouddrive2.com/browser-upload-guide.html" target="_blank" rel="noopener">https://www.clouddrive2.com/browser-upload-guide.html</a></li>
-            </ol>
-          </li>
-          <li>Android APK版本支持安卓系统存储访问框架(SAF)，可以在没有root的机器上部分实现本地挂载功能，所有支持SAF的应用程序都可以直接访问CloudDrive2的文件，支持完整的文件读写操作，支持显示文件缩略图，可以在主窗口设置存储访问框架功能打开或关闭。注意：老版本需要重新下载安装apk升级，通过CloudDrive2内的OTA升级的无法增加SAF功能</li>
-          <li>Android APK版本显示后台进程运行的console输出，改进后台运行稳定性，减少被系统杀掉后台的可能</li>
-          <li>修复某些电视设备(TCL，创维等)安装安卓APK版本后运行白屏闪退的问题</li>
-          <li>修复备份的文件过滤规则如果只选中应用到文件夹没有选中应用到文件时，当检测到文件系统变更时符合规则的文件没有被该规则处理的问题</li>
-          <li>修复取消大量上传任务可能会造成web界面较长时间无响应的问题</li>
-          <li>修复复制任务的完成进度在某些情况下显示超过100%的问题</li>
-          <li>修复某些情况下目录缓存时间显示不正确的问题</li>
-          <li>修复在设置备份完整扫描规则的扫描计划时，未启用星期几设置时扫描计划不被执行的问题</li>
-          <li>WebUI在瀑布流模式支持预览115等不支持直接获取缩略图网盘的的视频文件缩略图，所有支持浏览器播放的视频文件都默认显示视频缩略图，可以在系统设置中设置是否生成视频缩略图，以及生成视频缩略图的并发线程数，并发数默认为2，可以在1-5之间调整</li>
-          <li>WebUI文件夹选择窗支持文件名过滤功能</li>
-          <li>WebUI文件夹选择窗内创建新文件夹后自动进入新创建的文件夹</li>
-          <li>WebUI修复在高分辨率iPad上被识别成桌面版本，无法长按选中的问题</li>
-          <li>优化全屏浏览图片视频时的操作和界面</li>
-          <li>其它性能改进、bug修复和大量的界面优化</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.8"><strong>0.9.8(Web2.0.8.1):</strong></a>
-        <ol>
-          <li>修复macos的webdav客户端和0.9.7版本webdav服务器的兼容性问题</li>
-          <li>修复0.9.7在某些设备上无法监听https端口的问题</li>
-          <li>修复复制任务不显示已跳过文件数的问题</li>
-          <li>其它bug修复和界面优化</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.7"><strong>0.9.7(Web2.0.8.0):</strong></a>
-        <ol>
-          <li>
-            挂载的文件系统支持通过操作系统命令或者文件管理应用为每个文件单独设置权限: Linux、Android和Macos下支持单独设置每个文件的uid, gid, 访问权限和扩展属性; Windows下支持设置文件完整的用户访问控制和安全属性。文件权限设置在本地持久化，重启后仍然生效，不能跨设备同步文件权限设置
-          </li>
-          <li>支持对下载更新包设置单独的代理，解决部分用户下载更新包失败的问题</li>
-          <li>修复某些Linux系统下在挂载目录内某些应用创建文件失败（如飞牛os的内置文件管理器上传文件失败）的问题</li>
-          <li>WebUI浏览图片视频支持幻灯片播放，在系统设置里可设置图片的播放时间以及是否循环播放，幻灯片播放支持图片和音视频混合播放，在幻灯片播放模式下，音视频会自动播放，播放完成后自动播放下一个图片或者音视频</li>
-          <li>浏览图片视频时点击全屏按钮进入沉浸式浏览模式，默认不显示任何标题和按钮，上下无黑边，也可沉浸式幻灯片播放</li>
-          <li>瀑布流视图显示在本地文件夹和加密文件夹内的图片缩略图</li>
-          <li>WebUI修复当前目录下文件太多时界面操作卡顿的问题</li>
-          <li>浏览文件时的url记住当前页数，复制url并打开可直接定位到指定页</li>
-          <li>浏览文件到上级目录时，自动跳到历史浏览的页数并高亮显示最近浏览的目录</li>
-          <li>备份卡片显示完整的源目录，改进移动设备访问备份功能的一些布局问题</li>
-          <li>修复个别情况下页面会卡死的问题</li>
-          <li>修复WebUI版本升级后可能需要强制刷新页面才能正确显示的问题</li>
-          <li>其它性能改进、bug修复和界面调整</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.6"><strong>0.9.6(Web2.0.6.1):</strong></a>
-        <ol>
-          <li>
-            通过web界面移动或者复制文件夹时，如果目标目录存在同名文件夹，在冲突处理对话框中增加递归应用到子文件夹选项，默认选中，将按所选规则(覆盖、重命名、跳过)深度合并冲突文件，如果不选中递归应用到子文件夹，则直接对最上层目录执行冲突合并；同网盘和跨网盘移动复制都支持递归应用到子文件夹选项
-          </li>
-          <li>备份的文件过滤规则增加应用到文件选项，文件过滤规则应用到文件和应用到文件夹可独立设置开关</li>
-          <li>备份的文件名过滤规则不对源目录生效，只对源目录下的各级子目录生效，修复文件名白名单应用到目录时备份无法进行的问题</li>
-          <li>webhook的[global_params]增加time_format选项，可以设置webhook输出的时间格式，具体设置请参考添加webhook时最新的webhook模版</li>
-          <li>修复webhook某些设置情况下变量名替换失败的问题</li>
-          <li>启动时删除旧日志文件，保留最近10个日志文件</li>
-          <li>通过web界面拖动文件到目录树进行移动操作时，同网盘内移动，跨网盘复制</li>
-          <li>修复某些情况下跨网盘复制任务完成后不显示已完成状态的问题</li>
-          <li>提高文件下载的性能和效率</li>
-          <li>Web界面修复阿里云盘在列表模式下打开图片全屏预览显示失败的问题</li>
-          <li>其它性能改进，bug修复和界面优化</li>
-        </ol>
-        <a
-          href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v0.9.5"><strong>0.9.5(Web2.0.5.0):</strong></a>
-        <ol>
-          <li>
-            115网盘增加离线下载管理功能，在115网盘的任意目录内点击离线下载按钮显示离线下载管理窗口，支持复制离线下载链接、删除离线任务、重新开始下载离线任务（将删除当前的离线任务并且在相同文件夹内创建一个新任务，会消耗一个离线配额）、清除离线任务（可选清除全部、已完成、错误、正在下载的任务）
-          </li>
-          <li>改进macos挂载盘访问的性能，修复某些情况下Finder访问挂载盘容易卡顿和掉挂载的问题</li>
-          <li>增加实时系统日志推送功能，可以在日志设置页打开实时日志，系统日志会实时显示，可以在实时日志也设置实时日志的级别，默认级别为Info，可以清理当前的实时日志或者把当前实时日志下载为json文件</li>
-          <li>增加显示目前系统正在使用的文件功能，在性能监控页点击文件句柄打开正在使用的文件窗口，可显示当前系统正在打开的文件，打开文件的进程信息等</li>
-          <li>上传任务管理支持显示上传任务的操作类型，按照上传任务来源，操作类型目前包括来自挂载的上传，来自复制任务的上传和来自备份任务的上传</li>
-          <li>上传任务列表按照操作类型选择优先级，默认优先级为
-            挂载任务>备份任务>复制任务，上传任务列表会按照任务的优先级别从高到低依次处理，可以在设置界面的下载上传页修改任务类型的优先级，也可以改成按照任务添加的自然顺序处理</li>
-          <li>上传任务显示过滤器新增支持按照任务状态和操作类型进行过滤，比如可以只显示来自文件复制的正在上传的任务</li>
-          <li>复制任务支持暂停全部，恢复全部，删除全部，暂停所选，恢复所选，删除所选任务</li>
-          <li>多个复制任务的目录扫描过程由并发扫描改为排队扫描，避免因并发扫描导致的系统卡顿和网盘风控等问题</li>
-          <li>文件浏览器分页显示，默认每页显示100个文件，可以设置每页文件数量</li>
-          <li>大幅改进瀑布流视图，修复一些瀑布流视图的布局问题，桌面版瀑布流视图增加支持XS和S尺寸的图片大小供选择</li>
-          <li>修复复制任务统计数据显示不正确的问题</li>
-          <li>修复webhook配置删除后不会立即生效的问题</li>
-          <li>修复当子目录过多时文件夹选择器选择文件夹后可能自动跳转回原文件夹的问题</li>
-          <li>修复手动检查更新并点击更新后，系统更新可能会失败的问题，并修复更新过程中弹出过多提示信息的问题</li>
-          <li>修复一些在苹果手机上操作的问题</li>
-          <li>其它性能改进，bug修复和界面优化</li>
-        </ol>
-        <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases">更多历史版本</a>
-              </div>
-            </div>
-          </div>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.7" rel="noopener">在 GitHub 上查看这个版本</a></p>
         </div>
-      </div>
-    </div>
-    <!-- Windows Downloads -->
-    <div class="operating-system">
-      <h2>Windows</h2>
-      <div class="row">
-        <!-- Windows x64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/CloudDrive2Setup-X64-1.0.13.exe"><i
-                        class="fab fa-windows"></i> Windows x64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.6(Web3.0.6)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>新增支持添加SFTP/FTP(FTPS)/SMB三种网络文件系统，支持自动发现SMB服务器、自动发现SMB共享目录</li>
+        <li>添加备份时可选不立即执行全量扫描，默认值为添加备份后立即执行全量扫描</li>
+        <li>修复1.0.5在某些系统下运行过程中有可能挂起的问题</li>
+        <li>在文件浏览器根目录中移除云存储可选择是否永久移除，如不永久删除，该云存储只在当前运行中被移除，重启后还会恢复</li>
+        <li>其它性能优化和bug修复</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.6" rel="noopener">在 GitHub 上查看这个版本</a></p>
         </div>
-        <!-- Windows arm64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/CloudDrive2Setup-Arm64-1.0.13.exe"><i
-                        class="fab fa-windows"></i> Windows Arm64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.5(Web3.0.5)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>macOS全新异步挂载引擎：直接与macfuse内核扩展通信， 支持完全异步并发，文件读取不再阻塞目录浏览，多个文件可同时读写，多线程同时从FUSE设备接收内核请求，避免单线程瓶颈导致的请求挤压，大幅改善Finder在大量文件操作时的流畅度；运行时动态检测macfuse，未安装macfuse时给出错误提示而不是程序无法启动</li>
+        <li>上传任务数据库从PickleDB迁移至SQLite，重启后保持上传任务顺序</li>
+        <li>修复在某些情况下，重启机器后多个备份任务状态被禁用，只能重启服务才能重新允许的问题</li>
+        <li>离线下载支持.torrent文件，可直接拖拽或者上传.torrent文件，.torrent文件会被解析成磁力链接后添加</li>
+        <li>右键菜单新增云盘配置和文件夹磁盘缓存快捷入口，不再需要先打开属性面板才能设置云盘配置和磁盘缓存</li>
+        <li>本地文件夹不再显示云盘配置和磁盘缓存配置</li>
+        <li>其它性能改进、bug修复和界面优化</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.5" rel="noopener">在 GitHub 上查看这个版本</a></p>
         </div>
+      </details>
+        <p class="btn-row"><a class="btn btn-ghost btn-sm" href="https://github.com/cloud-fs/cloud-fs.github.io/releases" rel="noopener">在 GitHub 上查看全部历史版本</a></p>
       </div>
-    </div>
+    </section>
 
-    <!-- Linux Downloads -->
-    <div class="operating-system">
-      <h2>Linux</h2>
-      <div class="row">
-        <!-- Linux x86_64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-linux-x86_64-1.0.13.tgz"><i
-                        class="fab fa-linux"></i> Linux x86_64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Linux aarch64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-linux-aarch64-1.0.13.tgz"><i
-                        class="fab fa-linux"></i> Linux aarch64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Linux armv7 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-linux-armv7-1.0.13.tgz"><i
-                        class="fab fa-linux"></i> Linux armv7</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Add more Linux versions if needed -->
-      </div>
-    </div>
+  </main>
 
-    <!-- macOS Downloads -->
-    <div class="operating-system">
-      <h2>macOS</h2>
-      <div class="row">
-        <!-- macOS x86_64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-macos-x86_64-1.0.13.tgz"><i
-                        class="fab fa-apple"></i> MacOS x86_64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- macOS aarch64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-macos-aarch64-1.0.13.tgz"><i
-                        class="fab fa-apple"></i> MacOS aarch64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Add more macOS versions if needed -->
-      </div>
-    </div>
-
-    <!-- Android Downloads -->
-    <div class="operating-system">
-      <h2>Android</h2>
-      <div class="row">
-        <!-- Android universal apk -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-android-universal-1.0.13-219.apk"><i
-                        class="fab fa-android"></i> Android APK</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Android x86_64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-android-x86_64-1.0.13.tgz"><i
-                        class="fab fa-android"></i> Android x86_64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Android aarch64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-android-aarch64-1.0.13.tgz"><i
-                        class="fab fa-android"></i> Android aarch64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Android armv7 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-android-armv7-1.0.13.tgz"><i
-                        class="fab fa-android"></i> Android armv7</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Add more Android versions if needed -->
-      </div>
-    </div>
-
-    <!-- fnOS Downloads -->
-    <div class="operating-system">
-      <h2>飞牛 fnOS</h2>
-      <p class="text-muted">飞牛官方应用中心上架正在审核中，目前可下载对应架构的 fpk 包手动安装</p>
-      <div class="row">
-        <!-- fnOS x86_64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive2_1.0.13_x86.fpk"><i
-                        class="fas fa-server"></i> fnOS x86_64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- fnOS aarch64 -->
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h5 class="card-title"><a
-                      href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive2_1.0.13_arm.fpk"><i
-                        class="fas fa-server"></i> fnOS aarch64</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt-4">
-      <h2>从115网盘下载</h2>
-      <div class="container text-center" style="margin-bottom: 20px;">
-        <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://115cdn.com/s/swso4wr3zde?password=i9a4&">从115网盘下载</a>
-      </div>
-    </div>
-    <div class="mt-4">
-      <h2>从123云盘下载</h2>
-      <div class="container text-center" style="margin-bottom: 20px;">
-        <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://www.123pan.com/s/adWkjv-nxz0h.html">从123云盘下载</a>
-      </div>
-    </div>
-    <div class="mt-4">
-      <h2>从百度网盘下载</h2>
-      <div class="container text-center" style="margin-bottom: 20px;">
-        <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://pan.baidu.com/s/1KTDKYu4aCAH41TncNm5XEg?pwd=cdr2">从百度网盘下载</a>
-      </div>
-    </div>
-    <div class="mt-4">
-      <h2>从阿里云盘下载(Windows版)</h2>
-      <div class="container text-center" style="margin-bottom: 20px;">
-        <p style="font-weight: bold; padding: 10px;">因阿里云盘分享限制，只提供Windows版下载</p>
-        <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://www.aliyundrive.com/s/AHYFMyu8LTR/folder/64c93bd53de2f8fbd3aa41eeb8d0340583dd2425">从阿里云盘下载</a>
-      </div>
-    </div>
-    <div class="mt-4">
-      <h2>从天翼云盘下载</h2>
-      <div class="container text-center" style="margin-bottom: 20px;">
-        <p style="font-weight: bold; padding: 10px;">访问码：1otn</p>
-        <a class="btn btn-primary btn-lg btn-block" style="background-color: #2184bf;"
-          href="https://cloud.189.cn/web/share?code=jiM3aeUZFRja">从天翼云盘下载</a>
-      </div>
-    </div>
-    <!-- Docker Version Help -->
-    <div class="mt-4">
-      <h2>Docker 版本帮助</h2>
-      <a href="docker.html" class="btn btn-primary btn-block">Docker版本安装指南</a>
-    </div>
-
-    <!-- NAS Plugins -->
-    <div class="mt-4">
-      <h2>NAS 插件</h2>
-      <div class="alert alert-warning" role="alert">
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>注意：</strong>这些 NAS 插件由第三方提供，请自行判断下载，我们不保证其安全性和稳定性。
-      </div>
-      <div class="row">
-        <!-- Synology -->
-        <div class="col-md-6">
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">Synology 插件</h5>
-              <a href="https://imnks.com/3653.html" class="btn btn-primary btn-block">群晖新套件：CloudDrive2 网盘挂载工具
-                支持DSM6、7</a>
-            </div>
-          </div>
-        </div>
-        <!-- QNAP -->
-        <div class="col-md-6">
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">QNAP 插件</h5>
-              <a href="https://www.naslab.club/524.html"
-                class="btn btn-primary btn-block">「威联通QNAP」CloudDrive网盘挂载APP中心安装包</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-
-  <footer>
-    <!-- add contact us: Email to waytechcloudfs@gmail.com -->
+  <footer class="site-footer">
     <div class="container">
-      <p>如果您有任何问题或建议，请随时联系我们。</p>
-      <p><a href="mailto:waytechcloudfs@gmail.com">发送邮件</a> | <a href="https://t.me/cloudnaschat">Telegram</a></p>
-    </div>
-    <div class="container">
-      <p>&copy; 2025 CloudDrive. All rights reserved.</p>
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/download.html">English</a></p>
+      </div>
     </div>
   </footer>
 </body>

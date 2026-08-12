@@ -1,336 +1,724 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CloudDrive - 帮助</title>
-  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="fontawesome-free-6.4.0-web/css/all.min.css">
-  <link rel="stylesheet" href="css/site.css">
-  <script src="bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/site.js"></script>
-  <link rel="stylesheet" href="css/download.css">
+  <title>CloudDrive2 帮助 — 安装、挂载、备份、加密与排错</title>
+  <meta name="description" content="CloudDrive2 使用手册：在 Windows、Linux、macOS、Android、NAS 与 Docker 上安装运行，添加云存储，把云盘挂载成本地磁盘，跨云复制、备份、加密文件夹、WebDAV 与 API 令牌，以及反向代理、macFUSE、Google Drive 授权等常见问题的解决办法。">
+  <link rel="canonical" href="https://www.clouddrive2.com/help.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/help.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/help.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/help.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="CloudDrive2 帮助">
+  <meta property="og:description" content="安装与运行、连上第一个云盘、挂载成本地磁盘、日常使用与账号安全，以及最常被问到的几个问题。">
+  <meta property="og:url" content="https://www.clouddrive2.com/help.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
 </head>
-<style>
-  .navbar-collapse {
-    background-color: rgba(234, 242, 248, 0.9);
-    padding: 10px;
-  }
-
-  .card-title {
-    background-color: #e7f3ff;
-    color: #1c4966;
-    border-bottom: 1px solid #b3d7ff;
-    padding: 10px;
-  }
-
-  .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .card {
-    width: 100%;
-    max-width: 400px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .card-header {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #ccc;
-    border-radius: 5px 5px 0 0;
-  }
-
-  .card-header i {
-    font-size: 24px;
-    margin-right: 10px;
-  }
-
-  .card-header h4 {
-    margin: 0;
-  }
-
-  .card-body {
-    padding: 10px;
-  }
-
-  @media (min-width: 768px) {
-    .card {
-      width: calc(50% - 10px);
-    }
-  }
-
-  @media (min-width: 992px) {
-    .card {
-      width: calc(33.33% - 10px);
-    }
-  }
-
-  .tip-box {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .tip-box i {
-    font-size: 24px;
-    margin-right: 10px;
-    color: #0078d4;
-  }
-
-  .tip-box span {
-    font-size: 14px;
-    color: #333;
-  }
-</style>
 
 <body>
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light”">
-      <div class="container">
-        <a class="navbar-brand" href="index.html">
-          <img alt="clouddrive" src="img/clouddrive-h.png" height="80">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">主页</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="features.html">功能</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="pricing.html">会员</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="help.html">帮助</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/api/CloudDrive2_gRPC_API_Guide.html">API</a>
-            </li>
-          </ul>
-          <a class="btn btn-primary" style="background-color: #2184bf;" href="download.html">下载</a>
-        </div>
-      </div>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html" aria-current="page">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/help.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
     </nav>
   </header>
-  <div class="container mt-4">
-    <h1 class="hero-title">CloudDrive - 帮助</h1>
-    <p class="tagline">CloudDrive用户手册</p>
-    <div class="container py-5">
-      <div class="accordion accordion-flush" id="cloudDriveAccordion">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-              安装与运行
-            </button>
-          </h2>
-        </div>
-        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-          data-bs-parent="#cloudDriveAccordion">
-          <div class="accordion-body">
-            <h2>安装与运行</h2>
-            <div class="tip-box">
-              <i class="fas fa-info-circle"></i>
-              <span>安装完成后，用浏览器打开http://&lt;安装CloudDrive的主机IP&gt;:19798
-                打开管理界面。建议采用最新版Edge、Chrome、Safari或者Firefox浏览器，不支持IE浏览器</span>
-            </div>
-            <h3>Windows</h3>
-            <ol>
-              <li>访问我们的官方网站下载 CloudDrive。</li>
-              <li>打开安装包，按照屏幕上的提示进行操作。</li>
-              <li>安装完成后，您可以在桌面找到CloudDrive2快捷方式，双击快捷方式或者浏览器打开http://localhost:19798。</li>
-            </ol>
 
-            <h3>Linux 通用</h3>
-            <ol>
-              <li>确保你的Linux内核支持fuse，可以通过查看是否存在/dev/fuse来检查是否支持fuse，内核不支持fuse将无法挂载本地目录</li>
-              <li>如果你需要以非root用户运行CloudDrive，请按照对应操作系统手册安装fuse3，安装好后确认fusermount3命令可以运行，并修改/etc/fuse.conf，确保user_allow_other这一行前面的注释符#已经被删除掉</li>
-              <li>访问我们的官方网站下载对应架构的CloudDrive。</li>
-              <li>打开终端并导航到下载的安装包所在的目录。</li>
-              <li>运行以下命令以展开 CloudDrive：<br><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz</code></li>
-              <li>进入展开后的目录，运行<br><code>./clouddrive</code></li>
-              <li>可以将clouddrive运行加入系统自启动，或者设置为系统服务，具体操作请参考操作系统帮助</li>
-            </ol>
-            <h3>Arch Linux</h3>
-            <ol>
-              <li><a href="https://repology.org/project/cloud-fs/versions"><img src="https://repology.org/badge/vertical-allrepos/cloud-fs.svg" alt="Packaging status"></a></li>
-              <li>Arch Linux 及其衍生版可以通过 <a href="https://aur.archlinux.org/packages/clouddrive" target="_blank" rel="noopener">AUR 包</a>或<a href="https://github.com/taotieren/aur-repo" target="_blank" rel="noopener">自建源</a>安装: <br><code>yay -Syu clouddrive</code></li>
-              <li>通过 systemd 设置 clouddrive 启动并开启自启：<br>root 权限: <code>systemctl enable --now clouddrive.service</code><br>用户权限: <code>systemctl --user enable --now clouddrive.service</code></li>
-              <li>通过 systemd 查看 clouddrive 运行状态：<br>root 权限: <code>systemctl status clouddrive.service</code><br>用户权限: <code>systemctl --user status clouddrive.service</code></li>
-              <li>通过默认浏览器打开：<br>推荐：<code>xdg-open http://localhost:19798</code><br>IPv4: <code>xdg-open http://127.0.0.1:19798</code><br>IPv6: <code>xdg-open http://[::]:19798</code></li>
-              <li>注意：浏览器打开慢或卡顿之类情况，请使用浏览器的无痕模式访问。</li>
-              <li>登录后挂载本地磁盘时设置 UID GID，<br>获取当前用户 UID：<code>id -u</code><br>获取当前用户 GID：<code>id -g</code><br>获取其他用户 UID：<code>id -u <i>username</i></code><br>获取其他用户 GID：<code>id -g <i>username</i></code></li>
-              <li>AUR 包中提供的挂载本地磁盘位置：<br><code>/media/clouddrive</code></li>
-              <li>AUR 包中提供的 Clouddrive WebDAV 挂载本地磁盘位置 (此功能依赖 <code>davfs2</code> 包)：<br><code>/media/clouddrive-dav</code></li>
-              <li>将 Clouddrive WebDAV 用户名和密码填入：<br><code>/etc/davfs2/secrets</code><br>示例：<br><code>cat << EOF | sudo tee -a /etc/davfs2/secrets</code><br><code># personal webdav, application password</code><br><code>/media/clouddrive-dav user@email.com  mypassword</code><br><code>EOF</code></li>
-              <li>通过 systemd 设置 clouddrive-dav 启动并开启自启：<br>root 权限: <code>systemctl enable --now clouddrive-dav.service</code></li>
-              <li>通过 systemd 查看 clouddrive-dav 运行状态：<br>root 权限: <code>systemctl status clouddrive-dav.service</code></li>
-            </ol>
+  <main id="main">
 
-            <h3>macOS</h3>
-            <h4>Homebrew(推荐)</h4>
-            <ol>
-              <li>确保你的macOS已安装<a href="https://brew.sh/" target="_blank" rel="noopener noreferrer">Homebrew</a></li>
-              <li>运行前请确保系统已安装<a href="https://osxfuse.github.io/" target="_blank" rel="noopener noreferrer">macFUSE</a>，并已按照提示正确设置权限。或者通过brew命令安装macFUSE<br><code>brew install --cask macfuse</code></li>
-              <li>运行以下命令安装CloudDrive：<br>
-                <code>brew tap cloud-fs/clouddrive2</code><br>
-                <code>brew install clouddrive2</code>
-              </li>
-              <li>运行以下命令启动CloudDrive：<br><code>brew services start clouddrive2</code><br>运行成功后将会自动创建后台服务并且下次登录会自动运行</li>
-              <li>启动成功后用浏览器打开<a href="http://localhost:19798" target="_blank" rel="noopener noreferrer">http://localhost:19798</a>进入管理配置界面</li>
-              <li>运行以下命令停止CloudDrive：<br><code>brew services stop clouddrive2</code></li>
-              <li>运行以下命令卸载CloudDrive：<br><code>brew services stop clouddrive2<br>brew uninstall clouddrive2</code></li>
-              <li>运行以下命令更新CloudDrive： <br><code>brew services stop clouddrive2<br>brew update<br>brew upgrade clouddrive2<br>brew services start clouddrive2</code></li>
-            </ol>
-            <h4>手动安装</h4>
-            <ol>
-              <li>运行前请确保系统已安装<a href="https://osxfuse.github.io/" target="_blank" rel="noopener">macFUSE</a>，并已按照提示正确设置权限</li>
-              <li>访问我们的官方网站下载对应架构的CloudDrive。</li>
-              <li>打开终端并导航到下载的安装包所在的目录。</li>
-              <li>运行以下命令以展开 CloudDrive：<br><code>tar zxvf clouddrive-2-macos-$ARCH-$VERSION.tgz</code></li>
-              <li>进入展开后的目录，运行<br><code>./clouddrive</code></li>
-              <li>可以将clouddrive运行加入系统自启动，或者设置为系统服务，具体操作请参考操作系统帮助</li>
-            </ol>
-
-            <h3>Android</h3>
-            <ol>
-              <li>下载后缀为.apk的安装包安装后执行</li>
-              <li>未root的系统将无法挂载本地文件系统，其它功能包括多云盘备份和WebDAV服务等仍然可以正常使用</li>
-            </ol>
-
-            <h3>Docker</h3>
-            <a href="docker.html">Docker版本安装指南</a>
-
-
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">用户手册</p>
+          <h1>装好，然后连上第一个云盘</h1>
+          <p class="hero-lede">
+            从装到你的电脑、NAS 或手机上，到注册、添加云存储、把云盘挂载成本地磁盘，再到备份、加密和 WebDAV。按你手头的设备选一节看即可。
+          </p>
+          <ul class="chips">
+            <li><a class="chip chip-cloud" href="#install">安装与运行</a></li>
+            <li><a class="chip chip-cloud" href="#start">连上第一个云盘</a></li>
+            <li><a class="chip" href="#mount">挂载成本地磁盘</a></li>
+            <li><a class="chip" href="#apps">在手机和电视上用</a></li>
+            <li><a class="chip" href="#daily">日常使用</a></li>
+            <li><a class="chip" href="#account">账号与安全</a></li>
+            <li><a class="chip" href="#faq">常见问题</a></li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/download.html">下载安装包</a>
+            <a class="btn btn-ghost" href="/docker.html">Docker 部署指南</a>
           </div>
         </div>
-        <!-- add 注册与登录 -->
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingTwo">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-              注册与登录
-            </button>
-          </h2>
-          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-            data-bs-parent="#cloudDriveAccordion">
-            <div class="accordion-body">
-              <h2>注册</h2>
-              <ol>
-                <li>第一次运行CloudDrive</li>
-                <li>打开CloudDrive，点击右上角的“注册”按钮。</li>
-                <li>输入您的邮箱地址和密码，点击“注册”按钮。</li>
-                <li>系统将发送一封验证邮件到您的邮箱，请按照邮件中的提示进行操作。</li>
-                <li>验证成功后，您将被重定向到登录页面。</li>
-              </ol>
+        <div>
+          <img class="hero-shot" src="/img/shots/web-dashboard.webp" width="1600" height="900" decoding="async"
+               alt="浏览器里的 CloudDrive2 管理界面：左侧是仪表盘、我的文件、云存储、挂载点、备份、系统任务、WebDAV 与 API 令牌，右侧显示已连接云盘的总容量和最近文件。">
+        </div>
+      </div>
+    </section>
 
-              <h2>登录</h2>
-              <ol>
-                <li>打开CloudDrive，点击右上角的“登录”按钮。</li>
-                <li>输入您的邮箱地址和密码，点击“登录”按钮。</li>
-                <li>如果您的账号已经通过验证，您将被重定向到CloudDrive的主页。</li>
-              </ol>
-            </div>
+    <section class="band band-dark band-tight" aria-labelledby="port-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">装好之后第一件事</p>
+            <h2 id="port-h">在浏览器里打开</h2>
+            <p class="port-url">http://&lt;主机 IP&gt;:19798</p>
           </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingThree">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-              添加云存储
-            </button>
-          </h2>
-          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-            data-bs-parent="#cloudDriveAccordion">
-            <div class="accordion-body">
-              <p>1. 打开 CloudDrive，选择 "添加云存储"。</p>
-              <p>2. 在列表中选择您的云存储提供商。</p>
-              <p>3. 输入您的账号信息，然后按 "确定"。</p>
-              <p>4. 系统将验证您的账号，验证通过后，您的云存储将出现在 CloudDrive 中。</p>
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingFour">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-              文件管理
-            </button>
-          </h2>
-          <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
-            data-bs-parent="#cloudDriveAccordion">
-            <div class="accordion-body">
-              <p>1. 在 CloudDrive 中，您可以直接操作云存储中的文件，如上传、下载、删除、移动等。</p>
-              <p>2. 如果您将云存储挂载到本地驱动器，您可以像操作本地文件一样操作云存储中的文件。</p>
-              <p>3. 请注意，删除文件将直接影响您云存储中的文件，一旦删除，可能无法恢复。</p>
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingFive">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-              WebDAV服务
-            </button>
-          </h2>
-          <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
-            data-bs-parent="#cloudDriveAccordion">
-            <div class="accordion-body">
-              <H3>访问CloudDrive的WebDAV服务</H3>
-              <p>服务器：http://&ltip&gt:19798/dav</p>
-              <p>用户名：登录CloudDrive的用户Email，或者只填用户Email的用户名部分，不含@及以后的部分</p>
-              <p>密码：登录CloudDrive的用户密码</p>
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingChangePassword">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#collapseChangePassword" aria-expanded="false" aria-controls="collapseChangePassword">
-              忘记密码
-            </button>
-          </h2>
-          <div id="collapseChangePassword" class="accordion-collapse collapse" aria-labelledby="headingChangePassword"
-            data-bs-parent="#cloudDriveAccordion">
-            <div class="accordion-body">
-              <h3>忘记密码</h3>
-              <p>由于云端存储的用户信息是由用户本地密码加密，我们不保存用户密码，如忘记密码，可以重置密码，在登录界面点击重置按钮，按提示重置，重置将清空你在云端存储的账号信息并重置你的密码</p>
-              <div class="alert alert-warning" role="alert">
-                <i class="fas fa-exclamation-triangle"></i>
-                <strong>注意：</strong>重置密码将清空你在云端存储的账号信息并重置你的密码，但不会影响你的会员计划。
-              </div>
-            </div>
+          <div>
+            <p>核心服务的管理界面跑在 <strong>19798</strong> 上——无论装在 Windows、Linux、macOS、Android 还是 Docker 里都一样。装在本机就用 <code>http://localhost:19798</code>。</p>
+            <p>另有一个 HTTPS 端口 <strong>19799</strong>，默认关闭，要在设置里打开并配置证书。</p>
+            <p>应用自带的核心监听 <strong>29798</strong>，和核心服务错开——同一台机器上两个一起装，端口不会冲突。</p>
+            <p>管理界面整个是一个 WebAssembly 应用，所以浏览器必须支持 WebAssembly，不支持的直接白屏，不是「部分功能用不了」。电脑上用较新版本的 Edge、Chrome、Safari 或 Firefox 都可以，手机和平板上的主流浏览器也可以。<strong>Internet Explorer 不行；电视自带的浏览器、以及一些机顶盒、电子书和车机上的精简浏览器也多半不行</strong>——那些设备请改用手机或电脑打开，或者直接装对应平台的应用。</p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-  </div>
+    <section class="band" id="install" aria-labelledby="install-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">第一步</p>
+          <h2 id="install-h">安装与运行</h2>
+          <p>这一节讲的是把核心装成后台服务：电脑、NAS 或路由器都行。手机、电视和头显上的应用自带同一套核心，不需要另外架服务器，见<a href="#apps">在手机和电视上用</a>。</p>
+        </header>
 
+        <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</summary>
+          <div class="acc-body">
+            <ol>
+              <li>到<a href="/download.html#core">下载页</a>拿对应架构的安装包（x64 或 Arm64）。</li>
+              <li>打开安装包，按屏幕上的提示完成安装。</li>
+              <li>安装完成后，桌面上会出现 CloudDrive2 快捷方式。双击它，或者直接在浏览器里打开
+                  <code>http://localhost:19798</code>。</li>
+            </ol>
+            <div class="note note-warn">
+              <span class="note-title">上次跑完整安装包时早于 1.0.7 的，要再跑一次</span>
+              <p>1.0.7 把随包的 WinFSP 驱动升到了 2026 beta1，修掉旧版 WinFSP 的安全漏洞
+                 <a href="https://github.com/winfsp/winfsp/releases/tag/v2.2B1" rel="noopener">CVE-2026-3006</a>。应用内 OTA 只替换 CloudDrive2 自己的程序文件，从不碰驱动。</p>
+              <p>所以看的不是你现在是哪个版本，而是<strong>上一次跑完整安装包时是哪个版本</strong>。那次要是早于 1.0.7，哪怕之后一路 OTA 升到了最新版，驱动也仍然是旧的——请下载完整安装包重新运行安装程序，并按向导提示重启系统。记不清就再跑一次，没有副作用。</p>
+              <p>上次完整安装的是 1.0.7 或更高版本的，驱动已经是修好的那一版，之后的升级用应用内 OTA 就行。</p>
+            </div>
+            <div class="note">
+              <span class="note-title">它以系统服务的方式在跑</span>
+              <p>核心服务装完就注册成 Windows 系统服务，开机自启，不用登录桌面也在跑。<a href="/download.html#app">Windows 应用</a>不一样，它是普通应用，跟着你的账户启动。</p>
+              <p>安装包、服务和 WinFSP 驱动都经过代码签名，但个别杀毒软件仍可能拦下其中之一——服务起不来、挂载盘出不来，或者应用直接被关掉。遇到这种情况，把 CloudDrive2 的安装目录和 WinFSP 一起加进杀软白名单。管理界面打不开时的完整排查顺序见<a href="#faq">常见问题</a>。</p>
+              <p>要从局域网里的别的设备访问，Windows 防火墙得放行对应端口：核心服务是 <strong>19798</strong>（开了 HTTPS 再加 <strong>19799</strong>），应用是 <strong>29798</strong>。装的时候通常会弹一次「允许访问」，点掉了的话到「Windows 安全中心 → 防火墙和网络保护 → 允许应用通过防火墙」补上。</p>
+            </div>
+            <p class="chip-note">Windows 7 已停止支持——系统自带的 TLS 和运行库满足不了当前版本的要求。旧设备可以改用 Linux 或 Docker 版本。</p>
+          </div>
+        </details>
 
-  <!-- Footer -->
-  <footer class="footer text-center bg-light py-4">
+        <details class="acc">
+          <summary><i class="fa-brands fa-linux" aria-hidden="true"></i>Linux 通用</summary>
+          <div class="acc-body">
+            <ol>
+              <li>确认内核支持 FUSE。看一下 <code>/dev/fuse</code> 这个设备是否存在即可；内核不支持 FUSE 就无法把云盘挂载到本地目录。</li>
+              <li>如果打算用非 root 用户运行 CloudDrive2，请按所用发行版的手册安装 fuse3，装好后确认 <code>fusermount3</code> 命令可以运行，并编辑 <code>/etc/fuse.conf</code>，把 <code>user_allow_other</code> 这一行前面的注释符 <code>#</code> 删掉。</li>
+              <li>到<a href="/download.html#core">下载页</a>拿对应 CPU 架构的压缩包。</li>
+              <li>打开终端，进入压缩包所在的目录。</li>
+              <li>展开压缩包：
+                <div class="code-block"><pre><code>tar zxvf clouddrive-2-linux-$ARCH-$VERSION.tgz</code></pre></div>
+              </li>
+              <li>进入展开后的目录并运行：
+                <div class="code-block"><pre><code>./clouddrive</code></pre></div>
+              </li>
+              <li>可以把 clouddrive 加入开机自启动，或者注册成系统服务。具体做法请参考所用发行版的文档。</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-terminal" aria-hidden="true"></i>Arch Linux</summary>
+          <div class="acc-body">
+            <ol>
+              <li>Arch Linux 及其衍生版可以通过
+                  <a href="https://aur.archlinux.org/packages/clouddrive" rel="noopener">AUR 包</a>
+                  或<a href="https://github.com/taotieren/aur-repo" rel="noopener">第三方源</a>安装：
+                <div class="code-block"><pre><code>yay -Syu clouddrive</code></pre></div>
+              </li>
+              <li>用 systemd 启动 clouddrive 并设为自启：
+                <div class="code-block"><pre><code># root 权限
+systemctl enable --now clouddrive.service
+
+# 用户权限
+systemctl --user enable --now clouddrive.service</code></pre></div>
+              </li>
+              <li>查看 clouddrive 的运行状态：
+                <div class="code-block"><pre><code># root 权限
+systemctl status clouddrive.service
+
+# 用户权限
+systemctl --user status clouddrive.service</code></pre></div>
+              </li>
+              <li>用默认浏览器打开管理界面：
+                <div class="code-block"><pre><code># 推荐
+xdg-open http://localhost:19798
+
+# IPv4
+xdg-open http://127.0.0.1:19798
+
+# IPv6
+xdg-open http://[::]:19798</code></pre></div>
+              </li>
+              <li>如果浏览器打开很慢或者卡顿，改用浏览器的无痕模式访问。</li>
+              <li>登录后挂载本地磁盘时需要填 UID 和 GID：
+                <div class="code-block"><pre><code># 当前用户
+id -u
+id -g
+
+# 其他用户
+id -u username
+id -g username</code></pre></div>
+              </li>
+              <li>AUR 包预设的本地磁盘挂载位置：<code>/media/clouddrive</code>。</li>
+              <li>AUR 包预设的 WebDAV 挂载位置：<code>/media/clouddrive-dav</code>，这个功能依赖 <code>davfs2</code> 包。</li>
+              <li>把 WebDAV 的用户名和密码写进 <code>/etc/davfs2/secrets</code>，例如：
+                <div class="code-block"><pre><code>cat &lt;&lt; EOF | sudo tee -a /etc/davfs2/secrets
+# personal webdav, application password
+/media/clouddrive-dav user@email.com  mypassword
+EOF</code></pre></div>
+              </li>
+              <li>用 systemd 启动 clouddrive-dav 并设为自启（root 权限）：
+                <div class="code-block"><pre><code>systemctl enable --now clouddrive-dav.service</code></pre></div>
+              </li>
+              <li>查看 clouddrive-dav 的运行状态（root 权限）：
+                <div class="code-block"><pre><code>systemctl status clouddrive-dav.service</code></pre></div>
+              </li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS</summary>
+          <div class="acc-body">
+            <h4>用 Homebrew 安装（推荐）</h4>
+            <ol>
+              <li>先确认系统里装好了 <a href="https://brew.sh/" rel="noopener">Homebrew</a>。</li>
+              <li>运行前必须安装 <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>，并在「系统设置」里放行它的内核扩展——Apple 芯片的 Mac 还要先进一次恢复模式，完整步骤见<a href="/macfuse.html">给 macFUSE 放行</a>。也可以用 Homebrew 装：
+                <div class="code-block"><pre><code>brew install --cask macfuse</code></pre></div>
+              </li>
+              <li>安装 CloudDrive2：
+                <div class="code-block"><pre><code>brew tap cloud-fs/clouddrive2
+brew install clouddrive2</code></pre></div>
+              </li>
+              <li>启动 CloudDrive2：
+                <div class="code-block"><pre><code>brew services start clouddrive2</code></pre></div>
+                启动成功后会自动创建后台服务，下次登录系统时自动运行。
+              </li>
+              <li>用浏览器打开 <a href="http://localhost:19798" rel="noopener">http://localhost:19798</a>
+                  进入管理界面。</li>
+              <li>停止 CloudDrive2：
+                <div class="code-block"><pre><code>brew services stop clouddrive2</code></pre></div>
+              </li>
+              <li>卸载 CloudDrive2：
+                <div class="code-block"><pre><code>brew services stop clouddrive2
+brew uninstall clouddrive2</code></pre></div>
+              </li>
+              <li>升级 CloudDrive2：
+                <div class="code-block"><pre><code>brew services stop clouddrive2
+brew update
+brew upgrade clouddrive2
+brew services start clouddrive2</code></pre></div>
+              </li>
+            </ol>
+
+            <h4>手动安装</h4>
+            <ol>
+              <li>运行前必须安装 <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>，并按<a href="/macfuse.html">给 macFUSE 放行</a>里的步骤授权。</li>
+              <li>到<a href="/download.html#core">下载页</a>拿对应 CPU 架构的压缩包。</li>
+              <li>打开终端，进入压缩包所在的目录。</li>
+              <li>展开压缩包：
+                <div class="code-block"><pre><code>tar zxvf clouddrive-2-macos-$ARCH-$VERSION.tgz</code></pre></div>
+              </li>
+              <li>进入展开后的目录并运行：
+                <div class="code-block"><pre><code>./clouddrive</code></pre></div>
+              </li>
+              <li>可以把 clouddrive 加入开机自启动，或者注册成系统服务，具体做法参考系统文档。</li>
+            </ol>
+
+            <p class="chip-note">这一节讲的是后台服务。Mac 上还有带播放器的 CloudDrive2 应用，App Store 版与官网直接下载版的差异见 <a href="/apps/macos.html">macOS 版</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-android" aria-hidden="true"></i>Android</summary>
+          <div class="acc-body">
+            <ol>
+              <li>到<a href="/download.html#core">下载页</a>的「核心服务」一节拿后缀为 <code>.apk</code> 的安装包，安装后打开即可。它自带 Web 管理界面。</li>
+              <li><strong>没有 root 的系统无法把云盘挂载到本地文件系统。</strong>
+                  其余功能不受影响，多云盘备份、WebDAV 服务等照常可用；没有 root 时还可以走系统的存储访问框架（SAF），支持 SAF 的第三方应用就能直接读写 CloudDrive2 里的文件。</li>
+            </ol>
+            <p class="chip-note">带播放器的 CloudDrive2 应用是另一个安装包，从 Google Play 或<a href="/download.html#app">下载页的「应用」一节</a>获取。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-docker" aria-hidden="true"></i>Docker、NAS 与群晖 / 威联通</summary>
+          <div class="acc-body">
+            <p>在 NAS 或服务器上用容器跑，镜像是 <code>cloudnas/clouddrive2</code>。宿主机的挂载传播要是共享的，不少系统默认就开着，怎么查、必要时怎么开，连同可直接复制的启动配置，都见
+               <a href="/docker.html">Docker 部署指南</a>。</p>
+            <p>群晖与威联通的第三方套件在<a href="/download.html#nas">下载页</a>。</p>
+            <div class="note">
+              <span class="note-title">飞牛 fnOS 请用原生套件，不要用 Docker</span>
+              <p>容器里做 FUSE 挂载会撞上 fnOS 的命名空间限制，报 <code>mount syscall failed in pid 1 namespace</code>。我们提供了原生的 fpk 套件，装上就没有这个问题，在<a href="/download.html#core">下载页</a>。</p>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="start" aria-labelledby="start-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">第二步</p>
+          <h2 id="start-h">连上第一个云盘</h2>
+          <p>注册、登录、添加云存储，三步。三步都在浏览器里的管理界面完成，应用里的流程也一样。</p>
+        </header>
+
+        <ol class="steps">
+          <li id="register">
+            <h3>注册</h3>
+            <p>第一次运行 CloudDrive2 后，点击右上角的「注册」按钮，填入邮箱地址和密码。系统会往这个邮箱发一封验证邮件，按邮件里的提示完成验证；验证成功后会自动跳转到登录页面。</p>
+          </li>
+          <li>
+            <h3>登录</h3>
+            <p>点击右上角的「登录」按钮，填入同一组邮箱地址和密码。账号已经通过验证的话，就会跳转到 CloudDrive2 的主页。</p>
+          </li>
+          <li id="add-cloud">
+            <h3>添加云存储</h3>
+            <p>进「云存储」页，点「添加云存储」，在列表里选你的服务商，按提示扫码或填账号信息。验证通过后，这个云盘就会出现在「我的文件」里，和其他云盘并排。</p>
+          </li>
+        </ol>
+
+        <p class="chip-note">免费账号可以连 2 个云盘、建 1 个本地挂载；核心会员不限数量。各档的区别见<a href="/pricing.html">会员与价格</a>。</p>
+      </div>
+    </section>
+
+    <section class="band" id="mount" aria-labelledby="mount-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">第三步（可选）</p>
+          <h2 id="mount-h">把云盘挂载成本地磁盘</h2>
+          <p>挂载之后，云盘在资源管理器、访达和命令行里就是一块普通磁盘，任何软件都能直接打开里面的文件，不用先下载。这是 CloudDrive2 和网盘客户端最不一样的地方。</p>
+        </header>
+
+        <h3>建一个挂载点</h3>
+        <ol>
+          <li>进「挂载点」页，点「添加挂载点」。</li>
+          <li><strong>挂载名称</strong>：随便起，显示用。</li>
+          <li><strong>源目录</strong>：要挂出去的那个目录。可以是某个云盘的根目录，也可以是它下面的任意一层；填 <code>/</code> 就是把所有已连接的云盘一起挂出去。</li>
+          <li><strong>挂载点</strong>：Windows 上是一个盘符，Linux 与 macOS 上是一个空目录。</li>
+          <li><strong>选项</strong>：勾「只读」可以防误删误改；勾「启动时自动挂载」让它跟着服务一起起来。</li>
+          <li>Linux 与 macOS 还有「高级设置」，可以指定 UID、GID 和权限（默认 <code>0755</code>），决定挂载出来的文件属于哪个用户。</li>
+        </ol>
+
+        <h3>每个系统各需要什么</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th scope="col">系统</th>
+                <th scope="col">前置组件</th>
+                <th scope="col">挂载点填什么</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</th>
+                <td>WinFSP，挂载点页面上有一键安装按钮，装一次即可</td>
+                <td>盘符，例如 <code>X:</code></td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS</th>
+                <td><a href="/macfuse.html">macFUSE 与内核扩展放行</a>；Apple 芯片的 Mac 要先进恢复模式</td>
+                <td>一个空目录</td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-brands fa-linux" aria-hidden="true"></i>Linux</th>
+                <td>内核的 FUSE 支持；非 root 运行还需要 fuse3 与 <code>user_allow_other</code></td>
+                <td>一个空目录</td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-brands fa-docker" aria-hidden="true"></i>Docker</th>
+                <td>容器要拿到 FUSE 权限，挂载点要用 <code>shared</code> 传播才能在宿主机上看见</td>
+                <td>容器内的一个目录</td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</th>
+                <td>本地挂载需要 Root</td>
+                <td>一个空目录</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">Windows 上挂载出来的盘还分「本地」和「网络」两种类型，有些软件只认其中一种，挂不上或者软件看不见时可以换一种试试。</p>
+
+        <div class="note note-warn">
+          <span class="note-title">Docker 里挂载看不见？</span>
+          <p>容器内挂载成功、宿主机上却没有，几乎都是共享挂载传播没配。启动参数要带 <code>--cap-add SYS_ADMIN --device /dev/fuse --security-opt apparmor:unconfined</code>（或者直接 <code>--privileged</code>），挂载目录映射要写成 <code>:shared</code>。完整配置见 <a href="/docker.html">Docker 部署指南</a>。</p>
+        </div>
+
+        <p><a class="arrow-link" href="/features.html#local-mount">本地挂载的完整说明</a></p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="apps" aria-labelledby="apps-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">客户端</p>
+          <h2 id="apps-h">在手机、电视和头显上用</h2>
+          <p>应用不是上面那台服务器的遥控器，它自带完整的核心：装上、登录、添加云盘就能用，不需要另外架服务器。当然，如果你已经有一台在跑，也可以让应用连过去。</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-mobile-screen card-icon" aria-hidden="true"></i>
+            <h3>独立使用</h3>
+            <p>在应用里注册或登录同一个 CloudDrive 账号，然后添加云存储——步骤和浏览器里一模一样。手机上没有服务器也照样能浏览、播放、备份。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>连到已有的服务器</h3>
+            <p>家里 NAS 上已经跑着 CloudDrive2，就在那台上建一个 API 令牌，在应用里用地址加令牌把它添加进来。之后离线下载、搜索、跨云复制这些都能在应用里直接用。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-key card-icon" aria-hidden="true"></i>
+            <h3>会员与 App 专业版</h3>
+            <p>核心会员和 App 专业版都记在 CloudDrive 账号上，不绑设备也不绑商店。在哪个平台买的，换个平台登录同一账号照样是解锁状态。</p>
+          </div></li>
+        </ul>
+
+        <h3>装应用</h3>
+        <ul class="store-badges">
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>
+            <span><b>App Store</b><span>即将上架</span></span>
+          </span></li>
+          <li><a class="store-badge" href="https://play.google.com/store/apps/details?id=com.clouddrive2.CloudDrive2" rel="noopener">
+            <i class="fa-brands fa-google-play" aria-hidden="true"></i>
+            <span><b>Google Play</b><span>已上架</span></span>
+          </a></li>
+          <li><a class="store-badge" href="/download.html#app">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span><b>直接下载</b><span>macOS dmg · Android APK</span></span>
+          </a></li>
+        </ul>
+        <p class="chip-note">每个平台各能做什么、系统要求是什么，见<a href="/apps/">全部应用</a>。</p>
+      </div>
+    </section>
+
+    <section class="band" id="daily" aria-labelledby="daily-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">日常使用</p>
+          <h2 id="daily-h">连上之后还会用到的</h2>
+        </header>
+
+        <details class="acc" id="files">
+          <summary><i class="fa-solid fa-folder-tree" aria-hidden="true"></i>文件管理</summary>
+          <div class="acc-body">
+            <p>「我的文件」把所有已连接的云盘并排放在一起，上传、下载、重命名、移动、删除、新建文件夹都是跨云盘的操作，不只是在单个云盘里。列表、网格和瀑布流三种视图，排序、搜索、多选都有。</p>
+            <p>挂载成本地磁盘之后，这些文件在资源管理器、访达或任何软件里都能像本地文件一样操作。</p>
+            <div class="note note-danger">
+              <span class="note-title">删除操作不可撤销</span>
+              <p>在 CloudDrive2 里删除文件，删的就是云存储上的真实文件。一旦删除，可能无法恢复，请先确认再动手。</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="acc" id="copy">
+          <summary><i class="fa-solid fa-right-left" aria-hidden="true"></i>跨云盘复制</summary>
+          <div class="acc-body">
+            <p>像在同一个云盘里那样，把文件从一个云盘拖到另一个。先从源云盘取哈希：目标云盘用的是同一套哈希算法、并且命中了，就是真·秒传——服务端直接建一条指向已有数据的记录，数据根本不搬；算法不同或者没命中，就在两朵云之间边下边传，不落地到本地磁盘，速度受你的带宽限制。</p>
+            <p>操作在「我的文件」里：勾中要复制的文件或文件夹，点「移动/复制到...」，在目录树里选好目标，点「复制」。任务在后台跑，不用守着；进度到「任务」页看，「复制任务」和「上传任务」两个标签下都找得到。</p>
+            <p class="chip-note">跨云盘快速复制是核心会员功能。慢的那一种情况不是出了问题，是目标云盘那边没有可以命中的现成数据。</p>
+            <p>在「云存储」页点「添加云存储」，在「本地存储」里选「本地文件夹」，就能把机器上的一个目录加进来当复制的源或目标。只要有一端是本地文件夹，免费账号也能复制——把云盘上的东西拿下来，或者把本地的东西传上去，都不需要会员。</p>
+            <p class="chip-note">目标是本地文件夹时，任务会出现在「上传任务」里。方向没搞反：CloudDrive2 把复制统一成读源端、写目标端的一条流水线，写的那一半一律叫上传。</p>
+            <p><a class="arrow-link" href="/features.html#inter-cloud-copy">跨云盘复制的完整说明</a></p>
+          </div>
+        </details>
+
+        <details class="acc" id="backup">
+          <summary><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>备份</summary>
+          <div class="acc-body">
+            <ol>
+              <li>进「备份」页，点「添加备份」，按向导选源目录和一个或多个目标目录。本地文件夹和云盘目录都可以当源，也都可以当目标。</li>
+              <li>设置文件过滤规则（按扩展名或文件名，可以分别对文件和文件夹生效）和完成规则（例如上传完成后删除源文件）。</li>
+              <li>备份靠文件系统的实时监控工作：源目录里的改动一发生就同步过去。此外还可以配完整扫描的计划，定期对一遍。</li>
+            </ol>
+            <div class="note">
+              <span class="note-title">删除为什么没跟着同步</span>
+              <p>删除有两条路径。实时监控抓到的删除事件是确凿的，会按删除规则同步到目标端；而完整扫描只能看出「目标端有、源端没有」，这未必是删除，也可能是文件被移到了别处，照着删有风险。所以要不要据此删除，交由你在完整扫描规则里的「同步删除」选项自行开启。</p>
+              <p>源目录本身就是挂载的网盘时，实时删除事件不一定触发，这个选项尤其有用。</p>
+            </div>
+            <p class="chip-note">备份全量扫描很吃资源。「备份资源限制」里可以设最大并发扫描数（默认 1）和上传队列的上下限，避免扫大目录时堆出一大堆上传任务。</p>
+          </div>
+        </details>
+
+        <details class="acc" id="encrypt">
+          <summary><i class="fa-solid fa-lock" aria-hidden="true"></i>加密文件夹</summary>
+          <div class="acc-body">
+            <p>在任意云盘目录上右键选「创建加密文件夹」，设一个密码。之后往里面放的文件，文件名和内容都在本地加密后再上传——云端存的是密文，服务商看不到原文。解锁之后，读写和普通文件夹没有区别。</p>
+            <p>不用的时候点「锁定」，下次访问要重新输密码。创建时可以勾「保存密码」，重启后不必再输。</p>
+            <div class="note note-danger">
+              <span class="note-title">密码无法找回</span>
+              <p>加密文件夹的密码既不能改也不能恢复。忘记密码，文件夹里的内容就永久打不开了——我们也没有办法。</p>
+            </div>
+            <p><a class="arrow-link" href="/features.html#encrypted-filesystem">加密文件系统的完整说明</a></p>
+          </div>
+        </details>
+
+        <details class="acc" id="webdav">
+          <summary><i class="fa-solid fa-server" aria-hidden="true"></i>WebDAV 服务</summary>
+          <div class="acc-body">
+            <p>CloudDrive2 会把所有已连接的云盘再以一个 WebDAV 服务对外提供，任何支持 WebDAV 的软件都能连上来。</p>
+            <ul>
+              <li><strong>服务器地址：</strong><code>http://&lt;ip&gt;:19798/dav</code></li>
+              <li><strong>用户名：</strong>登录 CloudDrive2 的邮箱；也可以只填邮箱的用户名部分，即 <code>@</code> 之前的那一段。</li>
+              <li><strong>密码：</strong>登录 CloudDrive2 的密码。</li>
+            </ul>
+            <p>核心会员还可以在「WebDAV」页建独立的 WebDAV 用户，各自限定能看到哪个目录、能不能写，不必把主账号密码交出去。</p>
+            <p><a class="arrow-link" href="/features.html#webdav">WebDAV 的完整说明</a></p>
+          </div>
+        </details>
+
+        <details class="acc" id="token">
+          <summary><i class="fa-solid fa-id-badge" aria-hidden="true"></i>API 令牌</summary>
+          <div class="acc-body">
+            <p>第三方应用可以用 API 令牌访问 CloudDrive2，不必知道你的账号密码。进「API 令牌」页点「创建令牌」，可以限定它能访问的根目录、有效期，以及每一项操作的权限——文件读取、写入、修改、系统操作、云存储操作、账号操作，每一大项下面还能逐条勾。</p>
+            <div class="note note-warn">
+              <span class="note-title">给 Emby / Jellyfin 插件用的令牌要多勾两项</span>
+              <p>新建令牌时「推送消息」与「获取挂载点」默认没有勾选，必须手动勾上。少了它们，插件能连上、状态也显示正常，但媒体库永远不会自动更新。</p>
+            </div>
+            <p><a class="arrow-link" href="/download.html#plugin">Emby / Jellyfin 伴侣插件</a></p>
+          </div>
+        </details>
+
+        <details class="acc" id="offline">
+          <summary><i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>离线下载</summary>
+          <div class="acc-body">
+            <p>在支持的云盘目录里点「离线下载」，把磁力链接或 <code>.torrent</code> 文件交给云盘那边去下，下完直接落在云盘里，本地不占带宽也不占空间。<code>.torrent</code> 可以直接拖进来，会被解析成磁力链接后添加。</p>
+            <p>115 网盘还有一个离线下载管理窗口，可以复制链接、删除任务、重新开始，或者按状态批量清理。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="account" aria-labelledby="account-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">账号</p>
+          <h2 id="account-h">账号与安全</h2>
+          <p>存在云端的云存储账号信息是用你的密码加密的，我们不保存你的密码。这一节的几件事都跟这条有关。</p>
+        </header>
+
+        <details class="acc" id="password">
+          <summary><i class="fa-solid fa-key" aria-hidden="true"></i>忘记密码</summary>
+          <div class="acc-body">
+            <p>在登录界面点「重置」按钮，按提示重置——系统会往你的邮箱发一个重置代码。</p>
+            <div class="note note-warn">
+              <span class="note-title">重置会清空云端账号信息</span>
+              <p>重置会清空你保存在云端的云存储账号信息并重置密码，重置后需要重新添加云存储。会员计划不受影响。</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="acc" id="change-password">
+          <summary><i class="fa-solid fa-user-pen" aria-hidden="true"></i>修改邮箱与密码</summary>
+          <div class="acc-body">
+            <p>在「个人资料」页改。改邮箱要先收一封验证码邮件，验证通过才生效。改密码不会影响已经添加的云存储。</p>
+            <p class="chip-note">通过迅雷或合作伙伴设备直接登录的账号，只能改邮箱和密码中系统允许的那部分，页面上会写清楚。</p>
+          </div>
+        </details>
+
+        <details class="acc" id="2fa">
+          <summary><i class="fa-solid fa-shield-halved" aria-hidden="true"></i>两步验证</summary>
+          <div class="acc-body">
+            <p>在「个人资料」页开启。用任意 TOTP 验证器应用扫码绑定，绑定成功后会给你一组恢复代码——请单独存好，验证器丢了就靠它登录。</p>
+            <div class="note">
+              <span class="note-title">验证器和恢复代码都没了怎么办</span>
+              <p>在登录界面点「无法使用验证器？通过邮箱禁用两步验证」，系统会往账号邮箱发一个验证码。用这个验证码加账号密码就能关掉两步验证，之后用邮箱密码正常登录。验证码 30 分钟内有效。</p>
+            </div>
+          </div>
+        </details>
+
+        <details class="acc" id="devices">
+          <summary><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>设备解绑</summary>
+          <div class="acc-body">
+            <p>合作伙伴设备自动注册的账号，在改过邮箱和密码之后可以与原设备解绑。设备丢了或者卖掉了，解绑一次可以避免账号泄露。</p>
+            <p class="chip-note">离线的设备上可能还留着已保存的凭据，解绑之后建议再改一次密码，把那条路彻底断掉。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">排错</p>
+          <h2 id="faq-h">常见问题</h2>
+          <p>下面这些是被问得最多的几个，答案来自我们在 GitHub issues 上的回复。</p>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-plug-circle-exclamation" aria-hidden="true"></i>套了反向代理之后，界面一直卡在「连接中…」</summary>
+          <div class="acc-body">
+            <p>根因是反向代理把 PushMessage 这条 gRPC-Web 长连接给缓冲了，响应头一直不下发，前端就一直等；仪表盘上的任务数也跟着不刷新。在 nginx 里为 CloudDrive2 的转发关掉缓冲、放大读超时即可：</p>
+            <div class="code-block"><pre><code>location / {
+    proxy_pass http://127.0.0.1:19798;   # 改成你的 CD2 HTTP 端口
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    # 关键：流式 gRPC-Web 必须关闭缓冲
+    proxy_buffering off;
+    proxy_request_buffering off;
+    chunked_transfer_encoding on;
+    proxy_set_header Connection "";
+
+    # PushMessage 是长连接，读超时要放大
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+}</code></pre></div>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-apple" aria-hidden="true"></i>macOS 启动报 libfuse.2.dylib 缺失</summary>
+          <div class="acc-body">
+            <p>这是没有安装 macFUSE。挂载功能依赖它提供 <code>libfuse.2.dylib</code>。到 <a href="https://macfuse.github.io/" rel="noopener">macfuse.github.io</a> 下载安装，再按<a href="/macfuse.html">给 macFUSE 放行</a>里的步骤在系统设置里允许它的内核扩展——Apple 芯片的 Mac 还要进一次恢复模式。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-google-drive" aria-hidden="true"></i>添加 Google Drive 时报「此应用已被阻止」</summary>
+          <div class="acc-body">
+            <p>用你自己的 Google OAuth 凭据就不会被拦：到 Google Cloud Console 新建一个项目，启用 Google Drive API，配置 OAuth 同意屏幕并把自己加为测试用户，然后创建 OAuth 客户端 ID，拿到 client_id 与 client_secret；在 CloudDrive2 里添加 Google Drive 时填进去即可。这样授权走的是你自己的应用。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>115 扫码成功，但云盘不显示</summary>
+          <div class="acc-body">
+            <p>旧的「115」私有接口已经下线，扫码会成功但连不上。请改用 <strong>115open</strong>：先移除当前的 115，再添加 115open，然后把它重命名回原来的名字——挂载路径就不会变，已配置的挂载点和备份都不用改。</p>
+            <p class="chip-note">如果是连不上、报网络错误，那多半是到 115 或天翼登录接口的网络不通，先查 DNS 和代理再重试。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows 上打不开 19798</summary>
+          <div class="acc-body">
+            <p>按这个顺序查，多数问题在第一步就露馅了。</p>
+            <ol>
+              <li><strong>服务在不在跑。</strong>按 Win+R 打开 <code>services.msc</code>，找 <strong>CloudDrive2 Service</strong>（服务名 <code>CloudDrive2</code>）。状态应该是「正在运行」，启动类型应该是「自动」。停着就右键启动它；启动类型被改成「手动」或「禁用」的，右键 →「属性」改回「自动」，否则下次开机它不会自己起来。命令行同样能看：
+                <div class="code-block"><pre><code>sc query CloudDrive2</code></pre></div>
+              </li>
+              <li><strong>服务在跑，但别的机器连不上。</strong>那是 Windows 防火墙没放行端口——核心服务 <strong>19798</strong>，开了 HTTPS 再加 <strong>19799</strong>。本机用 <code>http://localhost:19798</code> 能开、别的机器打不开，基本就是这一条。</li>
+              <li><strong>服务起不来，或者刚起来就停。</strong>多半是被杀毒软件拦了。把 CloudDrive2 的安装目录和 WinFSP 一起加进白名单再试。</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-shield-virus" aria-hidden="true"></i>杀毒软件报安装包有毒</summary>
+          <div class="acc-body">
+            <p>这是误报。安装包经过代码签名，被检出的 <code>is-XXXX.tmp</code> 只是 Inno Setup 安装器解包时的临时文件，被启发式引擎误判。可以把安装目录和安装包加进杀软白名单，并向厂商提交误报反馈。</p>
+            <p>装完之后也可能被拦：服务起不来、挂载盘出不来，或者应用被直接关掉。签名齐全也挡不住启发式引擎，把 CloudDrive2 的安装目录和 WinFSP 一并加进白名单即可。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows 7 上装不了 / 登录不了</summary>
+          <div class="acc-body">
+            <p>Windows 7 已停止支持，其系统自带的 TLS 和运行库无法满足当前版本对安全连接和依赖的要求。建议在 Windows 10 / 11 上使用；如果必须在旧设备上跑，可以考虑改用 Linux 或 Docker 版本。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band band-alt cta-band">
+      <div class="container">
+        <h2>还是没解决？</h2>
+        <p>bug 和功能需求最好提到 GitHub issues 上，有记录也追得到。Telegram 群里平时有人在，也可以直接发邮件。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">在 GitHub 提 issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">发邮件</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
     <div class="container">
-      <p>&copy; 2025 CloudDrive. All rights reserved.</p>
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/help.html">English</a></p>
+      </div>
     </div>
   </footer>
 </body>

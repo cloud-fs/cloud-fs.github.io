@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudDrive2 — All your clouds. One app. Every screen.</title>
+  <meta name="description" content="CloudDrive2 mounts every cloud drive you own as a local disk, and streams what's on them in cinema quality: true Dolby Vision, Blu-ray disc menus, DSD1024, AI subtitle translation, and a streaming PDF reader that opens gigabyte-sized books in seconds.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="CloudDrive2 — All your clouds. One app. Every screen.">
+  <meta property="og:description" content="Mount every cloud as a local disk, then play what's on it in cinema quality on every screen you own.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t;if(!localStorage.getItem("cd2-lang")&&/^zh/i.test(navigator.language||""))location.replace("/")}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudDrive2",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "iOS, iPadOS, macOS, tvOS, visionOS, Android, Windows, Linux",
+    "url": "https://www.clouddrive2.com/en/",
+    "image": "https://www.clouddrive2.com/img/og-cover.jpg",
+    "description": "Multi-cloud management, local mounting and cinema-grade media playback."
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/" aria-current="page">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ── hero ─────────────────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Multi-cloud · Media · Every platform</p>
+          <h1>All your clouds. One app. Every screen.</h1>
+          <p class="hero-lede">
+            CloudDrive2 mounts every cloud drive you own as a local disk — then streams what's
+            on them, in cinema quality, to your phone, Mac, TV and headset. No downloading first.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/en/download.html">Download CloudDrive2</a>
+            <a class="btn btn-ghost" href="/en/apps/">See the apps</a>
+          </div>
+          <ul class="chips">
+            <li><span class="chip chip-video">True Dolby Vision P7 FEL</span></li>
+            <li><span class="chip chip-disc">Blu-ray disc menus</span></li>
+            <li><span class="chip chip-audio">DSD1024</span></li>
+            <li><span class="chip chip-subs">AI subtitles</span></li>
+            <li><span class="chip chip-cloud">Emby · Jellyfin direct</span></li>
+            <li><span class="chip chip-audio">Gigabyte PDFs in seconds</span></li>
+          </ul>
+        </div>
+        <div class="hero-stack">
+          <img class="shot-wide" src="/img/shots/macos-dashboard.webp" width="1600" height="815"
+               decoding="async" alt="The CloudDrive2 dashboard on a Mac, showing total storage across connected clouds and quick access to files, clouds, mounts, backups, transfers and WebDAV.">
+          <img class="shot-phone" src="/img/shots/iphone-dashboard.webp" width="553" height="1035"
+               decoding="async" alt="The CloudDrive2 dashboard on iPhone, with a storage card and eight quick-access tiles.">
+        </div>
+      </div>
+    </section>
+
+    <!-- ── platform strip ───────────────────────────────────────────── -->
+    <section class="band band-tight band-alt" aria-labelledby="platforms-h">
+      <div class="container">
+        <h2 id="platforms-h" class="sr-only">Supported platforms</h2>
+        <ul class="platform-strip">
+          <li><a href="/en/apps/ios.html"><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone · iPad</a></li>
+          <li><a href="/en/apps/macos.html"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</a></li>
+          <li><a href="/en/apps/tvos.html"><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV</a></li>
+          <li><a href="/en/apps/visionos.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Vision Pro</a></li>
+          <li><a href="/en/apps/android.html"><i class="fa-brands fa-android" aria-hidden="true"></i>Android</a></li>
+          <li><a href="/en/apps/android.html#android-tv"><i class="fa-solid fa-tv" aria-hidden="true"></i>Android TV</a></li>
+          <li><a href="/en/apps/quest.html"><i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>Meta Quest</a></li>
+          <li><a href="/en/apps/windows.html"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</a></li>
+          <li><a href="/en/apps/desktop.html"><i class="fa-brands fa-linux" aria-hidden="true"></i>Linux · NAS</a></li>
+          <li><a href="/en/docker.html"><i class="fa-brands fa-docker" aria-hidden="true"></i>Docker</a></li>
+          <li><a href="/en/apps/desktop.html#web-ui"><i class="fa-solid fa-globe" aria-hidden="true"></i>Web UI</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── launch: CloudDrive2 App, and how it relates to Core ──────── -->
+    <section class="band band-dark" aria-labelledby="naming-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="pill"><i class="fa-solid fa-star" aria-hidden="true"></i>New</p>
+          <h2 id="naming-h">Introducing CloudDrive2 App</h2>
+          <p>We are delighted to announce <strong>CloudDrive2 App</strong>: native apps for iPhone, iPad,
+             Mac, Apple TV, Vision Pro, Android phones and TVs, Meta Quest and Windows — each with
+             professional-grade video, audio and document playback.</p>
+        </header>
+
+        <h3>What about the CloudDrive2 I already run?</h3>
+        <p>Still here, and not replaced. It is now called <strong>CloudDrive2 Core</strong>, and the new
+           apps are built on top of it.</p>
+
+        <div class="halves">
+          <div class="half">
+            <p class="half-kicker">The one you have been using</p>
+            <h3>CloudDrive2 Core</h3>
+            <p>This is the original CloudDrive2. It is still a standalone product: it runs on a computer,
+               a NAS, Docker or a server, you manage it through the browser, and it remains under active
+               development.</p>
+            <p class="half-foot"><a class="arrow-link" href="/en/features.html">See the core features</a></p>
+          </div>
+          <p class="halves-join" aria-hidden="true">＋</p>
+          <div class="half">
+            <p class="half-kicker">The new one</p>
+            <h3>CloudDrive2 App</h3>
+            <p>Built on that same, still-developing Core, running natively on every platform and adding
+               professional-grade video, audio and document playback on top.</p>
+            <p class="half-foot"><a class="arrow-link" href="/en/apps/">See all the apps</a></p>
+          </div>
+        </div>
+
+        <p>More scenarios and more file types are coming.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/apps/">See all the apps</a>
+          <a class="btn btn-ghost" href="/en/download.html">Go to downloads</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── lifetime member promotion ────────────────────────────────── -->
+    <section class="band band-tight" aria-labelledby="promo-h">
+      <div class="container container-narrow">
+        <div class="promo">
+          <p class="promo-deadline">
+            <i class="fa-solid fa-gift" aria-hidden="true"></i>Ends 31 August 2026
+          </p>
+          <h2 id="promo-h">Thank you for testing it with us</h2>
+          <p>Through the testing stage, Core Lifetime members had every App Pro feature switched on.
+             The suggestions, bug reports and feedback you sent in over that period genuinely changed
+             this product.</p>
+          <p>So here is where that lands: <strong>every Core Lifetime member as of 31 August 2026 moves
+             up to the Ultimate Bundle, free</strong> — Core Lifetime plus App Pro, at no further cost.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/en/pricing.html">What the Ultimate Bundle includes</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── core features ────────────────────────────────────────────── -->
+    <section class="band" aria-labelledby="core-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">The core</p>
+          <h2 id="core-h">The same core, on every device</h2>
+          <p>The CloudDrive2 core manages every cloud account you have and handles cross-cloud copying,
+             encryption, backup and WebDAV. It is the background service you install on a computer, NAS or
+             Docker host, and it is built into every platform app in full — phones, TVs and headsets need
+             no server of their own. Each item below opens the full explanation.</p>
+        </header>
+        <ul class="card-grid">
+          <li><a class="card" href="/en/features.html#local-mount">
+            <i class="fa-solid fa-laptop-file card-icon" aria-hidden="true"></i>
+            <h3>Mount clouds as local disks</h3>
+            <p>Mount any number of clouds as local drives and use them like an internal disk. The only
+               cloud mount with full file-system semantics: POSIX permissions, ownership and extended
+               attributes, Windows security descriptors and ACLs, and random writes that never download
+               the whole file first.</p>
+          </a></li>
+          <li><a class="card" href="/en/features.html#unified-web-management">
+            <i class="fa-solid fa-people-roof card-icon" aria-hidden="true"></i>
+            <h3>One place for every cloud</h3>
+            <p>Organise files, sync folders and search across providers from a single interface — Aliyun Drive, Baidu, 115, Tianyi, 123 Pan, OneDrive, Google Drive, Xunlei, WebDAV and local folders.</p>
+          </a></li>
+          <li><a class="card" href="/en/features.html#one-login">
+            <i class="fa-solid fa-right-to-bracket card-icon" aria-hidden="true"></i>
+            <h3>Sign in once, use anywhere</h3>
+            <p>Sign in to your cloud accounts once and reach them from any device. Account details are encrypted with your password, and the server only ever stores a hash of it.</p>
+          </a></li>
+          <li><a class="card" href="/en/features.html#webdav">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>Built-in WebDAV server</h3>
+            <p>CloudDrive2 is itself a WebDAV server, so any WebDAV client can reach your combined cloud storage.</p>
+          </a></li>
+          <li><a class="card" href="/en/features.html#clouddrive-sharing">
+            <i class="fa-solid fa-share-nodes card-icon" aria-hidden="true"></i>
+            <h3>Share it with an API token</h3>
+            <p>Create an API token and any client that speaks the CloudDrive API can connect — another CloudDrive2, or third-party software. Far more survives than over WebDAV: thumbnails and previews, search on the cloud, offline downloads, rapid upload, capacity and direct links — granted item by item, with an expiry.</p>
+          </a></li>
+          <li><a class="card" href="/en/features.html#inter-cloud-copy">
+            <span class="badge-pro">PRO</span>
+            <i class="fa-solid fa-people-carry-box card-icon" aria-hidden="true"></i>
+            <h3>Fast cross-cloud copying</h3>
+            <p>Move files between clouds directly, without downloading them first. Saves your time and your bandwidth.</p>
+          </a></li>
+          <li><a class="card" href="/en/features.html#file-notification">
+            <span class="badge-pro">PRO</span>
+            <i class="fa-solid fa-bell card-icon" aria-hidden="true"></i>
+            <h3>File change notifications</h3>
+            <p>Get notified the moment a cloud file changes, so filesystem-watching tools keep working as they should.</p>
+          </a></li>
+          <li><a class="card" href="/en/features.html#encrypted-filesystem">
+            <span class="badge-pro">PRO</span>
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>Encrypted filesystem</h3>
+            <p>Create encrypted folders in any cloud or local folder. Filenames use AES, contents use chacha20-poly1305, and the password never leaves your machine. Unlocked, it behaves like any other folder.</p>
+          </a></li>
+          <li><a class="card" href="/en/features.html#file-access-control">
+            <span class="badge-pro">PRO</span>
+            <i class="fa-solid fa-lock card-icon" aria-hidden="true"></i>
+            <h3>Per-application permissions</h3>
+            <p>Define and manage file access per program, so you control exactly which app can read or write what.</p>
+          </a></li>
+          <li><a class="card" href="/en/features.html#service-vendor-friendly">
+            <i class="fa-solid fa-handshake card-icon" aria-hidden="true"></i>
+            <h3>Fair to the cloud providers</h3>
+            <p>CloudDrive2 keeps your experience smooth while using as little of the provider's capacity as it can.</p>
+          </a></li>
+          <li><a class="card" href="/en/features.html#multicloud-backup">
+            <span class="badge-pro">PRO</span>
+            <i class="fa-solid fa-cloud-arrow-up card-icon" aria-hidden="true"></i>
+            <h3>Multi-cloud backup</h3>
+            <p>Back any local disk or cloud up to several destinations at once, with automatic change detection, incremental runs and unlimited version history for overwrites and deletions.</p>
+          </a></li>
+          <li><a class="card" href="/en/apps/desktop.html">
+            <i class="fa-solid fa-globe card-icon" aria-hidden="true"></i>
+            <h3>Runs on nearly anything</h3>
+            <p>Windows, Linux and macOS computers. Synology, QNAP, Unraid and fnOS NAS boxes. Android phones and TV boxes. Even OpenWRT routers.</p>
+          </a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── media showcase (cinema register) ─────────────────────────── -->
+    <section class="band band-dark" aria-labelledby="media-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Media</p>
+          <h2 id="media-h">Watch what's in the cloud, from the cloud</h2>
+          <p>The CloudDrive2 App's player reads straight from cloud storage, so a 60 GB disc image never has
+             to come down to your device first. Decoding, menus, audio tracks and subtitles all come with it.</p>
+        </header>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Emby &amp; Jellyfin client with Direct Stream</h3>
+            <p>Sign in to your Emby or Jellyfin server to browse libraries, resume playback and read metadata.
+               When the server's media folder lives on CloudDrive anyway, the player skips the server's
+               transcoder and pulls from the cloud directly — your server stops relaying every byte.</p>
+            <p>From there the file is opened by the CloudDrive2 App's own player, so what plays is decided
+               by the player and not by the server: Blu-ray ISOs with their HDMV disc menus, true Dolby
+               Vision Profile 7, DSD and SACD ISOs — none of which Emby or Jellyfin support at all — open
+               straight from the library, and your watch history still syncs back to the server.</p>
+            <p>On the server side there is also a <a href="/en/download.html#plugin-h">companion plugin</a>: live
+               library updates without real-time monitoring, playback-aware prefetch, and path mappings you
+               no longer write by hand.</p>
+            <ul class="chips">
+              <li><span class="chip chip-cloud">Direct Stream</span></li>
+              <li><span class="chip chip-cloud">No server transcode</span></li>
+              <li><span class="chip chip-disc">Disc ISOs with menus</span></li>
+              <li><span class="chip chip-cloud">Server companion plugin</span></li>
+            </ul>
+            <a class="arrow-link" href="/en/apps/ios.html">See it on iPhone and iPad</a>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-media_client.webp" width="1600" height="888" loading="lazy" decoding="async"
+                 alt="The media view in CloudDrive: a featured title across the top, a row of libraries beneath it, and a Continue Watching shelf with a progress bar under each poster.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>True Dolby Vision and HDR10+</h3>
+            <p>Hardware-accelerated HEVC, AV1 and H.264 decoding, with Dolby Vision Profiles 5, 7 and 8
+               alongside HDR10, HDR10+ and HLG. Profile 7 Blu-ray content plays as Dolby Vision, full
+               enhancement layer (FEL) included, rather than falling back to HDR10.</p>
+            <p class="chip-note">A Profile 7 disc carries two picture layers. CloudDrive2 reads both and composes the enhancement layer into the final picture, full enhancement layer (FEL) sources included — what you get is the complete dual-layer Dolby Vision picture, not a base-layer-only render and not an HDR10 fallback. Windows, Android and the macOS direct download have it today; the App Store builds get it in app 1.0.15, currently in review. The <a href="/en/apps/quest.html">Meta Quest app</a> is the exception: in the headset only the base layer is used.</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">DV P5 / 7 / 8</span></li>
+              <li><span class="chip chip-video">HDR10+ · HLG</span></li>
+              <li><span class="chip chip-video">HEVC · AV1</span></li>
+            </ul>
+            <a class="arrow-link" href="/en/apps/macos.html">See it on the Mac</a>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-player_hdr10.webp" width="1600" height="901" loading="lazy" decoding="async"
+                 alt="A full-screen player on macOS playing a 4K demo clip, with HDR10, 4K and HEVC format badges in the corner.">
+          </figure>
+        </div>
+
+        <!-- no screenshot exists for disc menus; presented as a spec block -->
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Blu-ray ISOs, disc menus included</h3>
+            <p>Open a Blu-ray or DVD ISO straight from the cloud and get the real disc menu: chapter
+               selection, audio tracks, subtitle tracks, coloured shortcut keys. If the image is
+               incomplete, playback skips the menu and starts the main feature.</p>
+            <p class="chip-note">HDMV menus work on every platform. BD-J (Java) menus need Android, Meta Quest, Windows or the macOS build downloaded from this site; on iPhone, iPad, Apple TV, Vision Pro and the Mac App Store build a BD-J disc plays the main feature directly.</p>
+            <ul class="chips">
+              <li><span class="chip chip-disc">HDMV menus</span></li>
+              <li><span class="chip chip-disc">BD-J menus</span></li>
+              <li><span class="chip chip-disc">DVD ISO</span></li>
+              <li><span class="chip chip-audio">TrueHD · DTS-HD MA</span></li>
+            </ul>
+            <a class="arrow-link" href="/en/apps/android.html">See disc menus on Android</a>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-disc_menu.webp" width="1600" height="950" loading="lazy" decoding="async"
+                 alt="A Blu-ray disc's scene selection menu: PLAY, SETTINGS, SCENES and EXTRAS along the bottom, a row of scene thumbnails above, and bookmarks in the corner.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>AI subtitle translation, on your device</h3>
+            <p>Transcribe a film that has no subtitles and translate it into your language, or translate an
+               existing foreign-language track in full. Both steps run locally — no audio is sent to any
+               server. Generated subtitles are saved next to the video, so another device can reuse them.</p>
+            <ul class="chips">
+              <li><span class="chip chip-subs">On-device transcription</span></li>
+              <li><span class="chip chip-subs">Whole-track translation</span></li>
+              <li><span class="chip chip-subs">Saved as SRT</span></li>
+            </ul>
+            <a class="arrow-link" href="/en/apps/macos.html">See the subtitle settings</a>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-ai_subtitles.webp" width="1600" height="1053" loading="lazy" decoding="async"
+                 alt="Live Translation settings on macOS: spoken language Italian, target language Simplified Chinese, transcribe model set to on-device Apple.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>A multi-gigabyte PDF, open in seconds</h3>
+            <p>The streaming PDF reader never pulls the whole book down, fetching only the byte range the
+               pages you are looking at actually need. The 3.31 GB, 5892-page volume beside this opens from
+               the cloud in seconds, and dragging the scrubber to page 4038 renders on the spot — with no
+               complete copy left on your disk.</p>
+            <p>Turning pages, zooming and jumping through the outline all fetch on demand. Page thumbnails,
+               outline navigation, bookmarks and reading-position memory are all there.</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">Fetches pages on demand</span></li>
+              <li><span class="chip chip-audio">No full download</span></li>
+              <li><span class="chip chip-audio">Bookmarks and position</span></li>
+            </ul>
+            <a class="arrow-link" href="/en/apps/windows.html">See it on Windows</a>
+          </div>
+          <figure>
+            <img src="/img/shots/windows-pdf_reader.webp" width="1400" height="1055" loading="lazy" decoding="async"
+                 alt="The streaming PDF reader with a 3.31 GB document open in a two-page spread, the scrubber resting on page 4038 of 5892.">
+            <figcaption class="figure-caption">3.31 GB · 5892 pages · jumped straight to page 4038</figcaption>
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>Audiophile audio: DSD, SACD, bit-perfect</h3>
+            <p>Play DSD files and SACD ISOs straight from the cloud, sent over DoP to your USB DAC at up to
+               DSD1024. The app reads the capabilities the DAC itself reports, so the sample rates, bit
+               depths and DSD tiers you see are the ones it genuinely supports.</p>
+            <ul class="chips">
+              <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
+              <li><span class="chip chip-audio">DoP 1.1</span></li>
+              <li><span class="chip chip-audio">SACD ISO</span></li>
+              <li><span class="chip chip-audio">Dolby Atmos</span></li>
+            </ul>
+            <p class="chip-note">Native DSD straight to the DAC needs Android, the macOS build downloaded from this site, or Windows with your DAC's ASIO driver installed. Everywhere else it goes over DoP, which is equally bit-perfect.</p>
+            <p class="chip-note">DSD64 through DSD1024 are all supported. How far DoP and Native DSD actually go is set by the DAC you connect — the app outputs to what the DAC itself reports, and anything beyond that is converted to PCM.</p>
+            <a class="arrow-link" href="/en/apps/android.html">See the audio settings on Android</a>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-audio_player.webp" width="900" height="1487" loading="lazy" decoding="async"
+                 alt="The audio player mid-track on a DSD1024 file, with DSD1024 and DoP badges side by side beneath the artwork.">
+            <figcaption class="figure-caption">DSD1024 over DoP · the same on every platform</figcaption>
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
+            <h3>A private cinema on Vision Pro and Quest</h3>
+            <p>180°/360° VR video, Apple Spatial video and MVC 3D Blu-ray, streamed from the cloud. In VR
+               video, subtitles on both Vision Pro and Quest take on the depth of the picture automatically;
+               flat video has no depth to follow, so its subtitles stay on the screen plane. On Quest you can
+               also pick a cinema environment and set the screen's distance and curvature.</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">180° / 360°</span></li>
+              <li><span class="chip chip-video">MVC 3D</span></li>
+              <li><span class="chip chip-video">Apple Spatial video</span></li>
+            </ul>
+            <a class="arrow-link" href="/en/apps/visionos.html">See the Vision Pro app</a>
+          </div>
+          <figure>
+            <img src="/img/shots/visionos-immersive.webp" width="1600" height="900" loading="lazy" decoding="async"
+                 alt="Immersive playback on Vision Pro: a large virtual screen floating in a living room, playing 4K HDR footage.">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── open gRPC API ────────────────────────────────────────────── -->
+    <section class="band band-alt" aria-labelledby="api-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Open interface</p>
+          <h2 id="api-h">Our own apps are just clients of this API</h2>
+          <p>The core service exposes a complete gRPC API — not a handful of read-only endpoints held out
+             as a gesture. Every CloudDrive2 platform app, and the management interface in your browser,
+             is built entirely on it. There is no private route we kept for ourselves.</p>
+          <p>Which means a third-party developer can build anything we can. The interface is open to all
+             of them.</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-diagram-project card-icon" aria-hidden="true"></i>
+            <h3>It reaches everywhere</h3>
+            <p>File operations, mount point management, transfer tasks, cloud accounts, backup, the WebDAV service, API tokens, two-factor authentication and session management — over two hundred RPC methods, all of them available. Filesystem changes arrive in real time over a server stream.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-code card-icon" aria-hidden="true"></i>
+            <h3>Take the proto and start</h3>
+            <p>gRPC over HTTP/2, or gRPC-Web from a browser. Download the proto file and generate a client in whatever language you work in — the developer's guide walks through C#, Java, Go and Python.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-key card-icon" aria-hidden="true"></i>
+            <h3>You decide what it may touch</h3>
+            <p>Authorise with an API token, tick only the permissions it needs, and give it an expiry. Handing a third-party program a read-only token is a different act from handing it everything.</p>
+          </div></li>
+        </ul>
+
+        <div class="code-block">
+          <pre><code>curl https://www.clouddrive2.com/api/clouddrive.proto -o clouddrive.proto</code></pre>
+        </div>
+
+        <p class="chip-note">Not a promise on paper: the <a href="/en/download.html#plugin-h">Emby and Jellyfin companion plugin</a> on this site talks to CloudDrive2 through this same interface, by the same route any third-party program would take.</p>
+
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/api/CloudDrive2_gRPC_API_Guide.html">Read the API developer's guide</a>
+          <a class="btn btn-ghost" href="/api/clouddrive.proto">Download the proto file</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── partners ─────────────────────────────────────────────────── -->
+    <section class="band band-dark" aria-labelledby="partners-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Partners</p>
+          <h2 id="partners-h">Some devices ship with CloudDrive2 already on them</h2>
+          <p>TVs, TV boxes, Blu-ray players, NAS units, headsets — a lot of manufacturers build CloudDrive2 into
+             their products, so their users reach their own clouds on first boot. Devices from certified
+             partners go further and register with a device ID, which skips creating an account entirely.</p>
+        </header>
+
+        <ul class="logo-wall">
+          <li><span class="logo-tile"><img src="/img/partners/tencent-aurora-box.webp" alt="Tencent Aurora Box" width="560" height="120" loading="lazy" decoding="async"></span></li>
+          <li><span class="logo-tile"><img class="logo-word" src="/img/partners/tcl.svg" alt="TCL" width="68" height="24" loading="lazy" decoding="async"></span></li>
+          <li><span class="logo-tile"><img class="logo-word" src="/img/partners/hisense.svg" alt="Hisense" width="104" height="16" loading="lazy" decoding="async"></span></li>
+          <li><span class="logo-tile"><img src="/img/partners/sgw.webp" alt="拾光坞" width="560" height="146" loading="lazy" decoding="async"></span></li>
+          <li><span class="logo-tile"><img class="logo-mark" src="/img/partners/doopoo.webp" alt="doopoo" width="160" height="160" loading="lazy" decoding="async"></span></li>
+          <li><span class="logo-tile"><img class="logo-word" src="/img/partners/himedia.webp" alt="HiMedia" width="480" height="61" loading="lazy" decoding="async"></span></li>
+          <li><span class="logo-tile"><img class="logo-mark" src="/img/partners/dunehd.webp" alt="Dune HD" width="480" height="220" loading="lazy" decoding="async"></span></li>
+          <li><span class="logo-tile"><img src="/img/partners/hdsir.webp" alt="HD SIR" width="168" height="42" loading="lazy" decoding="async"></span></li>
+          <li><span class="logo-tile"><img class="logo-word" src="/img/partners/goovis.webp" alt="GOOVIS" width="480" height="94" loading="lazy" decoding="async"></span></li>
+          <li><span class="logo-tile"><img class="logo-word" src="/img/partners/unraid.svg" alt="Unraid" width="175" height="31" loading="lazy" decoding="async"></span></li>
+          <li><span class="logo-tile"><img class="logo-mark" src="/img/partners/xunlei.svg" alt="Xunlei" width="140" height="68" loading="lazy" decoding="async"></span></li>
+        </ul>
+
+        <p class="chip-note">We’re open to every manufacturer — if you want CloudDrive2 in your product,
+           come talk to us.</p>
+
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/partners.html">Meet the partners</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── accessibility programme ──────────────────────────────────── -->
+    <section class="band" aria-labelledby="a11y-h">
+      <div class="container container-narrow">
+        <p class="eyebrow">For users with visual impairments</p>
+        <h2 id="a11y-h">A ¥299 Core Lifetime tier, and a commitment</h2>
+        <p>Since CloudDrive launched we have received many letters from users with visual impairments —
+           not only kind words, but specific, practical suggestions about accessible interfaces. We commit
+           to taking accessibility fully into account, and continuing to improve it, in the interface work ahead.</p>
+        <p>Those letters taught us how much effort it takes to operate several separate cloud-drive clients
+           one by one. Mounting every cloud as a single system drive removes that layer of work entirely —
+           which is exactly what CloudDrive does.</p>
+        <p>So while Core Lifetime has returned to its regular ¥499, we keep a
+           <strong>¥299 Core Lifetime tier</strong> available — identical to the ¥499 one in what it
+           includes. Email us the name and certificate number on your
+           visual-disability certificate, and we will review it and send a discount code straight away.
+           Redeem it on a direct in-app purchase with your CloudDrive account — store rules mean discount
+           codes cannot be applied through the App Store, Google Play or the Meta store.</p>
+        <p class="btn-row">
+          <a class="btn btn-primary" href="mailto:waytechcloudfs@gmail.com">Email us for a code</a>
+          <a class="btn btn-ghost" href="/en/pricing.html">See all plans</a>
+        </p>
+        <p>Thank you for your understanding and support, and for helping us make this a better product.</p>
+      </div>
+    </section>
+
+    <!-- ── bottom CTA ───────────────────────────────────────────────── -->
+    <section class="band band-alt cta-band">
+      <div class="container">
+        <h2>Put your clouds on every screen</h2>
+        <p>The core is free to start: download it for a computer, NAS or Docker host, or get the app for your phone, TV or headset from its store.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/download.html">Go to downloads</a>
+          <a class="btn btn-ghost" href="/en/pricing.html">Plans and pricing</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

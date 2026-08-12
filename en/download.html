@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Download CloudDrive2 — Windows, Linux, macOS, Android, NAS</title>
+  <meta name="description" content="Download CloudDrive2: store links plus direct macOS and Android app builds, and the core service for Windows, Linux, macOS, Android and fnOS with the Docker image. Includes mirrors and the full changelog.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/download.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/download.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/download.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/download.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Download CloudDrive2">
+  <meta property="og:description" content="The app and the core service, released separately: store links, direct builds, installers for every platform, the Docker image and the full changelog.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/download.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html" aria-current="page">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/download.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" data-release>
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Download</p>
+        <h1>Install it wherever it belongs</h1>
+        <p class="hero-lede">
+          The same core, installed two ways: as the app on a phone, tablet, TV or headset,
+          or as a background service on a computer, NAS or Docker host. Sign in with the same CloudDrive account.
+        </p>
+        <ul class="chips">
+          <li><a class="chip chip-cloud" href="#apps">App stores</a></li>
+          <li><a class="chip chip-cloud" href="#app">Direct app downloads</a></li>
+          <li><a class="chip chip-cloud" href="#core">Core service packages</a></li>
+          <li><a class="chip" href="#mirrors">Cloud-drive mirrors</a></li>
+          <li><a class="chip" href="#nas">NAS and Docker</a></li>
+          <li><a class="chip" href="#plugin">Emby / Jellyfin plugin</a></li>
+          <li><a class="chip" href="#changelog">Changelog</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="apps" aria-labelledby="stores-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">App stores</p>
+          <h2 id="stores-h">Phones, tablets, TVs and headsets</h2>
+          <p>Install from the store and sign in with the same CloudDrive account. Core membership and App Pro
+             both live on the account, so they follow you across devices and platforms.</p>
+        </header>
+        <ul class="store-badges">
+          <li><a class="store-badge" href="https://apps.apple.com/us/app/clouddrive2-cloud-manager/id6760897168" rel="noopener">
+            <i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>
+            <span><b>App Store</b><span>Mac · Apple TV · Vision Pro — available now</span></span>
+          </a></li>
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-brands fa-app-store-ios" aria-hidden="true"></i>
+            <span><b>App Store</b><span>iPhone · iPad — in review</span></span>
+          </span></li>
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-brands fa-google-play" aria-hidden="true"></i>
+            <span><b>Google Play</b><span>Android phones and Android TV — closed testing</span></span>
+          </span></li>
+          <li><span class="store-badge" aria-disabled="true">
+            <i class="fa-solid fa-vr-cardboard" aria-hidden="true"></i>
+            <span><b>Meta Horizon</b><span>Quest — in alpha</span></span>
+          </span></li>
+        </ul>
+        <p class="chip-note">The iPhone and iPad build is in App Store review and installs as soon as it
+           clears. Android is in closed testing and not open to everyone yet — but the
+           <a href="#app">universal APK below</a> installs at any time, whatever the store is doing.</p>
+        <p class="chip-note">What each platform can do, what it requires and what it looks like is on the
+           <a href="/en/apps/">apps pages</a>.</p>
+      </div>
+    </section>
+
+    <section class="band" id="app" aria-labelledby="app-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">The app</p>
+          <h2 id="app-h">Direct app downloads</h2>
+          <p>The app and the core service are separate packages, released separately and versioned separately.
+             These are the app builds that do not go through a store: a notarised dmg for macOS, signed installers
+             for Windows and a universal APK for Android. They all check for their own updates in-app.</p>
+          <p class="release-line">Current release 1.0.14 ·
+             <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/app-v1.0.14-7" rel="noopener">GitHub release</a></p>
+        </header>
+
+        <ul class="dl-grid">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-7-DeveloperID.dmg">
+            <i class="fa-brands fa-apple" aria-hidden="true"></i>
+            <span><b>macOS direct download</b><span>CloudDrive2-1.0.14-7-DeveloperID.dmg</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-8-windows-x64.exe">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows x64</b><span>CloudDrive2-1.0.14-8-windows-x64.exe</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-8-windows-arm64.exe">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows Arm64</b><span>CloudDrive2-1.0.14-8-windows-arm64.exe</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-332-android.apk">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android universal APK</b><span>CloudDrive2-1.0.14-332-android.apk</span></span>
+          </a></li>
+        </ul>
+
+        <div class="note">
+          <span class="note-title">What they need</span>
+          <p>macOS 12 or later, universal for Apple silicon and Intel. This build is notarised by Apple, so it
+             opens without a security warning, and it runs outside the sandbox — local mounting (which needs
+             <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>), Blu-ray BD-J disc menus and USB
+             Native DSD exist only here. The full comparison is on the <a href="/en/apps/macos.html">macOS page</a>.</p>
+          <p>Windows 10 version 1809 (build 17763) or later, with separate x64 and Arm64 installers — pick the
+             wrong one and the installer says so. Both are code-signed and timestamped. Installing needs
+             administrator rights: it writes to Program Files and sets up the WinFSP driver that mounting uses.</p>
+          <p>Android 7.0 or later, one package for phones, tablets and Android TV. The universal APK covers
+             arm64-v8a and armeabi-v7a (32-bit ARM); there is no x86_64 build.</p>
+        </div>
+
+        <p class="chip-note">iPhone, iPad, Apple TV, Vision Pro and Meta Quest install from their own stores —
+           see <a href="#apps">above</a>. If you only want mounting and browser management and no player, the
+           <a href="#core">core service</a> is enough on its own.</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="core" aria-labelledby="direct-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">The core service</p>
+          <h2 id="direct-h">Core service packages</h2>
+          <p>The core service runs in the background on a computer, NAS or Android device, and does the actual
+             work: connecting clouds, mounting, cross-cloud copying, backup and WebDAV. Once it is installed, open
+             <code>http://&lt;host-ip&gt;:19798</code> in a browser to reach the management interface. Step-by-step
+             instructions are on the <a href="/en/help.html">help page</a>.</p>
+          <p class="release-line">Current release <span data-release-version>1.0.14</span> ·
+             <a data-release-link href="https://github.com/cloud-fs/cloud-fs.github.io/releases/latest" rel="noopener">GitHub releases</a></p>
+        </header>
+
+        <h3>Windows</h3>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-asset="win-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/CloudDrive2Setup-X64-1.0.14.exe">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows x64</b><span data-asset-name>CloudDrive2Setup-X64-1.0.14.exe</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="win-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/CloudDrive2Setup-Arm64-1.0.14.exe">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows Arm64</b><span data-asset-name>CloudDrive2Setup-Arm64-1.0.14.exe</span></span>
+          </a></li>
+        </ul>
+
+        <h3>Linux</h3>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-asset="linux-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-linux-x86_64-1.0.14.tgz">
+            <i class="fa-brands fa-linux" aria-hidden="true"></i>
+            <span><b>Linux x86_64</b><span data-asset-name>clouddrive-2-linux-x86_64-1.0.14.tgz</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="linux-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-linux-aarch64-1.0.14.tgz">
+            <i class="fa-brands fa-linux" aria-hidden="true"></i>
+            <span><b>Linux aarch64</b><span data-asset-name>clouddrive-2-linux-aarch64-1.0.14.tgz</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="linux-armv7" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-linux-armv7-1.0.14.tgz">
+            <i class="fa-brands fa-linux" aria-hidden="true"></i>
+            <span><b>Linux armv7</b><span data-asset-name>clouddrive-2-linux-armv7-1.0.14.tgz</span></span>
+          </a></li>
+        </ul>
+
+        <h3>macOS</h3>
+        <p>Mounting clouds as local disks needs <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a> installed first, and its kernel extension approved afterwards — see <a href="/en/macfuse.html">letting macFUSE through</a>. You can also install through Homebrew — see the <a href="/en/help.html">help page</a>.</p>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-asset="macos-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-macos-x86_64-1.0.14.tgz">
+            <i class="fa-brands fa-apple" aria-hidden="true"></i>
+            <span><b>macOS Intel</b><span data-asset-name>clouddrive-2-macos-x86_64-1.0.14.tgz</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="macos-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-macos-aarch64-1.0.14.tgz">
+            <i class="fa-brands fa-apple" aria-hidden="true"></i>
+            <span><b>macOS Apple Silicon</b><span data-asset-name>clouddrive-2-macos-aarch64-1.0.14.tgz</span></span>
+          </a></li>
+        </ul>
+
+        <h3>Android</h3>
+        <p>The APK here wraps the core service as an Android app, with its own web management interface; the tgz
+           archives run the core service inside an existing Android environment. The CloudDrive2 app with the
+           player is a different package, in the <a href="#app">section above</a>. Local mounting on a phone
+           requires root; browsing, playback, backup and WebDAV do not.</p>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-asset="android-apk" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-universal-1.0.14-222.apk">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android APK (universal)</b><span data-asset-name>clouddrive-2-android-universal-1.0.14-222.apk</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="android-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-aarch64-1.0.14.tgz">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android aarch64</b><span data-asset-name>clouddrive-2-android-aarch64-1.0.14.tgz</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="android-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-x86_64-1.0.14.tgz">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android x86_64</b><span data-asset-name>clouddrive-2-android-x86_64-1.0.14.tgz</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="android-armv7" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-armv7-1.0.14.tgz">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android armv7</b><span data-asset-name>clouddrive-2-android-armv7-1.0.14.tgz</span></span>
+          </a></li>
+        </ul>
+
+        <h3>fnOS</h3>
+        <p>The listing in the official fnOS app centre is still under review. For now, download the fpk package for your architecture and install it manually.</p>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-asset="fnos-x86" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive2_1.0.14_x86.fpk">
+            <i class="fa-solid fa-hard-drive" aria-hidden="true"></i>
+            <span><b>fnOS x86_64</b><span data-asset-name>clouddrive2_1.0.14_x86.fpk</span></span>
+          </a></li>
+          <li><a class="dl-item" data-asset="fnos-arm" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive2_1.0.14_arm.fpk">
+            <i class="fa-solid fa-hard-drive" aria-hidden="true"></i>
+            <span><b>fnOS aarch64</b><span data-asset-name>clouddrive2_1.0.14_arm.fpk</span></span>
+          </a></li>
+        </ul>
+      </div>
+    </section>
+
+
+    <section class="band" id="mirrors" aria-labelledby="mirror-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Mirrors</p>
+          <h2 id="mirror-h">Download from a cloud drive</h2>
+          <p>The same packages as above. Use these when GitHub is slow.</p>
+        </header>
+        <ul class="dl-grid">
+          <li><a class="dl-item" href="https://115cdn.com/s/swsyv343zde?password=s0c3&amp;" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>115</b><span>Access code s0c3</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://www.123pan.com/s/adWkjv-nxz0h.html" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>123 Pan</b><span>No access code</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://pan.baidu.com/s/1KTDKYu4aCAH41TncNm5XEg?pwd=cdr2" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>Baidu Pan</b><span>Access code cdr2</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://www.aliyundrive.com/s/AHYFMyu8LTR/folder/64c93bd53de2f8fbd3aa41eeb8d0340583dd2425" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>Aliyun Drive</b><span>Windows build only, due to sharing limits</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://cloud.189.cn/web/share?code=jiM3aeUZFRja" rel="noopener">
+            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+            <span><b>Tianyi Cloud</b><span>Access code 1otn</span></span>
+          </a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="nas" aria-labelledby="nas-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">NAS and containers</p>
+          <h2 id="nas-h">Running it on a NAS</h2>
+          <p>A NAS runs the same core service, by either of two routes: pull the Docker image, or install the
+             package for its architecture from the list above.</p>
+        </header>
+        <ul class="card-grid">
+          <li><a class="card" href="/en/docker.html">
+            <i class="fa-brands fa-docker card-icon" aria-hidden="true"></i>
+            <h3>Docker deployment guide</h3>
+            <p>For mounts to be visible outside the container the host needs shared mount propagation — which many systems already have. How to check, how to enable it when needed, and the full compose setup are all on that page.</p>
+          </a></li>
+          <li><a class="card" href="https://hub.docker.com/r/cloudnas/clouddrive2" rel="noopener">
+            <i class="fa-brands fa-docker card-icon" aria-hidden="true"></i>
+            <h3>Docker Hub image</h3>
+            <p><code>cloudnas/clouddrive2</code>, covering amd64, arm64 and armv7, published alongside every release.</p>
+          </a></li>
+          <li><a class="card" href="/en/apps/desktop.html">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>Synology, QNAP, Unraid, fnOS</h3>
+            <p>All the mainstream NAS platforms work, with packages for x86_64, arm64 and armv7.</p>
+          </a></li>
+        </ul>
+
+        <h3>Third-party NAS packages</h3>
+        <div class="note note-warn">
+          <span class="note-title">Please note</span>
+          <p>These NAS packages come from third parties. Judge them for yourself before downloading — we cannot vouch for their security or stability.</p>
+        </div>
+        <ul class="dl-grid">
+          <li><a class="dl-item" href="https://imnks.com/3653.html" rel="noopener">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>Synology package</b><span>DSM 6 and DSM 7</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://www.naslab.club/524.html" rel="noopener">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>QNAP package</b><span>Packaged by a third party</span></span>
+          </a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" id="plugin" aria-labelledby="plugin-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Plugin</p>
+          <h2 id="plugin-h">The Emby and Jellyfin companion plugin</h2>
+          <p>This one installs on the media server, and makes Emby or Jellyfin work with the CloudDrive2
+             on the same host. One source tree, two builds.</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-rotate card-icon" aria-hidden="true"></i>
+            <h3>Live library updates, with monitoring off</h3>
+            <p>The plugin subscribes to CloudDrive2's <a href="/en/features.html#file-notification">file-change notifications</a> and hands each one to the server's targeted-refresh entry point. A scraper — tinyMediaManager, MoviePilot, MDCx — finishes in the mounted folder and the film turns up in the library on its own, with real-time monitoring switched off. No recursive walk at startup, no burst of cloud listings, and no reliance on full scans, which are the single biggest cause of cloud-provider rate limiting.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-gauge-high card-icon" aria-hidden="true"></i>
+            <h3>Playback-aware prefetch</h3>
+            <p>At playback start it warms the head and tail of the file — the moov atom or EBML header a player needs for the first frame, and the MKV cues a seek reaches for. Near the end it warms the next file in the same folder, and on stop it closes the reader straight away. Every client benefits, not just the CloudDrive2 App.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-route card-icon" aria-hidden="true"></i>
+            <h3>Zero-config path mapping</h3>
+            <p>Direct play needs to know which local cloud folder a server's media path corresponds to, and that used to be a hand-written rule. The plugin exposes the mounts and cloud-account identities, and the App works the mapping out itself — matching on account identity rather than folder name, because the same 115 account is rarely named the same on both machines.</p>
+          </div></li>
+        </ul>
+
+        <h3>Download</h3>
+        <ul class="dl-grid">
+          <li><a class="dl-item" data-plugin-asset="emby" href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin/releases/latest">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>For Emby</b><span data-plugin-asset-name>Latest release</span></span>
+          </a></li>
+          <li><a class="dl-item" data-plugin-asset="jellyfin" href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin/releases/latest">
+            <i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i>
+            <span><b>For Jellyfin</b><span data-plugin-asset-name>Latest release</span></span>
+          </a></li>
+        </ul>
+        <p class="chip-note">Jellyfin takes the DLL, <code>meta.json</code> and <code>thumb.png</code> together in a <code>CloudDrive</code> subfolder of its plugin directory; Emby takes the DLL on its own, no subfolder. Replacing the DLL inside a container needs the container restarted — the server's own restart button is not enough. Full install and configuration notes are in the <a href="https://github.com/cloud-fs/clouddrive-mediaserver-plugin" rel="noopener">plugin repository</a>.</p>
+
+        <div class="note">
+          <span class="note-title">What it needs</span>
+          <p>Server minimum: <strong>Emby 4.8.0.80</strong> or <strong>Jellyfin 10.11</strong>. Verified on Emby 4.9.5 and Jellyfin 10.11.11.</p>
+          <p>The first two features are server-side only — install the plugin, point it at CloudDrive2, done, with no CloudDrive2 App involved. <strong>Live library updates rely on file-change notification, which is a membership (Pro) feature.</strong> Zero-config path mapping needs <strong>CloudDrive2 App 1.0.14</strong> or later.</p>
+          <p>The plugin connects to CloudDrive2 with an API token. When you create one, <strong>Push Messages and Get Mounts are off by default and have to be ticked by hand</strong> — without them the plugin connects, reports healthy, and never updates the library. It never writes, deletes or modifies a file.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="changelog" aria-labelledby="log-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Changelog</p>
+          <h2 id="log-h">What changed in each release</h2>
+          <p>Release notes for the core service and the web interface, newest first. The last 10 releases are listed here; everything before them is on the GitHub releases page.</p>
+        </header>
+      <details class="acc" open>
+        <summary>1.0.14(Web3.0.14)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>Added account deletion. You can delete your account from the profile page: a confirmation code is emailed to your registered address, and the deletion only goes through once you enter that code. Accounts that were registered automatically by a partner device, and accounts signed in through Xunlei, must first set an email address and password on the profile page before they can be deleted. Deleting an account cancels its remaining balance and all membership entitlements; refunds are not available</li>
+        <li>Fixed mounted drives hanging under heavy load — when transfers were busy and many requests arrived at once, a mounted cloud drive could stop responding for a long time (hours in extreme cases). This is now properly fixed: requests queue smoothly instead of hanging when the system is busy, and a single failing request returns an error promptly and the system recovers on its own</li>
+        <li>Smoother rate limiting, less likely to trip the risk controls of 115 and other clouds; raising the rate limit now takes effect immediately</li>
+        <li>Fixed intermittent "file does not exist" / duplicate-name errors after creating a folder on 115 — a freshly created folder could be misjudged because the cloud's index takes a few seconds to catch up. CloudDrive now detects that delay and retries briefly, so the operation completes normally</li>
+        <li>More reliable backups — temporary problems such as network hiccups are now retried automatically instead of being skipped, so fewer files are missed</li>
+        <li>Fixed backups treating a folder as a file, and added automatic cleanup of the invalid tasks left behind by that bug</li>
+        <li>The membership page now explains what CloudDrive2 App Pro unlocks, and links to it</li>
+        <li>Other bug fixes and performance improvements</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.14" rel="noopener">View this release on GitHub</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.13(Web3.0.13)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>Added resource-usage controls for full scans in multi-cloud backup:
+        <ol type="a">
+        <li>The default number of concurrent backup scans is 1. You can change the maximum concurrency on the backup page; full scans beyond that limit are queued and wait their turn</li>
+        <li>You can set upper and lower thresholds for the upload task queue. When the number of upload tasks exceeds the upper threshold, scan tasks pause and wait; when it falls back to the lower threshold, scan tasks resume automatically. This prevents too many upload tasks from piling up when scanning large files. Unlimited by default; configurable on the backup page</li>
+        </ol>
+        </li>
+        <li>For cross-cloud copies, you can choose on the Download/Upload page in system settings whether to save the downloaded data to a temporary file during the hash-computation stage, so the source file does not need to be downloaded again for the upload. The temporary file is deleted automatically once the copy completes. This option is off by default</li>
+        <li>Windows: fixed errors that could occur when editing images on a mounted drive in the system file manager, and fixed thumbnails not refreshing automatically after rotating an image</li>
+        <li>Fixed the task count shown in real time in the web UI possibly being inaccurate</li>
+        <li>Web UI: fixed dragging a local file to the root directory creating an upload task that could never complete, along with a file that could not be deleted</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.13" rel="noopener">View this release on GitHub</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.12(Web3.0.12)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>Fixed memory growth after a fuse mount: memory no longer grows without bound when media servers such as Emby scan millions of files</li>
+        <li>Fixed multiple S3 accounts on the same endpoint overwriting each other</li>
+        <li>Improved performance when accessing files over http, lowering CPU and memory usage</li>
+        <li>Web UI: added Select All and Deselect All options after entering multi-select mode on mobile</li>
+        <li>Fixed read-only folders (Guangya Cloud) not being usable as the source directory for a mounted drive or a backup</li>
+        <li>Other performance improvements and bug fixes</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.12" rel="noopener">View this release on GitHub</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.11(Web3.0.11)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>Added support for adding Guangya Cloud. Currently read-only: you can browse directories and read files, but cannot create folders, delete files, rename, move or upload. Login by scanning a QR code with the Guangya Cloud app is supported. A fully functional Guangya Cloud integration will come in a later release</li>
+        <li>For S3, when no bucket name is specified, all buckets in the account are browsable: ListBuckets (GET /) is used automatically and each bucket is shown as a top-level folder. Both path-style and virtual-hosted-style addressing, and V2/V4 signatures, are supported. The bucket-list root directory is read-only (creating/deleting buckets is not supported)</li>
+        <li>Fixed file reads possibly failing when connecting to some WebDAV servers that do not support http range requests</li>
+        <li>Web: added multi-server support. You can connect to the grpc service of another CloudDrive2, which makes it convenient to manage a mobile device's CloudDrive remotely from a desktop browser</li>
+        <li>Other bug fixes and UI improvements</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.11" rel="noopener">View this release on GitHub</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.10(Web3.0.10)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>When purchasing a lifetime membership, if the account still has an unexpired annual or monthly membership, the remaining unexpired portion is automatically credited at the annual rate against part of the lifetime membership price</li>
+        <li>Fixed authorization failing in 1.0.9 when adding Xunlei and when signing in with a Xunlei account</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.10" rel="noopener">View this release on GitHub</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.9(Web3.0.9)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>Added fnOS installation package downloads. The listing in the official fnOS app center is under review; for now you can download the fpk package for your architecture and install it manually</li>
+        <li>The web file browser now supports media scraper files (.nfo): it recognizes NFO files and posters inside a folder (Kodi/Emby/Jellyfin/Plex compatible) and shows movie information in the file properties panel. This feature only displays already-scraped directories; it does not scrape anything from the internet on its own</li>
+        <li>With 2FA enabled, if you lose both your recovery codes and your phone app and cannot sign in, you can have a reset code sent to the account email to disable two-factor authentication and sign in with just the account password</li>
+        <li>Accounts registered automatically by a partner device can be unbound from the original device after changing the email and password, so that a lost or sold bound device does not lead to account exposure</li>
+        <li>Added a "use multi-threaded download when copying" option in the cloud storage account configuration. When enabled, cross-cloud transfers and backups use the old multi-threaded download behavior</li>
+        <li>Added a confirmation dialog when locking an already-decrypted folder, to avoid making files unusable by mistake</li>
+        <li>Fixed directory listing failing in edge cases on macOS when there are multiple mount points, which required remounting</li>
+        <li>Fixed slow copying of files into encrypted directories</li>
+        <li>Fixed uploads possibly failing on Windows when editing files directly inside an encrypted folder with editors such as Visual Studio Code</li>
+        <li>Fixed temporary files being left behind when editing a docx file directly with Word in an encrypted directory on 115</li>
+        <li>Fixed downloads possibly failing on 32-bit armv7 when accessing large files directly over http</li>
+        <li>Other performance improvements and bug fixes</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.9" rel="noopener">View this release on GitHub</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.8(Web3.0.8)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>Cross-cloud copy performance improvements:
+        <ul>
+        <li>Memory usage during the preprocessing and upload stages of cross-cloud copies is greatly reduced</li>
+        <li>Cross-cloud copies to a local folder now use multi-threaded download for higher download speed</li>
+        </ul>
+        </li>
+        <li>Fixed editing files directly inside an encrypted folder through a mounted drive possibly failing</li>
+        <li>Fixed the Update button being unclickable in some cases when editing a mount point on Windows</li>
+        <li>Fixed CPU spikes and memory blowup in isolated cases after the service had been running for a long time</li>
+        <li>Other performance improvements, bug fixes and UI improvements</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.8" rel="noopener">View this release on GitHub</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.7(Web3.0.7)</summary>
+        <div class="acc-body">
+        <p><strong>⚠️ Important security notice (required reading for Windows users)</strong></p>
+        <p>This release upgrades WinFSP to 2026 beta1 in order to fix the security vulnerability <a href="https://github.com/winfsp/winfsp/releases/tag/v2.2B1" target="_blank" rel="noopener">CVE-2026-3006</a> found in older versions of WinFSP.</p>
+        <ul>
+        <li>You must download the full installation package and run the installer again, and restart your system when the installation wizard prompts you to.</li>
+        <li>Do not use the in-app OTA update: OTA only replaces the CloudDrive2 program files and will not reinstall the WinFSP driver, so you will not receive this security fix.</li>
+        </ul>
+        <ol>
+        <li>In the 115 configuration screen, the maximum number of download threads is limited to 2; the value set cannot exceed 2</li>
+        <li>Added a maximum requests-per-second limit in the 115 configuration screen, which cannot exceed 5.0</li>
+        <li>SMB/SFTP/FTP now support reporting disk space (only on some FTP servers; Pure-FTPd and ProFTPD with mod_facts enabled are currently known to return it correctly, other servers fall back to placeholder values. Due to protocol limitations, AVBL only returns the number of available bytes, so total capacity equals available and used is shown as 0)</li>
+        <li>Improved the SMB server and share discovery algorithm to work in more scenarios</li>
+        <li>Improved handling of file rename conflicts:
+        <ul>
+        <li>At the core layer (webdav/http/CloudDrive sharing, etc.), a rename conflict now returns a rename failure instead of directly overwriting the old file (which followed POSIX rename behavior)</li>
+        <li>Linux and macOS keep the original Unix rename-overwrite semantics: the old file is deleted first and then the rename is performed; if the old file is a non-empty directory, the error ENOTEMPTY is returned, matching POSIX rename(2) behavior</li>
+        <li>Windows switches from the previous POSIX behavior to the default Win32 MoveFile behavior, i.e. a rename conflict returns the ERROR_ALREADY_EXISTS error and Explorer shows a "destination already exists" prompt</li>
+        </ul>
+        </li>
+        <li>For accounts signed in directly through Xunlei and accounts signed in directly through a partner device, the change-password option is hidden on the profile page, leaving only the change email and password options</li>
+        <li>Fixed the "copy to clipboard" button in the web UI not working correctly in a non-secure context (when the cd2 URL is http:// and not localhost)</li>
+        <li>Other performance improvements and bug fixes</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.7" rel="noopener">View this release on GitHub</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.6(Web3.0.6)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>Added support for adding three network file system types: SFTP/FTP (FTPS)/SMB, with automatic discovery of SMB servers and automatic discovery of SMB shared directories</li>
+        <li>When adding a backup, you can now choose not to run a full scan immediately; the default is to run a full scan right after the backup is added</li>
+        <li>Fixed 1.0.5 possibly hanging while running on some systems</li>
+        <li>When removing a cloud storage from the root directory of the file browser, you can choose whether to remove it permanently. If not removed permanently, the cloud storage is only removed for the current run and is restored after a restart</li>
+        <li>Other performance optimizations and bug fixes</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.6" rel="noopener">View this release on GitHub</a></p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary>1.0.5(Web3.0.5)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>Brand-new asynchronous mount engine for macOS: it communicates directly with the macfuse kernel extension and supports fully asynchronous concurrency, so file reads no longer block directory browsing and multiple files can be read and written at the same time. Multiple threads receive kernel requests from the FUSE device simultaneously, avoiding the request backlog caused by a single-threaded bottleneck, which greatly improves how smoothly Finder handles large numbers of file operations. macfuse is detected dynamically at runtime, and when it is not installed an error message is shown instead of the program failing to start</li>
+        <li>Migrated the upload task database from PickleDB to SQLite, so upload task ordering is preserved after a restart</li>
+        <li>Fixed an issue where, in some cases, multiple backup tasks were disabled after restarting the machine and could only be re-enabled by restarting the service</li>
+        <li>Offline download now supports .torrent files: you can drag in or upload a .torrent file directly, and it will be parsed into a magnet link before being added</li>
+        <li>Added shortcuts for cloud drive configuration and folder disk cache to the context menu, so you no longer have to open the properties panel first to configure them</li>
+        <li>Local folders no longer show cloud drive configuration or disk cache configuration</li>
+        <li>Other performance improvements, bug fixes and UI improvements</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.5" rel="noopener">View this release on GitHub</a></p>
+        </div>
+      </details>
+        <p class="btn-row"><a class="btn btn-ghost btn-sm" href="https://github.com/cloud-fs/cloud-fs.github.io/releases" rel="noopener">See every past release on GitHub</a></p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/download.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
