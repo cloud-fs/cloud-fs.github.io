@@ -113,25 +113,29 @@
           <p class="eyebrow">The app</p>
           <h2 id="app-h">Direct app downloads</h2>
           <p>The app and the core service are separate packages, released separately and versioned separately.
-             These are the app builds that do not go through a store: a notarised dmg for macOS and a universal
-             APK for Android. Both check for their own updates in-app.</p>
-          <p class="release-line">Current release 1.0.12 (build 4) ·
-             <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/app-v1.0.12-4" rel="noopener">GitHub release</a></p>
+             These are the app builds that do not go through a store: a notarised dmg for macOS, signed installers
+             for Windows and a universal APK for Android. They all check for their own updates in-app.</p>
+          <p class="release-line">Current release 1.0.14 ·
+             <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/app-v1.0.14-7" rel="noopener">GitHub release</a></p>
         </header>
 
         <ul class="dl-grid">
-          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.12-4/CloudDrive2-1.0.12-4-DeveloperID.dmg">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-7-DeveloperID.dmg">
             <i class="fa-brands fa-apple" aria-hidden="true"></i>
-            <span><b>macOS direct download</b><span>CloudDrive2-1.0.12-4-DeveloperID.dmg</span></span>
+            <span><b>macOS direct download</b><span>CloudDrive2-1.0.14-7-DeveloperID.dmg</span></span>
           </a></li>
-          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.12-4/CloudDrive2-1.0.12-323-android.apk">
-            <i class="fa-brands fa-android" aria-hidden="true"></i>
-            <span><b>Android universal APK</b><span>CloudDrive2-1.0.12-323-android.apk</span></span>
-          </a></li>
-          <li><span class="dl-item" aria-disabled="true">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-8-windows-x64.exe">
             <i class="fa-brands fa-windows" aria-hidden="true"></i>
-            <span><b>Windows</b><span>Not yet released</span></span>
-          </span></li>
+            <span><b>Windows x64</b><span>CloudDrive2-1.0.14-8-windows-x64.exe</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-8-windows-arm64.exe">
+            <i class="fa-brands fa-windows" aria-hidden="true"></i>
+            <span><b>Windows Arm64</b><span>CloudDrive2-1.0.14-8-windows-arm64.exe</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-332-android.apk">
+            <i class="fa-brands fa-android" aria-hidden="true"></i>
+            <span><b>Android universal APK</b><span>CloudDrive2-1.0.14-332-android.apk</span></span>
+          </a></li>
         </ul>
 
         <div class="note">
@@ -140,13 +144,16 @@
              opens without a security warning, and it runs outside the sandbox — local mounting (which needs
              <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>), Blu-ray BD-J disc menus and USB
              Native DSD exist only here. The full comparison is on the <a href="/en/apps/macos.html">macOS page</a>.</p>
+          <p>Windows 10 version 1809 (build 17763) or later, with separate x64 and Arm64 installers — pick the
+             wrong one and the installer says so. Both are code-signed and timestamped. Installing needs
+             administrator rights: it writes to Program Files and sets up the WinFSP driver that mounting uses.</p>
           <p>Android 7.0 or later, one package for phones, tablets and Android TV. The universal APK covers
              arm64-v8a and armeabi-v7a (32-bit ARM); there is no x86_64 build.</p>
         </div>
 
         <p class="chip-note">iPhone, iPad, Apple TV, Vision Pro and Meta Quest install from their own stores —
-           see <a href="#apps">above</a>. On Windows you can run the <a href="#core">core service</a> today and
-           manage your clouds from a browser.</p>
+           see <a href="#apps">above</a>. If you only want mounting and browser management and no player, the
+           <a href="#core">core service</a> is enough on its own.</p>
       </div>
     </section>
 
@@ -159,48 +166,48 @@
              work: connecting clouds, mounting, cross-cloud copying, backup and WebDAV. Once it is installed, open
              <code>http://&lt;host-ip&gt;:19798</code> in a browser to reach the management interface. Step-by-step
              instructions are on the <a href="/en/help.html">help page</a>.</p>
-          <p class="release-line">Current release <span data-release-version>1.0.13</span> ·
+          <p class="release-line">Current release <span data-release-version>1.0.14</span> ·
              <a data-release-link href="https://github.com/cloud-fs/cloud-fs.github.io/releases/latest" rel="noopener">GitHub releases</a></p>
         </header>
 
         <h3>Windows</h3>
         <ul class="dl-grid">
-          <li><a class="dl-item" data-asset="win-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/CloudDrive2Setup-X64-1.0.13.exe">
+          <li><a class="dl-item" data-asset="win-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/CloudDrive2Setup-X64-1.0.14.exe">
             <i class="fa-brands fa-windows" aria-hidden="true"></i>
-            <span><b>Windows x64</b><span data-asset-name>CloudDrive2Setup-X64-1.0.13.exe</span></span>
+            <span><b>Windows x64</b><span data-asset-name>CloudDrive2Setup-X64-1.0.14.exe</span></span>
           </a></li>
-          <li><a class="dl-item" data-asset="win-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/CloudDrive2Setup-Arm64-1.0.13.exe">
+          <li><a class="dl-item" data-asset="win-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/CloudDrive2Setup-Arm64-1.0.14.exe">
             <i class="fa-brands fa-windows" aria-hidden="true"></i>
-            <span><b>Windows Arm64</b><span data-asset-name>CloudDrive2Setup-Arm64-1.0.13.exe</span></span>
+            <span><b>Windows Arm64</b><span data-asset-name>CloudDrive2Setup-Arm64-1.0.14.exe</span></span>
           </a></li>
         </ul>
 
         <h3>Linux</h3>
         <ul class="dl-grid">
-          <li><a class="dl-item" data-asset="linux-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-linux-x86_64-1.0.13.tgz">
+          <li><a class="dl-item" data-asset="linux-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-linux-x86_64-1.0.14.tgz">
             <i class="fa-brands fa-linux" aria-hidden="true"></i>
-            <span><b>Linux x86_64</b><span data-asset-name>clouddrive-2-linux-x86_64-1.0.13.tgz</span></span>
+            <span><b>Linux x86_64</b><span data-asset-name>clouddrive-2-linux-x86_64-1.0.14.tgz</span></span>
           </a></li>
-          <li><a class="dl-item" data-asset="linux-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-linux-aarch64-1.0.13.tgz">
+          <li><a class="dl-item" data-asset="linux-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-linux-aarch64-1.0.14.tgz">
             <i class="fa-brands fa-linux" aria-hidden="true"></i>
-            <span><b>Linux aarch64</b><span data-asset-name>clouddrive-2-linux-aarch64-1.0.13.tgz</span></span>
+            <span><b>Linux aarch64</b><span data-asset-name>clouddrive-2-linux-aarch64-1.0.14.tgz</span></span>
           </a></li>
-          <li><a class="dl-item" data-asset="linux-armv7" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-linux-armv7-1.0.13.tgz">
+          <li><a class="dl-item" data-asset="linux-armv7" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-linux-armv7-1.0.14.tgz">
             <i class="fa-brands fa-linux" aria-hidden="true"></i>
-            <span><b>Linux armv7</b><span data-asset-name>clouddrive-2-linux-armv7-1.0.13.tgz</span></span>
+            <span><b>Linux armv7</b><span data-asset-name>clouddrive-2-linux-armv7-1.0.14.tgz</span></span>
           </a></li>
         </ul>
 
         <h3>macOS</h3>
         <p>Mounting clouds as local disks needs <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a> installed first, and its kernel extension approved afterwards — see <a href="/en/macfuse.html">letting macFUSE through</a>. You can also install through Homebrew — see the <a href="/en/help.html">help page</a>.</p>
         <ul class="dl-grid">
-          <li><a class="dl-item" data-asset="macos-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-macos-x86_64-1.0.13.tgz">
+          <li><a class="dl-item" data-asset="macos-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-macos-x86_64-1.0.14.tgz">
             <i class="fa-brands fa-apple" aria-hidden="true"></i>
-            <span><b>macOS Intel</b><span data-asset-name>clouddrive-2-macos-x86_64-1.0.13.tgz</span></span>
+            <span><b>macOS Intel</b><span data-asset-name>clouddrive-2-macos-x86_64-1.0.14.tgz</span></span>
           </a></li>
-          <li><a class="dl-item" data-asset="macos-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-macos-aarch64-1.0.13.tgz">
+          <li><a class="dl-item" data-asset="macos-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-macos-aarch64-1.0.14.tgz">
             <i class="fa-brands fa-apple" aria-hidden="true"></i>
-            <span><b>macOS Apple Silicon</b><span data-asset-name>clouddrive-2-macos-aarch64-1.0.13.tgz</span></span>
+            <span><b>macOS Apple Silicon</b><span data-asset-name>clouddrive-2-macos-aarch64-1.0.14.tgz</span></span>
           </a></li>
         </ul>
 
@@ -210,34 +217,34 @@
            player is a different package, in the <a href="#app">section above</a>. Local mounting on a phone
            requires root; browsing, playback, backup and WebDAV do not.</p>
         <ul class="dl-grid">
-          <li><a class="dl-item" data-asset="android-apk" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-android-universal-1.0.13-219.apk">
+          <li><a class="dl-item" data-asset="android-apk" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-universal-1.0.14-222.apk">
             <i class="fa-brands fa-android" aria-hidden="true"></i>
-            <span><b>Android APK (universal)</b><span data-asset-name>clouddrive-2-android-universal-1.0.13-219.apk</span></span>
+            <span><b>Android APK (universal)</b><span data-asset-name>clouddrive-2-android-universal-1.0.14-222.apk</span></span>
           </a></li>
-          <li><a class="dl-item" data-asset="android-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-android-aarch64-1.0.13.tgz">
+          <li><a class="dl-item" data-asset="android-arm64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-aarch64-1.0.14.tgz">
             <i class="fa-brands fa-android" aria-hidden="true"></i>
-            <span><b>Android aarch64</b><span data-asset-name>clouddrive-2-android-aarch64-1.0.13.tgz</span></span>
+            <span><b>Android aarch64</b><span data-asset-name>clouddrive-2-android-aarch64-1.0.14.tgz</span></span>
           </a></li>
-          <li><a class="dl-item" data-asset="android-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-android-x86_64-1.0.13.tgz">
+          <li><a class="dl-item" data-asset="android-x64" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-x86_64-1.0.14.tgz">
             <i class="fa-brands fa-android" aria-hidden="true"></i>
-            <span><b>Android x86_64</b><span data-asset-name>clouddrive-2-android-x86_64-1.0.13.tgz</span></span>
+            <span><b>Android x86_64</b><span data-asset-name>clouddrive-2-android-x86_64-1.0.14.tgz</span></span>
           </a></li>
-          <li><a class="dl-item" data-asset="android-armv7" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive-2-android-armv7-1.0.13.tgz">
+          <li><a class="dl-item" data-asset="android-armv7" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive-2-android-armv7-1.0.14.tgz">
             <i class="fa-brands fa-android" aria-hidden="true"></i>
-            <span><b>Android armv7</b><span data-asset-name>clouddrive-2-android-armv7-1.0.13.tgz</span></span>
+            <span><b>Android armv7</b><span data-asset-name>clouddrive-2-android-armv7-1.0.14.tgz</span></span>
           </a></li>
         </ul>
 
         <h3>fnOS</h3>
         <p>The listing in the official fnOS app centre is still under review. For now, download the fpk package for your architecture and install it manually.</p>
         <ul class="dl-grid">
-          <li><a class="dl-item" data-asset="fnos-x86" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive2_1.0.13_x86.fpk">
+          <li><a class="dl-item" data-asset="fnos-x86" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive2_1.0.14_x86.fpk">
             <i class="fa-solid fa-hard-drive" aria-hidden="true"></i>
-            <span><b>fnOS x86_64</b><span data-asset-name>clouddrive2_1.0.13_x86.fpk</span></span>
+            <span><b>fnOS x86_64</b><span data-asset-name>clouddrive2_1.0.14_x86.fpk</span></span>
           </a></li>
-          <li><a class="dl-item" data-asset="fnos-arm" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.13/clouddrive2_1.0.13_arm.fpk">
+          <li><a class="dl-item" data-asset="fnos-arm" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v1.0.14/clouddrive2_1.0.14_arm.fpk">
             <i class="fa-solid fa-hard-drive" aria-hidden="true"></i>
-            <span><b>fnOS aarch64</b><span data-asset-name>clouddrive2_1.0.13_arm.fpk</span></span>
+            <span><b>fnOS aarch64</b><span data-asset-name>clouddrive2_1.0.14_arm.fpk</span></span>
           </a></li>
         </ul>
       </div>
@@ -252,9 +259,9 @@
           <p>The same packages as above. Use these when GitHub is slow.</p>
         </header>
         <ul class="dl-grid">
-          <li><a class="dl-item" href="https://115cdn.com/s/swso4wr3zde?password=i9a4&amp;" rel="noopener">
+          <li><a class="dl-item" href="https://115cdn.com/s/swsyv343zde?password=s0c3&amp;" rel="noopener">
             <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
-            <span><b>115</b><span>Access code i9a4</span></span>
+            <span><b>115</b><span>Access code s0c3</span></span>
           </a></li>
           <li><a class="dl-item" href="https://www.123pan.com/s/adWkjv-nxz0h.html" rel="noopener">
             <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
@@ -377,6 +384,22 @@
           <p>Release notes for the core service and the web interface, newest first. The last 10 releases are listed here; everything before them is on the GitHub releases page.</p>
         </header>
       <details class="acc" open>
+        <summary>1.0.14(Web3.0.14)</summary>
+        <div class="acc-body">
+        <ol>
+        <li>Added account deletion. You can delete your account from the profile page: a confirmation code is emailed to your registered address, and the deletion only goes through once you enter that code. Accounts that were registered automatically by a partner device, and accounts signed in through Xunlei, must first set an email address and password on the profile page before they can be deleted. Deleting an account cancels its remaining balance and all membership entitlements; refunds are not available</li>
+        <li>Fixed mounted drives hanging under heavy load — when transfers were busy and many requests arrived at once, a mounted cloud drive could stop responding for a long time (hours in extreme cases). This is now properly fixed: requests queue smoothly instead of hanging when the system is busy, and a single failing request returns an error promptly and the system recovers on its own</li>
+        <li>Smoother rate limiting, less likely to trip the risk controls of 115 and other clouds; raising the rate limit now takes effect immediately</li>
+        <li>Fixed intermittent "file does not exist" / duplicate-name errors after creating a folder on 115 — a freshly created folder could be misjudged because the cloud's index takes a few seconds to catch up. CloudDrive now detects that delay and retries briefly, so the operation completes normally</li>
+        <li>More reliable backups — temporary problems such as network hiccups are now retried automatically instead of being skipped, so fewer files are missed</li>
+        <li>Fixed backups treating a folder as a file, and added automatic cleanup of the invalid tasks left behind by that bug</li>
+        <li>The membership page now explains what CloudDrive2 App Pro unlocks, and links to it</li>
+        <li>Other bug fixes and performance improvements</li>
+        </ol>
+          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.14" rel="noopener">View this release on GitHub</a></p>
+        </div>
+      </details>
+      <details class="acc">
         <summary>1.0.13(Web3.0.13)</summary>
         <div class="acc-body">
         <ol>
@@ -523,22 +546,6 @@
         <li>Other performance improvements, bug fixes and UI improvements</li>
         </ol>
           <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.5" rel="noopener">View this release on GitHub</a></p>
-        </div>
-      </details>
-      <details class="acc">
-        <summary>1.0.4(Web3.0.4)</summary>
-        <div class="acc-body">
-        <ol>
-        <li>Fixed files starting with a dot (such as .DS_Store) not matching the ignored-extension rules for uploads and backups</li>
-        <li>Fixed FUSE statfs blocking for a long time when a cloud storage proxy server is unavailable; a 15-second timeout was added, and a cloud drive that times out is temporarily excluded from disk space statistics and updated automatically once it recovers</li>
-        <li>The conflict resolution dialog for move and copy now shows the list of conflicting files</li>
-        <li>Fixed the "Add rule" dropdown menu being clipped on the backup file filter rules page</li>
-        <li>Fixed the breadcrumb editor not navigating when pressing Enter while autocomplete suggestions are shown</li>
-        <li>Fixed broken download links on the logs page</li>
-        <li>Fixed Shift-click range selection not taking the current file filter into account</li>
-        <li>Other bug fixes and performance improvements</li>
-        </ol>
-          <p><a class="arrow-link" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/v1.0.4" rel="noopener">View this release on GitHub</a></p>
         </div>
       </details>
         <p class="btn-row"><a class="btn btn-ghost btn-sm" href="https://github.com/cloud-fs/cloud-fs.github.io/releases" rel="noopener">See every past release on GitHub</a></p>
