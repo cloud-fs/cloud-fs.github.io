@@ -754,9 +754,21 @@
             <h3>Not only the mount</h3>
             <p>CloudDrive2 goes further than the mount. Files changed through the web interface, files
                changed through the WebDAV server, and files that appear because an offline download was
-               imported all produce correct change notifications as well. However the file got there,
-               programs watching the folder see the current state.</p>
+               imported all produce correct change notifications as well. However the file got into
+               CloudDrive2, programs watching the folder see the current state.</p>
           </div>
+        </div>
+
+        <div class="note">
+          <span class="note-title">Changes made outside CloudDrive2 raise no notification</span>
+          <p>All of those paths share one condition: the change happened through CloudDrive2. Cloud providers
+             do not offer file-change notifications, so anything you upload, delete or rename in the
+             provider's own app or website is invisible to CloudDrive2 and produces no event — a program
+             watching the mounted folder is never woken, and <a href="#multicloud-backup">multi-cloud
+             backup</a> does not fire its live incremental pass either.</p>
+          <p>To make it notice, refresh that cloud directory in My Files. With <b>Directory Cache
+             Persistence</b> enabled, the refresh compares what it reads against the stored cache, and the
+             differences it finds produce change notifications as usual.</p>
         </div>
       </div>
     </section>
