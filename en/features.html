@@ -961,6 +961,19 @@
           <li><span class="chip chip-backup">Unlimited version history</span></li>
         </ul>
 
+        <div class="note">
+          <span class="note-title">What live monitoring can and cannot see</span>
+          <p>Live backup works from filesystem monitoring, and that covers both local folders and the cloud
+             directories inside CloudDrive2 — with one condition on the cloud side: the change has to happen
+             through CloudDrive2. Cloud providers do not offer file-change notifications, so anything you
+             add, edit or delete in the provider's own app or website is invisible to CloudDrive2, and live
+             backup will not fire for it.</p>
+          <p>To pick those changes up, refresh the cloud directory the backup watches in My Files. With
+             <b>Directory Cache Persistence</b> enabled, the refresh compares what it reads against the
+             stored cache, and the differences it finds trigger live incremental backup exactly as a local
+             change would. A scheduled full scan reconciles them too, but only when it next runs.</p>
+        </div>
+
         <h3>Local folders work as both source and destination</h3>
         <p>Just as with cross-cloud copying: on the Cloud Storages page, click <b>Add Cloud Storage</b>,
            pick <b>Local Folder</b> under Local Storages and add a directory from the machine. A backup can
