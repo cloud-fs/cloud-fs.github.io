@@ -115,38 +115,49 @@
           <p>The app and the core service are separate packages, released separately and versioned separately.
              These are the app builds that do not go through a store: a notarised dmg for macOS, signed installers
              for Windows and a universal APK for Android. They all check for their own updates in-app.</p>
-          <p class="release-line">Current release 1.0.14 ·
-             <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/app-v1.0.14-7" rel="noopener">GitHub release</a></p>
+          <p class="release-line">Current release 1.0.16 ·
+             <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/app-v1.0.16-9" rel="noopener">GitHub release</a></p>
         </header>
 
         <ul class="dl-grid">
-          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-7-DeveloperID.dmg">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-9/CloudDrive2-1.0.16-9-macos-arm64.dmg">
             <i class="fa-brands fa-apple" aria-hidden="true"></i>
-            <span><b>macOS direct download</b><span>CloudDrive2-1.0.14-7-DeveloperID.dmg</span></span>
+            <span><b>macOS Apple silicon</b><span>CloudDrive2-1.0.16-9-macos-arm64.dmg</span></span>
           </a></li>
-          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-8-windows-x64.exe">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-9/CloudDrive2-1.0.16-9-macos-x64.dmg">
+            <i class="fa-brands fa-apple" aria-hidden="true"></i>
+            <span><b>macOS Intel</b><span>CloudDrive2-1.0.16-9-macos-x64.dmg</span></span>
+          </a></li>
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-9/CloudDrive2-1.0.16-1-windows-x64.exe">
             <i class="fa-brands fa-windows" aria-hidden="true"></i>
-            <span><b>Windows x64</b><span>CloudDrive2-1.0.14-8-windows-x64.exe</span></span>
+            <span><b>Windows x64</b><span>CloudDrive2-1.0.16-1-windows-x64.exe</span></span>
           </a></li>
-          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-8-windows-arm64.exe">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-9/CloudDrive2-1.0.16-1-windows-arm64.exe">
             <i class="fa-brands fa-windows" aria-hidden="true"></i>
-            <span><b>Windows Arm64</b><span>CloudDrive2-1.0.14-8-windows-arm64.exe</span></span>
+            <span><b>Windows Arm64</b><span>CloudDrive2-1.0.16-1-windows-arm64.exe</span></span>
           </a></li>
-          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.14-7/CloudDrive2-1.0.14-332-android.apk">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-9/CloudDrive2-1.0.16-333-android.apk">
             <i class="fa-brands fa-android" aria-hidden="true"></i>
-            <span><b>Android universal APK</b><span>CloudDrive2-1.0.14-332-android.apk</span></span>
+            <span><b>Android universal APK</b><span>CloudDrive2-1.0.16-333-android.apk</span></span>
           </a></li>
         </ul>
 
         <div class="note">
           <span class="note-title">What they need</span>
-          <p>macOS 12 or later, universal for Apple silicon and Intel. This build is notarised by Apple, so it
+          <p>macOS 13 Ventura or later, with separate Apple silicon and Intel installers that are identical in
+             features. If you are unsure which you need, check About This Mac: "Chip Apple M…" takes the Apple
+             silicon build, "Processor Intel…" takes the Intel one. This build is notarised by Apple, so it
              opens without a security warning, and it runs outside the sandbox — local mounting (which needs
              <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>), Blu-ray BD-J disc menus and USB
              Native DSD exist only here. The full comparison is on the <a href="/en/apps/macos.html">macOS page</a>.</p>
           <p>Windows 10 version 1809 (build 17763) or later, with separate x64 and Arm64 installers — pick the
              wrong one and the installer says so. Both are code-signed and timestamped. Installing needs
-             administrator rights: it writes to Program Files and sets up the WinFSP driver that mounting uses.</p>
+             administrator rights: it writes to Program Files and sets up the WinFSP driver that mounting uses.
+             The Windows build number jumps from 1.0.14.9 to 1.0.16.1 to line back up with macOS and Android.</p>
+          <p class="chip-note">Windows users should take this one: on machines whose graphics driver did not
+             ship the Vulkan runtime, earlier builds could not play anything at all and reported "this build
+             does not include the playback engine" every time. 1.0.16.1 bundles its own implementation and
+             the failure is gone.</p>
           <p>Android 7.0 or later, one package for phones, tablets and Android TV. The universal APK covers
              arm64-v8a and armeabi-v7a (32-bit ARM); there is no x86_64 build.</p>
         </div>
