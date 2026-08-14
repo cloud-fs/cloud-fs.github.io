@@ -579,6 +579,17 @@ brew services start clouddrive2</code></pre></div>
                   it happens. You can also schedule full scans to reconcile periodically.</li>
             </ol>
             <div class="note">
+              <span class="note-title">Changes made in the cloud's own app do not trigger live backup</span>
+              <p>Real-time monitoring only sees changes that happen inside CloudDrive2. Cloud providers do
+                 not offer file-change notifications, so when the backup source is a cloud directory,
+                 anything you upload, delete or rename in the provider's own app or website is invisible to
+                 CloudDrive2.</p>
+              <p>To make it notice: refresh that cloud directory in My Files. With <b>Directory Cache
+                 Persistence</b> enabled, the refresh compares what it reads against the stored cache, and
+                 the differences trigger live incremental backup as usual. A scheduled full scan will
+                 reconcile them too.</p>
+            </div>
+            <div class="note">
               <span class="note-title">Why a deletion did not propagate</span>
               <p>There are two paths. A deletion caught by real-time monitoring is unambiguous, and is
                  applied to the destination according to your delete rule. A full scan can only observe
