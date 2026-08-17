@@ -338,6 +338,9 @@ brew services start clouddrive2</code></pre></div>
                <a href="/en/docker.html">Docker deployment guide</a>.</p>
             <p>The third-party Synology and QNAP packages are on the
                <a href="/en/download.html#nas">download page</a>.</p>
+            <p class="chip-note">Synology users take note: File Station cannot create or delete files on a
+               mounted drive. That is a known issue on Synology's side — the ways around it are under
+               <a href="#faq">common problems</a>.</p>
             <div class="note">
               <span class="note-title">On fnOS use the native package, not Docker</span>
               <p>Mounting over FUSE inside a container runs into fnOS's namespace limits and fails with
@@ -919,6 +922,21 @@ brew services start clouddrive2</code></pre></div>
             <p>Check the port first: the service built into the phone and tablet app listens on
                <strong>29798</strong>, not the core service's 19798. Point your player at
                <code>http://&lt;device IP&gt;:29798</code> and try again.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-server" aria-hidden="true"></i>File Station on Synology cannot create, rename or delete files on the mount</summary>
+          <div class="acc-body">
+            <p>Synology's own File Station does not support write operations on a FUSE-mounted filesystem.
+               This is a known issue on Synology's side and a lot of users hit it: the mount point opens,
+               files read and play, but creating a folder, renaming, deleting, moving and uploading all
+               fail.</p>
+            <p>The mount itself is fine — the same mount point reads and writes normally over SSH or from
+               another file manager.</p>
+            <p>Two ways around it: point File Station at CloudDrive2's <a href="#webdav">WebDAV service</a>
+               rather than the FUSE mount path, or use a third-party file manager on the NAS. It is also
+               worth reporting to Synology — the more reports it gets, the likelier it is to be fixed.</p>
           </div>
         </details>
 
