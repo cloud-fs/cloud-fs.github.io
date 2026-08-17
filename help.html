@@ -284,6 +284,7 @@ brew services start clouddrive2</code></pre></div>
             <p>在 NAS 或服务器上用容器跑，镜像是 <code>cloudnas/clouddrive2</code>。宿主机的挂载传播要是共享的，不少系统默认就开着，怎么查、必要时怎么开，连同可直接复制的启动配置，都见
                <a href="/docker.html">Docker 部署指南</a>。</p>
             <p>群晖与威联通的第三方套件在<a href="/download.html#nas">下载页</a>。</p>
+            <p class="chip-note">群晖用户请留意：File Station 无法在挂载盘里新建或删除文件，这是群晖侧的已知问题，绕开办法见<a href="#faq">常见问题</a>。</p>
             <div class="note">
               <span class="note-title">飞牛 fnOS 请用原生套件，不要用 Docker</span>
               <p>容器里做 FUSE 挂载会撞上 fnOS 的命名空间限制，报 <code>mount syscall failed in pid 1 namespace</code>。我们提供了原生的 fpk 套件，装上就没有这个问题，在<a href="/download.html#core">下载页</a>。</p>
@@ -714,6 +715,15 @@ brew services start clouddrive2</code></pre></div>
           <summary><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone / iPad 应用的 WebDAV 连不上</summary>
           <div class="acc-body">
             <p>先查端口：手机与平板应用内置服务的端口是 <strong>29798</strong>，不是核心服务的 19798。在播放器里填 WebDAV 地址时，用 <code>http://&lt;设备 IP&gt;:29798</code> 再试。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-server" aria-hidden="true"></i>群晖 File Station 里无法新建、重命名或删除挂载盘中的文件</summary>
+          <div class="acc-body">
+            <p>群晖自带的 File Station 不支持在 FUSE 挂载的文件系统上做写操作，这是群晖侧的已知问题，不少用户都碰到过。表现是挂载点进得去、文件看得到也放得了，但新建文件夹、重命名、删除、移动和上传全部失败。</p>
+            <p>挂载本身没问题：同一个挂载点，用 SSH 或者别的文件管理器读写都正常。</p>
+            <p>绕开的办法有两个：在 File Station 里改用 CloudDrive2 的 <a href="#webdav">WebDAV 服务</a>连接，不走 FUSE 挂载路径；或者在群晖上换用第三方的文件管理器。同时也建议向群晖反馈这个问题——反馈的人多了才有希望修。</p>
           </div>
         </details>
 
