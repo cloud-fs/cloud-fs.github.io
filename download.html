@@ -109,37 +109,37 @@
           <h2 id="app-h">应用的直接下载版</h2>
           <p>应用和核心服务是两套安装包，各自发布，版本号也各走各的。这里是不经商店的应用安装包：macOS 用经 Apple 公证的 dmg，Windows 用签过名的安装程序，Android 用通用 APK。它们都能在应用内自动检查更新。</p>
           <p class="release-line">当前版本 1.0.16 ·
-             <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/app-v1.0.16-9" rel="noopener">GitHub 发布页</a></p>
+             <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/app-v1.0.16-10" rel="noopener">GitHub 发布页</a></p>
         </header>
 
         <ul class="dl-grid">
-          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-9/CloudDrive2-1.0.16-9-macos-arm64.dmg">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-10/CloudDrive2-1.0.16-10-macos-arm64.dmg">
             <i class="fa-brands fa-apple" aria-hidden="true"></i>
-            <span><b>macOS Apple 芯片</b><span>CloudDrive2-1.0.16-9-macos-arm64.dmg</span></span>
+            <span><b>macOS Apple 芯片</b><span>CloudDrive2-1.0.16-10-macos-arm64.dmg</span></span>
           </a></li>
-          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-9/CloudDrive2-1.0.16-9-macos-x64.dmg">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-10/CloudDrive2-1.0.16-10-macos-x64.dmg">
             <i class="fa-brands fa-apple" aria-hidden="true"></i>
-            <span><b>macOS Intel</b><span>CloudDrive2-1.0.16-9-macos-x64.dmg</span></span>
+            <span><b>macOS Intel</b><span>CloudDrive2-1.0.16-10-macos-x64.dmg</span></span>
           </a></li>
-          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-9/CloudDrive2-1.0.16-1-windows-x64.exe">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-10/CloudDrive2-1.0.16-2-windows-x64.exe">
             <i class="fa-brands fa-windows" aria-hidden="true"></i>
-            <span><b>Windows x64</b><span>CloudDrive2-1.0.16-1-windows-x64.exe</span></span>
+            <span><b>Windows x64</b><span>CloudDrive2-1.0.16-2-windows-x64.exe</span></span>
           </a></li>
-          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-9/CloudDrive2-1.0.16-1-windows-arm64.exe">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-10/CloudDrive2-1.0.16-2-windows-arm64.exe">
             <i class="fa-brands fa-windows" aria-hidden="true"></i>
-            <span><b>Windows Arm64</b><span>CloudDrive2-1.0.16-1-windows-arm64.exe</span></span>
+            <span><b>Windows Arm64</b><span>CloudDrive2-1.0.16-2-windows-arm64.exe</span></span>
           </a></li>
-          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-9/CloudDrive2-1.0.16-333-android.apk">
+          <li><a class="dl-item" href="https://github.com/cloud-fs/cloud-fs.github.io/releases/download/app-v1.0.16-10/CloudDrive2-1.0.16-334-android.apk">
             <i class="fa-brands fa-android" aria-hidden="true"></i>
-            <span><b>Android 通用 APK</b><span>CloudDrive2-1.0.16-333-android.apk</span></span>
+            <span><b>Android 通用 APK</b><span>CloudDrive2-1.0.16-334-android.apk</span></span>
           </a></li>
         </ul>
 
         <div class="note">
           <span class="note-title">系统要求</span>
           <p>macOS 13 Ventura 或更高版本，Apple 芯片与 Intel 各有安装包，功能完全一致。不确定机型的，在「关于本机」里看：显示「芯片 Apple M…」下 Apple 芯片版，显示「处理器 Intel…」下 Intel 版。这一版由 Apple 公证，首次打开不会有安全警告，也不在沙盒里运行——本地挂载（需要 <a href="https://macfuse.github.io/" rel="noopener">macFUSE</a>）、蓝光 BD-J 光碟菜单和 USB 原生 DSD 只在这一版里有，两版差异见 <a href="/apps/macos.html">macOS 版</a>。</p>
-          <p>Windows 10 1809（内部版本 17763）或更高版本，x64 与 Arm64 各有安装包，选错了安装程序会直接提示。两个安装包都经过代码签名与时间戳。安装需要管理员权限：要写入 Program Files，并装上挂载用的 WinFSP 驱动。Windows 版本号这次从 1.0.14.9 跳到 1.0.16.1，是为了和 macOS、Android 重新对齐。</p>
-          <p class="chip-note">Windows 用户建议优先升级：旧版在显卡驱动没带 Vulkan 运行库的电脑上完全无法播放，每次都提示「此版本未包含播放引擎」。1.0.16.1 自带了替代实现，这个故障已经修复。</p>
+          <p>Windows 10 1809（内部版本 17763）或更高版本，x64 与 Arm64 各有安装包，选错了安装程序会直接提示。两个安装包都经过代码签名与时间戳。安装需要管理员权限：要写入 Program Files，并装上挂载用的 WinFSP 驱动。Windows 的版本号此前从 1.0.14.9 跳到 1.0.16.x，是为了和 macOS、Android 重新对齐。</p>
+          <p class="chip-note">Windows 用户建议优先升级：旧版在显卡驱动没带 Vulkan 运行库的电脑上完全无法播放，每次都提示「此版本未包含播放引擎」。现在的版本自带了替代实现，这个故障已经修复。</p>
           <p>Android 7.0 或更高版本，同一个包适配手机、平板与 Android TV。通用 APK 覆盖 arm64-v8a 与 armeabi-v7a（32 位 ARM），不含 x86_64。</p>
         </div>
 
