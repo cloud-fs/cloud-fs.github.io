@@ -456,8 +456,8 @@ brew services start clouddrive2</code></pre></div>
         <details class="acc" id="copy">
           <summary><i class="fa-solid fa-right-left" aria-hidden="true"></i>跨云盘复制</summary>
           <div class="acc-body">
-            <p>像在同一个云盘里那样，把文件从一个云盘拖到另一个。先从源云盘取哈希：目标云盘用的是同一套哈希算法、并且命中了，就是真·秒传——服务端直接建一条指向已有数据的记录，数据根本不搬；算法不同或者没命中，就在两朵云之间边下边传，不落地到本地磁盘，速度受你的带宽限制。</p>
-            <p>操作在「我的文件」里：勾中要复制的文件或文件夹，点「移动/复制到...」，在目录树里选好目标，点「复制」。任务在后台跑，不用守着；进度到「任务」页看，「复制任务」和「上传任务」两个标签下都找得到。</p>
+            <p>像在同一个云盘里那样，把文件从一个云盘拖到另一个。先从源云盘取哈希：目标云盘用的是同一套哈希算法、并且命中了，就是真·秒传——服务端直接建一条指向已有数据的记录，数据根本不搬；算法不同或者没命中，就在两朵云之间边下边传，不经过本地磁盘，速度受你的带宽限制。</p>
+            <p>操作在「我的文件」里：勾中要复制的文件或文件夹，点「移动/复制到...」，在目录树里选好目标，点「复制」。任务在后台运行，无需保持界面打开；进度到「任务」页看，「复制任务」和「上传任务」两个标签下都找得到。</p>
             <p class="chip-note">跨云盘快速复制是核心会员功能。慢的那一种情况不是出了问题，是目标云盘那边没有可以命中的现成数据。</p>
             <p>在「云存储」页点「添加云存储」，在「本地存储」里选「本地文件夹」，就能把机器上的一个目录加进来当复制的源或目标。只要有一端是本地文件夹，免费账号也能复制——把云盘上的东西拿下来，或者把本地的东西传上去，都不需要会员。</p>
             <p class="chip-note">目标是本地文件夹时，任务会出现在「上传任务」里。方向没搞反：CloudDrive2 把复制统一成读源端、写目标端的一条流水线，写的那一半一律叫上传。</p>
@@ -671,7 +671,7 @@ brew services start clouddrive2</code></pre></div>
         <details class="acc">
           <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows 上打不开 19798</summary>
           <div class="acc-body">
-            <p>按这个顺序查，多数问题在第一步就露馅了。</p>
+            <p>按这个顺序排查，多数问题在第一步就能查出来。</p>
             <ol>
               <li><strong>服务在不在跑。</strong>按 Win+R 打开 <code>services.msc</code>，找 <strong>CloudDrive2 Service</strong>（服务名 <code>CloudDrive2</code>）。状态应该是「正在运行」，启动类型应该是「自动」。停着就右键启动它；启动类型被改成「手动」或「禁用」的，右键 →「属性」改回「自动」，否则下次开机它不会自己起来。命令行同样能看：
                 <div class="code-block"><pre><code>sc query CloudDrive2</code></pre></div>
@@ -731,7 +731,7 @@ brew services start clouddrive2</code></pre></div>
           <summary><i class="fa-solid fa-hard-drive" aria-hidden="true"></i>挂载报 IO Error：mount point is not empty</summary>
           <div class="acc-body">
             <p>挂载点目录必须是空的。这个错误常见于重启之后：某个也在用这个路径的程序——Emby、下载工具、备份脚本都有可能——比 CloudDrive2 服务先启动，在目录真正被挂载之前往里写了东西，CloudDrive2 就拒绝在非空目录上挂载。</p>
-            <p>处理：先停掉往里写的程序，把挂载点目录里遗留的文件清走——它们在本地磁盘上，不在云盘里，清之前先看看有没有要保留的——然后重新挂载。要断根，就让依赖这个路径的程序晚于 CloudDrive2 启动：把它的服务设成依赖 CloudDrive2 服务，或者给它加一个延迟启动。</p>
+            <p>处理：先停掉往里写的程序，把挂载点目录里遗留的文件清走——它们在本地磁盘上，不在云盘里，清之前先看看有没有要保留的——然后重新挂载。要彻底避免，就让依赖这个路径的程序晚于 CloudDrive2 启动：把它的服务设成依赖 CloudDrive2 服务，或者给它加一个延迟启动。</p>
           </div>
         </details>
 
