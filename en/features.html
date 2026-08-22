@@ -177,6 +177,21 @@
         </div>
 
         <div class="note">
+          <span class="note-title">What touches your disk, and what does not</span>
+          <p>Reads stream straight from the cloud. Scrub a player's timeline, or have a program read a few
+             bytes from the middle of a file, and CloudDrive2 fetches just that range — nothing is written
+             to your disk and nothing accumulates there. If you do want a folder's contents cached locally
+             for repeated reads, turn on its <strong>folder disk cache</strong>: a per-folder setting, off
+             by default, which subfolders can inherit.</p>
+          <p>Writes work the other way round and do have to land. A cloud upload has to carry the file's
+             hash, and the hash cannot be computed until the file is complete, so data written to a mounted
+             drive goes into a local temporary directory first and is uploaded once it is whole. The
+             temporary file is deleted the moment the upload succeeds. So copying a 50 GB file onto a
+             mounted drive needs 50 GB free wherever that temporary directory lives — you can move it in
+             settings.</p>
+        </div>
+
+        <div class="note">
           <span class="note-title">Which platforms can mount</span>
           <p>Presenting a cloud as a disk in the system file system needs the operating system to allow it.</p>
           <p><b>Can mount:</b> Windows; the macOS build downloaded from this site (with macFUSE);
