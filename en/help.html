@@ -608,6 +608,39 @@ brew services start clouddrive2</code></pre></div>
           </div>
         </details>
 
+        <details class="acc" id="mobile-backup">
+          <summary><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Backing up photos and files from a phone</summary>
+          <div class="acc-body">
+            <p>Backup on a phone is the same feature as on a computer. Only the source differs: a phone's
+               photo library and folders have to be added as a <b>local folder</b> before a backup can use
+               them as its source.</p>
+            <ol>
+              <li><strong>Add the local folder first.</strong> On the Cloud Storages page, click Add Cloud
+                  Storage, pick <b>Local Folder</b> under Local Storages, and choose the directory you want
+                  backed up. iOS asks for photo library permission first, after which the library appears at
+                  <code>/Documents/Photos</code>: pick that folder to back up photos and videos only, or
+                  its parent <code>/Documents</code> to take the app's other files along with them.
+                  Android needs storage permission, and then you pick a directory under <code>/sdcard</code>:
+                  the camera roll is <code>/sdcard/DCIM</code>, downloads are
+                  <code>/sdcard/Download</code>, or take <code>/sdcard</code> itself to back up the whole
+                  of internal storage.</li>
+              <li><strong>Then create the backup.</strong> On the Backups page, click Add Backup, set the
+                  source to the local folder you just added, and name one or more cloud directories as
+                  destinations.</li>
+              <li><strong>The destination can be an encrypted folder.</strong> Create an
+                  <a href="#encrypt">encrypted folder</a> on the cloud first and choose it as the
+                  destination: photos and files are then encrypted locally before upload, and what the
+                  provider stores is ciphertext. That is an encrypted backup.</li>
+              <li><strong>Turn on File System Watcher.</strong> Enable it in the backup's settings and it
+                  monitors the source folder for changes in real time, so new photos, new videos and newly
+                  saved files are backed up on their own — nothing to trigger by hand.</li>
+            </ol>
+            <p class="chip-note">On iOS the photo library is read on demand: the original is pulled from the
+               system library only when the backup uploads it and released straight afterwards, so the
+               library is never duplicated into the app's own storage.</p>
+          </div>
+        </details>
+
         <details class="acc" id="encrypt">
           <summary><i class="fa-solid fa-lock" aria-hidden="true"></i>Encrypted folders</summary>
           <div class="acc-body">

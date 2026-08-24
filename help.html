@@ -487,6 +487,20 @@ brew services start clouddrive2</code></pre></div>
           </div>
         </details>
 
+        <details class="acc" id="mobile-backup">
+          <summary><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>在手机上备份照片和文件</summary>
+          <div class="acc-body">
+            <p>手机上的备份和电脑上是同一套功能，区别只在源目录怎么选：手机里的相册和文件夹要先添加成「本地文件夹」，之后才能作为备份源。</p>
+            <ol>
+              <li><strong>先把本地文件夹添加进来。</strong>进「云存储」页，点「添加云存储」，在「本地存储」里选「本地文件夹」，然后选中要备份的目录。iOS 上会先请求相册权限，同意后相册会出现在 <code>/Documents/Photos</code>：只备份照片和视频就选这个目录，想把应用里的其他文件一起备份就选上一级的 <code>/Documents</code>。Android 上需要授予存储权限，之后在 <code>/sdcard</code> 下面选目录：相册在 <code>/sdcard/DCIM</code>，下载的文件在 <code>/sdcard/Download</code>，也可以直接选 <code>/sdcard</code> 备份整个内部存储。</li>
+              <li><strong>再创建备份任务。</strong>进「备份」页，点「添加备份」，源目录选刚添加的本地文件夹，目标选一个或多个网盘目录。</li>
+              <li><strong>目标可以选加密文件夹。</strong>先在网盘上<a href="#encrypt">创建一个加密文件夹</a>，备份时把它选为目标，照片和文件就会在本地加密之后再上传，云端保存的是密文——这就是加密备份。</li>
+              <li><strong>打开「文件系统监视器」。</strong>在备份的设置里启用，它会实时监控源文件夹的变化。之后新拍的照片、新录的视频、新保存的文件都会自动备份，不必每次手动触发。</li>
+            </ol>
+            <p class="chip-note">iOS 上的相册是按需读取的：只有在备份要上传某张照片时才从系统相册取出原图，上传完成后随即释放，不会把整个相册复制一份到应用里占用空间。</p>
+          </div>
+        </details>
+
         <details class="acc" id="encrypt">
           <summary><i class="fa-solid fa-lock" aria-hidden="true"></i>加密文件夹</summary>
           <div class="acc-body">
