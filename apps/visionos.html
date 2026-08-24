@@ -212,6 +212,35 @@
       </div>
     </section>
 
+    <section class="band" aria-labelledby="backup-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">备份</p>
+          <h2 id="backup-h">照片与文件自动备份上云</h2>
+          <p>把这台 Vision Pro上的照片、视频和文件备份到一个或多个网盘。源目录要先添加成本地文件夹，之后才能作为备份源。</p>
+        </header>
+        <ol class="steps">
+          <li>
+            <h4>添加本地文件夹</h4>
+            <p>进「云存储」页，点「添加云存储」，在「本地存储」里选「本地文件夹」。相册在 <code>/Documents/Photos</code>：只备份照片和视频就选它；想把应用里的其他文件一起备份，就选上一级的 <code>/Documents</code>。第一次会请求相册权限。</p>
+          </li>
+          <li>
+            <h4>创建备份任务</h4>
+            <p>进「备份」页，点「添加备份」，源目录选刚添加的本地文件夹，目标选一个或多个网盘目录——可以同时备份到多个云盘。</p>
+          </li>
+          <li>
+            <h4>打开「文件系统监视器」</h4>
+            <p>在备份设置里启用，它会实时监控源文件夹。之后新拍的照片、新录的视频、新保存的文件都会自动备份，不必手动触发。</p>
+          </li>
+        </ol>
+        <div class="note">
+          <span class="note-title">目标选加密文件夹，这就是加密备份</span>
+          <p>先在网盘上创建一个加密文件夹，再把它选为备份目标：照片和文件会在本机加密之后才上传，云端保存的是密文，服务商看不到原始内容。密码只保存在本机，不会同步到我们的服务器。</p>
+        </div>
+        <p class="chip-note">相册是按需读取的：只有在备份要上传某张照片时才从系统相册取出原图，上传完成后随即释放，不会把整个相册复制一份到应用里占用空间。<a href="/help.html#mobile-backup">完整步骤见帮助页</a>。</p>
+      </div>
+    </section>
+
     <section class="band" aria-labelledby="more-h">
       <div class="container">
         <header class="band-head">
@@ -232,8 +261,8 @@
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
-            <h3>跨云传输与备份</h3>
-            <p>在不同服务商之间复制或移动文件，传输可暂停与恢复。自动备份任务按计划运行，支持文件夹递归上传，一次提交即可。</p>
+            <h3>跨云传输</h3>
+            <p>在不同服务商之间复制或移动文件，传输可暂停与恢复，支持文件夹递归上传。备份见<a href="#backup-h">上方</a>。</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>

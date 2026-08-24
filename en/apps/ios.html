@@ -286,6 +286,41 @@
       </div>
     </section>
 
+    <section class="band" aria-labelledby="backup-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Backup</p>
+          <h2 id="backup-h">Photos and files, backed up on their own</h2>
+          <p>Back up the photos, videos and files on this iPhone or iPad to one or more clouds. The source has to be added
+             as a local folder first before a backup can use it.</p>
+        </header>
+        <ol class="steps">
+          <li>
+            <h4>Add the local folder</h4>
+            <p>On the Cloud Storages page, click Add Cloud Storage and pick <b>Local Folder</b> under Local
+               Storages. The photo library is at <code>/Documents/Photos</code> — pick that for photos and videos only, or its parent <code>/Documents</code> to take the app’s other files along with them. You are asked for photo library permission the first time.</p>
+          </li>
+          <li>
+            <h4>Create the backup</h4>
+            <p>On the Backups page, click Add Backup, set the source to the local folder you just added, and
+               name one or more cloud directories as destinations — several clouds at once is fine.</p>
+          </li>
+          <li>
+            <h4>Turn on File System Watcher</h4>
+            <p>Enable it in the backup's settings and it monitors the source folder in real time, so new
+               photos, new videos and newly saved files are backed up on their own.</p>
+          </li>
+        </ol>
+        <div class="note">
+          <span class="note-title">Point it at an encrypted folder and it becomes an encrypted backup</span>
+          <p>Create an encrypted folder on the cloud first and choose it as the destination: photos and files
+             are encrypted on the device before upload, and what the provider stores is ciphertext with no
+             way to read the originals. The password stays on the device and is never synced to our servers.</p>
+        </div>
+        <p class="chip-note">The photo library is read on demand: an original is pulled from the system library only when the backup uploads it and released straight afterwards, so the library is never duplicated into the app’s own storage. <a href="/en/help.html#mobile-backup">Full steps are on the help page</a>.</p>
+      </div>
+    </section>
+
     <section class="band" aria-labelledby="more-h">
       <div class="container">
         <header class="band-head">
@@ -302,11 +337,6 @@
             <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
             <h3>Cross-cloud transfers</h3>
             <p>Copy or move files between providers. The transfer manager handles pause, resume, retry, throttling and concurrency, and uploads whole folders recursively.</p>
-          </div></li>
-          <li><div class="card">
-            <i class="fa-solid fa-cloud-arrow-up card-icon" aria-hidden="true"></i>
-            <h3>Backup and sync</h3>
-            <p>Scheduled, automated backup tasks, plus whole photo-library backup to the cloud.</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
