@@ -138,7 +138,7 @@
 
         <div class="feature-row">
           <div class="feature-text">
-            <h3>内置播放器与蓝光原盘</h3>
+            <h3>内置播放器，支持蓝光 ISO</h3>
             <p>VideoToolbox 硬件加速解码 H.264、H.265/HEVC、AV1，支持 HDR10、HDR10+ 与杜比视界——
                包括 Profile 7 蓝光内容（含完整增强层 FEL）的杜比视界播放。字幕支持 SRT、ASS/SSA、VTT 与 PGS，可独立调节延迟、样式与 HDR 亮度；影片信息自动读取本地 .nfo 元数据与海报、Logo 图片。</p>
             <p class="chip-note">Profile 7 的碟片带两层画面。CloudDrive2 两层都读，并把增强层合成进最终画面，完整增强层（FEL）的片源同样如此——放出来就是完整的双层杜比视界，既不会只剩基础层，也不会退回 HDR10。</p>
@@ -256,7 +256,8 @@
           <li><div class="card">
             <i class="fa-solid fa-folder-open card-icon" aria-hidden="true"></i>
             <h3>Finder 集成</h3>
-            <p>File Provider 扩展把已连接的云账号作为位置显示在 Finder 中，任何 Mac 应用都能浏览和打开云端文件。CloudDrive2 也可以通过「打开方式」和 <code>clouddrive://</code> URL 方案充当视频文件的外部播放器。</p>
+            <p>File Provider 扩展把已连接的云账号作为位置显示在 Finder 中，任何 Mac 应用都能浏览和打开云端文件；大文件支持按需流式读取，也可以按文件选择「保留在此 Mac 上」或「移除下载内容」。CloudDrive2 也可以通过「打开方式」和 <code>clouddrive://</code> URL 方案充当视频文件的外部播放器。</p>
+            <p class="chip-note">在 Finder 里双击打开时，Finder 仍会先把文件整份下载下来，iCloud 云盘也是这样。想在 Mac 上得到真正的本地磁盘行为，推荐用<a href="#get-h">直接下载版配合 macFUSE 挂载</a>。</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-right-left card-icon" aria-hidden="true"></i>
