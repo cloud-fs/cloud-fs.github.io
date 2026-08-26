@@ -703,6 +703,65 @@ brew services start clouddrive2</code></pre></div>
                or clearing them in bulk by status.</p>
           </div>
         </details>
+
+        <details class="acc" id="config-dir">
+          <summary><i class="fa-solid fa-folder-tree" aria-hidden="true"></i>Where the configuration lives</summary>
+          <div class="acc-body">
+            <p>The core service keeps its configuration and data in one directory —
+               <code>systemsettings.json</code>, <code>config.toml</code> and <code>log/</code> are all
+               there. Its location comes from the <code>CLOUDDRIVE_HOME</code> environment variable; with
+               that unset, it is <code>Waytech/CloudDrive2</code> inside the home directory of the
+               account the service runs as.</p>
+            <div class="table-scroll">
+              <table class="matrix-table">
+                <thead>
+                  <tr><th scope="col">How it runs</th><th scope="col">Configuration directory</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Windows core service</th><td><code>C:\Windows\System32\config\systemprofile\Waytech\CloudDrive2</code></td></tr>
+                  <tr><th scope="row">macOS / Linux, as your own account</th><td><code>~/Waytech/CloudDrive2</code></td></tr>
+                  <tr><th scope="row">macOS Homebrew</th><td><code>~/Waytech/CloudDrive2</code> for whichever account runs <code>brew services</code></td></tr>
+                  <tr><th scope="row">Linux as root</th><td><code>/root/Waytech/CloudDrive2</code></td></tr>
+                  <tr><th scope="row">Docker</th><td><code>/Config</code> inside the container — the host directory you mapped to it</td></tr>
+                  <tr><th scope="row">fnOS (fpk)</th><td>the package's own var directory, which the launcher puts into <code>CLOUDDRIVE_HOME</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>The Windows service path sits under <code>System32</code> because the service runs as the
+               system account, and that is the system account's home directory.</p>
+            <p class="chip-note">When in doubt, ask the running process. On Linux and NAS boxes:
+               <code>tr '\0' '\n' &lt; /proc/$(pgrep -n clouddrive)/environ | grep CLOUDDRIVE_HOME</code>.</p>
+          </div>
+        </details>
+
+        <details class="acc" id="run-after-start">
+          <summary><i class="fa-solid fa-play" aria-hidden="true"></i>Running a program once startup finishes</summary>
+          <div class="acc-body">
+            <p>The core service can run a program or script of your choosing once it has started and its
+               mounts are ready. This solves a boot-order problem: anything that depends on a mount path —
+               a Jellyfin or Emby container, or another service — sees an empty directory if it starts
+               before CloudDrive2 does. Having CloudDrive2 restart it afterwards gets the path right.</p>
+            <ol>
+              <li>Give the core service the environment variable
+                  <code>ENABLE_RUN_AFTER_START=true</code>.</li>
+              <li>Edit <code>systemsettings.json</code> in the <a href="#config-dir">configuration
+                  directory</a> and add a key:
+                <div class="code-block"><pre><code>"run_after_start": "docker restart jellyfin"</code></pre></div>
+                The value is split on whitespace into a command and its arguments; point it at a script if
+                you need anything more involved.</li>
+              <li>Restart the core service.</li>
+            </ol>
+            <div class="note note-warn">
+              <span class="note-title">This setting is deliberately absent from the web interface</span>
+              <p>It runs an arbitrary command with the core service's privileges, so we do not expose it in
+                 the web interface. Using it requires access to the machine running CloudDrive2, to set the
+                 environment variable and edit the configuration file by hand.</p>
+            </div>
+            <p class="chip-note">The fnOS fpk package already ships with
+               <code>ENABLE_RUN_AFTER_START=true</code>, so there you only need to edit
+               <code>systemsettings.json</code>.</p>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -955,6 +1014,25 @@ brew services start clouddrive2</code></pre></div>
             <p>Check the port first: the service built into the phone and tablet app listens on
                <strong>29798</strong>, not the core service's 19798. Point your player at
                <code>http://&lt;device IP&gt;:29798</code> and try again.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>A mounted drive on Windows cannot be shared, or other programs cannot see it</summary>
+          <div class="acc-body">
+            <p>Mount points on Windows belong to the account that created them. The core service runs as the
+               system account, so the drives it mounts belong to the system account; the
+               <a href="/en/download.html#app">Windows app</a> is an ordinary program running as your
+               signed-in account, so the drives it mounts exist only in your own session. Neither can see
+               the other's — that is how Windows works, not a misconfiguration.</p>
+            <p><strong>To share a mounted drive over SMB, it has to be mounted by the core service.</strong>
+               Windows' SMB server also runs as the system account, so the only mounts it can see, and
+               therefore share, are the ones the system account made. A drive mounted by the app is
+               invisible to it.</p>
+            <p class="chip-note">Share it as a <strong>local disk</strong> rather than a network location —
+               to Windows it is a local disk. The same reasoning applies to anything else running as a
+               service: media servers, backup software and scheduled tasks all need the core service's
+               mount, not the app's.</p>
           </div>
         </details>
 

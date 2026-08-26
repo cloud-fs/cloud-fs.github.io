@@ -547,6 +547,49 @@ brew services start clouddrive2</code></pre></div>
             <p>115 网盘还有一个离线下载管理窗口，可以复制链接、删除任务、重新开始，或者按状态批量清理。</p>
           </div>
         </details>
+
+        <details class="acc" id="config-dir">
+          <summary><i class="fa-solid fa-folder-tree" aria-hidden="true"></i>配置文件在哪里</summary>
+          <div class="acc-body">
+            <p>核心服务把配置和数据放在一个目录里：<code>systemsettings.json</code>、<code>config.toml</code> 和 <code>log/</code> 都在这里。位置由环境变量 <code>CLOUDDRIVE_HOME</code> 决定；没设这个变量时，用的是运行账户主目录下的 <code>Waytech/CloudDrive2</code>。</p>
+            <div class="table-scroll">
+              <table class="matrix-table">
+                <thead>
+                  <tr><th scope="col">运行方式</th><th scope="col">配置目录</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Windows 核心服务</th><td><code>C:\Windows\System32\config\systemprofile\Waytech\CloudDrive2</code></td></tr>
+                  <tr><th scope="row">macOS / Linux，以自己的账户运行</th><td><code>~/Waytech/CloudDrive2</code></td></tr>
+                  <tr><th scope="row">macOS Homebrew</th><td><code>~/Waytech/CloudDrive2</code>，取 <code>brew services</code> 的运行账户</td></tr>
+                  <tr><th scope="row">Linux 以 root 运行</th><td><code>/root/Waytech/CloudDrive2</code></td></tr>
+                  <tr><th scope="row">Docker</th><td>容器内是 <code>/Config</code>，也就是你映射进去的宿主机目录</td></tr>
+                  <tr><th scope="row">飞牛 fnOS（fpk）</th><td>套件自己的 var 目录，由启动脚本设进 <code>CLOUDDRIVE_HOME</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Windows 核心服务的目录之所以在 <code>System32</code> 下面，是因为它以系统账户运行，那就是系统账户的主目录。</p>
+            <p class="chip-note">不确定的时候，直接问正在运行的进程。Linux 与 NAS 上：<code>tr '\0' '\n' &lt; /proc/$(pgrep -n clouddrive)/environ | grep CLOUDDRIVE_HOME</code>。</p>
+          </div>
+        </details>
+
+        <details class="acc" id="run-after-start">
+          <summary><i class="fa-solid fa-play" aria-hidden="true"></i>启动完成后自动运行一个程序</summary>
+          <div class="acc-body">
+            <p>核心服务可以在自己启动完成、挂载点就绪之后，运行一个你指定的程序或脚本。用处是解决开机顺序问题：依赖挂载路径的程序（Jellyfin、Emby 容器，或者别的服务）如果比 CloudDrive2 先起来，它们看到的会是一个空目录。让 CloudDrive2 在就绪之后再去重启它们，路径就是对的。</p>
+            <ol>
+              <li>给核心服务加上环境变量 <code>ENABLE_RUN_AFTER_START=true</code>。</li>
+              <li>在<a href="#config-dir">配置目录</a>里编辑 <code>systemsettings.json</code>，加一个键：
+                <div class="code-block"><pre><code>"run_after_start": "docker restart jellyfin"</code></pre></div>
+                值按空格拆成命令和参数，需要更复杂的逻辑就指向一个脚本。</li>
+              <li>重启核心服务。</li>
+            </ol>
+            <div class="note note-warn">
+              <span class="note-title">这个选项不会出现在网页界面里</span>
+              <p>它能以核心服务的身份执行任意命令，所以我们没有把它做进网页界面——要用它，必须能登上跑 CloudDrive2 的那台机器，手工设置环境变量并编辑配置文件。</p>
+            </div>
+            <p class="chip-note">飞牛 fnOS 的 fpk 套件已经默认带了 <code>ENABLE_RUN_AFTER_START=true</code>，只需要改 <code>systemsettings.json</code>。</p>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -729,6 +772,15 @@ brew services start clouddrive2</code></pre></div>
           <summary><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>iPhone / iPad 应用的 WebDAV 连不上</summary>
           <div class="acc-body">
             <p>先查端口：手机与平板应用内置服务的端口是 <strong>29798</strong>，不是核心服务的 19798。在播放器里填 WebDAV 地址时，用 <code>http://&lt;设备 IP&gt;:29798</code> 再试。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows 上挂载盘共享不出去，或者别的程序看不到它</summary>
+          <div class="acc-body">
+            <p>Windows 上的挂载点是分用户的。核心服务以系统账户运行，它挂出来的盘属于系统账户；<a href="/download.html#app">Windows 应用</a>是普通程序，跟着你的登录账户跑，挂出来的盘只有你自己的会话看得到。两边挂的盘互相看不见，这是 Windows 的机制，不是配置问题。</p>
+            <p><strong>要把挂载盘做成 SMB 共享，必须用核心服务挂。</strong>Windows 的 SMB 服务器同样以系统账户运行，所以只有系统账户挂出来的盘它才看得到、才能共享出去。应用挂的盘对 SMB 服务器不可见。</p>
+            <p class="chip-note">共享的时候按<strong>本地磁盘</strong>来共享，不要按网络位置——挂载盘在系统里就是一块本地盘。同理，任何以服务方式运行的程序（媒体服务器、备份软件、计划任务）要访问挂载盘，也都要用核心服务挂的那一份。</p>
           </div>
         </details>
 
