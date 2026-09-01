@@ -551,7 +551,9 @@ brew services start clouddrive2</code></pre></div>
         <details class="acc" id="config-dir">
           <summary><i class="fa-solid fa-folder-tree" aria-hidden="true"></i>配置文件在哪里</summary>
           <div class="acc-body">
-            <p>核心服务把配置和数据放在一个目录里：<code>systemsettings.json</code>、<code>config.toml</code> 和 <code>log/</code> 都在这里。位置由环境变量 <code>CLOUDDRIVE_HOME</code> 决定；没设这个变量时，用的是运行账户主目录下的 <code>Waytech/CloudDrive2</code>。</p>
+            <p>配置和数据放在同一个目录里：<code>systemsettings.json</code>、<code>config.toml</code> 和 <code>log/</code> 都在这里。核心服务和应用各有各的位置，下面分开列。</p>
+            <h4>核心服务</h4>
+            <p>位置由环境变量 <code>CLOUDDRIVE_HOME</code> 决定；没设这个变量时，用的是运行账户主目录下的 <code>Waytech/CloudDrive2</code>。</p>
             <div class="table-scroll">
               <table class="matrix-table">
                 <thead>
@@ -568,6 +570,24 @@ brew services start clouddrive2</code></pre></div>
               </table>
             </div>
             <p>Windows 核心服务的目录之所以在 <code>System32</code> 下面，是因为它以系统账户运行，那就是系统账户的主目录。</p>
+            <h4>应用</h4>
+            <p>各平台的应用内置了同一套核心，但目录固定在应用自己的容器里，不看 <code>CLOUDDRIVE_HOME</code>。</p>
+            <div class="table-scroll">
+              <table class="matrix-table">
+                <thead>
+                  <tr><th scope="col">应用</th><th scope="col">配置目录</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Windows</th><td><code>%LOCALAPPDATA%\CloudDrive.WinUI</code>，也就是 <code>C:\Users\&lt;你的用户名&gt;\AppData\Local\CloudDrive.WinUI</code></td></tr>
+                  <tr><th scope="row">macOS</th><td><code>~/Library/Group Containers/group.com.clouddrive2.CloudDrive2/CloudAPI</code>，App Store 版与直接下载版相同</td></tr>
+                  <tr><th scope="row">iOS / iPadOS / visionOS</th><td>同名 App Group 容器下的 <code>CloudAPI</code>，在应用沙盒里，系统不给出可访问的路径</td></tr>
+                  <tr><th scope="row">Apple TV</th><td>应用容器里的 <code>Library/Caches/CloudAPI</code>——tvOS 只允许应用往这里写</td></tr>
+                  <tr><th scope="row">Android（手机、平板与 TV）</th><td><code>/data/data/com.clouddrive2.CloudDrive2/files/CloudDrive2</code>，属于应用内部存储，没有 Root 进不去</td></tr>
+                  <tr><th scope="row">Meta Quest</th><td><code>/data/data/com.clouddrive2.clouddrive2.vr/files/CloudDrive2</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>手机、平板、电视和头显上的目录都在应用沙盒内部，卸载应用就一起删掉了，也没法用文件管理器打开。真要备份或者迁移配置，用核心服务那一侧。</p>
             <p class="chip-note">不确定的时候，直接问正在运行的进程。Linux 与 NAS 上：<code>tr '\0' '\n' &lt; /proc/$(pgrep -n clouddrive)/environ | grep CLOUDDRIVE_HOME</code>。</p>
           </div>
         </details>

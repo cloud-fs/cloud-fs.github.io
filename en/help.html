@@ -707,11 +707,13 @@ brew services start clouddrive2</code></pre></div>
         <details class="acc" id="config-dir">
           <summary><i class="fa-solid fa-folder-tree" aria-hidden="true"></i>Where the configuration lives</summary>
           <div class="acc-body">
-            <p>The core service keeps its configuration and data in one directory —
-               <code>systemsettings.json</code>, <code>config.toml</code> and <code>log/</code> are all
-               there. Its location comes from the <code>CLOUDDRIVE_HOME</code> environment variable; with
-               that unset, it is <code>Waytech/CloudDrive2</code> inside the home directory of the
-               account the service runs as.</p>
+            <p>Configuration and data sit in one directory — <code>systemsettings.json</code>,
+               <code>config.toml</code> and <code>log/</code> are all there. The core service and the apps
+               each have their own location, listed separately below.</p>
+            <h4>The core service</h4>
+            <p>Its location comes from the <code>CLOUDDRIVE_HOME</code> environment variable; with that
+               unset, it is <code>Waytech/CloudDrive2</code> inside the home directory of the account the
+               service runs as.</p>
             <div class="table-scroll">
               <table class="matrix-table">
                 <thead>
@@ -729,6 +731,27 @@ brew services start clouddrive2</code></pre></div>
             </div>
             <p>The Windows service path sits under <code>System32</code> because the service runs as the
                system account, and that is the system account's home directory.</p>
+            <h4>The apps</h4>
+            <p>Every platform app has the same core built in, but its directory is fixed inside the app's
+               own container and does not read <code>CLOUDDRIVE_HOME</code>.</p>
+            <div class="table-scroll">
+              <table class="matrix-table">
+                <thead>
+                  <tr><th scope="col">App</th><th scope="col">Configuration directory</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Windows</th><td><code>%LOCALAPPDATA%\CloudDrive.WinUI</code> — that is <code>C:\Users\&lt;your name&gt;\AppData\Local\CloudDrive.WinUI</code></td></tr>
+                  <tr><th scope="row">macOS</th><td><code>~/Library/Group Containers/group.com.clouddrive2.CloudDrive2/CloudAPI</code>, the same in the App Store and direct-download builds</td></tr>
+                  <tr><th scope="row">iOS / iPadOS / visionOS</th><td><code>CloudAPI</code> in the app group container of the same name, inside the app sandbox — the system exposes no path you can open</td></tr>
+                  <tr><th scope="row">Apple TV</th><td><code>Library/Caches/CloudAPI</code> in the app container — the only place tvOS lets an app write</td></tr>
+                  <tr><th scope="row">Android (phone, tablet and TV)</th><td><code>/data/data/com.clouddrive2.CloudDrive2/files/CloudDrive2</code>, in the app's internal storage, which needs root to reach</td></tr>
+                  <tr><th scope="row">Meta Quest</th><td><code>/data/data/com.clouddrive2.clouddrive2.vr/files/CloudDrive2</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>On phones, tablets, TVs and headsets the directory lives inside the app sandbox: uninstalling
+               the app takes it with it, and no file manager can open it. To back up or move a configuration,
+               work from the core service side.</p>
             <p class="chip-note">When in doubt, ask the running process. On Linux and NAS boxes:
                <code>tr '\0' '\n' &lt; /proc/$(pgrep -n clouddrive)/environ | grep CLOUDDRIVE_HOME</code>.</p>
           </div>
