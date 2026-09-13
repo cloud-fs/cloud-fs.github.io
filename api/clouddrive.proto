@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.0.14";
+option (version) = "1.0.17";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -1451,7 +1451,14 @@ message APILoginResult {
   bool success = 1;
   string errorMessage = 2;
 }
-message AddLocalFolderRequest { string localFolderPath = 1; }
+message AddLocalFolderRequest {
+  string localFolderPath = 1;
+  // Optional name for the account's virtual root folder. Empty = the last path
+  // component, which is the historical behaviour. Removable volumes on Android
+  // mount under a UUID (`/storage/1234-5678`), so the client passes the
+  // system's volume label instead.
+  string displayName = 2;
+}
 message LoginCloudDriveRequest {
   string grpcUrl = 1;
   string token = 2;
@@ -1601,6 +1608,10 @@ message StringList { repeated string values = 1; }
 enum UpdateChannel {
   Release = 0;
   Beta = 1;
+  // GetSystemSettings has always reported this for an alpha-channel install;
+  // without it here SetSystemSettings could not name the channel it read back,
+  // so echoing the settings struct silently demoted Alpha to Release.
+  Alpha = 2;
 }
 enum LogLevel {
   Trace = 0;
