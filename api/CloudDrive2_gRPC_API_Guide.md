@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.0.14
+Version: 1.0.17
 
 ## Table of Contents
 
+- [What's New in 1.0.17](#whats-new-in-1017)
 - [What's New in 1.0.14](#whats-new-in-1014)
 - [What's New in 1.0.13](#whats-new-in-1013)
 - [What's New in 1.0.11](#whats-new-in-1011)
@@ -40,6 +41,36 @@ Version: 1.0.14
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.0.17
+
+### `AddLocalFolderRequest`: `displayName`
+
+`AddLocalFolderRequest` now accepts an optional `displayName` for the virtual root folder shown to the user. Leave it empty for the historical behaviour (last component of the path).
+
+The Android app supplies this for removable volumes: their mount paths look like `/storage/1234-5678/`, so the last path component is a UUID rather than a human-readable name. The client reads the volume label from the OS and passes it in `displayName` so the drive shows up as (e.g.) "SanDisk SD Card" in the file browser instead of `1234-5678`.
+
+**New field on `AddLocalFolderRequest`:**
+- `displayName` (field 2) — Optional. Overrides the default name derived from the last path component. Empty = historical behaviour.
+
+### `UpdateChannel.Alpha`
+
+The `UpdateChannel` enum now formally lists `Alpha = 2`.
+
+`GetSystemSettings` has always reported this value for alpha-channel installs. Without it in the proto, `SetSystemSettings` couldn't round-trip the value it had just read — clients that echoed the whole `SystemSettings` struct back to save an unrelated field would silently demote an alpha install to release.
+
+**Updated enum:**
+```protobuf
+enum UpdateChannel {
+  Release = 0;
+  Beta = 1;
+  Alpha = 2; // 1.0.17+
+}
+```
+
+Clients that treat unknown enum values conservatively should now accept `Alpha` alongside `Release` and `Beta`.
 
 ---
 
@@ -4356,6 +4387,10 @@ Adds a local folder as a cloud.
 ```protobuf
 message AddLocalFolderRequest {
   string localFolderPath = 1;
+  // Optional name for the account's virtual root folder. Empty = last path
+  // component (historical behaviour). Android passes the OS volume label
+  // for removable volumes, whose mount path ends in a UUID. 1.0.17+
+  string displayName = 2;
 }
 ```
 
@@ -8313,5 +8348,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2026-08-12*
+*Last Updated: 2026-09-13*
 *Copyright © 2026 CloudDrive. All rights reserved.*

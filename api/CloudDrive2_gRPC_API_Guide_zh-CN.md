@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.0.14
+版本: 1.0.17
 
 ## 目录
 
+- [1.0.17 版本新特性](#1017-版本新特性)
 - [1.0.14 版本新特性](#1014-版本新特性)
 - [1.0.13 版本新特性](#1013-版本新特性)
 - [1.0.11 版本新特性](#1011-版本新特性)
@@ -40,6 +41,36 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.0.17 版本新特性
+
+### `AddLocalFolderRequest` 新增 `displayName`
+
+`AddLocalFolderRequest` 新增可选的 `displayName`，用于指定虚拟根目录展示给用户的名称。留空则沿用旧行为（取路径的最后一段）。
+
+Android 版会用它来处理可移除存储：这类卷的挂载路径形如 `/storage/1234-5678/`，最后一段是 UUID 而不是人类可读的名称。客户端从系统读取卷标后通过 `displayName` 传入，让该盘在文件浏览器里显示成"SanDisk SD 卡"这样的名称，而不是 `1234-5678`。
+
+**`AddLocalFolderRequest` 新增字段:**
+- `displayName`（字段 2）— 可选。覆盖默认取路径最后一段的行为。留空表示沿用旧行为。
+
+### `UpdateChannel` 新增 `Alpha`
+
+`UpdateChannel` 枚举正式收录 `Alpha = 2`。
+
+`GetSystemSettings` 对 alpha 通道的安装一直返回该值，只是 proto 里没有对应项。这导致 `SetSystemSettings` 无法回传自己刚读到的通道值 —— 那些回写整个 `SystemSettings` 结构以更新其他字段的客户端，会把 alpha 安装静默降级为 release。
+
+**更新后的枚举:**
+```protobuf
+enum UpdateChannel {
+  Release = 0;
+  Beta = 1;
+  Alpha = 2; // 1.0.17+
+}
+```
+
+对未知枚举值保守处理的客户端，现在应把 `Alpha` 与 `Release`、`Beta` 一同视为合法值。
 
 ---
 
@@ -4358,6 +4389,9 @@ var result = await client.APILoginS3Async(request);
 ```protobuf
 message AddLocalFolderRequest {
   string localFolderPath = 1;
+  // 账号虚拟根目录展示给用户的名称，可选。留空 = 路径最后一段（旧行为）。
+  // Android 版为挂载路径末尾是 UUID 的可移除存储传入系统卷标。1.0.17+
+  string displayName = 2;
 }
 ```
 
@@ -8374,5 +8408,5 @@ class FileManager
 
 ---
 
-*最后更新: 2026-08-12*
+*最后更新: 2026-09-13*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*
