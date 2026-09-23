@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>双向同步 — CloudDrive2</title>
+  <meta name="description" content="CloudDrive2 核心服务 1.1.0 的双向同步：怎么开启，同一文件两处都改了怎么办，删除何时同步、删除保护上限，历史文件夹，云端文件夹的扫描时机，哪些位置可以参与，以及常见问题。">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://www.clouddrive2.com/two-way-sync.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/two-way-sync.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/two-way-sync.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/two-way-sync.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="双向同步 — CloudDrive2">
+  <meta property="og:description" content="让备份的各个文件夹在两个方向上保持一致：在任何一处添加、修改、重命名或删除，其他文件夹中也会执行相同的更改。">
+  <meta property="og:url" content="https://www.clouddrive2.com/two-way-sync.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/two-way-sync.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">核心服务 1.1.0 · 测试版</p>
+        <h1>双向同步</h1>
+        <p class="hero-lede">普通备份只朝一个方向复制：从源文件夹到目标文件夹。双向同步让这些文件夹保持一致——在任何一个文件夹里添加、修改、重命名或删除文件，其他文件夹中也会执行相同的更改。</p>
+        <ul class="chips">
+          <li><a class="chip chip-backup" href="#enable">如何开启</a></li>
+          <li><a class="chip" href="#conflict">两处都被修改</a></li>
+          <li><a class="chip" href="#delete">删除</a></li>
+          <li><a class="chip" href="#history">历史文件夹</a></li>
+          <li><a class="chip" href="#timing">云端文件夹与时间</a></li>
+          <li><a class="chip" href="#locations">哪些位置可以参与</a></li>
+          <li><a class="chip" href="#manage">同步问题、暂停与重置</a></li>
+          <li><a class="chip" href="#faq">常见问题</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/download.html#core">下载核心服务</a>
+          <a class="btn btn-ghost" href="/help.html#backup">备份说明</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="source-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">基本概念</p>
+            <h2 id="source-h">哪个是源文件夹</h2>
+          </div>
+          <div>
+            <p>源文件夹就是你最先选的那个文件夹。所有变化都先到源文件夹，再从源文件夹到其他目标文件夹。</p>
+            <p>日常使用中这一点并不重要，它只决定文件先到哪里。只有一种情况与它有关：两个位置同时修改了同一个文件，并且冲突规则选择了「保留源文件夹的版本」，这时保留原文件名的是源文件夹中的版本。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="enable" aria-labelledby="enable-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">开启</p>
+          <h2 id="enable-h">在备份模式里选「双向同步」</h2>
+          <p>新建备份时可以选择，已有的单向备份也可以改为双向同步。</p>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>选择备份模式</h3>
+            <p>打开「备份」，新建一个备份，或打开已有备份的设置。在「备份模式」中选择<strong>「双向同步」</strong>。</p>
+          </li>
+          <li>
+            <h3>检查其他规则</h3>
+            <p>有些选项在双向同步中含义不同，有两个选项不可用，见<a href="#rules">在双向同步中变化的规则</a>。</p>
+          </li>
+          <li>
+            <h3>保存并确认预览</h3>
+            <p>启用前，CloudDrive 会先比较各个文件夹，显示将要执行的操作：多少文件只存在于一处、多少文件内容不同、多少文件已经一致。你确认之前，不会改动任何文件。</p>
+          </li>
+        </ol>
+
+        <div class="note">
+          <span class="note-title">从单向备份改为双向同步时</span>
+          <p>第一次双向同步会把只存在于目标文件夹的文件复制回源文件夹。如果你在「只存在于目标文件夹的文件」中选了保持原样，则不复制。第一次同步不会删除任何文件。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="conflict" aria-labelledby="conflict-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">冲突</p>
+          <h2 id="conflict-h">同一文件在两处都被修改时</h2>
+          <p>在「同一文件在两处都被修改时」中选择怎么处理。</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-clone card-icon" aria-hidden="true"></i>
+            <h3>保留两个版本（默认）</h3>
+            <p>另一个版本以类似 <code>报告 (冲突副本 115 文档 2026-09-14 15-30-12).docx</code> 的名字保存在文件旁边，每个位置都有。不会丢失任何内容，由你决定留哪一个。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-clock card-icon" aria-hidden="true"></i>
+            <h3>保留较新的版本</h3>
+            <p>只有两个文件夹都是云端文件夹时才可以，因为只有云端存储会为每个文件保留可靠的时间。否则仍然保留两个版本。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-code-branch card-icon" aria-hidden="true"></i>
+            <h3>保留源文件夹或目标文件夹的版本</h3>
+            <p>选「保留源文件夹的版本」或「保留目标文件夹的版本」，另一个版本移到<a href="#history">历史文件夹</a>。</p>
+          </div></li>
+        </ul>
+
+        <p class="chip-note">冲突副本文件名里加的文字，可以在「冲突副本标记」中修改。</p>
+
+        <h3>两个目标文件夹都被修改、源文件夹未修改时</h3>
+        <p>这种情况不受上面规则的影响：两边都是云端文件夹时保留较新的版本，否则保留列表中第一个目标文件夹的版本；另一个版本在每个位置都保存为冲突副本。</p>
+      </div>
+    </section>
+
+    <section class="band" id="delete" aria-labelledby="delete-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">删除</p>
+          <h2 id="delete-h">删除默认不同步</h2>
+          <p>除非打开「同步删除」，否则在一个文件夹中删除的文件会保留在其他文件夹中。</p>
+        </header>
+
+        <p>打开「同步删除」后，在一个文件夹中删除的文件会按删除规则从其他文件夹中移除：</p>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">删除规则</th><th scope="col">其他文件夹中的文件如何处理</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">移到历史文件夹（默认）</th><td>移到原位置旁边的 <code>.clfs_history</code> 文件夹</td></tr>
+              <tr><th scope="row">移到回收站</th><td>存储支持回收站时进回收站，否则进历史文件夹</td></tr>
+              <tr><th scope="row">彻底删除</th><td>直接删除。需要在设置中确认后才生效</td></tr>
+              <tr><th scope="row">保留</th><td>文件保留在其他文件夹中</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note note-warn">
+          <span class="note-title">删除保护上限</span>
+          <p>如果一个文件夹中一次消失了很多文件——磁盘没有挂载、误清空了文件夹、中了病毒——CloudDrive 不会在其他地方删除它们，而是等你确认。备份会显示<strong>「等待确认」</strong>；打开同步问题，选「执行删除」（确实要删）或「恢复文件」（从其他文件夹恢复）。上限是 20 个文件，加上你在「删除保护上限」中设置的比例。</p>
+          <p>修改也有同样的保护：一个文件夹的大部分文件一次被重写时，这些修改会等你确认。选「接受修改」或「从源文件夹恢复」。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="history" aria-labelledby="history-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">旧版本</p>
+          <h2 id="history-h">历史文件夹</h2>
+        </header>
+        <p>被替换和被删除的文件保存在原位置旁边一个名为 <code>.clfs_history</code> 的隐藏文件夹中。</p>
+        <p>被「覆盖」规则替换的版本按「被替换的版本保留天数」保留，默认 0，即一直保留；其他的一直保留，直到你自己删除。</p>
+      </div>
+    </section>
+
+    <section class="band" id="timing" aria-labelledby="timing-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">时机</p>
+          <h2 id="timing-h">云端文件夹与时间</h2>
+          <p>本地文件夹有实时监控，变化几秒内就会被发现。云端文件夹按扫描计划检查：在其他应用中所做的更改，会在下次扫描后同步。</p>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3>设置扫描间隔</h3>
+            <p>有云端文件夹参与时，请设置扫描间隔，建议先设为 15 分钟。</p>
+            <p>在 115、百度网盘和 123 云盘上，扫描可以根据文件夹的时间判断里面是否有文件被添加或删除，所以没有变化的文件夹不必每次都重新列出。</p>
+            <p>但在其他应用中<strong>重命名</strong>文件不会改变文件夹的时间。这类重命名会在 CloudDrive 每隔几次扫描（最多一天）自动进行的彻底扫描中被发现；即使没有设置定时扫描，彻底扫描也会按时进行，频率可以在双向同步高级设置的「自动彻底扫描」中调整或关闭。想立刻检查每一个文件夹，就对备份用「重新扫描」。</p>
+          </div>
+          <div>
+            <h3>浏览云端文件夹时立即检查</h3>
+            <p>CloudDrive 因任何原因重新列出某个云端文件夹时——你浏览它、从挂载的磁盘打开它、往里复制文件——都会把新的文件列表和同步记录比较，发现差异就在几秒内同步这个文件夹。</p>
+            <p>所以在其他应用中添加的文件，只要你查看它所在的文件夹，就会同步到其他位置；否则在下次扫描后同步。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="locations" aria-labelledby="locations-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">范围</p>
+          <h2 id="locations-h">哪些位置可以参与</h2>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3>可以</h3>
+            <p>本地文件夹、大部分云端网盘、SMB / SFTP / WebDAV / S3，以及加密文件夹。</p>
+          </div>
+          <div>
+            <h3>不可以（添加时会说明原因）</h3>
+            <ul>
+              <li>网盘的根目录，请选择其中的某个文件夹</li>
+              <li>只读的网盘</li>
+              <li>搜索结果文件夹</li>
+              <li>不能提供可靠修改时间的存储，例如 FTP</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="note">
+          <span class="note-title">不能与其他备份的文件夹重合</span>
+          <p>参与双向同步的文件夹，不能和另一个备份的文件夹重合或互相嵌套。原因见<a href="#faq-overlap">常见问题</a>。</p>
+        </div>
+
+        <h3 id="rules">在双向同步中变化的规则</h3>
+        <ul>
+          <li>替换规则「跳过」不可用：修改过的文件必须能替换旧副本。请使用「保留历史版本」或「覆盖」。</li>
+          <li>「备份完成后删除源文件」不可用：源文件夹必须保留文件。</li>
+          <li>单向选项「从目标同步删除」不起作用，请改用「同步删除」。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" id="manage" aria-labelledby="manage-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">管理</p>
+          <h2 id="manage-h">同步问题、暂停与重置</h2>
+        </header>
+
+        <ul class="card-grid card-grid-2 card-grid-pairs">
+          <li><div class="card">
+            <i class="fa-solid fa-circle-exclamation card-icon" aria-hidden="true"></i>
+            <h3>同步问题</h3>
+            <p>需要你处理的事项都列在备份下方：冲突、等待确认的删除或修改、无法比较的文件夹、另一个 CloudDrive 实例也在同步的文件夹。每一项都说明该怎么做。「忽略」只隐藏该项，不改动任何文件。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-user-lock card-icon" aria-hidden="true"></i>
+            <h3>一个文件夹只用一个同步程序</h3>
+            <p>不要让另一个同步程序或另一个 CloudDrive 实例管理这些文件夹。CloudDrive 会在每个文件夹中写入一个名为 <code>.clfs_sync_owner</code> 的小型隐藏文件来发现这种情况；发现另一个实例时，该文件夹会被排除在外，直到对方停止。标记文件可以在高级设置中关闭。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-pause card-icon" aria-hidden="true"></i>
+            <h3>暂停</h3>
+            <p>备份页面资源限制中的「暂停双向同步」会让所有双向备份停止复制、重命名和删除。扫描照常进行并记录将要执行的操作，恢复之前可以先查看将要执行的操作。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-rotate-left card-icon" aria-hidden="true"></i>
+            <h3>重新开始</h3>
+            <p>「重置同步索引」会清除备份的同步记录，下次扫描会像第一次一样重新比较所有文件夹。不会删除任何文件。</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h">常见问题</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-trash-arrow-up" aria-hidden="true"></i>我删除的文件又回来了</summary>
+          <div class="acc-body">
+            <p>「同步删除」没有打开，或者删除时该文件夹无法访问。「同步删除」关闭时，其他文件夹会保留该文件；下次扫描时，只有在那边被修改过才会复制回来。打开「同步删除」即可同步删除。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>旧版本去哪了</summary>
+          <div class="acc-body">
+            <p>在文件旁边的 <code>.clfs_history</code> 文件夹中，或者在旁边的冲突副本中。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>为什么备份显示「等待确认」</summary>
+          <div class="acc-body">
+            <p>一次有很多文件消失或被修改。打开同步问题选择处理方式；你处理之前，不会删除或覆盖任何文件。见<a href="#delete">删除保护上限</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc" id="faq-overlap">
+          <summary><i class="fa-solid fa-object-group" aria-hidden="true"></i>一个文件夹可以用在两个备份中吗</summary>
+          <div class="acc-body">
+            <p>参与双向同步的文件夹不可以。只要有一个备份是双向同步，它的文件夹就不能和另一个备份的文件夹重合，也不能互相嵌套——两个同步任务同时管理同一个文件夹，会反复互相复制文件，删除操作也会被传递到其他文件夹。两个单向备份之间不受此限制，和以前一样。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-cloud" aria-hidden="true"></i>支持 115、阿里云盘、百度网盘等云端文件夹吗</summary>
+          <div class="acc-body">
+            <p>支持。在官方应用中所做的更改会在下次扫描时同步，见<a href="#timing">云端文件夹与时间</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-stop" aria-hidden="true"></i>如何停止</summary>
+          <div class="acc-body">
+            <p>把备份模式改回「单向备份」、禁用备份，或删除备份。文件都保留在原处。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>反馈问题</h2>
+        <p>双向同步目前处于测试阶段。发现问题请在 GitHub issues 提交，便于记录和跟踪；也可以在 Telegram 交流群反馈，或发送邮件。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">在 GitHub 提 issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">发邮件</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/two-way-sync.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

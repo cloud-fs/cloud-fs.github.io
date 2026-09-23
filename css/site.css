@@ -383,6 +383,8 @@ a.chip:hover { border-color: currentColor; }
 }
 .card-grid > li { margin: 0; display: flex; }
 .card-grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+/* four cards read as two pairs, never three plus a stray */
+@media (min-width: 720px) { .card-grid-pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 .card {
   position: relative; display: flex; flex-direction: column;

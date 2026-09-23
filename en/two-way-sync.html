@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Two-way sync — CloudDrive2</title>
+  <meta name="description" content="Two-way sync in CloudDrive2 core 1.1.0: turning it on, what happens when a file changes in two places, when deletions are mirrored and the deletion safety limit, the history folder, when cloud folders are scanned, which locations can take part, and common questions.">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/two-way-sync.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/two-way-sync.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/two-way-sync.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/two-way-sync.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Two-way sync — CloudDrive2">
+  <meta property="og:description" content="Keep a backup's folders the same in both directions: add, change, rename or delete a file in any of them and the others follow.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/two-way-sync.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/two-way-sync.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Core 1.1.0 · beta</p>
+        <h1>Two-way sync</h1>
+        <p class="hero-lede">A backup normally copies files one way: from the source folder to the destination folders. Two-way sync keeps all of these folders the same. A file you add, change, rename or delete in any of them ends up in all the others.</p>
+        <ul class="chips">
+          <li><a class="chip chip-backup" href="#enable">Turning it on</a></li>
+          <li><a class="chip" href="#conflict">Changed in two places</a></li>
+          <li><a class="chip" href="#delete">Deletions</a></li>
+          <li><a class="chip" href="#history">History folder</a></li>
+          <li><a class="chip" href="#timing">Cloud folders and timing</a></li>
+          <li><a class="chip" href="#locations">Which locations</a></li>
+          <li><a class="chip" href="#manage">Issues, pausing, starting over</a></li>
+          <li><a class="chip" href="#faq">FAQ</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/download.html#core">Download the core service</a>
+          <a class="btn btn-ghost" href="/en/help.html#backup">Backup help</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="source-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">One idea first</p>
+            <h2 id="source-h">Which folder is the source?</h2>
+          </div>
+          <div>
+            <p>The source folder is the one you picked first. Every change goes to the source folder first, and from there to the other destination folders.</p>
+            <p>This does not matter for everyday use; it only decides where a file goes first. The one place it shows: if two locations change the same file at the same time and you chose <strong>Keep the source folder's version</strong>, the source folder's version is the one that keeps the name.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="enable" aria-labelledby="enable-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Turning it on</p>
+          <h2 id="enable-h">Choose Two-way sync as the backup mode</h2>
+          <p>Pick it for a new backup, or switch an existing one-way backup over.</p>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>Choose the mode</h3>
+            <p>Open Backups and add a backup, or open the settings of an existing one. Under <strong>Backup mode</strong>, choose <strong>Two-way sync</strong>.</p>
+          </li>
+          <li>
+            <h3>Check the rules below it</h3>
+            <p>Some choices change meaning in two-way sync, and two of them are not available. See <a href="#rules">rules that change in two-way sync</a>.</p>
+          </li>
+          <li>
+            <h3>Save, look at the preview, confirm</h3>
+            <p>Before the backup is enabled, CloudDrive compares the folders and shows what will happen: how many files exist only in one place, how many differ, how many are already the same. Nothing is changed until you confirm.</p>
+          </li>
+        </ol>
+
+        <div class="note">
+          <span class="note-title">Switching over from a one-way backup</span>
+          <p>The first two-way pass copies files that exist only in a destination back to the source folder — or leaves them alone, if you chose that under <strong>Files that exist only in a destination folder</strong>. Nothing is deleted during this first pass.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="conflict" aria-labelledby="conflict-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Conflicts</p>
+          <h2 id="conflict-h">When the same file is changed in two places</h2>
+          <p>Choose what happens under <strong>When the same file is changed in two places</strong>.</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-clone card-icon" aria-hidden="true"></i>
+            <h3>Keep both versions (the default)</h3>
+            <p>The other version is kept next to the file with a name like <code>report (conflict copy 115 Documents 2026-09-14 15-30-12).docx</code>, in every location. Nothing is lost; you decide which one to keep.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-clock card-icon" aria-hidden="true"></i>
+            <h3>Keep the newer version</h3>
+            <p>Only possible when both folders are cloud folders, because only cloud storage keeps a reliable time for each file. Otherwise both versions are kept.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-code-branch card-icon" aria-hidden="true"></i>
+            <h3>Keep one side's version</h3>
+            <p>Choose <strong>Keep the source folder's version</strong> or <strong>Keep the destination folder's version</strong>. The other version is moved to the <a href="#history">history folder</a>.</p>
+          </div></li>
+        </ul>
+
+        <p class="chip-note">You can change the words added to a conflict copy under <strong>Conflict copy label</strong>.</p>
+
+        <h3>Changed in two destination folders, not in the source</h3>
+        <p>The rule above does not apply here. The newer version wins when both are cloud folders; otherwise the version in the first destination folder wins. The other version is kept as a conflict copy in every location.</p>
+      </div>
+    </section>
+
+    <section class="band" id="delete" aria-labelledby="delete-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Deletions</p>
+          <h2 id="delete-h">Deletions are not mirrored by default</h2>
+          <p>Unless you turn on <strong>Sync deletions</strong>, a file you delete in one folder stays in the others.</p>
+        </header>
+
+        <p>With <strong>Sync deletions</strong> on, a file deleted in one folder is removed from the others according to the delete rule:</p>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Delete rule</th><th scope="col">What happens to the file in the other folders</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Move to history folder (the default)</th><td>Goes to a <code>.clfs_history</code> folder next to where it was</td></tr>
+              <tr><th scope="row">Move to recycle bin</th><td>Goes to the recycle bin where the storage has one; elsewhere, to the history folder</td></tr>
+              <tr><th scope="row">Delete permanently</th><td>Deleted outright — only after you confirm this in the settings</td></tr>
+              <tr><th scope="row">Keep</th><td>Stays in the other folders</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note note-warn">
+          <span class="note-title">Deletion safety limit</span>
+          <p>If many files disappear from one folder at once — a disk that was not mounted, a folder emptied by mistake, a virus — CloudDrive does not delete them elsewhere. It waits for you. The backup shows <strong>Waiting for confirmation</strong>; open the sync issues and choose <strong>Apply deletions</strong> (they were meant) or <strong>Restore files</strong> (bring them back from the other folders). The limit is 20 files and the share you set under <strong>Deletion safety limit</strong>.</p>
+          <p>The same protection applies to changes: when a large part of a folder is rewritten at once, the changes wait for your confirmation. Choose <strong>Accept changes</strong> or <strong>Restore from the source folder</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="history" aria-labelledby="history-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Old versions</p>
+          <h2 id="history-h">The history folder</h2>
+        </header>
+        <p>Replaced and deleted files are kept in a hidden folder named <code>.clfs_history</code> next to where they were.</p>
+        <p>Versions replaced by the <strong>Overwrite</strong> rule are kept for the number of days set under <strong>Keep replaced versions for</strong> — 0, the default, keeps them for ever. Everything else stays until you delete it yourself.</p>
+      </div>
+    </section>
+
+    <section class="band" id="timing" aria-labelledby="timing-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Timing</p>
+          <h2 id="timing-h">Cloud folders and timing</h2>
+          <p>Local folders are watched, so a change is picked up within seconds. Cloud folders are checked on the scan schedule: a change you make in another app appears after the next scan.</p>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3>Set a scan interval</h3>
+            <p>When one of the folders is a cloud folder, set a scan interval — 15 minutes is a good start.</p>
+            <p>On 115, Baidu and 123, a scan can tell from a folder's time whether files were added to it or removed from it, so folders that did not change are not listed again on every scan.</p>
+            <p>A file <em>renamed</em> in another app does not change its folder's time. Such a rename is found by the thorough scan CloudDrive runs on its own every few scans, at most a day apart; it runs even when no regular scan is scheduled, and <strong>Automatic thorough scan</strong> under the advanced two-way settings sets how often, or turns it off. To look into every folder right away, use <strong>Rescan</strong> on the backup.</p>
+          </div>
+          <div>
+            <h3>Browsing a cloud folder checks it right away</h3>
+            <p>Whenever CloudDrive lists a cloud folder again for any reason — you browse it, open it from a mounted drive, or copy something into it — the new list is compared with what the sync knows about the folder, and a difference starts a sync of that folder within seconds.</p>
+            <p>So a file added in another app appears in the other locations as soon as you look at its folder, and otherwise after the next scan.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="locations" aria-labelledby="locations-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Scope</p>
+          <h2 id="locations-h">Which locations can take part</h2>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3>Can take part</h3>
+            <p>Local folders, most cloud drives, SMB / SFTP / WebDAV / S3, and encrypted folders.</p>
+          </div>
+          <div>
+            <h3>Cannot (and say why when you add them)</h3>
+            <ul>
+              <li>The root of a cloud drive — pick a folder inside it</li>
+              <li>A read-only cloud drive</li>
+              <li>A search-results folder</li>
+              <li>Storage with no reliable modification time, FTP for example</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="note">
+          <span class="note-title">No overlap with other backups</span>
+          <p>A folder taking part in two-way sync may not overlap or nest inside another backup's folders. The reason is in the <a href="#faq-overlap">FAQ</a>.</p>
+        </div>
+
+        <h3 id="rules">Rules that change in two-way sync</h3>
+        <ul>
+          <li><strong>Skip</strong> as the replace rule is not available: a changed file must be able to replace the older copy. Use <strong>Keep history versions</strong> or <strong>Overwrite</strong>.</li>
+          <li><strong>Delete source after backup</strong> is not available: the source folder must keep its files.</li>
+          <li><strong>Sync delete from destination</strong>, the one-way option, has no effect; use <strong>Sync deletions</strong> instead.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" id="manage" aria-labelledby="manage-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Day to day</p>
+          <h2 id="manage-h">Issues, pausing and starting over</h2>
+        </header>
+
+        <ul class="card-grid card-grid-2 card-grid-pairs">
+          <li><div class="card">
+            <i class="fa-solid fa-circle-exclamation card-icon" aria-hidden="true"></i>
+            <h3>Sync issues</h3>
+            <p>Anything that needs your attention is listed under the backup: conflicts, deletions or changes waiting for confirmation, a folder that could not be compared, a folder that another CloudDrive instance is also syncing. Each entry says what to do. <strong>Dismiss</strong> hides an entry without changing any file.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-user-lock card-icon" aria-hidden="true"></i>
+            <h3>One sync program per folder</h3>
+            <p>Do not let another sync program, or another CloudDrive instance, manage one of these folders. CloudDrive writes a small hidden file named <code>.clfs_sync_owner</code> in each folder to notice this; if another instance is found, that folder is left out until the other instance stops. You can turn the marker file off under the advanced settings.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-pause card-icon" aria-hidden="true"></i>
+            <h3>Pausing</h3>
+            <p><strong>Pause two-way sync</strong>, on the Backups page under resource limits, stops every two-way backup from copying, renaming or deleting anything. Scans still run and record what they would do, so you can see what will happen before you resume.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-rotate-left card-icon" aria-hidden="true"></i>
+            <h3>Starting over</h3>
+            <p><strong>Reset sync index</strong> makes the backup forget what it has synced so far. The next scan compares every folder again, as on the first run. Nothing is deleted.</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h">Frequently asked questions</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-trash-arrow-up" aria-hidden="true"></i>A file I deleted came back</summary>
+          <div class="acc-body">
+            <p>Sync deletions is off, or the deletion happened while the folder could not be reached. With Sync deletions off, the other folders keep the file and, on the next scan, it is copied back only if it was changed there. Turn on Sync deletions to mirror deletions.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>Where did my old version go?</summary>
+          <div class="acc-body">
+            <p>In the <code>.clfs_history</code> folder next to the file, or in a conflict copy next to it.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>Why does the backup say “Waiting for confirmation”?</summary>
+          <div class="acc-body">
+            <p>Many files disappeared or changed at once. Open the sync issues and choose what to do; nothing is deleted or overwritten until you do. See the <a href="#delete">deletion safety limit</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc" id="faq-overlap">
+          <summary><i class="fa-solid fa-object-group" aria-hidden="true"></i>Can I use one folder in two backups?</summary>
+          <div class="acc-body">
+            <p>Not a folder that takes part in two-way sync. As soon as one of the backups is two-way, its folders may not overlap or nest inside another backup's folders — two engines on one folder would copy back and forth and cascade deletions. Two one-way backups are not restricted, as before.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-cloud" aria-hidden="true"></i>Does it work with 115, Aliyun, Baidu and other cloud folders?</summary>
+          <div class="acc-body">
+            <p>Yes. Changes made in the official apps are picked up on the next scan; see <a href="#timing">cloud folders and timing</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-stop" aria-hidden="true"></i>How do I stop it?</summary>
+          <div class="acc-body">
+            <p>Switch the backup mode back to <strong>One-way backup</strong>, disable the backup, or remove it. The files stay where they are.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>Something off in the beta?</h2>
+        <p>Two-way sync is still in beta, so tell us when something does not look right. Bugs are best filed as GitHub issues, where they are tracked; the Telegram group is usually staffed, and email works too.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">File a GitHub issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">Email us</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/two-way-sync.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
