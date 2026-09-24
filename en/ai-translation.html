@@ -170,23 +170,24 @@
         <div class="table-scroll">
           <table class="matrix-table">
             <thead>
-              <tr><th scope="col">Transcription</th><th scope="col">Runs on</th><th scope="col">Error rate</th><th scope="col">Lines recognised</th><th scope="col">Timing offset</th></tr>
+              <tr><th scope="col">Transcription</th><th scope="col">Runs on</th><th scope="col">Error rate</th><th scope="col">Lines recognised</th><th scope="col">Timing offset</th><th scope="col">Cost</th></tr>
             </thead>
             <tbody>
-              <tr><th scope="row">Qwen qwen-audio-3.0-asr-flash</th><td>Remote API</td><td>12.2%</td><td>100%</td><td>0.22 s</td></tr>
-              <tr><th scope="row">Qwen qwen-audio-3.1-asr-flash</th><td>Remote API</td><td>12.3%</td><td>94%</td><td>0.20 s</td></tr>
-              <tr><th scope="row">Apple on-device</th><td>iPhone, iPad, Mac and others</td><td>13.9%</td><td>92%</td><td>1.20 s</td></tr>
-              <tr><th scope="row">Qwen fun-asr-flash</th><td>Remote API</td><td>18.4%</td><td>—</td><td>—</td></tr>
-              <tr><th scope="row">Qwen qwen3-asr-flash</th><td>Remote API</td><td>24.6%, with repeated output during music</td><td>—</td><td>—</td></tr>
-              <tr><th scope="row">Whisper Turbo</th><td>On-device</td><td>24.5%</td><td>—</td><td>—</td></tr>
-              <tr><th scope="row">Whisper Small</th><td>On-device</td><td>32.8%</td><td>—</td><td>—</td></tr>
-              <tr><th scope="row">Whisper Medium</th><td>On-device</td><td>35.0%, with repeated output</td><td>—</td><td>—</td></tr>
-              <tr><th scope="row">Whisper Base</th><td>On-device</td><td>43.4%</td><td>—</td><td>—</td></tr>
-              <tr><th scope="row">Whisper Tiny</th><td>On-device</td><td>71.7%, with repeated output</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Qwen qwen-audio-3.0-asr-flash</th><td>Remote API</td><td>12.2%</td><td>100%</td><td>0.22 s</td><td>¥0.00022/s, about ¥0.79/h (Beijing); ¥0.00026/s, about ¥0.94/h (Singapore)</td></tr>
+              <tr><th scope="row">Qwen qwen-audio-3.1-asr-flash</th><td>Remote API</td><td>12.3%</td><td>94%</td><td>0.20 s</td><td>Billed by token: input ¥0.8, output ¥2.7 per million tokens (Beijing); input ¥1.094, output ¥3.427 per million tokens (Singapore)</td></tr>
+              <tr><th scope="row">Apple on-device</th><td>iPhone, iPad, Mac and others</td><td>13.9%</td><td>92%</td><td>1.20 s</td><td>Free</td></tr>
+              <tr><th scope="row">Qwen fun-asr-flash</th><td>Remote API</td><td>18.4%</td><td>—</td><td>—</td><td>¥0.00022/s, about ¥0.79/h (Beijing); ¥0.00026/s, about ¥0.94/h (Singapore)</td></tr>
+              <tr><th scope="row">Qwen qwen3-asr-flash</th><td>Remote API</td><td>24.6%, with repeated output during music</td><td>—</td><td>—</td><td>¥0.00022/s, about ¥0.79/h (Beijing); ¥0.00026/s, about ¥0.94/h (Singapore)</td></tr>
+              <tr><th scope="row">Whisper Turbo</th><td>On-device</td><td>24.5%</td><td>—</td><td>—</td><td>Free</td></tr>
+              <tr><th scope="row">Whisper Small</th><td>On-device</td><td>32.8%</td><td>—</td><td>—</td><td>Free</td></tr>
+              <tr><th scope="row">Whisper Medium</th><td>On-device</td><td>35.0%, with repeated output</td><td>—</td><td>—</td><td>Free</td></tr>
+              <tr><th scope="row">Whisper Base</th><td>On-device</td><td>43.4%</td><td>—</td><td>—</td><td>Free</td></tr>
+              <tr><th scope="row">Whisper Tiny</th><td>On-device</td><td>71.7%, with repeated output</td><td>—</td><td>—</td><td>Free</td></tr>
             </tbody>
           </table>
         </div>
         <p class="chip-note">These are results for one film in one language; other films and languages will differ. A dash means the value was not measured.</p>
+        <p class="chip-note">Costs are Alibaba Cloud Model Studio list prices as of 24 September 2026, in RMB, billed on the length of audio sent to the service (music with no dialogue included); hourly figures are converted from the per-second price. The Beijing region includes 10 free hours within 90 days of activation (1 million tokens for qwen-audio-3.1-asr-flash). Prices can change; see <a href="https://www.alibabacloud.com/help/en/model-studio/model-pricing" rel="noopener">Model Studio pricing</a>. Translation is billed separately: in this test, translating with qwen3.8-flash cost about ¥0.05 per hour of film. On-device models run on your own device and have no service charge.</p>
         <p class="chip-note">Only a few Qwen models were tested as remote APIs. Other remote services were not tested, and they may do better or worse. The table only compares on-device models with remote APIs; it does not mean we recommend Qwen as a remote API.</p>
         <p class="chip-note">qwen-audio-3.0-asr-flash, qwen-audio-3.1-asr-flash and fun-asr-flash will be available in a future release; the current version cannot use them yet.</p>
 
