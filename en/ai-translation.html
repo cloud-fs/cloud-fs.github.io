@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI subtitle translation — CloudDrive2</title>
+  <meta name="description" content="AI subtitle translation in the CloudDrive2 apps: translate a video's existing subtitle track, or transcribe its audio and translate that; on-device models and remote APIs on each platform, output formats and dual-language subtitles, saving and reuse, the Emby / Jellyfin media client, whole-folder generation, and common questions.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/ai-translation.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/ai-translation.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/ai-translation.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/ai-translation.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="AI subtitle translation — CloudDrive2">
+  <meta property="og:description" content="Generate translated subtitles that play in sync: translate an existing subtitle track, or transcribe the audio and translate it. Use on-device models or your own API.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/ai-translation.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/ai-translation.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">An App Pro feature</p>
+        <h1>AI subtitle translation</h1>
+        <p class="hero-lede">Generate translated subtitles for a video and have them play in sync with the picture. When the video has a subtitle track, that track is translated; when it has none, the audio is transcribed first and then translated. The subtitles are saved in the video's own folder, so any other device that opens the same video loads them directly.</p>
+        <ul class="chips">
+          <li><a class="chip chip-subs" href="#source">Translate from</a></li>
+          <li><a class="chip" href="#platforms">Models by platform</a></li>
+          <li><a class="chip" href="#remote">Remote APIs</a></li>
+          <li><a class="chip" href="#start">Getting started</a></li>
+          <li><a class="chip" href="#output">SRT and dual-language ASS</a></li>
+          <li><a class="chip" href="#reuse">Saving and reuse</a></li>
+          <li><a class="chip" href="#media-client">Emby / Jellyfin</a></li>
+          <li><a class="chip" href="#batch">Whole folders</a></li>
+          <li><a class="chip" href="#privacy">Privacy</a></li>
+          <li><a class="chip" href="#faq">FAQ</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/apps/">Get the apps</a>
+          <a class="btn btn-ghost" href="/en/pricing.html#app-h">App Pro pricing</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="scope-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">Where it works</p>
+            <h2 id="scope-h">Which apps have it</h2>
+          </div>
+          <div>
+            <p>The CloudDrive2 apps for iPhone, iPad, Mac, Apple TV, Apple Vision Pro, Windows, Android phones and TVs, and Meta Quest. AI subtitle translation is part of <strong>App Pro</strong>: buy it once, and every device signed in to the same CloudDrive account has it.</p>
+            <p>AI translation may not be fully accurate; quality depends on the model you use.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="source" aria-labelledby="source-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Translate from</p>
+          <h2 id="source-h">A subtitle track, or the audio</h2>
+          <p>Choose under <strong>Translate From</strong>. Translating a subtitle track is faster and more accurate than transcribing audio.</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-wand-magic-sparkles card-icon" aria-hidden="true"></i>
+            <h3>Auto (prefer subtitle)</h3>
+            <p>The default. If the video has a subtitle track, that is translated; if not, the audio is transcribed.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-closed-captioning card-icon" aria-hidden="true"></i>
+            <h3>Subtitle track</h3>
+            <p>Translates a subtitle the video already has, such as a foreign-language track. Blu-ray PGS subtitles are pictures, so they are read with text recognition (OCR) first and then translated.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-microphone card-icon" aria-hidden="true"></i>
+            <h3>Audio track</h3>
+            <p>Transcribes the dialogue, then translates the text into the target language. On 5.1 and 7.1 tracks you can transcribe the dialogue channel only, so music and effects get in the way less.</p>
+          </div></li>
+        </ul>
+
+        <p class="chip-note">The <strong>Spoken Language</strong> is the language spoken in the video; the <strong>Target Language</strong> is the subtitle language to generate. Both have defaults in Settings and can be changed for each video. Picking the actual spoken language gives more accurate transcription.</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="platforms" aria-labelledby="platforms-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Models</p>
+          <h2 id="platforms-h">Transcription and translation on each platform</h2>
+          <p>Transcription and translation are separate steps, and each can run on the device or through a remote API. On-device models are free, and the audio and subtitle text stay on the device.</p>
+        </header>
+
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Platform</th><th scope="col">Transcription</th><th scope="col">Translation</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>iPhone and iPad</th><td>On-device (Apple, iOS / iPadOS 26), or a remote API</td><td>On-device (Apple, iOS 18), or a remote API</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</th><td>On-device (Apple, macOS 26), or a remote API</td><td>On-device (Apple, macOS 15), or a remote API</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>Apple Vision Pro</th><td>On-device (Apple, visionOS 26), or a remote API</td><td>On-device (Apple Intelligence, visionOS 26), or a remote API</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>Apple TV</th><td>On-device (Apple, tvOS 26), or a remote API</td><td>Remote API only</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</th><td>On-device (Whisper, model downloaded to the PC), or a remote API</td><td>A remote API. Translation into English can be done on the PC by Whisper itself</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-android" aria-hidden="true"></i>Android phones, tablets and TVs</th><td>On-device (Whisper, with GPU acceleration), or a remote API</td><td>On-device (ML Kit), or a remote API</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-meta" aria-hidden="true"></i>Meta Quest</th><td>On-device (Whisper), or a remote API</td><td>A remote API is recommended</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="split">
+          <div>
+            <h3>Whisper models</h3>
+            <p>On-device transcription on Windows, Android and Quest uses Whisper, in Tiny, Base, Small, Medium and Turbo sizes. A larger model is more accurate, slower, and takes more storage. Download one in Settings before first use.</p>
+            <p>With <strong>GPU acceleration</strong> set to Auto on Android, the app measures the GPU and the CPU on your device and uses whichever is faster.</p>
+          </div>
+          <div>
+            <h3>Apple on-device models</h3>
+            <p>iPhone, iPad, Mac and Vision Pro use the speech recognition and translation models built into the system. The first time you use a language, its language model is downloaded; progress shows in the setup wizard.</p>
+            <p>Apple TV has no on-device translation model. Set up a remote API on the Apple TV, or generate the subtitles on an iPhone, iPad or Mac first — see <a href="#reuse">saving and reuse</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="remote" aria-labelledby="remote-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Remote APIs</p>
+          <h2 id="remote-h">Using a remote API</h2>
+          <p>In the <strong>Live Translation</strong> settings, transcription and translation each get their own provider, endpoint, model and API key, and the two can use different providers. The app has presets for the services below: pick one and the endpoint and default model are filled in, so only the API key is left. You can also type an endpoint and a model directly instead of picking from the list.</p>
+        </header>
+
+        <h3>Built-in translate providers</h3>
+        <p>Translation uses an OpenAI-compatible chat completions endpoint. The first model listed for each provider is the default.</p>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Translate provider</th><th scope="col">Preset models</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">OpenAI</th><td><code>gpt-5.6-luna</code>, <code>gpt-5.6-terra</code>, <code>gpt-5.6-sol</code>, <code>gpt-4o-mini</code></td></tr>
+              <tr><th scope="row">DeepSeek</th><td><code>deepseek-v4-flash</code>, <code>deepseek-v4-pro</code></td></tr>
+              <tr><th scope="row">Google Gemini</th><td><code>gemini-3.7-flash</code>, <code>gemini-3.5-flash-lite</code>, <code>gemini-3.6-flash</code>, <code>gemini-2.5-flash</code></td></tr>
+              <tr><th scope="row">xAI (Grok)</th><td><code>grok-4.6</code>, <code>grok-4.5</code></td></tr>
+              <tr><th scope="row">Groq</th><td><code>openai/gpt-oss-20b</code>, <code>openai/gpt-oss-120b</code>, <code>qwen/qwen3.6-27b</code></td></tr>
+              <tr><th scope="row">OpenRouter</th><td><code>google/gemini-3.7-flash</code>, <code>deepseek/deepseek-v4-flash</code>, <code>z-ai/glm-5.3-flash</code>, <code>qwen/qwen3.8-flash</code></td></tr>
+              <tr><th scope="row">Mistral</th><td><code>mistral-small-latest</code>, <code>mistral-medium-latest</code>, <code>mistral-large-latest</code></td></tr>
+              <tr><th scope="row">SiliconFlow</th><td><code>deepseek-ai/DeepSeek-V4-Flash</code>, <code>Qwen/Qwen3.5-35B-A3B</code>, <code>deepseek-ai/DeepSeek-V4-Pro</code></td></tr>
+              <tr><th scope="row">Anthropic (Claude)</th><td><code>claude-haiku-4-5</code>, <code>claude-sonnet-5</code>, <code>claude-opus-5</code></td></tr>
+              <tr><th scope="row">Qwen (Intl / China)</th><td><code>qwen3.8-flash</code>, <code>qwen-flash</code>, <code>qwen-plus</code>, <code>qwen3.8-max</code></td></tr>
+              <tr><th scope="row">Zhipu (BigModel)</th><td><code>glm-4.7-flash</code>, <code>glm-5.3-flash</code>, <code>glm-4.7-flashx</code>, <code>glm-5.3</code></td></tr>
+              <tr><th scope="row">Ollama (local)</th><td><code>qwen3.8</code>, <code>gemma3</code>, <code>glm-5.3-flash</code>, <code>llama3.2</code></td></tr>
+              <tr><th scope="row">LM Studio (local)</th><td><code>local-model</code></td></tr>
+              <tr><th scope="row">MTranServer (self-hosted)</th><td>Your own translation server; no model to choose — enter the server URL and token (the token is optional)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Built-in transcribe providers</h3>
+        <p>Transcription uses an OpenAI-compatible audio transcriptions endpoint.</p>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Transcribe provider</th><th scope="col">Preset models</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">OpenAI Whisper</th><td><code>whisper-1</code>, <code>gpt-transcribe</code>, <code>gpt-4o-transcribe</code>, <code>gpt-4o-mini-transcribe</code></td></tr>
+              <tr><th scope="row">Groq</th><td><code>whisper-large-v3-turbo</code>, <code>whisper-large-v3</code></td></tr>
+              <tr><th scope="row">Speaches (self-hosted)</th><td><code>Systran/faster-whisper-base</code>, <code>deepdml/faster-whisper-large-v3-turbo-ct2</code>, <code>Systran/faster-whisper-large-v3</code>, <code>Systran/faster-whisper-small</code>, <code>Systran/faster-whisper-tiny</code></td></tr>
+              <tr><th scope="row">Qwen3-ASR (Intl / China)</th><td><code>qwen3-asr-flash</code></td></tr>
+              <tr><th scope="row">Zhipu (BigModel)</th><td><code>glm-asr-2512</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">Whisper models (for example <code>whisper-1</code> and <code>whisper-large-v3-turbo</code>) return a time for each sentence, so subtitles line up with the speech more closely. Other transcription models return a whole passage at once, so each subtitle's timing is less precise.</p>
+
+        <h3>Using your own endpoint</h3>
+        <div class="split">
+          <div>
+            <ul>
+              <li><strong>Translation</strong>: any OpenAI-compatible chat service works. Enter the full address under <strong>Translate endpoint</strong>, for example <code>https://api.example.com/v1/chat/completions</code>, and the model name from the provider's documentation under <strong>Translate model</strong>.</li>
+              <li><strong>Transcription</strong>: set <strong>Transcribe provider</strong> to <strong>Custom</strong> and enter the full address of an OpenAI-compatible audio transcriptions endpoint, for example <code>https://api.example.com/v1/audio/transcriptions</code>, and the model name.</li>
+              <li><strong>MTranServer</strong>: set <strong>Translate provider</strong> to MTranServer and fill in <strong>MTranServer URL</strong> and <strong>MTranServer token</strong>.</li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li><strong>Qwen</strong>: the international and China endpoints are different; pick the one for the region your API key belongs to.</li>
+              <li><strong>Ollama and LM Studio</strong>: the preset address is <code>localhost</code>, which only works on the computer running them. On a phone, TV or any other device, replace <code>localhost</code> with that computer's LAN IP address.</li>
+              <li><strong>Speaches</strong>: the preset has no address; enter your own server's. On a local network the API key can be left empty.</li>
+            </ul>
+          </div>
+        </div>
+
+        <p>Once it is filled in, use <strong>Test transcription</strong> and <strong>Test translation</strong> to check the endpoint works. Subtitle lines are short and requests are frequent, so the lighter models near the top of each list are faster and cheaper, and usually a better fit than large reasoning models.</p>
+        <p class="chip-note">API keys are stored on the device only. Charges for a remote service are billed by that provider, not by CloudDrive2. The preset providers and models change with app updates; the app shows the current list.</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="start" aria-labelledby="start-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Getting started</p>
+          <h2 id="start-h">Start translating in the player</h2>
+          <p>Turn on <strong>Live AI Subtitles</strong> under <strong>Live Translation</strong> in Settings, then play a video.</p>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>Open the subtitle menu</h3>
+            <p>In the player's subtitle menu, find the <strong>AI Translated</strong> section and choose <strong>Enable</strong>.</p>
+          </li>
+          <li>
+            <h3>Follow the wizard</h3>
+            <p>Three steps: choose the spoken and target languages (downloading a language model if needed), choose what to translate from, and choose the output format. Then choose <strong>Start</strong>.</p>
+          </li>
+          <li>
+            <h3>Subtitles generate as you watch</h3>
+            <p>Subtitles are generated from the current position, with progress shown as <strong>Translating</strong> and a percentage; once the whole video is done it shows <strong>Ready</strong>. After a seek, the new position is generated first.</p>
+          </li>
+        </ol>
+
+        <h3>Starting automatically</h3>
+        <ul>
+          <li><strong>Auto-enable for videos without subtitles</strong>: a video with no subtitle track starts AI translation on its own, using the defaults in Settings.</li>
+          <li><strong>Continue across playlist</strong>: in a playlist, each next video is translated with the same settings until you turn it off.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" id="output" aria-labelledby="output-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Output</p>
+          <h2 id="output-h">SRT or ASS</h2>
+          <p>Choose for the current video in the wizard's third step, <strong>Output format</strong>, or set the default under <strong>Output Format</strong> in the <strong>Live Translation</strong> settings.</p>
+        </header>
+
+        <ul class="card-grid card-grid-2">
+          <li><div class="card">
+            <i class="fa-solid fa-file-lines card-icon" aria-hidden="true"></i>
+            <h3>SRT</h3>
+            <p>Plain-text subtitles with the translation only. Almost every player and TV can read them, so choose SRT if you also want to use the file in other players.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-palette card-icon" aria-hidden="true"></i>
+            <h3>ASS (styled)</h3>
+            <p>Subtitles with a set font, size and colour. Only ASS can turn on <strong>Dual language (show original)</strong>, which shows the translation and the original together.</p>
+          </div></li>
+        </ul>
+
+        <h3>Dual language (show original)</h3>
+        <p>With ASS chosen, tick <strong>Dual language (show original)</strong> in the wizard, or turn it on in Settings. Each subtitle then has two lines: the translation on top, white, larger and bold; the original underneath, yellow and smaller. The original comes from what you translate from: the source subtitle's text when translating a subtitle track, or the transcription when translating the audio. Useful for learning a language, or for checking the translation.</p>
+
+        <h3>Other display settings</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Setting</th><th scope="col">What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Wrap long lines / Max characters per line</th><td>Splits an over-long subtitle line into several</td></tr>
+              <tr><th scope="row">Subtitle delay</th><td>Shows AI subtitles later, or earlier with a negative value. Increase it if subtitles appear a little before the voice. On-device and remote transcription each have their own value</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="chip-note">A subtitle saved next to the video is named <code>video name.target-language code.ai.srt</code> or <code>.ai.ass</code>, for example <code>Movie.zh-Hans.ai.ass</code>.</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="reuse" aria-labelledby="reuse-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Saving</p>
+          <h2 id="reuse-h">Saving and reuse</h2>
+          <p>With <strong>Save subtitles next to video</strong> on, the subtitle file is written to the video's cloud folder, with the same name as the video.</p>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3>Loading on other devices</h3>
+            <p>Once the subtitle sits next to the video, CloudDrive2 on any device loads it as an external subtitle when it opens that video — nothing is generated again. Other players can read the file too.</p>
+            <p>For example: generate the subtitles on a Mac with the on-device models, then watch the same video on Apple TV.</p>
+          </div>
+          <div>
+            <h3>Resuming after an interruption</h3>
+            <p>If you leave playback part-way, what has been translated is kept in this device's subtitle cache and the next run continues from there. When the translation service stops responding, what was translated is kept as well, and you can try again.</p>
+            <p><strong>Regenerate</strong> in the subtitle menu discards this video's cache and translates again from the start; <strong>Remove translation</strong> stops and deletes it. <strong>Subtitle cache</strong> in Settings clears every cache on this device; subtitles already saved next to your videos are not affected.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="media-client" aria-labelledby="media-client-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Emby / Jellyfin</p>
+          <h2 id="media-client-h">In the media client</h2>
+          <p>AI subtitle translation also works when you play a server's videos through the app's built-in Emby / Jellyfin client, in the same way as for cloud files: enable <strong>AI Translated</strong> in the player's subtitle menu. Where the finished subtitles are saved depends on the kind of server.</p>
+        </header>
+
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Server</th><th scope="col">Where the generated subtitles are saved</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Jellyfin</th><td>Uploaded to the Jellyfin server as an external subtitle for that video. From then on, any Jellyfin client playing the video can pick it</td></tr>
+              <tr><th scope="row">Emby</th><td>Emby has no API for uploading subtitles. If the server has <strong>Direct streaming</strong> turned on and <strong>Path mappings</strong> configured, the subtitle is written to the video's cloud folder. If the <a href="/en/download.html#plugin">CloudDrive2 companion plugin</a> is installed on the Emby server, the app tells Emby to refresh that video as soon as the translation finishes, and the new subtitle can be picked straight away; without the plugin, Emby shows it after its next library scan</td></tr>
+              <tr><th scope="row">No path mapping</th><td>The subtitle is kept only in this device's subtitle cache and used when you play the video again here</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="chip-note">Uploading to a Jellyfin server is currently offered on iPhone, iPad, Mac, Apple TV, Vision Pro and Android. On Windows, subtitles for a direct-streamed video are written to the video's cloud folder; otherwise they are kept on the device only.</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="batch" aria-labelledby="batch-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Whole folders</p>
+          <h2 id="batch-h">Generating subtitles for a whole folder</h2>
+          <p>Choose <strong>Generate AI Subtitles</strong> from a folder's or a video's menu. Subtitles are generated one by one in the background, without playing the videos, and saved next to each one.</p>
+        </header>
+
+        <ul>
+          <li><strong>Include subfolders</strong>: also processes videos inside subfolders.</li>
+          <li><strong>Skip videos that already have subtitles</strong>: skips a video with an embedded text subtitle, or with a matching .srt / .ass next to it.</li>
+          <li><strong>Include disc images (Blu-ray/DVD ISO)</strong>: also processes .iso files in the folder.</li>
+          <li><strong>Low priority (background)</strong>: generates more slowly, using less CPU and network.</li>
+        </ul>
+        <p>The jobs are listed under <strong>AI Subtitles</strong> on the Transfers page, where you can pause, resume, retry or cancel them all.</p>
+        <p class="chip-note">The last two options are currently offered on iPhone, iPad and Mac.</p>
+      </div>
+    </section>
+
+    <section class="band" id="privacy" aria-labelledby="privacy-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Privacy</p>
+          <h2 id="privacy-h">Where the data goes</h2>
+        </header>
+        <p>When transcription and translation both run on the device, the audio and subtitle text never leave it.</p>
+        <p>With a remote API, audio segments or subtitle text are sent to the service you configured and handled under that service's own privacy policy. We neither receive nor proxy this data. See the <a href="/privacy.html">privacy policy</a>.</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h">Frequently asked questions</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-crown" aria-hidden="true"></i>What do I need to buy?</summary>
+          <div class="acc-body">
+            <p>AI subtitle translation is part of App Pro. App Pro is tied to your CloudDrive account: buy it once and it works on every platform where you sign in with that account. Prices are on the <a href="/en/pricing.html#app-h">pricing page</a>. A remote API's own charges are billed separately by that provider.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-clock" aria-hidden="true"></i>Subtitles appear before or after the voice</summary>
+          <div class="acc-body">
+            <p>Adjust <strong>Subtitle delay</strong> under <strong>Live Translation</strong> in Settings. If subtitles come before the voice, increase it; if they come after, lower it or set a negative value. On-device and remote transcription each have their own value.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-language" aria-hidden="true"></i>The subtitles stay in the original language</summary>
+          <div class="acc-body">
+            <p>If the device has no on-device translation model and no valid remote endpoint and key are set, subtitles are shown in the original spoken language. Apple TV and Windows need a remote translation API; on iPhone, iPad or Mac, check that the system meets the version in <a href="#platforms">the table above</a> and that the language model has been downloaded.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-download" aria-hidden="true"></i>The Whisper model downloads slowly or stops</summary>
+          <div class="acc-body">
+            <p>The app tries several download sources in turn, including a mirror for mainland China. Downloading again after an interruption continues from where it stopped, and the finished file is verified; a file that fails verification is downloaded again.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-bolt" aria-hidden="true"></i>Translation cannot keep up with playback</summary>
+          <div class="acc-body">
+            <p>Transcribing audio is much slower than translating a subtitle track. If the video has subtitles, set <strong>Translate From</strong> to Auto (prefer subtitle) or Subtitle track. When transcribing, try a smaller Whisper model, turn on GPU acceleration on Android, or use a remote transcription service. You can also <a href="#batch">generate the subtitles in the background</a> first and watch afterwards.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-tv" aria-hidden="true"></i>How do I use on-device models for Apple TV?</summary>
+          <div class="acc-body">
+            <p>Apple TV has no on-device translation model. Generate the subtitles for that video on an iPhone, iPad or Mac with <strong>Save subtitles next to video</strong> on; Apple TV loads them when it opens the same video.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>Report a problem</h2>
+        <p>File problems as GitHub issues, where they are recorded and tracked; you can also report them in the Telegram group or by email.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">File a GitHub issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">Email us</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/ai-translation.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

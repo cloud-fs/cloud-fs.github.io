@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 字幕翻译 — CloudDrive2</title>
+  <meta name="description" content="CloudDrive2 应用的 AI 字幕翻译：翻译视频已有的字幕轨道，或对音频进行语音识别后翻译；各平台的设备端模型与远程 API，输出格式与双语字幕，保存与复用，Emby / Jellyfin 媒体客户端，整个文件夹批量生成，以及常见问题。">
+  <link rel="canonical" href="https://www.clouddrive2.com/ai-translation.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/ai-translation.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/ai-translation.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/ai-translation.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="AI 字幕翻译 — CloudDrive2">
+  <meta property="og:description" content="为视频生成同步显示的翻译字幕：翻译已有字幕轨道，或识别音频后翻译。可使用设备端模型，也可以接入自己的 API。">
+  <meta property="og:url" content="https://www.clouddrive2.com/ai-translation.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/ai-translation.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">App Pro 功能</p>
+        <h1>AI 字幕翻译</h1>
+        <p class="hero-lede">为视频生成翻译字幕，播放时与画面同步显示。视频有字幕轨道时直接翻译字幕；没有字幕时，先对音频进行语音识别，再翻译。生成的字幕保存在视频所在的文件夹中，其他设备打开同一个视频时直接加载。</p>
+        <ul class="chips">
+          <li><a class="chip chip-subs" href="#source">翻译来源</a></li>
+          <li><a class="chip" href="#platforms">各平台的模型</a></li>
+          <li><a class="chip" href="#remote">远程 API</a></li>
+          <li><a class="chip" href="#start">开始翻译</a></li>
+          <li><a class="chip" href="#output">SRT 与 ASS 双语</a></li>
+          <li><a class="chip" href="#reuse">保存与复用</a></li>
+          <li><a class="chip" href="#media-client">Emby / Jellyfin</a></li>
+          <li><a class="chip" href="#batch">批量生成</a></li>
+          <li><a class="chip" href="#privacy">隐私</a></li>
+          <li><a class="chip" href="#faq">常见问题</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/apps/">下载应用</a>
+          <a class="btn btn-ghost" href="/pricing.html#app-h">App Pro 价格</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="scope-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">适用范围</p>
+            <h2 id="scope-h">哪些应用可以使用</h2>
+          </div>
+          <div>
+            <p>iPhone、iPad、Mac、Apple TV、Apple Vision Pro、Windows、Android 手机与电视，以及 Meta Quest 上的 CloudDrive2 应用都可以使用。AI 字幕翻译属于 <strong>App Pro</strong>，一次购买，登录同一个 CloudDrive 账号的所有设备都可以使用。</p>
+            <p>AI 翻译的结果可能不完全准确，质量取决于所用的模型。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="source" aria-labelledby="source-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">翻译来源</p>
+          <h2 id="source-h">翻译字幕，或识别音频</h2>
+          <p>在「翻译来源」中选择。翻译字幕轨道比识别音频快，也更准确。</p>
+        </header>
+
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-wand-magic-sparkles card-icon" aria-hidden="true"></i>
+            <h3>自动（优先字幕）</h3>
+            <p>默认选项。视频有字幕轨道时翻译字幕，没有时识别音频。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-closed-captioning card-icon" aria-hidden="true"></i>
+            <h3>字幕轨道</h3>
+            <p>直接翻译视频中已有的字幕，例如外语字幕。蓝光的 PGS 图形字幕是图片，会先经过文字识别（OCR）转成文本再翻译。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-microphone card-icon" aria-hidden="true"></i>
+            <h3>音频轨道</h3>
+            <p>对视频的对白进行语音识别，再把识别出的文字翻译成目标语言。5.1 与 7.1 音轨可以只识别对白声道，减少音乐和音效的干扰。</p>
+          </div></li>
+        </ul>
+
+        <p class="chip-note">「源语言」是视频中所说的语言，「目标语言」是要生成的字幕语言。两者在设置里有默认值，也可以为每个视频单独选择。选择具体的源语言，识别更准确。</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="platforms" aria-labelledby="platforms-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">模型</p>
+          <h2 id="platforms-h">各平台的语音识别与翻译</h2>
+          <p>语音识别和翻译是两个独立的步骤，可以分别选择在设备端运行，或使用远程 API。设备端模型免费，音频和字幕文本不离开设备。</p>
+        </header>
+
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">平台</th><th scope="col">语音识别</th><th scope="col">翻译</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>iPhone 与 iPad</th><td>设备端（Apple，需要 iOS / iPadOS 26），或远程 API</td><td>设备端（Apple，需要 iOS 18），或远程 API</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>Mac</th><td>设备端（Apple，需要 macOS 26），或远程 API</td><td>设备端（Apple，需要 macOS 15），或远程 API</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>Apple Vision Pro</th><td>设备端（Apple，需要 visionOS 26），或远程 API</td><td>设备端（Apple 智能，需要 visionOS 26），或远程 API</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>Apple TV</th><td>设备端（Apple，需要 tvOS 26），或远程 API</td><td>仅远程 API</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</th><td>设备端（Whisper，模型下载到本机），或远程 API</td><td>远程 API。译为英语时可以直接由 Whisper 在本机完成</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-android" aria-hidden="true"></i>Android 手机、平板与电视</th><td>设备端（Whisper，支持 GPU 加速），或远程 API</td><td>设备端（ML Kit），或远程 API</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-meta" aria-hidden="true"></i>Meta Quest</th><td>设备端（Whisper），或远程 API</td><td>建议使用远程 API</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="split">
+          <div>
+            <h3>Whisper 模型</h3>
+            <p>Windows、Android 与 Quest 上的设备端语音识别使用 Whisper 模型，有 Tiny、Base、Small、Medium、Turbo 几档：模型越大，识别越准确，也越慢，占用的存储空间越多。第一次使用时在设置中下载。</p>
+            <p>Android 上的「GPU 加速」设为「自动」时，应用会在本机分别测试 GPU 和 CPU 的速度，使用较快的一个。</p>
+          </div>
+          <div>
+            <h3>Apple 设备端模型</h3>
+            <p>iPhone、iPad、Mac 与 Vision Pro 使用系统自带的语音识别和翻译模型。第一次使用某种语言时，需要下载对应的语言模型，下载进度显示在设置向导中。</p>
+            <p>Apple TV 没有设备端翻译模型。可以在 Apple TV 上配置远程 API，或者先在 iPhone、iPad 或 Mac 上生成字幕，见<a href="#reuse">保存与复用</a>。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="remote" aria-labelledby="remote-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">远程 API</p>
+          <h2 id="remote-h">使用远程 API</h2>
+          <p>在设置的「实时翻译」中，语音识别和翻译分别设置服务、接口地址、模型和 API 密钥，两者可以使用不同的服务商。应用内置了下列服务的预设：选择一个预设，接口地址和默认模型会自动填好，只需再填 API 密钥。接口地址和模型也可以直接输入，不必从列表中选择。</p>
+        </header>
+
+        <h3>内置的翻译服务</h3>
+        <p>翻译使用兼容 OpenAI 的对话接口（chat completions）。每个服务的第一个模型是默认选项。</p>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">翻译服务</th><th scope="col">预设模型</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">OpenAI</th><td><code>gpt-5.6-luna</code>、<code>gpt-5.6-terra</code>、<code>gpt-5.6-sol</code>、<code>gpt-4o-mini</code></td></tr>
+              <tr><th scope="row">DeepSeek</th><td><code>deepseek-v4-flash</code>、<code>deepseek-v4-pro</code></td></tr>
+              <tr><th scope="row">Google Gemini</th><td><code>gemini-3.7-flash</code>、<code>gemini-3.5-flash-lite</code>、<code>gemini-3.6-flash</code>、<code>gemini-2.5-flash</code></td></tr>
+              <tr><th scope="row">xAI（Grok）</th><td><code>grok-4.6</code>、<code>grok-4.5</code></td></tr>
+              <tr><th scope="row">Groq</th><td><code>openai/gpt-oss-20b</code>、<code>openai/gpt-oss-120b</code>、<code>qwen/qwen3.6-27b</code></td></tr>
+              <tr><th scope="row">OpenRouter</th><td><code>google/gemini-3.7-flash</code>、<code>deepseek/deepseek-v4-flash</code>、<code>z-ai/glm-5.3-flash</code>、<code>qwen/qwen3.8-flash</code></td></tr>
+              <tr><th scope="row">Mistral</th><td><code>mistral-small-latest</code>、<code>mistral-medium-latest</code>、<code>mistral-large-latest</code></td></tr>
+              <tr><th scope="row">硅基流动（SiliconFlow）</th><td><code>deepseek-ai/DeepSeek-V4-Flash</code>、<code>Qwen/Qwen3.5-35B-A3B</code>、<code>deepseek-ai/DeepSeek-V4-Pro</code></td></tr>
+              <tr><th scope="row">Anthropic（Claude）</th><td><code>claude-haiku-4-5</code>、<code>claude-sonnet-5</code>、<code>claude-opus-5</code></td></tr>
+              <tr><th scope="row">通义千问（国际 / 中国）</th><td><code>qwen3.8-flash</code>、<code>qwen-flash</code>、<code>qwen-plus</code>、<code>qwen3.8-max</code></td></tr>
+              <tr><th scope="row">智谱（BigModel）</th><td><code>glm-4.7-flash</code>、<code>glm-5.3-flash</code>、<code>glm-4.7-flashx</code>、<code>glm-5.3</code></td></tr>
+              <tr><th scope="row">Ollama（本机）</th><td><code>qwen3.8</code>、<code>gemma3</code>、<code>glm-5.3-flash</code>、<code>llama3.2</code></td></tr>
+              <tr><th scope="row">LM Studio（本机）</th><td><code>local-model</code></td></tr>
+              <tr><th scope="row">MTranServer（自建）</th><td>自建的翻译服务器，不需要选择模型，填写服务器地址和令牌（令牌可选）</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>内置的语音识别服务</h3>
+        <p>语音识别使用兼容 OpenAI 的音频转写接口。</p>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">语音识别服务</th><th scope="col">预设模型</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">OpenAI Whisper</th><td><code>whisper-1</code>、<code>gpt-transcribe</code>、<code>gpt-4o-transcribe</code>、<code>gpt-4o-mini-transcribe</code></td></tr>
+              <tr><th scope="row">Groq</th><td><code>whisper-large-v3-turbo</code>、<code>whisper-large-v3</code></td></tr>
+              <tr><th scope="row">Speaches（自建）</th><td><code>Systran/faster-whisper-base</code>、<code>deepdml/faster-whisper-large-v3-turbo-ct2</code>、<code>Systran/faster-whisper-large-v3</code>、<code>Systran/faster-whisper-small</code>、<code>Systran/faster-whisper-tiny</code></td></tr>
+              <tr><th scope="row">通义千问 Qwen3-ASR（国际 / 中国）</th><td><code>qwen3-asr-flash</code></td></tr>
+              <tr><th scope="row">智谱（BigModel）</th><td><code>glm-asr-2512</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">Whisper 系列模型（例如 <code>whisper-1</code>、<code>whisper-large-v3-turbo</code>）会返回每一句话的时间，字幕与语音对齐得更准。其他语音识别模型按整段返回文字，每条字幕的时间精度较低。</p>
+
+        <h3>使用自己的接口</h3>
+        <div class="split">
+          <div>
+            <ul>
+              <li><strong>翻译</strong>：任何兼容 OpenAI 对话接口的服务都可以使用。在「翻译接口」中填写完整地址，例如 <code>https://api.example.com/v1/chat/completions</code>，在「翻译模型」中填写服务商文档中的模型名称。</li>
+              <li><strong>语音识别</strong>：把「语音识别服务」设为「自定义」，填写兼容 OpenAI 音频转写的完整地址，例如 <code>https://api.example.com/v1/audio/transcriptions</code>，以及模型名称。</li>
+              <li><strong>MTranServer</strong>：把「翻译服务」设为 MTranServer，填写「MTranServer 地址」和「MTranServer 令牌」。</li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li><strong>通义千问</strong>：国际版与中国版的接口地址不同，按 API 密钥所属的区域选择。</li>
+              <li><strong>Ollama 与 LM Studio</strong>：预设地址是 <code>localhost</code>，只在运行这两个程序的电脑上可用。在手机、电视或其他设备上使用时，把 <code>localhost</code> 改成这台电脑的局域网 IP 地址。</li>
+              <li><strong>Speaches</strong>：预设不带地址，填写你自己的服务器地址；在局域网内使用时，API 密钥可以留空。</li>
+            </ul>
+          </div>
+        </div>
+
+        <p>填好之后，用「测试语音识别」和「测试翻译」确认接口可用。字幕的句子短、请求频繁，列表中靠前的轻量模型速度快、费用低，通常比大型推理模型更合适。</p>
+        <p class="chip-note">API 密钥只保存在本设备上。使用远程服务产生的费用由对应的服务商收取，与 CloudDrive2 无关。预设的服务和模型会随应用更新调整，以应用内显示的为准。</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="start" aria-labelledby="start-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">使用</p>
+          <h2 id="start-h">在播放器里开始翻译</h2>
+          <p>先在设置的「实时翻译」中打开「AI 实时字幕」，然后播放视频。</p>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>打开字幕菜单</h3>
+            <p>在播放器的字幕菜单里找到「AI 翻译」一栏，选择「启用」。</p>
+          </li>
+          <li>
+            <h3>按向导设置</h3>
+            <p>向导分三步：选择源语言和目标语言（需要时下载语言模型），选择翻译来源，选择输出格式。完成后选择「开始」。</p>
+          </li>
+          <li>
+            <h3>边播放边生成</h3>
+            <p>字幕从当前播放位置开始生成，进度显示为「翻译中」加百分比；整部视频完成后显示「已就绪」。拖动进度条后，应用会先生成新位置的字幕。</p>
+          </li>
+        </ol>
+
+        <h3>自动开始</h3>
+        <ul>
+          <li><strong>为无字幕的视频自动启用</strong>：打开没有字幕轨道的视频时，按设置中的默认值自动开始翻译。</li>
+          <li><strong>在播放列表中继续</strong>：在播放列表中，用同样的设置继续翻译后面的每一个视频，直到你关闭为止。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" id="output" aria-labelledby="output-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">输出</p>
+          <h2 id="output-h">SRT 还是 ASS</h2>
+          <p>在设置向导的第三步「输出格式」中为当前视频选择，或在设置的「实时翻译」中通过「输出格式」设置默认值。</p>
+        </header>
+
+        <ul class="card-grid card-grid-2">
+          <li><div class="card">
+            <i class="fa-solid fa-file-lines card-icon" aria-hidden="true"></i>
+            <h3>SRT</h3>
+            <p>纯文本字幕，只包含译文。几乎所有播放器和电视都能读取，适合同时在其他播放器中使用这份字幕。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-palette card-icon" aria-hidden="true"></i>
+            <h3>ASS（带样式）</h3>
+            <p>带字体、字号和颜色的字幕。只有 ASS 格式可以打开「双语（显示原文）」，同时显示译文和原文。</p>
+          </div></li>
+        </ul>
+
+        <h3>双语（显示原文）</h3>
+        <p>选择 ASS 后，在向导中勾选「双语（显示原文）」，或在设置中打开「双语（显示原文）」。每条字幕显示两行：上面一行是译文，白色、较大、加粗；下面一行是原文，黄色、较小。原文来自所选的翻译来源：翻译字幕轨道时是原字幕的文字，识别音频时是语音识别的结果。适合学习外语，或核对翻译是否准确。</p>
+
+        <h3>其他显示设置</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">设置</th><th scope="col">作用</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">自动换行长字幕 / 每行最多字符数</th><td>把过长的字幕行拆成多行</td></tr>
+              <tr><th scope="row">字幕延迟</th><td>把 AI 字幕整体推后显示，负值则提前。字幕比人声略早出现时，调大这个值。设备端和远程语音识别各有一个值</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="chip-note">保存到视频旁的字幕文件名为「视频文件名.目标语言代码.ai.srt」或「.ai.ass」，例如 <code>电影.zh-Hans.ai.ass</code>。</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="reuse" aria-labelledby="reuse-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">保存</p>
+          <h2 id="reuse-h">保存与复用</h2>
+          <p>打开「将字幕保存到视频旁」后，生成的字幕文件写入视频所在的云盘文件夹，文件名与视频相同。</p>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3>在其他设备上加载</h3>
+            <p>字幕保存在视频旁边之后，任何设备上的 CloudDrive2 打开这个视频，都会把它作为外挂字幕加载，不需要重新生成。其他播放器也可以读取这个字幕文件。</p>
+            <p>例如：在 Mac 上用设备端模型生成字幕，再在 Apple TV 上观看同一个视频。</p>
+          </div>
+          <div>
+            <h3>中断后继续</h3>
+            <p>生成过程中退出播放，已翻译的部分保存在本设备的字幕缓存中，下次打开从中断处继续。翻译服务无响应时，已翻译的部分同样保留，可以重试。</p>
+            <p>字幕菜单中的「重新生成」会清除这个视频的缓存并从头翻译；「删除翻译」会停止并删除它的翻译。设置中的「字幕缓存」可以清除本设备上的全部缓存，已保存到视频旁的字幕不受影响。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="media-client" aria-labelledby="media-client-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Emby / Jellyfin</p>
+          <h2 id="media-client-h">在媒体客户端中使用</h2>
+          <p>通过应用内置的 Emby / Jellyfin 客户端播放服务器上的视频时，同样可以使用 AI 字幕翻译，操作与播放云盘文件相同：在播放器的字幕菜单中启用「AI 翻译」。生成完成后，字幕的保存位置取决于服务器类型。</p>
+        </header>
+
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">服务器</th><th scope="col">生成的字幕保存到哪里</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Jellyfin</th><td>上传到 Jellyfin 服务器，作为这个视频的外挂字幕。之后在任何 Jellyfin 客户端中播放这个视频，都可以选择这条字幕</td></tr>
+              <tr><th scope="row">Emby</th><td>Emby 不提供上传字幕的接口。如果这台服务器开启了「直连串流」并配置了「路径映射」，字幕会写入视频所在的云盘文件夹。如果 Emby 服务器上安装了 <a href="/download.html#plugin">CloudDrive2 伴侣插件</a>，翻译完成后应用会立即通知 Emby 刷新这个视频，新字幕马上可以选择；没有安装插件时，Emby 在下次扫描媒体库后显示这条字幕</td></tr>
+              <tr><th scope="row">未配置路径映射</th><td>字幕只保存在本设备的字幕缓存中，在本设备上再次播放时直接使用</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="chip-note">上传到 Jellyfin 服务器目前在 iPhone、iPad、Mac、Apple TV、Vision Pro 与 Android 上提供。Windows 上，开启直连串流的视频，字幕写入视频所在的云盘文件夹；其余情况下只保存在本设备。</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="batch" aria-labelledby="batch-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">批量</p>
+          <h2 id="batch-h">为整个文件夹生成字幕</h2>
+          <p>在文件夹或视频的菜单中选择「生成 AI 字幕」。字幕在后台逐个生成，不需要播放视频，生成后保存在各个视频旁边。</p>
+        </header>
+
+        <ul>
+          <li><strong>包含子文件夹</strong>：同时处理子文件夹中的视频。</li>
+          <li><strong>跳过已有字幕的视频</strong>：视频已内嵌文本字幕，或旁边已有同名的 .srt / .ass 文件时跳过。</li>
+          <li><strong>包含光盘镜像（蓝光 / DVD ISO）</strong>：同时处理文件夹中的 .iso 文件。</li>
+          <li><strong>低优先级（后台）</strong>：放慢生成速度，减少 CPU 和网络占用。</li>
+        </ul>
+        <p>任务列在传输页面的「AI 字幕」中，可以暂停、继续、重试或全部取消。</p>
+        <p class="chip-note">后两个选项目前在 iPhone、iPad 与 Mac 上提供。</p>
+      </div>
+    </section>
+
+    <section class="band" id="privacy" aria-labelledby="privacy-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">隐私</p>
+          <h2 id="privacy-h">数据发送到哪里</h2>
+        </header>
+        <p>语音识别和翻译都在设备端运行时，音频和字幕文本不会离开你的设备。</p>
+        <p>使用远程 API 时，音频片段或字幕文本会发送到你配置的服务，由该服务按它自己的隐私政策处理。我们不接收也不代理这些数据。详见<a href="/privacy.html">隐私政策</a>。</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h">常见问题</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-crown" aria-hidden="true"></i>需要购买什么</summary>
+          <div class="acc-body">
+            <p>AI 字幕翻译属于 App Pro。App Pro 绑定 CloudDrive 账号，一次购买，在所有平台上登录同一个账号都可以使用。价格见<a href="/pricing.html#app-h">会员页</a>。使用远程 API 产生的费用由对应的服务商另行收取。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-clock" aria-hidden="true"></i>字幕比人声早出现或晚出现</summary>
+          <div class="acc-body">
+            <p>在设置的「实时翻译」中调整「字幕延迟」。字幕比人声早，调大这个值；比人声晚，调小或设为负值。设备端和远程语音识别各有一个值。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-language" aria-hidden="true"></i>字幕还是原来的语言，没有翻译</summary>
+          <div class="acc-body">
+            <p>当前设备没有可用的设备端翻译模型，也没有配置有效的远程接口和密钥时，字幕会以原来的语言显示。Apple TV 和 Windows 上需要配置远程翻译 API；在 iPhone、iPad 或 Mac 上，检查系统版本是否满足<a href="#platforms">上表</a>的要求，以及语言模型是否已经下载。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-download" aria-hidden="true"></i>Whisper 模型下载很慢或中断</summary>
+          <div class="acc-body">
+            <p>应用会依次尝试多个下载源，其中包括面向中国大陆的镜像。下载中断后再次下载，会从已下载的位置继续；下载完成后会校验文件，校验不通过时重新下载。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-bolt" aria-hidden="true"></i>翻译速度跟不上播放</summary>
+          <div class="acc-body">
+            <p>识别音频比翻译字幕慢得多。视频有字幕轨道时，把翻译来源设为「自动（优先字幕）」或「字幕轨道」。识别音频时，可以换用较小的 Whisper 模型、在 Android 上打开 GPU 加速，或改用远程语音识别服务。也可以先用<a href="#batch">批量生成</a>在后台生成字幕，之后再观看。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-tv" aria-hidden="true"></i>Apple TV 上怎样使用设备端模型</summary>
+          <div class="acc-body">
+            <p>Apple TV 没有设备端翻译模型。在 iPhone、iPad 或 Mac 上为这个视频生成字幕，并打开「将字幕保存到视频旁」，Apple TV 打开同一个视频时会直接加载这个字幕。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>反馈问题</h2>
+        <p>发现问题请在 GitHub issues 提交，便于记录和跟踪；也可以在 Telegram 交流群反馈，或发送邮件。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">在 GitHub 提 issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">发邮件</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/ai-translation.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
