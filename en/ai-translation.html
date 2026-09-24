@@ -155,7 +155,7 @@
         <div class="split">
           <div>
             <h3>Whisper models</h3>
-            <p>On-device transcription on Windows, Android and Quest uses Whisper, in Tiny, Base, Small, Medium and Turbo sizes. A larger model is more accurate, slower, and takes more storage. Download one in Settings before first use.</p>
+            <p>On-device transcription on Windows, Android and Quest uses Whisper, in Tiny, Base, Small, Medium and Turbo sizes. A larger model runs slower and takes more storage; see the comparison below for how accurate each one is. Download one in Settings before first use.</p>
             <p>With <strong>GPU acceleration</strong> set to Auto on Android, the app measures the GPU and the CPU on your device and uses whichever is faster.</p>
           </div>
           <div>
@@ -163,6 +163,38 @@
             <p>iPhone, iPad, Mac and Vision Pro use the speech recognition and translation models built into the system. The first time you use a language, its language model is downloaded; progress shows in the setup wizard.</p>
             <p>Apple TV has no on-device translation model. Set up a remote API on the Apple TV, or generate the subtitles on an iPhone, iPad or Mac first — see <a href="#reuse">saving and reuse</a>.</p>
           </div>
+        </div>
+
+        <h3>Transcription accuracy compared</h3>
+        <p>The table below is from one measured test: a 10-minute clip of a Japanese film (Yasujirō Ozu's <em>Tokyo Story</em>, with both dialogue and music), with each result compared character by character against a hand-checked Japanese transcript. A lower <strong>error rate</strong> is more accurate; <strong>lines recognised</strong> is the share of the checked lines that were picked up; <strong>timing offset</strong> is the median gap between when a subtitle appears and when the line is actually spoken.</p>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Transcription</th><th scope="col">Runs on</th><th scope="col">Error rate</th><th scope="col">Lines recognised</th><th scope="col">Timing offset</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Qwen qwen-audio-3.0-asr-flash</th><td>Remote API</td><td>12.2%</td><td>100%</td><td>0.22 s</td></tr>
+              <tr><th scope="row">Qwen qwen-audio-3.1-asr-flash</th><td>Remote API</td><td>12.3%</td><td>94%</td><td>0.20 s</td></tr>
+              <tr><th scope="row">Apple on-device</th><td>iPhone, iPad, Mac and others</td><td>13.9%</td><td>92%</td><td>1.20 s</td></tr>
+              <tr><th scope="row">Qwen fun-asr-flash</th><td>Remote API</td><td>18.4%</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Qwen qwen3-asr-flash</th><td>Remote API</td><td>24.6%, with repeated output during music</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Whisper Turbo</th><td>On-device</td><td>24.5%</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Whisper Small</th><td>On-device</td><td>32.8%</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Whisper Medium</th><td>On-device</td><td>35.0%, with repeated output</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Whisper Base</th><td>On-device</td><td>43.4%</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Whisper Tiny</th><td>On-device</td><td>71.7%, with repeated output</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">These are results for one film in one language; other films and languages will differ. A dash means the value was not measured.</p>
+        <p class="chip-note">Only a few Qwen models were tested as remote APIs. Other remote services were not tested, and they may do better or worse. The table only compares on-device models with remote APIs; it does not mean we recommend Qwen as a remote API.</p>
+        <p class="chip-note">qwen-audio-3.0-asr-flash, qwen-audio-3.1-asr-flash and fun-asr-flash will be available in a future release; the current version cannot use them yet.</p>
+
+
+        <div class="note note-warn">
+          <span class="note-title">About on-device Whisper recognition</span>
+          <p>On Windows, Android and Quest, the smaller models that can keep up (Tiny, Base, Small) often mishear dialogue, especially under background music and in languages other than English, and may repeat a phrase or invent lines during music. Turbo is more accurate, but too slow on most phones and TV boxes to keep up with playback, and on a computer it needs a capable graphics card to keep up. Medium is just as slow, and in the test above it was no more accurate than Small.</p>
+          <p>For accurate subtitles, use a remote speech recognition API, or generate the subtitles with Apple on-device recognition on an iPhone, iPad or Mac, save them next to the video, and watch on the other device.</p>
         </div>
       </div>
     </section>

@@ -404,6 +404,7 @@ a.card:hover {
 /* the grid carries no bottom margin, so a heading after it would touch a card */
 .card-grid + h3 { margin-top: var(--s7); }
 .steps + h3 { margin-top: var(--s7); }
+.split + h3 { margin-top: var(--s7); }
 .card > i, .card-icon {
   font-size: 1.3rem; color: var(--brand); margin-bottom: var(--s3); display: block;
 }

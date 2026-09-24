@@ -155,7 +155,7 @@
         <div class="split">
           <div>
             <h3>Whisper 模型</h3>
-            <p>Windows、Android 与 Quest 上的设备端语音识别使用 Whisper 模型，有 Tiny、Base、Small、Medium、Turbo 几档：模型越大，识别越准确，也越慢，占用的存储空间越多。第一次使用时在设置中下载。</p>
+            <p>Windows、Android 与 Quest 上的设备端语音识别使用 Whisper 模型，有 Tiny、Base、Small、Medium、Turbo 几档：模型越大，运行越慢，占用的存储空间越多。各档的准确度见下方的对比。第一次使用时在设置中下载。</p>
             <p>Android 上的「GPU 加速」设为「自动」时，应用会在本机分别测试 GPU 和 CPU 的速度，使用较快的一个。</p>
           </div>
           <div>
@@ -163,6 +163,38 @@
             <p>iPhone、iPad、Mac 与 Vision Pro 使用系统自带的语音识别和翻译模型。第一次使用某种语言时，需要下载对应的语言模型，下载进度显示在设置向导中。</p>
             <p>Apple TV 没有设备端翻译模型。可以在 Apple TV 上配置远程 API，或者先在 iPhone、iPad 或 Mac 上生成字幕，见<a href="#reuse">保存与复用</a>。</p>
           </div>
+        </div>
+
+        <h3>语音识别准确度对比</h3>
+        <p>下表是一次实测的结果：10 分钟日语电影片段（小津安二郎《东京物语》，有对白也有配乐），把识别结果与人工校对的日语台词逐字比较。「错字率」越低越准确；「识别出的台词」是人工校对的台词中被识别出来的比例；「字幕时间偏差」是字幕出现时间与实际说话时间之差的中位数。</p>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">语音识别</th><th scope="col">运行位置</th><th scope="col">错字率</th><th scope="col">识别出的台词</th><th scope="col">字幕时间偏差</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">通义千问 qwen-audio-3.0-asr-flash</th><td>远程 API</td><td>12.2%</td><td>100%</td><td>0.22 秒</td></tr>
+              <tr><th scope="row">通义千问 qwen-audio-3.1-asr-flash</th><td>远程 API</td><td>12.3%</td><td>94%</td><td>0.20 秒</td></tr>
+              <tr><th scope="row">Apple 设备端</th><td>iPhone、iPad、Mac 等</td><td>13.9%</td><td>92%</td><td>1.20 秒</td></tr>
+              <tr><th scope="row">通义 fun-asr-flash</th><td>远程 API</td><td>18.4%</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">通义千问 qwen3-asr-flash</th><td>远程 API</td><td>24.6%，音乐段有重复输出</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Whisper Turbo</th><td>设备端</td><td>24.5%</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Whisper Small</th><td>设备端</td><td>32.8%</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Whisper Medium</th><td>设备端</td><td>35.0%，有重复输出</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Whisper Base</th><td>设备端</td><td>43.4%</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Whisper Tiny</th><td>设备端</td><td>71.7%，有重复输出</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">这是一部电影、一种语言的测试结果，其他影片和语言的结果会有差异。「—」表示该项没有测量。</p>
+        <p class="chip-note">远程 API 只测试了通义千问的几个模型，其他远程服务没有测试，它们的结果可能更好，也可能更差。这张表只用于比较设备端模型和远程 API 的差别，不表示我们推荐通义千问作为远程 API。</p>
+        <p class="chip-note">qwen-audio-3.0-asr-flash、qwen-audio-3.1-asr-flash 和 fun-asr-flash 将在以后的版本中提供，当前版本还不能使用。</p>
+
+
+        <div class="note note-warn">
+          <span class="note-title">关于 Whisper 设备端识别</span>
+          <p>在 Windows、Android 与 Quest 上，能及时运行的较小模型（Tiny、Base、Small）经常听错对白，尤其是有背景音乐时和英语以外的语言，还可能在音乐段重复同一句话，或生成不存在的台词。Turbo 模型更准确，但在大多数手机和电视盒子上速度太慢，跟不上播放，在电脑上需要性能足够的显卡才能跟上。Medium 同样很慢，在上面的测试中准确度也没有超过 Small。</p>
+          <p>如需准确的字幕，建议使用远程语音识别接口，或在 iPhone、iPad、Mac 上用 Apple 设备端识别生成字幕并保存到视频旁，再在其他设备上观看。</p>
         </div>
       </div>
     </section>
