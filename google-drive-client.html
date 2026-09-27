@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>为 Google Drive 创建你自己的 OAuth 客户端 — CloudDrive2</title>
+  <meta name="description" content="在 Google Cloud 中创建「桌面应用」OAuth 客户端，用于在 CloudDrive2 中添加 Google Drive：创建项目、启用 Google Drive API、设置并发布同意屏幕、下载客户端文件。">
+  <link rel="canonical" href="https://www.clouddrive2.com/google-drive-client.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/google-drive-client.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/google-drive-client.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/google-drive-client.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="为 Google Drive 创建你自己的 OAuth 客户端 — CloudDrive2">
+  <meta property="og:description" content="在 Google Cloud 中创建「桌面应用」OAuth 客户端，用于在 CloudDrive2 中添加 Google Drive：创建项目、启用 Google Drive API、设置并发布同意屏幕、下载客户端文件。">
+  <meta property="og:url" content="https://www.clouddrive2.com/google-drive-client.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/google-drive-client.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Google Drive</p>
+        <h1>为 Google Drive 创建你自己的 OAuth 客户端</h1>
+        <p class="hero-lede">
+          CloudDrive2 添加 Google Drive 时，使用你在自己的 Google Cloud 项目中创建的 OAuth 客户端。创建免费，约需 5 分钟，只需做一次。以下步骤在 Google Cloud 控制台中完成，按钮名称以英文界面为准。
+        </p>
+        <ul class="chips">
+          <li><a class="chip chip-cloud" href="#why">为什么需要</a></li>
+          <li><a class="chip" href="#steps">创建步骤</a></li>
+          <li><a class="chip" href="#add">在 CloudDrive2 中添加</a></li>
+          <li><a class="chip" href="#tv">电视设备</a></li>
+          <li><a class="chip" href="#faq">常见问题</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://console.cloud.google.com/projectcreate" rel="noopener">打开 Google Cloud 控制台</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" id="why" aria-labelledby="why-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">背景</p>
+            <h2 id="why-h">为什么需要自己的客户端</h2>
+          </div>
+          <div>
+            <p>Google 要求能访问全部 Google Drive 文件的应用通过 Google 验证，并每年完成一次安全评估。CloudDrive2 的客户端目前没有通过验证，只有已加入其测试用户名单的少量 Google 账号可以通过它登录，其他账号的登录会被 Google 拒绝。</p>
+            <p>使用你自己创建的客户端时，这个应用只由你本人使用，不需要提交验证。登录和令牌交换由你设备上运行的 CloudDrive2 直接与 Google 完成，不经过 CloudDrive2 的服务器。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="steps" aria-labelledby="steps-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">在 Google Cloud 控制台中</p>
+          <h2 id="steps-h">创建步骤</h2>
+          <p>用你要添加到 CloudDrive2 的 Google 账号登录 Google Cloud 控制台，也可以用另一个 Google 账号。</p>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>创建项目</h3>
+            <p>打开 <a href="https://console.cloud.google.com/projectcreate" rel="noopener">console.cloud.google.com/projectcreate</a>。<strong>Project name</strong> 可任意填写，例如 <code>clouddrive2</code>；<strong>Location</strong> 保持 <strong>No organization</strong>。点击 <strong>Create</strong>，创建完成后在通知中点击 <strong>Select project</strong>，确认页面顶部显示的是这个项目。</p>
+          </li>
+          <li>
+            <h3>启用 Google Drive API</h3>
+            <p>打开 <a href="https://console.cloud.google.com/apis/library/drive.googleapis.com" rel="noopener">Google Drive API</a> 页面，点击 <strong>Enable</strong>。没有启用时，添加 Google Drive 会失败，并提示需要启用 Google Drive API。</p>
+          </li>
+          <li>
+            <h3>设置 OAuth 同意屏幕</h3>
+            <p>打开 <a href="https://console.cloud.google.com/auth/overview" rel="noopener">Google Auth Platform</a>，点击 <strong>Get started</strong>，然后依次填写：</p>
+            <ul>
+              <li><strong>App information</strong>：App name 可任意填写；User support email 选择你的邮箱。点击 <strong>Next</strong>。</li>
+              <li><strong>Audience</strong>：选择 <strong>External</strong>。点击 <strong>Next</strong>。</li>
+              <li><strong>Contact information</strong>：填写你的邮箱。点击 <strong>Next</strong>。</li>
+              <li><strong>Finish</strong>：勾选同意 Google API Services: User Data Policy，点击 <strong>Continue</strong>，再点击 <strong>Create</strong>。</li>
+            </ul>
+          </li>
+          <li>
+            <h3>发布应用（必须）</h3>
+            <p>在左侧菜单点击 <strong>Audience</strong>，在 Publishing status 下点击 <strong>Publish app</strong> 并确认，状态变为 <strong>In production</strong>。发布不需要提交验证。</p>
+            <p>如果保持 <strong>Testing</strong> 状态，Google 签发的刷新令牌会在 7 天后失效，届时 CloudDrive2 将无法访问这个 Google Drive。</p>
+          </li>
+          <li>
+            <h3>创建「桌面应用」客户端并下载文件</h3>
+            <p>在左侧菜单点击 <strong>Clients</strong> → <strong>Create client</strong>。<strong>Application type</strong> 选择 <strong>Desktop app</strong>，Name 可任意填写，点击 <strong>Create</strong>。</p>
+            <p>在弹出的窗口中点击 <strong>Download JSON</strong>，保存文件 <code>client_secret_….json</code>。Google 只在创建时显示一次客户端密钥；如果关闭了窗口而没有下载，需要在该客户端中添加一个新的密钥。</p>
+            <p>请勿选择 Web application。这种类型不能使用本机回调地址，登录时 Google 会显示 <code>redirect_uri_mismatch</code> 错误。</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="add" aria-labelledby="add-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">在 CloudDrive2 中</p>
+          <h2 id="add-h">添加 Google Drive</h2>
+        </header>
+        <ol class="steps">
+          <li>
+            <h3>填写客户端信息</h3>
+            <p>在 CloudDrive2 中选择「添加云盘」→「Google Drive」。选择下载的客户端文件，客户端 ID 和客户端密钥会自动填写；也可以手动复制填写。</p>
+          </li>
+          <li>
+            <h3>登录 Google 并授权</h3>
+            <p>点击「登录 Google 并授权」，浏览器会打开 Google 登录页面。</p>
+            <ul>
+              <li>页面显示 <strong>Google hasn't verified this app</strong> 时，这是你自己创建的应用，点击 <strong>Advanced</strong>，再点击 <strong>Go to 应用名称 (unsafe)</strong>。</li>
+              <li>在权限页面勾选访问 Google Drive 文件的选项，点击 <strong>Continue</strong>。</li>
+            </ul>
+            <p>完成后浏览器显示「Google Drive added」，CloudDrive2 中的对话框会自动完成。</p>
+          </li>
+          <li>
+            <h3>浏览器与 CloudDrive2 不在同一台设备时</h3>
+            <p>例如在电脑浏览器中管理 NAS 或 Docker 上的 CloudDrive2：授权后浏览器会打开一个无法访问的页面，地址以 <code>http://127.0.0.1</code> 开头。复制地址栏中的完整地址，粘贴到 CloudDrive2 对话框中的「浏览器中的地址」，点击「完成」。</p>
+          </li>
+        </ol>
+        <p class="chip-note">如果你已经有这个客户端的刷新令牌，也可以勾选「我已有此客户端的刷新令牌」，直接填写客户端 ID、客户端密钥和刷新令牌。</p>
+        <p class="chip-note">如果你的 Google 账号已加入 CloudDrive2 的测试用户名单，也可以在登录方式中选择「CloudDrive 的 Google 客户端（仅限测试用户）」，不需要创建客户端。</p>
+      </div>
+    </section>
+
+    <section class="band" id="tv" aria-labelledby="tv-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Apple TV · Android TV</p>
+          <h2 id="tv-h">电视设备</h2>
+          <p>电视上通常没有浏览器，无法完成 Google 登录。请在手机、电脑或网页管理界面中添加 Google Drive；开启「同步数据到云端」后，账号会同步到登录同一 CloudDrive2 账号的电视上。也可以在电视上直接填写客户端 ID、客户端密钥和刷新令牌。</p>
+        </header>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">常见问题</p>
+          <h2 id="faq-h">常见问题</h2>
+        </header>
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Google 页面显示 redirect_uri_mismatch</summary>
+          <div class="acc-body">
+            <p>客户端类型不是 Desktop app。按第 5 步重新创建一个 Desktop app 客户端。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>7 天后 Google Drive 无法访问</summary>
+          <div class="acc-body">
+            <p>应用仍处于 Testing 状态。按第 4 步发布应用，然后重新添加 Google Drive。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>提示需要启用 Google Drive API</summary>
+          <div class="acc-body">
+            <p>按第 2 步在同一个项目中启用 Google Drive API，然后重新添加。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>提示未授予 Google Drive 访问权限</summary>
+          <div class="acc-body">
+            <p>在 Google 的权限页面中，需要勾选访问 Google Drive 文件的选项。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>当前网络无法访问 Google</summary>
+          <div class="acc-body">
+            <p>CloudDrive2 需要访问 <code>oauth2.googleapis.com</code> 和 <code>www.googleapis.com</code>。添加 Google Drive 时在代理设置中设置 API 代理；浏览器也需要能够打开 Google 页面。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>未验证的应用有 100 名用户的上限，会影响我吗</summary>
+          <div class="acc-body">
+            <p>这个上限只在你把同一个客户端提供给其他人使用时才有影响。个人使用，包括添加你自己的多个 Google 账号，不受影响。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>如何撤销 CloudDrive2 的访问权限</summary>
+          <div class="acc-body">
+            <p>在 <a href="https://myaccount.google.com/permissions" rel="noopener">myaccount.google.com/permissions</a> 中移除你创建的应用。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/google-drive-client.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

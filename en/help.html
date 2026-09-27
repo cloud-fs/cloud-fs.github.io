@@ -901,11 +901,14 @@ brew services start clouddrive2</code></pre></div>
         <details class="acc">
           <summary><i class="fa-brands fa-google-drive" aria-hidden="true"></i>Adding Google Drive says "This app has been blocked"</summary>
           <div class="acc-body">
-            <p>Use your own Google OAuth credentials and the block does not apply. In the Google Cloud
-               Console, create a project, enable the Google Drive API, configure the OAuth consent screen
-               and add yourself as a test user, then create an OAuth client ID for its client_id and
-               client_secret. Enter those when you add Google Drive in CloudDrive2, and the authorisation
-               runs through your own application.</p>
+            <p>CloudDrive2's Google client has not been verified by Google, so only accounts on its test
+               user list can sign in with it. Use your own Google OAuth client instead: in the Google Cloud
+               console, create a project, enable the Google Drive API, set up and publish the OAuth consent
+               screen, then create a client of type Desktop app and download its client file. When you add
+               Google Drive in CloudDrive2, choose that file and click Sign in with Google.</p>
+            <p>The consent screen must be published (In production); while it stays in Testing, the
+               authorisation expires after 7 days. The full steps are in
+               <a href="/en/google-drive-client.html">Create your own OAuth client for Google Drive</a>.</p>
           </div>
         </details>
 

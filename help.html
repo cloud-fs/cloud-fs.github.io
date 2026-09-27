@@ -704,7 +704,8 @@ brew services start clouddrive2</code></pre></div>
         <details class="acc">
           <summary><i class="fa-brands fa-google-drive" aria-hidden="true"></i>添加 Google Drive 时报「此应用已被阻止」</summary>
           <div class="acc-body">
-            <p>用你自己的 Google OAuth 凭据就不会被拦：到 Google Cloud Console 新建一个项目，启用 Google Drive API，配置 OAuth 同意屏幕并把自己加为测试用户，然后创建 OAuth 客户端 ID，拿到 client_id 与 client_secret；在 CloudDrive2 里添加 Google Drive 时填进去即可。这样授权走的是你自己的应用。</p>
+            <p>CloudDrive2 的 Google 客户端没有通过 Google 验证，只有已加入其测试用户名单的账号可以通过它登录。请使用你自己的 Google OAuth 客户端：在 Google Cloud 控制台创建项目，启用 Google Drive API，设置并发布 OAuth 同意屏幕，创建类型为「桌面应用」（Desktop app）的客户端并下载客户端文件。然后在 CloudDrive2 中添加 Google Drive 时选择该文件，点击「登录 Google 并授权」。</p>
+            <p>同意屏幕需要发布为 In production；保持 Testing 状态时，授权会在 7 天后失效。完整步骤见<a href="/google-drive-client.html">为 Google Drive 创建你自己的 OAuth 客户端</a>。</p>
           </div>
         </details>
 

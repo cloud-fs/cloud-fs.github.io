@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create your own OAuth client for Google Drive — CloudDrive2</title>
+  <meta name="description" content="Create a Desktop app OAuth client in Google Cloud to add Google Drive to CloudDrive2: create a project, enable the Google Drive API, set up and publish the consent screen, and download the client file.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/google-drive-client.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/google-drive-client.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/google-drive-client.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/google-drive-client.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Create your own OAuth client for Google Drive — CloudDrive2">
+  <meta property="og:description" content="Create a Desktop app OAuth client in Google Cloud to add Google Drive to CloudDrive2: create a project, enable the Google Drive API, set up and publish the consent screen, and download the client file.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/google-drive-client.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/google-drive-client.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Google Drive</p>
+        <h1>Create your own OAuth client for Google Drive</h1>
+        <p class="hero-lede">
+          CloudDrive2 adds Google Drive with an OAuth client that you create in your own Google Cloud project. It is free, takes about 5 minutes, and only needs to be done once. The steps below take place in the Google Cloud console.
+        </p>
+        <ul class="chips">
+          <li><a class="chip chip-cloud" href="#why">Why it is needed</a></li>
+          <li><a class="chip" href="#steps">Create the client</a></li>
+          <li><a class="chip" href="#add">Add it in CloudDrive2</a></li>
+          <li><a class="chip" href="#tv">TV devices</a></li>
+          <li><a class="chip" href="#faq">Common problems</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://console.cloud.google.com/projectcreate" rel="noopener">Open the Google Cloud console</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" id="why" aria-labelledby="why-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">Background</p>
+            <h2 id="why-h">Why you need your own client</h2>
+          </div>
+          <div>
+            <p>Google requires apps that can access all Google Drive files to pass Google's verification and a yearly security assessment. CloudDrive2's client has not been verified, so only the few Google accounts on its test user list can sign in with it; Google rejects everyone else.</p>
+            <p>A client you create yourself is used only by you and does not need verification. The sign-in and token exchange happen directly between Google and the CloudDrive2 running on your device, not through CloudDrive2's servers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="steps" aria-labelledby="steps-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">In the Google Cloud console</p>
+          <h2 id="steps-h">Create the client</h2>
+          <p>Sign in to the Google Cloud console with the Google account you want to add to CloudDrive2, or with any other Google account.</p>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>Create a project</h3>
+            <p>Open <a href="https://console.cloud.google.com/projectcreate" rel="noopener">console.cloud.google.com/projectcreate</a>. Enter any <strong>Project name</strong>, for example <code>clouddrive2</code>, and leave <strong>Location</strong> as <strong>No organization</strong>. Click <strong>Create</strong>, then click <strong>Select project</strong> in the notification and check that the project is shown at the top of the page.</p>
+          </li>
+          <li>
+            <h3>Enable the Google Drive API</h3>
+            <p>Open the <a href="https://console.cloud.google.com/apis/library/drive.googleapis.com" rel="noopener">Google Drive API</a> page and click <strong>Enable</strong>. Without it, adding Google Drive fails with a message that the Google Drive API must be enabled.</p>
+          </li>
+          <li>
+            <h3>Set up the OAuth consent screen</h3>
+            <p>Open <a href="https://console.cloud.google.com/auth/overview" rel="noopener">Google Auth Platform</a> and click <strong>Get started</strong>. Then:</p>
+            <ul>
+              <li><strong>App information</strong>: enter any App name and choose your email as User support email. Click <strong>Next</strong>.</li>
+              <li><strong>Audience</strong>: choose <strong>External</strong>. Click <strong>Next</strong>.</li>
+              <li><strong>Contact information</strong>: enter your email. Click <strong>Next</strong>.</li>
+              <li><strong>Finish</strong>: agree to the Google API Services: User Data Policy, click <strong>Continue</strong>, then <strong>Create</strong>.</li>
+            </ul>
+          </li>
+          <li>
+            <h3>Publish the app (required)</h3>
+            <p>Click <strong>Audience</strong> in the left menu. Under Publishing status, click <strong>Publish app</strong> and confirm. The status changes to <strong>In production</strong>. Publishing does not require verification.</p>
+            <p>If the app stays in <strong>Testing</strong>, the refresh tokens Google issues expire after 7 days, and CloudDrive2 then loses access to that Google Drive.</p>
+          </li>
+          <li>
+            <h3>Create a Desktop app client and download its file</h3>
+            <p>Click <strong>Clients</strong> in the left menu, then <strong>Create client</strong>. Choose <strong>Desktop app</strong> as the <strong>Application type</strong>, enter any Name, and click <strong>Create</strong>.</p>
+            <p>In the dialog that appears, click <strong>Download JSON</strong> and keep the file <code>client_secret_….json</code>. Google shows the client secret only once, when the client is created. If you closed the dialog without downloading it, add a new secret to the client.</p>
+            <p>Do not choose Web application. That type cannot use the local callback address, and Google shows a <code>redirect_uri_mismatch</code> error during sign-in.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="add" aria-labelledby="add-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">In CloudDrive2</p>
+          <h2 id="add-h">Add Google Drive</h2>
+        </header>
+        <ol class="steps">
+          <li>
+            <h3>Enter the client</h3>
+            <p>In CloudDrive2, choose Add cloud → Google Drive. Choose the downloaded client file to fill in the client ID and client secret, or copy them in by hand.</p>
+          </li>
+          <li>
+            <h3>Sign in with Google</h3>
+            <p>Click Sign in with Google. The browser opens Google's sign-in page.</p>
+            <ul>
+              <li>When the page says <strong>Google hasn't verified this app</strong>: this is the app you created. Click <strong>Advanced</strong>, then <strong>Go to <em>app name</em> (unsafe)</strong>.</li>
+              <li>On the permissions page, tick the box for access to your Google Drive files and click <strong>Continue</strong>.</li>
+            </ul>
+            <p>The browser then shows "Google Drive added", and the dialog in CloudDrive2 finishes by itself.</p>
+          </li>
+          <li>
+            <h3>When the browser and CloudDrive2 are on different devices</h3>
+            <p>For example, when you manage CloudDrive2 on a NAS or in Docker from a computer's browser: after you allow access, the browser opens a page that cannot be reached, with an address starting with <code>http://127.0.0.1</code>. Copy the whole address from the address bar, paste it into "Address from the browser" in the CloudDrive2 dialog, and click Finish.</p>
+          </li>
+        </ol>
+        <p class="chip-note">If you already have a refresh token for this client, tick "I already have a refresh token for this client" and enter the client ID, client secret and refresh token directly.</p>
+        <p class="chip-note">If your Google account is on CloudDrive2's test user list, you can instead choose "CloudDrive's Google client (test users only)" as the sign-in method, without creating a client.</p>
+      </div>
+    </section>
+
+    <section class="band" id="tv" aria-labelledby="tv-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Apple TV · Android TV</p>
+          <h2 id="tv-h">TV devices</h2>
+          <p>TVs usually have no browser, so the Google sign-in cannot be done on them. Add Google Drive on a phone, a computer or in the web UI. With "sync data to cloud" turned on, the account syncs to TVs signed in to the same CloudDrive2 account. You can also enter the client ID, client secret and refresh token directly on the TV.</p>
+        </header>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Common problems</p>
+          <h2 id="faq-h">Common problems</h2>
+        </header>
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Google shows redirect_uri_mismatch</summary>
+          <div class="acc-body">
+            <p>The client is not a Desktop app client. Create a Desktop app client as in step 5.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Google Drive stops working after 7 days</summary>
+          <div class="acc-body">
+            <p>The app is still in Testing. Publish it as in step 4, then add Google Drive again.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>A message says the Google Drive API must be enabled</summary>
+          <div class="acc-body">
+            <p>Enable the Google Drive API in the same project as in step 2, then add Google Drive again.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>A message says Google Drive access was not granted</summary>
+          <div class="acc-body">
+            <p>On Google's permissions page, the box for access to your Google Drive files must be ticked.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Google is blocked on my network</summary>
+          <div class="acc-body">
+            <p>CloudDrive2 needs to reach <code>oauth2.googleapis.com</code> and <code>www.googleapis.com</code>. Set an API proxy in the proxy settings when adding Google Drive. The browser also needs to be able to open Google's pages.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Does the 100-user limit for unverified apps affect me?</summary>
+          <div class="acc-body">
+            <p>Only if you give the same client to other people. Personal use, including adding several of your own Google accounts, is not affected.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>How do I revoke CloudDrive2's access?</summary>
+          <div class="acc-body">
+            <p>Remove the app you created at <a href="https://myaccount.google.com/permissions" rel="noopener">myaccount.google.com/permissions</a>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/google-drive-client.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
