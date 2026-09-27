@@ -139,7 +139,7 @@
         <ol class="steps">
           <li>
             <h3>Enter the client</h3>
-            <p>In CloudDrive2, choose Add cloud → Google Drive. Choose the downloaded client file to fill in the client ID and client secret, or copy them in by hand.</p>
+            <p>In CloudDrive2, choose Add cloud → Google Drive. Choose the downloaded client file to fill in the client ID and client secret. You can also click "Choose from cloud storage…" to read a client file kept in cloud storage, or copy the values in by hand.</p>
           </li>
           <li>
             <h3>Sign in with Google</h3>
@@ -155,6 +155,11 @@
             <p>For example, when you manage CloudDrive2 on a NAS or in Docker from a computer's browser: after you allow access, the browser opens a page that cannot be reached, with an address starting with <code>http://127.0.0.1</code>. Copy the whole address from the address bar, paste it into "Address from the browser" in the CloudDrive2 dialog, and click Finish.</p>
           </li>
         </ol>
+        <div class="note">
+          <span class="note-title">Keeping the client file in cloud storage</span>
+          <p>You can also keep the client file in a cloud already added to CloudDrive2. When adding Google Drive, click "Choose from cloud storage…" and pick the file to fill in the client ID and client secret. On devices that cannot choose local files, such as TVs, this saves typing both values.</p>
+          <p><strong>Security note:</strong> the client secret is stored in the file as plain text. In an ordinary folder, anyone or any app with access to that cloud can read it. Keep the file in a CloudDrive2 <a href="/en/help.html#encrypt">encrypted folder</a>, or delete it once Google Drive has been added, since it is not needed afterwards.</p>
+        </div>
         <p class="chip-note">If you already have a refresh token for this client, tick "I already have a refresh token for this client" and enter the client ID, client secret and refresh token directly.</p>
         <p class="chip-note">If your Google account is on CloudDrive2's test user list, you can instead choose "CloudDrive's Google client (test users only)" as the sign-in method, without creating a client.</p>
       </div>
@@ -165,7 +170,7 @@
         <header class="band-head">
           <p class="eyebrow">Apple TV · Android TV</p>
           <h2 id="tv-h">TV devices</h2>
-          <p>TVs usually have no browser, so the Google sign-in cannot be done on them. Add Google Drive on a phone, a computer or in the web UI. With "sync data to cloud" turned on, the account syncs to TVs signed in to the same CloudDrive2 account. You can also enter the client ID, client secret and refresh token directly on the TV.</p>
+          <p>TVs usually have no browser, so the Google sign-in cannot be done on them. Add Google Drive on a phone, a computer or in the web UI. With "sync data to cloud" turned on, the account syncs to TVs signed in to the same CloudDrive2 account. You can also enter the client ID, client secret and refresh token on the TV: the client ID and secret can be read from a client file kept in cloud storage with "Choose from cloud storage" (see the security note above), and the refresh token has to be entered by hand.</p>
         </header>
       </div>
     </section>

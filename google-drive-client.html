@@ -139,7 +139,7 @@
         <ol class="steps">
           <li>
             <h3>填写客户端信息</h3>
-            <p>在 CloudDrive2 中选择「添加云盘」→「Google Drive」。选择下载的客户端文件，客户端 ID 和客户端密钥会自动填写；也可以手动复制填写。</p>
+            <p>在 CloudDrive2 中选择「添加云盘」→「Google Drive」。选择下载的客户端文件，客户端 ID 和客户端密钥会自动填写；也可以点击「从云盘选择…」读取保存在云盘中的客户端文件，或手动复制填写。</p>
           </li>
           <li>
             <h3>登录 Google 并授权</h3>
@@ -155,6 +155,11 @@
             <p>例如在电脑浏览器中管理 NAS 或 Docker 上的 CloudDrive2：授权后浏览器会打开一个无法访问的页面，地址以 <code>http://127.0.0.1</code> 开头。复制地址栏中的完整地址，粘贴到 CloudDrive2 对话框中的「浏览器中的地址」，点击「完成」。</p>
           </li>
         </ol>
+        <div class="note">
+          <span class="note-title">把客户端文件保存在云盘中</span>
+          <p>客户端文件也可以保存在已添加到 CloudDrive2 的云盘中。添加 Google Drive 时点击「从云盘选择…」，选中该文件，即可自动填写客户端 ID 和客户端密钥。在电视等无法选择本地文件的设备上，这样可以不用手动输入这两项。</p>
+          <p><strong>安全提示：</strong>客户端文件中的客户端密钥是明文。保存在普通文件夹中时，任何能访问这个云盘的人或应用都可以读取它。建议保存在 CloudDrive2 的<a href="/help.html#encrypt">加密文件夹</a>中；添加完成后不再需要这个文件，也可以删除。</p>
+        </div>
         <p class="chip-note">如果你已经有这个客户端的刷新令牌，也可以勾选「我已有此客户端的刷新令牌」，直接填写客户端 ID、客户端密钥和刷新令牌。</p>
         <p class="chip-note">如果你的 Google 账号已加入 CloudDrive2 的测试用户名单，也可以在登录方式中选择「CloudDrive 的 Google 客户端（仅限测试用户）」，不需要创建客户端。</p>
       </div>
@@ -165,7 +170,7 @@
         <header class="band-head">
           <p class="eyebrow">Apple TV · Android TV</p>
           <h2 id="tv-h">电视设备</h2>
-          <p>电视上通常没有浏览器，无法完成 Google 登录。请在手机、电脑或网页管理界面中添加 Google Drive；开启「同步数据到云端」后，账号会同步到登录同一 CloudDrive2 账号的电视上。也可以在电视上直接填写客户端 ID、客户端密钥和刷新令牌。</p>
+          <p>电视上通常没有浏览器，无法完成 Google 登录。请在手机、电脑或网页管理界面中添加 Google Drive；开启「同步数据到云端」后，账号会同步到登录同一 CloudDrive2 账号的电视上。也可以在电视上填写客户端 ID、客户端密钥和刷新令牌：客户端 ID 和客户端密钥可以通过「从云盘选择」读取保存在云盘中的客户端文件（见上方的安全提示），刷新令牌需要手动填写。</p>
         </header>
       </div>
     </section>
