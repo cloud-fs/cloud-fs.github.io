@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.0.17
+Version: 1.1.0
 
 ## Table of Contents
 
+- [What's New in 1.1.0](#whats-new-in-110)
 - [What's New in 1.0.17](#whats-new-in-1017)
 - [What's New in 1.0.14](#whats-new-in-1014)
 - [What's New in 1.0.13](#whats-new-in-1013)
@@ -41,6 +42,85 @@ Version: 1.0.17
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.1.0
+
+### Two-Way Backup Sync
+
+A backup can now keep its source and all of its destinations the same in both directions: a file added, changed, renamed or deleted in any of them reaches all the others. Set `Backup.syncMode` to `BackupTwoWay`. The default, `BackupOneWay`, keeps the existing behaviour, and backups created before 1.1.0 stay one-way after the upgrade. The user-facing behaviour is described on the [two-way sync help page](https://www.clouddrive2.com/en/two-way-sync.html).
+
+Check `CloudDriveSystemInfo.supportsTwoWayBackup` (field 8) before offering the mode. It is `true` when the server understands `Backup.syncMode` and the two-way RPCs below.
+
+**New fields on `Backup` (fields 16-27, all `optional`):**
+- `syncMode` — `BackupOneWay` (default) or `BackupTwoWay`
+- `conflictPolicy` — what happens when the same file changed in two places; default `ConflictKeepBoth`
+- `conflictCopyTag` — word added to a conflict copy's name; default `conflict copy`
+- `syncDeletionsTwoWay` — mirror deletions between the locations; default `false`
+- `twoWayHardDelete` — must be `true` for `fileDeleteRule = Delete` to delete permanently in two-way sync
+- `historyRetentionDays` — days a replaced version stays in `.clfs_history`; `0` (default) keeps it for ever
+- `massDeleteGuardPercent` — deletions above this share of a folder's files are held for confirmation; default `20`
+- `bootstrapExtrasPolicy` — what to do with files that exist only in a destination when the sync index is first built
+- `syncOwnerMarker` — write and check `.clfs_sync_owner` in every folder; default `true`
+- `deepScanEnabled`, `deepScanEveryPasses`, `deepScanMaxHours` — the automatic deep scan, which lists every folder whatever its folder time says; defaults `true`, every 8 full scans, at least every 24 hours
+
+**Compatibility:**
+- Every two-way field is `optional`. When a field is absent from `BackupUpdate`, the stored value is kept, so a client written before 1.1.0 cannot change the mode or the deletion switches. `BackupGetAll` and `BackupGetStatus` always return the effective values.
+- A message that carries `syncMode` marks a two-way-aware client. For a two-way backup, `BackupAdd` and `BackupUpdate` fail with `INVALID_ARGUMENT` and one of these stable texts, which clients can match:
+
+```text
+Two-way sync: file replace rule Skip is not allowed; use Overwrite or KeepHistoryVersion
+Two-way sync: the source folder must keep its files; set fileCompletionRule to None
+Two-way sync: fileDeleteRule Delete must be confirmed with twoWayHardDelete, or choose MoveToVersionHistory, Recycle or Keep
+Folders overlap with backup <source>: <folder> and <other folder>
+```
+
+  The first two apply to every client. The third applies only to two-way-aware clients: an older client's `Delete` rule is applied as `MoveToVersionHistory` instead, and `BackupStatus.effectiveDeleteRule` reports the rule actually in use. The overlap check applies whenever one of the two backups is two-way; two one-way backups may still share folders.
+
+**New fields on `BackupStatus` (fields 8-13):** `replicaStatuses` (the state of each location), `openSyncIssues`, `twoWayBootstrapped`, `heldDeletionGuards`, `effectiveDeleteRule` and `syncStats`. They are empty for one-way backups.
+
+**New RPCs (authorized):**
+- **`BackupStartTwoWaySyncPreview`**, **`BackupGetTwoWaySyncPreview`**, **`BackupCancelTwoWaySyncPreview`** — compute what enabling two-way sync, or its next pass, would do, without changing anything. Requires `allow_get_backups`.
+- **`BackupGetSyncIssues`** — open and resolved issues of a backup. Requires `allow_get_backups`.
+- **`BackupResolveSyncIssue`** — act on issues: dismiss, apply or restore held deletions, accept held changes, and so on. Requires `allow_modify_backups`.
+- **`BackupResetSyncIndex`** — forget the sync index; the next pass rebuilds it without deleting anything. Requires `allow_modify_backups`.
+- **`BackupUndoSyncPass`** — undo one of the last five passes. Requires `allow_modify_backups`.
+
+**New push message:** `CloudDrivePushMessage.MessageType.BACKUP_SYNC_ISSUE = 10`, with `BackupSyncIssuePush backupSyncIssue = 10` in the `data` oneof, sent when a two-way backup raises an issue that may need the user. See [BACKUP_SYNC_ISSUE](#9-backup_sync_issue).
+
+**New setting:** `SystemSettings.twoWaySyncPaused` (field 35). While `true`, every two-way pass only records what it would do and changes nothing.
+
+See [Backup Management](#backup-management) for the messages and each RPC.
+
+### Account Data Cloud Sync Control
+
+The "sync with cloud" setting could only be chosen at login (`UserLoginRequest.synDataToCloud`). Turning it on later could overwrite the cloud copy with this device's account list, or the other way round, without showing what would be lost. Four new RPCs change the setting while logged in, and compare the two copies first:
+
+1. **`GetCloudSyncStatus`** — the current setting, whether local changes are waiting to be sent, and how many accounts take part.
+2. **`PreviewCloudSync`** — fetch the cloud copy and compare it with this device account by account (same, different, only on this device, only in the cloud). Nothing is changed. Returns a `cloudDataVersion`.
+3. **`EnableCloudSync`** — turn sync on with a `CloudSyncStrategy`: the cloud copy replaces this device's synced accounts (the default), or this device's accounts replace the cloud copy. Pass the `cloudDataVersion` from the preview as `expectedCloudDataVersion`: if the cloud copy changed since the preview, the call fails with `ABORTED` and nothing is changed, so preview again and ask the user to confirm.
+4. **`DisableCloudSync`** — turn sync off. Pending changes are sent first. The cloud copy is kept unless `clearCloudData` is set.
+
+Accounts marked "do not sync to cloud" stay on this device whatever the strategy, and are never uploaded. `GetCloudSyncStatus` and `PreviewCloudSync` require `allow_get_account_info`; `EnableCloudSync` and `DisableCloudSync` require `allow_modify_account`. See [Account Data Cloud Sync](#account-data-cloud-sync).
+
+### Google Drive With the User's Own OAuth Client
+
+CloudDrive's own Google client is going through Google's verification, which can take a long time; until it is complete, only accounts on its test user list can sign in with it. Two new RPCs add Google Drive with an OAuth client the user creates in their own Google Cloud project (type **Desktop app**). The steps for creating one are on the [Google Drive client page](https://www.clouddrive2.com/en/google-drive-client.html).
+
+- **`ApiLoginGoogleDriveStart`** — takes the client ID and secret (and optional proxies) and returns a `session_id` and Google's `auth_url`. Open `auth_url` in the system browser.
+- **`ApiLoginGoogleDriveFinish`** — completes the sign-in. Leave `redirected_url` empty to wait up to `wait_seconds` (at most 60) for the browser to reach the server's loopback page, and call again while `done` is `false`. When the browser runs on another machine, the loopback page cannot load; have the user copy the address it ended on (`http://127.0.0.1:PORT/?state=...&code=...`) and pass it as `redirected_url`.
+
+The code is exchanged by the CloudDrive2 server itself, through the account's API proxy, never through a CloudDrive server. A session is valid for 20 minutes. Failures carry a stable `error_kind` for translated text: `invalid_client_id`, `access_denied`, `drive_not_granted`, `invalid_client`, `code_expired`, `no_refresh_token`, `drive_api_disabled`, `network`, `session_expired`, `pasted_url_invalid`, `other`. Both RPCs require `allow_modify_cloud_apis`.
+
+`ApiLoginGoogleDriveRefreshToken` now applies the proxies in its request from the first call, and fails with the reason (for example an invalid token, or the Google Drive API not enabled in the project) instead of adding an account that cannot be used.
+
+### WebDAV Server Addresses
+
+`DavServerConfig` gains fields filled by the server, so that a client connected through `127.0.0.1` can still show an address other devices can use:
+- `lanAddresses` (field 11) — IPv4 addresses of the server's network interfaces, with loopback, link-local and container bridges left out, the interface of the default route first
+- `httpPort` (12), `httpsPort` (13), `httpsEnabled` (14)
+- `runningInContainer` (15) — the server runs in Docker or a similar container, where its own addresses are usually not reachable and the host's address and mapped port should be shown instead
 
 ---
 
@@ -1982,8 +2062,12 @@ message CloudDriveSystemInfo {
   // true when dir cache persistence and disk buffer are force-disabled
   // (by platform config or SLOW_STORAGE device type)
   optional bool diskCacheDisabled = 7;
+  // this server understands Backup.syncMode and the two-way sync RPCs (1.1.0+)
+  bool supportsTwoWayBackup = 8;
 }
 ```
+
+**New in 1.1.0:** `supportsTwoWayBackup` is `true` when the server understands `Backup.syncMode` and the two-way sync RPCs.
 
 **Example (C#):**
 ```csharp
@@ -4138,6 +4222,8 @@ message LoginGoogleDriveRefreshTokenRequest {
   string client_id = 1;
   string client_secret = 2;
   string refresh_token = 3;
+  optional ProxyInfo apiProxy = 4;
+  optional ProxyInfo dataProxy = 5;
 }
 ```
 
@@ -4156,6 +4242,103 @@ if result.success:
     print("Google Drive added successfully")
 else:
     print(f"Error: {result.errorMessage}")
+```
+
+---
+
+#### ApiLoginGoogleDriveStart
+
+Starts adding Google Drive with the user's own OAuth client (type Desktop app). Returns the Google sign-in address to open in a browser. **New in 1.1.0.**
+
+**Request:** `LoginGoogleDriveStartRequest`
+
+**Response:** `LoginGoogleDriveStartResult`
+```protobuf
+message LoginGoogleDriveStartRequest {
+  string client_id = 1;
+  string client_secret = 2;
+  optional ProxyInfo apiProxy = 3;
+  optional ProxyInfo dataProxy = 4;
+  // clouddrive:// address the loopback page redirects to when the sign-in
+  // ends, so an in-app browser session closes by itself; status=success|error
+  // and kind=<error_kind> are appended. Unset: a "close this tab" page.
+  optional string return_url = 5;
+}
+
+message LoginGoogleDriveStartResult {
+  bool success = 1;
+  string error_message = 2; // English fallback text
+  string error_kind = 3;    // see LoginGoogleDriveFinishResult.error_kind
+  string session_id = 4;
+  string auth_url = 5;      // open in the system browser or an auth session
+}
+```
+
+`return_url`, when set, must use the `clouddrive://` scheme. The loopback page redirects to it when the sign-in ends, with `status=success|error` and `kind=<error_kind>` appended, so an in-app browser session can close by itself. When it is unset, the page asks the user to close the tab.
+
+Requires `allow_modify_cloud_apis`.
+
+---
+
+#### ApiLoginGoogleDriveFinish
+
+Completes a sign-in started with `ApiLoginGoogleDriveStart` and adds the account. **New in 1.1.0.**
+
+**Request:** `LoginGoogleDriveFinishRequest`
+
+**Response:** `LoginGoogleDriveFinishResult`
+```protobuf
+message LoginGoogleDriveFinishRequest {
+  string session_id = 1;
+  // the full address the browser shows after approval
+  // (http://127.0.0.1:PORT/?state=...&code=...)
+  string redirected_url = 2;
+  // without redirected_url: seconds to wait for the loopback page (max 60)
+  uint32 wait_seconds = 3;
+}
+
+message LoginGoogleDriveFinishResult {
+  bool done = 1; // false: still waiting for the browser; call again
+  bool success = 2;
+  string error_message = 3; // English fallback text
+  // stable failure kind for translated text: invalid_client_id,
+  // access_denied, drive_not_granted, invalid_client, code_expired,
+  // no_refresh_token, drive_api_disabled, network, session_expired,
+  // pasted_url_invalid, other
+  string error_kind = 4;
+}
+```
+
+- Leave `redirected_url` empty and set `wait_seconds` (at most 60) to wait for the browser to reach the server's loopback page. While `done` is `false`, call again.
+- When the browser runs on another machine (for example the web UI of a NAS opened from a computer), the loopback page cannot load. Ask the user to copy the address the browser ended on and pass it as `redirected_url`.
+- A session is valid for 20 minutes; after that the call fails with `session_expired`.
+
+Requires `allow_modify_cloud_apis`.
+
+**Example (Python):**
+```python
+start = stub.ApiLoginGoogleDriveStart(
+    clouddrive_pb2.LoginGoogleDriveStartRequest(
+        client_id="1234567890-abc.apps.googleusercontent.com",
+        client_secret="your-client-secret",
+    ),
+    metadata=auth_metadata,
+)
+if not start.success:
+    raise RuntimeError(f"{start.error_kind}: {start.error_message}")
+
+webbrowser.open(start.auth_url)
+
+while True:
+    result = stub.ApiLoginGoogleDriveFinish(
+        clouddrive_pb2.LoginGoogleDriveFinishRequest(
+            session_id=start.session_id, wait_seconds=30),
+        metadata=auth_metadata,
+    )
+    if result.done:
+        break
+
+print("Google Drive added" if result.success else f"Failed: {result.error_kind}")
 ```
 
 ---
@@ -4669,8 +4852,13 @@ message SystemSettings {
   optional uint32 maxConcurrentBackupWalkers = 33; // Max concurrent scans (default 1, min 1)
   // Cross-cloud copy: spool source to local temp during hashing so upload doesn't re-download
   optional bool useTempFileForCrossCloudCopy = 34; // default: false
+  // Two-way backup sync: while true every two-way pass only records what it
+  // would do and changes nothing. Default false. (1.1.0+)
+  optional bool twoWaySyncPaused = 35;
 }
 ```
+
+**New in 1.1.0:** `twoWaySyncPaused` pauses every two-way backup. While it is `true`, each two-way pass only records what it would do and changes nothing.
 
 **New in 1.0.13:** `backupQueueHighWater`, `backupQueueLowWater`, `maxConcurrentBackupWalkers` bound backup full-scan resource usage. These 3 fields form a group — when `maxConcurrentBackupWalkers` is present in `SetSystemSettings` the server rewrites all 3, so an omitted water mark means "no limit" rather than "don't change". `useTempFileForCrossCloudCopy` enables local temp spooling for cross-cloud copy (default: false).
 
@@ -5367,6 +5555,151 @@ message VerifyStorePurchaseResult {
 
 ---
 
+### Account Data Cloud Sync
+
+These RPCs turn the "sync with cloud" setting on and off while logged in. They compare this device's account list with the cloud copy first, instead of just changing the setting. **New in 1.1.0.**
+
+#### GetCloudSyncStatus
+
+Returns the current setting and the state of the local account list.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `CloudSyncStatus`
+```protobuf
+// ---- cloud sync of the account data (see GetCloudSyncStatus) ----
+message CloudSyncStatus {
+  bool isLogin = 1;
+  // the "sync with cloud" setting
+  bool syncWithCloud = 2;
+  // local changes are waiting to be sent to the cloud
+  bool pendingUpload = 3;
+  // accounts on this device that take part in sync
+  uint32 syncedAccounts = 4;
+  // accounts on this device marked "do not sync to cloud"
+  uint32 localOnlyAccounts = 5;
+}
+```
+
+Requires `allow_get_account_info`.
+
+---
+
+#### PreviewCloudSync
+
+Fetches the cloud copy and compares it with this device, account by account. Nothing is changed.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `CloudSyncPreview`
+```protobuf
+enum CloudSyncAccountState {
+  // on both sides with the same configuration
+  CloudSyncSame = 0;
+  // on both sides, the configuration differs (path or credentials)
+  CloudSyncDiffer = 1;
+  // only on this device
+  CloudSyncOnlyLocal = 2;
+  // only in the cloud copy
+  CloudSyncOnlyCloud = 3;
+}
+
+message CloudSyncAccountDiff {
+  string cloudName = 1;
+  string userName = 2;
+  // mount path on this device, empty when the account is only in the cloud
+  string localPath = 3;
+  // mount path in the cloud copy, empty when the account is only on this device
+  string cloudPath = 4;
+  CloudSyncAccountState state = 5;
+  // the local account is marked "do not sync to cloud": it stays on this
+  // device whatever the strategy and is never uploaded
+  bool localDoNotSync = 6;
+}
+
+message CloudSyncPreview {
+  // false when the account has never synced or the cloud copy was cleared;
+  // enabling then uploads this device's accounts whatever the strategy
+  bool cloudHasData = 1;
+  // opaque version of the cloud copy; pass it back in EnableCloudSyncRequest
+  string cloudDataVersion = 2;
+  repeated CloudSyncAccountDiff accounts = 3;
+  uint32 sameCount = 4;
+  uint32 differCount = 5;
+  uint32 onlyLocalCount = 6;
+  uint32 onlyCloudCount = 7;
+}
+```
+
+Show the comparison to the user before calling `EnableCloudSync`. Requires `allow_get_account_info`.
+
+---
+
+#### EnableCloudSync
+
+Turns sync on. One side replaces the other, then the result is uploaded.
+
+**Request:** `EnableCloudSyncRequest`
+
+**Response:** `CloudSyncResult`
+```protobuf
+enum CloudSyncStrategy {
+  // default: the cloud copy replaces this device's synced accounts
+  CloudSyncRemoteOverwritesLocal = 0;
+  // this device's synced accounts replace the cloud copy (other devices
+  // follow on their next reload)
+  CloudSyncLocalOverwritesRemote = 1;
+}
+
+message EnableCloudSyncRequest {
+  CloudSyncStrategy strategy = 1;
+  // cloudDataVersion from PreviewCloudSync; when set and the cloud copy has
+  // changed since, the call fails with ABORTED and nothing is changed
+  optional string expectedCloudDataVersion = 2;
+}
+
+message CloudSyncResult {
+  // accounts added to / replaced on / removed from this device
+  uint32 accountsAdded = 1;
+  uint32 accountsUpdated = 2;
+  uint32 accountsRemoved = 3;
+  // the merged set reached the cloud; false means it is queued and retried
+  bool uploaded = 4;
+}
+```
+
+Pass the `cloudDataVersion` from `PreviewCloudSync` as `expectedCloudDataVersion`. If the cloud copy has changed since the preview (for example another device added an account), the call fails with `ABORTED` and nothing is changed; preview again and ask the user to confirm. When `cloudHasData` was `false` in the preview, this device's accounts are uploaded whatever the strategy. Accounts marked "do not sync to cloud" are never uploaded or replaced.
+
+Requires `allow_modify_account`.
+
+---
+
+#### DisableCloudSync
+
+Turns sync off. Pending local changes are sent first.
+
+**Request:** `DisableCloudSyncRequest`
+
+**Response:** `DisableCloudSyncResult`
+```protobuf
+message DisableCloudSyncRequest {
+  // also remove the cloud copy from the account server; other devices keep
+  // their local copies but stop receiving updates
+  bool clearCloudData = 1;
+}
+
+message DisableCloudSyncResult {
+  // pending local changes were sent before sync was turned off (false when
+  // there were none, when clearCloudData was set, or when the send failed)
+  bool pendingChangesSent = 1;
+  bool cloudDataCleared = 2;
+}
+```
+
+With `clearCloudData`, the cloud copy is removed from the account server; other devices keep their local copies but stop receiving updates. Requires `allow_modify_account`.
+
+---
+
 ### Two-Factor Authentication (2FA)
 
 CloudDrive2 supports Time-based One-Time Password (TOTP) two-factor authentication for enhanced account security. This section documents all 2FA-related methods.
@@ -5915,6 +6248,78 @@ message BackupStatus {
 }
 ```
 
+**New in 1.1.0:** `BackupStatus` fields 8-13 describe two-way sync and are empty for one-way backups:
+```protobuf
+  // Two-way sync (fields 8-12), filled for every backup; empty for one-way.
+  repeated BackupReplicaStatus replicaStatuses = 8;
+  uint32 openSyncIssues = 9;
+  bool twoWayBootstrapped = 10;
+  uint32 heldDeletionGuards = 11;
+  FileDeleteRule effectiveDeleteRule = 12;  // Delete only when twoWayHardDelete is set
+  optional BackupSyncStats syncStats = 13;  // two-way only: the last pass and totals since start
+```
+```protobuf
+// Two-way sync: the state of one location (the source or a destination).
+message BackupReplicaStatus {
+  enum State {
+    ReplicaIdle = 0;
+    ReplicaScanning = 1;
+    ReplicaOffline = 2;   // not reachable in the last pass
+    ReplicaHeld = 3;      // deletions or changes held for confirmation
+    ReplicaError = 4;
+  }
+  enum Scheme {
+    SchemeObjectId = 0;   // cloud storage: a new file id per content change
+    SchemePathMtime = 1;  // files change in place: size and time
+  }
+  enum Detection {
+    DetectScan = 0;           // changes are found on the scan schedule only
+    DetectScanAndEvents = 1;  // scans plus CloudDrive's own change notifications
+    DetectWatch = 2;          // local folder with a file system watcher
+  }
+  string path = 1;
+  bool isSource = 2;
+  State state = 3;
+  string message = 4;
+  optional google.protobuf.Timestamp lastFinishTime = 5;
+  uint32 pendingChanges = 6;
+  BackupStatus.FileWatchStatus watcherStatus = 7;
+  bool indexReady = 8;
+  Scheme versionScheme = 9;
+  Detection detection = 10;
+  uint32 openIssues = 11;
+  bool onlySyncsOnScan = 12;  // interval 0, no schedule and no accelerators
+}
+
+// Two-way sync statistics: what the last pass did, and totals since the
+// service started (the journal is the durable record).
+message BackupSyncStats {
+  uint64 generation = 1;             // of the last pass
+  bool lastPassIncremental = 2;
+  google.protobuf.Timestamp lastPassAt = 3;
+  double lastPassSecs = 4;
+  uint32 dirsListed = 5;
+  uint32 dirsServedFromIndex = 6;
+  uint64 bytesHashed = 7;
+  uint32 copiesToSource = 8;
+  uint32 copiesToDestinations = 9;
+  uint32 renames = 10;
+  uint32 deletions = 11;
+  uint32 conflicts = 12;
+  uint32 held = 13;
+  uint32 unknownFolders = 14;
+  // Totals since the service started.
+  uint64 totalPasses = 15;
+  uint64 totalIncrementalPasses = 16;
+  uint64 totalCopies = 17;
+  uint64 totalRenames = 18;
+  uint64 totalDeletions = 19;
+  uint64 totalConflicts = 20;
+  optional google.protobuf.Timestamp lastFullPassAt = 21;
+  optional google.protobuf.Timestamp lastIncrementalPassAt = 22;
+}
+```
+
 ---
 
 #### BackupGetStatus
@@ -5948,10 +6353,53 @@ message Backup {
   bool isTimeSchedulesEnabled = 11;
     bool syncDeleteFromDest = 14; // mirror destination deletions during full scan
     optional bool dontStartScanAfterAdd = 15; // if true, don't auto-start full scan after adding backup
+  // Two-way sync (fields 16-24). All optional: absent on BackupUpdate keeps the
+  // stored value, so a client that predates them cannot change them.
+  optional BackupSyncMode syncMode = 16;              // default BackupOneWay
+  optional BackupConflictPolicy conflictPolicy = 17;  // default ConflictKeepBoth
+  optional string conflictCopyTag = 18;               // word added to a conflict copy's name; default "conflict copy"
+  optional bool syncDeletionsTwoWay = 19;             // the only deletion switch in two-way sync; default false
+  optional bool twoWayHardDelete = 20;                // required for fileDeleteRule=Delete to delete permanently in two-way sync
+  optional uint32 historyRetentionDays = 21;          // days a replaced version stays in .clfs_history; 0 = forever (the default)
+  optional uint32 massDeleteGuardPercent = 22;        // hold deletions above this share of a folder's files; default 20
+  optional BackupBootstrapExtrasPolicy bootstrapExtrasPolicy = 23;
+  optional bool syncOwnerMarker = 24;                 // write and check .clfs_sync_owner in every folder; default true
+  // Automatic deep scan: a full scan that lists every folder, whatever its
+  // folder time says (on 115, Baidu and 123 an unchanged folder time lets a
+  // scan skip a folder, but a file renamed in another app does not change
+  // its folder's time). A scan the user starts is always deep.
+  optional bool deepScanEnabled = 25;                 // default true
+  optional uint32 deepScanEveryPasses = 26;           // every N full scans; default 8; 0 = not by count
+  optional uint32 deepScanMaxHours = 27;              // at least every N hours; default 24; 0 = not by time
 }
 ```
 
-Enable `syncDeleteFromDest` to have CloudDrive prune destination files or folders that no longer exist at the source during a full walk-through. The server applies the existing delete rule (keep, recycle, move to history, etc.), which lets you implement mirror-style backups entirely via the API.
+**New in 1.1.0:** fields 16-27 configure two-way sync. See [What's New in 1.1.0](#whats-new-in-110) for their defaults and the compatibility rules.
+```protobuf
+// Direction of a backup. Two-way sync converges the source and every
+// destination: a change in any of them reaches all the others.
+enum BackupSyncMode {
+  BackupOneWay = 0;
+  BackupTwoWay = 1;
+}
+
+// What two-way sync does when the same file changed in two places.
+enum BackupConflictPolicy {
+  ConflictKeepBoth = 0;         // the other version is kept as a conflict copy
+  ConflictNewestWins = 1;       // by cloud server time; keeps both where a local folder is involved
+  ConflictSourceWins = 2;
+  ConflictDestinationWins = 3;
+}
+
+// Two-way sync: what to do with files that exist only in a destination when
+// the sync index is first built.
+enum BackupBootstrapExtrasPolicy {
+  BootstrapCopyExtrasToSource = 0;
+  BootstrapLeaveExtras = 1;     // left in place, not synced
+}
+```
+
+Enable `syncDeleteFromDest` to have CloudDrive prune destination files or folders that no longer exist at the source during a full walk-through. The server applies the existing delete rule (keep, recycle, move to history, etc.), which lets you implement mirror-style backups entirely via the API. It applies to one-way backups only and has no effect in two-way sync, where `syncDeletionsTwoWay` controls deletions (1.1.0+).
 
 Set `dontStartScanAfterAdd` to `true` to skip the automatic full scan when a new backup is added. By default (unset or `false`), a full scan starts immediately after the backup is created.
 
@@ -6045,6 +6493,225 @@ message PhotoLibraryChangeList {
 
 ---
 
+#### BackupStartTwoWaySyncPreview
+
+Starts a preview job that computes what enabling two-way sync, or the next pass of an existing two-way backup, would do. Nothing is changed. **New in 1.1.0.**
+
+**Request:** `BackupSyncPreviewStartRequest`
+
+**Response:** `BackupSyncPreviewHandle`
+```protobuf
+// Two-way sync preview: what enabling (or the next pass of) two-way sync
+// would do, computed without changing anything.
+message BackupSyncPreviewStartRequest {
+  oneof target {
+    Backup proposed = 1;     // an unsaved configuration, for example from a wizard
+    string sourcePath = 2;   // an existing backup
+  }
+  uint32 sampleLimit = 3;
+}
+
+message BackupSyncPreviewHandle { string previewId = 1; }
+
+message BackupSyncPreviewReplica {
+  string path = 1;
+  bool isSource = 2;
+  uint64 onlyHere = 3;
+  uint64 missingHere = 4;
+  uint64 differ = 5;
+  uint64 same = 6;
+  uint64 foldersOnlyHere = 7;
+  optional string refusalReason = 8;
+  uint64 wouldDelete = 9;
+  uint64 unverified = 10;
+  bool onlySyncsOnScan = 11;
+}
+
+message BackupSyncPreviewItem {
+  enum Kind {
+    OnlyHere = 0;
+    MissingHere = 1;
+    Differ = 2;
+  }
+  string relativePath = 1;
+  string replica = 2;
+  Kind kind = 3;
+}
+
+message BackupSyncPreview {
+  enum State {
+    PreviewRunning = 0;
+    PreviewDone = 1;
+    PreviewFailed = 2;
+    PreviewCancelled = 3;
+  }
+  repeated BackupSyncPreviewReplica replicas = 1;
+  repeated BackupSyncPreviewItem samples = 2;
+  bool truncated = 3;
+  google.protobuf.Timestamp computedAt = 4;
+  bool wouldHold = 5;
+  string holdReason = 6;
+  bool deletionMirroringChanges = 7;
+  string deletionMirroringDetail = 8;
+  State state = 9;
+  uint32 dirsListed = 10;
+  uint32 replicasDone = 11;
+  string previewId = 12;
+  bool fromIndex = 13;
+  string error = 14;
+}
+```
+
+Pass `proposed` for an unsaved configuration (for example from an add-backup wizard), or `sourcePath` for an existing backup. `sampleLimit` caps the number of sample paths returned in `samples`. Poll `BackupGetTwoWaySyncPreview` until `state` is no longer `PreviewRunning`. When `wouldHold` is `true`, the first pass would hold deletions or changes for confirmation, and `holdReason` says why. A location that cannot take part (for example the root of a cloud drive, or storage with no reliable modification time) has a `refusalReason`.
+
+Requires `allow_get_backups`.
+
+---
+
+#### BackupGetTwoWaySyncPreview
+
+Returns the current state and counts of a preview job.
+
+**Request:** `BackupSyncPreviewHandle`
+
+**Response:** `BackupSyncPreview`
+
+Requires `allow_get_backups`. **New in 1.1.0.**
+
+---
+
+#### BackupCancelTwoWaySyncPreview
+
+Cancels a preview job.
+
+**Request:** `BackupSyncPreviewHandle`
+
+**Response:** `google.protobuf.Empty`
+
+Requires `allow_get_backups`. **New in 1.1.0.**
+
+---
+
+#### BackupGetSyncIssues
+
+Returns the open and resolved issues of a two-way backup: conflicts, held deletions or changes, locations that could not be compared, folders another CloudDrive instance is also syncing, and so on. **New in 1.1.0.**
+
+**Request:** `StringValue` (source path)
+
+**Response:** `BackupSyncIssueList`
+```protobuf
+// Two-way sync: something the user should know about or decide on.
+message BackupSyncIssue {
+  enum Kind {
+    Conflict = 0;
+    HeldDeletes = 1;
+    StaleReplica = 2;
+    NameCaseClash = 3;
+    ModifiedVsDeleted = 4;
+    IndexRebuilt = 5;
+    ReplaceFailed = 6;
+    RenameCollision = 7;
+    CreatedOnBoth = 8;
+    NotComparable = 9;
+    DeletionsNotMirrored = 10;
+    UnverifiedPairs = 11;
+    HeldChanges = 12;
+    SharedReplica = 13;
+  }
+  uint64 id = 1;
+  Kind kind = 2;
+  string relativePath = 3;
+  string replica = 4;
+  string detail = 5;
+  google.protobuf.Timestamp time = 6;
+  bool resolved = 7;
+  uint32 affectedCount = 8;
+  optional string conflictCopyPath = 9;
+  string resolution = 10;
+  repeated string affectedPaths = 11;  // capped sample
+  FileDeleteRule deleteRule = 12;      // rule that ApplyHeldDeletions would use
+  uint32 affectedFolders = 13;
+}
+
+message BackupSyncIssueList { repeated BackupSyncIssue issues = 1; }
+```
+
+`affectedPaths` is a capped sample. For `HeldDeletes`, `deleteRule` is the rule `ApplyHeldDeletions` would use.
+
+Requires `allow_get_backups`.
+
+---
+
+#### BackupResolveSyncIssue
+
+Acts on one or more issues of a backup. **New in 1.1.0.**
+
+**Request:** `BackupResolveSyncIssueRequest`
+```protobuf
+message BackupResolveSyncIssueRequest {
+  enum Action {
+    Dismiss = 0;
+    ApplyHeldDeletions = 1;  // needs confirmed = true
+    RestoreHeldFiles = 2;
+    KeepReplicaVersion = 3;
+    AdoptAsIdentical = 4;
+    ApplyStaleVersions = 5;  // needs confirmed = true
+    AcceptHeldChanges = 6;
+    RestoreFromHub = 7;
+  }
+  string sourcePath = 1;
+  repeated uint64 issueIds = 2;
+  Action action = 3;
+  optional string replica = 4;
+  bool confirmed = 5;
+}
+```
+
+**Response:** `FileOperationResult`
+
+- `Dismiss` hides the issues without changing any file.
+- `ApplyHeldDeletions` and `ApplyStaleVersions` change files in other locations and need `confirmed = true`.
+- `RestoreHeldFiles` brings held deletions back from the other locations; `AcceptHeldChanges` and `RestoreFromHub` (restore from the source folder) answer held changes.
+- `KeepReplicaVersion` and `AdoptAsIdentical` take `replica` to name the location.
+
+Requires `allow_modify_backups`.
+
+---
+
+#### BackupResetSyncIndex
+
+Makes a backup forget its sync index. The next pass compares every location again, as on the first run, and deletes nothing. **New in 1.1.0.**
+
+**Request:** `StringValue` (source path)
+
+**Response:** `google.protobuf.Empty`
+
+Requires `allow_modify_backups`.
+
+---
+
+#### BackupUndoSyncPass
+
+Undoes what one pass did. The last five passes are kept. Files the pass replaced or deleted are put back from the history folder, renames are reverted, and folders it created are removed when empty. **New in 1.1.0.**
+
+**Request:** `BackupUndoSyncPassRequest`
+```protobuf
+// Undo what one pass did (the last five passes are kept): files the pass
+// replaced or deleted are put back from the history folder, renames are
+// reverted, created folders removed when empty. Needs confirmed = true.
+message BackupUndoSyncPassRequest {
+  string sourcePath = 1;
+  uint64 generation = 2;   // 0 = the last pass
+  bool confirmed = 3;
+}
+```
+
+**Response:** `FileOperationResult` — `errorMessage` lists what could not be undone.
+
+`generation = 0` means the last pass; `BackupStatus.syncStats.generation` is the generation of the last pass. Needs `confirmed = true`. Requires `allow_modify_backups`.
+
+---
+
 ### WebDAV Management
 
 #### GetDavServerConfig
@@ -6066,8 +6733,21 @@ message DavServerConfig {
   bool anonymousReadOnly = 8;
   repeated DavUser users = 9;
   bool enableAccessLog = 10;
+  // Where other devices can reach the server, filled in by the server so that
+  // a client connected through 127.0.0.1 can still show a usable address.
+  // IPv4 addresses of the server's network interfaces, loopback, link-local
+  // and container bridges left out, the interface of the default route first.
+  repeated string lanAddresses = 11;
+  uint32 httpPort = 12;
+  uint32 httpsPort = 13;
+  bool httpsEnabled = 14;
+  // The server runs in a container (Docker and the like): its own addresses
+  // are usually not reachable, the host's address and mapped port are.
+  bool runningInContainer = 15;
 }
 ```
+
+**New in 1.1.0:** fields 11-15 are filled by the server and ignored in `SetDavServerConfig`. They let a client connected through `127.0.0.1` show an address other devices can use. When `runningInContainer` is `true`, show the host's address and the mapped port instead.
 
 ---
 
@@ -6205,6 +6885,7 @@ message CloudDrivePushMessage {
     LOG_MESSAGE = 7;           // Server log message
     MERGE_TASKS = 8;           // Folder merge task update
     CLOUD_API_CHANGE = 9;      // Cloud account added, removed or renamed (1.0.14+)
+    BACKUP_SYNC_ISSUE = 10;    // A two-way backup raised an issue (1.1.0+)
   }
   MessageType messageType = 1;
   oneof data {
@@ -6216,6 +6897,7 @@ message CloudDrivePushMessage {
     LogMessage logMessage = 7;
     MergeTaskUpdate mergeTaskUpdate = 8;
     CloudApiChange cloudApiChange = 9;
+    BackupSyncIssuePush backupSyncIssue = 10;
   }
 }
 ```
@@ -6522,6 +7204,24 @@ case CloudDrivePushMessage.Types.MessageType.CloudApiChange:
     }
     break;
 ```
+
+#### 9. BACKUP_SYNC_ISSUE
+
+**Purpose**: Notify clients when a two-way backup raises an issue that may need the user, such as a conflict or held deletions. **New in 1.1.0.**
+
+**Data**: `BackupSyncIssuePush`
+```protobuf
+// Two-way sync: a new issue of a backup (conflict, held deletions, ...).
+message BackupSyncIssuePush {
+  string sourcePath = 1;
+  BackupSyncIssue issue = 2;
+}
+```
+
+- `sourcePath`: the backup's source path
+- `issue`: the new issue; see [BackupGetSyncIssues](#backupgetsyncissues)
+
+**Use Case**: Show a badge on the backup, or a notification, without polling `BackupGetSyncIssues`. Fetch the full list with `BackupGetSyncIssues` when the user opens it.
 
 ### Complete Push Message Example
 
@@ -8348,5 +9048,5 @@ This guide covers the complete CloudDrive2 gRPC API with:
 
 ---
 
-*Last Updated: 2026-09-13*
+*Last Updated: 2026-09-29*
 *Copyright © 2026 CloudDrive. All rights reserved.*

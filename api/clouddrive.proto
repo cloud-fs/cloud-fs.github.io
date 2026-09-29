@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.0.17";
+option (version) = "1.1.0";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -312,6 +312,15 @@ service CloudDriveFileSrv {
   // add Google Drive with refresh token
   rpc ApiLoginGoogleDriveRefreshToken(LoginGoogleDriveRefreshTokenRequest)
       returns (APILoginResult) {}
+  // add Google Drive with the user's own OAuth client (Desktop app type):
+  // returns the Google sign-in address to open in a browser
+  rpc ApiLoginGoogleDriveStart(LoginGoogleDriveStartRequest)
+      returns (LoginGoogleDriveStartResult) {}
+  // finish a sign-in from ApiLoginGoogleDriveStart: pass the address the
+  // browser ended on, or leave it empty to wait for the browser to reach this
+  // backend's loopback page; call again while `done` is false
+  rpc ApiLoginGoogleDriveFinish(LoginGoogleDriveFinishRequest)
+      returns (LoginGoogleDriveFinishResult) {}
   // add Xunlei Drive with OAuth result
   rpc ApiLoginXunleiOAuth(LoginXunleiOAuthRequest) returns (APILoginResult) {}
   // add XunleiOpen with OAuth result
@@ -455,6 +464,18 @@ service CloudDriveFileSrv {
   // change email and password, for trusted devices only
   rpc ChangeEmailAndPassword(ChangeEmailAndPasswordRequest)
       returns (google.protobuf.Empty) {}
+  // Cloud sync of the account data (the "sync with cloud" setting) while
+  // logged in. Login still takes synDataToCloud; these change it afterwards
+  // and reconcile this device with the cloud copy instead of just flipping
+  // the flag.
+  rpc GetCloudSyncStatus(google.protobuf.Empty) returns (CloudSyncStatus) {}
+  // fetch the cloud copy and compare it with this device, nothing is changed
+  rpc PreviewCloudSync(google.protobuf.Empty) returns (CloudSyncPreview) {}
+  // turn sync on: one side overwrites the other, then the result is uploaded
+  rpc EnableCloudSync(EnableCloudSyncRequest) returns (CloudSyncResult) {}
+  // turn sync off: pending changes are sent first, the cloud copy is kept
+  // unless clearCloudData is set
+  rpc DisableCloudSync(DisableCloudSyncRequest) returns (DisableCloudSyncResult) {}
   // chech balance log
   rpc GetBalanceLog(google.protobuf.Empty) returns (BalanceLogResult) {}
   // check activation code for a plan
@@ -502,6 +523,22 @@ service CloudDriveFileSrv {
   }
   // check if current plan can support more backups
   rpc CanAddMoreBackups(google.protobuf.Empty) returns (FileOperationResult) {}
+  // two-way sync: start a preview job (what would change); returns its id
+  rpc BackupStartTwoWaySyncPreview(BackupSyncPreviewStartRequest) returns (BackupSyncPreviewHandle) {}
+  // two-way sync: current state and counts of a preview job
+  rpc BackupGetTwoWaySyncPreview(BackupSyncPreviewHandle) returns (BackupSyncPreview) {}
+  // two-way sync: cancel a preview job
+  rpc BackupCancelTwoWaySyncPreview(BackupSyncPreviewHandle) returns (google.protobuf.Empty) {}
+  // two-way sync: open and resolved issues of a backup (by source path)
+  rpc BackupGetSyncIssues(StringValue) returns (BackupSyncIssueList) {}
+  // two-way sync: act on issues (dismiss, apply held deletions, restore...)
+  rpc BackupResolveSyncIssue(BackupResolveSyncIssueRequest) returns (FileOperationResult) {}
+  // two-way sync: forget the sync index of a backup (by source path); the next
+  // pass rebuilds it without deleting anything
+  rpc BackupResetSyncIndex(StringValue) returns (google.protobuf.Empty) {}
+  // Two-way sync: undo one pass (allow_modify_backups). The result's
+  // errorMessage lists what could not be undone.
+  rpc BackupUndoSyncPass(BackupUndoSyncPassRequest) returns (FileOperationResult) {}
   // notify about new photos for backup (iOS/mobile platform integration)
   rpc NotifyPhotoLibraryChanges(PhotoLibraryChangeList) returns (google.protobuf.Empty) {}
   // get machine id
@@ -865,6 +902,8 @@ message CloudDriveSystemInfo {
   // true when dir cache persistence and disk buffer are force-disabled
   // (by platform config or SLOW_STORAGE device type)
   optional bool diskCacheDisabled = 7;
+  // this server understands Backup.syncMode and the two-way sync RPCs
+  bool supportsTwoWayBackup = 8;
 }
 message UserLoginRequest {
   string userName = 1;
@@ -1137,6 +1176,7 @@ message CloudDrivePushMessage {
     LOG_MESSAGE = 7;
     MERGE_TASKS = 8;
     CLOUD_API_CHANGE = 9;
+    BACKUP_SYNC_ISSUE = 10;  // a two-way backup raised an issue that may need the user
   }
   MessageType messageType = 1;
   oneof data {
@@ -1148,7 +1188,13 @@ message CloudDrivePushMessage {
     LogMessage logMessage = 7;
     MergeTaskUpdate mergeTaskUpdate = 8;
     CloudApiChange cloudApiChange = 9;
+    BackupSyncIssuePush backupSyncIssue = 10;
   }
+}
+// Two-way sync: a new issue of a backup (conflict, held deletions, ...).
+message BackupSyncIssuePush {
+  string sourcePath = 1;
+  BackupSyncIssue issue = 2;
 }
 // Realtime update for merge tasks (folder recursive merges)
 message MergeTaskUpdate {
@@ -1384,6 +1430,41 @@ message LoginGoogleDriveRefreshTokenRequest {
   string refresh_token = 3;
   optional ProxyInfo apiProxy = 4;
   optional ProxyInfo dataProxy = 5;
+}
+message LoginGoogleDriveStartRequest {
+  string client_id = 1;
+  string client_secret = 2;
+  optional ProxyInfo apiProxy = 3;
+  optional ProxyInfo dataProxy = 4;
+  // clouddrive:// address the loopback page redirects to when the sign-in
+  // ends, so an in-app browser session closes by itself; status=success|error
+  // and kind=<error_kind> are appended. Unset: a "close this tab" page.
+  optional string return_url = 5;
+}
+message LoginGoogleDriveStartResult {
+  bool success = 1;
+  string error_message = 2; // English fallback text
+  string error_kind = 3;    // see LoginGoogleDriveFinishResult.error_kind
+  string session_id = 4;
+  string auth_url = 5;      // open in the system browser or an auth session
+}
+message LoginGoogleDriveFinishRequest {
+  string session_id = 1;
+  // the full address the browser shows after approval
+  // (http://127.0.0.1:PORT/?state=...&code=...)
+  string redirected_url = 2;
+  // without redirected_url: seconds to wait for the loopback page (max 60)
+  uint32 wait_seconds = 3;
+}
+message LoginGoogleDriveFinishResult {
+  bool done = 1; // false: still waiting for the browser; call again
+  bool success = 2;
+  string error_message = 3; // English fallback text
+  // stable failure kind for translated text: invalid_client_id,
+  // access_denied, drive_not_granted, invalid_client, code_expired,
+  // no_refresh_token, drive_api_disabled, network, session_expired,
+  // pasted_url_invalid, other
+  string error_kind = 4;
 }
 message LoginXunleiOAuthRequest {
   string refresh_token = 1;
@@ -1693,6 +1774,9 @@ message SystemSettings {
   // source a second time. Falls back to double download when local temp space
   // is insufficient. Default: false.
   optional bool useTempFileForCrossCloudCopy = 34;
+  // Two-way backup sync: while true every two-way pass only records what it
+  // would do and changes nothing. Default false.
+  optional bool twoWaySyncPaused = 35;
 }
 
 // Eviction strategy for disk cache
@@ -2057,6 +2141,84 @@ message ChangeEmailAndPasswordRequest {
   string newPassword = 2;
   bool syncUserDataWithCloud = 3;
 }
+// ---- cloud sync of the account data (see GetCloudSyncStatus) ----
+message CloudSyncStatus {
+  bool isLogin = 1;
+  // the "sync with cloud" setting
+  bool syncWithCloud = 2;
+  // local changes are waiting to be sent to the cloud
+  bool pendingUpload = 3;
+  // accounts on this device that take part in sync
+  uint32 syncedAccounts = 4;
+  // accounts on this device marked "do not sync to cloud"
+  uint32 localOnlyAccounts = 5;
+}
+enum CloudSyncAccountState {
+  // on both sides with the same configuration
+  CloudSyncSame = 0;
+  // on both sides, the configuration differs (path or credentials)
+  CloudSyncDiffer = 1;
+  // only on this device
+  CloudSyncOnlyLocal = 2;
+  // only in the cloud copy
+  CloudSyncOnlyCloud = 3;
+}
+message CloudSyncAccountDiff {
+  string cloudName = 1;
+  string userName = 2;
+  // mount path on this device, empty when the account is only in the cloud
+  string localPath = 3;
+  // mount path in the cloud copy, empty when the account is only on this device
+  string cloudPath = 4;
+  CloudSyncAccountState state = 5;
+  // the local account is marked "do not sync to cloud": it stays on this
+  // device whatever the strategy and is never uploaded
+  bool localDoNotSync = 6;
+}
+message CloudSyncPreview {
+  // false when the account has never synced or the cloud copy was cleared;
+  // enabling then uploads this device's accounts whatever the strategy
+  bool cloudHasData = 1;
+  // opaque version of the cloud copy; pass it back in EnableCloudSyncRequest
+  string cloudDataVersion = 2;
+  repeated CloudSyncAccountDiff accounts = 3;
+  uint32 sameCount = 4;
+  uint32 differCount = 5;
+  uint32 onlyLocalCount = 6;
+  uint32 onlyCloudCount = 7;
+}
+enum CloudSyncStrategy {
+  // default: the cloud copy replaces this device's synced accounts
+  CloudSyncRemoteOverwritesLocal = 0;
+  // this device's synced accounts replace the cloud copy (other devices
+  // follow on their next reload)
+  CloudSyncLocalOverwritesRemote = 1;
+}
+message EnableCloudSyncRequest {
+  CloudSyncStrategy strategy = 1;
+  // cloudDataVersion from PreviewCloudSync; when set and the cloud copy has
+  // changed since, the call fails with ABORTED and nothing is changed
+  optional string expectedCloudDataVersion = 2;
+}
+message CloudSyncResult {
+  // accounts added to / replaced on / removed from this device
+  uint32 accountsAdded = 1;
+  uint32 accountsUpdated = 2;
+  uint32 accountsRemoved = 3;
+  // the merged set reached the cloud; false means it is queued and retried
+  bool uploaded = 4;
+}
+message DisableCloudSyncRequest {
+  // also remove the cloud copy from the account server; other devices keep
+  // their local copies but stop receiving updates
+  bool clearCloudData = 1;
+}
+message DisableCloudSyncResult {
+  // pending local changes were sent before sync was turned off (false when
+  // there were none, when clearCloudData was set, or when the send failed)
+  bool pendingChangesSent = 1;
+  bool cloudDataCleared = 2;
+}
 message BalanceLog {
   double balance_before = 1;
   double balance_after = 2;
@@ -2129,6 +2291,25 @@ enum FileCompletionRule {
   DeleteSource = 1;
   DeleteSourceAndEmptyFolder = 2;
 }
+// Direction of a backup. Two-way sync converges the source and every
+// destination: a change in any of them reaches all the others.
+enum BackupSyncMode {
+  BackupOneWay = 0;
+  BackupTwoWay = 1;
+}
+// What two-way sync does when the same file changed in two places.
+enum BackupConflictPolicy {
+  ConflictKeepBoth = 0;         // the other version is kept as a conflict copy
+  ConflictNewestWins = 1;       // by cloud server time; keeps both where a local folder is involved
+  ConflictSourceWins = 2;
+  ConflictDestinationWins = 3;
+}
+// Two-way sync: what to do with files that exist only in a destination when
+// the sync index is first built.
+enum BackupBootstrapExtrasPolicy {
+  BootstrapCopyExtrasToSource = 0;
+  BootstrapLeaveExtras = 1;     // left in place, not synced
+}
 message BackupDestination {
   string destinationPath = 1;
   bool isEnabled = 2;
@@ -2159,6 +2340,55 @@ message Backup {
   bool isTimeSchedulesEnabled = 11;
   bool syncDeleteFromDest = 14; // Delete files/folders from destination that don't exist in source while walking through
   optional bool dontStartScanAfterAdd = 15; // If set to true, don't auto start full scan after backup is added. Default (false/unset) scans immediately.
+  // Two-way sync (fields 16-24). All optional: absent on BackupUpdate keeps the
+  // stored value, so a client that predates them cannot change them.
+  optional BackupSyncMode syncMode = 16;              // default BackupOneWay
+  optional BackupConflictPolicy conflictPolicy = 17;  // default ConflictKeepBoth
+  optional string conflictCopyTag = 18;               // word added to a conflict copy's name; default "conflict copy"
+  optional bool syncDeletionsTwoWay = 19;             // the only deletion switch in two-way sync; default false
+  optional bool twoWayHardDelete = 20;                // required for fileDeleteRule=Delete to delete permanently in two-way sync
+  optional uint32 historyRetentionDays = 21;          // days a replaced version stays in .clfs_history; 0 = forever (the default)
+  optional uint32 massDeleteGuardPercent = 22;        // hold deletions above this share of a folder's files; default 20
+  optional BackupBootstrapExtrasPolicy bootstrapExtrasPolicy = 23;
+  optional bool syncOwnerMarker = 24;                 // write and check .clfs_sync_owner in every folder; default true
+  // Automatic deep scan: a full scan that lists every folder, whatever its
+  // folder time says (on 115, Baidu and 123 an unchanged folder time lets a
+  // scan skip a folder, but a file renamed in another app does not change
+  // its folder's time). A scan the user starts is always deep.
+  optional bool deepScanEnabled = 25;                 // default true
+  optional uint32 deepScanEveryPasses = 26;           // every N full scans; default 8; 0 = not by count
+  optional uint32 deepScanMaxHours = 27;              // at least every N hours; default 24; 0 = not by time
+}
+// Two-way sync: the state of one location (the source or a destination).
+message BackupReplicaStatus {
+  enum State {
+    ReplicaIdle = 0;
+    ReplicaScanning = 1;
+    ReplicaOffline = 2;   // not reachable in the last pass
+    ReplicaHeld = 3;      // deletions or changes held for confirmation
+    ReplicaError = 4;
+  }
+  enum Scheme {
+    SchemeObjectId = 0;   // cloud storage: a new file id per content change
+    SchemePathMtime = 1;  // files change in place: size and time
+  }
+  enum Detection {
+    DetectScan = 0;           // changes are found on the scan schedule only
+    DetectScanAndEvents = 1;  // scans plus CloudDrive's own change notifications
+    DetectWatch = 2;          // local folder with a file system watcher
+  }
+  string path = 1;
+  bool isSource = 2;
+  State state = 3;
+  string message = 4;
+  optional google.protobuf.Timestamp lastFinishTime = 5;
+  uint32 pendingChanges = 6;
+  BackupStatus.FileWatchStatus watcherStatus = 7;
+  bool indexReady = 8;
+  Scheme versionScheme = 9;
+  Detection detection = 10;
+  uint32 openIssues = 11;
+  bool onlySyncsOnScan = 12;  // interval 0, no schedule and no accelerators
 }
 message BackupStatus {
   enum Status {
@@ -2184,6 +2414,48 @@ message BackupStatus {
   FileWatchStatus watcherStatus = 4;
   string watcherStatusMessage = 5;
   repeated TaskError errors = 7;
+  // Two-way sync (fields 8-12), filled for every backup; empty for one-way.
+  repeated BackupReplicaStatus replicaStatuses = 8;
+  uint32 openSyncIssues = 9;
+  bool twoWayBootstrapped = 10;
+  uint32 heldDeletionGuards = 11;
+  FileDeleteRule effectiveDeleteRule = 12;  // Delete only when twoWayHardDelete is set
+  optional BackupSyncStats syncStats = 13;  // two-way only: the last pass and totals since start
+}
+// Two-way sync statistics: what the last pass did, and totals since the
+// service started (the journal is the durable record).
+message BackupSyncStats {
+  uint64 generation = 1;             // of the last pass
+  bool lastPassIncremental = 2;
+  google.protobuf.Timestamp lastPassAt = 3;
+  double lastPassSecs = 4;
+  uint32 dirsListed = 5;
+  uint32 dirsServedFromIndex = 6;
+  uint64 bytesHashed = 7;
+  uint32 copiesToSource = 8;
+  uint32 copiesToDestinations = 9;
+  uint32 renames = 10;
+  uint32 deletions = 11;
+  uint32 conflicts = 12;
+  uint32 held = 13;
+  uint32 unknownFolders = 14;
+  // Totals since the service started.
+  uint64 totalPasses = 15;
+  uint64 totalIncrementalPasses = 16;
+  uint64 totalCopies = 17;
+  uint64 totalRenames = 18;
+  uint64 totalDeletions = 19;
+  uint64 totalConflicts = 20;
+  optional google.protobuf.Timestamp lastFullPassAt = 21;
+  optional google.protobuf.Timestamp lastIncrementalPassAt = 22;
+}
+// Undo what one pass did (the last five passes are kept): files the pass
+// replaced or deleted are put back from the history folder, renames are
+// reverted, created folders removed when empty. Needs confirmed = true.
+message BackupUndoSyncPassRequest {
+  string sourcePath = 1;
+  uint64 generation = 2;   // 0 = the last pass
+  bool confirmed = 3;
 }
 message BackupList { repeated BackupStatus backups = 1; }
 message BackupModifyRequest {
@@ -2198,6 +2470,111 @@ message BackupModifyRequest {
 message BackupSetEnabledRequest {
   string sourcePath = 1;
   bool isEnabled = 2;
+}
+// Two-way sync: something the user should know about or decide on.
+message BackupSyncIssue {
+  enum Kind {
+    Conflict = 0;
+    HeldDeletes = 1;
+    StaleReplica = 2;
+    NameCaseClash = 3;
+    ModifiedVsDeleted = 4;
+    IndexRebuilt = 5;
+    ReplaceFailed = 6;
+    RenameCollision = 7;
+    CreatedOnBoth = 8;
+    NotComparable = 9;
+    DeletionsNotMirrored = 10;
+    UnverifiedPairs = 11;
+    HeldChanges = 12;
+    SharedReplica = 13;
+  }
+  uint64 id = 1;
+  Kind kind = 2;
+  string relativePath = 3;
+  string replica = 4;
+  string detail = 5;
+  google.protobuf.Timestamp time = 6;
+  bool resolved = 7;
+  uint32 affectedCount = 8;
+  optional string conflictCopyPath = 9;
+  string resolution = 10;
+  repeated string affectedPaths = 11;  // capped sample
+  FileDeleteRule deleteRule = 12;      // rule that ApplyHeldDeletions would use
+  uint32 affectedFolders = 13;
+}
+message BackupSyncIssueList { repeated BackupSyncIssue issues = 1; }
+message BackupResolveSyncIssueRequest {
+  enum Action {
+    Dismiss = 0;
+    ApplyHeldDeletions = 1;  // needs confirmed = true
+    RestoreHeldFiles = 2;
+    KeepReplicaVersion = 3;
+    AdoptAsIdentical = 4;
+    ApplyStaleVersions = 5;  // needs confirmed = true
+    AcceptHeldChanges = 6;
+    RestoreFromHub = 7;
+  }
+  string sourcePath = 1;
+  repeated uint64 issueIds = 2;
+  Action action = 3;
+  optional string replica = 4;
+  bool confirmed = 5;
+}
+// Two-way sync preview: what enabling (or the next pass of) two-way sync
+// would do, computed without changing anything.
+message BackupSyncPreviewStartRequest {
+  oneof target {
+    Backup proposed = 1;     // an unsaved configuration, for example from a wizard
+    string sourcePath = 2;   // an existing backup
+  }
+  uint32 sampleLimit = 3;
+}
+message BackupSyncPreviewHandle { string previewId = 1; }
+message BackupSyncPreviewReplica {
+  string path = 1;
+  bool isSource = 2;
+  uint64 onlyHere = 3;
+  uint64 missingHere = 4;
+  uint64 differ = 5;
+  uint64 same = 6;
+  uint64 foldersOnlyHere = 7;
+  optional string refusalReason = 8;
+  uint64 wouldDelete = 9;
+  uint64 unverified = 10;
+  bool onlySyncsOnScan = 11;
+}
+message BackupSyncPreviewItem {
+  enum Kind {
+    OnlyHere = 0;
+    MissingHere = 1;
+    Differ = 2;
+  }
+  string relativePath = 1;
+  string replica = 2;
+  Kind kind = 3;
+}
+message BackupSyncPreview {
+  enum State {
+    PreviewRunning = 0;
+    PreviewDone = 1;
+    PreviewFailed = 2;
+    PreviewCancelled = 3;
+  }
+  repeated BackupSyncPreviewReplica replicas = 1;
+  repeated BackupSyncPreviewItem samples = 2;
+  bool truncated = 3;
+  google.protobuf.Timestamp computedAt = 4;
+  bool wouldHold = 5;
+  string holdReason = 6;
+  bool deletionMirroringChanges = 7;
+  string deletionMirroringDetail = 8;
+  State state = 9;
+  uint32 dirsListed = 10;
+  uint32 replicasDone = 11;
+  string previewId = 12;
+  bool fromIndex = 13;
+  string error = 14;
 }
 
 // Photo Library Integration (iOS/Mobile)
@@ -2297,6 +2674,17 @@ message DavServerConfig {
       8; // if true, anonymous access is read-only, default is true
   repeated DavUser users = 9;
   bool enableAccessLog = 10; // if true, log WebDAV access to webdav-YYYY-MM-DD.log
+  // Where other devices can reach the server, filled in by the server so that
+  // a client connected through 127.0.0.1 can still show a usable address.
+  // IPv4 addresses of the server's network interfaces, loopback, link-local
+  // and container bridges left out, the interface of the default route first.
+  repeated string lanAddresses = 11;
+  uint32 httpPort = 12;
+  uint32 httpsPort = 13;
+  bool httpsEnabled = 14;
+  // The server runs in a container (Docker and the like): its own addresses
+  // are usually not reachable, the host's address and mapped port are.
+  bool runningInContainer = 15;
 }
 message ModifyDavServerConfigRequest {
   optional bool enableDavServer = 1;

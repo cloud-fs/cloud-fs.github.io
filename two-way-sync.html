@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>双向同步 — CloudDrive2</title>
   <meta name="description" content="CloudDrive2 核心服务 1.1.0 的双向同步：怎么开启，同一文件两处都改了怎么办，删除何时同步、删除保护上限，历史文件夹，云端文件夹的扫描时机，哪些位置可以参与，以及常见问题。">
-  <meta name="robots" content="noindex">
   <link rel="canonical" href="https://www.clouddrive2.com/two-way-sync.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/two-way-sync.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/two-way-sync.html">
@@ -57,7 +56,7 @@
 
     <section class="hero">
       <div class="container">
-        <p class="eyebrow">核心服务 1.1.0 · 测试版</p>
+        <p class="eyebrow">核心服务 1.1.0 起</p>
         <h1>双向同步</h1>
         <p class="hero-lede">普通备份只朝一个方向复制：从源文件夹到目标文件夹。双向同步让这些文件夹保持一致——在任何一个文件夹里添加、修改、重命名或删除文件，其他文件夹中也会执行相同的更改。</p>
         <ul class="chips">
@@ -118,6 +117,12 @@
         <div class="note">
           <span class="note-title">从单向备份改为双向同步时</span>
           <p>第一次双向同步会把只存在于目标文件夹的文件复制回源文件夹。如果你在「只存在于目标文件夹的文件」中选了保持原样，则不复制。第一次同步不会删除任何文件。</p>
+        </div>
+
+        <div class="note note-warn">
+          <span class="note-title">先用不重要的文件夹试用</span>
+          <p>双向同步是新功能，建议先用不重要的文件夹试用一段时间，确认符合预期后再用于重要数据。</p>
+          <p>如果需要退回 1.0.20，请先停用设为双向同步的备份。旧版本可以读取配置文件，但不认识双向同步，会把这些备份当作单向备份运行，只把源文件夹的内容复制到目标文件夹。</p>
         </div>
       </div>
     </section>
@@ -344,7 +349,7 @@
     <section class="band cta-band">
       <div class="container">
         <h2>反馈问题</h2>
-        <p>双向同步目前处于测试阶段。发现问题请在 GitHub issues 提交，便于记录和跟踪；也可以在 Telegram 交流群反馈，或发送邮件。</p>
+        <p>发现问题请在 GitHub issues 提交，便于记录和跟踪；也可以在 Telegram 交流群反馈，或发送邮件。</p>
         <div class="btn-row">
           <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">在 GitHub 提 issue</a>
           <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a>

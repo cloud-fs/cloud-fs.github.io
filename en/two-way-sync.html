@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Two-way sync — CloudDrive2</title>
   <meta name="description" content="Two-way sync in CloudDrive2 core 1.1.0: turning it on, what happens when a file changes in two places, when deletions are mirrored and the deletion safety limit, the history folder, when cloud folders are scanned, which locations can take part, and common questions.">
-  <meta name="robots" content="noindex">
   <link rel="canonical" href="https://www.clouddrive2.com/en/two-way-sync.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/two-way-sync.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/two-way-sync.html">
@@ -56,7 +55,7 @@
 
     <section class="hero">
       <div class="container">
-        <p class="eyebrow">Core 1.1.0 · beta</p>
+        <p class="eyebrow">Core 1.1.0 and later</p>
         <h1>Two-way sync</h1>
         <p class="hero-lede">A backup normally copies files one way: from the source folder to the destination folders. Two-way sync keeps all of these folders the same. A file you add, change, rename or delete in any of them ends up in all the others.</p>
         <ul class="chips">
@@ -117,6 +116,12 @@
         <div class="note">
           <span class="note-title">Switching over from a one-way backup</span>
           <p>The first two-way pass copies files that exist only in a destination back to the source folder — or leaves them alone, if you chose that under <strong>Files that exist only in a destination folder</strong>. Nothing is deleted during this first pass.</p>
+        </div>
+
+        <div class="note note-warn">
+          <span class="note-title">Try it on folders that do not matter first</span>
+          <p>Two-way sync is a new feature. Try it on folders that do not matter for a while, and use it for important data once it behaves as you expect.</p>
+          <p>To go back to 1.0.20, first disable the backups set to two-way sync. The older version can read the configuration, but it does not know two-way sync and runs those backups as one-way backups, only copying the source folder to the destinations.</p>
         </div>
       </div>
     </section>
@@ -342,8 +347,8 @@
 
     <section class="band cta-band">
       <div class="container">
-        <h2>Something off in the beta?</h2>
-        <p>Two-way sync is still in beta, so tell us when something does not look right. Bugs are best filed as GitHub issues, where they are tracked; the Telegram group is usually staffed, and email works too.</p>
+        <h2>Report a problem</h2>
+        <p>File problems as GitHub issues, where they are recorded and tracked; you can also report them in the Telegram group or by email.</p>
         <div class="btn-row">
           <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">File a GitHub issue</a>
           <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>

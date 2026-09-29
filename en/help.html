@@ -575,6 +575,10 @@ brew services start clouddrive2</code></pre></div>
             <ol>
               <li>Go to Backups, click Add Backup, and use the wizard to pick a source directory and one or
                   more destinations. Local folders and cloud directories can each be either.</li>
+              <li>Under Backup mode, choose One-way backup or Two-way sync (1.1.0 and later). A one-way
+                  backup only copies the source to the destinations; two-way sync keeps the source and
+                  every destination the same, so a change in any of them reaches the others. See
+                  <a href="/en/two-way-sync.html">Two-way sync</a>.</li>
               <li>Set the file filter rules (by extension or by name, applied to files and folders
                   independently) and the completion rules — deleting the source file after upload, for
                   instance.</li>

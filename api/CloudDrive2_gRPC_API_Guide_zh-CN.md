@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.0.17
+版本: 1.1.0
 
 ## 目录
 
+- [1.1.0 版本新特性](#110-版本新特性)
 - [1.0.17 版本新特性](#1017-版本新特性)
 - [1.0.14 版本新特性](#1014-版本新特性)
 - [1.0.13 版本新特性](#1013-版本新特性)
@@ -41,6 +42,85 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.1.0 版本新特性
+
+### 备份双向同步
+
+备份现在可以让源文件夹和所有目标文件夹在两个方向上保持一致：在任何一个位置添加、修改、重命名或删除文件，其他位置都会执行相同的更改。把 `Backup.syncMode` 设为 `BackupTwoWay` 即可开启。默认值 `BackupOneWay` 保持原有行为，1.1.0 之前创建的备份升级后仍是单向备份。面向用户的说明见[双向同步帮助页](https://www.clouddrive2.com/two-way-sync.html)。
+
+提供这个模式之前，请先检查 `CloudDriveSystemInfo.supportsTwoWayBackup`（字段 8）：服务端支持 `Backup.syncMode` 和下面的双向同步 RPC 时为 `true`。
+
+**`Backup` 新增字段（字段 16-27，均为 `optional`）:**
+- `syncMode` — `BackupOneWay`（默认）或 `BackupTwoWay`
+- `conflictPolicy` — 同一文件在两处都被修改时如何处理；默认 `ConflictKeepBoth`
+- `conflictCopyTag` — 冲突副本文件名中添加的文字；默认 `conflict copy`
+- `syncDeletionsTwoWay` — 在各位置之间同步删除；默认 `false`
+- `twoWayHardDelete` — 双向同步中 `fileDeleteRule = Delete` 要彻底删除，必须设为 `true`
+- `historyRetentionDays` — 被替换的版本在 `.clfs_history` 中保留的天数；`0`（默认）表示一直保留
+- `massDeleteGuardPercent` — 一个文件夹中被删除的文件超过这个比例时，删除会等待确认；默认 `20`
+- `bootstrapExtrasPolicy` — 首次建立同步索引时，如何处理只存在于目标文件夹的文件
+- `syncOwnerMarker` — 在每个文件夹中写入并检查 `.clfs_sync_owner`；默认 `true`
+- `deepScanEnabled`、`deepScanEveryPasses`、`deepScanMaxHours` — 自动彻底扫描：不论文件夹时间如何都列出每一个文件夹；默认开启，每 8 次完整扫描一次，且至少每 24 小时一次
+
+**兼容规则:**
+- 所有双向同步字段都是 `optional`。`BackupUpdate` 中没有某个字段时，服务端保留已保存的值，因此 1.1.0 之前的客户端无法修改模式或删除开关。`BackupGetAll` 和 `BackupGetStatus` 始终返回实际生效的值。
+- 请求中带有 `syncMode` 表示客户端支持双向同步。对双向备份，`BackupAdd` 和 `BackupUpdate` 会以 `INVALID_ARGUMENT` 失败，并返回以下固定文本之一，客户端可以据此判断原因:
+
+```text
+Two-way sync: file replace rule Skip is not allowed; use Overwrite or KeepHistoryVersion
+Two-way sync: the source folder must keep its files; set fileCompletionRule to None
+Two-way sync: fileDeleteRule Delete must be confirmed with twoWayHardDelete, or choose MoveToVersionHistory, Recycle or Keep
+Folders overlap with backup <source>: <folder> and <other folder>
+```
+
+  前两条对所有客户端生效。第三条只对支持双向同步的客户端生效：旧客户端的 `Delete` 规则会按 `MoveToVersionHistory` 执行，实际使用的规则见 `BackupStatus.effectiveDeleteRule`。只要两个备份中有一个是双向同步，就会检查文件夹是否重合；两个单向备份仍然可以使用相同的文件夹。
+
+**`BackupStatus` 新增字段（字段 8-13）:** `replicaStatuses`（每个位置的状态）、`openSyncIssues`、`twoWayBootstrapped`、`heldDeletionGuards`、`effectiveDeleteRule` 和 `syncStats`。单向备份中这些字段为空。
+
+**新增 RPC（需要授权）:**
+- **`BackupStartTwoWaySyncPreview`**、**`BackupGetTwoWaySyncPreview`**、**`BackupCancelTwoWaySyncPreview`** — 计算开启双向同步（或下一次同步）将执行的操作，不改动任何文件。需要 `allow_get_backups`。
+- **`BackupGetSyncIssues`** — 备份的未处理和已处理的同步问题。需要 `allow_get_backups`。
+- **`BackupResolveSyncIssue`** — 处理同步问题：忽略、执行或恢复等待确认的删除、接受等待确认的修改等。需要 `allow_modify_backups`。
+- **`BackupResetSyncIndex`** — 清除同步索引；下一次同步重新建立索引，不删除任何文件。需要 `allow_modify_backups`。
+- **`BackupUndoSyncPass`** — 撤销最近五次同步中的一次。需要 `allow_modify_backups`。
+
+**新增推送消息:** `CloudDrivePushMessage.MessageType.BACKUP_SYNC_ISSUE = 10`，`data` oneof 中对应 `BackupSyncIssuePush backupSyncIssue = 10`。双向备份产生可能需要用户处理的问题时发送。见 [BACKUP_SYNC_ISSUE](#9-backup_sync_issue)。
+
+**新增设置:** `SystemSettings.twoWaySyncPaused`（字段 35）。为 `true` 时，每次双向同步只记录将要执行的操作，不改动任何文件。
+
+消息定义和每个 RPC 的说明见[备份管理](#备份管理)。
+
+### 账号数据云端同步开关
+
+"与云端同步"以前只能在登录时通过 `UserLoginRequest.synDataToCloud` 选择。登录后再打开，可能用本机的账号列表覆盖云端，或者反过来被云端覆盖，而且事先不会显示会丢失什么。新增的四个 RPC 可以在登录状态下开关这个设置，并先比较两边的数据:
+
+1. **`GetCloudSyncStatus`** — 当前设置、本机是否有等待发送的更改，以及参与同步的账号数量。
+2. **`PreviewCloudSync`** — 获取云端副本，与本机逐个账号比较（一致、不同、只在本机有、只在云端有），不改动任何数据。返回 `cloudDataVersion`。
+3. **`EnableCloudSync`** — 按 `CloudSyncStrategy` 开启同步：以云端为准替换本机参与同步的账号（默认），或以本机为准替换云端副本。把预览返回的 `cloudDataVersion` 作为 `expectedCloudDataVersion` 传入：如果预览之后云端副本被修改过，调用以 `ABORTED` 失败且不改动任何数据，此时应重新预览并请用户再次确认。
+4. **`DisableCloudSync`** — 关闭同步。先发送等待中的更改；除非设置 `clearCloudData`，云端副本会保留。
+
+标记为"不同步到云端"的账号不论选择哪种方式都保留在本机，也不会上传。`GetCloudSyncStatus` 和 `PreviewCloudSync` 需要 `allow_get_account_info`；`EnableCloudSync` 和 `DisableCloudSync` 需要 `allow_modify_account`。见[账号数据云端同步](#账号数据云端同步)。
+
+### 使用用户自己的 OAuth 客户端添加 Google Drive
+
+CloudDrive 自带的 Google 客户端正在进行 Google 的验证，验证可能需要很长时间；验证完成前，只有已加入其测试用户名单的账号可以通过它登录。新增的两个 RPC 使用用户在自己的 Google Cloud 项目中创建的 OAuth 客户端（类型为**桌面应用**，Desktop app）添加 Google Drive。创建客户端的步骤见 [Google Drive 客户端页面](https://www.clouddrive2.com/google-drive-client.html)。
+
+- **`ApiLoginGoogleDriveStart`** — 传入客户端 ID 和密钥（以及可选的代理），返回 `session_id` 和 Google 的 `auth_url`。在系统浏览器中打开 `auth_url`。
+- **`ApiLoginGoogleDriveFinish`** — 完成登录。`redirected_url` 留空时，最多等待 `wait_seconds`（不超过 60）秒，直到浏览器打开服务端的本机回调页面；`done` 为 `false` 时再次调用。浏览器运行在另一台设备上时，本机回调页面无法打开，请用户复制浏览器最后显示的地址（`http://127.0.0.1:PORT/?state=...&code=...`），作为 `redirected_url` 传入。
+
+授权码由 CloudDrive2 服务端自己通过该账号的 API 代理向 Google 交换，不经过 CloudDrive 的服务器。一次登录会话的有效期为 20 分钟。失败时返回固定的 `error_kind`，用于显示翻译后的文字：`invalid_client_id`, `access_denied`, `drive_not_granted`, `invalid_client`, `code_expired`, `no_refresh_token`, `drive_api_disabled`, `network`, `session_expired`, `pasted_url_invalid`, `other`。两个 RPC 都需要 `allow_modify_cloud_apis`。
+
+`ApiLoginGoogleDriveRefreshToken` 现在从第一次请求起就使用请求中的代理；令牌错误或项目没有启用 Google Drive API 时会返回失败原因，不再添加一个无法使用的账号。
+
+### WebDAV 服务器访问地址
+
+`DavServerConfig` 新增由服务端填写的字段，让通过 `127.0.0.1` 连接的客户端也能显示其他设备可用的地址:
+- `lanAddresses`（字段 11）— 服务器网络接口的 IPv4 地址，不含回环、链路本地和容器网桥地址，默认路由所在的接口排在最前
+- `httpPort`（12）、`httpsPort`（13）、`httpsEnabled`（14）
+- `runningInContainer`（15）— 服务端运行在 Docker 等容器中。此时它自己的地址通常无法访问，应显示宿主机的地址和映射的端口
 
 ---
 
@@ -1983,8 +2063,12 @@ message CloudDriveSystemInfo {
   // 当目录缓存持久化和磁盘缓冲区被强制禁用时为 true
   //（由平台配置或 SLOW_STORAGE 设备类型决定）
   optional bool diskCacheDisabled = 7;
+  // this server understands Backup.syncMode and the two-way sync RPCs (1.1.0+)
+  bool supportsTwoWayBackup = 8;
 }
 ```
+
+**1.1.0 新增:** 服务端支持 `Backup.syncMode` 和双向同步 RPC 时，`supportsTwoWayBackup` 为 `true`。
 
 **示例 (C#):**
 ```csharp
@@ -4162,6 +4246,103 @@ else:
 
 ---
 
+#### ApiLoginGoogleDriveStart
+
+使用用户自己的 OAuth 客户端（类型为 Desktop app）开始添加 Google Drive，返回需要在浏览器中打开的 Google 登录地址。**1.1.0 新增。**
+
+**请求:** `LoginGoogleDriveStartRequest`
+
+**响应:** `LoginGoogleDriveStartResult`
+```protobuf
+message LoginGoogleDriveStartRequest {
+  string client_id = 1;
+  string client_secret = 2;
+  optional ProxyInfo apiProxy = 3;
+  optional ProxyInfo dataProxy = 4;
+  // clouddrive:// address the loopback page redirects to when the sign-in
+  // ends, so an in-app browser session closes by itself; status=success|error
+  // and kind=<error_kind> are appended. Unset: a "close this tab" page.
+  optional string return_url = 5;
+}
+
+message LoginGoogleDriveStartResult {
+  bool success = 1;
+  string error_message = 2; // English fallback text
+  string error_kind = 3;    // see LoginGoogleDriveFinishResult.error_kind
+  string session_id = 4;
+  string auth_url = 5;      // open in the system browser or an auth session
+}
+```
+
+设置 `return_url` 时必须使用 `clouddrive://` 协议。登录结束后，本机回调页面会跳转到这个地址，并附加 `status=success|error` 和 `kind=<error_kind>`，使应用内的浏览器会话自动关闭。未设置时，页面提示用户关闭标签页。
+
+需要 `allow_modify_cloud_apis`。
+
+---
+
+#### ApiLoginGoogleDriveFinish
+
+完成由 `ApiLoginGoogleDriveStart` 开始的登录，并添加账号。**1.1.0 新增。**
+
+**请求:** `LoginGoogleDriveFinishRequest`
+
+**响应:** `LoginGoogleDriveFinishResult`
+```protobuf
+message LoginGoogleDriveFinishRequest {
+  string session_id = 1;
+  // the full address the browser shows after approval
+  // (http://127.0.0.1:PORT/?state=...&code=...)
+  string redirected_url = 2;
+  // without redirected_url: seconds to wait for the loopback page (max 60)
+  uint32 wait_seconds = 3;
+}
+
+message LoginGoogleDriveFinishResult {
+  bool done = 1; // false: still waiting for the browser; call again
+  bool success = 2;
+  string error_message = 3; // English fallback text
+  // stable failure kind for translated text: invalid_client_id,
+  // access_denied, drive_not_granted, invalid_client, code_expired,
+  // no_refresh_token, drive_api_disabled, network, session_expired,
+  // pasted_url_invalid, other
+  string error_kind = 4;
+}
+```
+
+- `redirected_url` 留空并设置 `wait_seconds`（不超过 60），等待浏览器打开服务端的本机回调页面。`done` 为 `false` 时再次调用。
+- 浏览器运行在另一台设备上时（例如在电脑上打开 NAS 的网页管理界面），本机回调页面无法打开。请用户复制浏览器最后显示的地址，作为 `redirected_url` 传入。
+- 一次会话的有效期为 20 分钟，过期后调用返回 `session_expired`。
+
+需要 `allow_modify_cloud_apis`。
+
+**示例 (Python):**
+```python
+start = stub.ApiLoginGoogleDriveStart(
+    clouddrive_pb2.LoginGoogleDriveStartRequest(
+        client_id="1234567890-abc.apps.googleusercontent.com",
+        client_secret="your-client-secret",
+    ),
+    metadata=auth_metadata,
+)
+if not start.success:
+    raise RuntimeError(f"{start.error_kind}: {start.error_message}")
+
+webbrowser.open(start.auth_url)
+
+while True:
+    result = stub.ApiLoginGoogleDriveFinish(
+        clouddrive_pb2.LoginGoogleDriveFinishRequest(
+            session_id=start.session_id, wait_seconds=30),
+        metadata=auth_metadata,
+    )
+    if result.done:
+        break
+
+print("已添加 Google Drive" if result.success else f"失败: {result.error_kind}")
+```
+
+---
+
 #### ApiLoginXunleiOAuth
 
 使用 OAuth 令牌添加迅雷网盘。
@@ -4668,8 +4849,13 @@ message SystemSettings {
   optional uint32 maxConcurrentBackupWalkers = 33; // 最大并发扫描数（默认 1，最小 1）
   // 跨云盘复制：哈希阶段将源文件缓存到本地临时文件，避免上传阶段再次下载
   optional bool useTempFileForCrossCloudCopy = 34; // 默认：false
+  // Two-way backup sync: while true every two-way pass only records what it
+  // would do and changes nothing. Default false. (1.1.0+)
+  optional bool twoWaySyncPaused = 35;
 }
 ```
+
+**1.1.0 新增:** `twoWaySyncPaused` 暂停所有双向备份。为 `true` 时，每次双向同步只记录将要执行的操作，不改动任何文件。
 
 **1.0.13 新增:** `backupQueueHighWater`、`backupQueueLowWater`、`maxConcurrentBackupWalkers` 用于限制备份全量扫描的资源占用。这 3 个字段构成一组 — 当 `SetSystemSettings` 中包含 `maxConcurrentBackupWalkers` 时，服务端会同时重写全部 3 个字段，因此未设置的水位线会被解释为"无限制"而非"不更改"。`useTempFileForCrossCloudCopy` 启用跨云盘复制的本地临时文件缓存（默认：false）。
 
@@ -5366,6 +5552,151 @@ message VerifyStorePurchaseResult {
 
 ---
 
+### 账号数据云端同步
+
+这些 RPC 在登录状态下开关"与云端同步"设置。它们会先比较本机的账号列表和云端副本，而不是直接修改设置。**1.1.0 新增。**
+
+#### GetCloudSyncStatus
+
+返回当前设置和本机账号列表的状态。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `CloudSyncStatus`
+```protobuf
+// ---- cloud sync of the account data (see GetCloudSyncStatus) ----
+message CloudSyncStatus {
+  bool isLogin = 1;
+  // the "sync with cloud" setting
+  bool syncWithCloud = 2;
+  // local changes are waiting to be sent to the cloud
+  bool pendingUpload = 3;
+  // accounts on this device that take part in sync
+  uint32 syncedAccounts = 4;
+  // accounts on this device marked "do not sync to cloud"
+  uint32 localOnlyAccounts = 5;
+}
+```
+
+需要 `allow_get_account_info`。
+
+---
+
+#### PreviewCloudSync
+
+获取云端副本，与本机逐个账号比较，不改动任何数据。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `CloudSyncPreview`
+```protobuf
+enum CloudSyncAccountState {
+  // on both sides with the same configuration
+  CloudSyncSame = 0;
+  // on both sides, the configuration differs (path or credentials)
+  CloudSyncDiffer = 1;
+  // only on this device
+  CloudSyncOnlyLocal = 2;
+  // only in the cloud copy
+  CloudSyncOnlyCloud = 3;
+}
+
+message CloudSyncAccountDiff {
+  string cloudName = 1;
+  string userName = 2;
+  // mount path on this device, empty when the account is only in the cloud
+  string localPath = 3;
+  // mount path in the cloud copy, empty when the account is only on this device
+  string cloudPath = 4;
+  CloudSyncAccountState state = 5;
+  // the local account is marked "do not sync to cloud": it stays on this
+  // device whatever the strategy and is never uploaded
+  bool localDoNotSync = 6;
+}
+
+message CloudSyncPreview {
+  // false when the account has never synced or the cloud copy was cleared;
+  // enabling then uploads this device's accounts whatever the strategy
+  bool cloudHasData = 1;
+  // opaque version of the cloud copy; pass it back in EnableCloudSyncRequest
+  string cloudDataVersion = 2;
+  repeated CloudSyncAccountDiff accounts = 3;
+  uint32 sameCount = 4;
+  uint32 differCount = 5;
+  uint32 onlyLocalCount = 6;
+  uint32 onlyCloudCount = 7;
+}
+```
+
+调用 `EnableCloudSync` 之前，先把比较结果显示给用户。需要 `allow_get_account_info`。
+
+---
+
+#### EnableCloudSync
+
+开启同步。以一方为准替换另一方，然后上传结果。
+
+**请求:** `EnableCloudSyncRequest`
+
+**响应:** `CloudSyncResult`
+```protobuf
+enum CloudSyncStrategy {
+  // default: the cloud copy replaces this device's synced accounts
+  CloudSyncRemoteOverwritesLocal = 0;
+  // this device's synced accounts replace the cloud copy (other devices
+  // follow on their next reload)
+  CloudSyncLocalOverwritesRemote = 1;
+}
+
+message EnableCloudSyncRequest {
+  CloudSyncStrategy strategy = 1;
+  // cloudDataVersion from PreviewCloudSync; when set and the cloud copy has
+  // changed since, the call fails with ABORTED and nothing is changed
+  optional string expectedCloudDataVersion = 2;
+}
+
+message CloudSyncResult {
+  // accounts added to / replaced on / removed from this device
+  uint32 accountsAdded = 1;
+  uint32 accountsUpdated = 2;
+  uint32 accountsRemoved = 3;
+  // the merged set reached the cloud; false means it is queued and retried
+  bool uploaded = 4;
+}
+```
+
+把 `PreviewCloudSync` 返回的 `cloudDataVersion` 作为 `expectedCloudDataVersion` 传入。如果预览之后云端副本被修改过（例如另一台设备添加了账号），调用以 `ABORTED` 失败且不改动任何数据；请重新预览并请用户再次确认。预览中 `cloudHasData` 为 `false` 时，不论选择哪种方式，都会上传本机的账号。标记为"不同步到云端"的账号不会被上传或替换。
+
+需要 `allow_modify_account`。
+
+---
+
+#### DisableCloudSync
+
+关闭同步。先发送本机等待中的更改。
+
+**请求:** `DisableCloudSyncRequest`
+
+**响应:** `DisableCloudSyncResult`
+```protobuf
+message DisableCloudSyncRequest {
+  // also remove the cloud copy from the account server; other devices keep
+  // their local copies but stop receiving updates
+  bool clearCloudData = 1;
+}
+
+message DisableCloudSyncResult {
+  // pending local changes were sent before sync was turned off (false when
+  // there were none, when clearCloudData was set, or when the send failed)
+  bool pendingChangesSent = 1;
+  bool cloudDataCleared = 2;
+}
+```
+
+设置 `clearCloudData` 时，会从账号服务器删除云端副本；其他设备保留各自的本地副本，但不再收到更新。需要 `allow_modify_account`。
+
+---
+
 ### 双因素认证 (2FA)
 
 CloudDrive2 支持基于时间的一次性密码 (TOTP) 双因素认证以增强账户安全性。本节记录所有与 2FA 相关的方法。
@@ -5914,6 +6245,78 @@ message BackupStatus {
 }
 ```
 
+**1.1.0 新增:** `BackupStatus` 的字段 8-13 描述双向同步，单向备份中为空:
+```protobuf
+  // Two-way sync (fields 8-12), filled for every backup; empty for one-way.
+  repeated BackupReplicaStatus replicaStatuses = 8;
+  uint32 openSyncIssues = 9;
+  bool twoWayBootstrapped = 10;
+  uint32 heldDeletionGuards = 11;
+  FileDeleteRule effectiveDeleteRule = 12;  // Delete only when twoWayHardDelete is set
+  optional BackupSyncStats syncStats = 13;  // two-way only: the last pass and totals since start
+```
+```protobuf
+// Two-way sync: the state of one location (the source or a destination).
+message BackupReplicaStatus {
+  enum State {
+    ReplicaIdle = 0;
+    ReplicaScanning = 1;
+    ReplicaOffline = 2;   // not reachable in the last pass
+    ReplicaHeld = 3;      // deletions or changes held for confirmation
+    ReplicaError = 4;
+  }
+  enum Scheme {
+    SchemeObjectId = 0;   // cloud storage: a new file id per content change
+    SchemePathMtime = 1;  // files change in place: size and time
+  }
+  enum Detection {
+    DetectScan = 0;           // changes are found on the scan schedule only
+    DetectScanAndEvents = 1;  // scans plus CloudDrive's own change notifications
+    DetectWatch = 2;          // local folder with a file system watcher
+  }
+  string path = 1;
+  bool isSource = 2;
+  State state = 3;
+  string message = 4;
+  optional google.protobuf.Timestamp lastFinishTime = 5;
+  uint32 pendingChanges = 6;
+  BackupStatus.FileWatchStatus watcherStatus = 7;
+  bool indexReady = 8;
+  Scheme versionScheme = 9;
+  Detection detection = 10;
+  uint32 openIssues = 11;
+  bool onlySyncsOnScan = 12;  // interval 0, no schedule and no accelerators
+}
+
+// Two-way sync statistics: what the last pass did, and totals since the
+// service started (the journal is the durable record).
+message BackupSyncStats {
+  uint64 generation = 1;             // of the last pass
+  bool lastPassIncremental = 2;
+  google.protobuf.Timestamp lastPassAt = 3;
+  double lastPassSecs = 4;
+  uint32 dirsListed = 5;
+  uint32 dirsServedFromIndex = 6;
+  uint64 bytesHashed = 7;
+  uint32 copiesToSource = 8;
+  uint32 copiesToDestinations = 9;
+  uint32 renames = 10;
+  uint32 deletions = 11;
+  uint32 conflicts = 12;
+  uint32 held = 13;
+  uint32 unknownFolders = 14;
+  // Totals since the service started.
+  uint64 totalPasses = 15;
+  uint64 totalIncrementalPasses = 16;
+  uint64 totalCopies = 17;
+  uint64 totalRenames = 18;
+  uint64 totalDeletions = 19;
+  uint64 totalConflicts = 20;
+  optional google.protobuf.Timestamp lastFullPassAt = 21;
+  optional google.protobuf.Timestamp lastIncrementalPassAt = 22;
+}
+```
+
 ---
 
 #### BackupGetStatus
@@ -5947,10 +6350,53 @@ message Backup {
   bool isTimeSchedulesEnabled = 11;
     bool syncDeleteFromDest = 14; // 完整扫描时同步删除目标端多余的文件
     optional bool dontStartScanAfterAdd = 15; // 为 true 时添加备份后不自动开始全量扫描
+  // Two-way sync (fields 16-24). All optional: absent on BackupUpdate keeps the
+  // stored value, so a client that predates them cannot change them.
+  optional BackupSyncMode syncMode = 16;              // default BackupOneWay
+  optional BackupConflictPolicy conflictPolicy = 17;  // default ConflictKeepBoth
+  optional string conflictCopyTag = 18;               // word added to a conflict copy's name; default "conflict copy"
+  optional bool syncDeletionsTwoWay = 19;             // the only deletion switch in two-way sync; default false
+  optional bool twoWayHardDelete = 20;                // required for fileDeleteRule=Delete to delete permanently in two-way sync
+  optional uint32 historyRetentionDays = 21;          // days a replaced version stays in .clfs_history; 0 = forever (the default)
+  optional uint32 massDeleteGuardPercent = 22;        // hold deletions above this share of a folder's files; default 20
+  optional BackupBootstrapExtrasPolicy bootstrapExtrasPolicy = 23;
+  optional bool syncOwnerMarker = 24;                 // write and check .clfs_sync_owner in every folder; default true
+  // Automatic deep scan: a full scan that lists every folder, whatever its
+  // folder time says (on 115, Baidu and 123 an unchanged folder time lets a
+  // scan skip a folder, but a file renamed in another app does not change
+  // its folder's time). A scan the user starts is always deep.
+  optional bool deepScanEnabled = 25;                 // default true
+  optional uint32 deepScanEveryPasses = 26;           // every N full scans; default 8; 0 = not by count
+  optional uint32 deepScanMaxHours = 27;              // at least every N hours; default 24; 0 = not by time
 }
 ```
 
-启用 `syncDeleteFromDest` 后, 备份在完整扫描阶段会依据当前删除策略自动清理目标端多出的文件/文件夹, 便于实现镜像式备份。
+**1.1.0 新增:** 字段 16-27 用于配置双向同步，默认值和兼容规则见 [1.1.0 版本新特性](#110-版本新特性)。
+```protobuf
+// Direction of a backup. Two-way sync converges the source and every
+// destination: a change in any of them reaches all the others.
+enum BackupSyncMode {
+  BackupOneWay = 0;
+  BackupTwoWay = 1;
+}
+
+// What two-way sync does when the same file changed in two places.
+enum BackupConflictPolicy {
+  ConflictKeepBoth = 0;         // the other version is kept as a conflict copy
+  ConflictNewestWins = 1;       // by cloud server time; keeps both where a local folder is involved
+  ConflictSourceWins = 2;
+  ConflictDestinationWins = 3;
+}
+
+// Two-way sync: what to do with files that exist only in a destination when
+// the sync index is first built.
+enum BackupBootstrapExtrasPolicy {
+  BootstrapCopyExtrasToSource = 0;
+  BootstrapLeaveExtras = 1;     // left in place, not synced
+}
+```
+
+启用 `syncDeleteFromDest` 后, 备份在完整扫描阶段会依据当前删除策略自动清理目标端多出的文件/文件夹, 便于实现镜像式备份。它只对单向备份生效，在双向同步中不起作用，双向同步中的删除由 `syncDeletionsTwoWay` 控制（1.1.0+）。
 
 将 `dontStartScanAfterAdd` 设为 `true` 可跳过添加备份后的自动全量扫描。默认行为（未设置或 `false`）保持不变 — 添加备份后立即开始全量扫描。
 
@@ -6044,6 +6490,225 @@ message PhotoLibraryChangeList {
 
 ---
 
+#### BackupStartTwoWaySyncPreview
+
+开始一个预览任务，计算开启双向同步（或已有双向备份的下一次同步）将执行的操作，不改动任何文件。**1.1.0 新增。**
+
+**请求:** `BackupSyncPreviewStartRequest`
+
+**响应:** `BackupSyncPreviewHandle`
+```protobuf
+// Two-way sync preview: what enabling (or the next pass of) two-way sync
+// would do, computed without changing anything.
+message BackupSyncPreviewStartRequest {
+  oneof target {
+    Backup proposed = 1;     // an unsaved configuration, for example from a wizard
+    string sourcePath = 2;   // an existing backup
+  }
+  uint32 sampleLimit = 3;
+}
+
+message BackupSyncPreviewHandle { string previewId = 1; }
+
+message BackupSyncPreviewReplica {
+  string path = 1;
+  bool isSource = 2;
+  uint64 onlyHere = 3;
+  uint64 missingHere = 4;
+  uint64 differ = 5;
+  uint64 same = 6;
+  uint64 foldersOnlyHere = 7;
+  optional string refusalReason = 8;
+  uint64 wouldDelete = 9;
+  uint64 unverified = 10;
+  bool onlySyncsOnScan = 11;
+}
+
+message BackupSyncPreviewItem {
+  enum Kind {
+    OnlyHere = 0;
+    MissingHere = 1;
+    Differ = 2;
+  }
+  string relativePath = 1;
+  string replica = 2;
+  Kind kind = 3;
+}
+
+message BackupSyncPreview {
+  enum State {
+    PreviewRunning = 0;
+    PreviewDone = 1;
+    PreviewFailed = 2;
+    PreviewCancelled = 3;
+  }
+  repeated BackupSyncPreviewReplica replicas = 1;
+  repeated BackupSyncPreviewItem samples = 2;
+  bool truncated = 3;
+  google.protobuf.Timestamp computedAt = 4;
+  bool wouldHold = 5;
+  string holdReason = 6;
+  bool deletionMirroringChanges = 7;
+  string deletionMirroringDetail = 8;
+  State state = 9;
+  uint32 dirsListed = 10;
+  uint32 replicasDone = 11;
+  string previewId = 12;
+  bool fromIndex = 13;
+  string error = 14;
+}
+```
+
+未保存的配置（例如添加备份向导中的配置）传入 `proposed`，已有备份传入 `sourcePath`。`sampleLimit` 限制 `samples` 中返回的示例路径数量。轮询 `BackupGetTwoWaySyncPreview`，直到 `state` 不再是 `PreviewRunning`。`wouldHold` 为 `true` 表示第一次同步会让删除或修改等待确认，原因见 `holdReason`。不能参与同步的位置（例如网盘根目录，或不能提供可靠修改时间的存储）带有 `refusalReason`。
+
+需要 `allow_get_backups`。
+
+---
+
+#### BackupGetTwoWaySyncPreview
+
+返回预览任务的当前状态和统计数量。
+
+**请求:** `BackupSyncPreviewHandle`
+
+**响应:** `BackupSyncPreview`
+
+需要 `allow_get_backups`。**1.1.0 新增。**
+
+---
+
+#### BackupCancelTwoWaySyncPreview
+
+取消预览任务。
+
+**请求:** `BackupSyncPreviewHandle`
+
+**响应:** `google.protobuf.Empty`
+
+需要 `allow_get_backups`。**1.1.0 新增。**
+
+---
+
+#### BackupGetSyncIssues
+
+返回双向备份的未处理和已处理的同步问题：冲突、等待确认的删除或修改、无法比较的位置、另一个 CloudDrive 实例也在同步的文件夹等。**1.1.0 新增。**
+
+**请求:** `StringValue`（源路径）
+
+**响应:** `BackupSyncIssueList`
+```protobuf
+// Two-way sync: something the user should know about or decide on.
+message BackupSyncIssue {
+  enum Kind {
+    Conflict = 0;
+    HeldDeletes = 1;
+    StaleReplica = 2;
+    NameCaseClash = 3;
+    ModifiedVsDeleted = 4;
+    IndexRebuilt = 5;
+    ReplaceFailed = 6;
+    RenameCollision = 7;
+    CreatedOnBoth = 8;
+    NotComparable = 9;
+    DeletionsNotMirrored = 10;
+    UnverifiedPairs = 11;
+    HeldChanges = 12;
+    SharedReplica = 13;
+  }
+  uint64 id = 1;
+  Kind kind = 2;
+  string relativePath = 3;
+  string replica = 4;
+  string detail = 5;
+  google.protobuf.Timestamp time = 6;
+  bool resolved = 7;
+  uint32 affectedCount = 8;
+  optional string conflictCopyPath = 9;
+  string resolution = 10;
+  repeated string affectedPaths = 11;  // capped sample
+  FileDeleteRule deleteRule = 12;      // rule that ApplyHeldDeletions would use
+  uint32 affectedFolders = 13;
+}
+
+message BackupSyncIssueList { repeated BackupSyncIssue issues = 1; }
+```
+
+`affectedPaths` 只包含有限数量的示例。对 `HeldDeletes`，`deleteRule` 是 `ApplyHeldDeletions` 将使用的删除规则。
+
+需要 `allow_get_backups`。
+
+---
+
+#### BackupResolveSyncIssue
+
+处理备份的一个或多个同步问题。**1.1.0 新增。**
+
+**请求:** `BackupResolveSyncIssueRequest`
+```protobuf
+message BackupResolveSyncIssueRequest {
+  enum Action {
+    Dismiss = 0;
+    ApplyHeldDeletions = 1;  // needs confirmed = true
+    RestoreHeldFiles = 2;
+    KeepReplicaVersion = 3;
+    AdoptAsIdentical = 4;
+    ApplyStaleVersions = 5;  // needs confirmed = true
+    AcceptHeldChanges = 6;
+    RestoreFromHub = 7;
+  }
+  string sourcePath = 1;
+  repeated uint64 issueIds = 2;
+  Action action = 3;
+  optional string replica = 4;
+  bool confirmed = 5;
+}
+```
+
+**响应:** `FileOperationResult`
+
+- `Dismiss` 只隐藏问题，不改动任何文件。
+- `ApplyHeldDeletions` 和 `ApplyStaleVersions` 会修改其他位置的文件，需要 `confirmed = true`。
+- `RestoreHeldFiles` 从其他位置恢复等待确认的删除；`AcceptHeldChanges` 和 `RestoreFromHub`（从源文件夹恢复）用于处理等待确认的修改。
+- `KeepReplicaVersion` 和 `AdoptAsIdentical` 通过 `replica` 指定位置。
+
+需要 `allow_modify_backups`。
+
+---
+
+#### BackupResetSyncIndex
+
+清除备份的同步索引。下一次同步会像第一次一样重新比较所有位置，不删除任何文件。**1.1.0 新增。**
+
+**请求:** `StringValue`（源路径）
+
+**响应:** `google.protobuf.Empty`
+
+需要 `allow_modify_backups`。
+
+---
+
+#### BackupUndoSyncPass
+
+撤销一次同步所执行的操作，最多保留最近五次。被这次同步替换或删除的文件从历史文件夹恢复，重命名被还原，这次同步创建的空文件夹被删除。**1.1.0 新增。**
+
+**请求:** `BackupUndoSyncPassRequest`
+```protobuf
+// Undo what one pass did (the last five passes are kept): files the pass
+// replaced or deleted are put back from the history folder, renames are
+// reverted, created folders removed when empty. Needs confirmed = true.
+message BackupUndoSyncPassRequest {
+  string sourcePath = 1;
+  uint64 generation = 2;   // 0 = the last pass
+  bool confirmed = 3;
+}
+```
+
+**响应:** `FileOperationResult` — `errorMessage` 列出无法撤销的内容。
+
+`generation = 0` 表示最近一次同步；最近一次同步的编号见 `BackupStatus.syncStats.generation`。需要 `confirmed = true`。需要 `allow_modify_backups`。
+
+---
+
 ### WebDAV 管理
 
 #### GetDavServerConfig
@@ -6065,8 +6730,21 @@ message DavServerConfig {
   bool anonymousReadOnly = 8;
   repeated DavUser users = 9;
   bool enableAccessLog = 10;
+  // Where other devices can reach the server, filled in by the server so that
+  // a client connected through 127.0.0.1 can still show a usable address.
+  // IPv4 addresses of the server's network interfaces, loopback, link-local
+  // and container bridges left out, the interface of the default route first.
+  repeated string lanAddresses = 11;
+  uint32 httpPort = 12;
+  uint32 httpsPort = 13;
+  bool httpsEnabled = 14;
+  // The server runs in a container (Docker and the like): its own addresses
+  // are usually not reachable, the host's address and mapped port are.
+  bool runningInContainer = 15;
 }
 ```
+
+**1.1.0 新增:** 字段 11-15 由服务端填写，`SetDavServerConfig` 会忽略它们。通过 `127.0.0.1` 连接的客户端可以用这些字段显示其他设备可用的地址。`runningInContainer` 为 `true` 时，应显示宿主机的地址和映射的端口。
 
 ---
 
@@ -6204,6 +6882,7 @@ message CloudDrivePushMessage {
     LOG_MESSAGE = 7;
     MERGE_TASKS = 8;
     CLOUD_API_CHANGE = 9; // 云盘账户增删改（1.0.14+）
+    BACKUP_SYNC_ISSUE = 10;    // 双向备份产生了同步问题（1.1.0+）
   }
   MessageType messageType = 1;
   oneof data {
@@ -6215,6 +6894,7 @@ message CloudDrivePushMessage {
     LogMessage logMessage = 7;
     MergeTaskUpdate mergeTaskUpdate = 8;
     CloudApiChange cloudApiChange = 9;
+    BackupSyncIssuePush backupSyncIssue = 10;
   }
 }
 ```
@@ -6528,6 +7208,24 @@ case CloudDrivePushMessage.Types.MessageType.CloudApiChange:
     }
     break;
 ```
+
+#### 9. BACKUP_SYNC_ISSUE
+
+**目的**: 双向备份产生可能需要用户处理的问题（例如冲突或等待确认的删除）时通知客户端。**1.1.0 新增。**
+
+**数据**: `BackupSyncIssuePush`
+```protobuf
+// Two-way sync: a new issue of a backup (conflict, held deletions, ...).
+message BackupSyncIssuePush {
+  string sourcePath = 1;
+  BackupSyncIssue issue = 2;
+}
+```
+
+- `sourcePath`: 备份的源路径
+- `issue`: 新产生的问题，见 [BackupGetSyncIssues](#backupgetsyncissues)
+
+**使用场景**: 无需轮询 `BackupGetSyncIssues` 即可在备份上显示标记或通知。用户打开问题列表时，再用 `BackupGetSyncIssues` 获取完整列表。
 
 ### 完整示例 - 处理所有推送消息类型
 
@@ -8408,5 +9106,5 @@ class FileManager
 
 ---
 
-*最后更新: 2026-09-13*
+*最后更新: 2026-09-29*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*
