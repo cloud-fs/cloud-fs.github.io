@@ -189,7 +189,7 @@
         <p class="chip-note">These are results for one film in one language; other films and languages will differ. A dash means the value was not measured.</p>
         <p class="chip-note">Costs are Alibaba Cloud Model Studio list prices as of 24 September 2026, in RMB, billed on the length of audio sent to the service (music with no dialogue included); hourly figures are converted from the per-second price. The Beijing region includes 10 free hours within 90 days of activation (1 million tokens for qwen-audio-3.1-asr-flash). Prices can change; see <a href="https://www.alibabacloud.com/help/en/model-studio/model-pricing" rel="noopener">Model Studio pricing</a>. Translation is billed separately: in this test, translating with qwen3.8-flash cost about ¥0.05 per hour of film. On-device models run on your own device and have no service charge.</p>
         <p class="chip-note">Only a few Qwen models were tested as remote APIs. Other remote services were not tested, and they may do better or worse. The table only compares on-device models with remote APIs; it does not mean we recommend Qwen as a remote API.</p>
-        <p class="chip-note">qwen-audio-3.0-asr-flash, qwen-audio-3.1-asr-flash and fun-asr-flash will be available in a future release; the current version cannot use them yet.</p>
+        <p class="chip-note">qwen-audio-3.0-asr-flash, qwen-audio-3.1-asr-flash and fun-asr-flash can be used from app 1.1.0; see <a href="#remote">remote APIs</a> below.</p>
 
 
         <div class="note note-warn">
@@ -245,12 +245,13 @@
               <tr><th scope="row">OpenAI Whisper</th><td><code>whisper-1</code>, <code>gpt-transcribe</code>, <code>gpt-4o-transcribe</code>, <code>gpt-4o-mini-transcribe</code></td></tr>
               <tr><th scope="row">Groq</th><td><code>whisper-large-v3-turbo</code>, <code>whisper-large-v3</code></td></tr>
               <tr><th scope="row">Speaches (self-hosted)</th><td><code>Systran/faster-whisper-base</code>, <code>deepdml/faster-whisper-large-v3-turbo-ct2</code>, <code>Systran/faster-whisper-large-v3</code>, <code>Systran/faster-whisper-small</code>, <code>Systran/faster-whisper-tiny</code></td></tr>
-              <tr><th scope="row">Qwen3-ASR (Intl / China)</th><td><code>qwen3-asr-flash</code></td></tr>
+              <tr><th scope="row">Qwen3-ASR (China)</th><td><code>qwen-audio-3.0-asr-flash</code>, <code>qwen-audio-3.1-asr-flash</code>, <code>qwen3-asr-flash</code></td></tr>
+              <tr><th scope="row">Qwen3-ASR (Intl)</th><td><code>qwen3-asr-flash</code>, <code>qwen-audio-3.0-asr-flash</code></td></tr>
               <tr><th scope="row">Zhipu (BigModel)</th><td><code>glm-asr-2512</code></td></tr>
             </tbody>
           </table>
         </div>
-        <p class="chip-note">Whisper models (for example <code>whisper-1</code> and <code>whisper-large-v3-turbo</code>) return a time for each sentence, so subtitles line up with the speech more closely. Other transcription models return a whole passage at once, so each subtitle's timing is less precise.</p>
+        <p class="chip-note">Whisper models (for example <code>whisper-1</code> and <code>whisper-large-v3-turbo</code>) return a time for each sentence, and the Qwen qwen-audio and fun-asr models a time for each word, so subtitles line up with the speech more closely. Other transcription models return a whole passage at once, so each subtitle's timing is less precise.</p>
 
         <h3>Using your own endpoint</h3>
         <div class="split">
@@ -263,7 +264,7 @@
           </div>
           <div>
             <ul>
-              <li><strong>Qwen</strong>: the international and China endpoints are different; pick the one for the region your API key belongs to.</li>
+              <li><strong>Qwen</strong>: the international and China endpoints are different; pick the one for the region your API key belongs to. Fun-ASR models (for example <code>fun-asr-flash</code>) are not in the preset list: pick a Qwen preset and type the model name under <strong>Model</strong>.</li>
               <li><strong>Ollama and LM Studio</strong>: the preset address is <code>localhost</code>, which only works on the computer running them. On a phone, TV or any other device, replace <code>localhost</code> with that computer's LAN IP address.</li>
               <li><strong>Speaches</strong>: the preset has no address; enter your own server's. On a local network the API key can be left empty.</li>
             </ul>

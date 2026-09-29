@@ -189,7 +189,7 @@
         <p class="chip-note">这是一部电影、一种语言的测试结果，其他影片和语言的结果会有差异。「—」表示该项没有测量。</p>
         <p class="chip-note">费用是阿里云百炼 2026 年 9 月 24 日公布的价格，按发送给服务的音频时长计费（包括无对白的音乐段），每小时的费用由每秒单价换算。北京地域开通后 90 天内有 10 小时免费额度（qwen-audio-3.1-asr-flash 为 100 万 token）。价格可能调整，以<a href="https://help.aliyun.com/zh/model-studio/model-pricing" rel="noopener">阿里云百炼模型价格</a>页面为准。翻译步骤另外计费：这次测试用 qwen3.8-flash 翻译，每小时影片约 0.05 元。设备端模型在你的设备上运行，不产生服务费用。</p>
         <p class="chip-note">远程 API 只测试了通义千问的几个模型，其他远程服务没有测试，它们的结果可能更好，也可能更差。这张表只用于比较设备端模型和远程 API 的差别，不表示我们推荐通义千问作为远程 API。</p>
-        <p class="chip-note">qwen-audio-3.0-asr-flash、qwen-audio-3.1-asr-flash 和 fun-asr-flash 将在以后的版本中提供，当前版本还不能使用。</p>
+        <p class="chip-note">qwen-audio-3.0-asr-flash、qwen-audio-3.1-asr-flash 和 fun-asr-flash 从应用 1.1.0 起可以使用，见下方的<a href="#remote">远程 API</a>。</p>
 
 
         <div class="note note-warn">
@@ -245,12 +245,13 @@
               <tr><th scope="row">OpenAI Whisper</th><td><code>whisper-1</code>、<code>gpt-transcribe</code>、<code>gpt-4o-transcribe</code>、<code>gpt-4o-mini-transcribe</code></td></tr>
               <tr><th scope="row">Groq</th><td><code>whisper-large-v3-turbo</code>、<code>whisper-large-v3</code></td></tr>
               <tr><th scope="row">Speaches（自建）</th><td><code>Systran/faster-whisper-base</code>、<code>deepdml/faster-whisper-large-v3-turbo-ct2</code>、<code>Systran/faster-whisper-large-v3</code>、<code>Systran/faster-whisper-small</code>、<code>Systran/faster-whisper-tiny</code></td></tr>
-              <tr><th scope="row">通义千问 Qwen3-ASR（国际 / 中国）</th><td><code>qwen3-asr-flash</code></td></tr>
+              <tr><th scope="row">通义千问 Qwen3-ASR（中国）</th><td><code>qwen-audio-3.0-asr-flash</code>、<code>qwen-audio-3.1-asr-flash</code>、<code>qwen3-asr-flash</code></td></tr>
+              <tr><th scope="row">通义千问 Qwen3-ASR（国际）</th><td><code>qwen3-asr-flash</code>、<code>qwen-audio-3.0-asr-flash</code></td></tr>
               <tr><th scope="row">智谱（BigModel）</th><td><code>glm-asr-2512</code></td></tr>
             </tbody>
           </table>
         </div>
-        <p class="chip-note">Whisper 系列模型（例如 <code>whisper-1</code>、<code>whisper-large-v3-turbo</code>）会返回每一句话的时间，字幕与语音对齐得更准。其他语音识别模型按整段返回文字，每条字幕的时间精度较低。</p>
+        <p class="chip-note">Whisper 系列模型（例如 <code>whisper-1</code>、<code>whisper-large-v3-turbo</code>）会返回每一句话的时间，通义千问的 qwen-audio 和 fun-asr 模型会返回每个词的时间，字幕与语音对齐得更准。其他语音识别模型按整段返回文字，每条字幕的时间精度较低。</p>
 
         <h3>使用自己的接口</h3>
         <div class="split">
@@ -263,7 +264,7 @@
           </div>
           <div>
             <ul>
-              <li><strong>通义千问</strong>：国际版与中国版的接口地址不同，按 API 密钥所属的区域选择。</li>
+              <li><strong>通义千问</strong>：国际版与中国版的接口地址不同，按 API 密钥所属的区域选择。Fun-ASR 模型（例如 <code>fun-asr-flash</code>）不在预设列表中，选择通义千问的预设后，在「模型」中直接输入模型名称即可。</li>
               <li><strong>Ollama 与 LM Studio</strong>：预设地址是 <code>localhost</code>，只在运行这两个程序的电脑上可用。在手机、电视或其他设备上使用时，把 <code>localhost</code> 改成这台电脑的局域网 IP 地址。</li>
               <li><strong>Speaches</strong>：预设不带地址，填写你自己的服务器地址；在局域网内使用时，API 密钥可以留空。</li>
             </ul>
