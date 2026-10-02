@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.1.0
+版本: 1.1.1
 
 ## 目录
 
+- [1.1.1 版本新特性](#111-版本新特性)
 - [1.1.0 版本新特性](#110-版本新特性)
 - [1.0.17 版本新特性](#1017-版本新特性)
 - [1.0.14 版本新特性](#1014-版本新特性)
@@ -29,6 +30,7 @@
   - [公共方法(无需授权)](#公共方法无需授权)
   - [授权方法](#授权方法)
   - [文件操作](#文件操作)
+  - [压缩包文件夹](#压缩包文件夹)
   - [挂载点管理](#挂载点管理)
   - [传输任务管理](#传输任务管理)
   - [云 API 管理](#云-api-管理)
@@ -39,9 +41,48 @@
   - [会话管理](#会话管理)
   - [账户注销](#账户注销)
   - [远程上传协议](#远程上传协议)
+  - [电视远程配置](#电视远程配置)
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.1.1 版本新特性
+
+### 把压缩包作为文件夹打开
+
+现在可以把任何云盘或本地文件夹中的压缩包作为只读文件夹打开，不用下载，也不用解压。每个打开的压缩包是根目录下「Archive Folders」文件夹中的一个文件夹；至少加载了一个压缩包文件夹时，根目录才列出「Archive Folders」。支持的格式有 ISO、zip、7z、RAR（RAR 2.9 及以后的版本，包括 RAR5）、tar、压缩的 tar 和单个 `.gz` 文件。SACD ISO 打开后是一个 DSF 曲目文件夹。面向用户的说明见[压缩包文件夹页面](https://www.clouddrive2.com/archive-folders.html)。
+
+- 提供这个功能之前，请先检查 `CloudDriveSystemInfo.supportsArchiveFolders`（字段 9）。
+- 这个功能默认关闭。需要打开 `SystemSettings.archiveFoldersEnabled`（字段 37），并且会员套餐包含压缩包文件夹（月费、年费、终身和轻享终身会员）。设置关闭时，`OpenArchiveFolder` 和 `LoadArchiveFolder` 以 `UNIMPLEMENTED` 失败；套餐不包含这个功能时，以 `PERMISSION_DENIED`（`invalid user plan`）失败，已保存的文件夹的状态为 `NoPlan`。
+- 压缩包文件夹和其中的所有项目都带有 `CloudDriveFile.readOnly`。压缩包文件夹本身还带有 `isArchiveFolder`（字段 81）和 `archiveFolderBadge`（字段 82），用于显示压缩包标记。
+- 7z 和 RAR 固实部分中的文件，按每个文件夹的 `SolidArchiveMode` 读取。`SolidLocalCache` 使用的本地缓存由所有压缩包文件夹共用，上限为 `SystemSettings.archiveCacheMaxBytes`（字段 38），默认 2 GiB。
+
+**新增 RPC（需要授权）:** `ProbeArchive` 和 `GetArchiveFolders` 需要新的令牌权限 `allow_get_archive_folders`（字段 42）。`OpenArchiveFolder`、`UpdateArchiveFolder`、`LoadArchiveFolder`、`UnloadArchiveFolder` 和 `RemoveArchiveFolder` 需要 `allow_modify_archive_folders`（字段 43）。见[压缩包文件夹](#压缩包文件夹)。
+
+### 下载链接签名
+
+新增设置 `SystemSettings.requireSignedDownloadUrls`（字段 36），默认关闭。打开后，不带令牌的 `/static/...` 下载请求必须带有 `sign` 查询参数，否则服务端返回 HTTP `403` 和 `signed link required`。来自服务端所在设备本身（回环地址）的请求不受影响。
+
+- 签名是用服务端工作目录中保存的密钥对文件路径计算的 HMAC。同一个文件的签名总是相同，所以保存在 `.strm` 文件中的链接可以继续使用。一个签名只能用来读取这一个文件。
+- 使用管理员令牌调用 `GetDownloadUrlPath` 时，返回的链接现在总是带有 `sign`，不论这个设置是否打开，所以现在复制的链接在设置打开后仍然可用。使用 API 令牌调用时，链接和以前一样带有 `token`。
+- 文件列表中的链接（`CloudDriveFile.downloadUrlPath`）只在这个设置打开时带有 `sign`。
+- 设置打开之前保存的链接没有签名，在其他设备上将无法使用。
+
+请原样使用返回的链接中的查询参数，不要自己根据文件路径拼接下载链接。
+
+### 立即上传
+
+`WriteFileRequest.uploadImmediately`（字段 6，与 `closeFile` 一起使用）和 `CloseFileRequest.uploadImmediately`（字段 2）让文件在关闭后立即上传：排在所有等待中的上传之前，也不等待空闲的上传位置。它用于应用自己写入、并等待上传完成的小文件，例如播放进度同步文件。
+
+### `UserName` 改为部分隐藏，新增 `fullUserName`
+
+`GetSystemInfo` 不需要令牌就能调用，所以 `CloudDriveSystemInfo.UserName` 现在返回部分隐藏的用户名：超过 8 个字符的用户名只保留前 4 个和后 4 个字符（`abcd***.com`）。它只用于在登录页面上提示。新字段 `fullUserName`（字段 10）返回完整的用户名，调用方的令牌需要有 `allow_get_memberships`。凡是按账号区分的数据，都应使用 `fullUserName`。
+
+### 用手机设置电视
+
+电视上的应用显示一个二维码。装有 CloudDrive2 的手机扫描后，通过 TLS 与电视的服务端配对，然后可以为电视登录 CloudDrive 账号、添加云盘账户，以及为电视上的输入框输入文字。新增九个 RPC：`BeginPairing`、`CancelPairing`、`CompletePairing`、`ListPairedControllers`、`RevokePairedController`、`AppAgentChannel`、`AppCall`、`WatchApp` 和 `GetLoginHandoff`。其中大多数只供 CloudDrive2 应用自己使用，只接受来自服务端所在设备本身的设备令牌。见[电视远程配置](#电视远程配置)。
 
 ---
 
@@ -1090,7 +1131,7 @@ python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. clouddrive.pr
 
 ### 版本兼容性
 
-**当前版本:** 1.0.14
+**当前版本:** 1.1.1
 
 始终使用与 CloudDrive2 服务器相同版本的 proto 文件以确保兼容性。您可以使用 `GetRuntimeInfo` 方法检查服务器版本。
 
@@ -1152,6 +1193,7 @@ var files = await _client.GetSubFilesAsync("/");
 - `SendResetAccountEmail` - 请求密码重置
 - `ResetAccount` - 使用验证码重置账户
 - `GetApiTokenInfo` - 获取 API 令牌信息
+- `CompletePairing` - 手机与电视配对（只能在电视的远程监听端口上调用，见[电视远程配置](#电视远程配置)）
 
 所有其他方法都需要带有有效 JWT 令牌的 `Authorization` 头。
 
@@ -2065,8 +2107,16 @@ message CloudDriveSystemInfo {
   optional bool diskCacheDisabled = 7;
   // this server understands Backup.syncMode and the two-way sync RPCs (1.1.0+)
   bool supportsTwoWayBackup = 8;
+  // this server has the archive folder RPCs (1.1.1+)
+  bool supportsArchiveFolders = 9;
+  // the signed-in user name in full, for callers with a valid token allowed to
+  // read the account. UserName is masked ("abcd***.com"), only a hint for the
+  // login page: anything keyed by the account must use this one. (1.1.1+)
+  optional string fullUserName = 10;
 }
 ```
+
+**1.1.1 新增:** 服务端提供[压缩包文件夹](#压缩包文件夹) RPC 时，`supportsArchiveFolders` 为 `true`。因为这个方法不需要令牌，`UserName` 超过 8 个字符时现在只返回部分内容（`abcd***.com`）。`fullUserName` 返回完整的用户名，调用方的令牌需要有 `allow_get_memberships`；凡是按账号区分的数据，都应使用它。
 
 **1.1.0 新增:** 服务端支持 `Backup.syncMode` 和双向同步 RPC 时，`supportsTwoWayBackup` 为 `true`。
 
@@ -2665,6 +2715,8 @@ message DownloadUrlPathInfo {
 }
 ```
 
+**1.1.1 变更:** 使用管理员令牌调用时，`downloadUrlPath` 现在总是带有 `sign` 查询参数。它是这一个文件的签名，`SystemSettings.requireSignedDownloadUrls` 打开后链接仍然可用。使用 API 令牌调用时，和以前一样带有 `token`。请原样使用返回的查询参数。见[下载链接签名](#下载链接签名)。
+
 **示例 (Java):**
 ```java
 GetDownloadUrlPathRequest request = GetDownloadUrlPathRequest.newBuilder()
@@ -2719,6 +2771,10 @@ message WriteFileRequest {
   uint64 length = 3;
   bytes buffer = 4;
   bool closeFile = 5;
+  // with closeFile: upload the file to the cloud now, ahead of every queued
+  // upload and without waiting for a free upload slot. Meant for small files
+  // an app writes itself and waits for (e.g. its progress-sync file). (1.1.1+)
+  optional bool uploadImmediately = 6;
 }
 ```
 
@@ -2749,10 +2805,14 @@ message WriteFileResult {
 ```protobuf
 message CloseFileRequest {
   uint64 fileHandle = 1;
+  // see WriteFileRequest.uploadImmediately (1.1.1+)
+  optional bool uploadImmediately = 2;
 }
 ```
 
 **响应:** `FileOperationResult`
+
+**1.1.1 新增:** `uploadImmediately` 让文件在关闭后立即上传，排在所有等待中的上传之前。只对应用需要等待上传完成的小文件使用。
 
 ---
 
@@ -2913,6 +2973,208 @@ message AddSharedLinkRequest {
 ```
 
 **响应:** `google.protobuf.Empty`
+
+---
+
+### 压缩包文件夹
+
+把压缩包作为只读文件夹打开，放在根目录下的「Archive Folders」文件夹中。这个功能需要打开 `SystemSettings.archiveFoldersEnabled`，并且会员套餐包含压缩包文件夹。请先检查 `CloudDriveSystemInfo.supportsArchiveFolders`。路径都是 CloudDrive 中的路径。**1.1.1 新增。**
+
+```protobuf
+// How files in the solid (forward-only) parts of an archive are read.
+enum SolidArchiveMode {
+  // Such files are listed but cannot be read.
+  SolidNeverExtract = 0;
+  // Decoded in memory only; reading backwards restarts decoding (slow).
+  SolidInMemory = 1;
+  // Decoded data is also kept in a local cache (global size limit
+  // SystemSettings.archiveCacheMaxBytes, least recently read goes first).
+  SolidLocalCache = 2;
+}
+
+message ArchiveFolder {
+  enum State {
+    Loading = 0;
+    Ready = 1;
+    Indexing = 2;       // first listing of a large archive; see progress
+    NotReady = 3;       // the archive's cloud is not available yet
+    Missing = 4;        // the archive file is gone or was renamed elsewhere
+    NeedsPassword = 5;  // encrypted: UpdateArchiveFolder with the password
+    Unsupported = 6;
+    NoPlan = 7;         // the membership plan does not include archive folders
+    Error = 8;
+    Unloaded = 9;       // saved, not shown
+  }
+  string folderPath = 1;        // "/Archive Folders/Album_iso"
+  string archivePath = 2;
+  bool autoLoad = 3;            // shown again after a restart
+  State state = 4;
+  string message = 5;
+  string format = 6;            // "iso", "sacd", "zip", "7z", "rar", "tar", "tar.gz", "gz"
+  uint64 fileCount = 7;
+  uint64 totalSize = 8;
+  optional double progress = 9; // 0..1 while Indexing
+  optional string coverImagePath = 10;
+  bool hasSolidMembers = 11;    // some files follow solidMode
+  SolidArchiveMode solidMode = 12;
+  uint64 cacheBytes = 13;       // this folder's share of the local cache
+  bool loaded = 14;             // shown in "Archive Folders" now
+}
+
+message ArchiveFolderList { repeated ArchiveFolder folders = 1; }
+```
+
+请使用服务端返回的 `folderPath`，不要自己拼接。文件夹名由压缩包的文件名得到，最后一个点换成 `_`（`Album.iso` 对应 `/Archive Folders/Album_iso`）；名称已被占用时，会加上 `(1)` 这样的编号。
+
+这些 RPC 共同的错误:
+- 关闭 `archiveFoldersEnabled` 时，`OpenArchiveFolder` 和 `LoadArchiveFolder` 返回 `UNIMPLEMENTED`（`archive folders are turned off in the settings`）
+- 会员套餐不包含压缩包文件夹时，这两个 RPC 返回 `PERMISSION_DENIED`（`invalid user plan`）
+- `folderPath` 不是已保存的压缩包文件夹时，返回 `NOT_FOUND`
+
+---
+
+#### ProbeArchive
+
+在打开之前查看压缩包的信息：格式、SACD 音轨区、是否需要密码、是否有固实部分，以及哪些文件无法读取。可以在打开对话框中显示这些信息。结果会被保存，之后打开这个压缩包时不需要再次读取。
+
+**请求:** `FileRequest`（`path` 为压缩包文件）
+
+**响应:** `ArchiveProbe`
+```protobuf
+message ArchiveProbe {
+  // Why a file cannot be opened as a folder (when supported is false).
+  enum Problem {
+    Other = 0;                // see message
+    NotAnArchive = 1;
+    NotFirstVolume = 2;       // a later volume of a set: open the first one
+    InsideArchiveFolder = 3;
+    Encrypted = 4;            // the file list is encrypted in a way CloudDrive cannot decrypt
+    Damaged = 5;
+  }
+  bool supported = 1;
+  string format = 2;
+  bool needsPassword = 3;
+  bool isSacd = 4;
+  bool hasStereo = 5;
+  bool hasMultichannel = 6;
+  // Some files are in solid blocks too big to decode at once: reading them
+  // follows solidMode. (Smaller compressed blocks are always readable.)
+  bool hasSolidMembers = 7;
+  string message = 8;
+  Problem problem = 9;
+  // Total size of the files hasSolidMembers is about.
+  uint64 solidBytes = 10;
+  // Files that are listed but cannot be read, by reason.
+  repeated ArchiveUnreadable unreadable = 11;
+}
+
+message ArchiveUnreadable {
+  enum Reason {
+    Damaged = 0;
+    Encrypted = 1;      // encryption CloudDrive cannot decrypt (zip, RAR)
+    NeedsPassword = 2;  // readable with the archive's password (7z)
+    Method = 3;         // a compression method CloudDrive does not decode
+    MissingVolume = 4;  // part of it is in a volume that is missing
+  }
+  Reason reason = 1;
+  uint64 count = 2;
+  string example = 3; // path inside the archive of one of them
+}
+```
+
+无法打开的文件返回 `supported = false`，并带有 `problem` 和 `message`，不返回错误。`problem` 为 `NotFirstVolume` 时，请改为查看这组分卷的第一卷（`.001`、`.part1.rar`）。需要 `allow_get_archive_folders`。
+
+---
+
+#### OpenArchiveFolder
+
+把压缩包作为文件夹打开：保存这个文件夹，并立即显示在「Archive Folders」中。压缩包已经保存过时，返回已保存的文件夹，并应用请求中的选项。
+
+**请求:** `OpenArchiveFolderRequest`
+```protobuf
+message OpenArchiveFolderRequest {
+  string archivePath = 1;
+  optional bool autoLoad = 2;             // default false
+  optional string password = 3;
+  // SACD: picture embedded in every DSF's tags (copied when opened; up to
+  // 2 MB). Clients pick it with their sidecar cover rule.
+  optional string coverImagePath = 4;
+  optional SolidArchiveMode solidMode = 5; // default SolidNeverExtract
+}
+```
+
+**响应:** `ArchiveFolder`
+
+调用最多等待 10 秒，等第一次列出文件完成。较大的压缩包在返回时可能仍处于 `Indexing` 状态，`progress` 从 0 变化到 1。打开分卷压缩包中第一卷以外的分卷时，返回 `INVALID_ARGUMENT`。需要 `allow_modify_archive_folders`。
+
+---
+
+#### GetArchiveFolders
+
+返回所有已保存的压缩包文件夹，包括已加载和未加载的。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `ArchiveFolderList`
+
+需要 `allow_get_archive_folders`。
+
+---
+
+#### UpdateArchiveFolder
+
+修改已保存的压缩包文件夹的设置。请求中没有的字段保持不变。
+
+**请求:** `UpdateArchiveFolderRequest`
+```protobuf
+message UpdateArchiveFolderRequest {
+  string folderPath = 1;
+  optional bool autoLoad = 2;
+  optional string password = 3;         // empty clears it
+  optional string coverImagePath = 4;   // empty removes the cover
+  optional SolidArchiveMode solidMode = 5;
+}
+```
+
+**响应:** `ArchiveFolder`
+
+`password` 为空字符串时清除已保存的密码，`coverImagePath` 为空字符串时移除封面。设置新的密码或封面后，文件夹会重新读取压缩包。把读取方式从 `SolidLocalCache` 改为其他方式时，会删除这个文件夹的缓存数据。需要 `allow_modify_archive_folders`。
+
+---
+
+#### LoadArchiveFolder
+
+立即在「Archive Folders」中显示一个已保存的压缩包文件夹。
+
+**请求:** `FileRequest`（`path` 为文件夹路径，例如 `/Archive Folders/Album_iso`）
+
+**响应:** `ArchiveFolder`
+
+需要 `allow_modify_archive_folders`。
+
+---
+
+#### UnloadArchiveFolder
+
+不再显示一个压缩包文件夹，但保留它的记录，状态变为 `Unloaded`。它的缓存数据会被删除。
+
+**请求:** `FileRequest`（`path` 为文件夹路径）
+
+**响应:** `google.protobuf.Empty`
+
+需要 `allow_modify_archive_folders`。
+
+---
+
+#### RemoveArchiveFolder
+
+不再显示一个压缩包文件夹，删除它的记录和缓存数据。压缩包文件本身不会被修改。
+
+**请求:** `FileRequest`（`path` 为文件夹路径）
+
+**响应:** `google.protobuf.Empty`
+
+需要 `allow_modify_archive_folders`。
 
 ---
 
@@ -4852,8 +5114,23 @@ message SystemSettings {
   // Two-way backup sync: while true every two-way pass only records what it
   // would do and changes nothing. Default false. (1.1.0+)
   optional bool twoWaySyncPaused = 35;
+  // Download links (/static/...) requested without a token must carry the
+  // `sign` parameter from GetDownloadUrlPath or a file listing. Requests from
+  // this device itself are always served. Links in .strm files made before
+  // this was turned on have no signature and stop working from other devices.
+  // Default false. (1.1.1+)
+  optional bool requireSignedDownloadUrls = 36;
+  // Archive folders (archives opened as read-only folders in "Archive
+  // Folders" at the root). Also needs the plan role enable_archive_folders.
+  // Default false. (1.1.1+)
+  optional bool archiveFoldersEnabled = 37;
+  // Size limit of the local cache of decoded solid-archive content, shared by
+  // every archive folder whose solid mode is SolidLocalCache. Default 2 GiB. (1.1.1+)
+  optional uint64 archiveCacheMaxBytes = 38;
 }
 ```
+
+**1.1.1 新增:** `requireSignedDownloadUrls` 要求不带令牌的下载链接带有签名（见[下载链接签名](#下载链接签名)）。`archiveFoldersEnabled` 开启[压缩包文件夹](#压缩包文件夹)，`archiveCacheMaxBytes` 设置固实压缩包本地缓存的上限。
 
 **1.1.0 新增:** `twoWaySyncPaused` 暂停所有双向备份。为 `true` 时，每次双向同步只记录将要执行的操作，不改动任何文件。
 
@@ -8364,6 +8641,325 @@ message GenerateSelfSignedCertRequest {
 
 ---
 
+### 电视远程配置
+
+电视上的应用（*主机*）显示一个二维码，手机（*控制端*）扫描后与电视的服务端配对。之后手机向电视的服务端调用已有的 RPC（`Login`、`LoginWith2FA`、`CreateOAuthState` 和各个 `APILogin*`），为电视登录账号、添加云盘账户；为电视的输入框输入文字时，通过服务端转发给电视上的应用。面向用户的步骤见[用手机设置电视](https://www.clouddrive2.com/help.html#tv)。**1.1.1 新增。**
+
+**连接与信任:**
+- 电视的服务端为控制端打开一个 TLS 监听端口，端口号为 HTTP 端口 + 2（应用中为 29800，独立的核心服务为 19800）；这个端口被占用时，使用其他空闲端口。实际的端口在配对票据中。有未关闭的配对票据，或至少有一个已配对的控制端时，这个端口保持打开。
+- 证书是自签名证书。控制端只信任指纹与二维码中一致的证书（证书 DER 的 SHA-256，无填充的 base64url），不检查主机名。
+- 远程监听端口只接受控制端令牌、`CompletePairing` 和 `GetSystemInfo`，从不接受设备令牌。
+- 仅限主机的 RPC（`BeginPairing`、`CancelPairing`、`ListPairedControllers`、`AppAgentChannel`、`GetLoginHandoff`）需要来自回环地址的设备令牌。其他调用方会收到 `PERMISSION_DENIED`（`only the app on this device can do this`）。
+
+**二维码**的内容是 `PairingTicket.qr_payload`:
+
+```text
+https://www.clouddrive2.com/tv#v=1&id=<device id>&n=<name>&p=<platform>&a=<addr>,<addr>&port=<port>&fp=<fingerprint>&s=<secret>
+```
+
+所有内容都在 `#` 之后，所以不会发送给任何网页服务器。各个值经过百分号编码，IPv6 地址写在方括号中。
+
+**控制端令牌**是一个根目录为 `/`、没有有效期的 API 令牌，`ListTokens` 不会列出它。它有设置电视所需的权限：列出文件、搜索、读取、新建文件夹、文件属性、空间和运行信息、推送消息、会员信息、传输任务、云 API、系统设置、WebDAV 设置、备份和账号信息。它不能管理令牌、控制服务、修改账号、修改挂载，也不能永久删除文件。
+
+---
+
+#### BeginPairing
+
+仅限主机应用。打开一个配对票据，并启动远程监听端口。
+
+**请求:** `BeginPairingRequest`
+```protobuf
+message BeginPairingRequest {
+  // What the host app is, as a controller should show it: "tvos",
+  // "androidtv", "android", "ios", "macos", "windows", "visionos".
+  string app_platform = 1;
+  string app_version = 2;
+}
+```
+
+**响应:** `PairingTicket`
+```protobuf
+message PairingTicket {
+  string ticket_id = 1;
+  string secret = 2;              // base64url; one use, expires_at_unix
+  uint64 expires_at_unix = 3;
+  repeated string addresses = 4;  // LAN addresses, best first
+  uint32 port = 5;                // the remote (TLS) listener
+  string cert_sha256 = 6;         // base64url SHA-256 of the certificate DER
+  string device_id = 7;
+  string device_name = 8;
+  string platform = 9;
+  string app_version = 10;
+  string qr_payload = 11;         // the URL to show as a QR code
+}
+```
+
+`secret` 是 16 个随机字节，5 分钟内有效，只能使用一次。输错 5 次后，这个票据提前失效。监听端口无法启动时，返回 `UNAVAILABLE`。
+
+---
+
+#### CancelPairing
+
+仅限主机应用。提前关闭一个票据，例如离开二维码页面时。
+
+**请求:** `CancelPairingRequest`
+```protobuf
+message CancelPairingRequest { string ticket_id = 1; }
+```
+
+**响应:** `google.protobuf.Empty`
+
+---
+
+#### CompletePairing
+
+控制端调用，不需要令牌，只能在远程监听端口上调用。控制端按顺序尝试二维码中的地址，连接 `https://<地址>:<端口>`，检查证书指纹，然后用 `secret` 换取控制端令牌。
+
+**请求:** `CompletePairingRequest`
+```protobuf
+message RemoteControllerInfo {
+  string device_id = 1;  // stable per controller install
+  string name = 2;       // e.g. "Pixel 9"
+  string platform = 3;   // "ios", "android", "macos", "windows", "web"
+  string app_version = 4;
+}
+
+message CompletePairingRequest {
+  string secret = 1;
+  RemoteControllerInfo controller = 2;
+}
+```
+
+**响应:** `CompletePairingResult`
+```protobuf
+message CompletePairingResult {
+  string token = 1;          // controller token; send as Bearer
+  string controller_id = 2;
+  string device_id = 3;      // the TV
+  string device_name = 4;
+  string platform = 5;
+  string app_version = 6;
+}
+```
+
+之后调用远程监听端口时，把令牌作为 `Bearer` 发送。`platform` 和 `app_version` 是电视上的应用传给 `BeginPairing` 的值，所以手机可以显示「Apple TV」或「Android TV」，而不是服务端的系统。`secret` 错误、已使用或已过期，或者尝试次数过多时，返回 `PERMISSION_DENIED`；不是通过远程监听端口调用时，也返回 `PERMISSION_DENIED`。
+
+---
+
+#### ListPairedControllers
+
+仅限主机应用。列出已配对的控制端。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `PairedControllerList`
+```protobuf
+message PairedController {
+  string controller_id = 1;
+  RemoteControllerInfo info = 2;
+  google.protobuf.Timestamp paired_at = 3;
+  google.protobuf.Timestamp last_seen = 4;
+  bool connected = 5;        // has a WatchApp stream open now
+}
+
+message PairedControllerList { repeated PairedController controllers = 1; }
+```
+
+---
+
+#### RevokePairedController
+
+移除一个已配对的控制端和它的令牌。主机应用可以移除任何控制端；控制端只能移除自己的配对，用于用户在手机上忘记这台电视时。
+
+**请求:** `RevokePairedControllerRequest`
+```protobuf
+message RevokePairedControllerRequest { string controller_id = 1; }
+```
+
+**响应:** `google.protobuf.Empty`
+
+没有这个控制端时，返回 `NOT_FOUND`。
+
+---
+
+#### GetLoginHandoff
+
+仅限主机应用，从不在远程监听端口上提供。返回这台设备自己登录的 CloudDrive 账号，应用可以用它调用电视的 `Login`，让已配对的电视登录同一个账号。电视需要密码本身，因为加密同步的云盘账户所用的密钥由密码生成。
+
+**请求:** `google.protobuf.Empty`
+
+**响应:** `LoginHandoff`
+```protobuf
+message LoginHandoff {
+  string user_name = 1;
+  string password = 2;
+}
+```
+
+这台设备没有登录时，返回 `FAILED_PRECONDITION`。
+
+---
+
+#### AppAgentChannel (双向流)
+
+仅限主机应用。这是电视上的应用与服务端之间的转发通道，应用运行时一直保持打开。服务端把每个控制端的调用作为 `AppAgentCall` 发送给应用；应用用 `AppAgentReply` 回答，或者发送一个事件给所有正在监听的控制端。应用发送的第一条消息是 `hello`。同一时间只能连接一个应用：新的流会替换旧的流。
+
+**请求流:** `AppAgentUpstream` · **响应流:** `AppAgentDownstream`
+```protobuf
+message AppAgentUpstream {
+  oneof kind {
+    AppAgentHello hello = 1;  // first message on the stream
+    AppAgentReply reply = 2;  // answer to an AppAgentCall
+    bytes event = 3;          // RemoteAppEvent, to every watching controller
+  }
+}
+
+message AppAgentHello {
+  string app_version = 1;
+  uint32 protocol_version = 2;  // 1
+}
+
+message AppAgentReply {
+  uint64 call_id = 1;
+  bytes payload = 2;            // RemoteAppResponse
+}
+
+message AppAgentDownstream {
+  oneof kind {
+    AppAgentCall call = 1;
+    AppAgentNotice notice = 2;
+  }
+}
+
+message AppAgentCall {
+  uint64 call_id = 1;
+  string controller_id = 2;
+  bytes payload = 3;            // RemoteAppRequest
+}
+
+message AppAgentNotice {
+  enum Kind {
+    CONTROLLER_PAIRED = 0;
+    CONTROLLER_REVOKED = 1;
+    CONTROLLER_CONNECTED = 2;     // opened WatchApp
+    CONTROLLER_DISCONNECTED = 3;  // its last WatchApp stream closed
+    PAIRING_CANCELLED = 4;        // a ticket expired or had too many wrong secrets
+  }
+  Kind kind = 1;
+  PairedController controller = 2;
+  string ticket_id = 3;
+}
+```
+
+---
+
+#### AppCall
+
+控制端调用。向电视上的应用发送一次调用，经 `AppAgentChannel` 转发。内容是编码为字节的 `RemoteAppRequest` 和 `RemoteAppResponse`，服务端不解析它们。
+
+**请求:** `AppCallRequest` · **响应:** `AppCallResult`
+```protobuf
+message AppCallRequest { bytes payload = 1; }
+
+message AppCallResult { bytes payload = 1; }
+```
+
+接受控制端令牌和电视所有者的管理员令牌。调用最多等待电视上的应用 15 秒。没有连接的应用时，返回 `UNAVAILABLE`（`CloudDrive is not open on the TV`）；应用没有按时回答时，返回 `DEADLINE_EXCEEDED`。
+
+---
+
+#### WatchApp (服务端流)
+
+控制端调用。接收电视上的应用发出的事件，以及应用是否已连接。
+
+**请求:** `google.protobuf.Empty`
+
+**响应流:** `AppEventMessage`
+```protobuf
+message AppEventMessage {
+  enum AgentState {
+    AGENT_UNKNOWN = 0;
+    AGENT_CONNECTED = 1;     // the TV app is running and answering
+    AGENT_DISCONNECTED = 2;  // CloudDrive is not open on the TV
+  }
+  oneof kind {
+    bytes event = 1;         // RemoteAppEvent from the TV app
+    AgentState agent_state = 2;
+  }
+}
+```
+
+手机上这台电视的页面打开时，请保持这个流打开。电视上移除了这个配对时，流以 `UNAUTHENTICATED`（`this device was removed on the TV`）结束；此时应忘记这台电视并重新配对。
+
+---
+
+#### 转发内容：在手机上输入
+
+在 1.1.1 中，电视上的应用只用转发通道做一件事：在手机上输入文字。有控制端在监听时，电视上的每个输入框旁边都有「在手机上输入」按钮。按下后，应用发送 `RemoteAppEvent.text_input_request`。手机显示一个输入框，并填入 `current_value`；密码等保密内容的 `current_value` 为空，所以已保存的密码或密钥不会离开电视。手机通过 `AppCall` 发送 `RemoteAppRequest.text_input_reply` 作为回答。新的请求会取消之前的请求（`text_input_cancelled`）。
+
+```protobuf
+message RemoteAppRequest {
+  string locale = 1;             // e.g. "zh-Hans", "en"
+  oneof kind {
+    RemoteGetPage get_page = 10;
+    RemoteSetValue set_value = 11;
+    RemotePress press = 12;
+    RemoteTextInputReply text_input_reply = 13;
+  }
+}
+
+message RemoteTextInputReply {
+  string request_id = 1;
+  string text = 2;
+  bool cancelled = 3;
+}
+
+message RemoteAppResponse {
+  oneof kind {
+    RemotePage page = 1;
+    RemoteStep step = 2;
+    RemoteError error = 3;
+    bool ok = 4;
+  }
+}
+
+message RemoteError { string message = 1; }
+
+message RemoteAppEvent {
+  oneof kind {
+    RemotePageChanged page_changed = 1;
+    RemoteTextInputRequest text_input_request = 2;
+    string text_input_cancelled = 3;   // request_id
+  }
+}
+
+message RemoteTextInputRequest {
+  string request_id = 1;
+  string title = 2;
+  bool secret = 3;
+  bool multiline = 4;
+  RemoteText.Hint hint = 5;
+  string current_value = 6;     // empty when secret
+}
+```
+
+```protobuf
+message RemoteText {
+  enum Hint {
+    PLAIN = 0;
+    URL = 1;
+    EMAIL = 2;
+    NUMBER = 3;
+    PASSWORD = 4;
+  }
+  // ……（其余字段属于未使用的设置页面）
+}
+```
+
+设置页面相关的消息（`get_page`、`set_value`、`press`、`page_changed`、`RemotePage` 及其控件）为了兼容保留在 proto 中，但没有使用。电视对这些请求返回错误。
+
+---
+
 ## 数据类型参考
 
 ### CloudDriveFile
@@ -8418,6 +9014,12 @@ message CloudDriveFile {
   //（创建/重命名/移动/复制到/删除/上传）均不支持。前端会在此类条目上
   // 隐藏写动作，并禁止将其作为复制/移动目标。1.0.11+
   bool readOnly = 80;
+  // 压缩包文件夹本身（「Archive Folders」中显示一个已打开的压缩包的文件夹）
+  // 为 true，客户端显示压缩包标记。其中的项目和「Archive Folders」本身不设置，
+  // 它们都带有 readOnly。1.1.1+
+  bool isArchiveFolder = 81;
+  // 仅在 isArchiveFolder 为 true 时提供：标记显示的格式和状态。1.1.1+
+  optional ArchiveFolderBadge archiveFolderBadge = 82;
 
   // 哈希信息
   enum HashType {
@@ -8441,6 +9043,12 @@ message CloudDriveFile {
   bool supportOfflineDownloadManagement = 75;
 
   optional DownloadUrlPathInfo downloadUrlPath = 76;
+}
+
+message ArchiveFolderBadge {
+  string format = 1;
+  ArchiveFolder.State state = 2;
+  bool autoLoad = 3;
 }
 ```
 
@@ -8496,6 +9104,10 @@ message TokenPermissions {
   bool allow_view_runtime_info = 22;
   bool allow_push_message = 41;
 
+  // 会员信息
+  bool allow_get_memberships = 23;
+  bool allow_modify_memberships = 24;
+
   // 管理权限
   bool allow_get_mounts = 25;
   bool allow_modify_mounts = 26;
@@ -8513,8 +9125,15 @@ message TokenPermissions {
   bool allow_get_account_info = 38;
   bool allow_modify_account = 39;
   bool allow_service_control = 40;
+
+  // 压缩包文件夹 (1.1.1+)
+  bool allow_get_archive_folders = 42; // GetArchiveFolders, ProbeArchive
+  bool allow_modify_archive_folders =
+      43; // OpenArchiveFolder, UpdateArchiveFolder, Load/Unload/RemoveArchiveFolder
 }
 ```
+
+`allow_get_archive_folders` 和 `allow_modify_archive_folders`（1.1.1 新增）控制[压缩包文件夹](#压缩包文件夹) RPC。有 `allow_get_memberships` 的令牌调用 `GetSystemInfo` 时，还会得到 `fullUserName`。
 
 `allow_push_message`(0.9.15 新增) 用于控制令牌是否可以订阅 `PushMessage`/`PushTaskChange` 等流式推送通知, 仅在需要实时消息时才应开启。
 
@@ -9102,9 +9721,9 @@ class FileManager
 - ✅ **安全准则**
 - ✅ **完整的工作示例**
 
-**API 版本:** 1.0.14
+**API 版本:** 1.1.1
 
 ---
 
-*最后更新: 2026-09-29*
+*最后更新: 2026-10-02*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*

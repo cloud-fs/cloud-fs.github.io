@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.1.0";
+option (version) = "1.1.1";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -628,6 +628,58 @@ service CloudDriveFileSrv {
   // Generate self-signed certificate for HTTPS
   rpc GenerateSelfSignedCert(GenerateSelfSignedCertRequest)
       returns (google.protobuf.Empty) {}
+
+  // ---- TV remote configuration (docs/TV_REMOTE_CONFIG.md) ----
+  // A phone (the controller) pairs with a TV by scanning a QR code, then
+  // configures it through the TV's backend.
+  // Host app only (device token, from this device): open a pairing ticket and
+  // start the TLS listener controllers connect to.
+  rpc BeginPairing(BeginPairingRequest) returns (PairingTicket) {}
+  // Host app only: close a ticket early (the QR screen was left).
+  rpc CancelPairing(CancelPairingRequest) returns (google.protobuf.Empty) {}
+  // Controller, no token, remote listener only: trade the QR secret for a
+  // controller token.
+  rpc CompletePairing(CompletePairingRequest) returns (CompletePairingResult) {}
+  // Host app only.
+  rpc ListPairedControllers(google.protobuf.Empty)
+      returns (PairedControllerList) {}
+  // Host app (any controller), or a controller removing its own pairing when
+  // its user forgets the TV.
+  rpc RevokePairedController(RevokePairedControllerRequest)
+      returns (google.protobuf.Empty) {}
+  // Host app only: the app's end of the relay. The backend sends controller
+  // calls down; the app sends replies and events up.
+  rpc AppAgentChannel(stream AppAgentUpstream)
+      returns (stream AppAgentDownstream) {}
+  // Controller (allow_app_config): one call to the TV app. The payloads are
+  // RemoteAppRequest / RemoteAppResponse; the backend never decodes them.
+  rpc AppCall(AppCallRequest) returns (AppCallResult) {}
+  // Controller (allow_app_config): events from the TV app.
+  rpc WatchApp(google.protobuf.Empty) returns (stream AppEventMessage) {}
+  // Host app only: this device's own CloudDrive sign-in, so its app can sign a
+  // paired TV in with the same account (the TV needs the password itself: the
+  // sync key comes from it). FAILED_PRECONDITION while signed out.
+  rpc GetLoginHandoff(google.protobuf.Empty) returns (LoginHandoff) {}
+
+  // Archive folders: an archive file opened as a read-only folder inside the
+  // "Archive Folders" folder at the root (shown while any is loaded). Needs
+  // SystemSettings.archiveFoldersEnabled and the plan role
+  // enable_archive_folders. Paths are CloudDrive paths.
+  // What an archive is (format, SACD areas, password, solid parts).
+  rpc ProbeArchive(FileRequest) returns (ArchiveProbe) {}
+  // Opens an archive as a folder (saved; loaded now), or returns the folder
+  // already saved for it.
+  rpc OpenArchiveFolder(OpenArchiveFolderRequest) returns (ArchiveFolder) {}
+  // Every saved archive folder, loaded or not.
+  rpc GetArchiveFolders(google.protobuf.Empty) returns (ArchiveFolderList) {}
+  // Changes auto-load, the solid mode, the password or the cover picture.
+  rpc UpdateArchiveFolder(UpdateArchiveFolderRequest) returns (ArchiveFolder) {}
+  // Shows a saved folder in "Archive Folders" now.
+  rpc LoadArchiveFolder(FileRequest) returns (ArchiveFolder) {}
+  // Hides it, keeping it saved.
+  rpc UnloadArchiveFolder(FileRequest) returns (google.protobuf.Empty) {}
+  // Hides it, forgets it and drops its cached data.
+  rpc RemoveArchiveFolder(FileRequest) returns (google.protobuf.Empty) {}
 }
 message GetTokenRequest {
   string userName = 1;
@@ -732,7 +784,11 @@ message CreateFileRequest {
   string fileName = 2;
 }
 message CreateFileResult { uint64 fileHandle = 1; }
-message CloseFileRequest { uint64 fileHandle = 1; }
+message CloseFileRequest {
+  uint64 fileHandle = 1;
+  // see WriteFileRequest.uploadImmediately
+  optional bool uploadImmediately = 2;
+}
 message MoveFileRequest {
   enum ConflictPolicy {
     Overwrite = 0;
@@ -763,6 +819,10 @@ message WriteFileRequest {
   uint64 length = 3;
   bytes buffer = 4;
   bool closeFile = 5;
+  // with closeFile: upload the file to the cloud now, ahead of every queued
+  // upload and without waiting for a free upload slot. Meant for small files
+  // an app writes itself and waits for (e.g. its progress-sync file).
+  optional bool uploadImmediately = 6;
 }
 message WriteFileResult { uint64 bytesWritten = 1; }
 
@@ -813,6 +873,13 @@ message CloudDriveFile {
   // (create/rename/move/copy-into/delete/upload) are unsupported. Frontends hide
   // write actions on such items and disallow them as copy/move destinations.
   bool readOnly = 80;
+  // True on an archive folder itself (a folder in "Archive Folders" that
+  // shows an opened archive): clients show an archive badge. Not set on the
+  // items inside it, nor on "Archive Folders" itself; all of them carry
+  // readOnly.
+  bool isArchiveFolder = 81;
+  // Present only when isArchiveFolder: the badge's format and state.
+  optional ArchiveFolderBadge archiveFolderBadge = 82;
   enum HashType {
     Unknown = 0;
     Md5 = 1;
@@ -904,6 +971,12 @@ message CloudDriveSystemInfo {
   optional bool diskCacheDisabled = 7;
   // this server understands Backup.syncMode and the two-way sync RPCs
   bool supportsTwoWayBackup = 8;
+  // this server has the archive folder RPCs
+  bool supportsArchiveFolders = 9;
+  // the signed-in user name in full, for callers with a valid token allowed to
+  // read the account. UserName is masked ("abcd***.com"), only a hint for the
+  // login page: anything keyed by the account must use this one.
+  optional string fullUserName = 10;
 }
 message UserLoginRequest {
   string userName = 1;
@@ -1777,6 +1850,19 @@ message SystemSettings {
   // Two-way backup sync: while true every two-way pass only records what it
   // would do and changes nothing. Default false.
   optional bool twoWaySyncPaused = 35;
+  // Download links (/static/...) requested without a token must carry the
+  // `sign` parameter from GetDownloadUrlPath or a file listing. Requests from
+  // this device itself are always served. Links in .strm files made before
+  // this was turned on have no signature and stop working from other devices.
+  // Default false.
+  optional bool requireSignedDownloadUrls = 36;
+  // Archive folders (archives opened as read-only folders in "Archive
+  // Folders" at the root). Also
+  // needs the plan role enable_archive_folders. Default false.
+  optional bool archiveFoldersEnabled = 37;
+  // Size limit of the local cache of decoded solid-archive content, shared by
+  // every archive folder whose solid mode is SolidLocalCache. Default 2 GiB.
+  optional uint64 archiveCacheMaxBytes = 38;
 }
 
 // Eviction strategy for disk cache
@@ -2908,6 +2994,11 @@ message TokenPermissions {
 
   // Service Control
   bool allow_service_control = 40; // RestartService, ShutdownService
+
+  // Archive Folders
+  bool allow_get_archive_folders = 42; // GetArchiveFolders, ProbeArchive
+  bool allow_modify_archive_folders =
+      43; // OpenArchiveFolder, UpdateArchiveFolder, Load/Unload/RemoveArchiveFolder
 }
 
 message TokenInfo {
@@ -3076,3 +3167,372 @@ message DeleteAccountRequest {
   bool forfeit_balance = 4;      // must be true when the account holds a balance
 }
 // ==================== End Account Deletion Messages ====================
+
+// ==================== TV remote configuration ====================
+// See docs/TV_REMOTE_CONFIG.md. The TV app is the "host"; a phone that
+// scanned its QR code is a "controller".
+
+message BeginPairingRequest {
+  // What the host app is, as a controller should show it: "tvos",
+  // "androidtv", "android", "ios", "macos", "windows", "visionos".
+  string app_platform = 1;
+  string app_version = 2;
+}
+message PairingTicket {
+  string ticket_id = 1;
+  string secret = 2;              // base64url; one use, expires_at_unix
+  uint64 expires_at_unix = 3;
+  repeated string addresses = 4;  // LAN addresses, best first
+  uint32 port = 5;                // the remote (TLS) listener
+  string cert_sha256 = 6;         // base64url SHA-256 of the certificate DER
+  string device_id = 7;
+  string device_name = 8;
+  string platform = 9;
+  string app_version = 10;
+  string qr_payload = 11;         // the URL to show as a QR code
+}
+message CancelPairingRequest { string ticket_id = 1; }
+
+message RemoteControllerInfo {
+  string device_id = 1;  // stable per controller install
+  string name = 2;       // e.g. "Pixel 9"
+  string platform = 3;   // "ios", "android", "macos", "windows", "web"
+  string app_version = 4;
+}
+message CompletePairingRequest {
+  string secret = 1;
+  RemoteControllerInfo controller = 2;
+}
+message CompletePairingResult {
+  string token = 1;          // controller token; send as Bearer
+  string controller_id = 2;
+  string device_id = 3;      // the TV
+  string device_name = 4;
+  string platform = 5;
+  string app_version = 6;
+}
+message PairedController {
+  string controller_id = 1;
+  RemoteControllerInfo info = 2;
+  google.protobuf.Timestamp paired_at = 3;
+  google.protobuf.Timestamp last_seen = 4;
+  bool connected = 5;        // has a WatchApp stream open now
+}
+message LoginHandoff {
+  string user_name = 1;
+  string password = 2;
+}
+message PairedControllerList { repeated PairedController controllers = 1; }
+message RevokePairedControllerRequest { string controller_id = 1; }
+
+message AppAgentUpstream {
+  oneof kind {
+    AppAgentHello hello = 1;  // first message on the stream
+    AppAgentReply reply = 2;  // answer to an AppAgentCall
+    bytes event = 3;          // RemoteAppEvent, to every watching controller
+  }
+}
+message AppAgentHello {
+  string app_version = 1;
+  uint32 protocol_version = 2;  // 1
+}
+message AppAgentReply {
+  uint64 call_id = 1;
+  bytes payload = 2;            // RemoteAppResponse
+}
+message AppAgentDownstream {
+  oneof kind {
+    AppAgentCall call = 1;
+    AppAgentNotice notice = 2;
+  }
+}
+message AppAgentCall {
+  uint64 call_id = 1;
+  string controller_id = 2;
+  bytes payload = 3;            // RemoteAppRequest
+}
+message AppAgentNotice {
+  enum Kind {
+    CONTROLLER_PAIRED = 0;
+    CONTROLLER_REVOKED = 1;
+    CONTROLLER_CONNECTED = 2;     // opened WatchApp
+    CONTROLLER_DISCONNECTED = 3;  // its last WatchApp stream closed
+    PAIRING_CANCELLED = 4;        // a ticket expired or had too many wrong secrets
+  }
+  Kind kind = 1;
+  PairedController controller = 2;
+  string ticket_id = 3;
+}
+message AppCallRequest { bytes payload = 1; }   // RemoteAppRequest
+message AppCallResult { bytes payload = 1; }    // RemoteAppResponse
+message AppEventMessage {
+  enum AgentState {
+    AGENT_UNKNOWN = 0;
+    AGENT_CONNECTED = 1;     // the TV app is running and answering
+    AGENT_DISCONNECTED = 2;  // CloudDrive is not open on the TV
+  }
+  oneof kind {
+    bytes event = 1;         // RemoteAppEvent from the TV app
+    AgentState agent_state = 2;
+  }
+}
+
+// ---- Payloads of AppCall / WatchApp, carried as bytes by the backend ----
+
+message RemoteAppRequest {
+  string locale = 1;             // e.g. "zh-Hans", "en"
+  oneof kind {
+    RemoteGetPage get_page = 10;
+    RemoteSetValue set_value = 11;
+    RemotePress press = 12;
+    RemoteTextInputReply text_input_reply = 13;
+  }
+}
+message RemoteGetPage { string page_id = 1; }   // "" is the root page
+message RemoteSetValue {
+  string page_id = 1;
+  string key = 2;
+  RemoteValue value = 3;
+  uint64 revision = 4;
+}
+message RemotePress {
+  string page_id = 1;
+  string key = 2;
+}
+message RemoteTextInputReply {
+  string request_id = 1;
+  string text = 2;
+  bool cancelled = 3;
+}
+
+message RemoteAppResponse {
+  oneof kind {
+    RemotePage page = 1;
+    RemoteStep step = 2;
+    RemoteError error = 3;
+    bool ok = 4;
+  }
+}
+message RemoteError { string message = 1; }
+message RemoteStep {
+  oneof kind {
+    RemotePage page = 1;
+    RemoteOpenUrl open_url = 2;
+    bool done = 3;
+  }
+  string message = 10;           // optional note to show
+}
+message RemoteOpenUrl {
+  string url = 1;                // open on the controller
+  string page_id = 2;            // then press return_key on this page
+  string return_key = 3;
+}
+
+message RemotePage {
+  string page_id = 1;
+  string title = 2;
+  repeated RemoteSection sections = 3;
+  uint64 revision = 4;
+}
+message RemoteSection {
+  string title = 1;
+  string footer = 2;
+  repeated RemoteItem items = 3;
+}
+message RemoteItem {
+  string key = 1;
+  string title = 2;
+  string subtitle = 3;          // second line / help
+  bool enabled = 4;
+  string disabled_reason = 5;
+  string error = 6;             // from the last set_value on this row
+  string portable_id = 7;       // same meaning across platforms (phase 2)
+  oneof control {
+    RemoteToggle toggle = 10;
+    RemoteChoice choice = 11;
+    RemoteNumber number = 12;
+    RemoteText text = 13;
+    RemoteLink link = 14;
+    RemoteButton button = 15;
+    RemoteInfo info = 16;
+  }
+}
+message RemoteValue {
+  oneof kind {
+    bool bool_value = 1;
+    int64 int_value = 2;
+    double double_value = 3;
+    string string_value = 4;
+    RemoteStringList list_value = 5;
+  }
+}
+message RemoteStringList { repeated string values = 1; }
+message RemoteToggle { bool on = 1; }
+message RemoteChoiceOption {
+  string value = 1;
+  string label = 2;
+  string detail = 3;
+}
+message RemoteChoice {
+  repeated RemoteChoiceOption options = 1;
+  repeated string selected = 2;
+  bool multiple = 3;
+  bool allow_custom = 4;        // free text allowed besides the options
+}
+message RemoteNumber {
+  double value = 1;
+  double min = 2;
+  double max = 3;
+  double step = 4;
+  string unit = 5;
+  uint32 decimals = 6;
+}
+message RemoteText {
+  enum Hint {
+    PLAIN = 0;
+    URL = 1;
+    EMAIL = 2;
+    NUMBER = 3;
+    PASSWORD = 4;
+  }
+  string value = 1;             // empty for secrets
+  bool secret = 2;
+  bool secret_set = 3;          // a secret has a value on the TV
+  bool multiline = 4;
+  Hint hint = 5;
+  string placeholder = 6;
+}
+message RemoteLink {
+  string page_id = 1;
+  string value_summary = 2;     // e.g. the current choice, shown on the row
+}
+message RemoteButton {
+  bool destructive = 1;
+  string confirm = 2;           // ask this before pressing, when set
+}
+message RemoteInfo { string text = 1; }
+
+message RemoteAppEvent {
+  oneof kind {
+    RemotePageChanged page_changed = 1;
+    RemoteTextInputRequest text_input_request = 2;
+    string text_input_cancelled = 3;   // request_id
+  }
+}
+message RemotePageChanged {
+  string page_id = 1;
+  uint64 revision = 2;
+}
+message RemoteTextInputRequest {
+  string request_id = 1;
+  string title = 2;
+  bool secret = 3;
+  bool multiline = 4;
+  RemoteText.Hint hint = 5;
+  string current_value = 6;     // empty when secret
+}
+// ==================== End TV remote configuration ====================
+
+// ---------------------------------------------------------------------------
+// Archive folders
+
+// How files in the solid (forward-only) parts of an archive are read.
+enum SolidArchiveMode {
+  // Such files are listed but cannot be read.
+  SolidNeverExtract = 0;
+  // Decoded in memory only; reading backwards restarts decoding (slow).
+  SolidInMemory = 1;
+  // Decoded data is also kept in a local cache (global size limit
+  // SystemSettings.archiveCacheMaxBytes, least recently read goes first).
+  SolidLocalCache = 2;
+}
+
+message ArchiveFolder {
+  enum State {
+    Loading = 0;
+    Ready = 1;
+    Indexing = 2;       // first listing of a large archive; see progress
+    NotReady = 3;       // the archive's cloud is not available yet
+    Missing = 4;        // the archive file is gone or was renamed elsewhere
+    NeedsPassword = 5;  // encrypted: UpdateArchiveFolder with the password
+    Unsupported = 6;
+    NoPlan = 7;         // the membership plan does not include archive folders
+    Error = 8;
+    Unloaded = 9;       // saved, not shown
+  }
+  string folderPath = 1;        // "/Archive Folders/Album_iso"
+  string archivePath = 2;
+  bool autoLoad = 3;            // shown again after a restart
+  State state = 4;
+  string message = 5;
+  string format = 6;            // "iso", "sacd", "zip", "7z", "rar", "tar", "tar.gz", "gz"
+  uint64 fileCount = 7;
+  uint64 totalSize = 8;
+  optional double progress = 9; // 0..1 while Indexing
+  optional string coverImagePath = 10;
+  bool hasSolidMembers = 11;    // some files follow solidMode
+  SolidArchiveMode solidMode = 12;
+  uint64 cacheBytes = 13;       // this folder's share of the local cache
+  bool loaded = 14;             // shown in "Archive Folders" now
+}
+message ArchiveFolderList { repeated ArchiveFolder folders = 1; }
+
+message OpenArchiveFolderRequest {
+  string archivePath = 1;
+  optional bool autoLoad = 2;             // default false
+  optional string password = 3;
+  // SACD: picture embedded in every DSF's tags (copied when opened; up to
+  // 2 MB). Clients pick it with their sidecar cover rule.
+  optional string coverImagePath = 4;
+  optional SolidArchiveMode solidMode = 5; // default SolidNeverExtract
+}
+message UpdateArchiveFolderRequest {
+  string folderPath = 1;
+  optional bool autoLoad = 2;
+  optional string password = 3;         // empty clears it
+  optional string coverImagePath = 4;   // empty removes the cover
+  optional SolidArchiveMode solidMode = 5;
+}
+message ArchiveProbe {
+  // Why a file cannot be opened as a folder (when supported is false).
+  enum Problem {
+    Other = 0;                // see message
+    NotAnArchive = 1;
+    NotFirstVolume = 2;       // a later volume of a set: open the first one
+    InsideArchiveFolder = 3;
+    Encrypted = 4;            // the file list is encrypted in a way CloudDrive cannot decrypt
+    Damaged = 5;
+  }
+  bool supported = 1;
+  string format = 2;
+  bool needsPassword = 3;
+  bool isSacd = 4;
+  bool hasStereo = 5;
+  bool hasMultichannel = 6;
+  // Some files are in solid blocks too big to decode at once: reading them
+  // follows solidMode. (Smaller compressed blocks are always readable.)
+  bool hasSolidMembers = 7;
+  string message = 8;
+  Problem problem = 9;
+  // Total size of the files hasSolidMembers is about.
+  uint64 solidBytes = 10;
+  // Files that are listed but cannot be read, by reason.
+  repeated ArchiveUnreadable unreadable = 11;
+}
+message ArchiveUnreadable {
+  enum Reason {
+    Damaged = 0;
+    Encrypted = 1;      // encryption CloudDrive cannot decrypt (zip, RAR)
+    NeedsPassword = 2;  // readable with the archive's password (7z)
+    Method = 3;         // a compression method CloudDrive does not decode
+    MissingVolume = 4;  // part of it is in a volume that is missing
+  }
+  Reason reason = 1;
+  uint64 count = 2;
+  string example = 3; // path inside the archive of one of them
+}
+message ArchiveFolderBadge {
+  string format = 1;
+  ArchiveFolder.State state = 2;
+  bool autoLoad = 3;
+}

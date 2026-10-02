@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.1.0
+Version: 1.1.1
 
 ## Table of Contents
 
+- [What's New in 1.1.1](#whats-new-in-111)
 - [What's New in 1.1.0](#whats-new-in-110)
 - [What's New in 1.0.17](#whats-new-in-1017)
 - [What's New in 1.0.14](#whats-new-in-1014)
@@ -29,6 +30,7 @@ Version: 1.1.0
   - [Public Methods (No Authorization Required)](#public-methods-no-authorization-required)
   - [Authorized Methods](#authorized-methods)
   - [File Operations](#file-operations)
+  - [Archive Folders](#archive-folders)
   - [Mount Point Management](#mount-point-management)
   - [Transfer Task Management](#transfer-task-management)
   - [Cloud API Management](#cloud-api-management)
@@ -39,9 +41,48 @@ Version: 1.1.0
   - [Session Management](#session-management)
   - [Account Deletion](#account-deletion)
   - [Remote Upload Protocol](#remote-upload-protocol)
+  - [TV Remote Configuration](#tv-remote-configuration)
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.1.1
+
+### Open Archives as Folders
+
+An archive in any cloud or local folder can now be opened as a read-only folder, without downloading or extracting it. Each opened archive is a folder inside an **Archive Folders** folder at the root, which is listed while at least one archive folder is loaded. The formats are ISO, zip, 7z, RAR (RAR 2.9 and later, including RAR5), tar, compressed tar and single `.gz` files. A SACD ISO opens as a folder of DSF tracks. The user-facing behaviour is described on the [archive folders page](https://www.clouddrive2.com/en/archive-folders.html).
+
+- Check `CloudDriveSystemInfo.supportsArchiveFolders` (field 9) before offering the feature.
+- The feature is off by default. It needs `SystemSettings.archiveFoldersEnabled` (field 37) and a membership plan that includes archive folders (the Core Pro plans and Lifetime Lite). While the setting is off, `OpenArchiveFolder` and `LoadArchiveFolder` fail with `UNIMPLEMENTED`; without the plan they fail with `PERMISSION_DENIED` (`invalid user plan`), and saved folders report the state `NoPlan`.
+- Archive folders and everything in them carry `CloudDriveFile.readOnly`. An archive folder itself also has `isArchiveFolder` (field 81) and `archiveFolderBadge` (field 82), for showing an archive badge.
+- Files in the solid parts of 7z and RAR archives are read according to each folder's `SolidArchiveMode`. The local cache used by `SolidLocalCache` is shared by all archive folders. Its limit is `SystemSettings.archiveCacheMaxBytes` (field 38), 2 GiB by default.
+
+**New RPCs (authorized):** `ProbeArchive` and `GetArchiveFolders` require the new token permission `allow_get_archive_folders` (field 42). `OpenArchiveFolder`, `UpdateArchiveFolder`, `LoadArchiveFolder`, `UnloadArchiveFolder` and `RemoveArchiveFolder` require `allow_modify_archive_folders` (field 43). See [Archive Folders](#archive-folders).
+
+### Signed Download Links
+
+New setting `SystemSettings.requireSignedDownloadUrls` (field 36), off by default. While it is on, a download request to `/static/...` without a token must carry a `sign` query parameter, or the server answers HTTP `403` with `signed link required`. Requests from the server's own device (a loopback address) are always served.
+
+- A signature is an HMAC of the file path under a key kept in the server's working directory. The same file always gets the same signature, so a link saved in a `.strm` file keeps working. A signature allows reading that one file only.
+- `GetDownloadUrlPath` called with an admin token now always returns a link with `sign`, whether the setting is on or not, so links copied now keep working after it is turned on. Called with an API token, the link carries `token` as before.
+- Links in file listings (`CloudDriveFile.downloadUrlPath`) carry `sign` only while the setting is on.
+- Links saved before the setting was turned on have no signature and stop working from other devices.
+
+Keep the query string of a returned link as it is, and don't build download links from the file path yourself.
+
+### Upload Immediately
+
+`WriteFileRequest.uploadImmediately` (field 6, used together with `closeFile`) and `CloseFileRequest.uploadImmediately` (field 2) upload the file as soon as it is closed, ahead of every queued upload and without waiting for a free upload slot. They are meant for small files that an app writes and then waits for, such as a progress-sync file.
+
+### Masked `UserName` and the New `fullUserName`
+
+`GetSystemInfo` can be called without a token, so `CloudDriveSystemInfo.UserName` now carries a masked name: a name longer than 8 characters keeps only its first and last four characters (`abcd***.com`). Use it only as a hint on a sign-in page. The new field `fullUserName` (field 10) carries the full name, for callers whose token has `allow_get_memberships`. Use `fullUserName` for anything keyed by the account.
+
+### Setting Up a TV From a Phone
+
+A TV app shows a QR code. A phone running CloudDrive2 scans it and pairs with the TV's server over TLS. The phone can then sign the TV in to CloudDrive, add cloud accounts to it, and type into the TV's text boxes. Nine RPCs support this: `BeginPairing`, `CancelPairing`, `CompletePairing`, `ListPairedControllers`, `RevokePairedController`, `AppAgentChannel`, `AppCall`, `WatchApp` and `GetLoginHandoff`. Most of them are for the CloudDrive2 apps only and accept just the device token, from the server's own device. See [TV Remote Configuration](#tv-remote-configuration).
 
 ---
 
@@ -1092,7 +1133,7 @@ The `clouddrive.proto` file contains:
 
 ### Version Compatibility
 
-**Current Version:** 1.0.14
+**Current Version:** 1.1.1
 
 Always use the proto file from the same version as your CloudDrive2 server to ensure compatibility. You can check your server version using the `GetRuntimeInfo` method.
 
@@ -1151,6 +1192,7 @@ The following methods are public and don't require a JWT token:
 - `SendResetAccountEmail` - Request password reset
 - `ResetAccount` - Reset account with code
 - `GetApiTokenInfo` - Get API token information
+- `CompletePairing` - Pair a phone with a TV (on the TV's remote listener only; see [TV Remote Configuration](#tv-remote-configuration))
 
 All other methods require the `Authorization` header with a valid JWT token.
 
@@ -2064,8 +2106,16 @@ message CloudDriveSystemInfo {
   optional bool diskCacheDisabled = 7;
   // this server understands Backup.syncMode and the two-way sync RPCs (1.1.0+)
   bool supportsTwoWayBackup = 8;
+  // this server has the archive folder RPCs (1.1.1+)
+  bool supportsArchiveFolders = 9;
+  // the signed-in user name in full, for callers with a valid token allowed to
+  // read the account. UserName is masked ("abcd***.com"), only a hint for the
+  // login page: anything keyed by the account must use this one. (1.1.1+)
+  optional string fullUserName = 10;
 }
 ```
+
+**New in 1.1.1:** `supportsArchiveFolders` is `true` when the server has the [archive folder](#archive-folders) RPCs. `UserName` is now masked when it is longer than 8 characters (`abcd***.com`), because this method needs no token. `fullUserName` carries the full name for callers whose token has `allow_get_memberships`; use it for anything keyed by the account.
 
 **New in 1.1.0:** `supportsTwoWayBackup` is `true` when the server understands `Backup.syncMode` and the two-way sync RPCs.
 
@@ -2664,6 +2714,8 @@ message DownloadUrlPathInfo {
 }
 ```
 
+**Changed in 1.1.1:** called with an admin token, `downloadUrlPath` now always carries a `sign` query parameter: a signature for this one file, which keeps the link working when `SystemSettings.requireSignedDownloadUrls` is on. Called with an API token, it carries `token` as before. Use the query string as returned. See [Signed Download Links](#signed-download-links).
+
 **Example (Java):**
 ```java
 GetDownloadUrlPathRequest request = GetDownloadUrlPathRequest.newBuilder()
@@ -2718,6 +2770,10 @@ message WriteFileRequest {
   uint64 length = 3;
   bytes buffer = 4;
   bool closeFile = 5;
+  // with closeFile: upload the file to the cloud now, ahead of every queued
+  // upload and without waiting for a free upload slot. Meant for small files
+  // an app writes itself and waits for (e.g. its progress-sync file). (1.1.1+)
+  optional bool uploadImmediately = 6;
 }
 ```
 
@@ -2748,10 +2804,14 @@ Closes an opened file.
 ```protobuf
 message CloseFileRequest {
   uint64 fileHandle = 1;
+  // see WriteFileRequest.uploadImmediately (1.1.1+)
+  optional bool uploadImmediately = 2;
 }
 ```
 
 **Response:** `FileOperationResult`
+
+**New in 1.1.1:** `uploadImmediately` uploads the file as soon as it is closed, ahead of every queued upload. Use it only for small files that the app waits for.
 
 ---
 
@@ -2912,6 +2972,208 @@ message AddSharedLinkRequest {
 ```
 
 **Response:** `google.protobuf.Empty`
+
+---
+
+### Archive Folders
+
+An archive file opened as a read-only folder inside the **Archive Folders** folder at the root. The feature needs `SystemSettings.archiveFoldersEnabled` and a membership plan that includes archive folders. Check `CloudDriveSystemInfo.supportsArchiveFolders` first. Paths are CloudDrive paths. **New in 1.1.1.**
+
+```protobuf
+// How files in the solid (forward-only) parts of an archive are read.
+enum SolidArchiveMode {
+  // Such files are listed but cannot be read.
+  SolidNeverExtract = 0;
+  // Decoded in memory only; reading backwards restarts decoding (slow).
+  SolidInMemory = 1;
+  // Decoded data is also kept in a local cache (global size limit
+  // SystemSettings.archiveCacheMaxBytes, least recently read goes first).
+  SolidLocalCache = 2;
+}
+
+message ArchiveFolder {
+  enum State {
+    Loading = 0;
+    Ready = 1;
+    Indexing = 2;       // first listing of a large archive; see progress
+    NotReady = 3;       // the archive's cloud is not available yet
+    Missing = 4;        // the archive file is gone or was renamed elsewhere
+    NeedsPassword = 5;  // encrypted: UpdateArchiveFolder with the password
+    Unsupported = 6;
+    NoPlan = 7;         // the membership plan does not include archive folders
+    Error = 8;
+    Unloaded = 9;       // saved, not shown
+  }
+  string folderPath = 1;        // "/Archive Folders/Album_iso"
+  string archivePath = 2;
+  bool autoLoad = 3;            // shown again after a restart
+  State state = 4;
+  string message = 5;
+  string format = 6;            // "iso", "sacd", "zip", "7z", "rar", "tar", "tar.gz", "gz"
+  uint64 fileCount = 7;
+  uint64 totalSize = 8;
+  optional double progress = 9; // 0..1 while Indexing
+  optional string coverImagePath = 10;
+  bool hasSolidMembers = 11;    // some files follow solidMode
+  SolidArchiveMode solidMode = 12;
+  uint64 cacheBytes = 13;       // this folder's share of the local cache
+  bool loaded = 14;             // shown in "Archive Folders" now
+}
+
+message ArchiveFolderList { repeated ArchiveFolder folders = 1; }
+```
+
+Use the `folderPath` the server returns instead of building it. It is made from the archive's file name with the last dot replaced by `_` (`Album.iso` becomes `/Archive Folders/Album_iso`), and a number such as `(1)` is added when the name is already taken.
+
+Errors common to these RPCs:
+- `UNIMPLEMENTED` (`archive folders are turned off in the settings`) from `OpenArchiveFolder` and `LoadArchiveFolder` while `archiveFoldersEnabled` is off
+- `PERMISSION_DENIED` (`invalid user plan`) from the same two RPCs when the plan does not include archive folders
+- `NOT_FOUND` when `folderPath` is not a saved archive folder
+
+---
+
+#### ProbeArchive
+
+Tells what an archive is before it is opened: the format, the SACD areas, whether it needs a password, whether it has solid parts, and which files cannot be read. Show the result in the open dialog. The result is kept, so opening the archive afterwards reads nothing more.
+
+**Request:** `FileRequest` (`path` is the archive file)
+
+**Response:** `ArchiveProbe`
+```protobuf
+message ArchiveProbe {
+  // Why a file cannot be opened as a folder (when supported is false).
+  enum Problem {
+    Other = 0;                // see message
+    NotAnArchive = 1;
+    NotFirstVolume = 2;       // a later volume of a set: open the first one
+    InsideArchiveFolder = 3;
+    Encrypted = 4;            // the file list is encrypted in a way CloudDrive cannot decrypt
+    Damaged = 5;
+  }
+  bool supported = 1;
+  string format = 2;
+  bool needsPassword = 3;
+  bool isSacd = 4;
+  bool hasStereo = 5;
+  bool hasMultichannel = 6;
+  // Some files are in solid blocks too big to decode at once: reading them
+  // follows solidMode. (Smaller compressed blocks are always readable.)
+  bool hasSolidMembers = 7;
+  string message = 8;
+  Problem problem = 9;
+  // Total size of the files hasSolidMembers is about.
+  uint64 solidBytes = 10;
+  // Files that are listed but cannot be read, by reason.
+  repeated ArchiveUnreadable unreadable = 11;
+}
+
+message ArchiveUnreadable {
+  enum Reason {
+    Damaged = 0;
+    Encrypted = 1;      // encryption CloudDrive cannot decrypt (zip, RAR)
+    NeedsPassword = 2;  // readable with the archive's password (7z)
+    Method = 3;         // a compression method CloudDrive does not decode
+    MissingVolume = 4;  // part of it is in a volume that is missing
+  }
+  Reason reason = 1;
+  uint64 count = 2;
+  string example = 3; // path inside the archive of one of them
+}
+```
+
+A file that cannot be opened returns `supported = false` with `problem` and `message`, not an error. For `NotFirstVolume`, probe the first volume of the set instead (`.001`, `.part1.rar`). Requires `allow_get_archive_folders`.
+
+---
+
+#### OpenArchiveFolder
+
+Opens an archive as a folder: it is saved and shown in Archive Folders at once. When the archive is already saved, returns that folder and applies the options in the request.
+
+**Request:** `OpenArchiveFolderRequest`
+```protobuf
+message OpenArchiveFolderRequest {
+  string archivePath = 1;
+  optional bool autoLoad = 2;             // default false
+  optional string password = 3;
+  // SACD: picture embedded in every DSF's tags (copied when opened; up to
+  // 2 MB). Clients pick it with their sidecar cover rule.
+  optional string coverImagePath = 4;
+  optional SolidArchiveMode solidMode = 5; // default SolidNeverExtract
+}
+```
+
+**Response:** `ArchiveFolder`
+
+The call waits up to 10 seconds for the first listing. A large archive may still be `Indexing` when it returns; `progress` goes from 0 to 1. A later volume of a split archive fails with `INVALID_ARGUMENT`. Requires `allow_modify_archive_folders`.
+
+---
+
+#### GetArchiveFolders
+
+Returns every saved archive folder, loaded or not.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `ArchiveFolderList`
+
+Requires `allow_get_archive_folders`.
+
+---
+
+#### UpdateArchiveFolder
+
+Changes the settings of a saved archive folder. Fields left out keep their values.
+
+**Request:** `UpdateArchiveFolderRequest`
+```protobuf
+message UpdateArchiveFolderRequest {
+  string folderPath = 1;
+  optional bool autoLoad = 2;
+  optional string password = 3;         // empty clears it
+  optional string coverImagePath = 4;   // empty removes the cover
+  optional SolidArchiveMode solidMode = 5;
+}
+```
+
+**Response:** `ArchiveFolder`
+
+An empty `password` clears the saved password, and an empty `coverImagePath` removes the cover. A new password or cover makes the folder read the archive again. Switching away from `SolidLocalCache` deletes the folder's cached data. Requires `allow_modify_archive_folders`.
+
+---
+
+#### LoadArchiveFolder
+
+Shows a saved archive folder in Archive Folders now.
+
+**Request:** `FileRequest` (`path` is the folder path, for example `/Archive Folders/Album_iso`)
+
+**Response:** `ArchiveFolder`
+
+Requires `allow_modify_archive_folders`.
+
+---
+
+#### UnloadArchiveFolder
+
+Hides an archive folder and keeps it saved; its state becomes `Unloaded`. Its cached data is deleted.
+
+**Request:** `FileRequest` (`path` is the folder path)
+
+**Response:** `google.protobuf.Empty`
+
+Requires `allow_modify_archive_folders`.
+
+---
+
+#### RemoveArchiveFolder
+
+Hides an archive folder, forgets it and deletes its cached data. The archive file itself is not changed.
+
+**Request:** `FileRequest` (`path` is the folder path)
+
+**Response:** `google.protobuf.Empty`
+
+Requires `allow_modify_archive_folders`.
 
 ---
 
@@ -4855,8 +5117,23 @@ message SystemSettings {
   // Two-way backup sync: while true every two-way pass only records what it
   // would do and changes nothing. Default false. (1.1.0+)
   optional bool twoWaySyncPaused = 35;
+  // Download links (/static/...) requested without a token must carry the
+  // `sign` parameter from GetDownloadUrlPath or a file listing. Requests from
+  // this device itself are always served. Links in .strm files made before
+  // this was turned on have no signature and stop working from other devices.
+  // Default false. (1.1.1+)
+  optional bool requireSignedDownloadUrls = 36;
+  // Archive folders (archives opened as read-only folders in "Archive
+  // Folders" at the root). Also needs the plan role enable_archive_folders.
+  // Default false. (1.1.1+)
+  optional bool archiveFoldersEnabled = 37;
+  // Size limit of the local cache of decoded solid-archive content, shared by
+  // every archive folder whose solid mode is SolidLocalCache. Default 2 GiB. (1.1.1+)
+  optional uint64 archiveCacheMaxBytes = 38;
 }
 ```
+
+**New in 1.1.1:** `requireSignedDownloadUrls` makes download links without a token need a signature (see [Signed Download Links](#signed-download-links)). `archiveFoldersEnabled` turns [archive folders](#archive-folders) on, and `archiveCacheMaxBytes` limits the local cache of solid archives.
 
 **New in 1.1.0:** `twoWaySyncPaused` pauses every two-way backup. While it is `true`, each two-way pass only records what it would do and changes nothing.
 
@@ -8305,6 +8582,325 @@ message GenerateSelfSignedCertRequest {
 
 ---
 
+### TV Remote Configuration
+
+A TV app (the *host*) shows a QR code, and a phone (the *controller*) scans it and pairs with the TV's server. The phone then signs the TV in and adds cloud accounts with the existing RPCs, sent to the TV's server (`Login`, `LoginWith2FA`, `CreateOAuthState`, the `APILogin*` RPCs), and uses a relay to the TV app for typing into the TV's text boxes. The user-facing steps are in the [TV setup help](https://www.clouddrive2.com/en/help.html#tv). **New in 1.1.1.**
+
+**Transport and trust:**
+- The TV's server opens a TLS listener for controllers on its HTTP port + 2 (29800 in the apps, 19800 for the standalone service), or on another free port when that one is taken. The actual port is in the pairing ticket. The listener runs while a pairing ticket is open or at least one controller is paired.
+- The certificate is self-signed. A controller trusts only the certificate whose fingerprint came in the QR code (SHA-256 of the certificate DER, base64url without padding) and ignores host names.
+- On the remote listener, only controller tokens, `CompletePairing` and `GetSystemInfo` are accepted. The device token is never accepted there.
+- Host-only RPCs (`BeginPairing`, `CancelPairing`, `ListPairedControllers`, `AppAgentChannel`, `GetLoginHandoff`) need the device token from a loopback address. Any other caller gets `PERMISSION_DENIED` (`only the app on this device can do this`).
+
+**The QR code** shows `PairingTicket.qr_payload`:
+
+```text
+https://www.clouddrive2.com/tv#v=1&id=<device id>&n=<name>&p=<platform>&a=<addr>,<addr>&port=<port>&fp=<fingerprint>&s=<secret>
+```
+
+Everything is in the fragment, so no web server sees it. Values are percent-encoded, and IPv6 addresses are written in brackets.
+
+**The controller token** is an API token with root `/` and no expiry, and is not listed by `ListTokens`. It has the permissions needed to set up a TV: listing, search, reading, creating folders, file properties, space and runtime information, push messages, memberships, transfer tasks, cloud APIs, system settings, WebDAV settings, backups and account information. It cannot manage tokens, control the service, change the account, change mounts or delete files permanently.
+
+---
+
+#### BeginPairing
+
+Host app only. Opens a pairing ticket and starts the remote listener.
+
+**Request:** `BeginPairingRequest`
+```protobuf
+message BeginPairingRequest {
+  // What the host app is, as a controller should show it: "tvos",
+  // "androidtv", "android", "ios", "macos", "windows", "visionos".
+  string app_platform = 1;
+  string app_version = 2;
+}
+```
+
+**Response:** `PairingTicket`
+```protobuf
+message PairingTicket {
+  string ticket_id = 1;
+  string secret = 2;              // base64url; one use, expires_at_unix
+  uint64 expires_at_unix = 3;
+  repeated string addresses = 4;  // LAN addresses, best first
+  uint32 port = 5;                // the remote (TLS) listener
+  string cert_sha256 = 6;         // base64url SHA-256 of the certificate DER
+  string device_id = 7;
+  string device_name = 8;
+  string platform = 9;
+  string app_version = 10;
+  string qr_payload = 11;         // the URL to show as a QR code
+}
+```
+
+The secret is 16 random bytes, valid for 5 minutes and for one use. Five wrong secrets end the ticket early. Fails with `UNAVAILABLE` when the listener cannot start.
+
+---
+
+#### CancelPairing
+
+Host app only. Closes a ticket early, for example when the QR code screen is left.
+
+**Request:** `CancelPairingRequest`
+```protobuf
+message CancelPairingRequest { string ticket_id = 1; }
+```
+
+**Response:** `google.protobuf.Empty`
+
+---
+
+#### CompletePairing
+
+Controller, without a token, on the remote listener only. The controller connects to `https://<address>:<port>` from the QR code, trying the addresses in order, checks the certificate fingerprint, and trades the secret for a controller token.
+
+**Request:** `CompletePairingRequest`
+```protobuf
+message RemoteControllerInfo {
+  string device_id = 1;  // stable per controller install
+  string name = 2;       // e.g. "Pixel 9"
+  string platform = 3;   // "ios", "android", "macos", "windows", "web"
+  string app_version = 4;
+}
+
+message CompletePairingRequest {
+  string secret = 1;
+  RemoteControllerInfo controller = 2;
+}
+```
+
+**Response:** `CompletePairingResult`
+```protobuf
+message CompletePairingResult {
+  string token = 1;          // controller token; send as Bearer
+  string controller_id = 2;
+  string device_id = 3;      // the TV
+  string device_name = 4;
+  string platform = 5;
+  string app_version = 6;
+}
+```
+
+Send the token as `Bearer` on later calls to the remote listener. `platform` and `app_version` are the ones the TV app passed to `BeginPairing`, so the phone can show "Apple TV" or "Android TV" rather than the server's system. A wrong, used or expired secret, or too many attempts, fails with `PERMISSION_DENIED`; so does a call that does not come through the remote listener.
+
+---
+
+#### ListPairedControllers
+
+Host app only. Lists the paired controllers.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `PairedControllerList`
+```protobuf
+message PairedController {
+  string controller_id = 1;
+  RemoteControllerInfo info = 2;
+  google.protobuf.Timestamp paired_at = 3;
+  google.protobuf.Timestamp last_seen = 4;
+  bool connected = 5;        // has a WatchApp stream open now
+}
+
+message PairedControllerList { repeated PairedController controllers = 1; }
+```
+
+---
+
+#### RevokePairedController
+
+Removes a paired controller and its token. The host app can remove any controller. A controller can remove only its own pairing, when its user forgets the TV.
+
+**Request:** `RevokePairedControllerRequest`
+```protobuf
+message RevokePairedControllerRequest { string controller_id = 1; }
+```
+
+**Response:** `google.protobuf.Empty`
+
+Fails with `NOT_FOUND` when there is no such controller.
+
+---
+
+#### GetLoginHandoff
+
+Host app only, never on the remote listener. Returns this device's own CloudDrive sign-in, so that its app can sign a paired TV in to the same account with the TV's `Login`. The TV needs the password itself, because the key that encrypts synced cloud accounts is derived from it.
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `LoginHandoff`
+```protobuf
+message LoginHandoff {
+  string user_name = 1;
+  string password = 2;
+}
+```
+
+Fails with `FAILED_PRECONDITION` while this device is signed out.
+
+---
+
+#### AppAgentChannel (Bidirectional Streaming)
+
+Host app only. The TV app's end of the relay, kept open while the app runs. The server sends each controller call down as an `AppAgentCall`; the app answers with an `AppAgentReply`, or sends an event up to every watching controller. The first upstream message is `hello`. Only one agent is connected at a time: a new stream replaces the old one.
+
+**Request stream:** `AppAgentUpstream` · **Response stream:** `AppAgentDownstream`
+```protobuf
+message AppAgentUpstream {
+  oneof kind {
+    AppAgentHello hello = 1;  // first message on the stream
+    AppAgentReply reply = 2;  // answer to an AppAgentCall
+    bytes event = 3;          // RemoteAppEvent, to every watching controller
+  }
+}
+
+message AppAgentHello {
+  string app_version = 1;
+  uint32 protocol_version = 2;  // 1
+}
+
+message AppAgentReply {
+  uint64 call_id = 1;
+  bytes payload = 2;            // RemoteAppResponse
+}
+
+message AppAgentDownstream {
+  oneof kind {
+    AppAgentCall call = 1;
+    AppAgentNotice notice = 2;
+  }
+}
+
+message AppAgentCall {
+  uint64 call_id = 1;
+  string controller_id = 2;
+  bytes payload = 3;            // RemoteAppRequest
+}
+
+message AppAgentNotice {
+  enum Kind {
+    CONTROLLER_PAIRED = 0;
+    CONTROLLER_REVOKED = 1;
+    CONTROLLER_CONNECTED = 2;     // opened WatchApp
+    CONTROLLER_DISCONNECTED = 3;  // its last WatchApp stream closed
+    PAIRING_CANCELLED = 4;        // a ticket expired or had too many wrong secrets
+  }
+  Kind kind = 1;
+  PairedController controller = 2;
+  string ticket_id = 3;
+}
+```
+
+---
+
+#### AppCall
+
+Controller. One call to the TV app, passed through `AppAgentChannel`. The payloads are `RemoteAppRequest` and `RemoteAppResponse`, encoded as bytes; the server never decodes them.
+
+**Request:** `AppCallRequest` · **Response:** `AppCallResult`
+```protobuf
+message AppCallRequest { bytes payload = 1; }
+
+message AppCallResult { bytes payload = 1; }
+```
+
+Accepts controller tokens and the TV owner's admin tokens. The call waits up to 15 seconds for the TV app. Fails with `UNAVAILABLE` (`CloudDrive is not open on the TV`) when no app agent is connected, and with `DEADLINE_EXCEEDED` when the app does not answer in time.
+
+---
+
+#### WatchApp (Server Streaming)
+
+Controller. Events from the TV app, and whether the app is connected.
+
+**Request:** `google.protobuf.Empty`
+
+**Response stream:** `AppEventMessage`
+```protobuf
+message AppEventMessage {
+  enum AgentState {
+    AGENT_UNKNOWN = 0;
+    AGENT_CONNECTED = 1;     // the TV app is running and answering
+    AGENT_DISCONNECTED = 2;  // CloudDrive is not open on the TV
+  }
+  oneof kind {
+    bytes event = 1;         // RemoteAppEvent from the TV app
+    AgentState agent_state = 2;
+  }
+}
+```
+
+Keep the stream open while the TV's screen is open on the phone. When the pairing is revoked on the TV, the stream ends with `UNAUTHENTICATED` (`this device was removed on the TV`); forget the TV and pair again.
+
+---
+
+#### Relay Payloads: Type on Phone
+
+In 1.1.1 the TV apps use the relay for one thing: typing on the phone. While a controller is watching, every text box on the TV has a **Type on Phone** button. Pressing it sends `RemoteAppEvent.text_input_request`. The phone shows a text box filled with `current_value`, which is empty for secrets, so a saved password or key never leaves the TV. The phone answers with `RemoteAppRequest.text_input_reply` through `AppCall`. A new request cancels the earlier one (`text_input_cancelled`).
+
+```protobuf
+message RemoteAppRequest {
+  string locale = 1;             // e.g. "zh-Hans", "en"
+  oneof kind {
+    RemoteGetPage get_page = 10;
+    RemoteSetValue set_value = 11;
+    RemotePress press = 12;
+    RemoteTextInputReply text_input_reply = 13;
+  }
+}
+
+message RemoteTextInputReply {
+  string request_id = 1;
+  string text = 2;
+  bool cancelled = 3;
+}
+
+message RemoteAppResponse {
+  oneof kind {
+    RemotePage page = 1;
+    RemoteStep step = 2;
+    RemoteError error = 3;
+    bool ok = 4;
+  }
+}
+
+message RemoteError { string message = 1; }
+
+message RemoteAppEvent {
+  oneof kind {
+    RemotePageChanged page_changed = 1;
+    RemoteTextInputRequest text_input_request = 2;
+    string text_input_cancelled = 3;   // request_id
+  }
+}
+
+message RemoteTextInputRequest {
+  string request_id = 1;
+  string title = 2;
+  bool secret = 3;
+  bool multiline = 4;
+  RemoteText.Hint hint = 5;
+  string current_value = 6;     // empty when secret
+}
+```
+
+```protobuf
+message RemoteText {
+  enum Hint {
+    PLAIN = 0;
+    URL = 1;
+    EMAIL = 2;
+    NUMBER = 3;
+    PASSWORD = 4;
+  }
+  // ... (the other fields belong to the unused settings pages)
+}
+```
+
+The settings page messages (`get_page`, `set_value`, `press`, `page_changed`, `RemotePage` and its controls) stay in the proto for wire compatibility but are not used. A TV answers them with an error.
+
+---
+
 ## Data Types Reference
 
 ### CloudDriveFile
@@ -8360,6 +8956,13 @@ message CloudDriveFile {
   // hide write actions on such items and disallow them as copy/move
   // destinations. 1.0.11+
   bool readOnly = 80;
+  // True on an archive folder itself (a folder in "Archive Folders" that
+  // shows an opened archive): clients show an archive badge. Not set on the
+  // items inside it, nor on "Archive Folders" itself; all of them carry
+  // readOnly. 1.1.1+
+  bool isArchiveFolder = 81;
+  // Present only when isArchiveFolder: the badge's format and state. 1.1.1+
+  optional ArchiveFolderBadge archiveFolderBadge = 82;
 
   // Hash information
   enum HashType {
@@ -8383,6 +8986,12 @@ message CloudDriveFile {
   bool supportOfflineDownloadManagement = 75;
 
   optional DownloadUrlPathInfo downloadUrlPath = 76;
+}
+
+message ArchiveFolderBadge {
+  string format = 1;
+  ArchiveFolder.State state = 2;
+  bool autoLoad = 3;
 }
 ```
 
@@ -8438,6 +9047,10 @@ message TokenPermissions {
   bool allow_view_runtime_info = 22;
   bool allow_push_message = 41;
 
+  // Membership
+  bool allow_get_memberships = 23;
+  bool allow_modify_memberships = 24;
+
   // Management permissions
   bool allow_get_mounts = 25;
   bool allow_modify_mounts = 26;
@@ -8455,8 +9068,15 @@ message TokenPermissions {
   bool allow_get_account_info = 38;
   bool allow_modify_account = 39;
   bool allow_service_control = 40;
+
+  // Archive Folders (1.1.1+)
+  bool allow_get_archive_folders = 42; // GetArchiveFolders, ProbeArchive
+  bool allow_modify_archive_folders =
+      43; // OpenArchiveFolder, UpdateArchiveFolder, Load/Unload/RemoveArchiveFolder
 }
 ```
+
+`allow_get_archive_folders` and `allow_modify_archive_folders` (added in 1.1.1) gate the [archive folder](#archive-folders) RPCs. `allow_get_memberships` also lets `GetSystemInfo` return `fullUserName`.
 
 `allow_push_message` (added in 0.9.15) gates access to the `PushMessage`/`PushTaskChange` streaming RPCs—omit it for tokens that should not subscribe to realtime notifications.
 
@@ -9044,9 +9664,9 @@ This guide covers the complete CloudDrive2 gRPC API with:
 - ✅ **Security guidelines**
 - ✅ **Complete working examples**
 
-**API Version:** 1.0.14
+**API Version:** 1.1.1
 
 ---
 
-*Last Updated: 2026-09-29*
+*Last Updated: 2026-10-02*
 *Copyright © 2026 CloudDrive. All rights reserved.*

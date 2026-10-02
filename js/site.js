@@ -183,3 +183,20 @@
     openTargetDetails();
   }
 })();
+
+/* Screenshots load lazily and take up space only once loaded, so a page opened at a # part
+   grows while the browser scrolls there and the target ends up further down. Keep the target
+   in view until the reader scrolls, or for ten seconds. */
+(function () {
+  if (!location.hash || !window.ResizeObserver) return;
+  var observer = new ResizeObserver(function () {
+    var el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (el) el.scrollIntoView();
+  });
+  function stop() { observer.disconnect(); }
+  observer.observe(document.body);
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (type) {
+    window.addEventListener(type, stop, { once: true, passive: true });
+  });
+  setTimeout(stop, 10000);
+})();
