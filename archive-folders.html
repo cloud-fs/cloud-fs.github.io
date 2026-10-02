@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>压缩包文件夹 — CloudDrive2</title>
+  <meta name="description" content="把云盘中的 ISO、zip、7z、RAR、tar 压缩包作为只读文件夹打开，不用下载也不用解压；SACD ISO 显示为 DSF 音频文件。开启方法、支持的格式、固实压缩包的读取方式和常见问题。">
+  <link rel="canonical" href="https://www.clouddrive2.com/archive-folders.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/archive-folders.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/archive-folders.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/archive-folders.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="压缩包文件夹 — CloudDrive2">
+  <meta property="og:description" content="把云盘中的压缩包作为只读文件夹打开，不用下载，也不用解压。">
+  <meta property="og:url" content="https://www.clouddrive2.com/archive-folders.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/archive-folders.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">核心功能 · 即将推出</p>
+        <h1>压缩包文件夹</h1>
+        <p class="hero-lede">把云盘中的压缩包作为只读文件夹打开，不用先下载，也不用解压。可以浏览其中的文件、直接播放，或把需要的文件复制出来。SACD ISO 会显示为 DSF 音频文件。</p>
+        <ul class="chips">
+          <li><a class="chip chip-cloud" href="#enable">开启</a></li>
+          <li><a class="chip" href="#open">打开压缩包</a></li>
+          <li><a class="chip" href="#formats">支持的格式</a></li>
+          <li><a class="chip" href="#solid">固实压缩包</a></li>
+          <li><a class="chip chip-audio" href="#sacd">SACD ISO</a></li>
+          <li><a class="chip" href="#limits">无法读取的情况</a></li>
+          <li><a class="chip" href="#faq">常见问题</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/download.html">下载</a>
+          <a class="btn btn-ghost" href="/pricing.html">会员与价格</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="soon-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">即将推出</p>
+            <h2 id="soon-h">下一个版本提供</h2>
+          </div>
+          <div>
+            <p>压缩包文件夹将在下一个版本中提供，包括所有平台的应用和核心服务的网页管理界面。</p>
+            <p>这是会员功能，需要包含「压缩包文件夹」的会员套餐。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="enable" aria-labelledby="enable-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">开启</p>
+          <h2 id="enable-h">默认关闭</h2>
+          <p>在设置的「压缩包文件夹」页打开「启用压缩包文件夹」。也可以直接打开一个压缩包：功能关闭时，打开对话框会提供「开启并打开」按钮。</p>
+        </header>
+        <p>同一页上还有「已保存的压缩包文件夹」列表，以及固实压缩包的本地缓存上限，见<a href="#solid">固实压缩包</a>。</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="open" aria-labelledby="open-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">打开</p>
+          <h2 id="open-h">把压缩包作为文件夹打开</h2>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>选择「作为文件夹打开」</h3>
+            <p>在文件的菜单中，或在文件详情中，选择「作为文件夹打开」。</p>
+          </li>
+          <li>
+            <h3>确认打开方式</h3>
+            <p>对话框显示压缩包的格式和文件数量。压缩包中有固实部分时，选择这部分的读取方式；需要密码的 7z 压缩包，在这里输入密码。选择「打开」。</p>
+          </li>
+          <li>
+            <h3>前往文件夹</h3>
+            <p>压缩包出现在最上层的「Archive Folders」文件夹中，名称为「文件名_扩展名」，例如 <code>Album.iso</code> 显示为 <code>Album_iso</code>。选择「前往文件夹」即可打开。</p>
+          </li>
+        </ol>
+
+        <div class="note">
+          <span class="note-title">压缩包文件夹是只读的</span>
+          <p>里面的文件和文件夹不能修改、删除、重命名或移动，也不能往里面复制文件。可以浏览、播放、下载，或把文件复制到其他位置，复制出来就相当于解压了这些文件。</p>
+        </div>
+
+        <h3>管理已打开的压缩包</h3>
+        <ul>
+          <li><strong>重启后自动加载</strong>：默认关闭。关闭时，CloudDrive2 重启后压缩包文件夹会保存在列表中，但不显示，需要时再打开。</li>
+          <li><strong>隐藏</strong>：不再显示这个文件夹，记录保留在「已保存的压缩包文件夹」中。</li>
+          <li><strong>移除</strong>：删除这条记录。压缩包文件本身不会被删除。</li>
+        </ul>
+        <p class="chip-note">挂载整个 CloudDrive2（根目录 <code>/</code>）时，Archive Folders 也会出现在挂载盘中；只挂载某一个云盘时不会出现。</p>
+      </div>
+    </section>
+
+    <section class="band" id="formats" aria-labelledby="formats-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">格式</p>
+          <h2 id="formats-h">支持的格式</h2>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">格式</th><th scope="col">说明</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">ISO</th><td>光盘镜像</td></tr>
+              <tr><th scope="row">zip</th><td>zip 压缩包</td></tr>
+              <tr><th scope="row">7z</th><td>设置了密码的 7z 压缩包，打开时输入密码</td></tr>
+              <tr><th scope="row">RAR</th><td>RAR 2.9 及更新版本创建的压缩包，包括 RAR5</td></tr>
+              <tr><th scope="row">tar 和压缩的 tar</th><td><code>.tar</code>、<code>.tar.gz</code>、<code>.tar.xz</code> 等。压缩的 tar 第一次打开时需要完整读取一遍才能列出文件，这时文件夹显示「正在读取压缩包目录」</td></tr>
+              <tr><th scope="row">SACD ISO</th><td>显示为 DSF 音频文件，见 <a href="#sacd">SACD ISO</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">分卷压缩包请打开第一个分卷，例如 <code>.part1.rar</code> 或 <code>.001</code> 文件。</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="solid" aria-labelledby="solid-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">固实压缩包</p>
+          <h2 id="solid-h">固实部分的读取方式</h2>
+          <p>7z 和 RAR 可以把很多文件压缩成一个连续的数据块，这叫固实压缩。数据块中的文件只能从数据块开头按顺序解压，不能直接从中间开始读取。ISO、zip 和 tar 没有这种数据块，打开时不会出现这个选择。</p>
+        </header>
+
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">选择</th><th scope="col">结果</th><th scope="col">适合</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">不解压</th><td>固实部分的文件打不开，其他文件正常读取</td><td>只需要压缩包中不在固实数据块里的文件</td></tr>
+              <tr><th scope="row">在内存中解压</th><td>读取时在内存中解压，不在本机保存任何数据。在文件中往回跳转时，需要从数据块开头重新解压，所以较慢</td><td>偶尔打开几个小文件</td></tr>
+              <tr><th scope="row">解压并保存到本地缓存</th><td>解压出的数据保存在本机的临时文件中，之后的读取和跳转直接使用这个文件</td><td>播放视频，或反复打开同一批文件</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>本地缓存由所有使用这种方式的压缩包共用，上限默认 2 GB，可以在压缩包文件夹设置的「本地缓存上限」中修改。空间满时，先删除最久没有读取的数据。压缩包文件夹被移除、压缩包文件被替换，或改用其他读取方式时，这个压缩包的缓存也会被删除。</p>
+        <p class="chip-note">读取方式按压缩包分别设置。打开后可以在这个压缩包文件夹的设置中修改。</p>
+      </div>
+    </section>
+
+    <section class="band" id="sacd" aria-labelledby="sacd-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">SACD</p>
+          <h2 id="sacd-h">SACD ISO 显示为 DSF 文件</h2>
+          <p>SACD 光盘镜像打开后，每一首曲目显示为一个 DSF 文件，可以在 CloudDrive2 中播放，也可以通过 WebDAV 或挂载盘交给其他播放器。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>文件夹结构</h3>
+            <p>光盘同时有立体声和多声道两个音轨区时，分为「Stereo」和「Multichannel」两个文件夹；只有一个音轨区时，曲目直接放在压缩包文件夹中。</p>
+          </div>
+          <div>
+            <h3>封面</h3>
+            <p>ISO 旁边有封面图片时，打开对话框会提供「把封面图片加到 DSF 文件里」。选中后，每个 DSF 文件的标签中都带有这张图片，不额外占用云盘空间。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="limits" aria-labelledby="limits-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">限制</p>
+          <h2 id="limits-h">无法读取的情况</h2>
+          <p>打开对话框会列出无法读取的文件和原因。</p>
+        </header>
+        <ul>
+          <li>加密的 zip 和 RAR 压缩包：CloudDrive2 不能解密其中的文件。文件列表本身加密的压缩包无法打开。</li>
+          <li>RAR 2 或更早版本创建的 RAR 文件。</li>
+          <li>使用了 CloudDrive2 不支持的压缩方式的文件。</li>
+          <li>分卷压缩包缺少某个分卷时，位于缺少的分卷中的文件。</li>
+          <li>已损坏的压缩包或文件。</li>
+          <li>压缩包文件夹中的压缩包不能再作为文件夹打开。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h">常见问题</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>压缩包文件夹显示「压缩包文件不见了，或已改名」</summary>
+          <div class="acc-body">
+            <p>压缩包文件被删除、改名或移动了。把文件改回原来的名称和位置后，文件夹会恢复；也可以移除这个压缩包文件夹，再打开压缩包的新位置。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>压缩包文件夹显示「你的会员套餐不包含压缩包文件夹」</summary>
+          <div class="acc-body">
+            <p>这是会员功能。升级到包含这个功能的会员套餐后，已保存的压缩包文件夹可以继续使用。见<a href="/pricing.html">会员与价格</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>重启后压缩包文件夹不见了</summary>
+          <div class="acc-body">
+            <p>「重启后自动加载」默认关闭。在「已保存的压缩包文件夹」中重新打开它，或在这个压缩包文件夹的设置中打开「重启后自动加载」。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>压缩包中的视频播放时拖动进度条很慢</summary>
+          <div class="acc-body">
+            <p>视频位于固实数据块中，读取方式是「在内存中解压」。往回跳转时需要从数据块开头重新解压。改为「解压并保存到本地缓存」后，跳转直接读取本地缓存。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>移除压缩包文件夹会删除压缩包吗</summary>
+          <div class="acc-body">
+            <p>不会。移除只删除压缩包文件夹的记录和它的本地缓存，云盘中的压缩包文件不受影响。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>反馈问题</h2>
+        <p>发现问题请在 GitHub issues 提交，便于记录和跟踪；也可以在 Telegram 交流群反馈，或发送邮件。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">在 GitHub 提 issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">发邮件</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/archive-folders.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

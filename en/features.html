@@ -76,6 +76,7 @@
             <li><a class="chip" href="#file-access-control">Access control</a></li>
             <li><a class="chip chip-cloud" href="#service-vendor-friendly">Fair to providers</a></li>
             <li><a class="chip chip-backup" href="#multicloud-backup">Multi-cloud backup</a></li>
+            <li><a class="chip" href="#archive-folders">Archive folders</a></li>
           </ul>
           <p class="chip-note">The core here is <b>CloudDrive2 Core</b> — the original CloudDrive2, still under active development.</p>
         </div>
@@ -424,6 +425,15 @@
             </div>
           </div>
         </div>
+
+        <h3 id="webdav-address">Connecting</h3>
+        <ul>
+          <li><strong>Server address</strong>: <code>http://&lt;server IP&gt;:19798/dav</code>. From 1.1.0 the WebDAV page lists the server's LAN IP addresses and port, for example <code>http://192.168.1.10:19798/dav</code>, so you don't have to look the address up.</li>
+          <li><strong>User name</strong>: the email you sign in to CloudDrive2 with, or just the part before the <code>@</code>.</li>
+          <li><strong>Password</strong>: your CloudDrive2 password.</li>
+          <li><strong>Anonymous access</strong>: when it is on, an empty user name and <code>anonymous</code> both sign in.</li>
+        </ul>
+        <p>When CloudDrive2 runs in Docker or another container, the container's own address usually can't be reached: use the host's IP address and the port mapped to the host. The WebDAV page also explains access from outside your network, over HTTPS, and through a reverse proxy.</p>
       </div>
     </section>
 
@@ -1011,6 +1021,35 @@
            pick <b>Local Folder</b> under Local Storages and add a directory from the machine. A backup can
            then use it as the source or as a destination — protecting local data to several clouds, or
            bringing cloud data back down to a local disk, is the same backup either way.</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="archive-folders" aria-labelledby="archive-folders-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Archives</p>
+          <h2 id="archive-folders-h">Archive folders <span class="chip chip-solid">Coming soon</span></h2>
+          <p>Open ISO, zip, 7z, RAR and tar archives in cloud storage as read-only folders, without downloading or extracting them first. Arriving in the next release, in the apps on every platform and in the web interface.</p>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-folder-open card-icon" aria-hidden="true"></i>
+            <h3>Browse and play directly</h3>
+            <p>Opened archives appear in the Archive Folders folder at the top level. Browse and play their files, or copy files out. Archive folders are read-only.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-compact-disc card-icon" aria-hidden="true"></i>
+            <h3>SACD ISO as DSF</h3>
+            <p>Each track of a SACD disc image shows as a DSF file, with one folder for stereo and one for multichannel. Play them in CloudDrive2 or hand them to another player.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-layer-group card-icon" aria-hidden="true"></i>
+            <h3>Solid archives</h3>
+            <p>The solid parts of 7z and RAR archives can be left unextracted, decoded in memory, or decoded into a local cache, chosen per archive.</p>
+          </div></li>
+        </ul>
+        <p class="chip-note">A membership feature: it needs a plan that includes archive folders.</p>
+        <p><a class="arrow-link" href="/en/archive-folders.html">Everything about archive folders</a></p>
       </div>
     </section>
 

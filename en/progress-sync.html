@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Progress sync — CloudDrive2</title>
+  <meta name="description" content="Coming to the CloudDrive2 apps: watch part of a video on one device and continue it on another at the same place, with the same audio, subtitles and delays; PDF and text files continue at the same reading position. Progress stays in your own cloud storage.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/progress-sync.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/progress-sync.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/progress-sync.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/progress-sync.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Progress sync — CloudDrive2">
+  <meta property="og:description" content="Continue watching and reading on another device where you stopped. Progress stays in your own cloud.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/progress-sync.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/progress-sync.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">App Pro feature · Coming soon</p>
+        <h1>Progress sync</h1>
+        <p class="hero-lede">Watch part of a video on one device, open it on another, and it continues where you left off, with the same audio track, subtitles and delays. PDF and text files continue at the same reading position. Progress is kept in cloud storage you choose, never on CloudDrive's servers.</p>
+        <ul class="chips">
+          <li><a class="chip chip-video" href="#what">What is synced</a></li>
+          <li><a class="chip" href="#setup">Turning it on</a></li>
+          <li><a class="chip" href="#join">Other devices</a></li>
+          <li><a class="chip" href="#timing">When it syncs</a></li>
+          <li><a class="chip chip-cloud" href="#privacy">Where the data lives</a></li>
+          <li><a class="chip" href="#providers">Differences between clouds</a></li>
+          <li><a class="chip" href="#faq">FAQ</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/apps/">Get the apps</a>
+          <a class="btn btn-ghost" href="/en/pricing.html#app-h">App Pro pricing</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="soon-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">Coming soon</p>
+            <h2 id="soon-h">In the next release</h2>
+          </div>
+          <div>
+            <p>Progress sync arrives in the next release of the apps for iPhone, iPad, Mac, Apple TV, Apple Vision Pro, Android phones and TVs, Meta Quest and Windows. The core service's web interface does not have it.</p>
+            <p>It is an <strong>App Pro</strong> feature and is off by default.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="what" aria-labelledby="what-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Contents</p>
+          <h2 id="what-h">What is synced</h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Videos</h3>
+            <ul>
+              <li>The playback position, and whether you watched to the end</li>
+              <li>The audio track and subtitle track you chose</li>
+              <li>Subtitle files you picked by hand</li>
+              <li>Audio delay and subtitle delay</li>
+              <li>Rotation, flip and aspect ratio</li>
+              <li>The Blu-ray playlist and chapter, and the DVD title</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Documents</h3>
+            <ul>
+              <li>PDF: the page and the place on the page</li>
+              <li>Text files: the reading position. It finds the same text even though each device lays the file out differently</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Not synced</h3>
+        <ul>
+          <li>Settings that depend on the screen: display mode (Fit, Pan &amp; Scan, Stretch), zoom, the video track and Dolby Vision choice, HDR subtitle brightness, and the player engine.</li>
+          <li>Emby and Jellyfin videos: their media server keeps the position.</li>
+          <li>Files only one device can reach: local folders, USB drives, files in phone storage.</li>
+          <li>App-wide settings: subtitle style, preferred languages, and the readers' view settings.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="setup" aria-labelledby="setup-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Turning it on</p>
+          <h2 id="setup-h">On the first device</h2>
+        </header>
+        <ol class="steps">
+          <li>
+            <h3>Turn on the switch</h3>
+            <p>In Settings, turn on <strong>Sync progress</strong>. It sits next to the account's <strong>Sync With Cloud</strong>.</p>
+          </li>
+          <li>
+            <h3>Choose where to keep progress</h3>
+            <p>Pick a cloud account. CloudDrive2 creates a <code>CloudDrive2 Sync</code> folder at its top level. Every device you want to sync needs access to this cloud.</p>
+          </li>
+          <li>
+            <h3>This device's history is uploaded</h3>
+            <p>The playback and reading positions already on this device become the first records. The status then reads "Synced just now".</p>
+          </li>
+        </ol>
+        <div class="note">
+          <span class="note-title">Choosing the cloud</span>
+          <p>The list shows only clouds that can be written to and that other devices can reach. Local folders, USB drives, read-only clouds, archive folders and GuangYaPan are not shown. Clouds that are on all your devices through Sync With Cloud come first, and among them those without a recycle bin; see <a href="#providers">differences between clouds</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="join" aria-labelledby="join-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Joining</p>
+          <h2 id="join-h">Other devices join</h2>
+          <p>Other devices find the <code>CloudDrive2 Sync</code> folder by themselves: a card appears at the top of Settings, for example "Your other devices keep progress in 115 › CloudDrive2 Sync (3 devices). Sync this device too?" Choose <strong>Turn On</strong>; <strong>Not now</strong> hides it for 30 days.</p>
+        </header>
+        <p>Turning it on merges the folder's records with this device's own. A TV set up from a phone shows the same card once it has signed in and its cloud accounts have synced.</p>
+
+        <h3>The Sync progress page</h3>
+        <ul>
+          <li><strong>Storage</strong>: for example "115 › CloudDrive2 Sync", changed with <strong>Change Storage…</strong>.</li>
+          <li><strong>What syncs</strong>: videos and documents, each of which can be turned off.</li>
+          <li><strong>Status</strong>: for example "Synced 2 minutes ago", with <strong>Sync Now</strong>.</li>
+          <li><strong>Devices</strong>: each device's name, kind and last sync. You can rename this device and remove other devices' records; a device still in use reappears after its next upload, so to stop a device, turn sync off on it.</li>
+          <li><strong>Clear Progress on All Devices</strong>: clears positions and watched marks everywhere, and can't be undone.</li>
+          <li><strong>Turning sync off</strong>: progress stays on this device, and you can also delete this device's file from the cloud.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="timing" aria-labelledby="timing-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Timing</p>
+          <h2 id="timing-h">When it syncs</h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Uploads</h3>
+            <p>Video progress uploads in three cases: you close the player, a playlist moves to the next file, or the app goes to the background. Nothing is uploaded while a video is playing or paused. Readers upload when they close.</p>
+            <p>So to continue on another device, first close the player on this one, or switch away from the app. If you only pause, the other device sees the position from the last upload.</p>
+          </div>
+          <div>
+            <h3>Reads</h3>
+            <p>When the app starts or comes to the front, and when a video or document is opened — waiting at most 1.5 seconds, then opening with what it has.</p>
+            <p>If newer progress from another device arrives after playback has started, the player shows a notice such as "Living Room TV stopped at 1:10:22", with <strong>Jump</strong>. A playing video is never moved by itself.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="privacy" aria-labelledby="privacy-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Privacy</p>
+          <h2 id="privacy-h">Progress stays in your own cloud</h2>
+          <p>CloudDrive's servers never receive this data. What you watched, and on which device, is known only to you and to whoever can open that cloud.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>What the folder holds</h3>
+            <p>Inside <code>CloudDrive2 Sync</code> there is a folder per CloudDrive account, a JSON file per device, and a README.txt explaining the folder. Each device writes only its own file and reads the others'.</p>
+            <p>Every file holds everything its device has merged, so deleting one device's file loses no progress.</p>
+          </div>
+          <div>
+            <h3>The files are not encrypted</h3>
+            <p>They are plain JSON text listing the paths of the files you opened and where you stopped. Anyone who can open that cloud — people you share the account with, and the cloud provider — can read them. Choose a cloud you are comfortable keeping that in.</p>
+            <p>Deleting the <code>CloudDrive2 Sync</code> folder deletes the copy in the cloud; devices that still have sync on write their own files again.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="providers" aria-labelledby="providers-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Clouds</p>
+          <h2 id="providers-h">Differences between clouds</h2>
+          <p>Each upload replaces the device's previous file with a new one. On a cloud with a recycle bin, the replaced file goes to the bin.</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Cloud</th><th scope="col">After each upload</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">115, 123, Baidu, Tianyi (189), OneDrive</th><td>The old file goes to the recycle bin until the provider empties it</td></tr>
+              <tr><th scope="row">Aliyun Drive (open platform), Xunlei, Google Drive</th><td>The old file is deleted permanently, not kept in a bin</td></tr>
+              <tr><th scope="row">WebDAV, S3, SMB, SFTP, FTP</th><td>No recycle bin</td></tr>
+              <tr><th scope="row">GuangYaPan</th><td>Can't hold the progress folder</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Uploads are few: even a heavy day of watching makes about 20, far under each provider's request limits. When a provider limits requests, sync waits 15 minutes to an hour before trying again. When a cloud's sign-in expires, sync pauses until you sign in to that cloud again.</p>
+      </div>
+    </section>
+
+    <section class="band" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h">Frequently asked questions</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>The other device didn't start where I stopped</summary>
+          <div class="acc-body">
+            <p>Pausing doesn't upload. Close the player on the first device, or switch away from the app, then open the video on the other one. If the other device is already playing, it shows a <strong>Jump</strong> notice within a minute or so once it reads the new position.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>This device can't find the other devices' progress</summary>
+          <div class="acc-body">
+            <p>This device doesn't have the cloud account that holds the progress. Add that cloud, or turn on the account's Sync With Cloud so your cloud accounts reach this device.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>What happens when App Pro ends?</summary>
+          <div class="acc-body">
+            <p>Sync pauses on every device, and nothing in the cloud is deleted. Each device keeps saving its own resume positions as before. When App Pro comes back, sync resumes and the progress saved in the meantime is merged by time, so nothing is lost.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Is progress kept when a file is renamed or moved?</summary>
+          <div class="acc-body">
+            <p>Yes. Sync finds the same file by its contents, name and size, and moves the progress to the new path.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>I don't want one device to save playback positions</summary>
+          <div class="acc-body">
+            <p>Turn off <strong>Remember Playback Position</strong> in that device's player settings. It then neither saves nor restores video positions, and adds nothing to sync.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>Report a problem</h2>
+        <p>File problems as GitHub issues, where they are recorded and tracked; you can also report them in the Telegram group or by email.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">File a GitHub issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">Email us</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/progress-sync.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

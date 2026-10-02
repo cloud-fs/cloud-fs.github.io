@@ -194,6 +194,42 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/macfuse.html"/>
   </url>
   <url>
+    <loc>https://www.clouddrive2.com/archive-folders.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/archive-folders.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/archive-folders.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/archive-folders.html"/>
+  </url>
+  <url>
+    <loc>https://www.clouddrive2.com/en/archive-folders.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/archive-folders.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/archive-folders.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/archive-folders.html"/>
+  </url>
+  <url>
+    <loc>https://www.clouddrive2.com/progress-sync.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/progress-sync.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/progress-sync.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/progress-sync.html"/>
+  </url>
+  <url>
+    <loc>https://www.clouddrive2.com/en/progress-sync.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/progress-sync.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/progress-sync.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/progress-sync.html"/>
+  </url>
+  <url>
+    <loc>https://www.clouddrive2.com/accessibility.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/accessibility.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/accessibility.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/accessibility.html"/>
+  </url>
+  <url>
+    <loc>https://www.clouddrive2.com/en/accessibility.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/accessibility.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/accessibility.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/accessibility.html"/>
+  </url>
+  <url>
     <loc>https://www.clouddrive2.com/two-way-sync.html</loc>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/two-way-sync.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/two-way-sync.html"/>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accessibility — CloudDrive2</title>
+  <meta name="description" content="What CloudDrive2 does for screen-reader users: subtitles read aloud during playback, Blu-ray picture subtitles included; gestures and keys to hide and show the player controls; and accessibility improvements on each platform and in the web interface.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/accessibility.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/accessibility.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/accessibility.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/accessibility.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Accessibility — CloudDrive2">
+  <meta property="og:description" content="Subtitles read aloud during playback, gestures and keys for the player, and accessibility improvements on every platform.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/accessibility.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/accessibility.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Accessibility</p>
+        <h1>Using CloudDrive2 with a screen reader</h1>
+        <p class="hero-lede">What the CloudDrive2 apps and web interface do for screen-reader users: subtitles read aloud while a video plays, gestures and keys for the player, and other improvements on each platform.</p>
+        <ul class="chips">
+          <li><a class="chip chip-subs" href="#subtitles">Subtitles read aloud</a></li>
+          <li><a class="chip" href="#player-controls">Player controls</a></li>
+          <li><a class="chip" href="#per-platform">Other improvements</a></li>
+          <li><a class="chip" href="#web">Web interface</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="mailto:waytechcloudfs@gmail.com">Report an accessibility problem</a>
+          <a class="btn btn-ghost" href="/en/#a11y-h">Membership offer for visually impaired users</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="promise-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">Our commitment</p>
+            <h2 id="promise-h">Improved from your feedback</h2>
+          </div>
+          <div>
+            <p>Most of the changes on this page came from screen-reader users' emails and testing. If a control can't be read, reached or found, email us the device, the system version and the screen reader you use.</p>
+            <p>Visually impaired users can apply for a discounted lifetime Core plan; see the <a href="/en/#a11y-h">home page</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="subtitles" aria-labelledby="subtitles-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Subtitles</p>
+          <h2 id="subtitles-h">Subtitles read aloud during playback</h2>
+          <p>While a screen reader is on, the player announces each new subtitle line, whether the controls are showing or hidden. There is no need for the screen reader's own screen recognition.</p>
+        </header>
+
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Platform</th><th scope="col">Screen reader</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row"><i class="fa-brands fa-android" aria-hidden="true"></i>Android phones, tablets and TVs</th><td>TalkBack and other screen readers</td><td>Available</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</th><td>Narrator and other screen readers</td><td>Available</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>iPhone, iPad, Mac, Apple TV, Apple Vision Pro</th><td>VoiceOver</td><td>Coming soon</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ul>
+          <li><strong>Text subtitles</strong>: SRT, ASS, text tracks inside the video and AI-translated subtitles are read from their text.</li>
+          <li><strong>Picture subtitles</strong>: Blu-ray PGS, DVD VobSub and DVB subtitles are pictures. They are recognised as text on the device, in the track's language, and then read.</li>
+          <li><strong>Only what is new</strong>: only a line that has just appeared is read. When one line stays and another joins it, the first is not read again.</li>
+          <li>On Windows, hiding subtitles with V also stops them being read.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="player-controls" aria-labelledby="controls-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Player</p>
+          <h2 id="controls-h">Controlling the player</h2>
+          <p>While a screen reader is on, the player controls don't hide by themselves after a while. You hide and show them yourself, so their names aren't read together with the subtitles.</p>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3><i class="fa-brands fa-apple" aria-hidden="true"></i> iPhone, iPad, Mac, Apple TV, Vision Pro</h3>
+            <ul>
+              <li>The video area is one VoiceOver element, "Video". A double tap hides or shows the controls and says which, and focus stays on the video.</li>
+              <li>The Magic Tap (a two-finger double tap) plays or pauses anywhere in the player.</li>
+              <li>The two-finger scrub closes the player; for audio, playback continues in the background. Panels and menus open in the player close first.</li>
+              <li>The progress bar is adjustable: swipe up or down to go forward or back 10 seconds, and the position is read out.</li>
+              <li>On Apple TV, hiding the controls with Back is announced.</li>
+            </ul>
+          </div>
+          <div>
+            <h3><i class="fa-brands fa-android" aria-hidden="true"></i> Android and Meta Quest</h3>
+            <ul>
+              <li>With TalkBack on, a double tap on the video area hides or shows the controls.</li>
+              <li>While the controls are hidden, the video area is a "Show player controls" button.</li>
+              <li>TalkBack's play/pause gesture and headset buttons control the player directly.</li>
+            </ul>
+            <h3><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows</h3>
+            <ul>
+              <li>H hides or shows the controls, and the screen reader says which.</li>
+              <li>With the controls hidden, Tab brings them back and moves to the first control; Shift+Tab moves to the last.</li>
+              <li>CloudDrive2 detects Narrator. While it runs, the controls don't hide in the middle of reading, and once hidden with H they stay hidden until H or a click.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="per-platform" aria-labelledby="per-platform-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">More</p>
+          <h2 id="per-platform-h">Other improvements on each platform</h2>
+        </header>
+        <ul>
+          <li><strong>iPhone, iPad, Vision Pro</strong>: in file lists and grids, each file is one VoiceOver element that reads its name, folder or size, date, encryption and playback progress. Double tap opens it; Properties is in the actions rotor.</li>
+          <li><strong>Apple devices</strong>: buttons in the player, the file browser and the panels have screen-reader labels in Chinese and English.</li>
+          <li><strong>Apple TV</strong>: on tvOS 27, text in the app follows Settings › Accessibility › Display &amp; Text Size › Text Size.</li>
+          <li><strong>Mac</strong>: the icon buttons on the image viewer's toolbar have screen-reader labels.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="web" aria-labelledby="web-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Web</p>
+          <h2 id="web-h">The core service's web interface</h2>
+          <p>From core 1.1.0:</p>
+        </header>
+        <ul>
+          <li>Items in the folder picker can be selected with the keyboard.</li>
+          <li>In full-screen image or video view, moving to the controls with the keyboard or a screen reader shows the hidden control bar again.</li>
+          <li>The buttons, tabs and menus on the Backups page are read out correctly by screen readers.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>Tell us what still gets in the way</h2>
+        <p>Please include the device, the system version and the screen reader you use. You can also file a GitHub issue or write in the Telegram group.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="mailto:waytechcloudfs@gmail.com">Email us</a>
+          <a class="btn btn-ghost" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">File a GitHub issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/accessibility.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

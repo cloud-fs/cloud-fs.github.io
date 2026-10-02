@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>同步播放进度 — CloudDrive2</title>
+  <meta name="description" content="CloudDrive2 应用即将推出的同步播放进度：在一台设备上看过一部分的视频，在另一台设备上从同一位置继续，音轨、字幕和延迟一起恢复；PDF 和文本同步阅读位置。进度保存在你自己的云盘中。">
+  <link rel="canonical" href="https://www.clouddrive2.com/progress-sync.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/progress-sync.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/progress-sync.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/progress-sync.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="同步播放进度 — CloudDrive2">
+  <meta property="og:description" content="在另一台设备上从停下的位置继续播放和阅读，进度保存在你自己的云盘中。">
+  <meta property="og:url" content="https://www.clouddrive2.com/progress-sync.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/progress-sync.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">App Pro 功能 · 即将推出</p>
+        <h1>同步播放进度</h1>
+        <p class="hero-lede">在一台设备上看过一部分的视频，在另一台设备上打开时，从停下的位置继续，音轨、字幕和延迟设置也一起恢复。PDF 和文本文件同步阅读位置。进度保存在你自己选择的云盘中，不经过 CloudDrive 的服务器。</p>
+        <ul class="chips">
+          <li><a class="chip chip-video" href="#what">同步哪些内容</a></li>
+          <li><a class="chip" href="#setup">在第一台设备上开启</a></li>
+          <li><a class="chip" href="#join">其他设备加入</a></li>
+          <li><a class="chip" href="#timing">什么时候同步</a></li>
+          <li><a class="chip chip-cloud" href="#privacy">数据保存在哪里</a></li>
+          <li><a class="chip" href="#providers">不同云盘的差别</a></li>
+          <li><a class="chip" href="#faq">常见问题</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/apps/">下载应用</a>
+          <a class="btn btn-ghost" href="/pricing.html#app-h">App Pro 价格</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="soon-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">即将推出</p>
+            <h2 id="soon-h">下一个版本提供</h2>
+          </div>
+          <div>
+            <p>同步播放进度将在下一个版本中提供，包括 iPhone、iPad、Mac、Apple TV、Apple Vision Pro、Android 手机与电视、Meta Quest 和 Windows 上的应用。核心服务的网页管理界面没有这个功能。</p>
+            <p>这是 <strong>App Pro</strong> 功能，默认关闭。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="what" aria-labelledby="what-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">内容</p>
+          <h2 id="what-h">同步哪些内容</h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>视频</h3>
+            <ul>
+              <li>播放位置，以及是否已经看完</li>
+              <li>选择的音轨和字幕轨道</li>
+              <li>手动选择的外挂字幕文件</li>
+              <li>音频延迟和字幕延迟</li>
+              <li>旋转、翻转和画面比例</li>
+              <li>蓝光的播放列表和章节，DVD 的标题</li>
+            </ul>
+          </div>
+          <div>
+            <h3>文档</h3>
+            <ul>
+              <li>PDF：页码和页面内的位置</li>
+              <li>文本文件：阅读位置。不同设备显示的排版不同，仍然能找到同一处文字</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>不同步的内容</h3>
+        <ul>
+          <li>与屏幕有关的设置：显示模式（适应、裁切、拉伸）、缩放、视频轨道和杜比视界选项、HDR 字幕亮度、播放器内核。</li>
+          <li>Emby 和 Jellyfin 中的视频：播放位置由媒体服务器保存。</li>
+          <li>只有一台设备能访问的文件：本地文件夹、U 盘、手机存储中的文件。</li>
+          <li>全局设置：字幕样式、首选语言、阅读器的视图设置。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="setup" aria-labelledby="setup-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">开启</p>
+          <h2 id="setup-h">在第一台设备上开启</h2>
+        </header>
+        <ol class="steps">
+          <li>
+            <h3>打开开关</h3>
+            <p>在设置中打开「同步进度」。这个开关在账号的「与云端同步」旁边。</p>
+          </li>
+          <li>
+            <h3>选择保存位置</h3>
+            <p>选择一个云盘账户。CloudDrive2 会在它的最上层创建「CloudDrive2 Sync」文件夹。所有需要同步的设备都要能访问这个云盘。</p>
+          </li>
+          <li>
+            <h3>上传这台设备的记录</h3>
+            <p>这台设备已有的播放位置和阅读位置会作为第一批记录上传。完成后状态显示「刚刚已同步」。</p>
+          </li>
+        </ol>
+        <div class="note">
+          <span class="note-title">选择云盘时</span>
+          <p>列表中只显示可以写入、而且其他设备也能访问的云盘。不显示本地文件夹、U 盘、只读的云盘、压缩包文件夹和光鸭云盘。通过「与云端同步」在所有设备上都有的云盘排在前面；其中没有回收站的云盘又排在更前面，原因见<a href="#providers">不同云盘的差别</a>。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="join" aria-labelledby="join-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">加入</p>
+          <h2 id="join-h">其他设备加入</h2>
+          <p>其他设备会自己找到「CloudDrive2 Sync」文件夹：设置顶部会出现一张卡片，例如「你的其他设备在 115 › CloudDrive2 Sync 中保存进度（3 台设备）。这台设备也同步吗？」选「开启」即可，选「以后再说」会隐藏 30 天。</p>
+        </header>
+        <p>开启后，文件夹中的记录与这台设备的记录合并。用手机设置的电视，登录并同步了云盘账户后，也会出现这张卡片。</p>
+
+        <h3>同步进度页面</h3>
+        <ul>
+          <li><strong>存储位置</strong>：例如「115 › CloudDrive2 Sync」，可以通过「更换存储…」更改。</li>
+          <li><strong>同步内容</strong>：视频和文档，可以分别关闭。</li>
+          <li><strong>状态</strong>：例如「2 分钟前已同步」，旁边是「立即同步」。</li>
+          <li><strong>设备</strong>：每台设备的名称、类型和上次同步时间。可以修改这台设备的名称，也可以移除其他设备的记录；仍在使用的设备下次上传后会重新出现，要停止某台设备，请在那台设备上关闭同步。</li>
+          <li><strong>清除所有设备上的进度</strong>：清除所有设备上的播放位置和已看完标记，无法撤销。</li>
+          <li><strong>关闭同步</strong>：进度保留在这台设备上，可以选择同时删除这台设备在云盘中的文件。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="timing" aria-labelledby="timing-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">时机</p>
+          <h2 id="timing-h">什么时候同步</h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>上传</h3>
+            <p>视频的进度在以下三种情况上传：关闭播放器、播放列表切换到下一个文件、应用退到后台。视频播放中和暂停时不上传。阅读器在关闭时上传。</p>
+            <p>所以要在另一台设备上继续，先在这台设备上关闭播放器，或让应用退到后台。只是暂停的话，另一台设备看到的是上一次上传的位置。</p>
+          </div>
+          <div>
+            <h3>读取</h3>
+            <p>应用启动或回到前台时读取。打开视频或文档时也会读取，最多等待 1.5 秒，然后用已有的记录打开。</p>
+            <p>开始播放后，如果读到另一台设备更新的位置，播放器会显示提示，例如「“客厅电视”停在了 1:10:22」，并提供「跳转」。正在播放的视频不会被自动移动。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="privacy" aria-labelledby="privacy-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">隐私</p>
+          <h2 id="privacy-h">进度保存在你自己的云盘中</h2>
+          <p>CloudDrive 的服务器不接收这些数据。你看过什么、在哪台设备上看，只有你自己，以及能访问这个云盘的人知道。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>文件夹里有什么</h3>
+            <p>「CloudDrive2 Sync」文件夹中，每个 CloudDrive 账号一个子文件夹，每台设备一个 JSON 文件，还有一个说明文件 README.txt。每台设备只写自己的文件，读取其他设备的文件。</p>
+            <p>每个文件都包含这台设备合并后的全部记录，所以删除某一台设备的文件不会丢失进度。</p>
+          </div>
+          <div>
+            <h3>文件不加密</h3>
+            <p>文件是普通的 JSON 文本，列出打开过的文件路径和停下的位置。能打开这个云盘的人，包括与你共用这个云盘账号的人和云盘服务商，都可以读取这些文件。请选择你愿意保存这些信息的云盘。</p>
+            <p>删除「CloudDrive2 Sync」文件夹会删除云盘中的副本；仍然开启同步的设备会重新写入自己的文件。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="providers" aria-labelledby="providers-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">云盘</p>
+          <h2 id="providers-h">不同云盘的差别</h2>
+          <p>每次上传都会用新文件替换这台设备的旧文件。在有回收站的云盘上，被替换的旧文件会进入回收站。</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">云盘</th><th scope="col">每次上传后</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">115、123 云盘、百度网盘、天翼云盘、OneDrive</th><td>旧文件进入回收站，直到云盘清空回收站</td></tr>
+              <tr><th scope="row">阿里云盘（开放平台）、迅雷云盘、Google Drive</th><td>旧文件被彻底删除，不进入回收站</td></tr>
+              <tr><th scope="row">WebDAV、S3、SMB、SFTP、FTP</th><td>没有回收站</td></tr>
+              <tr><th scope="row">光鸭云盘</th><td>不能用来保存进度</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>上传次数很少，一天大量观看大约产生 20 次上传，远低于各云盘的接口频率限制。云盘限制请求频率时，同步会等待 15 分钟到 1 小时后再试；云盘登录过期时，同步暂停，重新登录这个云盘后恢复。</p>
+      </div>
+    </section>
+
+    <section class="band" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h">常见问题</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>另一台设备没有从我停下的位置开始</summary>
+          <div class="acc-body">
+            <p>暂停不会上传。先在原来的设备上关闭播放器，或让应用退到后台，再在另一台设备上打开。如果另一台设备已经在播放，几十秒内读到新位置后会显示「跳转」提示。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>这台设备找不到其他设备的进度</summary>
+          <div class="acc-body">
+            <p>这台设备上没有保存进度的那个云盘账户。添加这个云盘，或开启账号的「与云端同步」，让云盘账户同步到这台设备。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>App Pro 到期后会怎样</summary>
+          <div class="acc-body">
+            <p>所有设备上的同步都会暂停，云盘中的文件不会被删除。每台设备自己的续播位置照常保存。重新获得 App Pro 后同步恢复，期间的进度按时间合并，不会丢失。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>文件被改名或移动后，进度还在吗</summary>
+          <div class="acc-body">
+            <p>在。同步会根据文件内容、名称和大小找到同一个文件，把进度对应到新的路径上。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>不想让某台设备保存播放位置</summary>
+          <div class="acc-body">
+            <p>在那台设备上关闭播放器设置中的「记住播放位置」。这台设备不再保存和恢复视频的播放位置，也不会向同步中添加记录。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>反馈问题</h2>
+        <p>发现问题请在 GitHub issues 提交，便于记录和跟踪；也可以在 Telegram 交流群反馈，或发送邮件。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">在 GitHub 提 issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">发邮件</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/progress-sync.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

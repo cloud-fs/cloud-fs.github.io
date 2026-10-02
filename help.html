@@ -431,6 +431,26 @@ brew services start clouddrive2</code></pre></div>
           </a></li>
         </ul>
         <p class="chip-note">每个平台各能做什么、系统要求是什么，见<a href="/apps/">全部应用</a>。</p>
+
+        <details class="acc" id="tv">
+          <summary><i class="fa-solid fa-tv" aria-hidden="true"></i>用手机设置电视（即将推出）</summary>
+          <div class="acc-body">
+            <p>这个功能将在下一个版本中提供。在 Apple TV 和 Android 电视上，用遥控器输入网址、密码和 API 密钥很慢，有些云盘的登录页面在电视上也打不开。用一部装有 CloudDrive2 的手机扫描电视上的二维码后，可以在手机上为电视完成这些操作。手机和电视可以是不同的系统，但需要连接同一个网络。</p>
+            <h4 id="tv-pair">配对</h4>
+            <ol>
+              <li>在电视上打开「设置 → 用手机设置」，电视显示一个二维码。二维码每隔几分钟更换一次。</li>
+              <li>在手机上打开 CloudDrive2 的「设置 → 设置电视」，选择「添加电视」，扫描电视上的二维码。手机上还没有 CloudDrive2 时，用手机相机扫描同一个二维码可以下载。</li>
+              <li>配对完成后，电视显示「已连接」，手机的「你的电视」列表中出现这台电视。</li>
+            </ol>
+            <h4 id="tv-sign-in">登录 CloudDrive 账号</h4>
+            <p>在手机上打开这台电视，为电视登录 CloudDrive 账号。电视的登录页面上也有「用手机登录」二维码。</p>
+            <h4 id="tv-add-cloud">添加云盘账户</h4>
+            <p>在手机上为电视添加云盘账户，需要扫码或在网页中登录的云盘，登录页面在手机上打开。</p>
+            <h4 id="tv-type-on-phone">在手机上输入</h4>
+            <p>在手机上保持这台电视的页面打开。电视的每个输入框旁边都有「在手机上输入」按钮，点一下，手机上会弹出输入框，并带上电视输入框中已有的内容（密码等保密内容除外）。在手机上输入完成后，文字会填到电视的输入框中。</p>
+            <p class="chip-note">电视自己的设置，例如实时翻译、媒体服务器和播放器设置，仍然在电视上修改。不再需要某部手机时，在电视的「设置 → 用手机设置」的「已配对的设备」中移除它，或在手机上选择「忘记这台电视」。</p>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -493,7 +513,7 @@ brew services start clouddrive2</code></pre></div>
           <div class="acc-body">
             <p>手机上的备份和电脑上是同一套功能，区别只在源目录怎么选：手机里的相册和文件夹要先添加成「本地文件夹」，之后才能作为备份源。</p>
             <ol>
-              <li><strong>先把本地文件夹添加进来。</strong>进「云存储」页，点「添加云存储」，在「本地存储」里选「本地文件夹」，然后选中要备份的目录。iOS 上会先请求相册权限，同意后相册会出现在 <code>/Documents/Photos</code>：只备份照片和视频就选这个目录，想把应用里的其他文件一起备份就选上一级的 <code>/Documents</code>。Android 上需要授予存储权限，之后在 <code>/sdcard</code> 下面选目录：相册在 <code>/sdcard/DCIM</code>，下载的文件在 <code>/sdcard/Download</code>，也可以直接选 <code>/sdcard</code> 备份整个内部存储。</li>
+              <li><strong>先把本地文件夹添加进来。</strong>进「云存储」页，点「添加云存储」，在「本地存储」里选「本地文件夹」，然后选中要备份的目录。iOS 上会先请求相册权限，同意后相册会出现在 <code>/Documents/Photos</code>：只备份照片和视频就选这个目录，想把应用里的其他文件一起备份就选上一级的 <code>/Documents</code>。Android 上需要授予存储权限，之后在 <code>/sdcard</code> 下面选目录：相册在 <code>/sdcard/DCIM</code>，下载的文件在 <code>/sdcard/Download</code>，也可以直接选 <code>/sdcard</code> 备份整个内部存储。U 盘、SD 卡等外部存储也可以添加为本地文件夹，作为备份源或目标。</li>
               <li><strong>再创建备份任务。</strong>进「备份」页，点「添加备份」，源目录选刚添加的本地文件夹，目标选一个或多个网盘目录。</li>
               <li><strong>目标可以选加密文件夹。</strong>先在网盘上<a href="#encrypt">创建一个加密文件夹</a>，备份时把它选为目标，照片和文件就会在本地加密之后再上传，云端保存的是密文——这就是加密备份。</li>
               <li><strong>打开「文件系统监视器」。</strong>在备份的设置里启用，它会实时监控源文件夹的变化。之后新拍的照片、新录的视频、新保存的文件都会自动备份，不必每次手动触发。</li>
@@ -515,19 +535,6 @@ brew services start clouddrive2</code></pre></div>
           </div>
         </details>
 
-        <details class="acc" id="webdav">
-          <summary><i class="fa-solid fa-server" aria-hidden="true"></i>WebDAV 服务</summary>
-          <div class="acc-body">
-            <p>CloudDrive2 会把所有已连接的云盘再以一个 WebDAV 服务对外提供，任何支持 WebDAV 的软件都能连上来。</p>
-            <ul>
-              <li><strong>服务器地址：</strong><code>http://&lt;ip&gt;:19798/dav</code></li>
-              <li><strong>用户名：</strong>登录 CloudDrive2 的邮箱；也可以只填邮箱的用户名部分，即 <code>@</code> 之前的那一段。</li>
-              <li><strong>密码：</strong>登录 CloudDrive2 的密码。</li>
-            </ul>
-            <p>核心会员还可以在「WebDAV」页建独立的 WebDAV 用户，各自限定能看到哪个目录、能不能写，不必把主账号密码交出去。</p>
-            <p><a class="arrow-link" href="/features.html#webdav">WebDAV 的完整说明</a></p>
-          </div>
-        </details>
 
         <details class="acc" id="token">
           <summary><i class="fa-solid fa-id-badge" aria-hidden="true"></i>API 令牌</summary>
@@ -657,6 +664,20 @@ brew services start clouddrive2</code></pre></div>
           <div class="acc-body">
             <p>合作伙伴设备自动注册的账号，在改过邮箱和密码之后可以与原设备解绑。设备丢了或者卖掉了，解绑一次可以避免账号泄露。</p>
             <p class="chip-note">离线的设备上可能还留着已保存的凭据，解绑之后建议再改一次密码，把那条路彻底断掉。</p>
+          </div>
+        </details>
+
+        <details class="acc" id="cloud-sync">
+          <summary><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>与云端同步</summary>
+          <div class="acc-body">
+            <p>「与云端同步」把你添加的云盘账户保存到账号服务器，登录同一个 CloudDrive 账号的其他设备会自动得到这些云盘账户。账户信息用你的密码加密后保存。</p>
+            <p>从 1.1.0 起，登录后可以随时开启或关闭：</p>
+            <ul>
+              <li><strong>开启前先对比</strong>：逐个显示云端和本机的云盘账户：一致、不同、只在本机有、只在云端有。</li>
+              <li><strong>选择以哪一边为准</strong>：以云端为准（默认），或以本机为准。从查看对比到确认之间，如果云端被其他设备改过，操作会中止并提示重新确认，不会在不知情的情况下覆盖。</li>
+              <li><strong>关闭时</strong>：可以选择是否同时清除服务器上的副本。</li>
+            </ul>
+            <p class="chip-note">标记为「不同步到云端」的云盘账户始终只保存在本机。</p>
           </div>
         </details>
       </div>
@@ -811,7 +832,7 @@ brew services start clouddrive2</code></pre></div>
           <div class="acc-body">
             <p>群晖自带的 File Station 不支持在 FUSE 挂载的文件系统上做写操作，这是群晖侧的已知问题，不少用户都碰到过。表现是挂载点进得去、文件看得到也放得了，但新建文件夹、重命名、删除、移动和上传全部失败。</p>
             <p>挂载本身没问题：同一个挂载点，用 SSH 或者别的文件管理器读写都正常。</p>
-            <p>绕开的办法有两个：在 File Station 里改用 CloudDrive2 的 <a href="#webdav">WebDAV 服务</a>连接，不走 FUSE 挂载路径；或者在群晖上换用第三方的文件管理器。同时也建议向群晖反馈这个问题——反馈的人多了才有希望修。</p>
+            <p>绕开的办法有两个：在 File Station 里改用 CloudDrive2 的 <a href="/features.html#webdav">WebDAV 服务</a>连接，不走 FUSE 挂载路径；或者在群晖上换用第三方的文件管理器。同时也建议向群晖反馈这个问题——反馈的人多了才有希望修。</p>
           </div>
         </details>
 

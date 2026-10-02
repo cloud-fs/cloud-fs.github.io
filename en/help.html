@@ -518,6 +518,26 @@ brew services start clouddrive2</code></pre></div>
         </ul>
         <p class="chip-note">What each platform can do and what it requires is on the
            <a href="/en/apps/">apps pages</a>.</p>
+
+        <details class="acc" id="tv">
+          <summary><i class="fa-solid fa-tv" aria-hidden="true"></i>Setting up a TV from a phone (coming soon)</summary>
+          <div class="acc-body">
+            <p>This arrives in the next release. On Apple TV and Android TV, typing addresses, passwords and API keys with a remote is slow, and some clouds' sign-in pages can't open on a TV at all. Scan a code on the TV with a phone running CloudDrive2, and do these things on the phone instead. The phone and the TV can run different systems, but must be on the same network.</p>
+            <h4 id="tv-pair">Pairing</h4>
+            <ol>
+              <li>On the TV, open Settings → Set up from phone. The TV shows a code, which changes every few minutes.</li>
+              <li>On the phone, open CloudDrive2's Settings → Set up a TV, choose Add a TV and scan the code on the TV. If the phone doesn't have CloudDrive2 yet, scanning the same code with the phone's camera takes you to the download.</li>
+              <li>Once paired, the TV says the phone is connected, and the TV appears in the phone's list of TVs.</li>
+            </ol>
+            <h4 id="tv-sign-in">Signing in to CloudDrive</h4>
+            <p>Open the TV on the phone and sign the TV in to your CloudDrive account. The TV's sign-in screen also shows a "Sign in with your phone" code.</p>
+            <h4 id="tv-add-cloud">Adding cloud accounts</h4>
+            <p>Add cloud accounts to the TV from the phone. For clouds that sign in with a QR code or a web page, the sign-in page opens on the phone.</p>
+            <h4 id="tv-type-on-phone">Type on Phone</h4>
+            <p>Keep the TV's screen open on the phone. Every text box on the TV has a Type on Phone button beside it: choose it, and a text box opens on the phone, filled with what the TV box already holds (except passwords and other secrets). What you type on the phone fills the TV's box.</p>
+            <p class="chip-note">The TV's own settings, such as live translation, media servers and the player, are still changed on the TV. To stop a phone from changing the TV, remove it under Paired devices in the TV's Settings → Set up from phone, or choose Forget This TV on the phone.</p>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -627,7 +647,8 @@ brew services start clouddrive2</code></pre></div>
                   Android needs storage permission, and then you pick a directory under <code>/sdcard</code>:
                   the camera roll is <code>/sdcard/DCIM</code>, downloads are
                   <code>/sdcard/Download</code>, or take <code>/sdcard</code> itself to back up the whole
-                  of internal storage.</li>
+                  of internal storage. USB drives, SD cards and other external storage can also be added
+                  as local folders, as a backup source or destination.</li>
               <li><strong>Then create the backup.</strong> On the Backups page, click Add Backup, set the
                   source to the local folder you just added, and name one or more cloud directories as
                   destinations.</li>
@@ -663,22 +684,6 @@ brew services start clouddrive2</code></pre></div>
           </div>
         </details>
 
-        <details class="acc" id="webdav">
-          <summary><i class="fa-solid fa-server" aria-hidden="true"></i>The WebDAV service</summary>
-          <div class="acc-body">
-            <p>CloudDrive2 serves every connected cloud back out over WebDAV, so any WebDAV-capable
-               software can connect to it.</p>
-            <ul>
-              <li><strong>Server address:</strong> <code>http://&lt;ip&gt;:19798/dav</code></li>
-              <li><strong>Username:</strong> the email address you sign in with — or just the part before
-                  the <code>@</code>.</li>
-              <li><strong>Password:</strong> the password you sign in with.</li>
-            </ul>
-            <p>Core membership also lets you create separate WebDAV users on the WebDAV page, each scoped
-               to a directory and each read-only or not, so you never have to hand out the main password.</p>
-            <p><a class="arrow-link" href="/en/features.html#webdav">More about WebDAV</a></p>
-          </div>
-        </details>
 
         <details class="acc" id="token">
           <summary><i class="fa-solid fa-id-badge" aria-hidden="true"></i>API tokens</summary>
@@ -850,6 +855,20 @@ brew services start clouddrive2</code></pre></div>
                detaching it keeps the account out of someone else's hands.</p>
             <p class="chip-note">An offline device may still hold saved credentials, so change your
                password once more after detaching to close that path for good.</p>
+          </div>
+        </details>
+
+        <details class="acc" id="cloud-sync">
+          <summary><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>Sync with cloud</summary>
+          <div class="acc-body">
+            <p>Sync With Cloud keeps the cloud accounts you add on the account server, so other devices signed in to the same CloudDrive account get them automatically. The account details are stored encrypted with your password.</p>
+            <p>From 1.1.0 you can turn it on or off at any time after signing in:</p>
+            <ul>
+              <li><strong>A comparison first</strong>: the cloud accounts in the cloud and on this device are shown side by side — the same, different, only on this device, only in the cloud.</li>
+              <li><strong>Choose which side wins</strong>: the cloud copy (the default) or this device. If another device changes the cloud copy between the comparison and your confirmation, the operation stops and asks you to confirm again, instead of overwriting it without your knowledge.</li>
+              <li><strong>When turning it off</strong>: choose whether to also remove the copy on the server.</li>
+            </ul>
+            <p class="chip-note">Cloud accounts marked "do not sync to cloud" always stay on this device only.</p>
           </div>
         </details>
       </div>
@@ -1075,7 +1094,7 @@ brew services start clouddrive2</code></pre></div>
                fail.</p>
             <p>The mount itself is fine — the same mount point reads and writes normally over SSH or from
                another file manager.</p>
-            <p>Two ways around it: point File Station at CloudDrive2's <a href="#webdav">WebDAV service</a>
+            <p>Two ways around it: point File Station at CloudDrive2's <a href="/en/features.html#webdav">WebDAV service</a>
                rather than the FUSE mount path, or use a third-party file manager on the NAS. It is also
                worth reporting to Synology — the more reports it gets, the likelier it is to be fixed.</p>
           </div>

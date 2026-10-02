@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>无障碍 — CloudDrive2</title>
+  <meta name="description" content="CloudDrive2 为读屏软件用户提供的功能：播放视频时朗读字幕（包括蓝光图形字幕），用手势或按键隐藏和显示播放控件，以及各平台和网页管理界面的无障碍改进。">
+  <link rel="canonical" href="https://www.clouddrive2.com/accessibility.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/accessibility.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/accessibility.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/accessibility.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="无障碍 — CloudDrive2">
+  <meta property="og:description" content="播放时朗读字幕、用手势或按键控制播放器，以及各平台的无障碍改进。">
+  <meta property="og:url" content="https://www.clouddrive2.com/accessibility.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/accessibility.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">无障碍</p>
+        <h1>用读屏软件使用 CloudDrive2</h1>
+        <p class="hero-lede">这一页说明 CloudDrive2 的应用和网页管理界面为读屏软件用户做了什么：播放视频时朗读字幕、用手势或按键控制播放器，以及各平台的其他改进。</p>
+        <ul class="chips">
+          <li><a class="chip chip-subs" href="#subtitles">朗读字幕</a></li>
+          <li><a class="chip" href="#player-controls">控制播放器</a></li>
+          <li><a class="chip" href="#per-platform">各平台的其他改进</a></li>
+          <li><a class="chip" href="#web">网页管理界面</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="mailto:waytechcloudfs@gmail.com">反馈无障碍问题</a>
+          <a class="btn btn-ghost" href="/#a11y-h">视力障碍用户的会员优惠</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-dark band-tight" aria-labelledby="promise-h">
+      <div class="container">
+        <div class="port-card">
+          <div>
+            <p class="eyebrow">我们的承诺</p>
+            <h2 id="promise-h">按用户的反馈改进</h2>
+          </div>
+          <div>
+            <p>这一页列出的改进，大部分来自读屏软件用户的来信和测试。如果你在使用中遇到读不出、点不到或找不到的控件，请发邮件告诉我们使用的设备、系统和读屏软件。</p>
+            <p>视力障碍用户可以申请 299 元的核心终身版优惠，说明见<a href="/#a11y-h">首页</a>。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="subtitles" aria-labelledby="subtitles-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">字幕</p>
+          <h2 id="subtitles-h">播放视频时朗读字幕</h2>
+          <p>读屏软件开启时，播放器会朗读每一条新出现的字幕，不论播放控件是否显示，不需要另外使用读屏软件的屏幕识别功能。</p>
+        </header>
+
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">平台</th><th scope="col">读屏软件</th><th scope="col">状态</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row"><i class="fa-brands fa-android" aria-hidden="true"></i>Android 手机、平板与电视</th><td>TalkBack 等读屏软件</td><td>已提供</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</th><td>讲述人和其他读屏软件</td><td>已提供</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>iPhone、iPad、Mac、Apple TV、Apple Vision Pro</th><td>VoiceOver</td><td>即将推出</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ul>
+          <li><strong>文本字幕</strong>：SRT、ASS、视频内嵌的文本字幕和 AI 翻译字幕，直接朗读字幕文字。</li>
+          <li><strong>图形字幕</strong>：蓝光的 PGS、DVD 的 VobSub 和 DVB 字幕是图片，先在设备上进行文字识别，再朗读识别出的文字。识别按字幕轨道的语言进行。</li>
+          <li><strong>只读新内容</strong>：只朗读刚出现的字幕行。一行字幕保持不变、另一行加入时，原来那一行不会重复朗读。</li>
+          <li>在 Windows 上，按 V 隐藏字幕后，播放器不再朗读字幕。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="player-controls" aria-labelledby="controls-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">播放器</p>
+          <h2 id="controls-h">控制播放器</h2>
+          <p>读屏软件开启时，播放控件不会因为一段时间没有操作而自动隐藏，你可以自己隐藏或显示控件，这样朗读字幕时不会同时读出控件的名称。</p>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3><i class="fa-brands fa-apple" aria-hidden="true"></i> iPhone、iPad、Mac、Apple TV、Vision Pro</h3>
+            <ul>
+              <li>视频区域是一个 VoiceOver 元素「视频」。双击隐藏或显示控件，并读出当前状态，焦点保持在视频上。</li>
+              <li>Magic Tap（双指连按两次）在播放器的任何位置播放或暂停。</li>
+              <li>双指擦除手势关闭播放器；播放音频时，音频在后台继续播放。播放器中打开的面板和菜单会先关闭。</li>
+              <li>进度条可以调节：向上或向下轻扫前进或后退 10 秒，并读出当前位置。</li>
+              <li>Apple TV 上，按返回键隐藏控件时会读出。</li>
+            </ul>
+          </div>
+          <div>
+            <h3><i class="fa-brands fa-android" aria-hidden="true"></i> Android 与 Meta Quest</h3>
+            <ul>
+              <li>TalkBack 开启时，双击视频区域隐藏或显示控件。</li>
+              <li>控件隐藏时，视频区域是一个「显示播放控件」按钮。</li>
+              <li>TalkBack 的播放和暂停手势，以及耳机按键，直接控制播放器。</li>
+            </ul>
+            <h3><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows</h3>
+            <ul>
+              <li>按 H 隐藏或显示控件，读屏软件会读出当前状态。</li>
+              <li>控件隐藏时按 Tab，控件重新显示，焦点移到第一个控件；按 Shift+Tab 移到最后一个控件。</li>
+              <li>CloudDrive2 能识别讲述人。讲述人运行时，控件不会在朗读中途自动隐藏，按 H 隐藏后保持隐藏，直到再按 H 或点击。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="per-platform" aria-labelledby="per-platform-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">其他</p>
+          <h2 id="per-platform-h">各平台的其他改进</h2>
+        </header>
+        <ul>
+          <li><strong>iPhone、iPad、Vision Pro</strong>：文件列表和网格中，每个文件是一个 VoiceOver 元素，依次读出名称、所在文件夹或大小、日期、是否加密和播放进度。双击打开；「属性」在操作转子中。</li>
+          <li><strong>Apple 设备</strong>：播放器、文件浏览器和各个面板的按钮都有中文和英文的读屏标签。</li>
+          <li><strong>Apple TV</strong>：在 tvOS 27 上，应用中的文字大小跟随系统设置中的「辅助功能 › 显示与文字大小 › 文字大小」。</li>
+          <li><strong>Mac</strong>：图片查看器工具栏上的图标按钮有读屏标签。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="web" aria-labelledby="web-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">网页</p>
+          <h2 id="web-h">核心服务的网页管理界面</h2>
+          <p>核心服务 1.1.0 起：</p>
+        </header>
+        <ul>
+          <li>文件夹选择框中的项目可以用键盘选择。</li>
+          <li>全屏查看图片或视频时，用键盘或读屏软件移到控制按钮上，隐藏的控制栏会重新显示。</li>
+          <li>备份页面的按钮、标签页和菜单可以被读屏软件正确读出。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>告诉我们哪里还不好用</h2>
+        <p>请在邮件中写明设备、系统版本和使用的读屏软件。也可以在 GitHub issues 提交，或在 Telegram 交流群反馈。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="mailto:waytechcloudfs@gmail.com">发邮件</a>
+          <a class="btn btn-ghost" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">在 GitHub 提 issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/accessibility.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

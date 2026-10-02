@@ -74,6 +74,7 @@
             <li><a class="chip" href="#file-access-control">访问监控与权限</a></li>
             <li><a class="chip chip-cloud" href="#service-vendor-friendly">云盘服务商友好</a></li>
             <li><a class="chip chip-backup" href="#multicloud-backup">多云盘备份</a></li>
+            <li><a class="chip" href="#archive-folders">压缩包文件夹</a></li>
           </ul>
           <p class="chip-note">这里说的「核心」就是 <b>CloudDrive2 Core</b>——也就是原来的 CloudDrive2，仍在持续开发。</p>
         </div>
@@ -361,6 +362,15 @@
             </div>
           </div>
         </div>
+
+        <h3 id="webdav-address">连接地址</h3>
+        <ul>
+          <li><strong>服务器地址</strong>：<code>http://&lt;服务器 IP&gt;:19798/dav</code>。从 1.1.0 起，「WebDAV」页直接列出服务器在局域网中的 IP 地址和端口，例如 <code>http://192.168.1.10:19798/dav</code>，不用自己查找服务器的地址。</li>
+          <li><strong>用户名</strong>：登录 CloudDrive2 的邮箱，也可以只填邮箱中 <code>@</code> 之前的部分。</li>
+          <li><strong>密码</strong>：登录 CloudDrive2 的密码。</li>
+          <li><strong>匿名访问</strong>：开启后，用户名留空或填写 <code>anonymous</code> 都可以登录。</li>
+        </ul>
+        <p>CloudDrive2 运行在 Docker 等容器中时，容器自己的地址通常无法访问，请使用宿主机的 IP 地址和映射到宿主机的端口。从外网访问、使用 HTTPS，以及通过反向代理访问的方法，「WebDAV」页上也有说明。</p>
       </div>
     </section>
 
@@ -848,6 +858,35 @@
 
         <h3>本地文件夹也能当源和目标</h3>
         <p>和跨云盘复制一样：在「云存储」页点「添加云存储」，在「本地存储」里选「本地文件夹」，把机器上的一个目录加进来。备份时它既能当源，也能当目标——把本机的数据备份到多个云盘，或者把云盘上的数据备份回本地磁盘，都是同一套备份在做。</p>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="archive-folders" aria-labelledby="archive-folders-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">压缩包</p>
+          <h2 id="archive-folders-h">压缩包文件夹 <span class="chip chip-solid">即将推出</span></h2>
+          <p>把云盘中的 ISO、zip、7z、RAR、tar 压缩包作为只读文件夹打开，不用先下载，也不用解压。将在下一个版本中提供，包括所有平台的应用和网页管理界面。</p>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <i class="fa-solid fa-folder-open card-icon" aria-hidden="true"></i>
+            <h3>直接浏览和播放</h3>
+            <p>打开的压缩包出现在最上层的「Archive Folders」文件夹中。可以浏览、播放其中的文件，或把文件复制出来。压缩包文件夹是只读的。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-compact-disc card-icon" aria-hidden="true"></i>
+            <h3>SACD ISO 显示为 DSF</h3>
+            <p>SACD 光盘镜像中的每首曲目显示为一个 DSF 文件，立体声和多声道各一个文件夹，可以在 CloudDrive2 中播放，也可以交给其他播放器。</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-layer-group card-icon" aria-hidden="true"></i>
+            <h3>固实压缩包</h3>
+            <p>7z 和 RAR 的固实部分可以选择不解压、在内存中解压，或解压并保存到本地缓存，按压缩包分别设置。</p>
+          </div></li>
+        </ul>
+        <p class="chip-note">这是会员功能，需要包含「压缩包文件夹」的会员套餐。</p>
+        <p><a class="arrow-link" href="/archive-folders.html">压缩包文件夹的完整说明</a></p>
       </div>
     </section>
 
