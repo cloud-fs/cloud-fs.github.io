@@ -116,14 +116,62 @@
       </div>
     </section>
 
-    <!-- ── launch: CloudDrive2 App, and how it relates to Core ──────── -->
-    <section class="band band-dark" aria-labelledby="naming-h">
+    <!-- ── recent major features ────────────────────────────────────── -->
+    <section class="band band-dark" id="new" aria-labelledby="new-h">
       <div class="container">
         <header class="band-head">
-          <p class="pill"><i class="fa-solid fa-star" aria-hidden="true"></i>全新发布</p>
-          <h2 id="naming-h">CloudDrive2 App 来了</h2>
-          <p>我们很高兴地宣布 <strong>CloudDrive2 App</strong>：iPhone、iPad、Mac、Apple TV、
-             Vision Pro、Android 手机与电视、Meta Quest、Windows——每个平台都有原生应用，并带来专业级的视频、音频与文档播放。</p>
+          <p class="pill"><i class="fa-solid fa-star" aria-hidden="true"></i>最近更新</p>
+          <h2 id="new-h">最近加入的主要功能</h2>
+          <p>以下功能在核心服务 1.1.0、1.1.1 和应用 1.1.0、1.1.1 中加入。核心服务每个版本的改动见<a href="/download.html#changelog">发布记录</a>。</p>
+        </header>
+        <ul class="card-grid">
+          <li><a class="card" href="/archive-folders.html">
+            <i class="fa-solid fa-file-zipper card-icon" aria-hidden="true"></i>
+            <h3>压缩包文件夹</h3>
+            <p>把云盘中的 ISO、zip、7z、RAR、tar 作为只读文件夹打开，不用下载，也不用解压；SACD ISO 显示为 DSF 音频文件。</p>
+            <p class="card-foot">核心服务 1.1.1 · 核心 Pro 功能</p>
+          </a></li>
+          <li><a class="card" href="/progress-sync.html">
+            <i class="fa-solid fa-clock-rotate-left card-icon" aria-hidden="true"></i>
+            <h3>同步播放进度</h3>
+            <p>在一台设备上停止播放，在另一台设备上从同一位置继续，音轨、字幕和延迟设置一起恢复；PDF 和文本同步阅读位置。进度保存在你自己的云盘中。</p>
+            <p class="card-foot">应用 1.1.1 · App Pro 功能</p>
+          </a></li>
+          <li><a class="card" href="/help.html#tv">
+            <i class="fa-solid fa-tv card-icon" aria-hidden="true"></i>
+            <h3>用手机设置电视</h3>
+            <p>电视显示二维码，用手机扫描后，在手机上为电视登录 CloudDrive 账号、添加云盘账户，以及为电视的输入框输入文字。</p>
+            <p class="card-foot">应用 1.1.1 · Apple TV 与 Android 电视</p>
+          </a></li>
+          <li><a class="card" href="/two-way-sync.html">
+            <i class="fa-solid fa-rotate card-icon" aria-hidden="true"></i>
+            <h3>双向同步</h3>
+            <p>本地文件夹和云端文件夹之间双向同步：在任何一个文件夹中添加、修改或重命名文件，其他文件夹中也会执行相同的更改。删除默认不同步，两处都改过的文件保留两个版本。</p>
+            <p class="card-foot">核心服务 1.1.0</p>
+          </a></li>
+          <li><a class="card" href="/accessibility.html#subtitles">
+            <i class="fa-solid fa-universal-access card-icon" aria-hidden="true"></i>
+            <h3>读屏软件朗读字幕</h3>
+            <p>读屏软件开启时，播放器朗读每一条新出现的字幕，蓝光等图形字幕先在设备上进行文字识别。</p>
+            <p class="card-foot">Android、Windows 应用 1.1.0 · Apple 应用 1.1.1</p>
+          </a></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>下载链接签名</h3>
+            <p>开启「下载链接需要签名」后，在其他设备上打开下载链接时必须带有签名，只知道文件路径的人无法下载。CloudDrive2 给出的链接会自动带上签名；开启前保存的链接（例如 .strm 文件中的）需要重新复制。</p>
+            <p class="card-foot">核心服务 1.1.1 · 默认关闭</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── CloudDrive2 Core and CloudDrive2 App ─────────────────────── -->
+    <section class="band band-alt" aria-labelledby="naming-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Core 与 App</p>
+          <h2 id="naming-h">CloudDrive2 Core 和 CloudDrive2 App</h2>
+          <p>iPhone、iPad、Mac、Apple TV、Vision Pro、Android 手机与电视、Meta Quest 和 Windows 上都有原生的 <strong>CloudDrive2 App</strong>，提供专业级的视频、音频与文档播放。</p>
         </header>
 
         <h3>那我一直在用的 CloudDrive2 呢？</h3>
@@ -133,8 +181,7 @@
           <div class="half">
             <p class="half-kicker">你一直在用的那个</p>
             <h3>CloudDrive2 Core</h3>
-            <p>就是原来的 CloudDrive2。它仍然是一个独立产品：跑在电脑、NAS、
-               Docker 或服务器上，用浏览器管理，并且仍在持续开发中。</p>
+            <p>就是原来的 CloudDrive2。它仍然是一个独立产品：跑在电脑、NAS、Docker 或服务器上，用浏览器管理，并且仍在持续开发中。</p>
             <p class="half-foot"><a class="arrow-link" href="/features.html">看看核心功能</a></p>
           </div>
           <p class="halves-join" aria-hidden="true">＋</p>
@@ -385,33 +432,6 @@
     </section>
 
     <!-- ── open gRPC API ────────────────────────────────────────────── -->
-    <section class="band" id="coming-soon" aria-labelledby="soon-h">
-      <div class="container">
-        <header class="band-head">
-          <p class="eyebrow">即将推出</p>
-          <h2 id="soon-h">下一个版本会带来的功能</h2>
-          <p>以下功能将在下一个版本中提供。</p>
-        </header>
-        <ul class="card-grid card-grid-2 card-grid-pairs">
-          <li><a class="card" href="/progress-sync.html">
-            <i class="fa-solid fa-clock-rotate-left card-icon" aria-hidden="true"></i>
-            <h3>同步播放进度</h3>
-            <p>在一台设备上停止播放，在另一台设备上从同一位置继续，音轨、字幕和延迟设置一起恢复；PDF 和文本同步阅读位置。进度保存在你自己的云盘中。App Pro 功能。</p>
-          </a></li>
-          <li><a class="card" href="/help.html#tv">
-            <i class="fa-solid fa-tv card-icon" aria-hidden="true"></i>
-            <h3>用手机设置电视</h3>
-            <p>电视显示二维码，用手机扫描后，在手机上为电视登录 CloudDrive 账号、添加云盘账户，以及为电视的输入框输入文字。</p>
-          </a></li>
-          <li><a class="card" href="/accessibility.html#subtitles">
-            <i class="fa-solid fa-universal-access card-icon" aria-hidden="true"></i>
-            <h3>VoiceOver 朗读字幕</h3>
-            <p>VoiceOver 开启时，播放器朗读每一条新字幕，蓝光等图形字幕先经过文字识别。Android 和 Windows 上已经提供。</p>
-          </a></li>
-        </ul>
-      </div>
-    </section>
-
     <section class="band band-alt" aria-labelledby="api-h">
       <div class="container">
         <header class="band-head">

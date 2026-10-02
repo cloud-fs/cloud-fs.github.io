@@ -117,15 +117,64 @@
       </div>
     </section>
 
-    <!-- ── launch: CloudDrive2 App, and how it relates to Core ──────── -->
-    <section class="band band-dark" aria-labelledby="naming-h">
+    <!-- ── recent major features ────────────────────────────────────── -->
+    <section class="band band-dark" id="new" aria-labelledby="new-h">
       <div class="container">
         <header class="band-head">
           <p class="pill"><i class="fa-solid fa-star" aria-hidden="true"></i>New</p>
-          <h2 id="naming-h">Introducing CloudDrive2 App</h2>
-          <p>We are delighted to announce <strong>CloudDrive2 App</strong>: native apps for iPhone, iPad,
-             Mac, Apple TV, Vision Pro, Android phones and TVs, Meta Quest and Windows — each with
-             professional-grade video, audio and document playback.</p>
+          <h2 id="new-h">Recent major features</h2>
+          <p>Added in core 1.1.0 and 1.1.1 and app 1.1.0 and 1.1.1. For what changed in each core release, see the <a href="/en/download.html#changelog">release notes</a>.</p>
+        </header>
+        <ul class="card-grid">
+          <li><a class="card" href="/en/archive-folders.html">
+            <i class="fa-solid fa-file-zipper card-icon" aria-hidden="true"></i>
+            <h3>Archive folders</h3>
+            <p>Open ISO, zip, 7z, RAR and tar archives in cloud storage as read-only folders, without downloading or extracting them; a SACD ISO shows as DSF audio files.</p>
+            <p class="card-foot">Core 1.1.1 · Core Pro feature</p>
+          </a></li>
+          <li><a class="card" href="/en/progress-sync.html">
+            <i class="fa-solid fa-clock-rotate-left card-icon" aria-hidden="true"></i>
+            <h3>Progress sync</h3>
+            <p>Stop on one device and continue on another at the same place, with the same audio, subtitles and delays; PDF and text files keep their reading position. Progress stays in your own cloud.</p>
+            <p class="card-foot">App 1.1.1 · App Pro feature</p>
+          </a></li>
+          <li><a class="card" href="/en/help.html#tv">
+            <i class="fa-solid fa-tv card-icon" aria-hidden="true"></i>
+            <h3>Set up a TV from a phone</h3>
+            <p>The TV shows a code; scan it with a phone to sign the TV in, add cloud accounts to it, and type into its text boxes from the phone.</p>
+            <p class="card-foot">App 1.1.1 · Apple TV and Android TV</p>
+          </a></li>
+          <li><a class="card" href="/en/two-way-sync.html">
+            <i class="fa-solid fa-rotate card-icon" aria-hidden="true"></i>
+            <h3>Two-way sync</h3>
+            <p>Sync local and cloud folders both ways: add, change or rename a file in any of them and the others do the same. Deletions are not synced unless you turn that on, and a file changed in two places keeps both versions.</p>
+            <p class="card-foot">Core 1.1.0</p>
+          </a></li>
+          <li><a class="card" href="/en/accessibility.html#subtitles">
+            <i class="fa-solid fa-universal-access card-icon" aria-hidden="true"></i>
+            <h3>Screen readers read subtitles</h3>
+            <p>With a screen reader on, the player reads each new subtitle line, recognising Blu-ray and other picture subtitles on the device first.</p>
+            <p class="card-foot">Android and Windows app 1.1.0 · Apple apps 1.1.1</p>
+          </a></li>
+          <li><div class="card">
+            <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>
+            <h3>Signed download links</h3>
+            <p>Turn on Require signed download links, and a download link opened on another device must carry a signature, so knowing a file's path is not enough. Links CloudDrive2 gives out are signed for you; links saved earlier, such as in .strm files, need copying again.</p>
+            <p class="card-foot">Core 1.1.1 · Off by default</p>
+          </div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── CloudDrive2 Core and CloudDrive2 App ─────────────────────── -->
+    <section class="band band-alt" aria-labelledby="naming-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Core and App</p>
+          <h2 id="naming-h">CloudDrive2 Core and CloudDrive2 App</h2>
+          <p><strong>CloudDrive2 App</strong> runs natively on iPhone, iPad, Mac, Apple TV, Vision Pro,
+             Android phones and TVs, Meta Quest and Windows, with professional-grade video, audio and
+             document playback.</p>
         </header>
 
         <h3>What about the CloudDrive2 I already run?</h3>
@@ -416,33 +465,6 @@
     </section>
 
     <!-- ── open gRPC API ────────────────────────────────────────────── -->
-    <section class="band" id="coming-soon" aria-labelledby="soon-h">
-      <div class="container">
-        <header class="band-head">
-          <p class="eyebrow">Coming soon</p>
-          <h2 id="soon-h">Arriving in the next release</h2>
-          <p>These arrive in the next release.</p>
-        </header>
-        <ul class="card-grid card-grid-2 card-grid-pairs">
-          <li><a class="card" href="/en/progress-sync.html">
-            <i class="fa-solid fa-clock-rotate-left card-icon" aria-hidden="true"></i>
-            <h3>Progress sync</h3>
-            <p>Stop on one device and continue on another at the same place, with the same audio, subtitles and delays; PDF and text files keep their reading position. Progress stays in your own cloud. An App Pro feature.</p>
-          </a></li>
-          <li><a class="card" href="/en/help.html#tv">
-            <i class="fa-solid fa-tv card-icon" aria-hidden="true"></i>
-            <h3>Set up a TV from a phone</h3>
-            <p>The TV shows a code; scan it with a phone to sign the TV in, add cloud accounts to it, and type into its text boxes from the phone.</p>
-          </a></li>
-          <li><a class="card" href="/en/accessibility.html#subtitles">
-            <i class="fa-solid fa-universal-access card-icon" aria-hidden="true"></i>
-            <h3>VoiceOver reads subtitles</h3>
-            <p>With VoiceOver on, the player reads each new subtitle line, recognising Blu-ray and other picture subtitles first. Already available on Android and Windows.</p>
-          </a></li>
-        </ul>
-      </div>
-    </section>
-
     <section class="band band-alt" aria-labelledby="api-h">
       <div class="container">
         <header class="band-head">
