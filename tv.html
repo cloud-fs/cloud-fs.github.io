@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <title>用手机设置电视 — CloudDrive2</title>
+  <link rel="stylesheet" href="bootstrap-5.3.0-dist/css/bootstrap.min.css">
+</head>
+
+<!--
+  Landing page for the QR code a CloudDrive TV app shows (docs/TV_REMOTE_CONFIG.md in the
+  app repo). The pairing data is in the URL fragment, which browsers never send to this
+  server. This page must stay free of analytics and third-party scripts: the only thing it
+  does with the fragment is hand it to the CloudDrive app on this phone.
+-->
+
+<body>
+  <main class="container py-4" style="max-width: 40rem">
+    <h1 class="h3">用手机设置电视</h1>
+    <p>这个二维码用于在手机上设置电视上的 CloudDrive2，例如登录账户、添加网盘，以及输入网址、密码等较长的内容。</p>
+    <p id="open-zh" hidden>
+      <a class="btn btn-primary" id="open-app-zh" href="#">在 CloudDrive2 中打开</a>
+    </p>
+    <p>如果按钮没有反应，请打开手机上的 CloudDrive2，进入<strong>设置 → 设置电视 → 添加电视</strong>，然后扫描电视上的二维码。</p>
+    <p>手机和电视需要连接同一个网络。</p>
+    <p>还没有安装 CloudDrive2？
+      <a href="https://apps.apple.com/cn/app/clouddrive2/id6760897168">App Store</a> ·
+      <a href="https://play.google.com/store/apps/details?id=com.clouddrive2.CloudDrive2">Google Play</a> ·
+      <a href="download.html">其他下载方式</a>
+    </p>
+
+    <hr>
+
+    <section lang="en">
+      <h2 class="h3">Set up your TV from your phone</h2>
+      <p>This QR code lets you set up CloudDrive2 on your TV from your phone: sign in, add cloud storage, and
+        type long text such as addresses and passwords.</p>
+      <p id="open-en" hidden>
+        <a class="btn btn-primary" id="open-app-en" href="#">Open in CloudDrive2</a>
+      </p>
+      <p>If the button does nothing, open CloudDrive2 on your phone, go to <strong>Settings → Set up a TV → Add a
+          TV</strong>, and scan the code on the TV.</p>
+      <p>Your phone and your TV must be on the same network.</p>
+      <p>Don't have CloudDrive2 yet?
+        <a href="https://apps.apple.com/cn/app/clouddrive2/id6760897168">App Store</a> ·
+        <a href="https://play.google.com/store/apps/details?id=com.clouddrive2.CloudDrive2">Google Play</a> ·
+        <a href="download.html">Other downloads</a>
+      </p>
+    </section>
+  </main>
+
+  <script>
+    // Pass the pairing data to the app unchanged; nothing is sent anywhere else.
+    (function () {
+      var fragment = window.location.hash;
+      if (!fragment || fragment.indexOf("v=1&") !== 1) {
+        return;
+      }
+      var appUrl = "clouddrive://tv" + fragment;
+      ["zh", "en"].forEach(function (lang) {
+        document.getElementById("open-app-" + lang).href = appUrl;
+        document.getElementById("open-" + lang).hidden = false;
+      });
+    })();
+  </script>
+</body>
+
+</html>
