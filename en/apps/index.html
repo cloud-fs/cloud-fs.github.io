@@ -365,6 +365,28 @@
                 <td class="c"><span class="yes">✓</span></td>
                 <td class="c"><span class="yes">✓</span></td>
               </tr>
+              <tr>
+                <th scope="row">E-book reader (EPUB, MOBI, AZW3, CBZ)</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Lyrics</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -380,30 +402,40 @@
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">New</p>
-          <h2 id="soon-h">New in app 1.1.1</h2>
-          <p>These arrived in app 1.1.1. Each platform's page says what it has.</p>
+          <h2 id="soon-h">New in app 1.1.2</h2>
+          <p>Available from app 1.1.2; each platform's page has the details. App 1.1.1 added <a href="/en/archive-folders.html">archive folders</a>, <a href="/en/progress-sync.html">progress sync</a> and <a href="/en/help.html#tv">TV setup from a phone</a>.</p>
         </header>
         <ul class="card-grid card-grid-2 card-grid-pairs">
-          <li><a class="card" href="/en/archive-folders.html">
-            <i class="fa-solid fa-file-zipper card-icon" aria-hidden="true"></i>
-            <h3>Archive folders</h3>
-            <p>Open ISO, zip, 7z, RAR and tar archives in cloud storage as read-only folders, without downloading or extracting them; a SACD ISO shows as DSF audio files. A Core Pro feature. Not yet in the Meta Quest app.</p>
-          </a></li>
-          <li><a class="card" href="/en/progress-sync.html">
-            <i class="fa-solid fa-clock-rotate-left card-icon" aria-hidden="true"></i>
-            <h3>Progress sync</h3>
-            <p>Stop on one device and continue on another at the same place, with the same audio, subtitles and delays; PDF and text files keep their reading position. Progress stays in your own cloud. An App Pro feature.</p>
-          </a></li>
-          <li><a class="card" href="/en/help.html#tv">
-            <i class="fa-solid fa-tv card-icon" aria-hidden="true"></i>
-            <h3>Set up a TV from a phone</h3>
-            <p>The TV shows a code; scan it with a phone to sign the TV in, add cloud accounts to it, and type into its text boxes from the phone.</p>
-          </a></li>
-          <li><a class="card" href="/en/accessibility.html#subtitles">
+          <li><div class="card">
+            <i class="fa-solid fa-book-open card-icon" aria-hidden="true"></i>
+            <h3>E-books</h3>
+            <p>EPUB, MOBI, AZW3 and CBZ files open straight from the cloud, without downloading the whole book. There is a table of contents, font size, line spacing, margins and themes; turn pages one at a time or scroll continuously, and vertical books work too. The reading position syncs across your devices through <a href="/en/progress-sync.html">progress sync</a> (App Pro). On every platform.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-music card-icon" aria-hidden="true"></i>
+            <h3>Lyrics</h3>
+            <p>The audio player shows timed lyrics from a .lrc file next to the song, and reads the lyrics stored in the song's own tags. The line being sung follows the music, with its translation underneath, and tapping a line plays from there (on a TV the lyrics only display). On every platform except the web interface.</p>
+          </div></li>
+          <li><a class="card" href="/en/accessibility.html">
             <i class="fa-solid fa-universal-access card-icon" aria-hidden="true"></i>
-            <h3>VoiceOver reads subtitles</h3>
-            <p>On iPhone, iPad, Mac, Apple TV and Vision Pro, with VoiceOver on, the player reads each new subtitle line, recognising Blu-ray and other picture subtitles first. Android and Windows have had this since 1.1.0.</p>
+            <h3>Screen readers read PDFs, scans and comics</h3>
+            <p>PDF pages are read paragraph by paragraph with headings marked, without downloading the whole file. Pages that are a single picture, such as scans and comics, are recognised on the device first. VoiceOver, TalkBack, Narrator and NVDA all read them.</p>
           </a></li>
+          <li><div class="card">
+            <i class="fa-solid fa-compact-disc card-icon" aria-hidden="true"></i>
+            <h3>DTS music files</h3>
+            <p>WAV files ripped from DTS CDs and .dts files no longer play as noise. Android passes DTS through when the receiver accepts it, and otherwise plays multichannel or stereo; a Mac keeps HDMI passthrough, and iPhone, iPad and Apple TV play multichannel PCM.</p>
+          </div></li>
+          <li><a class="card" href="/en/help.html#backup">
+            <i class="fa-solid fa-filter card-icon" aria-hidden="true"></i>
+            <h3>Backup filter rules by path</h3>
+            <p>The backup rule editor has Path Prefixes and Path Regex, to skip or keep one particular folder; Test the Rules shows whether a path is backed up and which rule skips it. In the Apple, Android and Windows apps.</p>
+          </a></li>
+          <li><div class="card">
+            <i class="fa-solid fa-share-from-square card-icon" aria-hidden="true"></i>
+            <h3>Android: share to CloudDrive</h3>
+            <p>Share files or folders from another app, choose Upload to CloudDrive and a cloud folder, and they upload. The last folder you chose is remembered.</p>
+          </div></li>
         </ul>
       </div>
     </section>

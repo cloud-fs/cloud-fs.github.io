@@ -57,9 +57,10 @@
       <div class="container">
         <p class="eyebrow">Accessibility</p>
         <h1>Using CloudDrive2 with a screen reader</h1>
-        <p class="hero-lede">What the CloudDrive2 apps and web interface do for screen-reader users: subtitles read aloud while a video plays, gestures and keys for the player, and other improvements on each platform.</p>
+        <p class="hero-lede">What the CloudDrive2 apps and web interface do for screen-reader users: subtitles read aloud while a video plays, PDFs and scans read aloud, gestures and keys for the player, and other improvements on each platform.</p>
         <ul class="chips">
           <li><a class="chip chip-subs" href="#subtitles">Subtitles read aloud</a></li>
+          <li><a class="chip" href="#documents">PDFs read aloud</a></li>
           <li><a class="chip" href="#player-controls">Player controls</a></li>
           <li><a class="chip" href="#per-platform">Other improvements</a></li>
           <li><a class="chip" href="#web">Web interface</a></li>
@@ -116,7 +117,37 @@
       </div>
     </section>
 
-    <section class="band band-alt" id="player-controls" aria-labelledby="controls-h">
+    <section class="band band-alt" id="documents" aria-labelledby="documents-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">PDFs and books</p>
+          <h2 id="documents-h">PDFs, scans and comics read aloud</h2>
+          <p>From app 1.1.2, screen readers can read the text on the pages of the PDF reader, without downloading the whole file first. Pages that are a single picture, such as scans and comics, are recognised on the device first, and the recognised text is read.</p>
+        </header>
+
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Platform</th><th scope="col">Screen reader</th><th scope="col">How pages are read</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>iPhone, iPad, Mac, Apple TV, Apple Vision Pro</th><td>VoiceOver</td><td>Reads the pages shown line by line, turns the page during continuous reading, and turns pages with a three-finger swipe; a Mac reads by line and offers page actions; Apple TV reads the focused page</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-android" aria-hidden="true"></i>Android phones, tablets and TVs, Meta Quest</th><td>TalkBack</td><td>One item per paragraph, in reading order, with headings marked; swiping on past the last paragraph turns the page</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</th><td>Narrator, NVDA</td><td>Reads the paragraphs laid over the page</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ul>
+          <li><strong>Page text</strong>: read in the order of the paragraphs on the page, with headings marked. PDFs in Chinese, Japanese and Korean work, and so do encrypted PDFs that open without a password.</li>
+          <li><strong>Scans and comics</strong>: the recognised text is put in reading order, by column and then by line. Apple devices use the system's Vision, Android and Meta Quest use the ML Kit model built into the app, and Windows uses the system's text recognition.</li>
+          <li><strong>E-books</strong>: books that reflow, such as EPUB, MOBI and AZW3, already give screen readers their text; pictures in a book are read by their alternative text.</li>
+          <li>Page text is loaded only while a screen reader is on.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" id="player-controls" aria-labelledby="controls-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Player</p>
@@ -153,7 +184,7 @@
       </div>
     </section>
 
-    <section class="band" id="per-platform" aria-labelledby="per-platform-h">
+    <section class="band band-alt" id="per-platform" aria-labelledby="per-platform-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">More</p>
@@ -164,11 +195,12 @@
           <li><strong>Apple devices</strong>: buttons in the player, the file browser and the panels have screen-reader labels in Chinese and English.</li>
           <li><strong>Apple TV</strong>: on tvOS 27, text in the app follows Settings › Accessibility › Display &amp; Text Size › Text Size.</li>
           <li><strong>Mac</strong>: the icon buttons on the image viewer's toolbar have screen-reader labels.</li>
+          <li><strong>iPhone, iPad, Vision Pro</strong>: while browsing files, VoiceOver's two-finger scrub goes back to the parent folder; in selection mode, the first scrub leaves selection mode. The toolbar's up button reads as "Parent Folder".</li>
         </ul>
       </div>
     </section>
 
-    <section class="band band-alt" id="web" aria-labelledby="web-h">
+    <section class="band" id="web" aria-labelledby="web-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Web</p>

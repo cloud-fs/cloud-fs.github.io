@@ -57,9 +57,10 @@
       <div class="container">
         <p class="eyebrow">无障碍</p>
         <h1>用读屏软件使用 CloudDrive2</h1>
-        <p class="hero-lede">这一页说明 CloudDrive2 的应用和网页管理界面为读屏软件用户做了什么：播放视频时朗读字幕、用手势或按键控制播放器，以及各平台的其他改进。</p>
+        <p class="hero-lede">这一页说明 CloudDrive2 的应用和网页管理界面为读屏软件用户做了什么：播放视频时朗读字幕、朗读 PDF 和扫描版、用手势或按键控制播放器，以及各平台的其他改进。</p>
         <ul class="chips">
           <li><a class="chip chip-subs" href="#subtitles">朗读字幕</a></li>
+          <li><a class="chip" href="#documents">朗读 PDF</a></li>
           <li><a class="chip" href="#player-controls">控制播放器</a></li>
           <li><a class="chip" href="#per-platform">各平台的其他改进</a></li>
           <li><a class="chip" href="#web">网页管理界面</a></li>
@@ -116,7 +117,37 @@
       </div>
     </section>
 
-    <section class="band band-alt" id="player-controls" aria-labelledby="controls-h">
+    <section class="band band-alt" id="documents" aria-labelledby="documents-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">PDF 与图书</p>
+          <h2 id="documents-h">朗读 PDF、扫描版和漫画</h2>
+          <p>应用 1.1.2 起，读屏软件可以朗读 PDF 阅读器中的页面文字，不需要先下载整个文件。整页是图片的页面，例如扫描版和漫画，先在设备上进行文字识别，再朗读识别出的文字。</p>
+        </header>
+
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">平台</th><th scope="col">读屏软件</th><th scope="col">怎样朗读</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row"><i class="fa-brands fa-apple" aria-hidden="true"></i>iPhone、iPad、Mac、Apple TV、Apple Vision Pro</th><td>VoiceOver</td><td>逐行朗读当前显示的页面，连续朗读时自动翻页，三指轻扫翻页；Mac 按行朗读并提供翻页操作；Apple TV 朗读获得焦点的页面</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-android" aria-hidden="true"></i>Android 手机、平板与电视，Meta Quest</th><td>TalkBack</td><td>每段文字是一个项目，按阅读顺序排列并标出标题；读到最后一段后再向后滑动即翻页</td></tr>
+              <tr><th scope="row"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</th><td>讲述人、NVDA</td><td>朗读覆盖在页面上的各段文字</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ul>
+          <li><strong>页面文字</strong>：按页面上的段落顺序朗读，标出标题。中文、日文、韩文的 PDF 和无需密码即可打开的加密 PDF 也可以朗读。</li>
+          <li><strong>扫描版和漫画</strong>：识别出的文字按阅读顺序排列，先按栏、再按行。Apple 设备使用系统的 Vision，Android 和 Meta Quest 使用应用内置的 ML Kit 模型，Windows 使用系统的文字识别。</li>
+          <li><strong>电子书</strong>：EPUB、MOBI、AZW3 等可以重新排版的书，文字本来就能被读屏软件朗读；书中的图片朗读它的替代文字。</li>
+          <li>页面文字只在读屏软件开启时才加载。PDF 阅读器中原来只有英文的控件名称现在都已翻译。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band" id="player-controls" aria-labelledby="controls-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">播放器</p>
@@ -153,7 +184,7 @@
       </div>
     </section>
 
-    <section class="band" id="per-platform" aria-labelledby="per-platform-h">
+    <section class="band band-alt" id="per-platform" aria-labelledby="per-platform-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">其他</p>
@@ -164,11 +195,12 @@
           <li><strong>Apple 设备</strong>：播放器、文件浏览器和各个面板的按钮都有中文和英文的读屏标签。</li>
           <li><strong>Apple TV</strong>：在 tvOS 27 上，应用中的文字大小跟随系统设置中的「辅助功能 › 显示与文字大小 › 文字大小」。</li>
           <li><strong>Mac</strong>：图片查看器工具栏上的图标按钮有读屏标签。</li>
+          <li><strong>iPhone、iPad、Vision Pro</strong>：浏览文件时，VoiceOver 的双指擦除手势返回上一级文件夹；在选择模式中，第一次擦除先退出选择模式。工具栏的向上按钮朗读为「上级文件夹」。</li>
         </ul>
       </div>
     </section>
 
-    <section class="band band-alt" id="web" aria-labelledby="web-h">
+    <section class="band" id="web" aria-labelledby="web-h">
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">网页</p>
