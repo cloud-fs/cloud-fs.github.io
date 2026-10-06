@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.1.1
+Version: 1.1.2
 
 ## Table of Contents
 
+- [What's New in 1.1.2](#whats-new-in-112)
 - [What's New in 1.1.1](#whats-new-in-111)
 - [What's New in 1.1.0](#whats-new-in-110)
 - [What's New in 1.0.17](#whats-new-in-1017)
@@ -45,6 +46,32 @@ Version: 1.1.1
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.1.2
+
+### Backup Filter Rules by Path
+
+The extension, file name and regex rules match one file or folder name at a time, at any depth, so they cannot skip a folder in one place only: a rule for `Temp` skips every folder named Temp. `FileBackupRule` has two new kinds that match the path from the backup's source folder instead. The user-facing behaviour is described in the [backup help](https://www.clouddrive2.com/en/help.html#backup).
+
+- `relativePaths` (field 5) lists paths relative to the source folder, one per line, with `/` or `\` separators. A full path inside the source folder is accepted too and is stored relative to it. Paths are compared by whole names, and a path matches itself and everything in it: `Users/me/AppData/Local/Temp` matches that folder and its contents, but not `Users/me/AppData/Local/Temp2`. In a whitelist rule, the folders on the way to a listed path are let through, so a scan can reach it.
+- `pathRegex` (field 6) is a regex matched against the path relative to the source folder, with "/" separators and a trailing "/" on folders (`Users/me/Temp/`). It is also tried on every folder above the path, so a folder that matches takes everything in it. Start the regex with `^` to match from the source folder; without it, the regex can match anywhere in the path. In a whitelist rule, a folder is entered while the regex could still match something below it.
+- Both kinds look at files and folders alike; `applyToFolder` and `applyToFile` are not used. The regex rule (field 3) still matches single names.
+- `BackupAdd` and `BackupUpdate` fail with `INVALID_ARGUMENT` when a path rule has no path or regex, lists a full path outside the source folder, or has a regex that does not compile. The other rule kinds are not checked, as before.
+- Check `CloudDriveSystemInfo.supportsPathFilterRules` (field 11) before offering the new kinds.
+
+A client written before 1.1.2 receives a path rule as an extensions rule with nothing in it, and would send it back that way. So `BackupUpdate` keeps the stored path rules unless the request sets `Backup.clientKnowsPathRules` (field 28) to `true`. A client that shows and edits path rules must set it on every `BackupUpdate`; otherwise a path rule the user deleted is kept. If the server is downgraded to an older version, the backup still loads, without its path rules.
+
+### Testing Filter Rules
+
+`BackupTestFileRules` (requires `allow_get_backups`) tests a path against filter rules as they are in an editor, before they are saved, and also for a backup that has not been added yet. It checks the path folder by folder, as a scan does, and returns whether the path would be backed up and which rule, or which folder above it, skips it. See [BackupTestFileRules](#backuptestfilerules).
+
+### Modified Files in Change Notifications
+
+`FileSystemChange.ChangeType` has a new value, `MODIFY` (3): new content was written into a file that already existed. It is sent when such a file, written through a mount or WebDAV, is flushed or closed, and when an upload that replaced a file finishes. A client that does not know the value can treat it as `CREATE`. Webhooks send it as the action `modify`.
+
+Writes through a mount or WebDAV are now reported when the file is closed, not only after the upload finishes. Writes through a mount or WebDAV to storage that CloudDrive writes directly (local folders, SMB, SFTP and encrypted folders) now send change notifications; before 1.1.2 they sent none. See [FILE_SYSTEM_CHANGE](#4-file_system_change).
 
 ---
 
@@ -1133,7 +1160,7 @@ The `clouddrive.proto` file contains:
 
 ### Version Compatibility
 
-**Current Version:** 1.1.1
+**Current Version:** 1.1.2
 
 Always use the proto file from the same version as your CloudDrive2 server to ensure compatibility. You can check your server version using the `GetRuntimeInfo` method.
 
@@ -2112,8 +2139,13 @@ message CloudDriveSystemInfo {
   // read the account. UserName is masked ("abcd***.com"), only a hint for the
   // login page: anything keyed by the account must use this one. (1.1.1+)
   optional string fullUserName = 10;
+  // this server has the path filter rules (FileBackupRule 5, 6) and
+  // BackupTestFileRules (1.1.2+)
+  bool supportsPathFilterRules = 11;
 }
 ```
+
+**New in 1.1.2:** `supportsPathFilterRules` is `true` when the server has the path filter rules (`FileBackupRule.relativePaths` and `pathRegex`) and `BackupTestFileRules`.
 
 **New in 1.1.1:** `supportsArchiveFolders` is `true` when the server has the [archive folder](#archive-folders) RPCs. `UserName` is now masked when it is longer than 8 characters (`abcd***.com`), because this method needs no token. `fullUserName` carries the full name for callers whose token has `allow_get_memberships`; use it for anything keyed by the account.
 
@@ -6648,6 +6680,38 @@ message Backup {
   optional bool deepScanEnabled = 25;                 // default true
   optional uint32 deepScanEveryPasses = 26;           // every N full scans; default 8; 0 = not by count
   optional uint32 deepScanMaxHours = 27;              // at least every N hours; default 24; 0 = not by time
+  // Set by clients that know the path rules (FileBackupRule 5 and 6). An
+  // update without it keeps the stored path rules: an older client shows
+  // them as empty extension rules and would otherwise lose them. (1.1.2+)
+  optional bool clientKnowsPathRules = 28;
+}
+```
+
+**New in 1.1.2:** `FileBackupRule` has two path rule kinds, `relativePaths` and `pathRegex`, and `clientKnowsPathRules` (field 28) keeps an older client from dropping them. See [What's New in 1.1.2](#whats-new-in-112).
+```protobuf
+message FileBackupRule {
+  oneof rule {
+    string extensions = 1;
+    string fileNames = 2;
+    string regex = 3;
+    uint64 minSize = 4;
+    // Paths relative to the source folder, one per line ("/" or backslash
+    // separators). A folder takes everything in it. Applies to files and
+    // folders alike; applyToFolder and applyToFile are not used. (1.1.2+)
+    string relativePaths = 5;
+    // A regex matched against the path relative to the source folder, with
+    // "/" separators and a trailing "/" on folders ("Users/me/Temp/"). Also
+    // tried on every folder above, so a match takes everything in it.
+    // Applies to files and folders alike; applyToFolder and applyToFile are
+    // not used. The regex rule (3) keeps matching single names. (1.1.2+)
+    string pathRegex = 6;
+  }
+  bool isEnabled = 100;
+  bool isBlackList = 101;
+  bool applyToFolder = 102;
+  // If present, determines whether rule applies to regular files; default true
+  // when absent
+  optional bool applyToFile = 103;
 }
 ```
 
@@ -6727,6 +6791,85 @@ Restarts backup scanning.
 **Request:** `StringValue` (source path)
 
 **Response:** `google.protobuf.Empty`
+
+---
+
+#### BackupTestFileRules
+
+Tests one path against filter rules while they are being edited. The rules come from the request, not from a stored backup, so a backup that has not been added yet can be tested too. Requires `allow_get_backups`. **New in 1.1.2.**
+
+**Request:** `BackupTestFileRulesRequest`
+```protobuf
+// Test a path against filter rules while they are being edited.
+message BackupTestFileRulesRequest {
+  // the backup's source folder (also for a backup not added yet)
+  string sourcePath = 1;
+  // the rules as they are in the editor, not the stored ones
+  repeated FileBackupRule fileBackupRules = 2;
+  // a full path inside the source folder, or a path relative to it
+  string testPath = 3;
+  // used when the path is not found: a folder (a trailing "/" also means a
+  // folder) and the file size for a minimum size rule
+  optional bool isFolder = 4;
+  optional uint64 fileSize = 5;
+}
+```
+
+**Response:** `BackupTestFileRulesResult`
+```protobuf
+message BackupTestFileRulesResult {
+  enum Outcome {
+    BackedUp = 0;
+    SkippedByRule = 1;         // ruleIndex skips the path itself
+    SkippedFolderAbove = 2;    // ruleIndex skips skippedFolder, which holds the path
+    SkippedSystemFile = 3;     // temporary files CloudDrive always skips
+    OutsideSource = 4;         // a full path that is not inside the source folder
+    InvalidRule = 5;           // ruleIndex cannot be used; see message
+  }
+  enum RuleVerdict {
+    NotUsed = 0;               // disabled, or does not look at this kind of item
+    Passes = 1;
+    Skips = 2;
+    Invalid = 3;
+  }
+  Outcome outcome = 1;
+  string relativePath = 2;     // the path the rules were tested on, "/" separators
+  bool isFolder = 3;
+  bool foundInSource = 4;      // the path exists; folder and size come from it
+  uint64 fileSize = 5;
+  int32 ruleIndex = 6;         // index in the request's rules; -1 when none
+  string skippedFolder = 7;    // relative path, for SkippedFolderAbove
+  repeated RuleVerdict ruleVerdicts = 8;  // per rule, for the path itself
+  string message = 9;          // an invalid rule's error
+}
+```
+
+- `testPath` is a full path inside `sourcePath` or a path relative to it. A full path outside the source folder returns `OutsideSource`.
+- When the path exists, whether it is a folder and its size are read from the source folder, and `foundInSource` is `true`. Otherwise `isFolder` (or a trailing "/" on `testPath`) and `fileSize` are used, so a path that does not exist yet can be tested too.
+- The path is tested folder by folder from the source folder down, as a scan does. When a rule skips a folder above the path, the outcome is `SkippedFolderAbove` and `skippedFolder` is that folder. Nothing in a skipped folder is backed up, whatever the other rules say about the path itself.
+- `ruleIndex` is an index into the request's `fileBackupRules`, or `-1`. `ruleVerdicts` has one entry per rule, in the same order, for the path itself.
+- `InvalidRule` means a rule cannot be used, for example a path regex that does not compile, and `message` has the error. The RPC returns it as a result instead of failing, so an editor can show the error next to the rule.
+
+**Example (C#):**
+```csharp
+var result = await client.BackupTestFileRulesAsync(new BackupTestFileRulesRequest
+{
+    SourcePath = sourcePath,
+    FileBackupRules =
+    {
+        new FileBackupRule
+        {
+            RelativePaths = "Users/me/AppData/Local/Temp",
+            IsEnabled = true,
+            IsBlackList = true,
+        },
+    },
+    TestPath = "Users/me/AppData/Local/Temp/cache.db",
+});
+Console.WriteLine($"{result.RelativePath}: {result.Outcome}");
+if (result.Outcome == BackupTestFileRulesResult.Types.Outcome.SkippedFolderAbove)
+    Console.WriteLine($"Rule {result.RuleIndex + 1} skips {result.SkippedFolder}");
+```
 
 ---
 
@@ -7281,13 +7424,14 @@ case CloudDrivePushMessage.Types.MessageType.ForceExit:
 
 #### 4. FILE_SYSTEM_CHANGE
 
-**Purpose**: Notify clients when files or folders are created, modified, moved, or deleted
+**Purpose**: Notify clients when files or folders are created, modified, renamed or moved, or deleted
 
 **Data**: `FileSystemChange`
-- `path`: Path of changed file/folder
-- `changeType`: Type of change (Created, Modified, Deleted, Renamed, Moved)
-- `oldPath`: Previous path (for rename/move operations)
-- `isDirectory`: Whether the item is a directory
+- `changeType`: `CREATE`, `DELETE`, `RENAME`, or `MODIFY` (1.1.2+: new content written into a file that already existed; a client that does not know it can treat it as `CREATE`)
+- `isDirectory`: Whether the item is a folder
+- `path`: Path of the changed file or folder; for `RENAME`, the path before the change
+- `newPath`: For `RENAME`, the path after the change (a move is reported as a rename)
+- `theFile`: The file after the change; not set for `DELETE`
 
 **Use Case**: Refresh file lists, update file explorer UI in real-time
 
@@ -7298,7 +7442,7 @@ case CloudDrivePushMessage.Types.MessageType.FileSystemChange:
 
     switch (fsChange.ChangeType)
     {
-        case FileSystemChange.Types.ChangeType.Created:
+        case FileSystemChange.Types.ChangeType.Create:
             Console.WriteLine($"New {(fsChange.IsDirectory ? "folder" : "file")} created: {fsChange.Path}");
             // Refresh current directory if we're viewing the parent
             if (IsViewingParentDirectory(fsChange.Path))
@@ -7307,17 +7451,22 @@ case CloudDrivePushMessage.Types.MessageType.FileSystemChange:
             }
             break;
 
-        case FileSystemChange.Types.ChangeType.Deleted:
+        case FileSystemChange.Types.ChangeType.Modify:
+            Console.WriteLine($"Modified: {fsChange.Path}");
+            // Show the new size and modified time
+            RefreshFileInUI(fsChange.Path, fsChange.TheFile);
+            break;
+
+        case FileSystemChange.Types.ChangeType.Delete:
             Console.WriteLine($"Deleted: {fsChange.Path}");
             // Remove from UI if visible
             RemoveFileFromUI(fsChange.Path);
             break;
 
-        case FileSystemChange.Types.ChangeType.Moved:
-        case FileSystemChange.Types.ChangeType.Renamed:
-            Console.WriteLine($"Moved/Renamed: {fsChange.OldPath} -> {fsChange.Path}");
+        case FileSystemChange.Types.ChangeType.Rename:
+            Console.WriteLine($"Moved/Renamed: {fsChange.Path} -> {fsChange.NewPath}");
             // Update UI
-            UpdateFileInUI(fsChange.OldPath, fsChange.Path);
+            UpdateFileInUI(fsChange.Path, fsChange.NewPath);
             break;
     }
     break;
@@ -9664,9 +9813,9 @@ This guide covers the complete CloudDrive2 gRPC API with:
 - ✅ **Security guidelines**
 - ✅ **Complete working examples**
 
-**API Version:** 1.1.1
+**API Version:** 1.1.2
 
 ---
 
-*Last Updated: 2026-10-02*
+*Last Updated: 2026-10-07*
 *Copyright © 2026 CloudDrive. All rights reserved.*

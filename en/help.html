@@ -599,12 +599,31 @@ brew services start clouddrive2</code></pre></div>
                   backup only copies the source to the destinations; two-way sync keeps the source and
                   every destination the same, so a change in any of them reaches the others. See
                   <a href="/en/two-way-sync.html">Two-way sync</a>.</li>
-              <li>Set the file filter rules (by extension or by name, applied to files and folders
-                  independently) and the completion rules — deleting the source file after upload, for
-                  instance.</li>
+              <li>Set the file filter rules and the completion rules — deleting the source file after
+                  upload, for instance. Filter rules can match by extension, name, regex or file size, or
+                  by a path inside the source folder (1.1.2 and later).</li>
               <li>Backup works from real-time filesystem monitoring: a change in the source propagates as
                   it happens. You can also schedule full scans to reconcile periodically.</li>
             </ol>
+            <div class="note">
+              <span class="note-title">Do filter rules match names or paths?</span>
+              <p>Extension, file name and regex rules only look at names: each folder and file name in a
+                 path is checked on its own, at any level. A file name rule <code>Temp</code> that applies
+                 to folders matches every folder named Temp in the source, wherever it is. A regex also
+                 matches one name at a time, so a "/" or "\" in it never matches anything.</p>
+              <p>To skip or keep one particular place, use a path rule (1.1.2 and later). "Path Prefixes"
+                 takes the start of a path on each line, counted from the source folder and compared by
+                 whole names; everything whose path starts with it is matched.
+                 <code>Users/me/AppData/Local/Temp</code> matches that folder and everything in it, but
+                 not Users/me/AppData/Local/Temp2 or Data/Users/me/AppData/Local/Temp. "Path Regex" is matched
+                 against the path from the source folder, with "/" between names and "/" at the end of a
+                 folder, such as <code>^Users/[^/]+/AppData/Local/Temp/</code>; start with ^ to match from
+                 the source folder only, otherwise the regex can match anywhere in the path.</p>
+              <p>All rules apply together: a file is backed up only if every enabled rule lets it through.
+                 A skipped folder is not opened, so nothing in it is backed up, and a whitelist rule cannot
+                 bring it back. While editing the rules, enter a path under "Test the Rules" to see whether
+                 it is backed up and which rule skips it.</p>
+            </div>
             <div class="note">
               <span class="note-title">Changes made in the cloud's own app do not trigger live backup</span>
               <p>Real-time monitoring only sees changes that happen inside CloudDrive2. Cloud providers do

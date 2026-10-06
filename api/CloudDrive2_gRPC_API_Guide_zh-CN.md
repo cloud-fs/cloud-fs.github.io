@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.1.1
+版本: 1.1.2
 
 ## 目录
 
+- [1.1.2 版本新特性](#112-版本新特性)
 - [1.1.1 版本新特性](#111-版本新特性)
 - [1.1.0 版本新特性](#110-版本新特性)
 - [1.0.17 版本新特性](#1017-版本新特性)
@@ -45,6 +46,32 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.1.2 版本新特性
+
+### 按路径匹配的备份过滤规则
+
+扩展名、文件名和正则表达式规则每次只匹配一个文件或文件夹的名称，不限层级，所以无法只排除某一个位置的文件夹：针对 `Temp` 的规则会排除所有名为 Temp 的文件夹。`FileBackupRule` 新增两种规则，按从备份源文件夹开始的路径匹配。面向用户的说明见[帮助页的备份部分](https://www.clouddrive2.com/help.html#backup)。
+
+- `relativePaths`（字段 5）列出相对于源文件夹的路径，每行一个，分隔符可以是“/”或“\”。也可以写源文件夹中的完整路径，保存时转换为相对路径。路径按完整名称比较，一个路径匹配它本身及其中的全部内容：`Users/me/AppData/Local/Temp` 匹配这个文件夹及其中的内容，不匹配 `Users/me/AppData/Local/Temp2`。作为白名单时，通往所列路径的各级文件夹也会放行，扫描才能到达它。
+- `pathRegex`（字段 6）是一个正则表达式，匹配相对于源文件夹的路径，名称之间用“/”分隔，文件夹路径以“/”结尾（`Users/me/Temp/`）。它也会用来匹配路径上面的每一级文件夹，所以匹配的文件夹中的全部内容都会匹配。以 `^` 开头表示从源文件夹开始匹配；不加 `^` 时可以匹配路径中的任何位置。作为白名单时，只要正则表达式还可能匹配某个文件夹下面的内容，就会进入这个文件夹。
+- 这两种规则对文件和文件夹都生效，不使用 `applyToFolder` 和 `applyToFile`。正则表达式规则（字段 3）仍然只匹配单个名称。
+- 路径规则没有写路径或正则表达式、写了源文件夹之外的完整路径，或者正则表达式无法编译时，`BackupAdd` 和 `BackupUpdate` 以 `INVALID_ARGUMENT` 失败。其他种类的规则和以前一样不做检查。
+- 提供这两种规则之前，请先检查 `CloudDriveSystemInfo.supportsPathFilterRules`（字段 11）。
+
+1.1.2 之前编写的客户端会把路径规则读成内容为空的扩展名规则，并按这个样子发回。所以除非请求中的 `Backup.clientKnowsPathRules`（字段 28）为 `true`，`BackupUpdate` 会保留已保存的路径规则。显示和编辑路径规则的客户端每次调用 `BackupUpdate` 都必须设置它，否则用户删除的路径规则会被保留下来。服务端降级到旧版本后，备份仍然可以读取，只是没有路径规则。
+
+### 测试过滤规则
+
+`BackupTestFileRules`（需要 `allow_get_backups`）用编辑器中尚未保存的过滤规则测试一个路径，还没有添加的备份也可以测试。它像扫描时一样逐级检查路径中的文件夹，返回这个路径是否会备份，以及被哪一条规则、或者被上面的哪一个文件夹排除。见 [BackupTestFileRules](#backuptestfilerules)。
+
+### 文件变化通知新增“修改”
+
+`FileSystemChange.ChangeType` 新增 `MODIFY`（3）：新内容写入了一个已经存在的文件。通过挂载或 WebDAV 写入这样的文件后刷新或关闭文件时，以及替换文件的上传完成时，都会发送。不认识这个值的客户端可以把它当作 `CREATE` 处理。Webhook 以 `modify` 动作发送。
+
+通过挂载或 WebDAV 写入的文件，现在在关闭时就会通知，不再只在上传完成后通知。通过挂载或 WebDAV 写入 CloudDrive 直接写入的存储（本地文件夹、SMB、SFTP 和加密文件夹）时，现在也会发送变化通知；1.1.2 之前不发送任何通知。见 [FILE_SYSTEM_CHANGE](#4-file_system_change)。
 
 ---
 
@@ -1131,7 +1158,7 @@ python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. clouddrive.pr
 
 ### 版本兼容性
 
-**当前版本:** 1.1.1
+**当前版本:** 1.1.2
 
 始终使用与 CloudDrive2 服务器相同版本的 proto 文件以确保兼容性。您可以使用 `GetRuntimeInfo` 方法检查服务器版本。
 
@@ -2113,8 +2140,13 @@ message CloudDriveSystemInfo {
   // read the account. UserName is masked ("abcd***.com"), only a hint for the
   // login page: anything keyed by the account must use this one. (1.1.1+)
   optional string fullUserName = 10;
+  // this server has the path filter rules (FileBackupRule 5, 6) and
+  // BackupTestFileRules (1.1.2+)
+  bool supportsPathFilterRules = 11;
 }
 ```
+
+**1.1.2 新增:** 服务端提供路径过滤规则（`FileBackupRule.relativePaths` 和 `pathRegex`）和 `BackupTestFileRules` 时，`supportsPathFilterRules` 为 `true`。
 
 **1.1.1 新增:** 服务端提供[压缩包文件夹](#压缩包文件夹) RPC 时，`supportsArchiveFolders` 为 `true`。因为这个方法不需要令牌，`UserName` 超过 8 个字符时现在只返回部分内容（`abcd***.com`）。`fullUserName` 返回完整的用户名，调用方的令牌需要有 `allow_get_memberships`；凡是按账号区分的数据，都应使用它。
 
@@ -6645,6 +6677,38 @@ message Backup {
   optional bool deepScanEnabled = 25;                 // default true
   optional uint32 deepScanEveryPasses = 26;           // every N full scans; default 8; 0 = not by count
   optional uint32 deepScanMaxHours = 27;              // at least every N hours; default 24; 0 = not by time
+  // Set by clients that know the path rules (FileBackupRule 5 and 6). An
+  // update without it keeps the stored path rules: an older client shows
+  // them as empty extension rules and would otherwise lose them. (1.1.2+)
+  optional bool clientKnowsPathRules = 28;
+}
+```
+
+**1.1.2 新增:** `FileBackupRule` 新增两种路径规则 `relativePaths` 和 `pathRegex`；`clientKnowsPathRules`（字段 28）防止旧客户端丢失这些规则。见 [1.1.2 版本新特性](#112-版本新特性)。
+```protobuf
+message FileBackupRule {
+  oneof rule {
+    string extensions = 1;
+    string fileNames = 2;
+    string regex = 3;
+    uint64 minSize = 4;
+    // Paths relative to the source folder, one per line ("/" or backslash
+    // separators). A folder takes everything in it. Applies to files and
+    // folders alike; applyToFolder and applyToFile are not used. (1.1.2+)
+    string relativePaths = 5;
+    // A regex matched against the path relative to the source folder, with
+    // "/" separators and a trailing "/" on folders ("Users/me/Temp/"). Also
+    // tried on every folder above, so a match takes everything in it.
+    // Applies to files and folders alike; applyToFolder and applyToFile are
+    // not used. The regex rule (3) keeps matching single names. (1.1.2+)
+    string pathRegex = 6;
+  }
+  bool isEnabled = 100;
+  bool isBlackList = 101;
+  bool applyToFolder = 102;
+  // If present, determines whether rule applies to regular files; default true
+  // when absent
+  optional bool applyToFile = 103;
 }
 ```
 
@@ -6724,6 +6788,85 @@ message BackupSetEnabledRequest {
 **请求:** `StringValue` (源路径)
 
 **响应:** `google.protobuf.Empty`
+
+---
+
+#### BackupTestFileRules
+
+用编辑中的过滤规则测试一个路径。规则来自请求，而不是已保存的备份，所以还没有添加的备份也可以测试。需要 `allow_get_backups`。**1.1.2 新增。**
+
+**请求:** `BackupTestFileRulesRequest`
+```protobuf
+// Test a path against filter rules while they are being edited.
+message BackupTestFileRulesRequest {
+  // the backup's source folder (also for a backup not added yet)
+  string sourcePath = 1;
+  // the rules as they are in the editor, not the stored ones
+  repeated FileBackupRule fileBackupRules = 2;
+  // a full path inside the source folder, or a path relative to it
+  string testPath = 3;
+  // used when the path is not found: a folder (a trailing "/" also means a
+  // folder) and the file size for a minimum size rule
+  optional bool isFolder = 4;
+  optional uint64 fileSize = 5;
+}
+```
+
+**响应:** `BackupTestFileRulesResult`
+```protobuf
+message BackupTestFileRulesResult {
+  enum Outcome {
+    BackedUp = 0;
+    SkippedByRule = 1;         // ruleIndex skips the path itself
+    SkippedFolderAbove = 2;    // ruleIndex skips skippedFolder, which holds the path
+    SkippedSystemFile = 3;     // temporary files CloudDrive always skips
+    OutsideSource = 4;         // a full path that is not inside the source folder
+    InvalidRule = 5;           // ruleIndex cannot be used; see message
+  }
+  enum RuleVerdict {
+    NotUsed = 0;               // disabled, or does not look at this kind of item
+    Passes = 1;
+    Skips = 2;
+    Invalid = 3;
+  }
+  Outcome outcome = 1;
+  string relativePath = 2;     // the path the rules were tested on, "/" separators
+  bool isFolder = 3;
+  bool foundInSource = 4;      // the path exists; folder and size come from it
+  uint64 fileSize = 5;
+  int32 ruleIndex = 6;         // index in the request's rules; -1 when none
+  string skippedFolder = 7;    // relative path, for SkippedFolderAbove
+  repeated RuleVerdict ruleVerdicts = 8;  // per rule, for the path itself
+  string message = 9;          // an invalid rule's error
+}
+```
+
+- `testPath` 可以是 `sourcePath` 中的完整路径，也可以是相对于它的路径。源文件夹之外的完整路径返回 `OutsideSource`。
+- 路径存在时，是否为文件夹和文件大小从源文件夹中读取，`foundInSource` 为 `true`。路径不存在时，使用 `isFolder`（`testPath` 以“/”结尾也表示文件夹）和 `fileSize`，所以还不存在的路径也可以测试。
+- 测试像扫描时一样从源文件夹开始逐级向下进行。某条规则排除了路径上面的一个文件夹时，结果为 `SkippedFolderAbove`，`skippedFolder` 是这个文件夹。被排除的文件夹中的内容都不会备份，不论其他规则对路径本身的判断如何。
+- `ruleIndex` 是请求中 `fileBackupRules` 的序号，没有时为 `-1`。`ruleVerdicts` 按同样的顺序给出每条规则对路径本身的判断。
+- `InvalidRule` 表示某条规则无法使用，例如路径正则表达式无法编译，错误信息在 `message` 中。这个 RPC 把它作为结果返回，而不是调用失败，编辑器可以把错误显示在对应的规则旁边。
+
+**示例 (C#):**
+```csharp
+var result = await client.BackupTestFileRulesAsync(new BackupTestFileRulesRequest
+{
+    SourcePath = sourcePath,
+    FileBackupRules =
+    {
+        new FileBackupRule
+        {
+            RelativePaths = "Users/me/AppData/Local/Temp",
+            IsEnabled = true,
+            IsBlackList = true,
+        },
+    },
+    TestPath = "Users/me/AppData/Local/Temp/cache.db",
+});
+Console.WriteLine($"{result.RelativePath}: {result.Outcome}");
+if (result.Outcome == BackupTestFileRulesResult.Types.Outcome.SkippedFolderAbove)
+    Console.WriteLine($"第 {result.RuleIndex + 1} 条规则排除了 {result.SkippedFolder}");
+```
 
 ---
 
@@ -7270,13 +7413,14 @@ case CloudDrivePushMessage.Types.MessageType.ForceExit:
 
 #### 4. FILE_SYSTEM_CHANGE
 
-**目的**: 通知客户端文件或文件夹更改
+**目的**: 通知客户端文件或文件夹的创建、修改、重命名或移动、删除
 
 **数据**: `FileSystemChange`
-- `changeType`: 更改类型 (CREATED, MODIFIED, DELETED, RENAMED)
-- `path`: 受影响的文件/文件夹路径
-- `oldPath`: 对于重命名操作的旧路径
-- `isDirectory`: 是否为目录
+- `changeType`: 更改类型，`CREATE`、`DELETE`、`RENAME`，或 `MODIFY`（1.1.2+：新内容写入了一个已经存在的文件；不认识这个值的客户端可以把它当作 `CREATE` 处理）
+- `isDirectory`: 是否为文件夹
+- `path`: 受影响的文件或文件夹路径；对于 `RENAME`，是更改前的路径
+- `newPath`: 对于 `RENAME`，是更改后的路径（移动也作为重命名报告）
+- `theFile`: 更改后的文件；`DELETE` 时没有
 
 **使用场景**:
 - 在文件浏览器中实时更新文件列表
@@ -7291,24 +7435,24 @@ case CloudDrivePushMessage.Types.MessageType.FileSystemChange:
 
     switch (change.ChangeType)
     {
-        case FileSystemChange.Types.ChangeType.Created:
+        case FileSystemChange.Types.ChangeType.Create:
             Console.WriteLine($"{itemType} 已创建: {change.Path}");
             await RefreshFileListAsync(Path.GetDirectoryName(change.Path));
             break;
 
-        case FileSystemChange.Types.ChangeType.Modified:
+        case FileSystemChange.Types.ChangeType.Modify:
             Console.WriteLine($"{itemType} 已修改: {change.Path}");
             await UpdateFileDetailsAsync(change.Path);
             break;
 
-        case FileSystemChange.Types.ChangeType.Deleted:
+        case FileSystemChange.Types.ChangeType.Delete:
             Console.WriteLine($"{itemType} 已删除: {change.Path}");
             await RemoveFromCacheAsync(change.Path);
             break;
 
-        case FileSystemChange.Types.ChangeType.Renamed:
-            Console.WriteLine($"{itemType} 已重命名: {change.OldPath} -> {change.Path}");
-            await UpdateFilePathAsync(change.OldPath, change.Path);
+        case FileSystemChange.Types.ChangeType.Rename:
+            Console.WriteLine($"{itemType} 已重命名: {change.Path} -> {change.NewPath}");
+            await UpdateFilePathAsync(change.Path, change.NewPath);
             break;
     }
     break;
@@ -9721,9 +9865,9 @@ class FileManager
 - ✅ **安全准则**
 - ✅ **完整的工作示例**
 
-**API 版本:** 1.1.1
+**API 版本:** 1.1.2
 
 ---
 
-*最后更新: 2026-10-02*
+*最后更新: 2026-10-07*
 *版权所有 © 2026 CloudDrive. 保留所有权利.*

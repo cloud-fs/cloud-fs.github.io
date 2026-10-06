@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.1.1";
+option (version) = "1.1.2";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
@@ -521,6 +521,8 @@ service CloudDriveFileSrv {
   // restart a backup walking through
   rpc BackupRestartWalkingThrough(StringValue) returns (google.protobuf.Empty) {
   }
+  // test a path against filter rules being edited (allow_get_backups)
+  rpc BackupTestFileRules(BackupTestFileRulesRequest) returns (BackupTestFileRulesResult) {}
   // check if current plan can support more backups
   rpc CanAddMoreBackups(google.protobuf.Empty) returns (FileOperationResult) {}
   // two-way sync: start a preview job (what would change); returns its id
@@ -977,6 +979,9 @@ message CloudDriveSystemInfo {
   // read the account. UserName is masked ("abcd***.com"), only a hint for the
   // login page: anything keyed by the account must use this one.
   optional string fullUserName = 10;
+  // this server has the path filter rules (FileBackupRule 5, 6) and
+  // BackupTestFileRules
+  bool supportsPathFilterRules = 11;
 }
 message UserLoginRequest {
   string userName = 1;
@@ -1148,6 +1153,9 @@ message FileSystemChange {
     CREATE = 0;
     DELETE = 1;
     RENAME = 2;
+    // new content written into a file that already existed; a client that
+    // doesn't know this value can treat it as CREATE
+    MODIFY = 3;
   }
   ChangeType changeType = 1;
   bool isDirectory = 2;
@@ -2353,6 +2361,16 @@ message FileBackupRule {
     string fileNames = 2;
     string regex = 3;
     uint64 minSize = 4;
+    // Paths relative to the source folder, one per line ("/" or backslash
+    // separators). A folder takes everything in it. Applies to files and
+    // folders alike; applyToFolder and applyToFile are not used.
+    string relativePaths = 5;
+    // A regex matched against the path relative to the source folder, with
+    // "/" separators and a trailing "/" on folders ("Users/me/Temp/"). Also
+    // tried on every folder above, so a match takes everything in it.
+    // Applies to files and folders alike; applyToFolder and applyToFile are
+    // not used. The regex rule (3) keeps matching single names.
+    string pathRegex = 6;
   }
   bool isEnabled = 100;
   bool isBlackList = 101;
@@ -2444,6 +2462,48 @@ message Backup {
   optional bool deepScanEnabled = 25;                 // default true
   optional uint32 deepScanEveryPasses = 26;           // every N full scans; default 8; 0 = not by count
   optional uint32 deepScanMaxHours = 27;              // at least every N hours; default 24; 0 = not by time
+  // Set by clients that know the path rules (FileBackupRule 5 and 6). An
+  // update without it keeps the stored path rules: an older client shows
+  // them as empty extension rules and would otherwise lose them.
+  optional bool clientKnowsPathRules = 28;
+}
+// Test a path against filter rules while they are being edited.
+message BackupTestFileRulesRequest {
+  // the backup's source folder (also for a backup not added yet)
+  string sourcePath = 1;
+  // the rules as they are in the editor, not the stored ones
+  repeated FileBackupRule fileBackupRules = 2;
+  // a full path inside the source folder, or a path relative to it
+  string testPath = 3;
+  // used when the path is not found: a folder (a trailing "/" also means a
+  // folder) and the file size for a minimum size rule
+  optional bool isFolder = 4;
+  optional uint64 fileSize = 5;
+}
+message BackupTestFileRulesResult {
+  enum Outcome {
+    BackedUp = 0;
+    SkippedByRule = 1;         // ruleIndex skips the path itself
+    SkippedFolderAbove = 2;    // ruleIndex skips skippedFolder, which holds the path
+    SkippedSystemFile = 3;     // temporary files CloudDrive always skips
+    OutsideSource = 4;         // a full path that is not inside the source folder
+    InvalidRule = 5;           // ruleIndex cannot be used; see message
+  }
+  enum RuleVerdict {
+    NotUsed = 0;               // disabled, or does not look at this kind of item
+    Passes = 1;
+    Skips = 2;
+    Invalid = 3;
+  }
+  Outcome outcome = 1;
+  string relativePath = 2;     // the path the rules were tested on, "/" separators
+  bool isFolder = 3;
+  bool foundInSource = 4;      // the path exists; folder and size come from it
+  uint64 fileSize = 5;
+  int32 ruleIndex = 6;         // index in the request's rules; -1 when none
+  string skippedFolder = 7;    // relative path, for SkippedFolderAbove
+  repeated RuleVerdict ruleVerdicts = 8;  // per rule, for the path itself
+  string message = 9;          // an invalid rule's error
 }
 // Two-way sync: the state of one location (the source or a destination).
 message BackupReplicaStatus {
