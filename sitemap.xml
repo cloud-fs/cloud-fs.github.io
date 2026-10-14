@@ -218,6 +218,18 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/progress-sync.html"/>
   </url>
   <url>
+    <loc>https://www.clouddrive2.com/media-library.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/media-library.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/media-library.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/media-library.html"/>
+  </url>
+  <url>
+    <loc>https://www.clouddrive2.com/en/media-library.html</loc>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/media-library.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/media-library.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/media-library.html"/>
+  </url>
+  <url>
     <loc>https://www.clouddrive2.com/accessibility.html</loc>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/accessibility.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/accessibility.html"/>

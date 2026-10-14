@@ -672,13 +672,13 @@
         <div class="split">
           <div>
             <h3>挂载盘也有这套机制</h3>
-            <p>CloudDrive2 让挂载出来的云盘文件系统也支持这套机制。挂载盘里创建、删除、重命名或修改文件时，使用 FileSystemWatcher 或 FileNotify 的第三方程序都会收到通知。
-               Emby、Jellyfin、Plex 这类媒体管理程序，就是靠它来发现媒体目录里多了新片子。</p>
+            <p>CloudDrive2 让挂载出来的云盘文件系统也支持这套机制。挂载盘里创建、删除、重命名或修改文件时，使用 FileSystemWatcher 或 FileNotify 的第三方程序都会收到通知。Emby、Jellyfin、Plex 这类媒体管理程序，就是靠它来发现媒体目录里多了新片子。</p>
             <p>Emby 与 Jellyfin 还可以更进一步：装上 <a href="/download.html#plugin-h">CloudDrive2 伴侣插件</a>，变更通知会直接送进服务器的定向刷新入口，媒体库的「实时监控」就可以全部关掉。</p>
           </div>
           <div>
             <h3>不只是挂载盘</h3>
             <p>CloudDrive2 还在此之上做了扩展。除了挂载文件系统上的操作，通过 Web 界面修改文件、通过 WebDAV 服务修改文件，以及通过 CloudDrive2 导入离线下载产生的文件变化，同样会生成正确的变更通知。无论文件是通过哪条路径进到 CloudDrive2 的，监视目录的程序看到的状态都是最新的。</p>
+            <p>CloudDrive2 App 的<a href="/media-library.html#new-files">媒体库</a>也使用这些通知：通过这台设备上的 CloudDrive2 添加、删除或改名的文件，通常在几秒内出现在媒体库中，不需要重新扫描。</p>
           </div>
         </div>
 

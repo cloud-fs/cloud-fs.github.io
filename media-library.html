@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>媒体库 — CloudDrive2</title>
+  <meta name="description" content="CloudDrive2 应用的媒体库：把云盘中的电影、剧集、音乐和图书整理成海报墙。说明文件夹和文件名如何识别、刮削从哪些网站获取信息、所有选项的作用、媒体信息、人物和合集、家长控制、Emby 兼容接口、信息在设备上如何保存，以及媒体库如何在多台设备之间同步。">
+  <link rel="canonical" href="https://www.clouddrive2.com/media-library.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/media-library.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/media-library.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/media-library.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="媒体库 — CloudDrive2">
+  <meta property="og:description" content="把云盘中的电影、剧集、音乐和图书整理成海报墙，不需要媒体服务器。信息保存在你自己的设备和云盘中。">
+  <meta property="og:url" content="https://www.clouddrive2.com/media-library.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    /* a second two-column block after steps or another split needs the same gap */
+    .steps + .split, .split + .split { margin-top: var(--s7); }
+    /* the storage table: long row headings wrap, so the other columns keep their width */
+    .store-table { table-layout: fixed; min-width: 720px; }
+    .store-table tbody th { white-space: normal; }
+    .store-table .col-what { width: 30%; }
+    .store-table .col-where { width: 22%; }
+    .store-table .col-kept { width: 28%; }
+    .store-table .col-sync { width: 20%; }
+    /* sample names: a long name wraps inside its column */
+    .name-table { table-layout: fixed; min-width: 560px; }
+    .name-table .col-name { width: 52%; }
+    .name-table tbody th { white-space: normal; font-weight: 400; }
+    .name-table code { overflow-wrap: anywhere; }
+  </style>
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/media-library.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">App Pro 功能 · 公测中</p>
+        <h1>媒体库</h1>
+        <p class="hero-lede">选择云盘中的文件夹，CloudDrive2 应用就把其中的电影、剧集、音乐和图书整理成带海报、简介和演员的媒体库。不需要另外搭建 Emby、Jellyfin 或 Plex 服务器：文件夹里已有的 NFO 和图片优先使用，缺少的信息可以从 TMDB 等网站获取；已经有 Emby 或 Jellyfin 服务器的，可以直接导入它的媒体库。整理结果保存在你自己的设备上，并可以通过你自己的云盘在多台设备之间同步。</p>
+        <ul class="chips">
+          <li><a class="chip chip-video" href="#types">媒体库类型</a></li>
+          <li><a class="chip" href="#create">创建与选项</a></li>
+          <li><a class="chip chip-cloud" href="#import">从 Emby 或 Jellyfin 导入</a></li>
+          <li><a class="chip chip-video" href="#video">视频如何识别</a></li>
+          <li><a class="chip chip-video" href="#scraper">刮削与匹配</a></li>
+          <li><a class="chip chip-cloud" href="#sites">信息来源网站</a></li>
+          <li><a class="chip" href="#review">待确认与手动识别</a></li>
+          <li><a class="chip chip-subs" href="#words">识别词</a></li>
+          <li><a class="chip chip-subs" href="#shelves">二级分类</a></li>
+          <li><a class="chip chip-video" href="#mediainfo">媒体信息</a></li>
+          <li><a class="chip" href="#people">人物、合集与编辑</a></li>
+          <li><a class="chip chip-video" href="#skip">跳过片头片尾</a></li>
+          <li><a class="chip chip-backup" href="#sidecars">保存 NFO 和图片</a></li>
+          <li><a class="chip chip-audio" href="#music">音乐库</a></li>
+          <li><a class="chip chip-audio" href="#books">图书库</a></li>
+          <li><a class="chip" href="#index">媒体库数据</a></li>
+          <li><a class="chip chip-cloud" href="#sync">跨设备同步</a></li>
+          <li><a class="chip chip-cloud" href="#sync-data">同步扫描数据</a></li>
+          <li><a class="chip chip-disc" href="#private">私密媒体库</a></li>
+          <li><a class="chip chip-disc" href="#parental">家长控制</a></li>
+          <li><a class="chip chip-cloud" href="#emby-api">Emby 兼容接口</a></li>
+          <li><a class="chip" href="#privacy">隐私</a></li>
+          <li><a class="chip" href="#faq">常见问题</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/apps/">下载应用</a>
+          <a class="btn btn-ghost" href="/pricing.html#app-h">App Pro 价格</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── types ─────────────────────────────────────────────────────── -->
+    <section class="band" id="types" aria-labelledby="types-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">类型</p>
+          <h2 id="types-h">五种媒体库</h2>
+          <p>一个媒体库由一个或多个文件夹组成，可以来自任何云盘、WebDAV、NAS 或本地文件夹，只要 CloudDrive2 能列出它们。不同媒体库的文件夹可以重叠。</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">类型</th><th scope="col">内容</th><th scope="col">信息来源</th><th scope="col">浏览方式</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">电影</th><td>电影，包括蓝光和 DVD 原盘、ISO、分段文件和多个版本</td><td>NFO 和图片，TMDB</td><td>海报墙、二级分类、合集</td></tr>
+              <tr><th scope="row">剧集</th><td>剧集、季和集，包括动画</td><td>NFO 和图片，TMDB，动画还使用 Bangumi</td><td>海报墙、季、集、接下来</td></tr>
+              <tr><th scope="row">混合</th><td>电影和剧集放在一起，自动区分</td><td>同上</td><td>电影和剧集的二级分类</td></tr>
+              <tr><th scope="row">音乐</th><td>专辑：一个文件夹的音轨、多碟专辑、CUE 整轨、SACD ISO</td><td>音乐文件的标签，CUE，SACD 的光盘信息，MusicBrainz</td><td>专辑、艺术家、文件夹</td></tr>
+              <tr><th scope="row">图书</th><td>EPUB、MOBI、AZW3、CBZ、PDF、TXT，Calibre 书库</td><td>Calibre 的 metadata.opf，图书文件自带的信息，Open Library</td><td>图书、作者、系列、文件夹</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="split">
+          <div>
+            <h3>在哪里显示</h3>
+            <p>媒体库显示在应用的「影视」界面中，名为「CloudDrive 媒体库」，与 Emby、Jellyfin 服务器并列。在「设置 → 界面」中选择「影视」，应用启动后先显示海报墙。</p>
+            <ul>
+              <li><strong>首页</strong>：精选、继续观看、接下来、继续收听、继续阅读，以及每个媒体库的「最新」一行。正在扫描或同步的媒体库显示状态，例如「扫描中」「识别中」「同步中」；由另一台设备扫描时显示「他处扫描」或「等待中」，见<a href="#one-scanner">由一台设备扫描</a>。</li>
+              <li><strong>精选</strong>：首页顶部的轮播，显示继续观看、接下来和各媒体库最新的影片。私密媒体库锁定时，以及家长控制锁定时超过最高分级的影片，不会出现在精选中。</li>
+              <li><strong>搜索</strong>：片名的译名和别名也能搜到，繁体和简体、重音符号不影响结果。歌曲在所在专辑的页面打开过之后才能搜到。</li>
+              <li><strong>收藏</strong>：收藏与媒体库数据分开保存，「清除媒体库数据」和重新扫描不会删除，并随<a href="#sync">跨设备同步媒体库</a>同步。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>哪些设备可以使用</h3>
+            <p>iPhone、iPad、Mac、Windows 电脑、Apple TV、Apple Vision Pro、Android 手机、平板和电视、Meta Quest 上的 CloudDrive2 应用。每台设备都在本机整理媒体库，不需要一直开着的服务器。</p>
+            <p>各设备上的功能相同，但有这些差别：Meta Quest 没有 Emby 兼容接口；Apple TV 上不能从 Emby 或 Jellyfin 导入，其他设备导入的媒体库会同步过来；Apple TV 和 Android TV 的人物页不显示链接，「重新扫描」没有自定义间隔；Apple TV 上「编辑元数据…」只能改文字，Android TV 上的图片只能来自云盘；Android 没有选择视频轨的功能，也没有选择多个项目和右键菜单。较小的差别会在相关处注明。</p>
+            <p>核心服务的网页管理界面不显示媒体库，但提供「媒体库待确认」页面，可以在浏览器中确认自动识别无法确定的影片，见<a href="#web">在网页上确认</a>。</p>
+            <h3>App Pro</h3>
+            <p>整个媒体库功能都需要 App Pro：添加和编辑媒体库、在线信息、识别、保存信息和图片、跨设备同步，以及在「影视」界面中浏览和播放。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── create ────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="create" aria-labelledby="create-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">创建</p>
+          <h2 id="create-h">创建媒体库与所有选项</h2>
+          <p>在「设置 → 媒体库」中点「添加媒体库」（需要 App Pro），也可以在首页添加。媒体库编辑页面中的选项按下面的顺序排列；音乐库和图书库没有信息语言、优先使用在线信息、识别词和二级分类，「在媒体旁保存信息和图片」也用于音乐库和图书库。</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">选项</th><th scope="col">默认</th><th scope="col">作用</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">名称</th><td>第一个文件夹的名称</td><td>显示在媒体库列表、首页和侧边栏中。</td></tr>
+              <tr><th scope="row">类型</th><td>电影</td><td>电影、剧集、混合、音乐、图书。电影库不会把文件夹识别成剧集；剧集库中有视频的文件夹都按剧集处理；混合库自动区分。</td></tr>
+              <tr><th scope="row">文件夹</th><td>—</td><td>至少一个。「添加文件夹」从 CloudDrive2 能访问的所有位置中选择，不能选根目录 /。同一个媒体库中，位于另一个已选文件夹内的文件夹会被去掉。移除文件夹不会删除其中的文件。</td></tr>
+              <tr><th scope="row">私密媒体库</th><td>关闭</td><td>输入 PIN 后才显示，见<a href="#private">私密媒体库</a>。第一次打开时要求设置 PIN。</td></tr>
+              <tr><th scope="row">在线查找</th><td>普通媒体库开启，私密媒体库关闭</td><td>没有 NFO 的影片在 TMDB 上查找；音乐库在 MusicBrainz 上查找，图书库在 Open Library 上查找。还需要打开「在线信息」中对应的总开关。关闭后，这个媒体库的任何信息都不会发送到这些网站；只有你在「识别…」中手动选择的条目会按编号获取。</td></tr>
+              <tr><th scope="row">信息语言</th><td>跟随界面语言</td><td>视频媒体库的标题、简介和人物以哪种语言获取和显示：跟随界面语言、English、简体中文、繁體中文。见<a href="#scraper">刮削与匹配</a>。</td></tr>
+              <tr><th scope="row">优先使用在线信息</th><td>关闭</td><td>即使媒体旁有 .nfo 文件或图片，也优先使用 TMDB 的标题、简介和图片；TMDB 没有的，才用这些文件。.nfo 里的 TMDB 或 IMDb 编号仍用来确定是哪部影片。需要先打开在线查找。</td></tr>
+              <tr><th scope="row">在媒体旁保存信息和图片</th><td>关闭</td><td>把 .nfo、海报和背景图写入媒体库的文件夹，供 Kodi、Jellyfin、Emby 和 Infuse 使用。子选项「Infuse 兼容副本」和「演员头像（.actors 文件夹）」。音乐库写入 album.nfo 和专辑封面，图书库写入 OPF 和封面。见<a href="#sidecars">保存 NFO 和图片</a>。</td></tr>
+              <tr><th scope="row">识别时检测媒体信息</th><td>开启</td><td>识别影片的同时读取视频文件的开头部分，得到分辨率、HDR 和音轨等信息，由扫描这个媒体库的设备完成。关闭后，只有开启了「后台检测媒体信息」的设备才会检测。只有视频媒体库有这个选项。见<a href="#mediainfo">媒体信息</a>。</td></tr>
+              <tr><th scope="row">列目录速度</th><td>每秒 2 次</td><td>读取这个媒体库时每秒列出的文件夹数。列得太快，网盘可能限制账号；同一个网盘账号上的所有 CloudDrive 共用这个配额。只对本设备有效。</td></tr>
+              <tr><th scope="row">重新扫描</th><td>从不</td><td>完整扫描过的媒体库不会再自动扫描。可以设为每次启动时、每小时、每天或自定义间隔（以小时计；Apple TV 和 Android TV 没有自定义间隔，Android 上只有视频媒体库有这个选项）。「立即扫描」马上重新读取媒体库的文件夹。只对本设备有效。见<a href="#index">媒体库数据</a>。</td></tr>
+              <tr><th scope="row">重新识别未识别的标题</th><td>—</td><td>「重新识别」按钮在「立即扫描」下面。待确认、在 TMDB 上未找到、或被当作影视以外内容的标题重新查找，在所有同步的设备上生效。适合在改进识别的应用更新之后使用。你的选择、NFO 文件和已识别的标题保持不变。只有视频媒体库有这个按钮。</td></tr>
+              <tr><th scope="row">在本设备上扫描此媒体库</th><td>创建媒体库的设备</td><td>由哪台设备扫描这个媒体库，你的其他设备直接使用它的扫描结果，不再重复扫描。在一台设备上打开，就改由这台设备扫描；在扫描它的设备上关闭，则任何设备都可以扫描，电脑优先。其他设备上这一行显示「由 某设备 扫描」。需要同时打开「跨设备同步媒体库」和「跨设备同步扫描数据」才生效。见<a href="#one-scanner">由一台设备扫描</a>。</td></tr>
+              <tr><th scope="row">在本设备缓存文件</th><td>关闭</td><td>读过一次的文件存进本设备的磁盘缓存，下次不用再下载：关闭、仅小文件（图片、字幕、.nfo 等 10 MB 以下的文件）、视频以外的全部文件、全部文件。只对本设备有效，不随媒体库同步。</td></tr>
+              <tr><th scope="row">识别词</th><td>无</td><td>在读取之前改写文件名和文件夹名，与 MoviePilot 的自定义识别词格式相同。见<a href="#words">识别词</a>。</td></tr>
+              <tr><th scope="row">二级分类</th><td>默认分类</td><td>把媒体库分成「华语电影」「日番」等分类，与 MoviePilot 的 category.yaml 格式相同。见<a href="#shelves">二级分类</a>。</td></tr>
+              <tr><th scope="row">封面</th><td>自动</td><td>首页上媒体库的封面由它自己的图片组成，排列方式为海报、拼贴或背景图。「换一批」更换图片，预览满意后保存；自动封面显示最近添加的内容。只保存在本设备。</td></tr>
+              <tr><th scope="row">上移 / 下移</th><td>—</td><td>调整媒体库的显示顺序。</td></tr>
+              <tr><th scope="row">删除媒体库</th><td>—</td><td>只删除媒体库，其中的文件夹和文件都会保留。</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="settings">「设置 → 媒体库」页面</h3>
+        <div class="split">
+          <div>
+            <h4>识别</h4>
+            <p>这些设置只保存在本设备，不同步。</p>
+            <ul>
+              <li><strong>从 TMDB 获取影片信息</strong>：默认关闭。打开后，没有 NFO 的影片从 TMDB 获取海报、简介和演员。不需要自己申请 API 密钥。</li>
+              <li><strong>动画也在 Bangumi 查找</strong>：默认开启，在 TMDB 开关打开时生效。</li>
+              <li><strong>从 MusicBrainz 获取音乐信息</strong>：默认关闭。找到专辑的年份，补上缺少的封面，还找到具体的发行版本和演职人员；艺术家页的简介和照片来自维基百科和维基共享资源。</li>
+              <li><strong>从 Open Library 获取图书信息</strong>：默认关闭。找到图书的年份，补上缺少的封面；作者页显示来自 Open Library 和维基百科的简介。</li>
+              <li><strong>AI 辅助识别</strong>：默认关闭。用你选择的 AI 服务和模型协助识别规则无法识别的影片、专辑和图书，见<a href="#ai">AI 辅助识别</a>。</li>
+              <li><strong>接口地址</strong>：默认 api.tmdb.org，在中国大陆可以访问；也可以选 api.themoviedb.org（中国大陆可能无法访问），或填写自己的 https 地址，例如反向代理。</li>
+              <li><strong>图片地址</strong>：默认 image.tmdb.org，也可以自定义。</li>
+            </ul>
+            <h4>隐私与家长控制</h4>
+            <ul>
+              <li><strong>私密媒体库</strong>：见<a href="#private">私密媒体库</a>。</li>
+              <li><strong>家长控制</strong>：见<a href="#parental">家长控制</a>。</li>
+            </ul>
+          </div>
+          <div>
+            <h4>同步</h4>
+            <ul>
+              <li><strong>跨设备同步媒体库</strong>：见<a href="#sync">跨设备同步</a>。</li>
+              <li><strong>跨设备同步扫描数据</strong>和图片包：见<a href="#sync-data">同步扫描数据</a>。</li>
+            </ul>
+            <h4>扫描与存储</h4>
+            <ul>
+              <li><strong>同时读取的媒体库数</strong>：同时读取并查找信息的媒体库数量，默认 1，上一个媒体库完成后才开始下一个。</li>
+              <li><strong>媒体信息</strong>：「后台检测媒体信息」「文件之间的间隔」「播放视频时暂停」和「海报角标」，见<a href="#mediainfo">媒体信息</a>。</li>
+              <li><strong>本机数据</strong>：媒体库数据和图片占用的空间；「图片上限」默认 1 GB，可选 500 MB 至 100 GB，或不限；「清除媒体库数据」删除已读取的条目、详细信息和图片，然后重新读取，媒体库、识别结果和观看进度保留。见<a href="#index">媒体库数据</a>。</li>
+            </ul>
+            <h4>高级</h4>
+            <ul>
+              <li><strong>Emby 兼容接口</strong>（Meta Quest 没有）：见<a href="#emby-api">Emby 兼容接口</a>。</li>
+              <li><strong>导出与导入</strong>：「导出媒体库…」把媒体库保存为一个 JSON 文件；不使用同步时，可以在另一台设备上用「导入媒体库…」导入。私密媒体库只在解锁时导出。手动识别的结果不导出。电视上没有这一项。</li>
+            </ul>
+            <div class="note">
+              <span class="note-title">在电视上编辑</span>
+              <p>电视上可以创建和编辑媒体库。识别词和二级分类这类长文本，可以用手机扫码后在手机上输入。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── import from emby / jellyfin ───────────────────────────────── -->
+    <section class="band" id="import" aria-labelledby="import-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">导入</p>
+          <h2 id="import-h">从 Emby 或 Jellyfin 导入</h2>
+          <p>Emby 或 Jellyfin 服务器的媒体文件就在你的网盘中时（例如通过 CloudDrive2 挂载），可以把服务器的媒体库导入：影片的信息、图片、媒体信息、观看记录和人物都从服务器读取，不再扫描文件夹、不再刮削，影片直接从网盘播放。导入只读取服务器，不修改服务器上的任何内容。</p>
+          <p>只支持媒体文件本身在网盘中的服务器。用 .strm 文件指向媒体的媒体库暂时不能导入。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>如何导入</h3>
+            <ol>
+              <li>先在「媒体服务器」中登录这台服务器。只有服务器的管理员才能读取媒体库的文件夹。</li>
+              <li>在「设置 → 媒体库」中点「从 Emby 或 Jellyfin 导入…」，选择服务器。</li>
+              <li>列出服务器的媒体库和其中每个文件夹。位于本设备网盘中的文件夹显示「可从 … 直接播放」；不在网盘中的（服务器自己的硬盘或 NAS）显示「不在本设备的网盘中」，不导入。对应的网盘文件夹由服务器上的 <a href="/download.html#plugin">CloudDrive2 配套插件</a>、同名的网盘账号，以及你在「媒体服务器」中为这台服务器设置的路径映射得出。</li>
+              <li>勾选媒体库，选择导入哪些人物、CloudDrive 已有信息时以哪一方为准，然后点「导入」。导入在后台进行，可以关闭窗口，「设置 → 媒体库」中显示进度。导入过的媒体库显示「更新」，再导入一次就是更新它。</li>
+            </ol>
+            <p>服务器的电影库成为电影库，剧集库成为剧集库，其他视频库成为混合库。音乐库和图书库暂时不能导入。</p>
+            <h3>CloudDrive 已有信息时</h3>
+            <p>影片和人物分开选择：「优先使用服务器的信息」（影片的默认）、「优先使用 CloudDrive 的信息」、「使用有内容的一方，两边都有时使用较新的」（人物的默认）。空白内容不会替换已有内容，CloudDrive 的信息也不会被删除。下次导入同一台服务器时沿用上次的选择；影片的选择也可以在媒体库编辑页面的「从 某服务器 导入」一行中更改，不需要重新读取。</p>
+          </div>
+          <div>
+            <h3>导入的内容</h3>
+            <ul>
+              <li>电影和剧集的名称、原名、简介、标语、类型、标签、制作公司、分级、评分和首映日期；海报、标志、横幅、缩略图和所有背景图，显示时从服务器获取。</li>
+              <li>剧集的季和集，每一集的名称、简介、编号、时长和播出日期。</li>
+              <li>服务器读到的媒体信息：分辨率、HDR 和杜比视界、音轨（包括全景声和 DTS:X）、字幕。服务器没能读取的文件，例如部分 ISO，由应用在后台检测。</li>
+              <li>你在服务器上的观看记录、播放进度和收藏（导入时登录的用户的），设备上更新的记录保留。</li>
+              <li>人物：「这些媒体库中有简介或照片的人物」（默认）、「这些媒体库中的所有人物」、「服务器上的所有人物」或「不导入人物」。简介、生卒日期、出生地、照片和最多 6 张背景图，以及标签和一句话介绍。照片下载到本设备。</li>
+            </ul>
+            <h3>导入之后</h3>
+            <ul>
+              <li>导入的媒体库从服务器读取，不扫描文件夹，也不在线查询，首页和媒体库页显示「正在从 某服务器 读取 · 已读取 N 部」。每次重新扫描时再读一次服务器，服务器上已经没有的影片会去掉。</li>
+              <li>开启<a href="#sync">跨设备同步媒体库</a>和<a href="#sync-data">同步扫描数据</a>时，导入的媒体库同步到你的其他设备，它们使用导入它的设备读到的内容；人物的简介、照片和前三张背景图也一起同步。没有登录这台服务器的设备上，服务器的图片显示不出来时改用其他图片。</li>
+              <li>Apple TV 上没有导入，可以显示其他设备导入的媒体库。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── video recognition ─────────────────────────────────────────── -->
+    <section class="band band-alt" id="video" aria-labelledby="video-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">识别</p>
+          <h2 id="video-h">视频如何识别</h2>
+          <p>整理视频时只读取文件夹和文件的名称，不打开视频文件。常见的命名方式都能识别，包括下载站和发布组的长名称、字幕组的命名、中文数字的集数、蓝光原盘和 DVD、分成几段的电影和成套的光盘，文件不需要先改名。</p>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3>不单独成为影片的文件</h3>
+            <ul>
+              <li>花絮和预告片属于所在的影片，例如 <code>trailers</code>、<code>featurettes</code> 文件夹，名称以 <code>-trailer</code> 结尾的文件，以及字幕组的 <code>[NCOP]</code>、<code>[NCED]</code>。</li>
+              <li>NAS 和系统的文件夹不读取，例如 <code>@eaDir</code>、<code>#recycle</code>、<code>$RECYCLE.BIN</code>。</li>
+              <li>名称带「测试」「样片」「demo」等词的视频按测试片段处理，不在线查找。</li>
+              <li>同一个媒体库中同一部电影的几个文件合并为一部电影，在详情页的版本中选择。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>在名称中指定条目</h3>
+            <p>文件或文件夹名中的 <code>{tmdbid=123}</code>、<code>[tmdb-123]</code>、<code>(imdb-tt0113277)</code>，或 MoviePilot 的 <code>{[tmdbid=123;type=tv;s=2]}</code>，直接指定 TMDB 或 IMDb 条目，不再搜索。识别不对时，也可以在「识别…」中手动选择，或用<a href="#words">识别词</a>修正一批文件。</p>
+            <h3>视频文件</h3>
+            <p>mkv、mp4、m4v、mov、avi、wmv、flv、webm、mpg、mpeg、m2ts、mts、ts、vob、rmvb、rm、3gp、ogv、iso。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── scraper ───────────────────────────────────────────────────── -->
+    <section class="band" id="scraper" aria-labelledby="scraper-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">刮削</p>
+          <h2 id="scraper-h">刮削与匹配</h2>
+          <p>识别出片名和年份后，从 TMDB 获取影片的信息和图片，动画同时在 Bangumi（番组计划）查找。不能确定是哪一部的影片进入<a href="#review">待确认</a>，确认之前照常可以播放；你在「识别…」中的选择不会被自动识别覆盖。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>已有的 NFO 和图片</h3>
+            <p>Kodi、Emby、Jellyfin、tinyMediaManager 等工具写入的 NFO、海报、背景图、标志和季海报都会读取。NFO 中有 TMDB 或 IMDb 编号时，按编号直接获取，不再搜索。</p>
+            <p>文件夹中的 NFO 和图片优先显示，TMDB 只补充缺少的部分；媒体库打开「优先使用在线信息」时相反。你用「编辑元数据…」保存的内容总是优先。</p>
+          </div>
+          <div>
+            <h3>从 TMDB 获取的信息</h3>
+            <p>片名、简介、类型、评分、海报和背景图、演员和导演、每一季和每一集的信息、合集，以及用于<a href="#parental">家长控制</a>的分级。显示的语言由媒体库的「信息语言」决定。</p>
+            <h3>动画</h3>
+            <p>字幕组命名的动画先在 Bangumi 查找，再通过 bangumi-data 的对应表找到 TMDB 上的季和集，所以季的划分与 TMDB 不同的动画也能对应到正确的集。</p>
+          </div>
+        </div>
+
+        <h3>什么时候查找</h3>
+        <ul>
+          <li>在后台查找，屏幕上正在显示的先查找。手机和电视只在应用处于前台时查找。</li>
+          <li>待确认和未找到的影片在 7 天后或改名后重新查找；在媒体库设置中点「重新识别未识别的标题」可以立即重新查找。</li>
+          <li>开启<a href="#sync-data">跨设备同步扫描数据</a>时，查找的结果同步到其他设备，它们不再重复查找。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── sites ─────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="sites" aria-labelledby="sites-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">信息来源</p>
+          <h2 id="sites-h">信息来源网站</h2>
+          <p>只使用下面这些公开网站，以及你自己选择的 AI 服务。每个都有单独的开关，默认只开启 Bangumi（而且要在 TMDB 开启后才生效）；Wikidata 和维基百科随 MusicBrainz、Open Library 的开关使用。媒体库的「在线查找」关闭时，这个媒体库不访问任何网站。</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">网站</th><th scope="col">用于</th><th scope="col">发送的内容</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">TMDB</th><td>电影、剧集、季、集、合集、演员、分级</td><td>片名和年份；TMDB 或 IMDb 编号</td></tr>
+              <tr><th scope="row">Bangumi 番组计划</th><td>动画</td><td>动画的名称（匿名请求）</td></tr>
+              <tr><th scope="row">bangumi-data</th><td>Bangumi 与 TMDB 的季、集对应表，约 8,400 部</td><td>只下载，不发送内容</td></tr>
+              <tr><th scope="row">MusicBrainz</th><td>专辑的年份、发行版本、演职人员和艺术家</td><td>专辑名、艺术家、条形码、唱片编号；CD 抓轨的各曲时长；打开艺术家页时的艺术家编号</td></tr>
+              <tr><th scope="row">Cover Art Archive</th><td>专辑封面</td><td>MusicBrainz 编号</td></tr>
+              <tr><th scope="row">Open Library</th><td>图书的年份、封面和简介；作者</td><td>ISBN，或书名和第一作者；打开作者页时的作者姓名</td></tr>
+              <tr><th scope="row">Wikidata、维基百科、维基共享资源</th><td>艺术家和作者页的简介，艺术家的照片</td><td>MusicBrainz 或 Open Library 给出的编号和链接；作者姓名</td></tr>
+              <tr><th scope="row">你选择的 AI 服务</th><td><a href="#ai">AI 辅助识别</a></td><td>项目在媒体库文件夹以下的路径、文件名，以及从文件中读到的标签、CUE、SACD 文本或 OPF</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>不使用豆瓣、TVDB、OMDb、Discogs 或其他网站。NFO 中的 TVDB 编号会读取，但不会请求 TVDB。豆瓣的信息可以通过 Calibre 等工具写入的 metadata.opf 进入图书库。网站暂时无法访问时，使用设备上已缓存的结果。</p>
+        <p class="chip-note">本产品使用 TMDB 和 TMDB API，但未经 TMDB 认可、认证或以其他方式批准；应用的「关于」页面显示 TMDB 的标志和这句声明。动画信息来自 Bangumi 番组计划；季和集的对应来自 bangumi-data（CC BY 4.0）。音乐信息来自 MusicBrainz；封面来自 Cover Art Archive。图书信息和封面来自 Open Library。艺术家和作者的简介来自维基百科，照片来自维基共享资源。</p>
+      </div>
+    </section>
+
+    <!-- ── review ────────────────────────────────────────────────────── -->
+    <section class="band" id="review" aria-labelledby="review-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">确认</p>
+          <h2 id="review-h">待确认与手动识别</h2>
+          <p>自动匹配无法确定的影片进入「待确认」，确认之前照常可以从文件播放。<a href="#mediainfo">媒体信息</a>检测发现的问题也列在这里：无法读取的文件，以及文件时长与自动匹配到的影片相差较多的。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>「识别…」</h3>
+            <p>每部影片的详情页都有「识别…」：可以从最多 5 个候选中选择，搜索片名和年份，标记「不在 TMDB 上」，或「重新自动识别」。识别结果是自动匹配的时，「保留这个结果」把它确认为你的选择。</p>
+            <p>手动选择会一直保留，自动识别不会覆盖它；开启跨设备同步时，其他设备也采用这个选择。媒体库的「在线查找」关闭时也可以手动识别。</p>
+            <h3>识别专辑和图书</h3>
+            <p>专辑页的「识别专辑」和图书页的「识别图书」在 MusicBrainz 或 Open Library 上选择正确的条目，补上缺少的年份和封面。选择随媒体库同步。</p>
+            <h3 id="ai">AI 辅助识别</h3>
+            <p>规则无法识别的影片、专辑和图书，可以使用 AI 模型辅助识别。在「设置 → 媒体库 → 识别 → AI 辅助识别」中选择服务、模型和 API 密钥（与 AI 字幕使用同一个密钥），并选择模型读取哪些媒体库。私密媒体库和关闭了「在线查找」的媒体库不能选择。</p>
+            <ul>
+              <li>模型读取项目在媒体库文件夹以下的路径和从文件中读到的信息，只给出搜索词；之后照常在 TMDB、MusicBrainz 和 Open Library 中搜索，并按上面的规则确定结果。</li>
+              <li>打开后，在后台为未识别的项目询问模型，每个项目的回答保存在设备上，每天最多调用 1,000 次。</li>
+              <li>「识别…」中的「询问 AI」显示模型的回答和依据。选择结果之前不会保存任何内容。</li>
+            </ul>
+          </div>
+          <div id="web">
+            <h3>在网页上确认</h3>
+            <p>核心服务的网页管理界面中有「媒体库待确认」页面，适合在电脑浏览器中处理电视上积累的待确认影片。</p>
+            <ul>
+              <li>需要至少一台设备开启了<a href="#sync">跨设备同步媒体库</a>。网页读取各台设备上传到「CloudDrive2 Sync」文件夹的待确认列表。</li>
+              <li>可以选择候选，或粘贴 TMDB 链接或编号；网页没有片名搜索。</li>
+              <li>你的设备下次同步时采用网页上的选择。</li>
+              <li>私密媒体库的影片在输入 PIN 解锁后显示。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── words ─────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="words" aria-labelledby="words-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">识别词</p>
+          <h2 id="words-h">识别词</h2>
+          <p>识别词在读取之前改写这个媒体库里的文件名和文件夹名：纠正季、集的编号，把片名替换为指定的名称，去掉广告前缀。格式与 MoviePilot 的自定义识别词相同，已有的列表可以直接粘贴。每行一条规则，按顺序执行；以 <code>#</code> 开头的行是备注。</p>
+        </header>
+        <div class="code-block">
+          <pre><code># 删除词语
+国语中字
+# 替换（(?i) 表示不区分大小写）
+(?i)Kimetsu no Yaiba => 鬼灭之刃
+# 调整两个词之间的集数
+第 &lt;&gt; 集 &gt;&gt; EP+12
+# 先替换，再调整集数
+Apotheosis.S02 =&gt; Apotheosis S01 &amp;&amp; S01 &lt;&gt; 2160p &gt;&gt; EP+52
+# 把名称指向 TMDB 条目，可以指定季和集
+斗罗大陆 =&gt; 斗罗大陆{[tmdbid=99025;type=tv]}</code></pre>
+        </div>
+        <div class="split">
+          <div>
+            <ul>
+              <li><code>=&gt;</code>、<code>&amp;&amp;</code>、<code>&lt;&gt;</code>、<code>&gt;&gt;</code> 两侧需要空格。调整集数时，前后的定位词可以有一个为空。</li>
+              <li>规则是正则表达式，对照名称原文匹配，包括扩展名；默认区分大小写。</li>
+              <li>调整集数时，两个词之间的每个数字都会改变；表达式支持 <code>EP</code>、整数和加减乘除。数字前面的 0 会保留（05 加 12 是 17），中文数字仍写成中文。</li>
+              <li><code>{[…]}</code> 中可以写 <code>tmdbid</code>、<code>imdbid</code>、<code>type</code>（movie 或 tv）、<code>s</code>（季）、<code>e</code>（集）。</li>
+              <li>最多读取 1,000 行，每行最多 1,000 个字符。</li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li>识别词只在这个媒体库中生效：文件管理、播放器和字幕中显示的仍是原来的名称，文件也不会被改名。</li>
+              <li>编辑器逐行检查，例如「第 4 行未使用：…」。「试一个名称」显示改写后的名称、是哪几行改的，以及读取出的片名、年份、季和集。</li>
+              <li>修改识别词后，媒体库重新整理；NFO 中的信息和观看进度保留。</li>
+              <li>「导出」保存为 <code>&lt;媒体库&gt; 识别词.txt</code>（UTF-8）。「导入」支持 UTF-8 和 GB18030 编码的文件，可以选「添加到末尾」（跳过已有的行）或「替换」。电视上可以用手机输入整段文字。</li>
+              <li>识别词随媒体库同步，以最后一次编辑为准。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── shelves ───────────────────────────────────────────────────── -->
+    <section class="band" id="shelves" aria-labelledby="shelves-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">二级分类</p>
+          <h2 id="shelves-h">二级分类</h2>
+          <p>二级分类在媒体库页面顶部显示为一排按钮：「全部」在最前面，后面是每个分类和其中的数量。只有两个以上分类有内容时才显示。规则使用 MoviePilot 的 category.yaml 格式，已有的文件可以直接粘贴。每部影片放进第一个满足所有条件的分类，没有条件的分类包含其余所有影片。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>默认分类</h3>
+            <p>不修改时使用默认分类，名称跟随应用语言。混合库同时有电影和剧集的分类，电影在前。</p>
+            <div class="code-block">
+              <pre><code>movie:
+  动画电影:
+    genre_ids: '16'
+  华语电影:
+    original_language: 'zh,cn,bo,za'
+  外语电影:
+tv:
+  国漫:
+    genre_ids: '16'
+    origin_country: 'CN,TW,HK'
+  日番:
+    genre_ids: '16'
+    origin_country: 'JP'
+  纪录片:
+    genre_ids: '99'
+  儿童:
+    genre_ids: '10762'
+  综艺:
+    genre_ids: '10764,10767'
+  国产剧:
+    origin_country: 'CN,TW,HK'
+  欧美剧:
+    origin_country: 'US,FR,GB,DE,ES,IT,NL,PT,RU,UK'
+  日韩剧:
+    origin_country: 'JP,KP,KR,TH,IN,SG'
+  未分类:</code></pre>
+            </div>
+          </div>
+          <div>
+            <h3>条件</h3>
+            <div class="table-scroll">
+              <table class="matrix-table">
+                <thead>
+                  <tr><th scope="col">条件</th><th scope="col">含义</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row"><code>genre_ids</code></th><td>TMDB 类型编号，也可以写名称：<code>动画</code> 或 <code>Animation</code> 是 16</td></tr>
+                  <tr><th scope="row"><code>original_language</code></th><td>原始语言代码，粤语是 <code>cn</code>；也可以写 <code>粤语</code>、<code>日语</code></td></tr>
+                  <tr><th scope="row"><code>origin_country</code></th><td>出品国家或地区代码，也可以写 <code>香港</code>、<code>UK</code></td></tr>
+                  <tr><th scope="row"><code>production_countries</code></th><td>制作国家或地区</td></tr>
+                  <tr><th scope="row"><code>release_year</code></th><td>年份，或 <code>1990-1999</code> 这样的范围</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <ul>
+              <li>多个值用 <code>,</code>、<code>，</code> 或 <code>、</code> 分隔，满足其中一个即可。</li>
+              <li>写在 <code>movie:</code> 或 <code>tv:</code> 之外的分类同时用于电影和剧集。</li>
+              <li>最多 100 个分类，名称最多 40 个字符。编辑器逐行提示问题，「恢复默认」恢复默认分类，关闭「使用二级分类」则不分类。</li>
+              <li>分类所需的信息先取 NFO，再取 TMDB。没有原始语言时，按国家推断（中国大陆、台湾、新加坡为中文，香港、澳门为粤语）。在线查找关闭时只使用 NFO 中的信息。</li>
+              <li>还没有获取到信息的影片暂时不在任何分类中，但在「全部」中。</li>
+              <li>按文件夹浏览时不显示分类。音乐库和图书库没有二级分类。</li>
+              <li>媒体库中有<a href="#people">合集</a>时，分类按钮的最后还有「合集」。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── media info ────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="mediainfo" aria-labelledby="mediainfo-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">媒体信息</p>
+          <h2 id="mediainfo-h">媒体信息</h2>
+          <p>媒体信息是视频文件本身的技术信息：分辨率、帧率、HDR、编码、音轨和字幕。它用于详情页的媒体信息卡片、海报角标和「画面与声音」筛选。检测只读取文件开头的一小部分，不下载整个文件。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>来源</h3>
+            <ul>
+              <li><strong>由文件名推测</strong>：每部影片先按文件名推测分辨率、HDR、编码和音轨（如 <code>2160p</code>、<code>DV</code>、<code>Atmos</code>）。</li>
+              <li><strong>来自 NFO</strong>：NFO 中的 <code>&lt;streamdetails&gt;</code>。</li>
+              <li><strong>检测媒体信息</strong>：读取文件开头，支持 MKV、MP4、TS 和 M2TS，一部 2 小时的电影通常只读取 128–320 KB；蓝光 ISO 和 BDMV 文件夹从播放列表读取正片的信息。</li>
+              <li><strong>播放时保存</strong>：播放媒体库中的视频几秒后，保存播放器读到的信息。</li>
+            </ul>
+            <p>能读出编码、分辨率、帧率、HDR10、HDR10+、HLG 和杜比视界、杜比全景声、DTS-HD MA 和 DTS:X，以及音轨和字幕的语言。结果按文件的大小和修改时间保存，文件改变后重新检测。</p>
+          </div>
+          <div>
+            <h3>用途</h3>
+            <p>媒体信息用于海报上的 4K、杜比视界、HDR、全景声角标（检测过的为实心，仅由文件名推测的为空心）、「画面与声音」筛选、一部电影有多个版本时选择最适合本设备的版本，以及在待确认中列出无法读取或时长不符的文件。开启「在媒体旁保存信息和图片」时，检测结果也写入 NFO。</p>
+            <h3>识别时检测</h3>
+            <p>每个视频媒体库的「识别时检测媒体信息」默认开启：扫描这个媒体库的设备在识别影片的同时读取视频文件的开头，最新的影片先检测，一个文件通常只读 256 KB 左右。开启<a href="#sync-data">跨设备同步扫描数据</a>时，结果同步到其他设备，它们不再读取。</p>
+            <h3>后台检测媒体信息</h3>
+            <p>用于关闭了「识别时检测媒体信息」的媒体库。在「设置 → 媒体库 → 扫描与存储」中打开，默认关闭，只对本设备有效。它逐个、缓慢地读取每个视频文件的开头：读完一个文件后按「文件之间的间隔」等待（云盘默认 2 秒），播放视频时暂停。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── people, collections, editing ──────────────────────────────── -->
+    <section class="band" id="people" aria-labelledby="people-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">人物与合集</p>
+          <h2 id="people-h">人物、合集与编辑</h2>
+          <p>演员、艺术家和作者有自己的页面；属于同一合集的电影可以一起浏览；电影和剧集的信息可以手动修改。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>人物页</h3>
+            <ul>
+              <li><strong>演员和导演</strong>：简介、照片和链接来自 TMDB，按媒体库的信息语言获取；页面列出媒体库中有这个人的影片。</li>
+              <li><strong>艺术家</strong>：简介和照片来自维基百科和维基共享资源，通过 MusicBrainz 给出的链接获取。</li>
+              <li><strong>作者</strong>：简介来自 Open Library 和维基百科。</li>
+              <li>同一个人在 NFO、TMDB 和音乐、图书的演职人员中是同一条记录，各种语言的名字都能找到这个人。</li>
+              <li>其他应用通过 <a href="#emby-api">Emby 兼容接口</a>写入的名字、简介和照片优先显示。</li>
+            </ul>
+            <h3>合集</h3>
+            <p>TMDB 的合集，或 NFO 中的 <code>&lt;set&gt;</code>，把电影归入合集。媒体库中有两部以上电影的合集，出现在二级分类按钮中的「合集」里。</p>
+          </div>
+          <div>
+            <h3>编辑元数据</h3>
+            <p>电影和剧集的详情页有「编辑元数据…」，可以修改标题、简介、类型、演员和图片等。修改保存为影片文件夹里的 NFO 文件和图片，所以其他应用和你的其他设备也会读取；只修改你改动的部分，其他应用写入的内容保留。手动编辑的内容优先于在线信息，「优先使用在线信息」也不会替换它。Apple TV 上不能修改图片。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── skip intro and ending ──────────────────────────────────────── -->
+    <section class="band band-alt" id="skip" aria-labelledby="skip-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">播放</p>
+          <h2 id="skip-h">跳过片头片尾</h2>
+          <p>播放媒体库中剧集的一集时，可以在播放器中设置这一季的片头在哪里结束、片尾从哪里开始。设置对这一季的每一集都有效，并随<a href="#sync">跨设备同步媒体库</a>同步到你的其他设备。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>设置</h3>
+            <ul>
+              <li>播放媒体库中剧集的一集时，在播放器的「片头片尾」中，播放到片头结束或片尾开始的地方点「设为当前位置」。</li>
+              <li>片头从每一集的开头算，片尾从每一集的结尾倒着算，所以长度不同的各集也能用同一个设置。</li>
+              <li>「跳过片头片尾」开关只对这台设备有效，默认打开；关闭后不跳过，设置的时间保留。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>播放时</h3>
+            <ul>
+              <li>从头播放一集时跳过片头；播放到片尾开始的地方时接着播放下一集，这一集算作看完。</li>
+              <li>手动把进度拖到片头或片尾之内时照常播放。</li>
+            </ul>
+            <h3>哪些设备</h3>
+            <p>Mac、iPhone、iPad、Apple TV、Apple Vision Pro（窗口播放和沉浸式播放）、Android 手机、平板和电视、Meta Quest、Windows 电脑。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── sidecars ──────────────────────────────────────────────────── -->
+    <section class="band" id="sidecars" aria-labelledby="sidecars-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">写入文件夹</p>
+          <h2 id="sidecars-h">在媒体旁保存信息和图片</h2>
+          <p>开启后，已识别的影片会在所在文件夹中写入 .nfo、海报和背景图，Kodi、Jellyfin、Emby 和 Infuse 可以直接读取，不需要再刮削一次。默认关闭，每个媒体库单独设置，随媒体库同步。视频媒体库只为通过 TMDB 识别的电影和剧集写入，合集和「不在 TMDB 上」的影片不写入。音乐库和图书库也可以写入，见下面的表格。</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">影片</th><th scope="col">NFO</th><th scope="col">图片</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">电影文件夹</th><td><code>&lt;视频名&gt;.nfo</code></td><td><code>poster.jpg</code>、<code>fanart.jpg</code></td></tr>
+              <tr><th scope="row">分段的电影</th><td>—</td><td><code>poster.jpg</code>、<code>fanart.jpg</code></td></tr>
+              <tr><th scope="row">蓝光原盘</th><td><code>BDMV/index.nfo</code></td><td><code>poster.jpg</code>、<code>fanart.jpg</code></td></tr>
+              <tr><th scope="row">DVD</th><td><code>VIDEO_TS/VIDEO_TS.nfo</code></td><td><code>poster.jpg</code>、<code>fanart.jpg</code></td></tr>
+              <tr><th scope="row">单独的视频文件</th><td><code>&lt;文件名&gt;.nfo</code></td><td><code>&lt;文件名&gt;-poster.jpg</code>、<code>&lt;文件名&gt;-fanart.jpg</code></td></tr>
+              <tr><th scope="row">剧集</th><td><code>tvshow.nfo</code></td><td><code>poster.jpg</code>、<code>fanart.jpg</code>、<code>season01-poster.jpg</code>…、<code>season-specials-poster.jpg</code></td></tr>
+              <tr><th scope="row">每一集</th><td><code>&lt;文件名&gt;.nfo</code></td><td><code>&lt;文件名&gt;-thumb.jpg</code></td></tr>
+              <tr><th scope="row">专辑</th><td><code>album.nfo</code>（Kodi 格式，Jellyfin 和 Emby 也能读取）</td><td><code>folder.jpg</code>：Cover Art Archive 的封面，1200 像素</td></tr>
+              <tr><th scope="row">图书</th><td><code>&lt;书名文件名&gt;.opf</code>（Calibre 读取的 OPF 格式）</td><td><code>&lt;书名文件名&gt;.jpg</code>：Open Library 的封面</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="split">
+          <div>
+            <h3>选项</h3>
+            <ul>
+              <li><strong>Infuse 兼容副本</strong>：另外用 Infuse 读取的名称保存海报和背景图（<code>&lt;文件名&gt;.jpg</code>、<code>&lt;文件名&gt;-fanart.jpg</code>）。</li>
+              <li><strong>演员头像（.actors 文件夹）</strong>：每部影片最多 20 位演员的头像，保存在 <code>.actors</code> 文件夹中。</li>
+              <li><strong>重新检查</strong>：重新检查每个已识别的标题。已有的文件不会被替换。</li>
+            </ul>
+            <p>NFO 使用 Kodi 格式，以设备的显示语言写入片名、原名、评分、简介、标语、片长、TMDB 和 IMDb 编号、类型、导演、首映日期、演员等，并带 <code>&lt;lockdata&gt;</code>，Emby 和 Jellyfin 不会改写它。检测过<a href="#mediainfo">媒体信息</a>的文件，还写入其中的视频、音轨和字幕信息。不写 <code>movie.nfo</code> 和标志图片。</p>
+            <p>专辑只在 MusicBrainz 确定了专辑、而且专辑有自己的文件夹时写入；文件夹中已有任何图片时不写封面。图书只在 Open Library 确定了图书时写入。音乐库需要打开「从 MusicBrainz 获取音乐信息」，图书库需要打开「从 Open Library 获取图书信息」。</p>
+          </div>
+          <div>
+            <h3>不改动其他工具写入的文件</h3>
+            <ul>
+              <li>CloudDrive2 写入的 NFO 第二行有一个标记。文件夹中已有其他工具写的 NFO 时，这部影片不写入任何文件；已有海报、背景图等同类图片时，跳过那一张。</li>
+              <li>例外：视频媒体库同时打开「优先使用在线信息」和「在媒体旁保存信息和图片」时，开启前会确认，其他应用写的 .nfo 和图片会被改名（加上 <code>.bak</code>），替换为 TMDB 的信息和图片。不会删除任何文件。音乐库和图书库没有这个例外。</li>
+              <li>识别结果改变时，只替换 CloudDrive2 自己写入、而且之后没有被修改过的文件。</li>
+              <li>你删除的文件不会被重新写入，除非点「重新检查」。</li>
+              <li>私密媒体库开启前会提示：片名、简介和海报会作为普通文件保存，能打开这些文件夹的人和存储服务商都能看到。锁定时不写入。</li>
+            </ul>
+            <h3>写入的速度</h3>
+            <p>开启前显示估计的文件数：每部电影约 3 个，每部剧集 3 个加每集 2 个，Infuse 副本另加 2 个。一次上传一个文件，间隔至少 1 秒。存储限制请求频率时，等待 15 分钟后继续。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── music ─────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="music" aria-labelledby="music-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">音乐</p>
+          <h2 id="music-h">音乐库</h2>
+          <p>音乐按文件夹和标签整理：一张专辑是一个文件夹，<code>CD1</code>、<code>Disc 2</code> 这样的文件夹合为一张多碟专辑。标签优先于文件夹名；用网易云音乐、QQ 音乐等数据写过标签的文件，显示的就是写入的内容。</p>
+        </header>
+        <h3>没有标签时，从名称读取</h3>
+        <div class="table-scroll">
+          <table class="matrix-table name-table">
+            <colgroup><col class="col-name"><col></colgroup>
+            <thead>
+              <tr><th scope="col">文件夹或文件的名称</th><th scope="col">识别为</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row"><code>【MQS】1984  谭咏麟【爱的根源】宝丽金 - 环球唱片2015</code></th><td>艺术家谭咏麟，专辑《爱的根源》，1984 年。</td></tr>
+              <tr><th scope="row"><code>33【www.xxx.com】老虎鱼《完美之作-1》ES WAV分轨</code></th><td>艺术家老虎鱼，专辑《完美之作-1》。</td></tr>
+              <tr><th scope="row"><code>(1959) Chopin - Les Vingt-Quatre Préludes - Samson François [EMI Classics 24-96]</code></th><td>艺术家 Chopin，专辑 Les Vingt-Quatre Préludes - Samson François，1959 年。</td></tr>
+              <tr><th scope="row"><code>90130-32 Mozart 9 Symphonies Karl Böhm 3SACD/disc 1.iso … disc 3.iso</code></th><td>一张三碟的 SACD 专辑《Mozart 9 Symphonies Karl Böhm》。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="split">
+          <div>
+            <h3>格式</h3>
+            <p>flac、ape、wav、wv、m4a、alac、aac、mp3、ogg、oga、opus、dsf、dff、tak、tta、aif、aiff、wma、dts、ac3、mka；SACD ISO；.cue 整轨。</p>
+            <h3>标签</h3>
+            <ul>
+              <li>支持常见的标签格式：ID3、FLAC 和 Ogg 的 Vorbis 注释、MP4、APE 等。只读取文件开头的一小段，不下载整个文件。</li>
+              <li>用 GBK、Big5 等旧编码写的中文标签也能正确显示，例如「陳百強」。</li>
+              <li>繁体和简体视为同一位艺术家：「譚詠麟」和「谭咏麟」在一起。「群星」「Various Artists」的专辑排在艺术家列表最后。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>CUE 和 SACD</h3>
+            <p>整轨文件按 .cue 分成曲目，可以切换上一首、下一首；FLAC 内嵌的 CUE 和 GBK 编码的 CUE 也能读取。SACD ISO 的专辑页列出立体声和多声道曲目，多声道曲目标为 5.1。</p>
+            <h3>封面</h3>
+            <p>依次使用专辑文件夹中的图片、第一首内嵌的封面，以及开启 MusicBrainz 时 Cover Art Archive 的封面。</p>
+            <h3>MusicBrainz</h3>
+            <p>「从 MusicBrainz 获取音乐信息」和音乐库的「在线查找」都打开时，按条形码、CD 的曲目时长、唱片编号或专辑名和艺术家找到具体的发行版本，专辑页显示唱片公司、唱片编号、指挥、乐团、独奏和每首曲目的演职人员。艺术家使用 MusicBrainz 的名字，文件夹中的「Mozart」显示为 Wolfgang Amadeus Mozart；点名字打开<a href="#people">艺术家页</a>。专辑页的「识别专辑」可以手动选择，见<a href="#review">识别专辑和图书</a>。</p>
+            <p>歌词（同名的 .lrc 文件或标签中的歌词）由音频播放器显示。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── books ─────────────────────────────────────────────────────── -->
+    <section class="band" id="books" aria-labelledby="books-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">图书</p>
+          <h2 id="books-h">图书库</h2>
+          <p>一本书是一个文件，或一个 Calibre 图书文件夹。同名的 <code>三体.epub</code> 和 <code>三体.azw3</code> 是同一本书的两种格式。图书的信息依次取自 Calibre 的 metadata.opf、图书文件自带的信息、文件名和文件夹名。</p>
+        </header>
+        <h3>从文件名读取</h3>
+        <p>支持《书名》作者、[作者] 书名、书名 - 作者、书名_作者，以及 Z-Library、Anna's Archive 和 libgen 的命名方式。</p>
+        <div class="table-scroll">
+          <table class="matrix-table name-table">
+            <colgroup><col class="col-name"><col></colgroup>
+            <thead>
+              <tr><th scope="col">文件名</th><th scope="col">识别为</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row"><code>三体 (刘慈欣) (Z-Library).epub</code></th><td>书名《三体》，作者刘慈欣。</td></tr>
+              <tr><th scope="row"><code>诡秘之主 [精校] [www.xxx.com].epub</code></th><td>书名《诡秘之主》。「精校」和网址被去掉。</td></tr>
+              <tr><th scope="row"><code>[美]卡尔·萨根 - 宇宙.epub</code></th><td>书名《宇宙》，作者卡尔·萨根，与「卡爾·薩根」是同一位作者。</td></tr>
+              <tr><th scope="row"><code>A Brief History of Time - Hawking, Stephen.epub</code></th><td>书名 A Brief History of Time，作者与「Stephen Hawking」是同一位。</td></tr>
+              <tr><th scope="row"><code>三体全集 (套装共3册).pdf</code></th><td>一套书《三体全集》。</td></tr>
+              <tr><th scope="row"><code>三体2.epub</code></th><td>书名《三体2》，不是《三体》的第 2 卷。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="split">
+          <div>
+            <h3>格式</h3>
+            <p>EPUB、MOBI、AZW、AZW3、PRC、CBZ 用阅读器打开，PDF 用 PDF 查看器，TXT 用文本查看器。同一本书有多种格式时优先打开 EPUB，其他格式在详情页单独打开。</p>
+            <h3>文件中的信息</h3>
+            <p>读取 Calibre 的 metadata.opf（包括豆瓣等插件获取的信息）、EPUB、MOBI 和 AZW3 自带的书名、作者、简介和封面，以及 CBZ 漫画的 ComicInfo.xml。只读取需要的部分，不下载整本书；「未知」这类无效值，以及含「微信」「公众号」的广告内容不使用。</p>
+          </div>
+          <div>
+            <h3>封面</h3>
+            <p>依次使用同名图片或 Calibre 的 cover.jpg、文件夹中的图片、书中的封面、Open Library 的封面；都没有时，生成一张带书名和作者的封面。</p>
+            <h3>阅读和 Open Library</h3>
+            <ul>
+              <li>首页先显示正在读的书。阅读位置可以通过<a href="/progress-sync.html">同步播放进度</a>在设备之间同步。</li>
+              <li>「从 Open Library 获取图书信息」和图书库的「在线查找」都打开时，为缺少年份或封面的书查找，先按 ISBN，再按书名和作者。Open Library 上中文图书的信息较少。</li>
+              <li>图书页的「识别图书」可以手动选择 Open Library 上的图书，见<a href="#review">识别专辑和图书</a>。作者页显示来自 Open Library 和维基百科的简介。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── library data ──────────────────────────────────────────────── -->
+    <section class="band band-alt" id="index" aria-labelledby="index-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">媒体库数据</p>
+          <h2 id="index-h">信息如何在设备上保存和更新</h2>
+          <p>每台设备自己整理媒体库：通过本机的 CloudDrive2 列出文件夹，把结果写入本机的媒体库数据库，每个 CloudDrive 账号一个。它与应用缓存分开保存，清除缓存不会删除它，重启或更新应用后媒体库可以立即打开，已读取的文件不再读取。整理的规则在所有平台上相同，所以同样的文件夹在每台设备上得到同样的结果。媒体库的设置、识别结果和收藏可以<a href="#sync">同步</a>；打开<a href="#sync-data">跨设备同步扫描数据</a>后，设备从文件中读取的信息和在线查找的结果，以及海报和封面，也可以同步：一台设备完整扫描过的媒体库，在其他设备上直接可用。</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table store-table">
+            <colgroup><col class="col-what"><col class="col-where"><col class="col-kept"><col class="col-sync"></colgroup>
+            <thead>
+              <tr><th scope="col">内容</th><th scope="col">保存在</th><th scope="col">保留</th><th scope="col">同步</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">媒体库的设置、PIN 校验信息、识别结果</th><td>应用数据，每个 CloudDrive 账号一份</td><td>一直保留</td><td>开启同步时同步</td></tr>
+              <tr><th scope="row">收藏</th><td>媒体库数据库旁的单独文件</td><td>一直保留；「清除媒体库数据」和重新扫描不删除</td><td>开启「跨设备同步媒体库」时同步</td></tr>
+              <tr><th scope="row">文件夹的整理结果、影片和剧集的信息、音乐标签、图书信息、媒体信息、人物、观看状态</th><td>媒体库数据库，每个账号一份</td><td>一直保留；文件的大小或修改时间改变时重新读取；「清除媒体库数据」后重新读取</td><td>开启「跨设备同步扫描数据」时同步</td></tr>
+              <tr><th scope="row">海报、背景图、封面、人物照片</th><td>媒体库数据库旁的图片文件夹</td><td>「图片上限」默认 1 GB，超过时先删除最久没有显示的；标志一直保留</td><td>可以用图片包从其他设备取得海报和封面（需要开启同步扫描数据，电视上默认关闭）</td></tr>
+              <tr><th scope="row">待确认、未找到的结果和候选</th><td>媒体库数据库</td><td>7 天后重新查找</td><td>待确认的列表同步，供网页使用</td></tr>
+              <tr><th scope="row">TMDB、MusicBrainz、Open Library、Bangumi 的查询结果</th><td>媒体库数据库旁的单独文件（answers）</td><td>3 至 30 天；超过 60 天后清除，总量超过 400 MB 时先清除最旧的；「清除媒体库数据」不删除</td><td>开启「跨设备同步扫描数据」时同步</td></tr>
+              <tr><th scope="row">人物详情：来自维基百科、维基数据等来源的简介和链接</th><td>媒体库数据库</td><td>30 至 180 天</td><td>开启「跨设备同步扫描数据」时同步</td></tr>
+              <tr><th scope="row">番剧对应表</th><td>缓存目录</td><td>每 7 天更新</td><td>否</td></tr>
+              <tr><th scope="row">其他应用通过 Emby 兼容接口写入的信息</th><td>媒体库数据库旁的单独文件和照片文件夹</td><td>一直保留；「清除媒体库数据」和重新扫描不删除</td><td>否</td></tr>
+              <tr><th scope="row">在线信息的开关和接口地址、自动锁定时间、家长控制、图片上限、在本设备缓存文件、重新扫描、列目录速度、媒体库封面</th><td>本设备的设置</td><td>一直保留</td><td>否</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Apple TV 只能把媒体库数据库保存在系统可能清理的缓存中。被清理后重新扫描一次；开启「跨设备同步扫描数据」时，则从其他设备重新取入，快得多；媒体库、PIN 和识别结果保留在设置中，或从同步中恢复。</p>
+        <div class="split">
+          <div>
+            <h3>整理和更新</h3>
+            <ul>
+              <li>第一次扫描时，找到的内容陆续出现，不需要等整个媒体库整理完。</li>
+              <li>没有改变的文件夹不会重新列出。列出文件夹的速度见<a href="#avoid-limits">避免网盘限制账号</a>。</li>
+              <li>通过这台设备的 CloudDrive2 改名或移动文件时，影片的识别结果随文件移动。</li>
+            </ul>
+            <h3>什么时候重新扫描</h3>
+            <ul>
+              <li>完整扫描过的媒体库不会再自动扫描。可以在媒体库设置的「重新扫描」中设置自动扫描的间隔，或用「立即扫描」「扫描此文件夹」手动扫描。</li>
+              <li>第一次扫描被中断时，下次启动从中断处继续，直到完成。</li>
+            </ul>
+          </div>
+          <div>
+            <h3 id="new-files">自动发现新文件</h3>
+            <p>账号有核心 Pro 功能<a href="/features.html#file-notification">文件变更通知</a>时，通过这台设备的 CloudDrive2（应用、网页管理界面、WebDAV、挂载盘）添加、删除、改名的文件，通常在几秒内更新到媒体库，不需要重新扫描。</p>
+            <p>115、百度网盘和 123 云盘在文件夹内容改变时更新文件夹的修改时间，所以在其他地方添加的文件也能在下次整理时发现。其他云盘上由别的设备或网盘自己的应用做的改动，点「刷新」，或用「扫描此文件夹」「立即扫描」时出现。</p>
+            <h3>本机数据</h3>
+            <p>「设置 → 媒体库 → 扫描与存储」显示媒体库数据和图片占用的空间。「图片上限」可选 500 MB、1 GB、2 GB、5 GB、10 GB、50 GB、100 GB 或不限。「清除媒体库数据」删除已读取的条目、详细信息和图片，然后重新读取媒体库；媒体库、识别结果和观看进度都会保留。</p>
+            <h3>离线时</h3>
+            <p>网站无法访问时使用已缓存的信息。媒体库数据库中的内容在启动时立即显示，无法访问的云盘或文件夹不会让媒体库变空。</p>
+          </div>
+        </div>
+        <div class="note note-warn" id="avoid-limits">
+          <span class="note-title">避免网盘限制账号</span>
+          <p>列目录太快或下载太多时，网盘可能限制账号。CloudDrive2 扫描时已经尽量避免：按「列目录速度」列出文件夹，默认每秒 2 次，同时最多列出 3 个文件夹；读取音乐标签时，每个网盘账号每秒最多读取一个文件；检测媒体信息时只读取文件开头的一小部分，通常几百 KB。</p>
+          <p>这些限制只在一台设备上有效。多台设备同时扫描同一个网盘账号时，请求会叠加，CloudDrive2 无法阻止。所以最好不要在多台设备上扫描同一个网盘账号中的媒体库。同时打开「跨设备同步媒体库」和「跨设备同步扫描数据」后，一个媒体库只由一台设备扫描，其他设备使用它的结果，见<a href="#one-scanner">由一台设备扫描</a>。</p>
+          <p>建议把媒体文件和同步数据保存在不同的网盘账号中，这样扫描媒体库和同步数据的请求不会落在同一个账号上。例如媒体文件放在 115 网盘，「CloudDrive2 Sync」文件夹放在 123 云盘。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── sync ──────────────────────────────────────────────────────── -->
+    <section class="band" id="sync" aria-labelledby="sync-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">同步</p>
+          <h2 id="sync-h">跨设备同步媒体库</h2>
+          <p>在一台设备上创建媒体库、选择识别结果，其他设备自动得到同样的媒体库。打开「设置 → 媒体库 → 同步 → 跨设备同步媒体库」。这是 App Pro 功能，默认关闭，与<a href="/progress-sync.html">同步播放进度</a>使用同一个「CloudDrive2 Sync」文件夹：先开启的那个选择云盘，另一个直接使用，不再询问。建议选择与媒体文件不同的网盘账号，见<a href="#avoid-limits">避免网盘限制账号</a>。数据保存在你自己的云盘中，不经过 CloudDrive 的服务器。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>同步的内容</h3>
+            <ul>
+              <li>每个媒体库的全部设置，包括文件夹、识别词、二级分类和扫描它的设备；删除媒体库也会同步。</li>
+              <li>PIN 校验信息（不是 PIN 本身）。</li>
+              <li>影片、专辑和图书的识别结果，包括你的选择。</li>
+              <li>收藏，以及每一季<a href="#skip">跳过片头片尾</a>的时间。</li>
+              <li>待确认的列表，供<a href="#web">网页</a>使用。</li>
+            </ul>
+            <h3>不同步的内容</h3>
+            <ul>
+              <li>媒体库数据和图片：由<a href="#sync-data">跨设备同步扫描数据</a>同步，那是单独的开关。</li>
+              <li>只对本设备有效的选项，例如在线信息的开关、列目录速度、图片上限和家长控制。</li>
+              <li>观看进度和已看标记：由<a href="/progress-sync.html">同步播放进度</a>同步。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>文件夹结构</h3>
+            <div class="code-block">
+              <pre><code>CloudDrive2 Sync/
+  README.txt
+  &lt;CloudDrive 账号&gt;/
+    progress/   同步播放进度
+    library/    媒体库
+      客厅电视.&lt;设备编号&gt;.&lt;序号&gt;.json
+      MacBook.&lt;设备编号&gt;.&lt;序号&gt;.json</code></pre>
+            </div>
+            <p>每台设备只写自己的文件，每个文件都包含这台设备合并后的全部内容，所以新设备读取任何一个文件都能得到完整的媒体库。</p>
+            <h3>如何合并</h3>
+            <p>每一项设置单独合并，以最后修改的为准；你的选择总是优先于自动识别的结果。删除的媒体库不会再出现。较新版本应用写入的文件会被跳过，并提示更新应用。</p>
+            <h3>什么时候同步</h3>
+            <p>应用启动、回到前台和打开媒体库时读取，修改后几秒内上传。云盘限制请求频率时，至少等待 15 分钟再试。在有回收站的云盘上，被替换的旧文件会进入回收站，见<a href="/progress-sync.html#providers">不同云盘的差别</a>。</p>
+          </div>
+        </div>
+        <div class="note">
+          <span class="note-title">新设备加入</span>
+          <p>新设备需要登录同一个 CloudDrive 账号，并能访问保存「CloudDrive2 Sync」的云盘，然后打开「跨设备同步媒体库」。媒体库的文件夹按 CloudDrive2 中的完整路径保存，通过「与云端同步」在各设备上都有的云盘路径相同。关闭同步时，媒体库保留在这台设备上，可以选择同时删除这台设备在云盘中的文件。App Pro 是一次性购买，不会到期；只有购买被退款时才会失效，此时同步暂停，云盘中的文件不会被删除。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── sync-data ─────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="sync-data" aria-labelledby="sync-data-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">同步</p>
+          <h2 id="sync-data-h">跨设备同步扫描数据</h2>
+          <p>一台设备列出文件夹、读取文件中的信息、在线查找影片后，可以把得到的结果分享给其他设备，其他设备不再重复读取和查找。一台设备完整扫描过的媒体库，在其他设备上直接可用，新设备几分钟内就能显示很大的媒体库。打开「设置 → 媒体库 → 同步 → 跨设备同步扫描数据」。这是 App Pro 功能，默认关闭，与<a href="#sync">跨设备同步媒体库</a>使用同一个「CloudDrive2 Sync」文件夹。数据保存在你自己的云盘中，不经过 CloudDrive 的服务器。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>设备分享的内容</h3>
+            <ul>
+              <li>从文件中读取的信息：NFO、<a href="#mediainfo">媒体信息</a>、音乐标签、CUE、SACD 光盘文本和图书的元数据。</li>
+              <li>每个文件夹的整理结果，以及完整扫描过的媒体库的影片列表。取得列表的设备直接显示整个媒体库，只在发现变化或你要求扫描时，才重新读取变化的部分。</li>
+              <li>在线查找的结果，包括待确认和未找到的，以及人物的详情。</li>
+              <li>私密媒体库的数据也会同步：「私密」只在媒体界面中隐藏这些媒体库，不限制对云盘的访问。</li>
+            </ul>
+            <h3>不同步的内容</h3>
+            <ul>
+              <li>图片：由下面的<a href="#sync-pictures">图片包</a>分享。</li>
+              <li>各设备自己的选项，例如图片上限和在本设备缓存文件。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>文件夹结构</h3>
+            <div class="code-block">
+              <pre><code>CloudDrive2 Sync/
+  &lt;CloudDrive 账号&gt;/
+    progress/   同步播放进度
+    library/    媒体库
+    facts/      扫描数据
+      MacBook.&lt;设备编号&gt;.12-0.jsonl.zst
+      MacBook.&lt;设备编号&gt;.12-3.jsonl.zst
+    pictures/   图片包</code></pre>
+            </div>
+            <p>每台设备只写自己的压缩文件。约 2.4 万个影视需要 18 MB。</p>
+            <h3>什么时候同步</h3>
+            <p>应用启动时、回到前台超过 10 分钟时读取；一次扫描或一轮在线查找有新内容时写入。数据包和图片等到连上 Wi-Fi 或有线网络再同步，除非打开「使用移动数据同步」。</p>
+            <h3>关闭同步</h3>
+            <p>已取入的内容保留在这台设备上。也可以同时从云盘删除这台设备的数据包和图片文件。</p>
+          </div>
+        </div>
+        <div class="split">
+          <div>
+            <h3>新设备加入</h3>
+            <p>登录同一个 CloudDrive 账号，确认能访问保存「CloudDrive2 Sync」的云盘，然后打开「跨设备同步媒体库」和「跨设备同步扫描数据」。媒体库的文件夹按 CloudDrive2 中的完整路径保存，所以这个云盘在新设备上需要有相同的路径。其他设备完整扫描过的媒体库直接可用，例如一台新的 iPad 在约一分钟内显示了 Mac 上 7 个视频媒体库的全部影片。</p>
+            <h3>先同步，再扫描</h3>
+            <p>应用启动、打开同步或添加媒体库时，先取回其他设备的扫描数据，再扫描和识别，只处理数据包中还没有的部分。最多等待 5 分钟；离线或读取失败时照常扫描。</p>
+            <div class="note">
+              <span class="note-title">谁能读取数据包</span>
+              <p>数据包是压缩的，没有加密，包含影视的路径、NFO 文件的内容、从媒体文件中读到的信息，以及 TMDB、MusicBrainz 等服务的查询结果。能打开这个云盘的人都能读到，包括私密媒体库的数据。</p>
+            </div>
+          </div>
+          <div>
+            <h3 id="one-scanner">由一台设备扫描</h3>
+            <p>同时打开两个同步开关时，一个媒体库由一台设备扫描，其他设备等待它的扫描结果，不再各自列出同样的文件夹。创建媒体库的设备默认扫描它，可以在媒体库设置的「在本设备上扫描此媒体库」中改为另一台设备。</p>
+            <ul>
+              <li>扫描期间，扫描的设备至少每 10 分钟上传一次数据包；其他设备显示「正在 某设备 上扫描」，并取入它陆续找到的内容。</li>
+              <li>扫描的设备 30 分钟没有上传数据包（关机、离线）时，由其他设备继续扫描，已经得到的内容不会丢失。</li>
+              <li>在本设备点「立即扫描」「扫描此文件夹」或「刷新」总是马上扫描。</li>
+              <li>图书库扫描只要几秒，每台设备自己扫描。</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 id="sync-pictures">图片包</h3>
+        <p>逐张从云盘获取海报很慢。打开<strong>下载图片包</strong>后（需要先打开跨设备同步扫描数据），设备从你的其他设备写入的几个大文件中取得海报和封面，不再逐张获取。手机、平板、电脑和 Quest 上默认开启，Android TV 和 Apple TV 上默认关闭。</p>
+        <ul>
+          <li><strong>写入图片包的设备</strong>：打开了「分享图片」（默认打开）、本身有这些图片的设备，只在其他设备请求时写入。</li>
+          <li><strong>图片包的内容</strong>：海报、季海报和封面，不包含背景图和人物照片。</li>
+          <li><strong>下载哪些图片</strong>：本设备显示的媒体库中、本设备还没有的图片，最新的影视在前，直到图片上限用到 90%。下载会等到连上 Wi-Fi 或有线网络，播放视频时暂停。</li>
+        </ul>
+        <div class="note">
+          <span class="note-title">大型媒体库需要较长时间</span>
+          <p>媒体库很大时，第一次同步扫描数据和图片可能需要很长时间，请耐心等待。同步在后台进行，已经显示的内容可以照常使用。</p>
+          <p>图片缓存在本设备上，可能占用很多存储空间。请在「设置 → 媒体库 → 扫描与存储」中按需要设置「图片上限」：默认 1 GB，可选 500 MB 至 100 GB 或不限；超过上限时，先删除最久没有显示的图片。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── private ───────────────────────────────────────────────────── -->
+    <section class="band" id="private" aria-labelledby="private-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">私密</p>
+          <h2 id="private-h">私密媒体库与 PIN</h2>
+          <p>私密媒体库输入 PIN 后才显示。锁定时，它和其中的影片不出现在任何列表、首页、继续观看、待确认和数量中。每个 CloudDrive 账号一个 PIN，4 到 8 位数字，在「设置 → 媒体库 → 隐私与家长控制」中设置。</p>
+        </header>
+        <div class="split">
+          <div>
+            <ul>
+              <li><strong>自动锁定</strong>：默认离开应用 5 分钟后锁定，也可以设为离开时、15 分钟或 1 小时后。每次启动应用时都是锁定的。</li>
+              <li>私密媒体库的「在线查找」默认关闭，内容不会发送给 <a href="#ai">AI 辅助识别</a>的服务。</li>
+              <li>与私密媒体库重叠的文件夹，在锁定时其他媒体库中也会隐藏重叠的部分。</li>
+              <li><strong>忘记 PIN</strong>：PIN 无法找回。可以删除所有私密媒体库和 PIN，之后重新添加，其中的文件夹和文件都会保留。</li>
+            </ul>
+          </div>
+          <div>
+            <div class="note note-warn">
+              <span class="note-title">PIN 不加密文件</span>
+              <p>PIN 只是在媒体页面中隐藏私密媒体库，并不限制访问：这些文件夹仍可在文件管理和网盘自己的应用中打开。同步文件中保存的是 PIN 的校验信息（PBKDF2-SHA256，100,000 轮），不是 PIN 本身，但 4 位数字的 PIN 可以被很快试出，请不要把它当作密码使用。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── parental control ──────────────────────────────────────────── -->
+    <section class="band band-alt" id="parental" aria-labelledby="parental-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">家长控制</p>
+          <h2 id="parental-h">家长控制</h2>
+          <p>家长控制让这台设备只能浏览媒体库：进入文件、切换到文件管理器或打开设置时，需要输入 4 位数字的家长密码。在「设置 → 媒体库 → 隐私与家长控制」中打开，需要 App Pro。密码只保存在这台设备上，不同步；它和私密媒体库的 PIN 是两个不同的密码。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>锁定时</h3>
+            <ul>
+              <li>锁定时不能进入文件、文件管理器和设置；「识别…」、添加和删除媒体库需要输入密码。</li>
+              <li>离开应用或屏幕关闭时立即锁定；也可以设置输入密码后多久没有操作就重新锁定，默认从不。</li>
+              <li><strong>忘记密码</strong>：输入这台设备上登录的 CloudDrive2 账户的密码，验证通过后设置新密码。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>最高分级</h3>
+            <p>可选不限制、G（所有年龄）、PG（8 岁以上）、PG-13（13 岁以上）、R（17 岁以上）。锁定时，高于此分级的影片在所有页面、搜索和首页中隐藏。</p>
+            <ul>
+              <li>分级先取 NFO 中的分级，再取 TMDB 的分级；没有美国的分级时，按英国、德国、法国、日本等其他国家和地区的分级换算。</li>
+              <li><strong>显示没有分级的影片</strong>：默认关闭。还没有分级信息的影片在锁定时隐藏，除非打开此项。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note note-warn">
+          <span class="note-title">家长控制不加密文件</span>
+          <p>家长控制只限制这台设备上的 CloudDrive2 应用。文件仍可以通过其他设备、网盘自己的应用或挂载的磁盘打开。没有 App Pro 时，媒体库和影视界面都不能使用，家长控制也不起作用。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── emby-compatible api ───────────────────────────────────────── -->
+    <section class="band" id="emby-api" aria-labelledby="emby-api-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">其他应用</p>
+          <h2 id="emby-api-h">Emby 兼容接口</h2>
+          <p>Mac、iPhone、iPad、Apple TV、Apple Vision Pro、Android 手机和电视、Windows 电脑上的 CloudDrive2 可以提供 Emby 兼容接口，让 MoviePilot 等工具像连接 Emby 服务器一样连接媒体库，读取其中的影片和人物，并补全演员的名字、简介和头像。在「设置 → 媒体库 → 高级 → Emby 兼容接口」中打开，默认关闭。Meta Quest 上没有这个功能。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>设置</h3>
+            <ul>
+              <li><strong>端口</strong>：默认 29801。iPhone、iPad 和 Apple Vision Pro 上只在应用显示在屏幕上时运行。</li>
+              <li><strong>仅限本机</strong>：只有这台设备上的应用可以连接；关闭时局域网内的应用都可以连接。</li>
+              <li><strong>API 密钥</strong>：为每个要连接的应用生成一个，并选择它可以访问的媒体库。私密媒体库只有在用 PIN 解锁后选择「包括隐私库」才能访问。</li>
+              <li>在 MoviePilot 中，服务器类型请选择 Emby，再填入地址和密钥。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>其他应用写入的信息</h3>
+            <ul>
+              <li>人物的名字、简介、照片和角色名，以及收藏。人物信息优先于 NFO 和 TMDB 显示。</li>
+              <li>这些信息保存在本机，不写入媒体所在的文件夹；「清除媒体库数据」和重新扫描不会删除它们。</li>
+              <li>开启<a href="#sync-data">跨设备同步扫描数据</a>时，这些信息和照片同步到你的其他设备。</li>
+              <li>目前只接收人物的信息和收藏，影片本身的信息和图片暂不接收。</li>
+            </ul>
+            <div class="note">
+              <span class="note-title">安全</span>
+              <p>接口在局域网内使用普通 HTTP，请妥善保管密钥。通过它只能访问媒体库中的影片和人物，无法访问你的文件和账号。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── privacy ───────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="privacy" aria-labelledby="privacy-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">隐私</p>
+          <h2 id="privacy-h">哪些信息离开设备</h2>
+        </header>
+        <div class="split">
+          <div>
+            <ul>
+              <li><strong>CloudDrive 的服务器</strong>：不接收媒体库的任何内容。</li>
+              <li><strong>信息来源网站</strong>：只在对应开关和媒体库的「在线查找」都打开时，发送<a href="#sites">表格中列出的内容</a>，例如片名和年份。不发送文件内容、路径和账号。打开艺术家或作者页时，MusicBrainz 编号或作者姓名会发送给 Wikidata 和维基百科。</li>
+              <li><strong>你选择的 AI 服务</strong>：只在打开「AI 辅助识别」时，发送所选媒体库中未识别项目在媒体库文件夹以下的路径、文件名，以及从文件中读到的标签、CUE、SACD 文本或 OPF（Windows 不发送目录表、目录编号和 SACD 文本）。私密媒体库的内容不发送。部分服务可能会用免费套餐下发送的内容训练模型；DeepSeek 将数据存储在中国大陆。</li>
+              <li><strong>你的 Emby 或 Jellyfin 服务器</strong>：只在<a href="#import">导入</a>时用你的登录读取媒体库、影片、人物、图片和你的观看记录，不写入任何内容。</li>
+              <li><strong>局域网中的应用</strong>：只在打开 Emby 兼容接口时，持有密钥的应用可以读取所选媒体库中的影片和人物。</li>
+              <li><strong>你的云盘</strong>：开启同步时，保存同步文件；开启同步扫描数据时，保存数据包、图片文件，以及其他应用和导入的服务器给出的人物照片；开启保存信息和图片时，保存 NFO 和图片；用「编辑元数据…」保存时，写入影片文件夹的 NFO 和图片。</li>
+            </ul>
+          </div>
+          <div>
+            <p>同步文件是普通的 JSON 文本，不加密，包含媒体库的名称和文件夹、PIN 校验信息、已识别影片的路径和 TMDB 编号、待确认的候选，以及剧集每一季跳过片头片尾的时间。能打开这个云盘的人，包括与你共用这个云盘账号的人和云盘服务商，都可以读取。请选择你愿意保存这些信息的云盘。删除「CloudDrive2 Sync」文件夹会删除云盘中的副本；仍然开启同步的设备会重新写入自己的文件。</p>
+            <p>扫描数据包是压缩的，没有加密，包含影视的路径、NFO 文件的内容、从媒体文件中读到的信息，以及 TMDB、MusicBrainz 等服务的查询结果，包括私密媒体库的数据；图片文件包含海报和封面。能打开这个云盘的人都能读到。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── faq ───────────────────────────────────────────────────────── -->
+    <section class="band" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h">常见问题</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>媒体库里只有文件名，没有海报和简介</summary>
+          <div class="acc-body">
+            <p>文件夹里没有 NFO 和图片时，需要在线查找。打开「设置 → 媒体库 → 识别 → 从 TMDB 获取影片信息」，并确认这个媒体库的「在线查找」是打开的。私密媒体库的「在线查找」默认关闭。用「测试连接」检查能否访问 TMDB；在中国大陆请使用默认的 api.tmdb.org。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>识别错了，怎么改</summary>
+          <div class="acc-body">
+            <p>在影片详情页点「识别…」，从候选中选择，或搜索片名和年份。选择会一直保留。如果一批文件都有同样的问题，例如字幕组的名称或集数编号，可以写一条<a href="#words">识别词</a>，或在文件夹名中加上 <code>{tmdbid=…}</code>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>为什么没有年份的电影常在待确认中</summary>
+          <div class="acc-body">
+            <p>同名的电影很多，没有年份时，只有文件名中的中文名和英文名都与同一部电影相符才自动识别，否则需要你确认一次。在文件名或文件夹名中加上年份，例如 <code>Heat (1995)</code>，就可以自动识别。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>已经用 tinyMediaManager 或 Emby 刮削过，还需要在线查找吗</summary>
+          <div class="acc-body">
+            <p>不需要。文件夹里的 NFO 和图片优先使用，NFO 中有编号的影片直接识别。可以关闭在线查找，媒体库只显示文件夹里已有的信息。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>开启「在媒体旁保存信息和图片」会覆盖我已有的文件吗</summary>
+          <div class="acc-body">
+            <p>不会。其他工具写入的 NFO 和图片不会被改动；文件夹中已有其他工具的 NFO 时，这部影片不写入任何文件。只有同时打开「优先使用在线信息」时，确认后其他工具的 .nfo 和图片会被改名（加上 .bak），替换为 TMDB 的信息和图片，不会删除。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>新加入的文件没有出现在媒体库中</summary>
+          <div class="acc-body">
+            <p>在媒体库页面点「刷新」。账号有核心 Pro 功能「文件变更通知」时，通过这台设备添加的文件会自动出现，见<a href="#new-files">自动发现新文件</a>。在其他设备或网盘自己的应用中添加的文件，要等文件夹再次被读取时才出现：在媒体库的文件夹视图或文件浏览器中点「扫描此文件夹」，或在媒体库设置中点「立即扫描」，也可以设置「重新扫描」的间隔。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>另一台设备上没有我的媒体库</summary>
+          <div class="acc-body">
+            <p>两台设备都要打开「跨设备同步媒体库」，登录同一个 CloudDrive 账号，并且都能访问保存「CloudDrive2 Sync」的云盘。不开同步时，可以用「导出媒体库…」和「导入媒体库…」。影片列表、从文件中读到的信息和海报，由<a href="#sync-data">跨设备同步扫描数据</a>负责。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>新设备又把整个媒体库扫描了一遍</summary>
+          <div class="acc-body">
+            <p>在新设备和一台已经扫描过的设备上都打开「设置 → 媒体库 → 同步 → 跨设备同步扫描数据」。另一台设备完整扫描过的媒体库，新设备直接取入，不列出文件夹，不重复读取和查询；同时打开「跨设备同步媒体库」时，新媒体库也只由一台设备扫描，见<a href="#one-scanner">由一台设备扫描</a>。第一次读取会等到连上 Wi-Fi 或有线网络，除非打开了「使用移动数据同步」。海报由<a href="#sync-pictures">图片包</a>取得，电视上要先打开「下载图片包」。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>扫描时网盘提示请求太频繁，或限制了账号</summary>
+          <div class="acc-body">
+            <p>先停止在其他设备上扫描同一个网盘账号中的媒体库，并在媒体库设置中把「列目录速度」改为每秒 1 次。然后同时打开「跨设备同步媒体库」和「跨设备同步扫描数据」，让一个媒体库只由一台设备扫描。建议把「CloudDrive2 Sync」文件夹放在与媒体文件不同的网盘账号中，例如媒体文件在 115 网盘、同步数据在 123 云盘。见<a href="#avoid-limits">避免网盘限制账号</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>媒体库会改动或删除我的文件吗</summary>
+          <div class="acc-body">
+            <p>不会删除。媒体库只读取文件夹，删除媒体库或移除文件夹也不会删除文件。识别词只改变媒体库中读取的名称，不会给文件改名。会写入的只有：你开启的「在媒体旁保存信息和图片」、你用「编辑元数据…」保存的 NFO 和图片，以及同步文件。同时打开「优先使用在线信息」和「在媒体旁保存信息和图片」时，其他应用的 .nfo 和图片会被改名为 .bak，不会删除。其他应用通过 Emby 兼容接口写入的信息保存在本机，不写入你的文件。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>海报上的 4K、HDR 角标是空心的</summary>
+          <div class="acc-body">
+            <p>空心角标是由文件名推测的，还没有读取文件确认。媒体库的「识别时检测媒体信息」打开时（默认），扫描它的设备会逐渐检测；也可以在详情页点「检测媒体信息」，或在「设置 → 媒体库 → 扫描与存储」中打开「后台检测媒体信息」。检测后角标变为实心。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>媒体库显示「他处扫描」或「等待中」</summary>
+          <div class="acc-body">
+            <p>这个媒体库由另一台设备扫描，这台设备直接使用它的结果。想在这台设备上扫描，点「立即扫描」，或在媒体库设置中打开「在本设备上扫描此媒体库」。那台设备关机或离线 30 分钟后，由其他设备继续扫描。见<a href="#one-scanner">由一台设备扫描</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>识别改进后，以前没识别出来的影片怎么办</summary>
+          <div class="acc-body">
+            <p>在媒体库设置中点「重新识别未识别的标题」旁的「重新识别」。待确认、未找到和被当作其他内容的标题会按新的规则重新查找，在所有同步的设备上生效；已识别的和你选择过的不变。按新规则整理文件夹（例如<a href="#video">一套光盘</a>）要先「扫描此文件夹」。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>每集都要看一遍片头</summary>
+          <div class="acc-body">
+            <p>播放这一季的任何一集时，在播放器中打开「片头片尾」，在片头结束时点「设为当前位置」。整季的每一集都会跳过片头，你的其他设备也一样。见<a href="#skip">跳过片头片尾</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>忘记了家长控制的密码</summary>
+          <div class="acc-body">
+            <p>在输入密码的界面点「忘记密码？」，输入这台设备上登录的 CloudDrive2 账户的密码（开启了两步验证时还要输入验证码）。验证通过后可以设置新密码。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>已经用 Emby 或 Jellyfin 整理好了，还要再扫描一遍吗</summary>
+          <div class="acc-body">
+            <p>不用，媒体文件在你的网盘中时可以直接导入（暂不支持 .strm 文件）：在「设置 → 媒体库」中点「从 Emby 或 Jellyfin 导入…」。影片的信息、图片、媒体信息、观看记录和人物都从服务器读取，影片从网盘直接播放，不再扫描文件夹，也不在线查询。见<a href="#import">从 Emby 或 Jellyfin 导入</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>导入以后，Emby 或 Jellyfin 服务器还要一直开着吗</summary>
+          <div class="acc-body">
+            <p>播放不需要：影片直接从网盘播放。导入的媒体库每次重新扫描时从服务器读取，服务器关闭时保留上次读到的内容；海报和背景图在显示时从服务器获取，获取不到时改用其他图片。人物的照片在导入时已经下载到设备上。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>能用 MoviePilot 等工具补全演员头像吗</summary>
+          <div class="acc-body">
+            <p>可以，在 Mac、iPhone、iPad、Apple TV、Apple Vision Pro、Android 手机和电视、Windows 电脑上（Meta Quest 上没有）。打开「设置 → 媒体库 → 高级 → Emby 兼容接口」，为工具生成一个密钥，在工具中把服务器类型选为 Emby，填入服务器地址和密钥。工具写入的名字、简介和头像会优先显示，见 <a href="#emby-api">Emby 兼容接口</a>。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>反馈问题</h2>
+        <p>发现问题请在 GitHub issues 提交，便于记录和跟踪；也可以在 Telegram 交流群反馈，或发送邮件。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">在 GitHub 提 issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">发邮件</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/media-library.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

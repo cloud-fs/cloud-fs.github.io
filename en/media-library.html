@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Media library — CloudDrive2</title>
+  <meta name="description" content="The media library in the CloudDrive2 apps turns the films, shows, music and books in your cloud storage into a poster wall. How folders and file names are recognized, which sites the scraper uses, what every option does, media info, people and box sets, parental control, the Emby API for other apps, how the information is stored on each device, and how libraries sync across devices.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/media-library.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/media-library.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/media-library.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/media-library.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Media library — CloudDrive2">
+  <meta property="og:description" content="The films, shows, music and books in your cloud storage as a poster wall, with no media server. The information stays on your own devices and in your own storage.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/media-library.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    /* a second two-column block after steps or another split needs the same gap */
+    .steps + .split, .split + .split { margin-top: var(--s7); }
+    /* the storage table: long row headings wrap, so the other columns keep their width */
+    .store-table { table-layout: fixed; min-width: 720px; }
+    .store-table tbody th { white-space: normal; }
+    .store-table .col-what { width: 30%; }
+    .store-table .col-where { width: 22%; }
+    .store-table .col-kept { width: 28%; }
+    .store-table .col-sync { width: 20%; }
+    /* sample names: a long name wraps inside its column */
+    .name-table { table-layout: fixed; min-width: 560px; }
+    .name-table .col-name { width: 52%; }
+    .name-table tbody th { white-space: normal; font-weight: 400; }
+    .name-table code { overflow-wrap: anywhere; }
+  </style>
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/media-library.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">App Pro feature · In beta</p>
+        <h1>Media library</h1>
+        <p class="hero-lede">Choose folders in your cloud storage, and the CloudDrive2 app turns the films, shows, music and books in them into libraries with posters, plots and cast. No Emby, Jellyfin or Plex server is needed: NFO files and artwork already in the folders come first, and what they leave out can be looked up on TMDB and other sites; if you already run an Emby or Jellyfin server, you can import its libraries. The results stay on your own devices, and can sync across them through your own cloud storage.</p>
+        <ul class="chips">
+          <li><a class="chip chip-video" href="#types">Library types</a></li>
+          <li><a class="chip" href="#create">Creating and options</a></li>
+          <li><a class="chip chip-cloud" href="#import">Import from Emby or Jellyfin</a></li>
+          <li><a class="chip chip-video" href="#video">How videos are recognized</a></li>
+          <li><a class="chip chip-video" href="#scraper">Scraping and matching</a></li>
+          <li><a class="chip chip-cloud" href="#sites">Information sources</a></li>
+          <li><a class="chip" href="#review">Needs review and Identify</a></li>
+          <li><a class="chip chip-subs" href="#words">Recognition words</a></li>
+          <li><a class="chip chip-subs" href="#shelves">Shelves</a></li>
+          <li><a class="chip chip-video" href="#mediainfo">Media info</a></li>
+          <li><a class="chip" href="#people">People, box sets and editing</a></li>
+          <li><a class="chip chip-video" href="#skip">Skip intro and ending</a></li>
+          <li><a class="chip chip-backup" href="#sidecars">Saving NFO and artwork</a></li>
+          <li><a class="chip chip-audio" href="#music">Music libraries</a></li>
+          <li><a class="chip chip-audio" href="#books">Book libraries</a></li>
+          <li><a class="chip" href="#index">Library data</a></li>
+          <li><a class="chip chip-cloud" href="#sync">Sync across devices</a></li>
+          <li><a class="chip chip-cloud" href="#sync-data">Sync scanned data</a></li>
+          <li><a class="chip chip-disc" href="#private">Private libraries</a></li>
+          <li><a class="chip chip-disc" href="#parental">Parental control</a></li>
+          <li><a class="chip chip-cloud" href="#emby-api">Emby API</a></li>
+          <li><a class="chip" href="#privacy">Privacy</a></li>
+          <li><a class="chip" href="#faq">FAQ</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/apps/">Get the apps</a>
+          <a class="btn btn-ghost" href="/en/pricing.html#app-h">App Pro pricing</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── types ─────────────────────────────────────────────────────── -->
+    <section class="band" id="types" aria-labelledby="types-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Types</p>
+          <h2 id="types-h">Five kinds of library</h2>
+          <p>A library is one or more folders. They can be on any cloud storage, WebDAV server, NAS or local disk that CloudDrive2 can list. Different libraries' folders may overlap.</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Type</th><th scope="col">Holds</th><th scope="col">Information from</th><th scope="col">Browsing</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Movies</th><td>Films, including Blu-ray and DVD folders, ISOs, films in parts and multiple versions</td><td>NFO and artwork, TMDB</td><td>Poster wall, shelves, box sets</td></tr>
+              <tr><th scope="row">TV Shows</th><td>Shows, seasons and episodes, anime included</td><td>NFO and artwork, TMDB, and Bangumi for anime</td><td>Poster wall, seasons, episodes, Next Up</td></tr>
+              <tr><th scope="row">Mixed</th><td>Films and shows together, told apart automatically</td><td>As above</td><td>Film and show shelves</td></tr>
+              <tr><th scope="row">Music</th><td>Albums: a folder of tracks, multi-disc albums, a cue sheet with one big file, SACD ISOs</td><td>Tags in the music files, cue sheets, a SACD's disc text, MusicBrainz</td><td>Albums, artists, folders</td></tr>
+              <tr><th scope="row">Books</th><td>EPUB, MOBI, AZW3, CBZ, PDF, TXT, Calibre libraries</td><td>Calibre's metadata.opf, the book file's own metadata, Open Library</td><td>Books, authors, series, folders</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="split">
+          <div>
+            <h3>Where libraries appear</h3>
+            <p>Libraries appear in the app's Media interface as "CloudDrive Libraries", next to Emby and Jellyfin servers. Choose Media under Settings → Interface to start the app on the poster wall.</p>
+            <ul>
+              <li><strong>Home</strong>: Featured, Continue Watching, Next Up, Continue Listening, Continue Reading, and a "Latest" row for each library. A library being scanned or synced shows its state, such as Scanning, Identifying or Syncing; one that another device scans shows Elsewhere or Waiting (see <a href="#one-scanner">One device scans a library</a>).</li>
+              <li><strong>Featured</strong>: a carousel at the top of Home with titles from Continue Watching, Next Up and the newest in each library. Titles of a locked private library, and titles above parental control's rating limit while locked, are never featured.</li>
+              <li><strong>Search</strong>: translated and alternative titles are found too, and accents and Traditional or Simplified Chinese don't matter. A song is found once its album's page has been opened.</li>
+              <li><strong>Favorites</strong>: kept apart from library data, so Clear library data and a rescan keep them, and they sync with <a href="#sync">Sync libraries across devices</a>.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Devices</h3>
+            <p>The CloudDrive2 apps on iPhone, iPad, Mac, Windows PCs, Apple TV, Apple Vision Pro, Android phones, tablets and TVs, and Meta Quest. Each device builds its libraries itself; no server has to stay on.</p>
+            <p>The features are the same on every device, with these differences: the Emby API isn't on Meta Quest; Apple TV can't import from Emby or Jellyfin, but shows libraries another device imported; on Apple TV and Android TV, person pages leave out the links and Scan again has no custom interval; on Apple TV, Edit metadata… changes text only, and on Android TV its pictures come only from your cloud storage; Android has no video-track picker, and no picking several titles or right-click menu. Smaller differences are noted where they matter.</p>
+            <p>The core service's web interface doesn't show libraries. It has a Titles to Confirm page where you can confirm, in a browser, the titles the automatic match wasn't sure about. See <a href="#web">Confirming on the web</a>.</p>
+            <h3>App Pro</h3>
+            <p>The whole media library needs App Pro: adding and editing libraries, online info, identifying titles, saving info and artwork, syncing across devices, and browsing and playing in the Media interface.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── create ────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="create" aria-labelledby="create-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Creating</p>
+          <h2 id="create-h">Creating a library, and every option</h2>
+          <p>In Settings → Media Libraries, choose Add Library (needs App Pro); Home can add one too. The library editor lists these options in this order. Music and book libraries don't have Metadata language, Prefer online info, recognition words or shelves; "Save info and artwork beside the media" works for them too.</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Option</th><th scope="col">Default</th><th scope="col">What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Name</th><td>The first folder's name</td><td>Shown in the library list, on Home and in the sidebar.</td></tr>
+              <tr><th scope="row">Type</th><td>Movies</td><td>Movies, TV Shows, Mixed, Music or Books. A Movies library never treats a folder as a show. In a TV Shows library, every folder with videos is a show. A Mixed library tells them apart.</td></tr>
+              <tr><th scope="row">Folders</th><td>—</td><td>At least one. Add Folder picks from everything CloudDrive2 can reach, except the root / itself. A folder inside another folder of the same library is dropped. Removing a folder doesn't delete its files.</td></tr>
+              <tr><th scope="row">Private Library</th><td>Off</td><td>Shown only after the PIN is entered; see <a href="#private">Private libraries</a>. The first private library asks you to set a PIN.</td></tr>
+              <tr><th scope="row">Look up online</th><td>On for a normal library, off for a private one</td><td>Titles without an NFO are looked up on TMDB; music libraries use MusicBrainz and book libraries Open Library. The matching switch under Online info must be on too. Off: nothing about this library is sent to those sites. Only a title you pick yourself in Identify… is fetched by its id.</td></tr>
+              <tr><th scope="row">Metadata language</th><td>Follow interface</td><td>The language a video library's titles, plots and people are fetched and shown in: Follow interface, English, Simplified Chinese or Traditional Chinese. See <a href="#scraper">Scraping and matching</a>.</td></tr>
+              <tr><th scope="row">Prefer online info</th><td>Off</td><td>Titles, plots and artwork come from TMDB even when .nfo files or pictures sit beside the media; those are used only where TMDB has nothing. An .nfo's TMDB or IMDb id still decides which title it is. Needs Look up online.</td></tr>
+              <tr><th scope="row">Save info and artwork beside the media</th><td>Off</td><td>Writes .nfo files, posters and backdrops into the library's folders, for Kodi, Jellyfin, Emby and Infuse. Sub-options: Copies for Infuse, and Actor photos (.actors folder). Music libraries get album.nfo and the album cover, and book libraries an OPF and the cover. See <a href="#sidecars">Saving NFO and artwork</a>.</td></tr>
+              <tr><th scope="row">Detect media info while identifying</th><td>On</td><td>Reads the start of each video file as its title is identified, for its resolution, HDR and audio tracks. The device that scans this library does it. Off: only devices with Detect media info in the background on detect it. Video libraries only. See <a href="#mediainfo">Media info</a>.</td></tr>
+              <tr><th scope="row">Listing speed</th><td>2 per second</td><td>Folder listings per second while this library is read. A cloud storage can block an account that lists too fast, and every CloudDrive on the same storage account shares the allowance. This device only.</td></tr>
+              <tr><th scope="row">Scan again</th><td>Never</td><td>A library scanned completely isn't scanned again by itself. It can be set to At each start, Every hour, Every day or a custom interval (in hours; not on Apple TV and Android TV, and on Android for video libraries only). Scan now reads the library's folders again right away. This device only. See <a href="#index">Library data</a>.</td></tr>
+              <tr><th scope="row">Look up unidentified titles again</th><td>—</td><td>The Look Up Again button, under Scan now. Titles waiting for review, not found on TMDB, or taken for something other than a film or show are looked up again, on every device that syncs. Useful after an update that identifies titles better. Your choices, NFO files and titles already identified stay as they are. Video libraries only.</td></tr>
+              <tr><th scope="row">Scan this library on this device</th><td>The device that created the library</td><td>Which device scans the library; your other devices take its scan instead of scanning it again. Turned on, this device scans it from then on; turned off on the device that scans it, any device may, a computer first. Elsewhere the row says Scanned by &lt;device&gt;. Applies while Sync libraries and Sync scanned data are both on. See <a href="#one-scanner">One device scans a library</a>.</td></tr>
+              <tr><th scope="row">Keep files on this device</th><td>Off</td><td>Files read once are kept in this device's disk cache, so they aren't downloaded again: Off, Small files only (pictures, subtitles, .nfo and other files under 10 MB), Everything except video, or All files. This device only; it doesn't sync.</td></tr>
+              <tr><th scope="row">Recognition words</th><td>None</td><td>Rewrites file and folder names before they are read, in MoviePilot's custom recognition words format. See <a href="#words">Recognition words</a>.</td></tr>
+              <tr><th scope="row">Shelves</th><td>Default shelves</td><td>Splits the library into shelves such as Chinese-language films or Anime, in MoviePilot's category.yaml format. See <a href="#shelves">Shelves</a>.</td></tr>
+              <tr><th scope="row">Cover</th><td>Automatic</td><td>The library's cover on Home is made of its own pictures, laid out as Posters, Mosaic or Backdrop. Shuffle swaps the pictures; save once the preview looks right. The automatic cover shows what was added lately. Kept on this device.</td></tr>
+              <tr><th scope="row">Move Up / Move Down</th><td>—</td><td>Changes the order of the libraries.</td></tr>
+              <tr><th scope="row">Delete Library</th><td>—</td><td>Only the library is deleted. Its folders and files stay.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="settings">The Settings → Media Libraries page</h3>
+        <div class="split">
+          <div>
+            <h4>Identification</h4>
+            <p>These settings stay on the device and don't sync.</p>
+            <ul>
+              <li><strong>Look up titles on TMDB</strong>: off by default. When on, titles without an NFO get their poster, plot and cast from TMDB. You don't need your own API key.</li>
+              <li><strong>Look up anime on Bangumi</strong>: on by default; works while TMDB lookup is on.</li>
+              <li><strong>Look up music on MusicBrainz</strong>: off by default. Finds an album's year and a missing cover, the exact release and its credits, and artist pages take their biography and photo from Wikipedia and Wikimedia Commons.</li>
+              <li><strong>Look up books on Open Library</strong>: off by default. Finds a book's year and a missing cover; author pages show a biography from Open Library and Wikipedia.</li>
+              <li><strong>AI identification</strong>: off by default. An AI service and model you choose help identify the films, albums and books the rules can't; see <a href="#ai">AI identification</a>.</li>
+              <li><strong>API address</strong>: api.tmdb.org by default, which is reachable from mainland China. Or api.themoviedb.org (may not be reachable from mainland China), or your own https address, such as a reverse proxy.</li>
+              <li><strong>Image address</strong>: image.tmdb.org by default, or your own.</li>
+            </ul>
+            <h4>Privacy &amp; parental control</h4>
+            <ul>
+              <li><strong>Private libraries</strong>: see <a href="#private">Private libraries</a>.</li>
+              <li><strong>Parental control</strong>: see <a href="#parental">Parental control</a>.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Sync</h4>
+            <ul>
+              <li><strong>Sync libraries across devices</strong>: see <a href="#sync">Sync across devices</a>.</li>
+              <li><strong>Sync scanned data across devices</strong> and the picture packs: see <a href="#sync-data">Sync scanned data</a>.</li>
+            </ul>
+            <h4>Scanning &amp; storage</h4>
+            <ul>
+              <li><strong>Libraries read at once</strong>: how many libraries are read and looked up at the same time; 1 by default, so the next library starts when the last one is done.</li>
+              <li><strong>Media info</strong>: Detect media info in the background, Wait between files, Pause while a video plays, and Badges on posters; see <a href="#mediainfo">Media info</a>.</li>
+              <li><strong>On this device</strong>: the space library data and pictures use; Picture limit, 1 GB by default, from 500 MB to 100 GB, or Unlimited; Clear library data deletes what was read, the details and the pictures, then reads the libraries again, keeping the libraries, identifications and watch progress. See <a href="#index">Library data</a>.</li>
+            </ul>
+            <h4>Advanced</h4>
+            <ul>
+              <li><strong>Emby API for other apps</strong> (not on Meta Quest): see <a href="#emby-api">Emby API</a>.</li>
+              <li><strong>Export and Import</strong>: Export Libraries… saves the libraries as one JSON file, which Import Libraries… loads on another device when sync is off. Private libraries are exported only while unlocked. Identify choices aren't exported. TVs don't have this.</li>
+            </ul>
+            <div class="note">
+              <span class="note-title">Editing on a TV</span>
+              <p>TVs can create and edit libraries. Long text such as recognition words and shelves can be typed on a phone after scanning the TV's code.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── import from emby / jellyfin ───────────────────────────────── -->
+    <section class="band" id="import" aria-labelledby="import-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Import</p>
+          <h2 id="import-h">Import from Emby or Jellyfin</h2>
+          <p>When an Emby or Jellyfin server's media is on your cloud storage (mounted through CloudDrive2, for example), you can import the server's libraries: the titles' text, pictures, media info, your watch history and the people are read from the server, so no folder is scanned and nothing is scraped again, and the titles play straight from your cloud storage. The import only reads the server; it changes nothing there.</p>
+          <p>Only servers whose media files are themselves on your cloud storage are supported. Libraries that point to their media with .strm files can't be imported yet.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>How to import</h3>
+            <ol>
+              <li>Sign in to the server under Media Servers first. Only a server administrator can read the libraries' folders.</li>
+              <li>In Settings → Media Libraries, choose Import from Emby or Jellyfin…, then the server.</li>
+              <li>The server's libraries are listed with each of their folders. A folder on this device's cloud storage shows "… plays directly from …"; one that isn't (the server's own disk or NAS) shows "… is not on this device's cloud storage" and is left out. The matching cloud folder comes from the <a href="/en/download.html#plugin">CloudDrive2 companion plugin</a> on the server, the same storage account, and the path mappings you set for the server under Media Servers.</li>
+              <li>Tick the libraries, choose which people to import and which goes first when CloudDrive already has something, and choose Import. It runs in the background: you can close the window, and Settings → Media Libraries shows how far it has got. A library imported before shows Update; importing it again brings it up to date.</li>
+            </ol>
+            <p>The server's movie libraries become film libraries, its TV libraries show libraries, and its other video libraries mixed libraries. Music and book libraries can't be imported yet.</p>
+            <h3>When CloudDrive already has it</h3>
+            <p>Chosen separately for titles and for people: The server's first (titles' default), CloudDrive's first, or Whichever has it; the newer when both do (people's default). An empty field never replaces a filled one, and nothing of CloudDrive's is deleted. Importing the same server again starts from the last choices; a library's title choice can also be changed in its editor, on the "Imported from …" row, without reading the server again.</p>
+          </div>
+          <div>
+            <h3>What comes along</h3>
+            <ul>
+              <li>Films' and shows' names, original titles, plots, taglines, genres, tags, studios, age ratings, ratings and premiere dates; posters, logos, banners, thumbs and every backdrop, fetched from the server when shown.</li>
+              <li>A show's seasons and episodes, each episode's name, plot, numbers, runtime and air date.</li>
+              <li>The media info the server read: resolution, HDR and Dolby Vision, audio tracks (Atmos and DTS:X included) and subtitles. Files the server couldn't read, some ISOs for example, are detected by the app in the background.</li>
+              <li>Your played state, resume points and favourites on the server (the signed-in user's); a newer one on the device is kept.</li>
+              <li>People: People in these libraries with a biography or photo (the default), Everyone in these libraries, Everyone on the server, or No one. Their biographies, birth and death dates, birthplaces, photos and up to six backdrops, their tags and one-line description. Photos are downloaded to the device.</li>
+            </ul>
+            <h3>After the import</h3>
+            <ul>
+              <li>An imported library is read from the server: no folder is scanned and nothing is looked up online, and Home and the library page show "Reading from &lt;server&gt; · N titles read". Each rescan reads the server again, and titles the server no longer lists leave.</li>
+              <li>With <a href="#sync">Sync libraries across devices</a> and <a href="#sync-data">Sync scanned data</a> on, an imported library reaches your other devices, which use what the importing device read; people's biographies, photos and first three backdrops travel too. On a device not signed in to that server, a server picture that can't load gives way to another.</li>
+              <li>Apple TV doesn't import, but shows the libraries another device imported.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── video recognition ─────────────────────────────────────────── -->
+    <section class="band band-alt" id="video" aria-labelledby="video-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Recognition</p>
+          <h2 id="video-h">How videos are recognized</h2>
+          <p>Building a video library reads only the names of folders and files; no video file is opened. The usual ways of naming are understood, including long names from download sites and release groups, fansub names, episodes in Chinese numerals, Blu-ray and DVD folders, films split into parts, and sets of discs, so files don't need renaming first.</p>
+        </header>
+
+        <div class="split">
+          <div>
+            <h3>Files that are not titles</h3>
+            <ul>
+              <li>Extras and trailers belong to their title, such as <code>trailers</code> and <code>featurettes</code> folders, files whose names end in <code>-trailer</code>, and fansub <code>[NCOP]</code> and <code>[NCED]</code> files.</li>
+              <li>NAS and system folders are not read, such as <code>@eaDir</code>, <code>#recycle</code> and <code>$RECYCLE.BIN</code>.</li>
+              <li>Videos with words such as test, sample or demo in their names are treated as test clips and never looked up.</li>
+              <li>Several files of one film in a library become one title, with each file as a version to choose on its page.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Naming the entry yourself</h3>
+            <p><code>{tmdbid=123}</code>, <code>[tmdb-123]</code>, <code>(imdb-tt0113277)</code> or MoviePilot's <code>{[tmdbid=123;type=tv;s=2]}</code> in a file or folder name names the TMDB or IMDb entry, and nothing is searched. When a title is wrong, you can also pick the entry in Identify…, or fix many files at once with <a href="#words">recognition words</a>.</p>
+            <h3>Video files</h3>
+            <p>mkv, mp4, m4v, mov, avi, wmv, flv, webm, mpg, mpeg, m2ts, mts, ts, vob, rmvb, rm, 3gp, ogv, iso.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── scraper ───────────────────────────────────────────────────── -->
+    <section class="band" id="scraper" aria-labelledby="scraper-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Scraping</p>
+          <h2 id="scraper-h">Scraping and matching</h2>
+          <p>Once a title and year are read, the title's details and pictures come from TMDB, and anime is also looked up on Bangumi. A title that can't be matched with certainty goes to <a href="#review">Needs review</a> and plays as usual until you confirm it; an entry you pick in Identify… is never replaced by an automatic match.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>The NFO and artwork you have</h3>
+            <p>NFO files, posters, backdrops, logos and season posters written by Kodi, Emby, Jellyfin, tinyMediaManager and similar tools are read. When an NFO has a TMDB or IMDb id, the entry is fetched by that id and nothing is searched.</p>
+            <p>The NFO and artwork in the folder come first, and TMDB fills only what they leave out; with the library's Prefer online info on, it is the other way round. What you save with Edit metadata… always comes first.</p>
+          </div>
+          <div>
+            <h3>What comes from TMDB</h3>
+            <p>Title, plot, genres, rating, poster and backdrop, cast and directors, each season and episode, box sets, and the certifications used by <a href="#parental">parental control</a>. The language they show in is the library's Metadata language.</p>
+            <h3>Anime</h3>
+            <p>Anime named the fansub way is looked up on Bangumi first, and the bangumi-data table gives the TMDB season and episode it maps to, so anime whose seasons TMDB divides differently still lands on the right episode.</p>
+          </div>
+        </div>
+
+        <h3>When titles are looked up</h3>
+        <ul>
+          <li>In the background, titles on screen first. Phones and TVs look up only while the app is in front.</li>
+          <li>Titles in Needs review or Not found are looked up again after 7 days, or when their name changes; Look up unidentified titles again, in the library's settings, does it at once.</li>
+          <li>With <a href="#sync-data">Sync scanned data across devices</a> on, the results travel to your other devices, which don't look those titles up again.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── sites ─────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="sites" aria-labelledby="sites-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Sources</p>
+          <h2 id="sites-h">Information sources</h2>
+          <p>Only these public sites are used, and an AI service you choose. Each has its own switch, and only Bangumi is on by default (and it works only once TMDB lookup is on); Wikidata and Wikipedia go with the MusicBrainz and Open Library switches. A library with Look up online off contacts none of them.</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Site</th><th scope="col">Used for</th><th scope="col">What is sent</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">TMDB</th><td>Films, shows, seasons, episodes, box sets, cast, certifications</td><td>Title and year; TMDB or IMDb ids</td></tr>
+              <tr><th scope="row">Bangumi</th><td>Anime</td><td>The anime's name (anonymous requests)</td></tr>
+              <tr><th scope="row">bangumi-data</th><td>The table mapping Bangumi to TMDB seasons and episodes, about 8,400 titles</td><td>Nothing; download only</td></tr>
+              <tr><th scope="row">MusicBrainz</th><td>Album years, releases, credits and artists</td><td>Album name, artists, barcode, catalogue number; a CD rip's track lengths; an artist's id when their page opens</td></tr>
+              <tr><th scope="row">Cover Art Archive</th><td>Album covers</td><td>The MusicBrainz id</td></tr>
+              <tr><th scope="row">Open Library</th><td>Book years, covers and descriptions; authors</td><td>ISBN, or title and first author; an author's name when their page opens</td></tr>
+              <tr><th scope="row">Wikidata, Wikipedia, Wikimedia Commons</th><td>Biographies on artist and author pages, artists' photos</td><td>The ids and links MusicBrainz or Open Library give; an author's name</td></tr>
+              <tr><th scope="row">The AI service you choose</th><td><a href="#ai">AI identification</a></td><td>An item's path below its library folder, its file names, and the tags, cue sheet, SACD text or OPF read from its files</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Douban, TVDB, OMDb, Discogs and other sites are not used. TVDB ids in an NFO are read, but TVDB is never asked. Douban data can reach a book library through a metadata.opf written by Calibre and its plugins. While a site is unreachable, the answers cached on the device are used.</p>
+        <p class="chip-note">This product uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB; the app's About page shows TMDB's logo with this notice. Anime info from Bangumi; season links from bangumi-data (CC BY 4.0). Music info from MusicBrainz; covers from the Cover Art Archive. Book info and covers from Open Library. Artist and author biographies from Wikipedia; photos from Wikimedia Commons.</p>
+      </div>
+    </section>
+
+    <!-- ── review ────────────────────────────────────────────────────── -->
+    <section class="band" id="review" aria-labelledby="review-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Confirming</p>
+          <h2 id="review-h">Needs review and Identify</h2>
+          <p>Titles that automatic matching can't decide go to Needs review, and play from their files as usual until you confirm them. Problems that <a href="#mediainfo">media info</a> detection finds are listed there too: files that can't be read, and files whose length differs a lot from the matched title.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Identify…</h3>
+            <p>Every title page has Identify…: pick one of up to 5 candidates, search by title and year, mark it Not on TMDB, or Look Up Automatically. When the identification is an automatic match, Keep This Match makes it your choice.</p>
+            <p>Your choice stays, and automatic matching never overwrites it; with sync on, your other devices take it too. Identify… works even with the library's Look up online off.</p>
+            <h3>Identify Album and Identify Book</h3>
+            <p>Identify Album on an album page and Identify Book on a book page pick the right MusicBrainz or Open Library entry, which fills in a missing year and cover. The choice syncs with the library.</p>
+            <h3 id="ai">AI identification</h3>
+            <p>For films, albums and books the rules can't identify, an AI model can suggest what to search for. Under Settings → Media Libraries → Identification → AI identification, choose the service, the model and the API key (the same key AI subtitles use), and the libraries the model reads. Private libraries and libraries with Look up online off can't be chosen.</p>
+            <ul>
+              <li>The model reads an item's path below its library folder and what was read from its files, and gives search terms only. TMDB, MusicBrainz and Open Library are then searched as usual, and the rules above decide.</li>
+              <li>Once on, the model is asked in the background about items not identified yet. Each item's answer is kept on the device; at most 1,000 calls a day.</li>
+              <li>Ask AI in Identify… shows the model's answer and its evidence. Nothing is saved until you pick a result.</li>
+            </ul>
+          </div>
+          <div id="web">
+            <h3>Confirming on the web</h3>
+            <p>The core service's web interface has a Titles to Confirm page, handy for clearing in a computer's browser the titles a TV has piled up.</p>
+            <ul>
+              <li>At least one device needs <a href="#sync">Sync libraries across devices</a> on. The page reads the review lists your devices upload to the CloudDrive2 Sync folder.</li>
+              <li>Pick a candidate, or paste a TMDB link or ID; the page has no title search.</li>
+              <li>Your devices take the choice the next time they sync.</li>
+              <li>Titles of a private library show after you unlock with the PIN.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── words ─────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="words" aria-labelledby="words-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Recognition words</p>
+          <h2 id="words-h">Recognition words</h2>
+          <p>Recognition words rewrite this library's file and folder names before they are read: fix a season's numbering, swap a title for the one you want, remove an ad prefix. The format is MoviePilot's custom recognition words, so existing lists paste straight in. One rule per line, applied in order; a line starting with <code>#</code> is a note.</p>
+        </header>
+        <div class="code-block">
+          <pre><code># Delete words
+国语中字
+# Replace ((?i) ignores case)
+(?i)Kimetsu no Yaiba =&gt; 鬼灭之刃
+# Shift the episode numbers between two words
+第 &lt;&gt; 集 &gt;&gt; EP+12
+# Replace, then shift
+Apotheosis.S02 =&gt; Apotheosis S01 &amp;&amp; S01 &lt;&gt; 2160p &gt;&gt; EP+52
+# Point a name at a TMDB title, optionally a season and episode
+斗罗大陆 =&gt; 斗罗大陆{[tmdbid=99025;type=tv]}</code></pre>
+        </div>
+        <div class="split">
+          <div>
+            <ul>
+              <li><code>=&gt;</code>, <code>&amp;&amp;</code>, <code>&lt;&gt;</code> and <code>&gt;&gt;</code> need a space on each side. When shifting episodes, either of the two anchor words may be empty.</li>
+              <li>Rules are regular expressions, matched against the name as it is, extension included; they are case-sensitive unless they start with <code>(?i)</code>.</li>
+              <li>A shift changes every number between the two words. The expression can use <code>EP</code>, whole numbers and + − × ÷. Leading zeros are kept (05 plus 12 is 17), and Chinese numerals stay Chinese.</li>
+              <li><code>{[…]}</code> takes <code>tmdbid</code>, <code>imdbid</code>, <code>type</code> (movie or tv), <code>s</code> (season) and <code>e</code> (episode).</li>
+              <li>The first 1,000 lines are read, each up to 1,000 characters.</li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li>Words apply only inside this library. The file browser, the player and subtitles still see the real names, and no file is renamed.</li>
+              <li>The editor checks each line, for example "Line 4 isn't used: …". Try a name shows the rewritten name, which lines changed it, and the title, year, season and episode read from it.</li>
+              <li>After an edit the library is read again; NFO details and watch progress are kept.</li>
+              <li>Export saves <code>&lt;library&gt; recognition words.txt</code> (UTF-8). Import reads UTF-8 or GB18030 files and asks whether to Add to the end (skipping lines already there) or Replace. On a TV, type the whole text on a phone.</li>
+              <li>Words sync with the library; the newest edit wins.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── shelves ───────────────────────────────────────────────────── -->
+    <section class="band" id="shelves" aria-labelledby="shelves-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Shelves</p>
+          <h2 id="shelves-h">Shelves</h2>
+          <p>Shelves appear as a row of buttons at the top of a library page: All first, then each shelf with its count. The row shows only when at least two shelves hold titles. The rules use MoviePilot's category.yaml format, so an existing file pastes straight in. Each title goes on the first shelf whose conditions all hold; a shelf without conditions takes every title still left.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Default shelves</h3>
+            <p>Until you edit them, a library uses the default shelves, named in the app's language. A Mixed library has both the film and the show shelves, films first.</p>
+            <div class="code-block">
+              <pre><code>movie:
+  Animation:
+    genre_ids: '16'
+  Chinese-language:
+    original_language: 'zh,cn,bo,za'
+  Other languages:
+tv:
+  Chinese animation:
+    genre_ids: '16'
+    origin_country: 'CN,TW,HK'
+  Anime:
+    genre_ids: '16'
+    origin_country: 'JP'
+  Documentary:
+    genre_ids: '99'
+  Kids:
+    genre_ids: '10762'
+  Variety:
+    genre_ids: '10764,10767'
+  Chinese drama:
+    origin_country: 'CN,TW,HK'
+  Western drama:
+    origin_country: 'US,FR,GB,DE,ES,IT,NL,PT,RU,UK'
+  Asian drama:
+    origin_country: 'JP,KP,KR,TH,IN,SG'
+  Other:</code></pre>
+            </div>
+          </div>
+          <div>
+            <h3>Conditions</h3>
+            <div class="table-scroll">
+              <table class="matrix-table">
+                <thead>
+                  <tr><th scope="col">Condition</th><th scope="col">Meaning</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row"><code>genre_ids</code></th><td>TMDB genre ids, or names: <code>Animation</code> or <code>动画</code> is 16</td></tr>
+                  <tr><th scope="row"><code>original_language</code></th><td>Original language code; Cantonese is <code>cn</code>. Names such as <code>粤语</code> work too</td></tr>
+                  <tr><th scope="row"><code>origin_country</code></th><td>Country or region of origin, as a code or a name such as <code>Hong Kong</code> or <code>UK</code></td></tr>
+                  <tr><th scope="row"><code>production_countries</code></th><td>Production countries or regions</td></tr>
+                  <tr><th scope="row"><code>release_year</code></th><td>A year, or a span such as <code>1990-1999</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <ul>
+              <li>Separate several values with <code>,</code>, <code>，</code> or <code>、</code>; any one of them is enough.</li>
+              <li>A shelf outside <code>movie:</code> and <code>tv:</code> is for both films and shows.</li>
+              <li>Up to 100 shelves, names up to 40 characters. The editor points out problems line by line; Restore defaults brings the default shelves back, and turning off Use shelves removes them.</li>
+              <li>The facts come from the NFO first, then TMDB. Without an original language, it is taken from the country (mainland China, Taiwan and Singapore are Chinese; Hong Kong and Macau Cantonese). With Look up online off, only NFO facts are used.</li>
+              <li>A title whose facts aren't known yet is on no shelf for now, but it is in All.</li>
+              <li>Shelves don't show while browsing by folder. Music and book libraries have no shelves.</li>
+              <li>A library with <a href="#people">box sets</a> also has Collections at the end of its shelf row.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── media info ────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="mediainfo" aria-labelledby="mediainfo-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Media info</p>
+          <h2 id="mediainfo-h">Media info</h2>
+          <p>Media info is what a video file itself holds: resolution, frame rate, HDR, codecs, audio and subtitle tracks. It feeds the title page's media info card, the poster badges and the Picture and sound filters. Detecting it reads only a small part at the start of a file; whole files are never downloaded.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Where it comes from</h3>
+            <ul>
+              <li><strong>From the file name</strong>: every title first gets what its name says about resolution, HDR, codecs and audio (<code>2160p</code>, <code>DV</code>, <code>Atmos</code>…).</li>
+              <li><strong>From the NFO</strong>: the NFO's <code>&lt;streamdetails&gt;</code>.</li>
+              <li><strong>Detect media info</strong>: reads the start of the file. MKV, MP4, TS and M2TS; a 2-hour film usually costs 128–320 KB. Blu-ray ISOs and BDMV folders are read from their playlists.</li>
+              <li><strong>While playing</strong>: a few seconds into a library video, what the player found is saved.</li>
+            </ul>
+            <p>It reads codecs, resolution, frame rate, HDR10, HDR10+, HLG and Dolby Vision, Dolby Atmos, DTS-HD MA and DTS:X, and the audio and subtitle languages. Results are kept by the file's size and modified time, and detected again when the file changes.</p>
+          </div>
+          <div>
+            <h3>Where it is used</h3>
+            <p>Media info drives the 4K, Dolby Vision, HDR and Atmos badges on posters (solid when detected, outlined when only the file name says so), the Picture and sound filters, the choice of the version best on this device when a film has several, and the Needs review list of files that can't be read or whose length doesn't match. With Save info and artwork beside the media on, detected tracks also go into the NFO.</p>
+            <h3>Detected while identifying</h3>
+            <p>Each video library's Detect media info while identifying is on by default: the device that scans the library reads the start of each video file as its title is identified, newest titles first, usually about 256 KB a file. With <a href="#sync-data">Sync scanned data</a> on, the results travel, and your other devices don't read the files again.</p>
+            <h3>Detect media info in the background</h3>
+            <p>For the libraries that don't detect media info while identifying. Under Settings → Media Libraries → Scanning &amp; storage; off by default, and for this device only. It reads the start of each video file, one at a time and slowly: after each file it waits the Wait between files time (2 s on clouds by default), and it pauses while a video plays.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── people, collections, editing ──────────────────────────────── -->
+    <section class="band" id="people" aria-labelledby="people-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">People and box sets</p>
+          <h2 id="people-h">People, box sets and editing</h2>
+          <p>Cast, artists and authors have pages of their own; the films of one box set can be browsed together; and a film's or show's details can be edited by hand.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Person pages</h3>
+            <ul>
+              <li><strong>Cast and directors</strong>: biography, photo and links from TMDB, in the library's metadata language; the page lists the titles in your libraries that name them.</li>
+              <li><strong>Artists</strong>: biography and photo from Wikipedia and Wikimedia Commons, through the links MusicBrainz gives.</li>
+              <li><strong>Authors</strong>: a biography from Open Library and Wikipedia.</li>
+              <li>One person is one record whether an NFO, TMDB or a music or book credit names them, and any of their names finds them.</li>
+              <li>Names, biographies and photos other apps send through the <a href="#emby-api">Emby API</a> come first.</li>
+            </ul>
+            <h3>Box sets</h3>
+            <p>TMDB's collection, or the NFO's <code>&lt;set&gt;</code>, puts a film in a box set. Box sets with at least two films in the library appear under Collections in the shelf row.</p>
+          </div>
+          <div>
+            <h3>Edit metadata</h3>
+            <p>Film and show pages have Edit metadata… for the title, plot, genres, cast, pictures and more. Edits are saved as the NFO file and pictures in the film's folder, so other apps and your other devices read them too; only what you changed is rewritten, and what other apps wrote stays. Your edits outrank online info, and Prefer online info never replaces them. Apple TV can't change pictures.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── skip intro and ending ──────────────────────────────────────── -->
+    <section class="band band-alt" id="skip" aria-labelledby="skip-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Playback</p>
+          <h2 id="skip-h">Skip intro and ending</h2>
+          <p>Playing an episode of a library's show, you can set in the player where the season's intro ends and where its ending starts. They hold for every episode of that season, and reach your other devices with <a href="#sync">Sync libraries across devices</a>.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Setting them</h3>
+            <ul>
+              <li>While an episode of a library's show plays, open Intro and Ending in the player and press Set to Now where the intro ends or the ending starts.</li>
+              <li>The intro is counted from each episode's start and the ending back from its end, so episodes of different lengths share them.</li>
+              <li>The Skip intro and ending switch is for this device only and on by default; off, nothing is skipped and the times stay.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>While playing</h3>
+            <ul>
+              <li>An episode played from the start skips the intro; reaching the ending's start plays the next episode, and the episode counts as watched.</li>
+              <li>Seeking into the intro or the ending yourself plays it.</li>
+            </ul>
+            <h3>Devices</h3>
+            <p>Mac, iPhone, iPad, Apple TV, Apple Vision Pro (in a window and in the immersive player), Android phones, tablets and TVs, Meta Quest, and Windows PCs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── sidecars ──────────────────────────────────────────────────── -->
+    <section class="band" id="sidecars" aria-labelledby="sidecars-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Writing to folders</p>
+          <h2 id="sidecars-h">Save info and artwork beside the media</h2>
+          <p>When on, identified titles get .nfo files, posters and backdrops written into their folders, which Kodi, Jellyfin, Emby and Infuse read as they are, with no second scrape. It is off by default, set per library, and syncs with the library. Video libraries write files only for films and shows identified on TMDB; not for box sets or titles marked Not on TMDB. Music and book libraries can write files too; see the table.</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Title</th><th scope="col">NFO</th><th scope="col">Images</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Film folder</th><td><code>&lt;video name&gt;.nfo</code></td><td><code>poster.jpg</code>, <code>fanart.jpg</code></td></tr>
+              <tr><th scope="row">Film in part folders</th><td>—</td><td><code>poster.jpg</code>, <code>fanart.jpg</code></td></tr>
+              <tr><th scope="row">Blu-ray</th><td><code>BDMV/index.nfo</code></td><td><code>poster.jpg</code>, <code>fanart.jpg</code></td></tr>
+              <tr><th scope="row">DVD</th><td><code>VIDEO_TS/VIDEO_TS.nfo</code></td><td><code>poster.jpg</code>, <code>fanart.jpg</code></td></tr>
+              <tr><th scope="row">A loose video file</th><td><code>&lt;file name&gt;.nfo</code></td><td><code>&lt;file name&gt;-poster.jpg</code>, <code>&lt;file name&gt;-fanart.jpg</code></td></tr>
+              <tr><th scope="row">Show</th><td><code>tvshow.nfo</code></td><td><code>poster.jpg</code>, <code>fanart.jpg</code>, <code>season01-poster.jpg</code>…, <code>season-specials-poster.jpg</code></td></tr>
+              <tr><th scope="row">Each episode</th><td><code>&lt;file name&gt;.nfo</code></td><td><code>&lt;file name&gt;-thumb.jpg</code></td></tr>
+              <tr><th scope="row">Album</th><td><code>album.nfo</code> (Kodi's format, which Jellyfin and Emby read too)</td><td><code>folder.jpg</code>: the Cover Art Archive's cover, 1200 px</td></tr>
+              <tr><th scope="row">Book</th><td><code>&lt;book file name&gt;.opf</code> (the OPF form Calibre reads)</td><td><code>&lt;book file name&gt;.jpg</code>: Open Library's cover</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="split">
+          <div>
+            <h3>Options</h3>
+            <ul>
+              <li><strong>Copies for Infuse</strong>: also writes the poster and backdrop under the names Infuse reads (<code>&lt;file name&gt;.jpg</code>, <code>&lt;file name&gt;-fanart.jpg</code>).</li>
+              <li><strong>Actor photos (.actors folder)</strong>: up to 20 cast photos in each title's <code>.actors</code> folder.</li>
+              <li><strong>Check again</strong>: checks every identified title again. Files that exist are never replaced.</li>
+            </ul>
+            <p>NFO files use Kodi's format, in the device's display language: title, original title, rating, plot, tagline, runtime, TMDB and IMDb ids, genres, directors, premiere date, cast and more, with <code>&lt;lockdata&gt;</code> so Emby and Jellyfin don't rewrite them. A file whose <a href="#mediainfo">media info</a> was detected also gets its video, audio and subtitle tracks. <code>movie.nfo</code> and logos are not written.</p>
+            <p>An album gets files only when MusicBrainz has decided it and it has a folder of its own; no cover is written when the folder already has any picture. A book gets files only when Open Library has decided it. Music libraries need Look up music on MusicBrainz, and book libraries Look up books on Open Library.</p>
+          </div>
+          <div>
+            <h3>Other people's files are left alone</h3>
+            <ul>
+              <li>An NFO written by CloudDrive2 carries a marker on its second line. If a folder already has another tool's NFO, nothing is written for that title. If it already has a poster, backdrop or other image in a role, that image is skipped.</li>
+              <li>The exception: in a video library with both Prefer online info and Save info and artwork beside the media on, after a confirmation, other apps' .nfo files and pictures are renamed (with <code>.bak</code> added) and replaced with TMDB's. Nothing is deleted. Music and book libraries have no such exception.</li>
+              <li>When a title's identity changes, only files CloudDrive2 wrote itself, and nobody changed since, are replaced.</li>
+              <li>A file you delete isn't written again unless you choose Check again.</li>
+              <li>For a private library, a warning comes first: titles, plot and posters are saved as ordinary files that anyone who can open the folders, and the storage provider, can see. Nothing is written while it is locked.</li>
+            </ul>
+            <h3>How fast</h3>
+            <p>Before it starts, you see an estimate: about 3 files per film, 3 per show plus 2 per episode, and 2 more with Infuse copies. Files are uploaded one at a time, at least 1 second apart. When the storage asks to slow down, writing continues 15 minutes later.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── music ─────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="music" aria-labelledby="music-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Music</p>
+          <h2 id="music-h">Music libraries</h2>
+          <p>Music is organized by folders and tags: an album is a folder, and folders such as <code>CD1</code> and <code>Disc 2</code> make one multi-disc album. Tags come before folder names; files tagged with data from NetEase Cloud Music, QQ Music or any other tagger show what was written into them.</p>
+        </header>
+        <h3>Names read when there are no tags</h3>
+        <div class="table-scroll">
+          <table class="matrix-table name-table">
+            <colgroup><col class="col-name"><col></colgroup>
+            <thead>
+              <tr><th scope="col">Folder or file name</th><th scope="col">Recognized as</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row"><code>【MQS】1984  谭咏麟【爱的根源】宝丽金 - 环球唱片2015</code></th><td>Artist 谭咏麟 (Alan Tam), album 爱的根源, 1984.</td></tr>
+              <tr><th scope="row"><code>33【www.xxx.com】老虎鱼《完美之作-1》ES WAV分轨</code></th><td>Artist 老虎鱼 (Stockfisch), album 完美之作-1.</td></tr>
+              <tr><th scope="row"><code>(1959) Chopin - Les Vingt-Quatre Préludes - Samson François [EMI Classics 24-96]</code></th><td>Artist Chopin, album Les Vingt-Quatre Préludes - Samson François, 1959.</td></tr>
+              <tr><th scope="row"><code>90130-32 Mozart 9 Symphonies Karl Böhm 3SACD/disc 1.iso … disc 3.iso</code></th><td>One three-disc SACD album, Mozart 9 Symphonies Karl Böhm.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="split">
+          <div>
+            <h3>Formats</h3>
+            <p>flac, ape, wav, wv, m4a, alac, aac, mp3, ogg, oga, opus, dsf, dff, tak, tta, aif, aiff, wma, dts, ac3, mka; SACD ISOs; .cue with one big file.</p>
+            <h3>Tags</h3>
+            <ul>
+              <li>The usual tag formats: ID3, FLAC and Ogg Vorbis comments, MP4, APE and others. Only a small part at the start of each file is read; whole files are never downloaded.</li>
+              <li>Chinese tags written in GBK, Big5 and other legacy encodings show correctly, such as 陳百強.</li>
+              <li>Traditional and Simplified spellings of an artist are one artist: 譚詠麟 and 谭咏麟 appear together. Albums by Various Artists are listed last among the artists.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Cue sheets and SACD</h3>
+            <p>A single-file album is split into tracks by its .cue, with previous and next between them; cue sheets embedded in a FLAC, and GBK cue sheets, are read too. A SACD ISO's album page lists its stereo and multichannel tracks, the multichannel ones marked 5.1.</p>
+            <h3>Covers</h3>
+            <p>A picture in the album folder, then the first track's embedded picture, then, with MusicBrainz on, the Cover Art Archive.</p>
+            <h3>MusicBrainz</h3>
+            <p>With Look up music on MusicBrainz and the library's Look up online both on, the exact release is found by barcode, a CD rip's track lengths, catalogue number, or album name and artist, and the album page shows the label, catalogue number, conductor, orchestra, soloists and each track's credits. Artists take MusicBrainz's names, so a folder's "Mozart" shows as Wolfgang Amadeus Mozart; a name opens its <a href="#people">artist page</a>. Identify Album on the album page picks a release by hand; see <a href="#review">Identify Album and Identify Book</a>.</p>
+            <p>Lyrics (a matching .lrc file, or lyrics in the tags) are shown by the audio player.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── books ─────────────────────────────────────────────────────── -->
+    <section class="band" id="books" aria-labelledby="books-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Books</p>
+          <h2 id="books-h">Book libraries</h2>
+          <p>A book is one file, or one Calibre book folder. <code>三体.epub</code> and <code>三体.azw3</code> side by side are one book in two formats. A book's facts come from Calibre's metadata.opf first, then the book file's own metadata, then the file and folder names.</p>
+        </header>
+        <h3>Names read from files</h3>
+        <p>Understands 《title》author, [author] title, title - author, title_author, and Z-Library, Anna's Archive and libgen names.</p>
+        <div class="table-scroll">
+          <table class="matrix-table name-table">
+            <colgroup><col class="col-name"><col></colgroup>
+            <thead>
+              <tr><th scope="col">File name</th><th scope="col">Recognized as</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row"><code>三体 (刘慈欣) (Z-Library).epub</code></th><td>The title 三体 (The Three-Body Problem) by 刘慈欣 (Liu Cixin).</td></tr>
+              <tr><th scope="row"><code>诡秘之主 [精校] [www.xxx.com].epub</code></th><td>The title 诡秘之主. 精校 (proofread) and the address are removed.</td></tr>
+              <tr><th scope="row"><code>[美]卡尔·萨根 - 宇宙.epub</code></th><td>The title 宇宙 (Cosmos) by Carl Sagan, the same author as 卡爾·薩根.</td></tr>
+              <tr><th scope="row"><code>A Brief History of Time - Hawking, Stephen.epub</code></th><td>The title A Brief History of Time, by the same author as "Stephen Hawking".</td></tr>
+              <tr><th scope="row"><code>三体全集 (套装共3册).pdf</code></th><td>A set, 三体全集 (the Three-Body trilogy).</td></tr>
+              <tr><th scope="row"><code>三体2.epub</code></th><td>The title 三体2, not volume 2 of 三体.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="split">
+          <div>
+            <h3>Formats</h3>
+            <p>EPUB, MOBI, AZW, AZW3, PRC and CBZ open in the book reader, PDF in the PDF viewer, TXT in the text viewer. When a book has several formats, EPUB opens first; the others open from the book's page.</p>
+            <h3>What the files say</h3>
+            <p>Calibre's metadata.opf (including what plugins such as Douban fetched), the title, authors, description and cover inside EPUB, MOBI and AZW3 files, and a CBZ comic's ComicInfo.xml. Only the parts needed are read; whole books are never downloaded. Junk values such as "Unknown", and advertising such as WeChat accounts, are ignored.</p>
+          </div>
+          <div>
+            <h3>Covers</h3>
+            <p>A picture with the book's name or Calibre's cover.jpg, then a picture in the folder, then the cover inside the book, then Open Library. With none, a cover with the title and author is drawn.</p>
+            <h3>Reading and Open Library</h3>
+            <ul>
+              <li>Home shows the books you are reading first. Reading positions can sync across devices with <a href="/en/progress-sync.html">progress sync</a>.</li>
+              <li>With Look up books on Open Library and the library's Look up online both on, books missing a year or a cover are looked up, by ISBN first, then by title and author. Open Library has little on Chinese books.</li>
+              <li>Identify Book on the book page picks an Open Library book by hand; see <a href="#review">Identify Album and Identify Book</a>. An author's page shows a biography from Open Library and Wikipedia.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── library data ──────────────────────────────────────────────── -->
+    <section class="band band-alt" id="index" aria-labelledby="index-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Library data</p>
+          <h2 id="index-h">How information is stored and kept up to date</h2>
+          <p>Each device builds its libraries itself: it lists the folders through its own CloudDrive2 and writes the results into the device's library database, one per CloudDrive account. It is kept apart from the app's cache, so clearing the cache doesn't delete it; after a restart or an app update the libraries open at once, and files already read aren't read again. The rules are the same on every platform, so the same folders give the same result on every device. Library settings, identifications and hearts can <a href="#sync">sync</a>; with <a href="#sync-data">Sync scanned data</a>, so can what a device has read and looked up, and the posters and covers: a library scanned completely on one device is ready on the others.</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table store-table">
+            <colgroup><col class="col-what"><col class="col-where"><col class="col-kept"><col class="col-sync"></colgroup>
+            <thead>
+              <tr><th scope="col">What</th><th scope="col">Where</th><th scope="col">Kept</th><th scope="col">Synced</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Library settings, PIN check, identifications</th><td>App data, one copy per CloudDrive account</td><td>Always</td><td>With sync on</td></tr>
+              <tr><th scope="row">Hearts (Favorites)</th><td>A file of their own beside the library database</td><td>Always; Clear library data and rescans keep them</td><td>With Sync libraries across devices</td></tr>
+              <tr><th scope="row">Folder verdicts, title and show details, music tags, book metadata, media info, people, played state</th><td>The library database, per account</td><td>Always; read again when a file's size or modified time changes, or after Clear library data</td><td>With Sync scanned data</td></tr>
+              <tr><th scope="row">Posters, backdrops, covers, people's photos</th><td>A pictures folder beside the library database</td><td>Picture limit, 1 GB by default; past it, the pictures shown longest ago go first. Logos are always kept</td><td>Posters and covers can come from your other devices as picture packs, with Sync scanned data (off by default on TVs)</td></tr>
+              <tr><th scope="row">Needs review and Not found results, with candidates</th><td>The library database</td><td>Looked up again after 7 days</td><td>The Needs review list syncs, for the web page</td></tr>
+              <tr><th scope="row">TMDB, MusicBrainz, Open Library and Bangumi answers</th><td>A file of their own (answers) beside the library database</td><td>3 to 30 days; forgotten after 60 days, and the oldest first above 400 MB. Clear library data keeps them</td><td>With Sync scanned data</td></tr>
+              <tr><th scope="row">People's details: biographies and links from Wikipedia, Wikidata and the other sources</th><td>The library database</td><td>30 to 180 days</td><td>With Sync scanned data</td></tr>
+              <tr><th scope="row">The anime table</th><td>Cache folder</td><td>Refreshed every 7 days</td><td>No</td></tr>
+              <tr><th scope="row">What other apps sent through the Emby API</th><td>A separate file and photos folder beside the library database</td><td>Always; Clear library data and rescans keep it</td><td>No</td></tr>
+              <tr><th scope="row">Online info switches and addresses, Lock Again time, parental control, Picture limit, Keep files on this device, Scan again, Listing speed, library covers</th><td>This device's settings</td><td>Always</td><td>No</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Apple TV can keep the library database only in a cache the system may clear. When it is cleared, the libraries are scanned once more, or, with Sync scanned data on, taken in again from your other devices, which is much quicker; the libraries, the PIN and identifications stay in the settings or come back through sync.</p>
+        <div class="split">
+          <div>
+            <h3>Reading and updating</h3>
+            <ul>
+              <li>On a first scan, titles appear as they are found, without waiting for the whole library.</li>
+              <li>A folder that hasn't changed isn't listed again. For how fast folders are listed, see <a href="#avoid-limits">Keep the cloud from limiting your account</a>.</li>
+              <li>When files are renamed or moved through this device's CloudDrive2, their identifications move with them.</li>
+            </ul>
+            <h3>When a library is scanned again</h3>
+            <ul>
+              <li>A library scanned completely isn't scanned again by itself. Scan again in the library's settings sets an interval for automatic scans, and Scan now or Scan this folder scans at once.</li>
+              <li>A first scan that was stopped goes on from where it stopped at the next start, until it is complete.</li>
+            </ul>
+          </div>
+          <div>
+            <h3 id="new-files">Picking up new files by itself</h3>
+            <p>With the Core Pro feature <a href="/en/features.html#file-notification">file change notifications</a>, files added, deleted or renamed through this device's CloudDrive2 (the app, the web interface, WebDAV, the mounted drive) usually reach the library within seconds, with no rescan.</p>
+            <p>115, Baidu Netdisk and 123 Pan update a folder's modified time when its contents change, so files added elsewhere are found on the next read. Changes made on other storage by other devices, or by the storage's own app, appear on Refresh, or when you use Scan this folder or Scan now.</p>
+            <h3>On this device</h3>
+            <p>Settings → Media Libraries → Scanning &amp; storage shows the space library data and pictures use. Picture limit offers 500 MB, 1 GB, 2 GB, 5 GB, 10 GB, 50 GB, 100 GB and Unlimited. Clear library data deletes what was read, the details and the pictures, then reads the libraries again; the libraries, identifications and watch progress stay.</p>
+            <h3>Offline</h3>
+            <p>When a site can't be reached, cached information is used. What the library database holds shows at once when the app starts, and storage or folders that can't be reached never empty a library.</p>
+          </div>
+        </div>
+        <div class="note note-warn" id="avoid-limits">
+          <span class="note-title">Keep the cloud from limiting your account</span>
+          <p>A cloud storage can limit an account that lists folders too fast or downloads too much. CloudDrive2 scans carefully to avoid this: it lists folders at the library's Listing speed, 2 a second by default, with at most 3 at a time; it reads music tags at most one file a second per storage account; and to detect media info it reads only the start of a file, usually a few hundred KB.</p>
+          <p>These limits apply on each device. When several devices scan the same storage account, their requests add up, and CloudDrive2 can't prevent that. So it's best not to scan libraries in the same storage account on more than one device. With both Sync libraries across devices and Sync scanned data across devices on, each library is scanned by one device and the others use its results; see <a href="#one-scanner">One device scans a library</a>.</p>
+          <p>We also suggest keeping media files and synced data in different storage accounts, so scanning the libraries and syncing their data don't send requests to the same account. For example, keep media files on 115 and the CloudDrive2 Sync folder on 123 Pan.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── sync ──────────────────────────────────────────────────────── -->
+    <section class="band" id="sync" aria-labelledby="sync-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Sync</p>
+          <h2 id="sync-h">Sync libraries across devices</h2>
+          <p>Create a library or choose an identification on one device, and your other devices get the same. Turn on Settings → Media Libraries → Sync → Sync libraries across devices. It is an App Pro feature, off by default, and uses the same CloudDrive2 Sync folder as <a href="/en/progress-sync.html">progress sync</a>: whichever you turn on first picks the storage, and the other uses it without asking. We suggest a storage account other than the one that holds your media files; see <a href="#avoid-limits">Keep the cloud from limiting your account</a>. The data stays in your own cloud storage and never passes through CloudDrive's servers.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>What syncs</h3>
+            <ul>
+              <li>Each library's settings, including its folders, recognition words, shelves and the device that scans it; deleting a library syncs too.</li>
+              <li>The PIN check (not the PIN itself).</li>
+              <li>The identifications of titles, albums and books, your choices included.</li>
+              <li>Favorites, and each season's <a href="#skip">intro and ending</a> times.</li>
+              <li>The Needs review list, for the <a href="#web">web page</a>.</li>
+            </ul>
+            <h3>What doesn't</h3>
+            <ul>
+              <li>Library data and pictures: these sync with <a href="#sync-data">Sync scanned data across devices</a>, a switch of its own.</li>
+              <li>Choices for this device only, such as the online info switches, Listing speed, Picture limit and parental control.</li>
+              <li>Watch progress and watched marks: these sync with <a href="/en/progress-sync.html">progress sync</a>.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Folder layout</h3>
+            <div class="code-block">
+              <pre><code>CloudDrive2 Sync/
+  README.txt
+  &lt;CloudDrive account&gt;/
+    progress/   progress sync
+    library/    media libraries
+      Living Room TV.&lt;device id&gt;.&lt;seq&gt;.json
+      MacBook.&lt;device id&gt;.&lt;seq&gt;.json</code></pre>
+            </div>
+            <p>Each device writes only its own file, and every file holds everything that device has merged, so any one file gives a new device the full set of libraries.</p>
+            <h3>How changes merge</h3>
+            <p>Each setting merges on its own, and the latest change wins; your choice always outranks an automatic match. A deleted library never comes back. Files written by a newer version of the app are skipped, with a prompt to update.</p>
+            <h3>When it syncs</h3>
+            <p>A device reads when the app starts, comes back to the front, or opens a library, and uploads a change within seconds. When the storage limits requests, it waits at least 15 minutes before trying again. On storage with a recycle bin, replaced files go to the bin; see <a href="/en/progress-sync.html#providers">storage differences</a>.</p>
+          </div>
+        </div>
+        <div class="note">
+          <span class="note-title">Adding a device</span>
+          <p>The new device needs to be signed in to the same CloudDrive account and to reach the storage holding CloudDrive2 Sync; then turn on Sync libraries across devices. Library folders are saved as full CloudDrive2 paths, which are the same on every device for storage added through Sync With Cloud. Turning sync off keeps the libraries on the device, and can also delete this device's file from the storage. App Pro is a one-time purchase and doesn't expire; it ends only if the purchase is refunded, and then sync pauses and the files in your storage stay.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── sync-data ─────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="sync-data" aria-labelledby="sync-data-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Sync</p>
+          <h2 id="sync-data-h">Sync scanned data across devices</h2>
+          <p>A device that has listed your folders, read the files and looked titles up can share the results, so your other devices don't read and look them up again. A library scanned completely on one device is ready on the others, and a new device shows a big library within minutes. Turn on Settings → Media Libraries → Sync → Sync scanned data across devices. It is an App Pro feature, off by default, and uses the same CloudDrive2 Sync folder as <a href="#sync">Sync libraries across devices</a>. The data stays in your own cloud storage and never passes through CloudDrive's servers.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>What a device shares</h3>
+            <ul>
+              <li>What it read from the files: NFO details, <a href="#mediainfo">media info</a>, music tags, cue sheets, SACD disc text and book metadata.</li>
+              <li>Each folder's result, and the list of titles of a library scanned completely. A device that takes the list shows the whole library at once, and reads what changed only when a change is found or you ask for a scan.</li>
+              <li>The results of online lookups, Needs review and Not found included, and the details of people.</li>
+              <li>Private libraries' data too: private only hides those libraries on the media screens and doesn't limit access to your storage.</li>
+            </ul>
+            <h3>What doesn't</h3>
+            <ul>
+              <li>Pictures: the <a href="#sync-pictures">picture packs</a> below share them.</li>
+              <li>Each device's own choices, such as Picture limit and Keep files on this device.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Folder layout</h3>
+            <div class="code-block">
+              <pre><code>CloudDrive2 Sync/
+  &lt;CloudDrive account&gt;/
+    progress/   progress sync
+    library/    media libraries
+    facts/      scanned data
+      MacBook.&lt;device id&gt;.12-0.jsonl.zst
+      MacBook.&lt;device id&gt;.12-3.jsonl.zst
+    pictures/   picture packs</code></pre>
+            </div>
+            <p>Each device writes only its own compressed files. About 18 MB for 24,000 titles.</p>
+            <h3>When it syncs</h3>
+            <p>A device reads when the app starts and when it comes back to the front after 10 minutes or more, and writes when a scan or a lookup pass ends with something new. Packs and pictures wait for Wi-Fi or Ethernet unless Sync over mobile data is on.</p>
+            <h3>Turning it off</h3>
+            <p>What was taken in stays on the device. You can also delete this device's packs and picture files from the storage.</p>
+          </div>
+        </div>
+        <div class="split">
+          <div>
+            <h3>Adding a device</h3>
+            <p>Sign in to the same CloudDrive account, make sure the device reaches the storage holding CloudDrive2 Sync, and turn on Sync libraries across devices and Sync scanned data across devices. Library folders are saved as full CloudDrive2 paths, so the storage needs the same path on the new device. Libraries another device scanned completely are ready at once: a new iPad showed all the titles of a Mac's 7 video libraries in about a minute.</p>
+            <h3>Sync first, then scan</h3>
+            <p>When the app starts, when sync is turned on, and when a library is added, the device first takes in what your other devices scanned, then scans and identifies only what the packs don't hold. It waits at most 5 minutes, and scans as usual when offline or when the read fails.</p>
+            <div class="note">
+              <span class="note-title">Who can read the packs</span>
+              <p>The packs are compressed, not encrypted. They hold the titles' paths, what the NFO files say, what was read from the media files, and the answers of TMDB, MusicBrainz and the like. Anyone who can open that storage can read them, private libraries' data included.</p>
+            </div>
+          </div>
+          <div>
+            <h3 id="one-scanner">One device scans a library</h3>
+            <p>With both sync switches on, one device scans a library and the others wait for its results instead of each listing the same folders. The device that created the library scans it, unless another is chosen with Scan this library on this device in the library's settings.</p>
+            <ul>
+              <li>While it scans, the scanning device uploads its pack at least every 10 minutes; the other devices show "Scanning on &lt;device&gt;" and take in what it finds as it goes.</li>
+              <li>If the scanning device uploads no pack for 30 minutes (switched off, offline), another device continues the scan, and nothing found so far is lost.</li>
+              <li>Scan now, Scan this folder and Refresh on this device always scan at once.</li>
+              <li>A book library scans in seconds, so each device scans its own.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 id="sync-pictures">Picture packs</h3>
+        <p>Fetching posters one by one from cloud storage is slow. With <strong>Download picture packs</strong> on (it needs Sync scanned data), a device takes posters and covers from a few big files your other devices wrote, instead of one by one. It is on by default on phones, tablets, computers and Quest, and off on Android TV and Apple TV.</p>
+        <ul>
+          <li><strong>Devices that write packs</strong>: devices that hold the pictures, with Share pictures on (the default); they write only while another device asks.</li>
+          <li><strong>What a pack holds</strong>: posters, season posters and covers; no backdrops or people's photos.</li>
+          <li><strong>What a device downloads</strong>: pictures of the libraries it shows that it doesn't hold yet, newest titles first, until its Picture limit is 90% full. It waits for Wi-Fi or Ethernet and pauses while a video plays.</li>
+        </ul>
+        <div class="note">
+          <span class="note-title">Large libraries take a while</span>
+          <p>For a large library, the first sync of scan data and pictures can take a long time, so please be patient. It runs in the background, and what is already shown can be used as usual.</p>
+          <p>Pictures are cached on this device and can take a lot of storage. Set Picture limit in Settings → Media Libraries → Scanning &amp; storage to suit you: 1 GB by default, 500 MB to 100 GB, or Unlimited. Over the limit, the pictures not shown for the longest are deleted first.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── private ───────────────────────────────────────────────────── -->
+    <section class="band" id="private" aria-labelledby="private-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Private</p>
+          <h2 id="private-h">Private libraries and the PIN</h2>
+          <p>A private library shows only after the PIN is entered. While locked, it and its titles are absent from every list, Home, Continue Watching, Needs review and count. There is one PIN per CloudDrive account, 4 to 8 digits, set under Settings → Media Libraries → Privacy &amp; parental control.</p>
+        </header>
+        <div class="split">
+          <div>
+            <ul>
+              <li><strong>Lock Again</strong>: 5 minutes after you leave the app by default, or when you leave it, or after 15 minutes or 1 hour. The app starts locked every time.</li>
+              <li>A private library starts with Look up online off, and its titles are never sent to the <a href="#ai">AI identification</a> service.</li>
+              <li>Where another library's folders overlap a private library, the overlapping part is hidden there too while locked.</li>
+              <li><strong>Forgot PIN…</strong>: the PIN can't be recovered. You can remove every private library and the PIN, then add them again; their folders and files stay.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="note note-warn">
+              <span class="note-title">The PIN doesn't encrypt anything</span>
+              <p>The PIN hides private libraries in the media screens. It doesn't restrict access: their folders can still be opened in the file browser and in the storage's own app. The sync file holds a check value for the PIN (PBKDF2-SHA256, 100,000 rounds), not the PIN itself, but a 4-digit PIN can be found by trying quickly, so don't use it as a password.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── parental control ──────────────────────────────────────────── -->
+    <section class="band band-alt" id="parental" aria-labelledby="parental-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Parental control</p>
+          <h2 id="parental-h">Parental control</h2>
+          <p>Parental control leaves only the libraries to browse on this device: opening Files, switching to the file manager or opening Settings needs a 4-digit parental code. Turn it on under Settings → Media Libraries → Privacy &amp; parental control; it needs App Pro. The code stays on this device and doesn't sync; it is a different code from the private libraries' PIN.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>While locked</h3>
+            <ul>
+              <li>While locked, Files, the file manager and Settings can't be opened, and Identify…, adding a library and deleting one ask for the code.</li>
+              <li>It locks at once when you leave the app or the screen sleeps; Auto-Lock can also lock it again after a time without use, Never by default.</li>
+              <li><strong>Forgot code?</strong>: enter the password of the CloudDrive2 account signed in on this device; once it is confirmed, set a new code.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Highest rating</h3>
+            <p>No limit, G (all ages), PG (8 and up), PG-13 (13 and up) or R (17 and up). While locked, titles rated above it are hidden from every page, search and Home.</p>
+            <ul>
+              <li>The rating comes from the NFO first, then from TMDB; without a US rating, the rating of the UK, Germany, France, Japan or another country or region is converted.</li>
+              <li><strong>Show titles without a rating</strong>: off by default. A title whose rating isn't known yet is hidden while locked, unless this is on.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note note-warn">
+          <span class="note-title">Parental control doesn't encrypt anything</span>
+          <p>Parental control limits only the CloudDrive2 app on this device. The files can still be opened from other devices, the storage's own app, or a mounted drive. Without App Pro, the libraries and the Media interface aren't available, so parental control has no effect.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── emby-compatible api ───────────────────────────────────────── -->
+    <section class="band" id="emby-api" aria-labelledby="emby-api-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Other apps</p>
+          <h2 id="emby-api-h">Emby API for other apps</h2>
+          <p>CloudDrive2 on a Mac, iPhone, iPad, Apple TV, Apple Vision Pro, Android phone or TV, or Windows PC can serve an Emby-compatible API, so tools such as MoviePilot connect to your libraries as they would to an Emby server: they read the titles and people, and fill in the cast's names, biographies and photos. Turn it on under Settings → Media Libraries → Advanced → Emby API for other apps; it is off by default. Meta Quest doesn't have it.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Settings</h3>
+            <ul>
+              <li><strong>Port</strong>: 29801 by default. On iPhone, iPad and Apple Vision Pro it runs only while the app is on the screen.</li>
+              <li><strong>This device only</strong>: only apps on this device can connect; when off, apps on your local network can.</li>
+              <li><strong>API keys</strong>: make one for each app that connects, and choose the libraries it reaches. Private libraries are reached only when "Private libraries too" was chosen after unlocking with the PIN.</li>
+              <li>In MoviePilot, choose Emby as the server type, then enter the address and a key.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>What other apps write</h3>
+            <ul>
+              <li>People's names, biographies, photos and roles, and Favorites. People's details show before what the NFO and TMDB say.</li>
+              <li>It is kept on this device, never in your media's folders; Clear library data and rescans keep it.</li>
+              <li>With <a href="#sync-data">Sync scanned data across devices</a> on, it travels to your other devices with the photos.</li>
+              <li>Only people's details and Favorites are taken for now; a title's own details and pictures are not.</li>
+            </ul>
+            <div class="note">
+              <span class="note-title">Security</span>
+              <p>The API uses plain HTTP on your local network, so keep the keys safe. It reaches only the titles and people in your libraries, never your files or your account.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── privacy ───────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="privacy" aria-labelledby="privacy-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Privacy</p>
+          <h2 id="privacy-h">What leaves the device</h2>
+        </header>
+        <div class="split">
+          <div>
+            <ul>
+              <li><strong>CloudDrive's servers</strong>: receive nothing from the media library.</li>
+              <li><strong>Information sources</strong>: only when their switch and the library's Look up online are both on, and only <a href="#sites">what the table lists</a>, such as a title and year. File contents, paths and accounts are never sent. Opening an artist or author page sends the MusicBrainz id or the author's name on to Wikidata and Wikipedia.</li>
+              <li><strong>The AI service you choose</strong>: only with AI identification on, the chosen libraries' unidentified items' paths below their library folder, their file names, and the tags, cue sheets, SACD text or OPF read from them (Windows sends no table of contents, catalogue numbers or SACD text). Private libraries are never sent. Some services may train on what is sent under a free plan; DeepSeek stores data in mainland China.</li>
+              <li><strong>Your Emby or Jellyfin server</strong>: only when you <a href="#import">import</a>, it is read with your sign-in: its libraries, titles, people, pictures and your watch history. Nothing is written to it.</li>
+              <li><strong>Apps on your network</strong>: only with the Emby API on, apps holding a key can read the titles and people in the libraries it reaches.</li>
+              <li><strong>Your storage</strong>: the sync files when sync is on; the scanned-data packs, picture files, and people's photos from other apps and imported servers when Sync scanned data is on; NFO files and artwork when saving them is on; the NFO and pictures in a film's folder when you save Edit metadata….</li>
+            </ul>
+          </div>
+          <div>
+            <p>The sync files are plain JSON text, not encrypted. They hold the libraries' names and folders, the PIN check, identified titles' paths and TMDB ids, Needs review candidates, and each season's intro and ending times. Anyone who can open that storage, including people you share the storage account with and the storage provider, can read them. Choose storage you are comfortable keeping this in. Deleting the CloudDrive2 Sync folder deletes the copies in the storage; devices with sync still on write their own files again.</p>
+            <p>The scanned-data packs are compressed, not encrypted. They hold the titles' paths, what the NFO files say, what was read from the media files, and the answers of TMDB, MusicBrainz and the like, private libraries' data included; the picture files hold posters and covers. Anyone who can open the storage can read them.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── faq ───────────────────────────────────────────────────────── -->
+    <section class="band" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h">Frequently asked questions</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>My library shows only file names, with no posters or plots</summary>
+          <div class="acc-body">
+            <p>Without NFO files and artwork in the folders, titles need online lookup. Turn on Settings → Media Libraries → Identification → Look up titles on TMDB, and check that the library's Look up online is on; private libraries start with it off. Use Test connection to check that TMDB can be reached; in mainland China, keep the default api.tmdb.org.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>A title was identified wrongly. How do I fix it?</summary>
+          <div class="acc-body">
+            <p>Open the title's page, choose Identify…, and pick a candidate or search by title and year. Your choice is kept. If a whole batch of files has the same problem, such as a fansub group's naming or episode numbers, write a <a href="#words">recognition word</a> or add <code>{tmdbid=…}</code> to the folder's name.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Why do films without a year often end up in Needs review?</summary>
+          <div class="acc-body">
+            <p>Many films share a title. Without a year, a film is accepted only when both the Chinese and the Latin title in its name match the same film; otherwise you confirm it once. Add the year to the file or folder name, such as <code>Heat (1995)</code>, and it is identified automatically.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>I already scraped with tinyMediaManager or Emby. Do I need online lookup?</summary>
+          <div class="acc-body">
+            <p>No. NFO files and artwork in the folders come first, and titles whose NFO has an id are identified directly. You can turn lookup off and let the library show only what the folders already have.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Will "Save info and artwork beside the media" overwrite my files?</summary>
+          <div class="acc-body">
+            <p>No. NFO files and images written by other tools are never changed, and a title whose folder already has another tool's NFO gets no files at all. Only with Prefer online info on too, after a confirmation, are other tools' .nfo files and pictures renamed (with .bak added) and replaced with TMDB's; nothing is deleted.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>New files don't appear in the library</summary>
+          <div class="acc-body">
+            <p>Choose Refresh on the library page. With the Core Pro feature file change notifications, files added through this device appear by themselves; see <a href="#new-files">Picking up new files by itself</a>. Files added on other devices or in the storage's own app appear when the folder is read again: choose Scan this folder in the library's folder view, or in the file browser, or Scan now in the library's settings, or set how often Scan again runs.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>My libraries aren't on my other device</summary>
+          <div class="acc-body">
+            <p>Both devices need Sync libraries across devices on, the same CloudDrive account, and access to the storage holding CloudDrive2 Sync. Without sync, use Export Libraries… and Import Libraries…. The titles, what was read from the files and the posters come with <a href="#sync-data">Sync scanned data across devices</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>My new device scans the whole library again</summary>
+          <div class="acc-body">
+            <p>Turn on Settings → Media Libraries → Sync → Sync scanned data across devices on the new device and on one that has scanned already. A library the other device scanned completely is taken in whole: no folder is listed, nothing is read or asked again. With Sync libraries across devices on too, a new library is scanned by one device only; see <a href="#one-scanner">One device scans a library</a>. The first read waits for Wi-Fi or Ethernet unless Sync over mobile data is on. Posters come from the <a href="#sync-pictures">picture packs</a>; on a TV, turn on Download picture packs first.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>The cloud reports too many requests, or limits the account, while scanning</summary>
+          <div class="acc-body">
+            <p>Stop scanning libraries in the same storage account on your other devices, and set the library's Listing speed to 1 per second. Then turn on both Sync libraries across devices and Sync scanned data across devices, so each library is scanned by one device. Keep the CloudDrive2 Sync folder in a different storage account from your media files, for example media files on 115 and synced data on 123 Pan. See <a href="#avoid-limits">Keep the cloud from limiting your account</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Does the library change or delete my files?</summary>
+          <div class="acc-body">
+            <p>It never deletes them. The library only reads the folders, and deleting a library or removing a folder deletes no files. Recognition words change only the names the library reads; no file is renamed. The only things written are the NFO files and artwork you turn on, the NFO and pictures you save with Edit metadata…, and the sync files. With both Prefer online info and Save info and artwork beside the media on, other apps' .nfo files and pictures are renamed to .bak, never deleted. What other apps send through the Emby API is kept on the device, not in your files.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>The 4K and HDR badges on a poster are outlined</summary>
+          <div class="acc-body">
+            <p>An outlined badge comes from the file name; the file hasn't been read to confirm it. With the library's Detect media info while identifying on (the default), the device that scans it detects them in time; or choose Detect media info on the title's page, or turn on Detect media info in the background under Settings → Media Libraries → Scanning &amp; storage. The badge turns solid once detected.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>A library shows Elsewhere or Waiting</summary>
+          <div class="acc-body">
+            <p>Another device scans that library, and this one takes its scan. To scan it on this device, choose Scan now, or turn on Scan this library on this device in the library's settings. If that device is off or offline for 30 minutes, another takes over. See <a href="#one-scanner">One device scans a library</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Identification got better; what about titles it missed before?</summary>
+          <div class="acc-body">
+            <p>In the library's settings, choose Look Up Again beside Look up unidentified titles again. Titles in Needs review, Not found, or taken for something else are looked up by the new rules, on every device that syncs; identified titles and your choices stay. Folders sorted by a new rule (such as <a href="#video">a set of discs</a>) need Scan this folder first.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>I sit through the opening of every episode</summary>
+          <div class="acc-body">
+            <p>Playing any episode of the season, open Intro and Ending in the player and choose Set to Now as the opening ends. Every episode of that season skips it from then on, on your other devices too. See <a href="#skip">Skip intro and ending</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>I forgot the parental control code</summary>
+          <div class="acc-body">
+            <p>Choose Forgot code? where the code is asked for, and enter the password of the CloudDrive2 account signed in on this device (and a two-factor code if it has one). Once it is confirmed, set a new code.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>My libraries are already organised in Emby or Jellyfin. Do I scan them again?</summary>
+          <div class="acc-body">
+            <p>No: when the media files are on your cloud storage (.strm files aren't supported yet), import them under Settings → Media Libraries → Import from Emby or Jellyfin…. The titles' text, pictures, media info, your watch history and the people are read from the server, the titles play straight from your cloud storage, and no folder is scanned or looked up online. See <a href="#import">Import from Emby or Jellyfin</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Does the Emby or Jellyfin server have to stay on after the import?</summary>
+          <div class="acc-body">
+            <p>Not to play: titles play straight from your cloud storage. An imported library reads the server again at each rescan, and keeps what it read last while the server is off; posters and backdrops are fetched from the server when shown, and another picture shows when they can't be. People's photos were downloaded to the device at the import.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Can MoviePilot or a similar tool fill in the cast's photos?</summary>
+          <div class="acc-body">
+            <p>Yes, on a Mac, iPhone, iPad, Apple TV, Apple Vision Pro, Android phone or TV, or Windows PC (not on Meta Quest). Open Settings → Media Libraries → Advanced → Emby API for other apps, make a key for the tool, choose Emby as the server type in the tool, and enter the server address and the key. The names, biographies and photos the tool sends show first; see <a href="#emby-api">Emby API for other apps</a>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>Report a problem</h2>
+        <p>File problems as GitHub issues, where they are recorded and tracked; you can also report them in the Telegram group or by email.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">File a GitHub issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">Email us</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/media-library.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
