@@ -71,7 +71,7 @@
 
     <section class="hero">
       <div class="container">
-        <p class="eyebrow">App Pro feature · In beta</p>
+        <p class="eyebrow">App Pro feature</p>
         <h1>Media library</h1>
         <p class="hero-lede">Choose folders in your cloud storage, and the CloudDrive2 app turns the films, shows, music and books in them into libraries with posters, plots and cast. No Emby, Jellyfin or Plex server is needed: NFO files and artwork already in the folders come first, and what they leave out can be looked up on TMDB and other sites; if you already run an Emby or Jellyfin server, you can import its libraries. The results stay on your own devices, and can sync across them through your own cloud storage.</p>
         <ul class="chips">
@@ -137,13 +137,13 @@
               <li><strong>Home</strong>: Featured, Continue Watching, Next Up, Continue Listening, Continue Reading, and a "Latest" row for each library. A library being scanned or synced shows its state, such as Scanning, Identifying or Syncing; one that another device scans shows Elsewhere or Waiting (see <a href="#one-scanner">One device scans a library</a>).</li>
               <li><strong>Featured</strong>: a carousel at the top of Home with titles from Continue Watching, Next Up and the newest in each library. Titles of a locked private library, and titles above parental control's rating limit while locked, are never featured.</li>
               <li><strong>Search</strong>: translated and alternative titles are found too, and accents and Traditional or Simplified Chinese don't matter. A song is found once its album's page has been opened.</li>
-              <li><strong>Favorites</strong>: kept apart from library data, so Clear library data and a rescan keep them, and they sync with <a href="#sync">Sync libraries across devices</a>.</li>
+              <li><strong>Favorites</strong>: Favorites, between Home and Search in the sidebar (in the tab bar at the bottom on phones and iPad), lists the titles and people you favorited. Favorites are kept apart from library data, so Clear library data and a rescan keep them, and they sync with <a href="#sync">Sync libraries across devices</a>.</li>
             </ul>
           </div>
           <div>
             <h3>Devices</h3>
             <p>The CloudDrive2 apps on iPhone, iPad, Mac, Windows PCs, Apple TV, Apple Vision Pro, Android phones, tablets and TVs, and Meta Quest. Each device builds its libraries itself; no server has to stay on.</p>
-            <p>The features are the same on every device, with these differences: the Emby API isn't on Meta Quest; Apple TV can't import from Emby or Jellyfin, but shows libraries another device imported; on Apple TV and Android TV, person pages leave out the links and Scan again has no custom interval; on Apple TV, Edit metadata… changes text only, and on Android TV its pictures come only from your cloud storage; Android has no video-track picker, and no picking several titles or right-click menu. Smaller differences are noted where they matter.</p>
+            <p>The features are the same on every device, with these differences: the Emby API isn't on Meta Quest; Apple TV can't import from Emby or Jellyfin, but shows libraries another device imported; on Apple TV and Android TV, person pages leave out the links and Scan again has no custom interval; on Apple TV, Edit metadata… changes text only, and on Android TV its pictures come only from your cloud storage; Android has no video-track picker, and no picking several titles or right-click menu; Windows doesn't have show status, Use a video frame when there's no poster or .strm files yet. Smaller differences are noted where they matter.</p>
             <p>The core service's web interface doesn't show libraries. It has a Titles to Confirm page where you can confirm, in a browser, the titles the automatic match wasn't sure about. See <a href="#web">Confirming on the web</a>.</p>
             <h3>App Pro</h3>
             <p>The whole media library needs App Pro: adding and editing libraries, online info, identifying titles, saving info and artwork, syncing across devices, and browsing and playing in the Media interface.</p>
@@ -175,6 +175,7 @@
               <tr><th scope="row">Prefer online info</th><td>Off</td><td>Titles, plots and artwork come from TMDB even when .nfo files or pictures sit beside the media; those are used only where TMDB has nothing. An .nfo's TMDB or IMDb id still decides which title it is. Needs Look up online.</td></tr>
               <tr><th scope="row">Save info and artwork beside the media</th><td>Off</td><td>Writes .nfo files, posters and backdrops into the library's folders, for Kodi, Jellyfin, Emby and Infuse. Sub-options: Copies for Infuse, and Actor photos (.actors folder). Music libraries get album.nfo and the album cover, and book libraries an OPF and the cover. See <a href="#sidecars">Saving NFO and artwork</a>.</td></tr>
               <tr><th scope="row">Detect media info while identifying</th><td>On</td><td>Reads the start of each video file as its title is identified, for its resolution, HDR and audio tracks. The device that scans this library does it. Off: only devices with Detect media info in the background on detect it. Video libraries only. See <a href="#mediainfo">Media info</a>.</td></tr>
+              <tr><th scope="row">Use a video frame when there's no poster</th><td>Off</td><td>A film with no picture at all, or an episode with no still, shows a frame of its video. The cloud's own video thumbnail is used when it has one; otherwise a small part of the video is read for a frame when the title first shows on screen, once per video. Disc images work too: Blu-ray and DVD ISOs on Apple devices, Blu-ray ISOs only on Android devices and Meta Quest, none on 32-bit TV boxes; Blu-ray and DVD folders and .strm files get no frame. Video libraries only; not on Windows yet.</td></tr>
               <tr><th scope="row">Listing speed</th><td>2 per second</td><td>Folder listings per second while this library is read. A cloud storage can block an account that lists too fast, and every CloudDrive on the same storage account shares the allowance. This device only.</td></tr>
               <tr><th scope="row">Scan again</th><td>Never</td><td>A library scanned completely isn't scanned again by itself. It can be set to At each start, Every hour, Every day or a custom interval (in hours; not on Apple TV and Android TV, and on Android for video libraries only). Scan now reads the library's folders again right away. This device only. See <a href="#index">Library data</a>.</td></tr>
               <tr><th scope="row">Look up unidentified titles again</th><td>—</td><td>The Look Up Again button, under Scan now. Titles waiting for review, not found on TMDB, or taken for something other than a film or show are looked up again, on every device that syncs. Useful after an update that identifies titles better. Your choices, NFO files and titles already identified stay as they are. Video libraries only.</td></tr>
@@ -260,7 +261,7 @@
           <div>
             <h3>What comes along</h3>
             <ul>
-              <li>Films' and shows' names, original titles, plots, taglines, genres, tags, studios, age ratings, ratings and premiere dates; posters, logos, banners, thumbs and every backdrop, fetched from the server when shown.</li>
+              <li>Films' and shows' names, original titles, plots, taglines, genres, tags, studios, age ratings, ratings, premiere dates and shows' status (continuing or ended); posters, logos, banners, thumbs and every backdrop, fetched from the server when shown.</li>
               <li>A show's seasons and episodes, each episode's name, plot, numbers, runtime and air date.</li>
               <li>The media info the server read: resolution, HDR and Dolby Vision, audio tracks (Atmos and DTS:X included) and subtitles. Files the server couldn't read, some ISOs for example, are detected by the app in the background.</li>
               <li>Your played state, resume points and favourites on the server (the signed-in user's); a newer one on the device is kept.</li>
@@ -300,7 +301,8 @@
             <h3>Naming the entry yourself</h3>
             <p><code>{tmdbid=123}</code>, <code>[tmdb-123]</code>, <code>(imdb-tt0113277)</code> or MoviePilot's <code>{[tmdbid=123;type=tv;s=2]}</code> in a file or folder name names the TMDB or IMDb entry, and nothing is searched. When a title is wrong, you can also pick the entry in Identify…, or fix many files at once with <a href="#words">recognition words</a>.</p>
             <h3>Video files</h3>
-            <p>mkv, mp4, m4v, mov, avi, wmv, flv, webm, mpg, mpeg, m2ts, mts, ts, vob, rmvb, rm, 3gp, ogv, iso.</p>
+            <p>mkv, mp4, m4v, mov, avi, wmv, flv, webm, mpg, mpeg, m2ts, mts, ts, vob, rmvb, rm, 3gp, ogv, iso, strm.</p>
+            <p>A .strm file plays the video it points to. When it points to a file in CloudDrive2 (its path, or a CloudDrive2 download or WebDAV link), media info is read from that file too, and playback progress is kept on the .strm file. Windows doesn't read .strm files yet.</p>
           </div>
         </div>
       </div>
@@ -322,9 +324,12 @@
           </div>
           <div>
             <h3>What comes from TMDB</h3>
-            <p>Title, plot, genres, rating, poster and backdrop, cast and directors, each season and episode, box sets, and the certifications used by <a href="#parental">parental control</a>. The language they show in is the library's Metadata language.</p>
+            <p>Title, plot, genres, rating, poster and backdrop, cast and directors, each season and episode, shows' status, box sets, and the certifications used by <a href="#parental">parental control</a>. The language they show in is the library's Metadata language.</p>
+            <p>An episode's page lists its director and writers, the show's cast and the episode's guest stars. Android, Meta Quest and Windows don't list an episode's own director, writers and guest stars yet.</p>
             <h3>Anime</h3>
             <p>Anime named the fansub way is looked up on Bangumi first, and the bangumi-data table gives the TMDB season and episode it maps to, so anime whose seasons TMDB divides differently still lands on the right episode.</p>
+            <h3>Show status</h3>
+            <p>A show's poster carries Continuing or Ended in its bottom-left corner, and its page shows the status after the year; a library's Filter can show only continuing or only ended shows. Like the rest of a show's info, the status comes from <code>&lt;status&gt;</code> in tvshow.nfo first, then TMDB (the other way round with Prefer online info on); a library imported from Emby or Jellyfin uses the server's. Continuing and Returning Series show as Continuing, Ended and Canceled as Ended; a show with no status shows none. Not on Windows yet.</p>
           </div>
         </div>
 
@@ -539,7 +544,7 @@ tv:
           </div>
           <div>
             <h3>Where it is used</h3>
-            <p>Media info drives the 4K, Dolby Vision, HDR and Atmos badges on posters (solid when detected, outlined when only the file name says so), the Picture and sound filters, the choice of the version best on this device when a film has several, and the Needs review list of files that can't be read or whose length doesn't match. With Save info and artwork beside the media on, detected tracks also go into the NFO.</p>
+            <p>Media info drives the 4K, Dolby Vision, HDR and Atmos badges on posters (solid when detected, outlined when only the file name says so) and the BD and DVD badges of discs, the Picture and sound filters, the choice of the version best on this device when a film has several, and the Needs review list of files that can't be read or whose length doesn't match. With Save info and artwork beside the media on, detected tracks also go into the NFO. A film in several pieces lists each piece's media info on its page, and its length is compared as all its pieces together.</p>
             <h3>Detected while identifying</h3>
             <p>Each video library's Detect media info while identifying is on by default: the device that scans the library reads the start of each video file as its title is identified, newest titles first, usually about 256 KB a file. With <a href="#sync-data">Sync scanned data</a> on, the results travel, and your other devices don't read the files again.</p>
             <h3>Detect media info in the background</h3>
@@ -667,7 +672,7 @@ tv:
         <header class="band-head">
           <p class="eyebrow">Music</p>
           <h2 id="music-h">Music libraries</h2>
-          <p>Music is organized by folders and tags: an album is a folder, and folders such as <code>CD1</code> and <code>Disc 2</code> make one multi-disc album. Tags come before folder names; files tagged with data from NetEase Cloud Music, QQ Music or any other tagger show what was written into them.</p>
+          <p>Music is organized by folders and tags: an album is a folder, and folders such as <code>CD1</code> and <code>Disc 2</code> make one multi-disc album. Tags come before folder names; files tagged with data from NetEase Cloud Music, QQ Music or any other tagger show what was written into them. A folder holding the tracks of several albums (told apart by their album tags) shows each album; for now on Mac, iPhone, iPad, Apple TV and Apple Vision Pro.</p>
         </header>
         <h3>Names read when there are no tags</h3>
         <div class="table-scroll">
@@ -1079,7 +1084,7 @@ tv:
         <details class="acc">
           <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>My library shows only file names, with no posters or plots</summary>
           <div class="acc-body">
-            <p>Without NFO files and artwork in the folders, titles need online lookup. Turn on Settings → Media Libraries → Identification → Look up titles on TMDB, and check that the library's Look up online is on; private libraries start with it off. Use Test connection to check that TMDB can be reached; in mainland China, keep the default api.tmdb.org.</p>
+            <p>Without NFO files and artwork in the folders, titles need online lookup. Turn on Settings → Media Libraries → Identification → Look up titles on TMDB, and check that the library's Look up online is on; private libraries start with it off. Use Test connection to check that TMDB can be reached; in mainland China, keep the default api.tmdb.org. A title with no artwork in its folder and none on TMDB can show a frame of its video: turn on Use a video frame when there's no poster in the library's settings.</p>
           </div>
         </details>
 

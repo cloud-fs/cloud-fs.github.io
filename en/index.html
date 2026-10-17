@@ -80,6 +80,7 @@
             <a class="btn btn-ghost" href="/en/apps/">See the apps</a>
           </div>
           <ul class="chips">
+            <li><span class="chip chip-video">Media library</span></li>
             <li><span class="chip chip-video">True Dolby Vision P7 FEL</span></li>
             <li><span class="chip chip-disc">Blu-ray disc menus</span></li>
             <li><span class="chip chip-audio">DSD1024</span></li>
@@ -123,11 +124,11 @@
         <header class="band-head">
           <p class="pill"><i class="fa-solid fa-star" aria-hidden="true"></i>New</p>
           <h2 id="new-h">Recent major features</h2>
-          <p>Added in core 1.1.0 to 1.1.2 and app 1.1.0 to 1.1.2. For what changed in each core release, see the <a href="/en/download.html#changelog">release notes</a>.</p>
+          <p>Added in core 1.1.0 to 1.1.2 and app 1.1.0 to 1.1.3. For what changed in each core release, see the <a href="/en/download.html#changelog">release notes</a>.</p>
         </header>
         <div class="note">
-          <span class="note-title">The media library is in beta</span>
-          <p>App 1.1.3-beta adds the <a href="/en/media-library.html">media library</a>: choose folders in your cloud storage, and the app turns the films, shows, music and books in them into a library with posters, plots and cast, with no Emby, Jellyfin or Plex server to set up. The media library is an App Pro feature. 1.1.3-beta for Windows, macOS and Android can be downloaded from <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/app-v1.1.3-22" rel="noopener">GitHub</a>, or installed through <a href="https://play.google.com/store/apps/details?id=com.clouddrive2.CloudDrive2" rel="noopener">Google Play's open testing</a>, <a href="https://testflight.apple.com/join/SzcsXXSp" rel="noopener">TestFlight</a> (iPhone, iPad, Mac, Apple TV and Apple Vision Pro; 1.1.3 is waiting for Apple's review and can be installed once approved) and Meta Quest's <a href="https://www.meta.com/s/5ZFFQbENf" rel="noopener">BETA channel</a>. The regular Google Play and App Store versions haven't been updated yet. Features and screens may still change during the beta; please report problems on <a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub issues</a>.</p>
+          <span class="note-title">New: the media library</span>
+          <p>App 1.1.3 adds the <a href="/en/media-library.html">media library</a>: choose folders in your cloud storage, and the app turns the films, shows, music and books in them into a library with posters, plots and cast, with no Emby, Jellyfin or Plex server to set up. The media library is an App Pro feature. On Apple platforms, 1.1.3 is in App Store review and will update there once approved; until then it can be installed through <a href="https://testflight.apple.com/join/SzcsXXSp" rel="noopener">TestFlight</a>.</p>
         </div>
         <ul class="card-grid">
           <li><div class="card">
@@ -332,6 +333,25 @@
 
         <div class="feature-row">
           <div class="feature-text">
+            <h3>A media library with no server to run</h3>
+            <p>Choose folders in your cloud storage, and the CloudDrive2 App turns the films, shows, music and books in them into a library with posters, plots and cast, with no Emby, Jellyfin or Plex server to set up. NFO files and artwork already in your folders come first; what's missing comes from TMDB, Bangumi, MusicBrainz and Open Library.</p>
+            <p>Each device builds its libraries itself, and the libraries, favorites, identifications and scanned data sync through your own cloud storage: a library one device has scanned is ready on the others. If you already run Emby or Jellyfin, you can import its libraries instead. The media library arrived in app 1.1.3 and is an App Pro feature.</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">Films · shows · music · books</span></li>
+              <li><span class="chip">NFO first</span></li>
+              <li><span class="chip chip-cloud">Sync across devices</span></li>
+              <li><span class="chip chip-cloud">Import from Emby / Jellyfin</span></li>
+            </ul>
+            <a class="arrow-link" href="/en/media-library.html">Everything about the media library</a>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-media_client.webp" width="1600" height="888" loading="lazy" decoding="async"
+                 alt="The media view in CloudDrive: a featured title across the top, a row of libraries beneath it, and a Continue Watching shelf with a progress bar under each poster.">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
             <h3>Emby &amp; Jellyfin client with Direct Stream</h3>
             <p>Sign in to your Emby or Jellyfin server to browse libraries, resume playback and read metadata.
                When the server's media folder lives on CloudDrive anyway, the player skips the server's
@@ -352,8 +372,8 @@
             <a class="arrow-link" href="/en/apps/ios.html">See it on iPhone and iPad</a>
           </div>
           <figure>
-            <img src="/img/shots/macos-media_client.webp" width="1600" height="888" loading="lazy" decoding="async"
-                 alt="The media view in CloudDrive: a featured title across the top, a row of libraries beneath it, and a Continue Watching shelf with a progress bar under each poster.">
+            <img src="/img/shots/androidtv-direct_stream.webp" width="1600" height="901" loading="lazy" decoding="async"
+                 alt="The Add Server flow on Android TV asking whether to stream directly from CloudDrive, with a note about avoiding sending every byte through the media server.">
           </figure>
         </div>
 

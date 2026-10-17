@@ -387,6 +387,17 @@
                 <td class="c"><span class="yes">✓</span></td>
                 <td class="c"><span class="yes">✓</span></td>
               </tr>
+              <tr>
+                <th scope="row">Media library</th>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+                <td class="c"><span class="yes">✓</span></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -402,39 +413,39 @@
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">New</p>
-          <h2 id="soon-h">New in app 1.1.2</h2>
-          <p>Available from app 1.1.2; each platform's page has the details. App 1.1.1 added <a href="/en/archive-folders.html">archive folders</a>, <a href="/en/progress-sync.html">progress sync</a> and <a href="/en/help.html#tv">TV setup from a phone</a>.</p>
+          <h2 id="soon-h">New in app 1.1.3</h2>
+          <p>Available from app 1.1.3; each platform's page has the details. App 1.1.2 added e-books, lyrics and <a href="/en/accessibility.html">PDFs read by screen readers</a>; app 1.1.1 added <a href="/en/archive-folders.html">archive folders</a>, <a href="/en/progress-sync.html">progress sync</a> and <a href="/en/help.html#tv">TV setup from a phone</a>.</p>
         </header>
         <ul class="card-grid card-grid-2 card-grid-pairs">
-          <li><div class="card">
-            <i class="fa-solid fa-book-open card-icon" aria-hidden="true"></i>
-            <h3>E-books</h3>
-            <p>EPUB, MOBI, AZW3 and CBZ files open straight from the cloud, without downloading the whole book. There is a table of contents, font size, line spacing, margins and themes; turn pages one at a time or scroll continuously, and vertical books work too. The reading position syncs across your devices through <a href="/en/progress-sync.html">progress sync</a> (App Pro). On every platform.</p>
-          </div></li>
-          <li><div class="card">
-            <i class="fa-solid fa-music card-icon" aria-hidden="true"></i>
-            <h3>Lyrics</h3>
-            <p>The audio player shows timed lyrics from a .lrc file next to the song, and reads the lyrics stored in the song's own tags. The line being sung follows the music, with its translation underneath, and tapping a line plays from there (on a TV the lyrics only display). On every platform except the web interface.</p>
-          </div></li>
-          <li><a class="card" href="/en/accessibility.html">
-            <i class="fa-solid fa-universal-access card-icon" aria-hidden="true"></i>
-            <h3>Screen readers read PDFs, scans and comics</h3>
-            <p>PDF pages are read paragraph by paragraph with headings marked, without downloading the whole file. Pages that are a single picture, such as scans and comics, are recognised on the device first. VoiceOver, TalkBack, Narrator and NVDA all read them.</p>
+          <li><a class="card" href="/en/media-library.html">
+            <i class="fa-solid fa-film card-icon" aria-hidden="true"></i>
+            <h3>Media library</h3>
+            <p>Choose folders in your cloud storage, and the app turns the films, shows, music and books in them into a library with posters, plots and cast, with no server to set up. Libraries, favorites and scanned data sync through your own cloud storage, and you can import from Emby or Jellyfin. An App Pro feature, on every platform; the App Store versions for Apple platforms are in review.</p>
           </a></li>
           <li><div class="card">
-            <i class="fa-solid fa-compact-disc card-icon" aria-hidden="true"></i>
-            <h3>DTS music files</h3>
-            <p>WAV files ripped from DTS CDs and .dts files no longer play as noise. Android passes DTS through when the receiver accepts it, and otherwise plays multichannel or stereo; a Mac keeps HDMI passthrough, and iPhone, iPad and Apple TV play multichannel PCM.</p>
+            <i class="fa-solid fa-circle-play card-icon" aria-hidden="true"></i>
+            <h3>Mini player</h3>
+            <p>When music keeps playing after the player is hidden, a mini player stays on screen with the cover and song name, and previous, play/pause, next and stop. On iPhone, iPad and Apple TV.</p>
           </div></li>
-          <li><a class="card" href="/en/help.html#backup">
-            <i class="fa-solid fa-filter card-icon" aria-hidden="true"></i>
-            <h3>Backup filter rules by path</h3>
-            <p>The backup rule editor has Path Prefixes and Path Regex, to skip or keep one particular folder; Test the Rules shows whether a path is backed up and which rule skips it. In the Apple, Android and Windows apps.</p>
-          </a></li>
           <li><div class="card">
-            <i class="fa-solid fa-share-from-square card-icon" aria-hidden="true"></i>
-            <h3>Android: share to CloudDrive</h3>
-            <p>Share files or folders from another app, choose Upload to CloudDrive and a cloud folder, and they upload. The last folder you chose is remembered.</p>
+            <i class="fa-solid fa-gear card-icon" aria-hidden="true"></i>
+            <h3>Settings in the same eight groups</h3>
+            <p>Settings fall into the same eight groups on every platform: Interface, Appearance and Language are one Interface page, and parental control is under Media Libraries. Windows settings use the same layout too.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-forward card-icon" aria-hidden="true"></i>
+            <h3>Apple: seeking plays at once</h3>
+            <p>Seeking in a song, or tapping a line of its lyrics, plays from there at once instead of waiting a few seconds first.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-volume-high card-icon" aria-hidden="true"></i>
+            <h3>Android: TrueHD and DTS-HD over eARC</h3>
+            <p>On a TV with eARC and audio set to Always pass through, TrueHD and DTS-HD go to the receiver as they are, and the receiver shows Dolby Atmos. Before, TrueHD was decoded to 7.1 PCM when the TV didn't report its HDMI sink.</p>
+          </div></li>
+          <li><div class="card">
+            <i class="fa-solid fa-file-video card-icon" aria-hidden="true"></i>
+            <h3>Android: HEVC files from Bilibili's encoder</h3>
+            <p>HEVC files made by Bilibili's encoder open. Before, extra data in their headers kept them from playing.</p>
           </div></li>
         </ul>
       </div>
@@ -456,7 +467,7 @@
 
             <h3>App Pro follows your account too</h3>
             <p>Browsing clouds, managing files and basic playback need no extra purchase.
-               The advanced playback features — HDR and Dolby Vision, DSD, ISO disc playback (Blu-ray, DVD and SACD), AI subtitle translation, the media client (Emby and Jellyfin), and VR video playback of every kind (VR180, 360, fisheye, EAC, 3D SBS/OU) —
+               The advanced playback features — HDR and Dolby Vision, DSD, ISO disc playback (Blu-ray, DVD and SACD), AI subtitle translation, the media client (Emby and Jellyfin), the media library, and VR video playback of every kind (VR180, 360, fisheye, EAC, 3D SBS/OU) —
                need the one-time <strong>App Pro</strong> in-app
                purchase. Buy it once and it is unlocked on every device that signs in with the same
                CloudDrive account. Nothing to buy again, and nothing counted per device or per platform.</p>

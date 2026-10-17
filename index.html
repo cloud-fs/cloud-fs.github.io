@@ -79,6 +79,7 @@
             <a class="btn btn-ghost" href="/apps/">查看应用</a>
           </div>
           <ul class="chips">
+            <li><span class="chip chip-video">媒体库</span></li>
             <li><span class="chip chip-video">真·杜比视界 P7 FEL</span></li>
             <li><span class="chip chip-disc">蓝光原盘菜单</span></li>
             <li><span class="chip chip-audio">DSD1024</span></li>
@@ -122,11 +123,11 @@
         <header class="band-head">
           <p class="pill"><i class="fa-solid fa-star" aria-hidden="true"></i>最近更新</p>
           <h2 id="new-h">最近加入的主要功能</h2>
-          <p>以下功能在核心服务 1.1.0 至 1.1.2 和应用 1.1.0 至 1.1.2 中加入。核心服务每个版本的改动见<a href="/download.html#changelog">发布记录</a>。</p>
+          <p>以下功能在核心服务 1.1.0 至 1.1.2 和应用 1.1.0 至 1.1.3 中加入。核心服务每个版本的改动见<a href="/download.html#changelog">发布记录</a>。</p>
         </header>
         <div class="note">
-          <span class="note-title">媒体库开始公测</span>
-          <p>应用 1.1.3-beta 加入了<a href="/media-library.html">媒体库</a>：选择云盘中的文件夹，应用把其中的电影、剧集、音乐和图书整理成带海报、简介和演员的媒体库，不需要另外搭建 Emby、Jellyfin 或 Plex 服务器。媒体库是 App Pro 功能。Windows、macOS 和 Android 版的 1.1.3-beta 可以从 <a href="https://github.com/cloud-fs/cloud-fs.github.io/releases/tag/app-v1.1.3-22" rel="noopener">GitHub</a> 下载；也可以通过 <a href="https://play.google.com/store/apps/details?id=com.clouddrive2.CloudDrive2" rel="noopener">Google Play 的公开测试</a>、<a href="https://testflight.apple.com/join/SzcsXXSp" rel="noopener">TestFlight</a>（iPhone、iPad、Mac、Apple TV、Apple Vision Pro；1.1.3 正在等待 Apple 审核，通过后可以安装）和 Meta Quest 的 <a href="https://www.meta.com/s/5ZFFQbENf" rel="noopener">BETA 渠道</a>安装。Google Play 和 App Store 的正式版本还没有更新。测试期间功能和界面还可能调整，发现问题请在 <a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub issues</a> 中提交。</p>
+          <span class="note-title">新功能：媒体库</span>
+          <p>应用 1.1.3 加入了<a href="/media-library.html">媒体库</a>：选择云盘中的文件夹，应用把其中的电影、剧集、音乐和图书整理成带海报、简介和演员的媒体库，不需要另外搭建 Emby、Jellyfin 或 Plex 服务器。媒体库是 App Pro 功能。Apple 平台的 1.1.3 正在 App Store 审核，审核通过后在 App Store 更新；在此之前可以通过 <a href="https://testflight.apple.com/join/SzcsXXSp" rel="noopener">TestFlight</a> 安装。</p>
         </div>
         <ul class="card-grid">
           <li><div class="card">
@@ -320,6 +321,25 @@
 
         <div class="feature-row">
           <div class="feature-text">
+            <h3>媒体库：整理云盘中的影片，不需要服务器</h3>
+            <p>选择云盘中的文件夹，CloudDrive2 App 把其中的电影、剧集、音乐和图书整理成带海报、简介和演员的媒体库，不需要另外搭建 Emby、Jellyfin 或 Plex 服务器。文件夹里已有的 NFO 和图片优先使用，缺少的信息从 TMDB、Bangumi、MusicBrainz 和 Open Library 获取。</p>
+            <p>每台设备在本机整理媒体库，媒体库、收藏、识别结果和扫描数据通过你自己的云盘在设备之间同步：一台设备扫描过的媒体库，其他设备直接使用。已经有 Emby 或 Jellyfin 服务器的，可以直接导入它的媒体库。媒体库从应用 1.1.3 起提供，是 App Pro 功能。</p>
+            <ul class="chips">
+              <li><span class="chip chip-video">电影 · 剧集 · 音乐 · 图书</span></li>
+              <li><span class="chip">NFO 优先</span></li>
+              <li><span class="chip chip-cloud">跨设备同步</span></li>
+              <li><span class="chip chip-cloud">从 Emby / Jellyfin 导入</span></li>
+            </ul>
+            <a class="arrow-link" href="/media-library.html">媒体库的完整说明</a>
+          </div>
+          <figure>
+            <img src="/img/shots/macos-media_client.webp" width="1600" height="888" loading="lazy" decoding="async"
+                 alt="CloudDrive 的影视界面：顶部是精选影片的横幅，下面是媒体库一行，再下面是「继续观看」的海报墙，每张海报下方带播放进度。">
+          </figure>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-text">
             <h3>Emby / Jellyfin 客户端，直连串流</h3>
             <p>登录你的 Emby 或 Jellyfin 服务器，浏览媒体库、续播、看元数据。如果服务器的媒体目录本来就在 CloudDrive 上，播放器会绕过服务器转码，直接从云端拉流——服务器不再为每一个字节做中转。</p>
             <p>拉流之后，文件是由 CloudDrive2 App 自己的播放器打开的，所以能播放哪些格式取决于播放器，与服务器是否支持无关：蓝光原盘 ISO 连着 HDMV 光碟菜单、真·杜比视界 Profile 7、DSD 与 SACD ISO——这些 Emby 和 Jellyfin 本身并不支持的东西，在媒体库里点开照样能放，观看记录也照常同步回服务器。</p>
@@ -333,8 +353,8 @@
             <a class="arrow-link" href="/apps/ios.html">看看它在 iPhone 与 iPad 上的样子</a>
           </div>
           <figure>
-            <img src="/img/shots/macos-media_client.webp" width="1600" height="888" loading="lazy" decoding="async"
-                 alt="CloudDrive 的影视界面：顶部是精选影片的横幅，下面是媒体库一行，再下面是「继续观看」的海报墙，每张海报下方带播放进度。">
+            <img src="/img/shots/androidtv-direct_stream.webp" width="1600" height="901" loading="lazy" decoding="async"
+                 alt="Android TV 上的「添加服务器」流程，正在询问「直接从 CloudDrive 串流?」，说明文字写着「避免每字节都经过媒体服务器」。">
           </figure>
         </div>
 
