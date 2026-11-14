@@ -250,6 +250,9 @@ service CloudDriveFileSrv {
   rpc GetCopyTasks(google.protobuf.Empty) returns (GetCopyTaskResult) {}
   // get all merge tasks (folder recursive merges)
   rpc GetMergeTasks(google.protobuf.Empty) returns (GetMergeTasksResult) {}
+  // requests per second each cloud account is sending to its provider's API
+  // right now; only accounts with qps > 0 are listed
+  rpc GetCloudAPIQps(google.protobuf.Empty) returns (CloudAPIQpsList) {}
   // cancel a merge task by source and destination paths
   rpc CancelMergeTask(CancelMergeTaskRequest) returns (google.protobuf.Empty) {}
   // cancel copy folder task
@@ -1024,6 +1027,9 @@ message AccountStatusResult {
   repeated BoundDevice boundDevices =
       10; // partner devices this account is bound to (empty if none); drives the unbind UI
   optional SubscriptionInfo subscription = 11; // present only for a store auto-renew subscription (Apple/Google/Meta); null for Alipay/one-time
+  optional bool appProEnabled = 12; // the core's own answer to "does this account have App Pro"; apps read this instead of looking for the role themselves
+  optional bool forceUpdate = 13; // the account server orders this build to update now; an app that cannot install by itself must stop and send the user to the update
+  optional bool mediaServerEnabled = 14; // the core's own answer to "does this account have the media server" (role enable_media_server: a core plan): the media server, the web media pages and their playback
 }
 // Auto-renew store subscription details (see iap-server-handoff §6.2).
 message SubscriptionInfo {
@@ -1147,7 +1153,17 @@ message GetAllTasksCountResult {
   bool hasUpdate = 4;
   repeated UploadFileInfo uploadFileStatusChanges =
       5; // upload file status changed
+  double totalQps = 7; // all cloud accounts' requests per second, summed
 }
+message CloudAPIQps {
+  string name = 1;           // the cloud's name, as in CloudAPI.name
+  string userName = 2;
+  string nickName = 3;
+  optional string path = 4;  // the cloud's folder
+  double qps = 5;            // average requests per second over the last 3 seconds
+  optional double qpsLimit = 6; // the account's QPS limit, when it has one
+}
+message CloudAPIQpsList { repeated CloudAPIQps apis = 1; }
 message FileSystemChange {
   enum ChangeType {
     CREATE = 0;
@@ -1642,6 +1658,9 @@ message LoginSftpRequest {
   bool doNotSyncToCloud = 8;
   optional ProxyInfo apiProxy = 9;
   optional ProxyInfo dataProxy = 10;
+  // Also offer old algorithms (diffie-hellman-group14-sha1, ssh-rsa, CBC ciphers...)
+  // for servers such as OpenSSH 5.x; weaker, off by default
+  bool allowLegacyAlgorithms = 11;
 }
 message LoginFtpRequest {
   string host = 1;

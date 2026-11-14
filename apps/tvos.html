@@ -98,6 +98,25 @@
       </div>
     </section>
 
+    <section class="band band-alt" id="beta-120" aria-labelledby="beta-120-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">1.2.0 公开测试</p>
+          <h2 id="beta-120-h">1.2.0 的新增功能</h2>
+          <p>以下为 1.2.0 公开测试功能。连接媒体服务器时，请使用 CloudDrive2 App 1.2.0-beta 及以上版本，并将服务器升级到 1.2.0-beta 或更新版本。<a href="/download.html#beta">下载与测试渠道</a>。</p>
+        </header>
+        <ul class="card-grid card-grid-2">
+          <li><a class="card" href="/media-server.html"><h3>连接媒体服务器</h3><p>由电脑或 NAS 统一扫描电影、剧集、音乐和图书，应用通过配对连接，使用观看用户、收藏和继续播放。也可以在应用中开启媒体服务器，提供本机整理的媒体库。</p></a></li>
+          <li><a class="card" href="/media-library.html"><h3>媒体库浏览与资料</h3><p>按视频、HDR、音频及字幕条件筛选，在人物页浏览相关作品；读取本地季 NFO 和各季海报，单季剧集也保留季海报。音轨和字幕选择随标题同步。</p></a></li>
+          <li><a class="card" href="/ai-translation.html#server-background"><h3>后台 AI 字幕</h3><p>为影片、单集或整季提交字幕生成与翻译任务，查看耗时、暂停、继续及调整等待顺序。连接媒体服务器时由服务器处理，任务无需播放影片。</p></a></li>
+          <li><div class="card"><h3>播放器与阅读器</h3><p>视频增加 A–B 循环和总时长/剩余时间切换；音乐集中显示歌词、队列和专辑信息。支持 CBR 漫画以及静态和动态 JPEG XL 图片。</p></div></li>
+          <li><div class="card"><h3>遥控器与 VoiceOver</h3><p>更新视频、音乐和迷你播放器的遥控器操作，改进媒体库和设置中的焦点移动。音乐可显示较大的时间信息；VoiceOver 更完整地朗读标题、剧集与观看状态。</p></div></li>
+          <li><a class="card" href="/accessibility.html"><h3>无障碍操作</h3><p>改进媒体标题、筛选和播放控件的键盘与读屏操作；欢迎在反馈中说明设备、系统版本和读屏软件。</p></a></li>
+        </ul>
+        <p class="chip-note">连接服务器需要 App Pro；向其他设备提供本机媒体库需要 App Pro 和支持媒体服务器的核心会员（月费、年费或完整版终身会员，轻享终身会员不含）。提供服务的设备需要保持运行，后台持续运行能力取决于操作系统。 <a href="/pricing.html#media-server-h">会员要求</a></p>
+      </div>
+    </section>
+
     <section class="band band-dark" aria-labelledby="media-h">
       <div class="container">
         <header class="band-head">
@@ -153,10 +172,9 @@
             <h3>无损音乐、杜比全景声与多声道环绕</h3>
             <p>Apple TV 上的完整音频播放器：FLAC、WAV、ALAC、APE，DSD 最高支持 DSD1024，还支持 SACD ISO 播放。专辑封面、无缝播放和后台播放——浏览文件时音乐不间断，遥控器上可用「正在播放」控制。</p>
             <p>杜比全景声（杜比数字+）通过 HDMI 以比特流直通输出到功放或回音壁。TrueHD、
-               DTS-HD Master Audio 和 DTS 音轨完整解码，经 HDMI 以 5.1 或 7.1 多声道输出——
-               绝不强制下混成立体声。多声道 DSD 同样如此：5.1 声道的 SACD ISO、.dsf 与 .dff
-               通过功放以真正的环绕声播放。完整环绕声场始终保留，所以 AirPods Pro / Max 可享受带头部追踪的空间音频，立体声设备则采用标准 ITU-R BS.775 下混。</p>
-            <p class="chip-note">DSD64 到 DSD1024 都支持。DoP 与原生 DSD 实际能走到哪一档，取决于所连解码器的能力——应用按解码器自己声明的规格输出，它接不了的档位会转成 PCM。</p>
+               DTS-HD Master Audio 和 DTS 音轨完整解码，在当前 HDMI 输出路由支持时，以 5.1 或 7.1 多声道 PCM 输出。多声道 DSD 同样如此：5.1 声道的 SACD ISO、.dsf 与 .dff
+               通过功放以真正的环绕声播放。在支持的设备上， AirPods Pro / Max 可享受带头部追踪的空间音频，立体声设备则采用标准 ITU-R BS.775 下混。</p>
+            <p class="chip-note">支持 DSD64 至 DSD1024 文件，转换为 PCM 后交由本平台的音频输出播放，不提供 USB 原生 DSD 或 DoP 输出。</p>
             <ul class="chips">
               <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
               <li><span class="chip chip-audio">SACD ISO</span></li>
@@ -194,9 +212,9 @@
     <section class="band band-alt" id="media-library" aria-labelledby="library-h">
       <div class="container">
         <header class="band-head">
-          <p class="eyebrow">媒体库 · 应用 1.1.3 新增</p>
+          <p class="eyebrow">媒体库 · 应用 1.1.3 起</p>
           <h2 id="library-h">把云盘中的影片整理成媒体库</h2>
-          <p>选择云盘中的文件夹，应用把其中的电影、剧集、音乐和图书整理成带海报、简介和演员的媒体库，不需要另外搭建 Emby、Jellyfin 或 Plex 服务器。媒体库是 App Pro 功能。App Store 中的 1.1.3 正在审核，审核通过后即可更新；在此之前可以通过 <a href="https://testflight.apple.com/join/SzcsXXSp" rel="noopener">TestFlight</a> 安装。</p>
+          <p>选择云盘中的文件夹，应用把其中的电影、剧集、音乐和图书整理成带海报、简介和演员的媒体库，不需要另外搭建 Emby、Jellyfin 或 Plex 服务器。媒体库是 App Pro 功能。</p>
         </header>
         <ul class="card-grid">
           <li><div class="card">
@@ -255,7 +273,7 @@
           <li><div class="card">
             <i class="fa-solid fa-film card-icon" aria-hidden="true"></i>
             <h3>影库元数据</h3>
-            <p>自动读取本地 .nfo 文件与海报图片（Plex / Jellyfin / Emby 命名规范），打造丰富且私有的影库——不联网抓取。</p>
+            <p>自动读取本地 .nfo 文件与海报图片（Plex / Jellyfin / Emby 命名规范），媒体库优先读取本地资料；普通媒体库可在线补全，私密媒体库单独设置。</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-shield-halved card-icon" aria-hidden="true"></i>

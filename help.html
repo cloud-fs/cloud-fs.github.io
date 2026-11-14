@@ -62,6 +62,7 @@
             从装到你的电脑、NAS 或手机上，到注册、添加云存储、把云盘挂载成本地磁盘，再到备份、加密和 WebDAV。按你手头的设备选一节看即可。
           </p>
           <ul class="chips">
+          <li><a class="chip" href="#media-120">媒体功能设置</a></li>
             <li><a class="chip chip-cloud" href="#install">安装与运行</a></li>
             <li><a class="chip chip-cloud" href="#start">连上第一个云盘</a></li>
             <li><a class="chip" href="#mount">挂载成本地磁盘</a></li>
@@ -79,6 +80,25 @@
           <img class="hero-shot" src="/img/shots/web-dashboard.webp" width="1600" height="900" decoding="async"
                alt="浏览器里的 CloudDrive2 管理界面：左侧是仪表盘、我的文件、云存储、挂载点、备份、系统任务、WebDAV 与 API 令牌，右侧显示已连接云盘的总容量和最近文件。">
         </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="media-120" aria-labelledby="media-120-h">
+      <div class="container container-narrow">
+        <header class="band-head"><p class="eyebrow">1.2.0 公开测试</p><h2 id="media-120-h">开始使用 1.2.0 媒体功能</h2></header>
+        <p>请使用 1.2.0-beta 及以上版本的应用和核心服务。提供媒体服务器需要 App Pro 和核心月费、年费或完整版终身会员，轻享终身会员不含此功能；客户端应用需要 App Pro。</p>
+        <ol>
+          <li>更新提供服务的设备，在设置中打开「媒体服务器」，选择或创建同步目录，添加媒体库目录并开启服务。保持该设备运行，等待首次扫描完成。</li>
+          <li>在客户端应用中打开「设置 → 媒体库 → 连接媒体服务器」，选择发现的服务器或输入地址，按提示完成配对，再选择保存进度和收藏的观看用户。</li>
+          <li>在浏览器中进入核心服务的媒体界面浏览媒体库。如果只想播放文件，可直接从「文件」打开独立网页播放器，不必先创建媒体库。</li>
+          <li>需要后台字幕时，先在服务器配置语音识别和翻译服务，再从影片、单集或整季详情提交任务。任务无需播放视频；媒体服务器不提供播放中的实时 AI 字幕。</li>
+        </ol>
+        <p>用 API 令牌把另一台 CloudDrive 添加为云存储，是访问它的文件；这与媒体服务器配对不同，也不会复制所有应用设置。</p>
+        <p>「任务」新增网盘请求频率统计，可查看每个账号每秒发送的请求数。添加旧版 SFTP 服务器时，可按需开启「允许旧算法」以兼容旧服务器，此选项默认关闭。</p>
+        <h3>播放或连接异常时</h3>
+        <p>在浏览器默认设置下，普通 HTTP 地址可能无法使用 WebCodecs、WebGPU 等加速，导致 4K HEVC 卡顿。建议使用 HTTPS 或 localhost；Chrome 和 Edge 也可按指南对可信地址设置例外。 <a href="/web-player.html#chrome-secure-origin">浏览器设置方法</a>。</p>
+        <p>媒体库无法连接时，先确认服务器仍在运行、媒体服务器开关已开启、两项会员有效，且当前设备可以访问服务器地址。反馈时请提供应用和核心版本、设备与系统、复现步骤及相关日志；播放问题请同时说明音视频格式、浏览器或音频输出设备。</p>
+        <p><a href="/media-server.html">媒体服务器完整指南</a> · <a href="/ai-translation.html#server-background">后台 AI 字幕说明</a> · <a href="/download.html#beta">测试渠道</a></p>
       </div>
     </section>
 

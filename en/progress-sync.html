@@ -59,6 +59,7 @@
         <h1>Progress sync</h1>
         <p class="hero-lede">Watch part of a video on one device, open it on another, and it continues where you left off, with the same audio track, subtitles and delays. PDF, text files and e-books continue at the same reading position. Progress is kept in cloud storage you choose, never on CloudDrive's servers.</p>
         <ul class="chips">
+          <li><a class="chip" href="#media-server-progress">Media-server progress</a></li>
           <li><a class="chip chip-video" href="#what">What is synced</a></li>
           <li><a class="chip" href="#setup">Turning it on</a></li>
           <li><a class="chip" href="#join">Other devices</a></li>
@@ -71,6 +72,15 @@
           <a class="btn btn-primary" href="/en/apps/">Get the apps</a>
           <a class="btn btn-ghost" href="/en/pricing.html#app-h">App Pro pricing</a>
         </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="media-server-progress" aria-labelledby="media-server-progress-h">
+      <div class="container container-narrow">
+        <header class="band-head"><p class="eyebrow">1.2.0 public beta</p><h2 id="media-server-progress-h">Media-server progress is separate</h2></header>
+        <p>The cloud-folder instructions below describe the apps’ Sync progress feature. In 1.2.0, a connected CloudDrive media server also saves playback and reading progress, watched status and track choices for the selected viewer. Apps and the browser’s Media interface use that server record; each viewer has separate progress.</p>
+        <p>Books opened from the browser’s Files page still keep their position in that browser. Books opened from a server library report reading progress to the server; the browser can additionally keep a more precise local location. Use the same server and viewer when continuing on another device.</p>
+        <p><a href="/en/media-server.html">Media server setup and membership requirements</a></p>
       </div>
     </section>
 
@@ -102,13 +112,13 @@
           </div>
         </div>
 
-        <h3>Not synced</h3>
+        <h3>Not included in cloud-folder sync</h3>
         <ul>
           <li>Settings that depend on the screen: display mode (Fit, Pan &amp; Scan, Stretch), zoom, the video track and Dolby Vision choice, HDR subtitle brightness, and the player engine.</li>
           <li>Emby and Jellyfin videos: their media server keeps the position.</li>
           <li>Files only one device can reach: local folders, USB drives, files in phone storage.</li>
           <li>App-wide settings: subtitle style, preferred languages, and the readers' view settings.</li>
-          <li>E-books read in the core's web interface: the position stays in that browser.</li>
+          <li>E-books opened from the web Files page: the position stays in that browser. Library books also use server progress.</li>
         </ul>
       </div>
     </section>
@@ -118,7 +128,7 @@
         <header class="band-head">
           <p class="eyebrow">Turning it on</p>
           <h2 id="setup-h">On the first device</h2>
-          <p>Progress sync is an App Pro feature, available from app 1.1.1 and off by default. It works in the apps for iPhone, iPad, Mac, Apple TV, Apple Vision Pro, Android phones and TVs, Meta Quest and Windows; the core service's web interface does not have it.</p>
+          <p>Progress sync is an App Pro feature, available from app 1.1.1 and off by default. It works in the apps for iPhone, iPad, Mac, Apple TV, Apple Vision Pro, Android phones and TVs, Meta Quest and Windows; the core’s web interface does not join this cloud-folder sync. Media-server progress is described above.</p>
         </header>
         <ol class="steps">
           <li>

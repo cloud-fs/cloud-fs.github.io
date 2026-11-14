@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API 开发者指南
 
-版本: 1.1.2
+版本: 1.2.0-beta
 
 ## 目录
 
+- [1.2.0-beta 新增功能](#120-beta-新增功能)
 - [1.1.2 版本新特性](#112-版本新特性)
 - [1.1.1 版本新特性](#111-版本新特性)
 - [1.1.0 版本新特性](#110-版本新特性)
@@ -46,6 +47,18 @@
 - [数据类型参考](#数据类型参考)
 - [错误处理](#错误处理)
 - [最佳实践](#最佳实践)
+
+---
+
+## 1.2.0-beta 新增功能
+
+[可下载的 Proto 定义](clouddrive.proto)已更新到 1.2.0 公开测试版。现有 RPC 名称保持兼容，以下新增接口和字段需要 1.2.0 核心。
+
+- `GetCloudAPIQps(google.protobuf.Empty)` 返回 `CloudAPIQpsList.apis`，仅列出当前请求速率非零的云盘账户。每个 `CloudAPIQps` 包含 `name`、`userName`、`nickName`、可选 `path`、`qps`（最近三秒的平均每秒请求数）和可选 `qpsLimit`。接口需要授权，API 令牌需要 `allow_get_transfer_tasks` 权限。`GetAllTasksCountResult.totalQps` 提供所有账户的合计请求速率。
+- `AccountStatusResult` 新增可选字段 `appProEnabled`（12）、`forceUpdate`（13）和 `mediaServerEnabled`（14）。最后一项表示核心会员的媒体服务器权益，实际提供媒体服务还需要 App Pro。旧服务器未返回可选字段时，不要将缺省值当成已核实的权益。
+- `LoginSftpRequest.allowLegacyAlgorithms`（11）用于兼容旧版 SFTP 服务器，默认关闭；只在旧服务器需要时开启。
+
+媒体服务器与独立网页播放器是本次新增产品功能；本文介绍的是核心文件管理 gRPC API。媒体服务器配对和观看用户进度使用单独的协议，通过 API 令牌添加 CloudDrive 云存储并不等同于媒体服务器配对。设置与会员要求见[媒体服务器](../media-server.html)和[网页播放器](../web-player.html)。
 
 ---
 
@@ -1158,7 +1171,7 @@ python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. clouddrive.pr
 
 ### 版本兼容性
 
-**当前版本:** 1.1.2
+**当前版本:** 1.2.0-beta
 
 始终使用与 CloudDrive2 服务器相同版本的 proto 文件以确保兼容性。您可以使用 `GetRuntimeInfo` 方法检查服务器版本。
 
@@ -3384,7 +3397,30 @@ message GetAllTasksCountResult {
   PushMessage pushMessage = 3;
   bool hasUpdate = 4;
   repeated UploadFileInfo uploadFileStatusChanges = 5;
+  double totalQps = 7;
 }
+```
+
+---
+
+#### GetCloudAPIQps
+
+**权限：** `allow_get_transfer_tasks`
+
+**请求：** `google.protobuf.Empty`
+
+**响应：** `CloudAPIQpsList`，只列出 `qps > 0` 的云盘账户。速率取最近三秒的平均值；仅在云盘支持且已配置限制时返回 `qpsLimit`。
+
+```protobuf
+message CloudAPIQps {
+  string name = 1;
+  string userName = 2;
+  string nickName = 3;
+  optional string path = 4;
+  double qps = 5;
+  optional double qpsLimit = 6;
+}
+message CloudAPIQpsList { repeated CloudAPIQps apis = 1; }
 ```
 
 ---
@@ -4911,6 +4947,7 @@ message LoginSftpRequest {
   bool doNotSyncToCloud = 8;
   optional ProxyInfo apiProxy = 9;
   optional ProxyInfo dataProxy = 10;
+  bool allowLegacyAlgorithms = 11; // off by default
 }
 ```
 
@@ -5634,6 +5671,9 @@ message AccountStatusResult {
   // 仅在用户拥有商店自动续费订阅（Apple/Google/Meta）时存在；
   // 支付宝或一次性购买不返回
   optional SubscriptionInfo subscription = 11;
+  optional bool appProEnabled = 12;
+  optional bool forceUpdate = 13;
+  optional bool mediaServerEnabled = 14;
 }
 
 message AccountPlan {
@@ -9865,7 +9905,7 @@ class FileManager
 - ✅ **安全准则**
 - ✅ **完整的工作示例**
 
-**API 版本:** 1.1.2
+**API 版本:** 1.2.0-beta
 
 ---
 

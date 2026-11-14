@@ -1,9 +1,10 @@
 # CloudDrive2 gRPC API Developer's Guide
 
-Version: 1.1.2
+Version: 1.2.0-beta
 
 ## Table of Contents
 
+- [What's New in 1.2.0-beta](#whats-new-in-120-beta)
 - [What's New in 1.1.2](#whats-new-in-112)
 - [What's New in 1.1.1](#whats-new-in-111)
 - [What's New in 1.1.0](#whats-new-in-110)
@@ -46,6 +47,18 @@ Version: 1.1.2
 - [Data Types Reference](#data-types-reference)
 - [Error Handling](#error-handling)
 - [Best Practices](#best-practices)
+
+---
+
+## What's New in 1.2.0-beta
+
+The downloadable [Proto schema](clouddrive.proto) is updated for the 1.2.0 public beta. Existing RPC names remain compatible; the additions below require a 1.2.0 core.
+
+- `GetCloudAPIQps(google.protobuf.Empty)` returns `CloudAPIQpsList.apis`: active cloud accounts with a nonzero request rate. Each `CloudAPIQps` contains `name`, `userName`, `nickName`, optional `path`, `qps` (average requests per second over the last three seconds), and optional `qpsLimit`. The call requires authorization; an API token needs `allow_get_transfer_tasks`. `GetAllTasksCountResult.totalQps` reports the aggregate rate.
+- `AccountStatusResult` adds optional `appProEnabled` (12), `forceUpdate` (13) and `mediaServerEnabled` (14). The last field reports the core-plan media-server entitlement; serving also requires App Pro. Do not interpret a missing optional field from an older server as a verified entitlement.
+- `LoginSftpRequest.allowLegacyAlgorithms` (11) allows compatibility with older SFTP servers. It defaults to false; enable it only when the older server requires it.
+
+The media server and independent web player are new product features, but this guide documents the core file-management gRPC API. Media-server pairing and viewer progress use a separate protocol; adding a CloudDrive storage provider with an API token is not media-server pairing. See the [media-server guide](../en/media-server.html) and [web-player guide](../en/web-player.html) for setup and membership requirements.
 
 ---
 
@@ -1160,7 +1173,7 @@ The `clouddrive.proto` file contains:
 
 ### Version Compatibility
 
-**Current Version:** 1.1.2
+**Current Version:** 1.2.0-beta
 
 Always use the proto file from the same version as your CloudDrive2 server to ensure compatibility. You can check your server version using the `GetRuntimeInfo` method.
 
@@ -3383,7 +3396,30 @@ message GetAllTasksCountResult {
   PushMessage pushMessage = 3;
   bool hasUpdate = 4;
   repeated UploadFileInfo uploadFileStatusChanges = 5;
+  double totalQps = 7;
 }
+```
+
+---
+
+#### GetCloudAPIQps
+
+**Permission:** `allow_get_transfer_tasks`
+
+**Request:** `google.protobuf.Empty`
+
+**Response:** `CloudAPIQpsList`. Only cloud accounts with `qps > 0` are listed. Rates are averaged over the last three seconds; `qpsLimit` is present only when a supported limit is configured.
+
+```protobuf
+message CloudAPIQps {
+  string name = 1;
+  string userName = 2;
+  string nickName = 3;
+  optional string path = 4;
+  double qps = 5;
+  optional double qpsLimit = 6;
+}
+message CloudAPIQpsList { repeated CloudAPIQps apis = 1; }
 ```
 
 ---
@@ -4912,6 +4948,7 @@ message LoginSftpRequest {
   bool doNotSyncToCloud = 8;
   optional ProxyInfo apiProxy = 9;
   optional ProxyInfo dataProxy = 10;
+  bool allowLegacyAlgorithms = 11; // off by default
 }
 ```
 
@@ -5637,6 +5674,9 @@ message AccountStatusResult {
   // present only for a store auto-renew subscription (Apple/Google/Meta);
   // null for Alipay or one-time purchases
   optional SubscriptionInfo subscription = 11;
+  optional bool appProEnabled = 12;
+  optional bool forceUpdate = 13;
+  optional bool mediaServerEnabled = 14;
 }
 
 message AccountPlan {
@@ -9813,7 +9853,7 @@ This guide covers the complete CloudDrive2 gRPC API with:
 - ✅ **Security guidelines**
 - ✅ **Complete working examples**
 
-**API Version:** 1.1.2
+**API Version:** 1.2.0-beta
 
 ---
 

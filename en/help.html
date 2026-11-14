@@ -64,6 +64,7 @@
             Read the section for the device in front of you.
           </p>
           <ul class="chips">
+          <li><a class="chip" href="#media-120">Media setup</a></li>
             <li><a class="chip chip-cloud" href="#install">Installing</a></li>
             <li><a class="chip chip-cloud" href="#start">Your first cloud</a></li>
             <li><a class="chip" href="#mount">Mounting as a disk</a></li>
@@ -81,6 +82,25 @@
           <img class="hero-shot" src="/img/shots/macos-dashboard.webp" width="1600" height="815" decoding="async"
                alt="The CloudDrive2 console: total capacity across the connected clouds, with entries for files, cloud storage, mounts, backups, tasks, WebDAV, API tokens and devices.">
         </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="media-120" aria-labelledby="media-120-h">
+      <div class="container container-narrow">
+        <header class="band-head"><p class="eyebrow">1.2.0 public beta</p><h2 id="media-120-h">Set up the 1.2.0 media features</h2></header>
+        <p>Use App and core 1.2.0-beta or later. Serving libraries requires App Pro and a Monthly, Yearly or full Lifetime core plan; Lifetime Lite is excluded. A client app needs App Pro.</p>
+        <ol>
+          <li>Update the serving device, then open Media Server in its settings. Select or create the sync folder, add library folders and enable serving. Keep that device running and allow the initial scan to finish.</li>
+          <li>In a client app, open Settings → Media Libraries → Use a media server, select the discovered server or enter its address, then complete pairing. Choose the viewer whose progress and favorites you want to use.</li>
+          <li>In the browser, open the core’s Media interface to browse its library. To play a file without a media library, open it from Files using the independent web player.</li>
+          <li>For background subtitles, configure speech recognition and translation on the server, then submit a film, episode or season from its detail page. These jobs do not require playback; the media server does not provide live AI subtitles during playback.</li>
+        </ol>
+        <p>Adding another CloudDrive instance as a storage provider with an API token exposes its files. This is separate from pairing with its media server, and does not copy all app settings.</p>
+        <p>Tasks now includes cloud API request rates, showing each account’s requests per second. When adding an older SFTP server, the optional Allow legacy algorithms setting can improve compatibility; it is off by default.</p>
+        <h3>Playback or connection problems</h3>
+        <p>With default browser settings, an ordinary HTTP address may lack WebCodecs and WebGPU acceleration, causing 4K HEVC to stutter. Prefer HTTPS or localhost; Chrome and Edge also support a trusted-address workaround described in the guide. <a href="/en/web-player.html#chrome-secure-origin">Browser setup</a>.</p>
+        <p>If a library cannot connect, check that the serving device is running, Media Server is enabled, both required memberships are active and the address is reachable from this device. Report the app/core versions, device and OS, steps to reproduce, and relevant logs. For playback, include the video/audio format and browser or audio output device.</p>
+        <p><a href="/en/media-server.html">Detailed media-server guide</a> · <a href="/en/ai-translation.html#server-background">Background AI subtitles</a> · <a href="/en/download.html#beta">Beta channels</a></p>
       </div>
     </section>
 

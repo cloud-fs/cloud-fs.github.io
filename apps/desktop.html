@@ -88,6 +88,16 @@
       </div>
     </section>
 
+    <section class="band band-alt" id="media-120" aria-labelledby="media-120-h">
+      <div class="container container-narrow">
+        <header class="band-head"><p class="eyebrow">1.2.0 公开测试</p><h2 id="media-120-h">在 NAS 上管理媒体，在浏览器里播放</h2></header>
+        <p>1.2.0 核心可扫描并提供电影、剧集、音乐和图书媒体库。应用配对后可选择观看用户，在不同设备间继续播放；客户端关闭后，服务器仍可继续扫描和提供媒体库。</p>
+        <p>独立网页播放器在浏览器中解码几乎所有音视频格式，无需服务器端转码，也无需开启媒体服务器。实际性能及 HDR 输出取决于设备和浏览器；在浏览器默认设置下，使用 HTTPS 或 localhost 可启用更多加速能力。</p>
+        <p>可在观看前为影片、单集或整季提交后台字幕生成与翻译任务。低端电视盒子和较老的 ARM32 设备建议使用外部语音识别 API：本地 Whisper 即使使用 Base 模型仍可能很慢，识别准确率也较低。</p>
+        <p>请使用 1.2.0-beta 及以上版本的应用和核心服务。提供媒体服务器需要 App Pro 和核心月费、年费或完整版终身会员，轻享终身会员不含此功能；客户端应用需要 App Pro。</p><p><a href="/media-server.html">媒体服务器设置</a> · <a href="/web-player.html">网页播放器</a> · <a href="/ai-translation.html#server-background">后台字幕</a> · <a href="/download.html#beta">测试版下载</a></p>
+      </div>
+    </section>
+
     <section class="band" aria-labelledby="mount-h">
       <div class="container">
         <header class="band-head">
@@ -208,7 +218,7 @@ http://&lt;主机 IP&gt;:19798          # 局域网里的其它设备</code></pr
           <div>
             <p>Web 界面是这台服务的唯一控制台：Windows 上双击桌面快捷方式打开的是它，
                NAS 和 Docker 上没有图形界面，用的也是它。</p>
-            <p>手机、平板、电视和头显上的 CloudDrive2 应用连接的是同一个服务，在哪一端改的设置，另一端都能看到。</p>
+            <p>各平台应用自带独立核心。添加远程 CloudDrive 云存储可访问本机文件；连接媒体服务器则可浏览本机媒体库。应用自身的设置仍由各设备分别保存。</p>
             <p class="chip-note">这个界面是一个 WebAssembly 应用，浏览器不支持 WebAssembly 就只有白屏。电脑上用较新版本的 Edge、Chrome、Safari 或 Firefox，手机平板上用主流浏览器都可以；IE 不行，电视和机顶盒自带的精简浏览器也多半不行。</p>
             <p><a class="arrow-link" href="/features.html#unified-web-management">统一的多云盘管理</a></p>
           </div>

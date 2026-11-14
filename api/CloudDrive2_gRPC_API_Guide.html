@@ -539,6 +539,23 @@
         html[lang="en"] .lang-text-visible {
             display: none;
         }
+        a:focus-visible, button:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+        .download-btn { font: inherit; cursor: pointer; }
+        .header h1 { margin: 0; }
+        .header button:focus-visible { outline-color: white; }
+        .menu-toggle { display: none; }
+        .main-content { min-width: 0; }
+        .main-content :not(pre) > code, .main-content a { overflow-wrap: anywhere; }
+        .api-table-scroll { overflow-x: auto; }
+        @media (max-width: 768px) {
+            .header { position: static; height: auto; padding: 1rem; flex-wrap: wrap; gap: .75rem; }
+            .header-title { width: 100%; }
+            .header h1 { font-size: 1.15rem; }
+            .menu-toggle { display: inline-flex; }
+            .sidebar { display: none; position: static; width: 100%; height: auto; transform: none; transition: none; }
+            .sidebar.show { display: block; transform: none; }
+            .main-content { margin: 0; padding: 1.25rem; }
+        }
     </style>
 </head>
 <body>
@@ -546,22 +563,24 @@
     <div class="header">
         <div class="header-title">
             <h1>CloudDrive2 gRPC API <span data-lang="zh-CN">开发者指南</span><span data-lang="en" class="lang-text-hidden">Developer's Guide</span></h1>
-            <span class="version-badge">v1.1.2</span>
+            <span class="version-badge">v1.2.0-beta</span>
         </div>
-        <div style="display:flex;align-items:center;gap:0.75rem;">
-            <a class="download-btn" id="download-md-btn" onclick="downloadMarkdown()" title="Download Markdown">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+            <button type="button" class="download-btn menu-toggle" id="api-menu-toggle" aria-expanded="false" aria-controls="api-navigation" onclick="toggleApiNavigation()"><span data-lang="zh-CN">目录</span><span data-lang="en" class="lang-text-hidden">Contents</span></button>
+            <button type="button" class="download-btn" id="download-md-btn" onclick="downloadMarkdown()" title="Download Markdown" aria-label="Download Markdown">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"/><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06Z"/></svg>
                 <span data-lang="zh-CN">MD</span><span data-lang="en" class="lang-text-hidden">MD</span>
-            </a>
+            </button>
             <div class="lang-switcher">
-                <button type="button" class="lang-btn active" onclick="switchLanguage('zh-CN')" id="btn-zh">中文</button>
-                <button type="button" class="lang-btn" onclick="switchLanguage('en')" id="btn-en">English</button>
+                <button type="button" class="lang-btn active" onclick="switchLanguage('zh-CN')" id="btn-zh" aria-pressed="true">中文</button>
+                <button type="button" class="lang-btn" onclick="switchLanguage('en')" id="btn-en" aria-pressed="false">English</button>
             </div>
         </div>
     </div>
 
     <!-- Sidebar Navigation -->
-    <nav class="sidebar">
+    <nav class="sidebar" id="api-navigation" aria-label="API 目录 / API contents">
+        <div class="nav-section"><a href="#" class="nav-link" data-target-en="whats-new-in-120-beta" data-target-zh="120-beta-新增功能"><span data-lang="zh-CN">1.2.0-beta 新增功能</span><span data-lang="en" class="lang-text-hidden">New in 1.2.0-beta</span></a></div>
         <div class="nav-section">
             <div class="nav-section-title" data-lang="zh-CN">快速开始</div>
             <div class="nav-section-title lang-text-hidden" data-lang="en">Quick Start</div>
@@ -618,7 +637,7 @@
     </main>
 
     <!-- Back to Top Button -->
-    <button type="button" class="back-to-top" onclick="scrollToTop()" id="backToTop">
+    <button type="button" class="back-to-top" onclick="scrollToTop()" id="backToTop" aria-label="返回顶部 / Back to top">
         ↑
     </button>
 
@@ -697,6 +716,15 @@
                 console.log('HTML parsed, length:', html.length);
 
                 document.getElementById('markdown-content').innerHTML = html;
+                document.querySelectorAll('#markdown-content table').forEach(table => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'api-table-scroll';
+                    wrapper.tabIndex = 0;
+                    wrapper.setAttribute('role', 'region');
+                    wrapper.setAttribute('aria-label', lang === 'zh-CN' ? '可横向滚动的 API 表格' : 'Scrollable API table');
+                    table.before(wrapper);
+                    wrapper.appendChild(table);
+                });
 
                 // Highlight code blocks
                 document.querySelectorAll('pre code').forEach((block) => {
@@ -794,9 +822,17 @@ dotnet serve</code></pre>
             }
         }
 
+        function toggleApiNavigation() {
+            const open = document.getElementById('api-navigation').classList.toggle('show');
+            document.getElementById('api-menu-toggle').setAttribute('aria-expanded', String(open));
+        }
+
         // Switch language
         function switchLanguage(lang) {
             currentLang = lang;
+            document.getElementById('btn-zh').setAttribute('aria-pressed', String(lang === 'zh-CN'));
+            document.getElementById('btn-en').setAttribute('aria-pressed', String(lang === 'en'));
+            document.getElementById('download-md-btn').setAttribute('aria-label', lang === 'zh-CN' ? '下载 Markdown 文档' : 'Download Markdown');
             document.documentElement.lang = lang;
 
             // Update button states
@@ -952,7 +988,14 @@ dotnet serve</code></pre>
 
             if (target) {
                 // Scroll with offset for fixed header
-                const headerOffset = 80;
+                const mobile = window.matchMedia('(max-width: 768px)').matches;
+                if (mobile) {
+                    document.getElementById('api-navigation').classList.remove('show');
+                    document.getElementById('api-menu-toggle').setAttribute('aria-expanded', 'false');
+                    target.tabIndex = -1;
+                    target.focus({ preventScroll: true });
+                }
+                const headerOffset = mobile ? 16 : 80;
                 const elementPosition = target.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 

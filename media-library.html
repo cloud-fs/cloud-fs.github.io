@@ -125,7 +125,7 @@
               <tr><th scope="row">剧集</th><td>剧集、季和集，包括动画</td><td>NFO 和图片，TMDB，动画还使用 Bangumi</td><td>海报墙、季、集、接下来</td></tr>
               <tr><th scope="row">混合</th><td>电影和剧集放在一起，自动区分</td><td>同上</td><td>电影和剧集的二级分类</td></tr>
               <tr><th scope="row">音乐</th><td>专辑：一个文件夹的音轨、多碟专辑、CUE 整轨、SACD ISO</td><td>音乐文件的标签，CUE，SACD 的光盘信息，MusicBrainz</td><td>专辑、艺术家、文件夹</td></tr>
-              <tr><th scope="row">图书</th><td>EPUB、MOBI、AZW3、CBZ、PDF、TXT，Calibre 书库</td><td>Calibre 的 metadata.opf，图书文件自带的信息，Open Library</td><td>图书、作者、系列、文件夹</td></tr>
+              <tr><th scope="row">图书</th><td>EPUB、MOBI、AZW3、CBZ、CBR、PDF、TXT，Calibre 书库</td><td>Calibre 的 metadata.opf，图书文件自带的信息，Open Library</td><td>图书、作者、系列、文件夹</td></tr>
             </tbody>
           </table>
         </div>
@@ -778,9 +778,9 @@ tv:
         <div class="split">
           <div>
             <h3>格式</h3>
-            <p>EPUB、MOBI、AZW、AZW3、PRC、CBZ 用阅读器打开，PDF 用 PDF 查看器，TXT 用文本查看器。同一本书有多种格式时优先打开 EPUB，其他格式在详情页单独打开。</p>
+            <p>EPUB、MOBI、AZW、AZW3、PRC、CBZ、CBR 用阅读器打开，PDF 用 PDF 查看器，TXT 用文本查看器。同一本书有多种格式时优先打开 EPUB，其他格式在详情页单独打开。</p>
             <h3>文件中的信息</h3>
-            <p>读取 Calibre 的 metadata.opf（包括豆瓣等插件获取的信息）、EPUB、MOBI 和 AZW3 自带的书名、作者、简介和封面，以及 CBZ 漫画的 ComicInfo.xml。只读取需要的部分，不下载整本书；「未知」这类无效值，以及含「微信」「公众号」的广告内容不使用。</p>
+            <p>读取 Calibre 的 metadata.opf（包括豆瓣等插件获取的信息）、EPUB、MOBI 和 AZW3 自带的书名、作者、简介和封面，以及 CBZ / CBR 漫画的 ComicInfo.xml。只读取需要的部分，不下载整本书；「未知」这类无效值，以及含「微信」「公众号」的广告内容不使用。</p>
           </div>
           <div>
             <h3>封面</h3>

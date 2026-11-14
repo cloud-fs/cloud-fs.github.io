@@ -823,3 +823,7 @@ pre code { font-size: inherit; }
   color: var(--text-muted); font-size: .84rem;
 }
 .footer-bottom p { margin: 0; max-width: none; }
+
+/* Long URLs must not widen the page or a grid step on narrow screens. */
+.steps > li { min-width: 0; }
+:not(pre) > code { overflow-wrap: anywhere; }

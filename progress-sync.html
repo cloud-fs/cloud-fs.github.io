@@ -59,6 +59,7 @@
         <h1>同步播放进度</h1>
         <p class="hero-lede">在一台设备上看过一部分的视频，在另一台设备上打开时，从停下的位置继续，音轨、字幕和延迟设置也一起恢复。PDF、文本文件和电子书同步阅读位置。进度保存在你自己选择的云盘中，不经过 CloudDrive 的服务器。</p>
         <ul class="chips">
+          <li><a class="chip" href="#media-server-progress">媒体服务器进度</a></li>
           <li><a class="chip chip-video" href="#what">同步哪些内容</a></li>
           <li><a class="chip" href="#setup">在第一台设备上开启</a></li>
           <li><a class="chip" href="#join">其他设备加入</a></li>
@@ -71,6 +72,15 @@
           <a class="btn btn-primary" href="/apps/">下载应用</a>
           <a class="btn btn-ghost" href="/pricing.html#app-h">App Pro 价格</a>
         </div>
+      </div>
+    </section>
+
+    <section class="band band-alt" id="media-server-progress" aria-labelledby="media-server-progress-h">
+      <div class="container container-narrow">
+        <header class="band-head"><p class="eyebrow">1.2.0 公开测试</p><h2 id="media-server-progress-h">媒体服务器进度与云盘同步的区别</h2></header>
+        <p>下文的云盘目录和上传时机，介绍的是应用中的「同步进度」功能。1.2.0 中，连接的 CloudDrive 媒体服务器也会为当前观看用户保存播放与阅读进度、已看状态和音轨字幕选择。应用和浏览器的媒体界面使用服务器上的记录，不同观看用户的进度相互独立。</p>
+        <p>从浏览器「文件」页打开的图书，阅读位置仍保存在当前浏览器；从服务器媒体库打开的图书会向服务器记录阅读进度，浏览器也可保留更精确的本地位置。跨设备继续阅读时，请连接同一服务器并选择同一观看用户。</p>
+        <p><a href="/media-server.html">媒体服务器设置与会员要求</a></p>
       </div>
     </section>
 
@@ -102,13 +112,13 @@
           </div>
         </div>
 
-        <h3>不同步的内容</h3>
+        <h3>不参加云盘目录同步的内容</h3>
         <ul>
           <li>与屏幕有关的设置：显示模式（适应、裁切、拉伸）、缩放、视频轨道和杜比视界选项、HDR 字幕亮度、播放器内核。</li>
           <li>Emby 和 Jellyfin 中的视频：播放位置由媒体服务器保存。</li>
           <li>只有一台设备能访问的文件：本地文件夹、U 盘、手机存储中的文件。</li>
           <li>全局设置：字幕样式、首选语言、阅读器的视图设置。</li>
-          <li>在核心服务网页版中阅读的电子书：阅读位置只保存在当前浏览器中。</li>
+          <li>从核心服务网页的「文件」页打开的电子书：阅读位置只保存在当前浏览器中。媒体库图书另有服务器进度。</li>
         </ul>
       </div>
     </section>
@@ -118,7 +128,7 @@
         <header class="band-head">
           <p class="eyebrow">开启</p>
           <h2 id="setup-h">在第一台设备上开启</h2>
-          <p>同步播放进度是 App Pro 功能，从应用 1.1.1 起提供，默认关闭。iPhone、iPad、Mac、Apple TV、Apple Vision Pro、Android 手机与电视、Meta Quest 和 Windows 上的应用都可以使用，核心服务的网页管理界面没有这个功能。</p>
+          <p>同步播放进度是 App Pro 功能，从应用 1.1.1 起提供，默认关闭。iPhone、iPad、Mac、Apple TV、Apple Vision Pro、Android 手机与电视、Meta Quest 和 Windows 上的应用都可以使用，核心服务的网页管理界面不参加这项云盘目录同步；媒体界面的服务器进度见上文。</p>
         </header>
         <ol class="steps">
           <li>

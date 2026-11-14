@@ -91,6 +91,16 @@
       </div>
     </section>
 
+    <section class="band band-alt" id="media-120" aria-labelledby="media-120-h">
+      <div class="container container-narrow">
+        <header class="band-head"><p class="eyebrow">1.2.0 public beta</p><h2 id="media-120-h">Media libraries and playback on your NAS</h2></header>
+        <p>The 1.2.0 core can scan and serve films, shows, music and books. Pair your apps to it, choose a viewer and continue watching across devices. The server keeps the library available while client apps are closed.</p>
+        <p>The independent web player decodes almost all audio and video formats in the browser, without server-side transcoding or enabling the media server. Actual performance and HDR output depend on the browser and device. HTTPS or localhost enables more browser acceleration under default settings.</p>
+        <p>Generate and translate subtitles as background jobs before watching, for a film, episode or whole season. Low-end TV boxes and older ARM32 devices should use external speech-recognition APIs: even Whisper Base can be slow and has low recognition accuracy.</p>
+        <p>Use App and core 1.2.0-beta or later. Serving libraries requires App Pro and a Monthly, Yearly or full Lifetime core plan; Lifetime Lite is excluded. A client app needs App Pro.</p><p><a href="/en/media-server.html">Media server setup</a> · <a href="/en/web-player.html">Web player</a> · <a href="/en/ai-translation.html#server-background">Background subtitles</a> · <a href="/en/download.html#beta">Beta downloads</a></p>
+      </div>
+    </section>
+
     <section class="band" aria-labelledby="mount-h">
       <div class="container">
         <header class="band-head">
@@ -224,8 +234,7 @@ http://&lt;host&gt;:19798           # from anything else on the network</code></
             <p>The web UI is the only console this service has: the desktop shortcut on Windows opens it,
                and on a NAS or in Docker, where there is no graphical desktop at all, it is still the
                same page.</p>
-            <p>The CloudDrive2 apps on phones, tablets, TVs and headsets connect to the same service, so a
-               setting changed in one place shows up everywhere.</p>
+            <p>Each native app has its own core. Adding this machine as a CloudDrive storage provider exposes its files; pairing with its media server exposes its libraries. App settings remain device-specific.</p>
             <p class="chip-note">The interface is a WebAssembly application, and a browser without WebAssembly support shows a blank page. Any recent Edge, Chrome, Safari or Firefox on a computer works, as do the mainstream mobile browsers; Internet Explorer does not, and neither do most browsers built into TVs and set-top boxes.</p>
             <p><a class="arrow-link" href="/en/features.html#unified-web-management">One place for every cloud</a></p>
           </div>

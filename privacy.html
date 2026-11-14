@@ -11,7 +11,7 @@
 <body>
   <div class="container py-4">
     <h1>Privacy Policy</h1>
-    <p class="text-muted">Last updated: 26 July 2026</p>
+    <p class="text-muted">Last updated: 14 November 2026</p>
 
     <h2>中文版</h2>
 
@@ -40,13 +40,16 @@
     <p>4.2 <strong>照片与视频权限（READ_MEDIA_IMAGES / READ_MEDIA_VIDEO / READ_MEDIA_AUDIO）</strong>：用于你主动发起的相册备份与媒体文件上传。</p>
     <p>4.3 <strong>前台服务（数据同步 / 媒体播放）</strong>：用于在你切换应用或锁屏时继续进行传输任务与媒体播放。</p>
     <p>4.4 <strong>通知权限</strong>：用于显示传输进度、备份结果与播放控制。</p>
-    <p>4.5 <strong>网络、Wi-Fi 状态与组播</strong>：用于访问云盘、以及在局域网内发现 Emby / Jellyfin 媒体服务器。</p>
+    <p>4.5 <strong>网络、Wi-Fi 状态与组播</strong>：用于访问云盘、以及在局域网内发现 CloudDrive、Emby / Jellyfin 媒体服务器。</p>
     <p>4.6 <strong>USB 主机模式与音频设置</strong>：用于向外接 USB DAC 输出原生 DSD / 比特完美音频。</p>
 
     <h3>5. 第三方服务</h3>
     <p>5.1 <strong>你连接的云盘与存储服务</strong>：当你添加 115、阿里云盘、百度网盘、123云盘、迅雷云盘、天翼云盘、光鸭云盘、Google Drive、OneDrive、S3 / 兼容对象存储、WebDAV、SMB、FTP/SFTP 等服务时，你与这些服务之间的交互受该服务自身的隐私政策约束。</p>
-    <p>5.2 <strong>AI 实时字幕翻译（可选功能）</strong>：本功能可完全在设备端运行。如果你<strong>主动</strong>配置了远程语音识别或翻译服务（例如 OpenAI、Groq、Qwen，或你自建的 Speaches / MTranServer），相应的音频片段或字幕文本会使用<strong>你自己的 API 密钥</strong>发送到<strong>你指定的</strong>服务商，并受该服务商的隐私政策约束。我们不接收也不代理这些数据。</p>
+    <p>5.2 <strong>AI 字幕生成与翻译（可选功能）</strong>：本功能可完全在设备端运行，媒体服务器的后台任务则在你提供服务的设备上处理。如果你<strong>主动</strong>配置了远程语音识别或翻译服务（例如 OpenAI、Groq、Qwen，或你自建的 Speaches / MTranServer），相应的音频片段或字幕文本会使用<strong>你自己的 API 密钥</strong>发送到<strong>你指定的</strong>服务商，并受该服务商的隐私政策约束。我们不接收也不代理这些数据。</p>
     <p>5.3 <strong>Emby / Jellyfin</strong>：你填写的媒体服务器地址与凭证仅保存在本地，用于直接连接你自己的服务器。</p>
+
+    <p>5.4 <strong>CloudDrive 媒体服务器与进度</strong>：开启媒体服务器后，你的服务器向配对的客户端提供媒体库、图片和播放所需的文件，并保存观看用户的收藏、播放与阅读进度。它是你自己运行的设备，不是 CloudDrive 团队的服务器。开启应用中的进度或已扫描资料同步时，相关记录会保存到你选择的云盘同步目录；从网页「文件」页阅读图书的位置保存在当前浏览器。详见<a href="/media-server.html">媒体服务器</a>和<a href="/progress-sync.html">进度同步</a>。</p>
+    <p>5.5 <strong>在线媒体资料</strong>：启用在线资料查询时，识别所需的标题、文件名中的识别信息或媒体标识会发送给所选资料服务（例如 TMDB、MusicBrainz、Open Library），并从这些服务获取简介、人物和图片。可在媒体库设置中关闭自动在线查询；私密媒体库默认不自动查询。详见<a href="/media-library.html">媒体库说明</a>。</p>
 
     <h3>6. 数据存储与安全</h3>
     <p>6.1 账户密码以<strong>哈希</strong>形式保存，我们不保存密码原文；与我们服务器之间的所有通信均使用 HTTPS / TLS 加密传输。</p>
@@ -125,7 +128,7 @@
       running when you switch apps or lock the screen.</p>
     <p>4.4 <strong>Notifications.</strong> Transfer progress, backup results and playback controls.</p>
     <p>4.5 <strong>Network, Wi-Fi state and multicast.</strong> Reaching your clouds, and discovering
-      Emby / Jellyfin servers on your local network.</p>
+      CloudDrive, Emby / Jellyfin servers on your local network.</p>
     <p>4.6 <strong>USB host mode and audio settings.</strong> Native DSD / bit-perfect output to an external
       USB DAC.</p>
 
@@ -134,13 +137,16 @@
       Baidu Pan, 123 Pan, Xunlei Cloud, Tianyi Cloud, GuangYaPan, Google Drive, OneDrive, S3-compatible object
       storage, WebDAV, SMB or FTP/SFTP, your interaction with those services is governed by their own privacy
       policies.</p>
-    <p>5.2 <strong>AI live subtitle translation (optional).</strong> This feature can run entirely on-device.
+    <p>5.2 <strong>AI subtitle generation and translation (optional).</strong> This feature can run entirely on-device; media-server background jobs run on the device you use to serve your library.
       If <strong>you</strong> configure a remote speech-recognition or translation service (for example OpenAI,
       Groq, Qwen, or your own Speaches / MTranServer instance), audio segments or subtitle text are sent to
       <strong>the provider you chose, using your own API key</strong>, and are governed by that provider's
       privacy policy. We neither receive nor proxy this data.</p>
     <p>5.3 <strong>Emby / Jellyfin.</strong> Server addresses and credentials you enter are stored locally and
       used only to connect to your own server.</p>
+
+    <p>5.4 <strong>CloudDrive media servers and progress.</strong> When you enable serving, your server provides library metadata, artwork and playback files to paired clients, and stores each viewer’s favorites and playback or reading progress. This is your own device, not a server operated by the CloudDrive team. App progress and scanned-data sync, when enabled, store records in your chosen cloud sync folder. Books opened from the web Files page keep their position in that browser. See <a href="/en/media-server.html">Media server</a> and <a href="/en/progress-sync.html">Progress sync</a>.</p>
+    <p>5.5 <strong>Online media information.</strong> When online lookup is enabled, titles, identifying information from filenames or media identifiers needed for matching are sent to the chosen metadata services (such as TMDB, MusicBrainz and Open Library), which provide descriptions, people and artwork. Automatic online lookup can be disabled in library settings; it is off by default for private libraries. See the <a href="/en/media-library.html">media library guide</a>.</p>
 
     <h3>6. Storage and security</h3>
     <p>6.1 Account passwords are stored as a <strong>hash</strong> — we never store the password itself. All

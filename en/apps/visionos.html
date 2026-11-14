@@ -99,6 +99,25 @@
       </div>
     </section>
 
+    <section class="band band-alt" id="beta-120" aria-labelledby="beta-120-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">1.2.0 public beta</p>
+          <h2 id="beta-120-h">What’s new in 1.2.0</h2>
+          <p>These features are in the 1.2.0 public beta. Use CloudDrive2 App 1.2.0-beta or later with a 1.2.0-beta or later media server. <a href="/en/download.html#beta">Downloads and beta channels</a>.</p>
+        </header>
+        <ul class="card-grid card-grid-2">
+          <li><a class="card" href="/en/media-server.html"><h3>Connect to a media server</h3><p>Let a computer or NAS scan films, shows, music and books, then pair the app to browse with viewer profiles, favorites and Continue Watching. The app can also serve the libraries organized on this device.</p></a></li>
+          <li><a class="card" href="/en/media-library.html"><h3>Library browsing and metadata</h3><p>Filter by video, HDR, audio and subtitle availability, and browse related works on people pages. Read local season NFO files and posters, including a poster for a single-season show. Audio and subtitle choices follow each title.</p></a></li>
+          <li><a class="card" href="/en/ai-translation.html#server-background"><h3>Background AI subtitles</h3><p>Submit films, episodes or whole seasons for subtitle generation and translation. View processing time, pause, resume and reorder waiting jobs. A connected media server processes the jobs without playing the video.</p></a></li>
+          <li><div class="card"><h3>Players and readers</h3><p>Video adds A–B repeat and total/remaining time. Music brings lyrics, queues and album information together. Read CBR comics and view still or animated JPEG XL images.</p></div></li>
+          <li><div class="card"><h3>Listening rooms and home theater</h3><p>Browse albums, lyrics, queues and music details in the listening room. Home theater plays sound through room speakers and keeps subtitles aligned with the screen, with updated immersive controls and pop-up panels.</p></div></li>
+          <li><a class="card" href="/en/accessibility.html"><h3>Accessible controls</h3><p>Improved keyboard and screen-reader access to media titles, filters and playback controls. Include your device, OS and screen reader when reporting a problem.</p></a></li>
+        </ul>
+        <p class="chip-note">Connecting to a server requires App Pro. Serving this device’s libraries requires App Pro and an eligible core plan (monthly, yearly or full Lifetime; Lifetime Lite is excluded). Keep the serving device running; background availability depends on the operating system. <a href="/en/pricing.html#media-server-h">Membership details</a></p>
+      </div>
+    </section>
+
     <section class="band" aria-labelledby="cloud-h">
       <div class="container">
         <header class="band-head">
@@ -198,8 +217,8 @@
                render as head-tracked spatial audio — the whole surround bed placed around you, never a
                stereo fold-down. It works through Vision Pro's own audio and with AirPods Pro and Max.</p>
             <p>Multichannel DSD does the same: 5.1 SACD ISO, .dsf and .dff play in true surround. Plus
-               FLAC, WAV and ALAC, and DSD playback up to DSD1024 with DoP output.</p>
-            <p class="chip-note">DSD64 through DSD1024 are all supported. How far DoP and Native DSD actually go is set by the DAC you connect — the app outputs to what the DAC itself reports, and anything beyond that is converted to PCM.</p>
+               FLAC, WAV and ALAC, and DSD playback up to DSD1024.</p>
+            <p class="chip-note">DSD64 through DSD1024 files are supported and converted to PCM for this platform’s audio output. This does not provide native USB DSD or DoP output.</p>
             <ul class="chips">
               <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
               <li><span class="chip chip-audio">Multichannel SACD ISO</span></li>
@@ -241,9 +260,9 @@
     <section class="band band-alt" id="media-library" aria-labelledby="library-h">
       <div class="container">
         <header class="band-head">
-          <p class="eyebrow">Media library · New in app 1.1.3</p>
+          <p class="eyebrow">Media library · App 1.1.3 and later</p>
           <h2 id="library-h">Your cloud's films, organized into a library</h2>
-          <p>Choose folders in your cloud storage, and the app turns the films, shows, music and books in them into a library with posters, plots and cast, with no Emby, Jellyfin or Plex server to set up. The media library is an App Pro feature. The App Store version of 1.1.3 is in review and will update once approved; until then it can be installed through <a href="https://testflight.apple.com/join/SzcsXXSp" rel="noopener">TestFlight</a>.</p>
+          <p>Choose folders in your cloud storage, and the app turns the films, shows, music and books in them into a library with posters, plots and cast, with no Emby, Jellyfin or Plex server to set up. The media library is an App Pro feature.</p>
         </header>
         <ul class="card-grid">
           <li><div class="card">
@@ -370,7 +389,7 @@
           <li><div class="card">
             <i class="fa-solid fa-book-open card-icon" aria-hidden="true"></i>
             <h3>E-books</h3>
-            <p>EPUB, MOBI, AZW3 and CBZ files open straight from the cloud, without downloading the whole book. There is a table of contents, font size, line spacing, margins and themes; turn pages one at a time or scroll continuously, and vertical books work too. Tap either side of the page or swipe to turn it. The reading position syncs across your devices through <a href="/en/progress-sync.html">progress sync</a> (App Pro). Books with DRM and Kindle KFX books can't be read.</p>
+            <p>EPUB, MOBI, AZW3, CBZ and CBR files open straight from the cloud, without downloading the whole book. There is a table of contents, font size, line spacing, margins and themes; turn pages one at a time or scroll continuously, and vertical books work too. Tap either side of the page or swipe to turn it. The reading position syncs across your devices through <a href="/en/progress-sync.html">progress sync</a> (App Pro). Books with DRM and Kindle KFX books can't be read.</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-music card-icon" aria-hidden="true"></i>
@@ -380,7 +399,7 @@
           <li><div class="card">
             <i class="fa-solid fa-sliders card-icon" aria-hidden="true"></i>
             <h3>And these</h3>
-            <p>Library metadata from local .nfo files and artwork in Plex, Jellyfin and Emby naming (no online scraping), disk cache with configurable eviction, independent audio and subtitle delay, dark and light themes, English and Chinese interfaces.</p>
+            <p>Library metadata from local .nfo files and artwork in Plex, Jellyfin and Emby naming (with optional online lookup in media libraries), disk cache with configurable eviction, independent audio and subtitle delay, dark and light themes, English and Chinese interfaces.</p>
           </div></li>
         </ul>
       </div>
