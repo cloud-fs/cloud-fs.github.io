@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AI 字幕翻译 — CloudDrive2</title>
-  <meta name="description" content="CloudDrive2 应用的 AI 字幕翻译：翻译视频已有的字幕轨道，或对音频进行语音识别后翻译；各平台的设备端模型与远程 API，输出格式与双语字幕，保存与复用，Emby / Jellyfin 媒体客户端，整个文件夹批量生成，以及常见问题。">
+  <meta name="description" content="CloudDrive2 AI 字幕：应用内播放时翻译、设备上的批量生成，以及媒体服务器后台生成。了解服务器设置、任务队列、模型与 API、字幕保存、格式限制和低性能设备建议。">
   <link rel="canonical" href="https://www.clouddrive2.com/ai-translation.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/ai-translation.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/ai-translation.html">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CloudDrive2">
   <meta property="og:title" content="AI 字幕翻译 — CloudDrive2">
-  <meta property="og:description" content="为视频生成同步显示的翻译字幕：翻译已有字幕轨道，或识别音频后翻译。可使用设备端模型，也可以接入自己的 API。">
+  <meta property="og:description" content="在应用内翻译字幕，或由媒体服务器在后台生成并保存字幕文件。支持本地模型与自选 API；低性能设备强烈建议使用外部语音识别 API。">
   <meta property="og:url" content="https://www.clouddrive2.com/ai-translation.html">
   <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -57,7 +57,8 @@
       <div class="container">
         <p class="eyebrow">App Pro 功能</p>
         <h1>AI 字幕翻译</h1>
-        <p class="hero-lede">为视频生成翻译字幕，播放时与画面同步显示。视频有字幕轨道时直接翻译字幕；没有字幕时，先对音频进行语音识别，再翻译。生成的字幕保存在视频所在的文件夹中，其他设备打开同一个视频时直接加载。</p>
+        <p class="release-line">1.2.0 公开 Beta 测试：新增媒体服务器后台字幕生成；应用中的实时字幕仍按各平台的支持范围提供。</p>
+        <p class="hero-lede">可以在 CloudDrive2 应用播放时翻译字幕，也可以提前在设备或媒体服务器上批量生成。翻译已有的字幕文字，或先识别音频再翻译；保存到视频旁边的字幕文件可以供其他设备和播放器使用。媒体服务器只在后台生成字幕，不提供播放中的实时字幕。</p>
         <ul class="chips">
           <li><a class="chip chip-subs" href="#source">翻译来源</a></li>
           <li><a class="chip" href="#platforms">各平台的模型</a></li>
@@ -66,7 +67,8 @@
           <li><a class="chip" href="#output">SRT 与 ASS 双语</a></li>
           <li><a class="chip" href="#reuse">保存与复用</a></li>
           <li><a class="chip" href="#media-client">Emby / Jellyfin</a></li>
-          <li><a class="chip" href="#batch">批量生成</a></li>
+          <li><a class="chip" href="#batch">应用批量生成</a></li>
+          <li><a class="chip" href="#server-background">服务器后台生成</a></li>
           <li><a class="chip" href="#privacy">隐私</a></li>
           <li><a class="chip" href="#faq">常见问题</a></li>
         </ul>
@@ -82,17 +84,18 @@
         <div class="port-card">
           <div>
             <p class="eyebrow">适用范围</p>
-            <h2 id="scope-h">哪些应用可以使用</h2>
+            <h2 id="scope-h">应用与媒体服务器</h2>
           </div>
           <div>
             <p>iPhone、iPad、Mac、Apple TV、Apple Vision Pro、Windows、Android 手机与电视，以及 Meta Quest 上的 CloudDrive2 应用都可以使用。AI 字幕翻译属于 <strong>App Pro</strong>，一次购买，登录同一个 CloudDrive 账号的所有设备都可以使用。</p>
+            <p>1.2.0-beta 标准核心还提供<a href="#server-background">媒体服务器后台字幕任务</a>，可以从网页或连接服务器的应用添加。服务器账号需要同时拥有 App Pro 和包含媒体服务器的核心会员（月费、年费或终身版，轻享终身版不含），见<a href="/media-server.html#plans">媒体服务器会员要求</a>。</p>
             <p>AI 翻译的结果可能不完全准确，质量取决于所用的模型。</p>
           </div>
         </div>
 
         <div class="note">
           <span class="note-title">CloudDrive2 不提供语音识别或翻译服务</span>
-          <p>语音识别和翻译由两种方式完成：你的设备自带的模型，或你自己配置的外部 API。CloudDrive2 不运营任何语音识别或翻译服务器，也不代你调用这类服务。使用外部 API 时，需要你自己向服务商申请 API 密钥，费用和数据处理由该服务商负责。</p>
+          <p>语音识别和翻译由设备上的模型、你自己的媒体服务器或你配置的外部 API 完成。CloudDrive2 官方不运营语音识别或翻译服务，也不代理这些请求。使用外部 API 时，需要你自己向服务商申请 API 密钥，费用和数据处理由该服务商负责。</p>
         </div>
       </div>
     </section>
@@ -123,6 +126,8 @@
           </div></li>
         </ul>
 
+        <p class="chip-note">以上为应用中的翻译来源。服务器的「自动」只优先使用匹配源语言的内嵌文本字幕；服务器不识别 PGS 等图形字幕，详见<a href="#server-formats">服务器的来源与格式限制</a>。</p>
+
         <p class="chip-note">「源语言」是视频中所说的语言，「目标语言」是要生成的字幕语言。两者在设置里有默认值，也可以为每个视频单独选择。选择具体的源语言，识别更准确。</p>
       </div>
     </section>
@@ -132,7 +137,7 @@
         <header class="band-head">
           <p class="eyebrow">模型</p>
           <h2 id="platforms-h">各平台的语音识别与翻译</h2>
-          <p>语音识别和翻译是两个独立的步骤，可以分别选择在设备端运行，或使用远程 API。设备端模型免费，音频和字幕文本不离开设备。</p>
+          <p>语音识别和翻译是两个独立的步骤。应用可使用下表中的设备端模型或远程 API；服务器使用自己的 Whisper 模型或外部语音识别 API，翻译另行配置。只在本地运行的步骤不会把对应的音频或文字发送给外部服务。</p>
         </header>
 
         <div class="table-scroll">
@@ -148,6 +153,7 @@
               <tr><th scope="row"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</th><td>设备端（Whisper，模型下载到本机），或远程 API</td><td>远程 API。译为英语时可以直接由 Whisper 在本机完成</td></tr>
               <tr><th scope="row"><i class="fa-brands fa-android" aria-hidden="true"></i>Android 手机、平板与电视</th><td>设备端（Whisper，支持 GPU 加速），或远程 API</td><td>设备端（ML Kit），或远程 API</td></tr>
               <tr><th scope="row"><i class="fa-brands fa-meta" aria-hidden="true"></i>Meta Quest</th><td>设备端（Whisper），或远程 API</td><td>建议使用远程 API</td></tr>
+              <tr><th scope="row"><a href="#server-background">媒体服务器（后台任务）</a></th><td>服务器上的 Whisper，或外部 API</td><td>OpenAI 兼容翻译 API、自建 MTranServer，或「不翻译（保留原话）」</td></tr>
             </tbody>
           </table>
         </div>
@@ -192,9 +198,11 @@
         <p class="chip-note">qwen-audio-3.0-asr-flash、qwen-audio-3.1-asr-flash 和 fun-asr-flash 从应用 1.1.0 起可以使用，见下方的<a href="#remote">远程 API</a>。</p>
 
 
-        <div class="note note-warn">
-          <span class="note-title">关于 Whisper 设备端识别</span>
-          <p>在 Windows、Android 与 Quest 上，能及时运行的较小模型（Tiny、Base、Small）经常听错对白，尤其是有背景音乐时和英语以外的语言，还可能在音乐段重复同一句话，或生成不存在的台词。Turbo 模型更准确，但在大多数手机和电视盒子上速度太慢，跟不上播放，在电脑上需要性能足够的显卡才能跟上。Medium 同样很慢，在上面的测试中准确度也没有超过 Small。</p>
+        <div class="note note-warn" id="whisper-low-end" role="note" aria-labelledby="whisper-low-end-h">
+          <span class="note-title" id="whisper-low-end-h">重要提示：低性能设备强烈建议使用外部语音识别 API</span>
+          <p>电视盒子和部分老旧 ARM32 设备即使启用了 CPU 优化，运行 Whisper Base 模型仍然很慢，生成字幕可能比播放视频耗时更长。Base 模型对影视对白的识别准确度很低，尤其是在有背景音乐或对白不清晰时；速度优化不会提高模型的准确度。</p>
+          <p><strong>在这些设备上，我们强烈建议使用外部语音识别 API，不建议使用本地 Whisper 模型。</strong>见<a href="/ai-translation.html#remote">远程 API 设置</a>。</p>
+          <p>在 Windows、Android 与 Quest 上，较小模型（Tiny、Base、Small）经常听错对白，尤其是有背景音乐时和英语以外的语言，还可能在音乐段重复同一句话，或生成不存在的台词。Turbo 模型更准确，但在大多数手机和电视盒子上速度太慢，跟不上播放，在电脑上需要性能足够的显卡才能跟上。Medium 同样很慢，在上面的测试中准确度也没有超过 Small。</p>
           <p>如需准确的字幕，建议使用远程语音识别接口，或在 iPhone、iPad、Mac 上用 Apple 设备端识别生成字幕并保存到视频旁，再在其他设备上观看。</p>
         </div>
       </div>
@@ -272,7 +280,7 @@
         </div>
 
         <p>填好之后，用「测试语音识别」和「测试翻译」确认接口可用。字幕的句子短、请求频繁，列表中靠前的轻量模型速度快、费用低，通常比大型推理模型更合适。</p>
-        <p class="chip-note">API 密钥只保存在本设备上。使用远程服务产生的费用由对应的服务商收取，与 CloudDrive2 无关。预设的服务和模型会随应用更新调整，以应用内显示的为准。</p>
+        <p class="chip-note">应用本地任务的 API 密钥保存在本设备；服务器任务使用保存在服务器上的密钥，需要在服务器中单独配置。费用由对应服务商收取，与 CloudDrive2 无关。预设列表以当前应用或服务器网页显示的为准。</p>
       </div>
     </section>
 
@@ -280,7 +288,7 @@
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">使用</p>
-          <h2 id="start-h">在播放器里开始翻译</h2>
+          <h2 id="start-h">在应用播放器里开始翻译</h2>
           <p>先在设置的「实时翻译」中打开「AI 实时字幕」，然后播放视频。</p>
         </header>
 
@@ -312,14 +320,14 @@
         <header class="band-head">
           <p class="eyebrow">输出</p>
           <h2 id="output-h">SRT 还是 ASS</h2>
-          <p>在设置向导的第三步「输出格式」中为当前视频选择，或在设置的「实时翻译」中通过「输出格式」设置默认值。</p>
+          <p>应用中，在向导的「输出格式」或「实时翻译」设置中选择。服务器中，在「媒体服务器 → AI 字幕 → 输出」设置默认值，也可以在添加任务时选择。</p>
         </header>
 
         <ul class="card-grid card-grid-2">
           <li><div class="card">
             <i class="fa-solid fa-file-lines card-icon" aria-hidden="true"></i>
             <h3>SRT</h3>
-            <p>纯文本字幕，只包含译文。几乎所有播放器和电视都能读取，适合同时在其他播放器中使用这份字幕。</p>
+            <p>纯文本字幕。翻译时保存译文；服务器选择「不翻译」时保存原文。几乎所有播放器和电视都能读取，适合同时在其他播放器中使用这份字幕。</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-palette card-icon" aria-hidden="true"></i>
@@ -339,7 +347,7 @@
             </thead>
             <tbody>
               <tr><th scope="row">自动换行长字幕 / 每行最多字符数</th><td>把过长的字幕行拆成多行</td></tr>
-              <tr><th scope="row">字幕延迟</th><td>把 AI 字幕整体推后显示，负值则提前。字幕比人声略早出现时，调大这个值。设备端和远程语音识别各有一个值</td></tr>
+              <tr><th scope="row">字幕延迟</th><td>把 AI 字幕整体推后显示，负值则提前。字幕比人声略早出现时，调大这个值。每个语音识别模型分别保存延迟；服务器在自己的 AI 字幕设置中配置</td></tr>
             </tbody>
           </table>
         </div>
@@ -355,6 +363,8 @@
           <h2 id="reuse-h">保存与复用</h2>
           <p>打开「将字幕保存到视频旁」后，生成的字幕文件写入视频所在的云盘文件夹，文件名与视频相同。</p>
         </header>
+
+        <p class="chip-note">服务器任务在完成后自动把字幕写到视频旁边，不使用应用播放器的「将字幕保存到视频旁」开关。服务器必须有目标文件夹的写入权限；详见<a href="#server-output">服务器输出与缓存</a>。</p>
 
         <div class="split">
           <div>
@@ -400,7 +410,7 @@
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">批量</p>
-          <h2 id="batch-h">为整个文件夹生成字幕</h2>
+          <h2 id="batch-h">在应用中为整个文件夹生成字幕</h2>
           <p>在文件夹或视频的菜单中选择「生成 AI 字幕」。字幕在后台逐个生成，不需要播放视频，生成后保存在各个视频旁边。</p>
         </header>
 
@@ -415,6 +425,58 @@
       </div>
     </section>
 
+    <section class="band" id="server-background" aria-labelledby="server-background-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">1.2.0-beta · 媒体服务器</p>
+          <h2 id="server-background-h">由服务器在后台生成字幕</h2>
+          <p>网页和连接媒体服务器的 CloudDrive2 应用可以把影片、剧集或多个所选条目加入服务器的字幕队列。任务使用服务器自己的资源、设置和 API 密钥。提交后可以关闭浏览器或客户端，服务器保持运行即可继续生成；它不会向播放器实时发送新生成的字幕。</p>
+        </header>
+        <div class="note note-warn" role="note" aria-labelledby="server-api-advice-h">
+          <span class="note-title" id="server-api-advice-h">低性能设备：强烈建议使用外部语音识别 API</span>
+          <p>电视盒子和部分老旧 ARM32 设备即使启用了 CPU 优化，Whisper Base 仍然很慢，对影视对白的识别准确度也很低。加速不会改善模型准确度。我们强烈建议在这些设备上使用外部语音识别 API，不使用本地 Whisper；详见<a href="#whisper-low-end">重要提示</a>和<a href="#remote">API 设置</a>。</p>
+        </div>
+
+        <h3 id="server-setup">设置与添加任务</h3>
+        <ol class="steps">
+          <li><h3>准备媒体服务器</h3><p>使用 1.2.0-beta 标准核心，按<a href="/media-server.html">媒体服务器指南</a>启用服务并准备媒体库。服务器账号需要 App Pro 和包含媒体服务器的核心会员。无媒体的兼容构建不提供此功能。</p></li>
+          <li><h3>打开 AI 字幕并配置服务</h3><p>在网页「媒体服务器 → AI 字幕」中打开开关，设置源语言、目标语言和翻译来源。语音识别选外部 API 或服务器上的 Whisper；翻译选 OpenAI 兼容服务、自建 MTranServer，或「不翻译（保留原话）」。在这里填写服务器使用的接口地址、模型和密钥，应用播放器的设置不会自动替代它们。</p></li>
+          <li><h3>测试语音识别与翻译</h3><p>用「测试语音识别」和「测试翻译」检查服务。选择 Whisper 时，先下载模型；测试显示处理 25 秒音频所需的时间、线程数和 CPU / GPU。低于 1 倍仍可后台生成，但等候时间更长。显卡加速是否可用取决于服务器构建和驱动；ARM32 CPU 加速在支持的处理器上自动启用，<a href="/docker.html#ai-subtitles">Docker 无需额外加速参数</a>。</p></li>
+          <li><h3>从媒体库添加视频</h3><p>在影片或剧集详情页选择「生成 AI 字幕」，或选中多个条目后操作。确认语言、翻译来源、服务和输出格式，再加入队列。剧集、季会展开为分集，多段电影分别生成字幕。连接服务器的应用在此处添加的任务交给服务器执行，不在手机或电视本地执行。</p></li>
+        </ol>
+        <p class="chip-note">接口地址必须能从服务器访问。在 Docker 中，<code>localhost</code> 指当前容器的网络环境；使用其他设备上的 Ollama、LM Studio、Speaches 或 MTranServer 时，请填写服务器可访问的地址。云端服务的 API 费用由服务商另行收取。</p>
+
+        <h3 id="server-formats">翻译来源与格式限制</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">媒体服务器后台字幕任务支持的来源与限制</caption>
+            <thead><tr><th scope="col">项目</th><th scope="col">服务器行为</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">自动</th><td>优先使用内嵌、非强制且匹配源语言的文本字幕；没有匹配字幕时识别音频。建议明确选择实际的源语言。</td></tr>
+              <tr><th scope="row">现有字幕</th><td>翻译视频内的文本字幕；找不到可用文本轨时跳过该任务，不改为语音识别。服务器不对 PGS 等图形字幕做 OCR，也不把视频旁的外挂字幕作为翻译输入。</td></tr>
+              <tr><th scope="row">音频（语音识别）</th><td>优先选择匹配源语言的可解码音轨，否则选默认音轨或第一条可用音轨。5.1 / 7.1 音轨可以使用「仅对白声道」。</td></tr>
+              <tr><th scope="row">视频与光盘</th><td>支持可解码音轨的 MKV / WebM、MP4 / MOV、TS / M2TS，以及蓝光 ISO 和 BDMV 文件夹的主标题。服务器后台生成不支持 DVD；不支持的文件或音轨会在任务中给出原因。</td></tr>
+              <tr><th scope="row">跳过已有字幕的视频</th><td>服务器检查视频旁是否已有匹配文件名的字幕文件。仅有内嵌字幕不会触发此项，可以继续用于翻译。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>服务器上的 Whisper 用于语音识别，不调用手机上的 Apple 或 ML Kit 模型。选择本地 Whisper 也不等于翻译在本地完成：翻译使用单独配置的服务；选择「不翻译」才保留识别或读取出的原文。</p>
+
+        <h3 id="server-queue">管理任务与性能</h3>
+        <ul>
+          <li>网页「任务 → AI 字幕」显示正在运行、暂停、等待和已结束的任务，以及进度、耗时、识别速度、读取与翻译耗时、下载量和失败原因。</li>
+          <li>可以暂停或恢复整个队列，也可以单独暂停一个任务，让其他任务继续；可以取消、重试、移除任务或清除已结束记录。等待中的任务可以上移、下移、置顶或置底。</li>
+          <li>「同时处理的视频数」默认 1，最多 4。使用外部语音识别服务且读取不同文件的任务可以并行；使用本地 Whisper 的任务始终单独运行。「低优先级」减少 CPU 线程数，让服务器有更多资源处理其他工作。</li>
+          <li>暂停时保留已经处理的内容，恢复时在缓存兼容的情况下继续。关闭服务器的「AI 字幕」开关会停止队列并禁止添加新任务；关闭提交任务的浏览器不会暂停服务器。</li>
+          <li>服务器管理员和所有者设备管理队列与服务密钥；使用配对码或观看者身份连接的设备只能为自己可见的媒体添加任务，不能管理整个队列。</li>
+        </ul>
+
+        <h3 id="server-output">输出、保存与缓存</h3>
+        <p>支持 SRT 和 ASS，ASS 可显示原文与译文。完成后自动保存为 <code>视频名.目标语言.ai.srt</code> 或 <code>.ai.ass</code>，写入视频所在的文件夹；蓝光任务写入光盘 ISO 或蓝光文件夹旁边。需要目标位置可写，写入失败会显示在任务中。同名的已生成字幕会被替换；开启「跳过已有字幕的视频」可避免再次生成。</p>
+        <p>服务器保存未完成任务的工作副本、下载的 Whisper 模型，以及每个语音识别模型的字幕延迟。在「媒体服务器 → AI 字幕 → 存储」中可以清除工作副本或删除模型。清除工作副本会失去相关任务已做的进度，但不会删除视频旁已经保存的字幕；所需模型可以重新下载。</p>
+      </div>
+    </section>
+
     <section class="band" id="privacy" aria-labelledby="privacy-h">
       <div class="container">
         <header class="band-head">
@@ -422,6 +484,7 @@
           <h2 id="privacy-h">数据发送到哪里</h2>
         </header>
         <p>语音识别和翻译都在设备端运行时，音频和字幕文本不会离开你的设备。</p>
+        <p>服务器后台任务由你自己的媒体服务器读取视频。使用服务器上的 Whisper 时，音频不发送给外部语音识别服务；如果翻译配置了外部 API，字幕文字仍会发送给该服务。服务器的密钥、模型和未完成任务缓存保存在服务器的数据目录，Docker 用户应持久保存该目录。</p>
         <p>使用远程 API 时，音频片段或字幕文本会发送到你配置的服务，由该服务按它自己的隐私政策处理。我们不接收也不代理这些数据。详见<a href="/privacy.html">隐私政策</a>。</p>
       </div>
     </section>
@@ -436,14 +499,14 @@
         <details class="acc">
           <summary><i class="fa-solid fa-crown" aria-hidden="true"></i>需要购买什么</summary>
           <div class="acc-body">
-            <p>AI 字幕翻译属于 App Pro。App Pro 绑定 CloudDrive 账号，一次购买，在所有平台上登录同一个账号都可以使用。价格见<a href="/pricing.html#app-h">会员页</a>。使用远程 API 产生的费用由对应的服务商另行收取。</p>
+            <p>AI 字幕翻译属于 App Pro。App Pro 绑定 CloudDrive 账号，一次购买，在所有平台上登录同一个账号都可以使用。价格见<a href="/pricing.html#app-h">会员页</a>。媒体服务器后台生成还要求服务器账号拥有包含媒体服务器的核心会员，见<a href="/media-server.html#plans">服务器会员要求</a>。使用远程 API 产生的费用由对应的服务商另行收取。</p>
           </div>
         </details>
 
         <details class="acc">
           <summary><i class="fa-solid fa-clock" aria-hidden="true"></i>字幕比人声早出现或晚出现</summary>
           <div class="acc-body">
-            <p>在设置的「实时翻译」中调整「字幕延迟」。字幕比人声早，调大这个值；比人声晚，调小或设为负值。设备端和远程语音识别各有一个值。</p>
+            <p>在设置的「实时翻译」中调整「字幕延迟」。字幕比人声早，调大这个值；比人声晚，调小或设为负值。每个语音识别模型分别保存延迟。服务器任务的延迟在「媒体服务器 → AI 字幕」中按语音识别模型设置，与播放器的设置分开保存。</p>
           </div>
         </details>
 
@@ -464,7 +527,7 @@
         <details class="acc">
           <summary><i class="fa-solid fa-bolt" aria-hidden="true"></i>翻译速度跟不上播放</summary>
           <div class="acc-body">
-            <p>识别音频比翻译字幕慢得多。视频有字幕轨道时，把翻译来源设为「自动（优先字幕）」或「字幕轨道」。识别音频时，可以换用较小的 Whisper 模型、在 Android 上打开 GPU 加速，或改用远程语音识别服务。也可以先用<a href="#batch">批量生成</a>在后台生成字幕，之后再观看。</p>
+            <p>识别音频比翻译字幕慢得多。视频有可用文本字幕时，优先翻译字幕。低性能电视盒子和老旧 ARM32 设备强烈建议使用外部语音识别 API；较小的 Whisper Base 仍可能很慢，准确度也很低。可以先用<a href="#batch">应用批量生成</a>或<a href="#server-background">服务器后台生成</a>完成字幕，再播放视频。服务器后台任务不要求生成速度达到播放速度。</p>
           </div>
         </details>
 

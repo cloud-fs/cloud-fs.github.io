@@ -73,6 +73,7 @@
       <div class="container">
         <p class="eyebrow">App Pro feature</p>
         <h1>Media library</h1>
+        <p class="release-line">Local media libraries are already available. Media-server connections, season metadata and poster updates, and server background subtitles are in public beta in 1.2.0.</p>
         <p class="hero-lede">Choose folders in your cloud storage, and the CloudDrive2 app turns the films, shows, music and books in them into libraries with posters, plots and cast. No Emby, Jellyfin or Plex server is needed: NFO files and artwork already in the folders come first, and what they leave out can be looked up on TMDB and other sites; if you already run an Emby or Jellyfin server, you can import its libraries. The results stay on your own devices, and can sync across them through your own cloud storage.</p>
         <ul class="chips">
           <li><a class="chip chip-video" href="#types">Library types</a></li>
@@ -138,13 +139,14 @@
               <li><strong>Featured</strong>: a carousel at the top of Home with titles from Continue Watching, Next Up and the newest in each library. Titles of a locked private library, and titles above parental control's rating limit while locked, are never featured.</li>
               <li><strong>Search</strong>: translated and alternative titles are found too, and accents and Traditional or Simplified Chinese don't matter. A song is found once its album's page has been opened.</li>
               <li><strong>Favorites</strong>: Favorites, between Home and Search in the sidebar (in the tab bar at the bottom on phones and iPad), lists the titles and people you favorited. Favorites are kept apart from library data, so Clear library data and a rescan keep them, and they sync with <a href="#sync">Sync libraries across devices</a>.</li>
+              <li><strong>Show in Files</strong>: the page of a film, an episode, an album or a book opens the file browser in the folder that holds its file, with the file selected and scrolled into view. A film selects its video file (a disc its BDMV or VIDEO_TS folder); a show and an album folder open their own folder. Hidden while parental control is locked.</li>
             </ul>
           </div>
           <div>
             <h3>Devices</h3>
-            <p>The CloudDrive2 apps on iPhone, iPad, Mac, Windows PCs, Apple TV, Apple Vision Pro, Android phones, tablets and TVs, and Meta Quest. Each device builds its libraries itself; no server has to stay on.</p>
-            <p>The features are the same on every device, with these differences: the Emby API isn't on Meta Quest; Apple TV can't import from Emby or Jellyfin, but shows libraries another device imported; on Apple TV and Android TV, person pages leave out the links and Scan again has no custom interval; on Apple TV, Edit metadata… changes text only, and on Android TV its pictures come only from your cloud storage; Android has no video-track picker, and no picking several titles or right-click menu; Windows doesn't have show status, Use a video frame when there's no poster or .strm files yet. Smaller differences are noted where they matter.</p>
-            <p>The core service's web interface doesn't show libraries. It has a Titles to Confirm page where you can confirm, in a browser, the titles the automatic match wasn't sure about. See <a href="#web">Confirming on the web</a>.</p>
+            <p>The CloudDrive2 apps on iPhone, iPad, Mac, Windows PCs, Apple TV, Apple Vision Pro, Android phones, tablets and TVs, and Meta Quest. Each device builds its libraries itself; no server has to stay on. The core service on a computer or NAS can also work as a <a href="/en/media-server.html">media server</a>, scanning once for all your devices and other players; without a computer or NAS that is always on, <a href="/en/media-server.html#app-serve">the app on one device can serve its libraries</a> instead.</p>
+            <p>The features are the same on every device, with these differences: the Emby API isn't on Meta Quest; Apple TV can't import from Emby or Jellyfin, but shows libraries another device imported; on Apple TV and Android TV, person pages leave out the links and Scan again has no custom interval; on Apple TV, Edit metadata… changes text only, and on Android TV its pictures come only from your cloud storage; Android has no video-track picker, and no picking several titles or right-click menu. Smaller differences are noted where they matter.</p>
+            <p>The core service's web interface has a Titles to Confirm page, and with the <a href="/en/media-server.html#web">media server</a> on it can browse and play the libraries too. On Titles to Confirm you can confirm, in a browser, the titles the automatic match wasn't sure about. See <a href="#web">Confirming on the web</a>.</p>
             <h3>App Pro</h3>
             <p>The whole media library needs App Pro: adding and editing libraries, online info, identifying titles, saving info and artwork, syncing across devices, and browsing and playing in the Media interface.</p>
           </div>
@@ -170,13 +172,13 @@
               <tr><th scope="row">Type</th><td>Movies</td><td>Movies, TV Shows, Mixed, Music or Books. A Movies library never treats a folder as a show. In a TV Shows library, every folder with videos is a show. A Mixed library tells them apart.</td></tr>
               <tr><th scope="row">Folders</th><td>—</td><td>At least one. Add Folder picks from everything CloudDrive2 can reach, except the root / itself. A folder inside another folder of the same library is dropped. Removing a folder doesn't delete its files.</td></tr>
               <tr><th scope="row">Private Library</th><td>Off</td><td>Shown only after the PIN is entered; see <a href="#private">Private libraries</a>. The first private library asks you to set a PIN.</td></tr>
-              <tr><th scope="row">Look up online</th><td>On for a normal library, off for a private one</td><td>Titles without an NFO are looked up on TMDB; music libraries use MusicBrainz and book libraries Open Library. The matching switch under Online info must be on too. Off: nothing about this library is sent to those sites. Only a title you pick yourself in Identify… is fetched by its id.</td></tr>
-              <tr><th scope="row">Metadata language</th><td>Follow interface</td><td>The language a video library's titles, plots and people are fetched and shown in: Follow interface, English, Simplified Chinese or Traditional Chinese. See <a href="#scraper">Scraping and matching</a>.</td></tr>
+              <tr><th scope="row">Look up online</th><td>On for a normal library, off for a private one</td><td>Titles without an NFO are looked up on TMDB; music libraries use MusicBrainz and book libraries Open Library. The matching switch under Settings → Media Libraries → Identification must be on too (it is on by default). Off: nothing about this library is sent to those sites. Only a title you pick yourself in Identify… is fetched by its id.</td></tr>
+              <tr><th scope="row">Metadata language</th><td>Follow interface</td><td>The language a video library's titles, plots and people are fetched and shown in: Follow interface, English, Simplified Chinese or Traditional Chinese. With Follow interface, switching the interface language shows titles and plots in the new language at once. See <a href="#scraper">Scraping and matching</a>.</td></tr>
               <tr><th scope="row">Prefer online info</th><td>Off</td><td>Titles, plots and artwork come from TMDB even when .nfo files or pictures sit beside the media; those are used only where TMDB has nothing. An .nfo's TMDB or IMDb id still decides which title it is. Needs Look up online.</td></tr>
               <tr><th scope="row">Save info and artwork beside the media</th><td>Off</td><td>Writes .nfo files, posters and backdrops into the library's folders, for Kodi, Jellyfin, Emby and Infuse. Sub-options: Copies for Infuse, and Actor photos (.actors folder). Music libraries get album.nfo and the album cover, and book libraries an OPF and the cover. See <a href="#sidecars">Saving NFO and artwork</a>.</td></tr>
               <tr><th scope="row">Detect media info while identifying</th><td>On</td><td>Reads the start of each video file as its title is identified, for its resolution, HDR and audio tracks. The device that scans this library does it. Off: only devices with Detect media info in the background on detect it. Video libraries only. See <a href="#mediainfo">Media info</a>.</td></tr>
-              <tr><th scope="row">Use a video frame when there's no poster</th><td>Off</td><td>A film with no picture at all, or an episode with no still, shows a frame of its video. The cloud's own video thumbnail is used when it has one; otherwise a small part of the video is read for a frame when the title first shows on screen, once per video. Disc images work too: Blu-ray and DVD ISOs on Apple devices, Blu-ray ISOs only on Android devices and Meta Quest, none on 32-bit TV boxes; Blu-ray and DVD folders and .strm files get no frame. Video libraries only; not on Windows yet.</td></tr>
-              <tr><th scope="row">Listing speed</th><td>2 per second</td><td>Folder listings per second while this library is read. A cloud storage can block an account that lists too fast, and every CloudDrive on the same storage account shares the allowance. This device only.</td></tr>
+              <tr><th scope="row">Use a video frame when there's no poster</th><td>Off</td><td>A film with no picture at all, or an episode with no still, shows a frame of its video. The cloud's own video thumbnail is used when it has one; otherwise a small part of the video is read for a frame when the title first shows on screen, once per video. Disc images work too: Blu-ray and DVD ISOs on Apple devices, Blu-ray ISOs only on Android devices and Meta Quest, none on 32-bit TV boxes; Blu-ray and DVD folders and .strm files get no frame. Video libraries only.</td></tr>
+              <tr><th scope="row">Listing speed</th><td>2 per second</td><td>Folder listings per second while this library is read. A cloud storage can block an account that lists too fast, and every CloudDrive on the same storage account shares the allowance. It can be 1 to 10 a second, or no limit. This device only.</td></tr>
               <tr><th scope="row">Scan again</th><td>Never</td><td>A library scanned completely isn't scanned again by itself. It can be set to At each start, Every hour, Every day or a custom interval (in hours; not on Apple TV and Android TV, and on Android for video libraries only). Scan now reads the library's folders again right away. This device only. See <a href="#index">Library data</a>.</td></tr>
               <tr><th scope="row">Look up unidentified titles again</th><td>—</td><td>The Look Up Again button, under Scan now. Titles waiting for review, not found on TMDB, or taken for something other than a film or show are looked up again, on every device that syncs. Useful after an update that identifies titles better. Your choices, NFO files and titles already identified stay as they are. Video libraries only.</td></tr>
               <tr><th scope="row">Scan this library on this device</th><td>The device that created the library</td><td>Which device scans the library; your other devices take its scan instead of scanning it again. Turned on, this device scans it from then on; turned off on the device that scans it, any device may, a computer first. Elsewhere the row says Scanned by &lt;device&gt;. Applies while Sync libraries and Sync scanned data are both on. See <a href="#one-scanner">One device scans a library</a>.</td></tr>
@@ -196,10 +198,10 @@
             <h4>Identification</h4>
             <p>These settings stay on the device and don't sync.</p>
             <ul>
-              <li><strong>Look up titles on TMDB</strong>: off by default. When on, titles without an NFO get their poster, plot and cast from TMDB. You don't need your own API key.</li>
+              <li><strong>Look up titles on TMDB</strong>: on by default, so titles without an NFO get their right name, poster, plot and cast from TMDB. You don't need your own API key.</li>
               <li><strong>Look up anime on Bangumi</strong>: on by default; works while TMDB lookup is on.</li>
-              <li><strong>Look up music on MusicBrainz</strong>: off by default. Finds an album's year and a missing cover, the exact release and its credits, and artist pages take their biography and photo from Wikipedia and Wikimedia Commons.</li>
-              <li><strong>Look up books on Open Library</strong>: off by default. Finds a book's year and a missing cover; author pages show a biography from Open Library and Wikipedia.</li>
+              <li><strong>Look up music on MusicBrainz</strong>: on by default. Finds an album's year and a missing cover, the exact release and its credits, and artist pages take their biography and photo from Wikipedia and Wikimedia Commons.</li>
+              <li><strong>Look up books on Open Library</strong>: on by default. Finds a book's year and a missing cover; author pages show a biography from Open Library and Wikipedia.</li>
               <li><strong>AI identification</strong>: off by default. An AI service and model you choose help identify the films, albums and books the rules can't; see <a href="#ai">AI identification</a>.</li>
               <li><strong>API address</strong>: api.tmdb.org by default, which is reachable from mainland China. Or api.themoviedb.org (may not be reachable from mainland China), or your own https address, such as a reverse proxy.</li>
               <li><strong>Image address</strong>: image.tmdb.org by default, or your own.</li>
@@ -215,12 +217,16 @@
             <ul>
               <li><strong>Sync libraries across devices</strong>: see <a href="#sync">Sync across devices</a>.</li>
               <li><strong>Sync scanned data across devices</strong> and the picture packs: see <a href="#sync-data">Sync scanned data</a>.</li>
+              <li><strong>Use a media server</strong>: this device shows the libraries of a media server on a computer or NAS and stops scanning itself; see <a href="/en/media-server.html#apps">Media server</a>.</li>
             </ul>
+            <p>Settings has three more media pages: Media Server serves the libraries this device scans to your other devices (see <a href="/en/media-server.html#app-serve">Libraries served by an app</a>), Emby / Jellyfin connects your Emby and Jellyfin servers, and <a href="/en/progress-sync.html">Sync progress</a>.</p>
             <h4>Scanning &amp; storage</h4>
             <ul>
+              <li><strong>Keep scanning when the app is in the background</strong>: whether scanning, identifying and detecting media info go on while you use other apps. On by default on Apple TV and Android TV, off on phones, tablets, Apple Vision Pro and Meta Quest, where they pause until you come back; on iPhone and iPad they also pause when the screen locks unless Keep Running When Locked is on. Macs and Windows PCs don't have it: work always goes on.</li>
               <li><strong>Libraries read at once</strong>: how many libraries are read and looked up at the same time; 1 by default, so the next library starts when the last one is done.</li>
               <li><strong>Media info</strong>: Detect media info in the background, Wait between files, Pause while a video plays, and Badges on posters; see <a href="#mediainfo">Media info</a>.</li>
               <li><strong>On this device</strong>: the space library data and pictures use; Picture limit, 1 GB by default, from 500 MB to 100 GB, or Unlimited; Clear library data deletes what was read, the details and the pictures, then reads the libraries again, keeping the libraries, identifications and watch progress. See <a href="#index">Library data</a>.</li>
+              <li id="resume"><strong>Minimum and maximum resume percentage</strong>: 5% and 95% by default. A video stopped before the minimum keeps no place to resume from, and the place it had is removed; stopped after the maximum, it is marked watched. A watched video played again keeps its mark, and gets a place to resume from when stopped part way. Seeking back to the start and closing clears the place. For this device only.</li>
             </ul>
             <h4>Advanced</h4>
             <ul>
@@ -302,7 +308,7 @@
             <p><code>{tmdbid=123}</code>, <code>[tmdb-123]</code>, <code>(imdb-tt0113277)</code> or MoviePilot's <code>{[tmdbid=123;type=tv;s=2]}</code> in a file or folder name names the TMDB or IMDb entry, and nothing is searched. When a title is wrong, you can also pick the entry in Identify…, or fix many files at once with <a href="#words">recognition words</a>.</p>
             <h3>Video files</h3>
             <p>mkv, mp4, m4v, mov, avi, wmv, flv, webm, mpg, mpeg, m2ts, mts, ts, vob, rmvb, rm, 3gp, ogv, iso, strm.</p>
-            <p>A .strm file plays the video it points to. When it points to a file in CloudDrive2 (its path, or a CloudDrive2 download or WebDAV link), media info is read from that file too, and playback progress is kept on the .strm file. Windows doesn't read .strm files yet.</p>
+            <p>A .strm file plays the video it points to. When it points to a file in CloudDrive2 (its path, or a CloudDrive2 download or WebDAV link), media info is read from that file too, and playback progress is kept on the .strm file. Also supported on Windows in the 1.2.0 public beta.</p>
           </div>
         </div>
       </div>
@@ -319,6 +325,7 @@
         <div class="split">
           <div>
             <h3>The NFO and artwork you have</h3>
+            <p>The 1.2.0 public beta reads <code>season.nfo</code> in season folders, including season names, overviews, air dates, ratings and artwork references. It also supports root-level artwork such as <code>season01-poster.jpg</code>. Show pages display the season posters together, keeping a season poster separate from the show poster even for a single-season show.</p>
             <p>NFO files, posters, backdrops, logos and season posters written by Kodi, Emby, Jellyfin, tinyMediaManager and similar tools are read. When an NFO has a TMDB or IMDb id, the entry is fetched by that id and nothing is searched.</p>
             <p>The NFO and artwork in the folder come first, and TMDB fills only what they leave out; with the library's Prefer online info on, it is the other way round. What you save with Edit metadata… always comes first.</p>
           </div>
@@ -329,13 +336,14 @@
             <h3>Anime</h3>
             <p>Anime named the fansub way is looked up on Bangumi first, and the bangumi-data table gives the TMDB season and episode it maps to, so anime whose seasons TMDB divides differently still lands on the right episode.</p>
             <h3>Show status</h3>
-            <p>A show's poster carries Continuing or Ended in its bottom-left corner, and its page shows the status after the year; a library's Filter can show only continuing or only ended shows. Like the rest of a show's info, the status comes from <code>&lt;status&gt;</code> in tvshow.nfo first, then TMDB (the other way round with Prefer online info on); a library imported from Emby or Jellyfin uses the server's. Continuing and Returning Series show as Continuing, Ended and Canceled as Ended; a show with no status shows none. Not on Windows yet.</p>
+            <p>A show's poster carries Continuing or Ended in its bottom-left corner, and its page shows the status after the year; a library's Filter can show only continuing or only ended shows. Like the rest of a show's info, the status comes from <code>&lt;status&gt;</code> in tvshow.nfo first, then TMDB (the other way round with Prefer online info on); a library imported from Emby or Jellyfin uses the server's. Continuing and Returning Series show as Continuing, Ended and Canceled as Ended; a show with no status shows none. Also supported on Windows in the 1.2.0 public beta.</p>
           </div>
         </div>
 
         <h3>When titles are looked up</h3>
         <ul>
-          <li>In the background, titles on screen first. Phones and TVs look up only while the app is in front.</li>
+          <li>In the background, titles on screen first. A title not identified yet shows Pending on its poster, and is identified at once when you open its page.</li>
+          <li>Phones, tablets, Apple Vision Pro and Meta Quest scan and look up only while the app is in front by default; TVs go on in the background. See Keep scanning when the app is in the background.</li>
           <li>Titles in Needs review or Not found are looked up again after 7 days, or when their name changes; Look up unidentified titles again, in the library's settings, does it at once.</li>
           <li>With <a href="#sync-data">Sync scanned data across devices</a> on, the results travel to your other devices, which don't look those titles up again.</li>
         </ul>
@@ -348,7 +356,7 @@
         <header class="band-head">
           <p class="eyebrow">Sources</p>
           <h2 id="sites-h">Information sources</h2>
-          <p>Only these public sites are used, and an AI service you choose. Each has its own switch, and only Bangumi is on by default (and it works only once TMDB lookup is on); Wikidata and Wikipedia go with the MusicBrainz and Open Library switches. A library with Look up online off contacts none of them.</p>
+          <p>Only these public sites are used, and an AI service you choose. Each has its own switch: TMDB, Bangumi, MusicBrainz and Open Library are on by default (Bangumi works only while TMDB lookup is on), and the AI service is off; Wikidata and Wikipedia go with the MusicBrainz and Open Library switches. A library with Look up online off contacts none of them.</p>
         </header>
         <div class="table-scroll">
           <table class="matrix-table">
@@ -378,7 +386,7 @@
         <header class="band-head">
           <p class="eyebrow">Confirming</p>
           <h2 id="review-h">Needs review and Identify</h2>
-          <p>Titles that automatic matching can't decide go to Needs review, and play from their files as usual until you confirm them. Problems that <a href="#mediainfo">media info</a> detection finds are listed there too: files that can't be read, and files whose length differs a lot from the matched title.</p>
+          <p>Titles that automatic matching can't decide go to Needs review, and play from their files as usual until you confirm them. Problems that <a href="#mediainfo">media info</a> detection finds are listed there too: files that can't be read, and files whose length differs a lot from the matched title. A title whose files can't be read is marked Can't be read or Empty files on its poster, and Identify… says why, for example that a file is empty (0 bytes) or that the storage didn't send its contents. Such a file is read again a week later, so a replaced file takes its title out of Needs review.</p>
         </header>
         <div class="split">
           <div>
@@ -391,7 +399,7 @@
             <p>For films, albums and books the rules can't identify, an AI model can suggest what to search for. Under Settings → Media Libraries → Identification → AI identification, choose the service, the model and the API key (the same key AI subtitles use), and the libraries the model reads. Private libraries and libraries with Look up online off can't be chosen.</p>
             <ul>
               <li>The model reads an item's path below its library folder and what was read from its files, and gives search terms only. TMDB, MusicBrainz and Open Library are then searched as usual, and the rules above decide.</li>
-              <li>Once on, the model is asked in the background about items not identified yet. Each item's answer is kept on the device; at most 1,000 calls a day.</li>
+              <li>Once on, the model is asked in the background about items not identified yet. Each item's answer is kept on the device. Model calls a day can be chosen (100 to 50,000), typed as a number (not on a TV), or set to no limit; 1,000 by default.</li>
               <li>Ask AI in Identify… shows the model's answer and its evidence. Nothing is saved until you pick a result.</li>
             </ul>
           </div>
@@ -400,7 +408,8 @@
             <p>The core service's web interface has a Titles to Confirm page, handy for clearing in a computer's browser the titles a TV has piled up.</p>
             <ul>
               <li>At least one device needs <a href="#sync">Sync libraries across devices</a> on. The page reads the review lists your devices upload to the CloudDrive2 Sync folder.</li>
-              <li>Pick a candidate, or paste a TMDB link or ID; the page has no title search.</li>
+              <li>With a <a href="/en/media-server.html">media server</a> on that has the title, the card opens the libraries' own Identify… panel: search by title, see more about a candidate, Ask AI, Keep This Match or Not on TMDB.</li>
+              <li>Without a media server, pick a candidate, or paste a TMDB link or ID; the page then has no title search.</li>
               <li>Your devices take the choice the next time they sync.</li>
               <li>Titles of a private library show after you unlock with the PIN.</li>
             </ul>
@@ -529,7 +538,7 @@ tv:
         <header class="band-head">
           <p class="eyebrow">Media info</p>
           <h2 id="mediainfo-h">Media info</h2>
-          <p>Media info is what a video file itself holds: resolution, frame rate, HDR, codecs, audio and subtitle tracks. It feeds the title page's media info card, the poster badges and the Picture and sound filters. Detecting it reads only a small part at the start of a file; whole files are never downloaded.</p>
+          <p>Media info is what a video file itself holds: resolution, frame rate, HDR, codecs, audio and subtitle tracks. It feeds the title page's media info card, the poster badges and the library <a href="#filters">filters</a>. Detecting it reads only a small part at the start of a file; whole files are never downloaded.</p>
         </header>
         <div class="split">
           <div>
@@ -544,13 +553,31 @@ tv:
           </div>
           <div>
             <h3>Where it is used</h3>
-            <p>Media info drives the 4K, Dolby Vision, HDR and Atmos badges on posters (solid when detected, outlined when only the file name says so) and the BD and DVD badges of discs, the Picture and sound filters, the choice of the version best on this device when a film has several, and the Needs review list of files that can't be read or whose length doesn't match. With Save info and artwork beside the media on, detected tracks also go into the NFO. A film in several pieces lists each piece's media info on its page, and its length is compared as all its pieces together.</p>
+            <p>Media info drives the 4K, Dolby Vision, HDR and Atmos badges on posters (solid when detected, outlined when only the file name says so) and the BD and DVD badges of discs, the library filters, the choice of the version best on this device when a film has several, and the Needs review list of files that can't be read or whose length doesn't match. With Save info and artwork beside the media on, detected tracks also go into the NFO. A film in several pieces lists each piece's media info on its page, and its length is compared as all its pieces together.</p>
             <h3>Detected while identifying</h3>
             <p>Each video library's Detect media info while identifying is on by default: the device that scans the library reads the start of each video file as its title is identified, newest titles first, usually about 256 KB a file. With <a href="#sync-data">Sync scanned data</a> on, the results travel, and your other devices don't read the files again.</p>
             <h3>Detect media info in the background</h3>
             <p>For the libraries that don't detect media info while identifying. Under Settings → Media Libraries → Scanning &amp; storage; off by default, and for this device only. It reads the start of each video file, one at a time and slowly: after each file it waits the Wait between files time (2 s on clouds by default), and it pauses while a video plays.</p>
           </div>
         </div>
+        <h3 id="filters">Filters</h3>
+        <p>A CloudDrive library's Filters are grouped by what the files themselves are, and can be combined. Each group lists only what the library has; Video codec and File format show when there are at least two. Libraries on Emby and Jellyfin servers keep the server's own filters.</p>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Group</th><th scope="col">Choices</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Resolution</th><td>8K, 4K, 1080p, 720p, SD (576p and 480p).</td></tr>
+              <tr><th scope="row">HDR</th><td>Dolby Vision, HDR10+, HDR10, HLG.</td></tr>
+              <tr><th scope="row">Sound</th><td>Dolby Atmos, DTS:X, Dolby TrueHD, DTS-HD MA, Multichannel.</td></tr>
+              <tr><th scope="row">Video codec</th><td>For example HEVC, H.264, AV1, VC-1, MPEG-2.</td></tr>
+              <tr><th scope="row">File format</th><td>For example MKV, MP4, ISO, TS, Blu-ray folder, DVD folder.</td></tr>
+              <tr><th scope="row">Audio and subtitle languages</th><td>The languages in the files; Any under subtitle languages shows only titles that have subtitles, and None only the videos with no subtitles inside or beside them.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>You can also filter by played state, favorites, genre, tag, studio, show status, rating and year. Resolution, HDR and Sound start from what file names say, and get exact once media info is detected. These filters replace the earlier HD, 4K and Subtitles switches and the Blu-ray, DVD, ISO and File video types; HD, 4K and Subtitles chosen before become the matching choices. They are on Mac, iPhone, iPad, Apple TV, Apple Vision Pro, Android, Meta Quest, Windows and the web page.</p>
       </div>
     </section>
 
@@ -566,7 +593,8 @@ tv:
           <div>
             <h3>Person pages</h3>
             <ul>
-              <li><strong>Cast and directors</strong>: biography, photo and links from TMDB, in the library's metadata language; the page lists the titles in your libraries that name them.</li>
+              <li><strong>Cast and directors</strong>: biography, photo and links from TMDB, in the library's metadata language; the page lists the titles in your libraries that name them, which sort and filter as a library's do, with the count the filters leave. An actor who also sings has their albums on the page too, and an artist's page lists the films and shows they are in.</li>
+              <li><strong>Identify and edit a person</strong>: Identify on a person's page picks the right person on TMDB, and Edit… changes the name, the dates of birth and death, the birthplace, the biography, the photo and the backdrops. What you fill in outranks the online services' details; clear a field and the online details show again.</li>
               <li><strong>Artists</strong>: biography and photo from Wikipedia and Wikimedia Commons, through the links MusicBrainz gives.</li>
               <li><strong>Authors</strong>: a biography from Open Library and Wikipedia.</li>
               <li>One person is one record whether an NFO, TMDB or a music or book credit names them, and any of their names finds them.</li>
@@ -578,6 +606,14 @@ tv:
           <div>
             <h3>Edit metadata</h3>
             <p>Film and show pages have Edit metadata… for the title, plot, genres, cast, pictures and more. Edits are saved as the NFO file and pictures in the film's folder, so other apps and your other devices read them too; only what you changed is rewritten, and what other apps wrote stays. Your edits outrank online info, and Prefer online info never replaces them. Apple TV can't change pictures.</p>
+            <h3>Search, History and Go to Library</h3>
+            <ul>
+              <li>A search opened from a library's page looks in that library first, with a switch to All libraries. Search also finds the artists and authors whose names hold the term.</li>
+              <li>History lists the albums of songs played to the end, beside the films and episodes watched.</li>
+              <li>Go to Library on a film, show, album or book page opens the library it is in, at that title.</li>
+            </ul>
+            <h3 id="ai-subtitles">Generate AI subtitles</h3>
+            <p>A film's or show's page, and a selection of several titles in a library, have Generate AI subtitles, with the same options as background AI subtitles in the file manager; a film in several parts gets every part. On a device that organizes its own libraries the job joins that device's AI subtitles queue; connected to a <a href="/en/media-server.html#ai-subtitles">media server</a>, the server makes them. See <a href="/en/ai-translation.html">AI subtitle translation</a>.</p>
           </div>
         </div>
       </div>
@@ -702,11 +738,11 @@ tv:
           </div>
           <div>
             <h3>Cue sheets and SACD</h3>
-            <p>A single-file album is split into tracks by its .cue, with previous and next between them; cue sheets embedded in a FLAC, and GBK cue sheets, are read too. A SACD ISO's album page lists its stereo and multichannel tracks, the multichannel ones marked 5.1.</p>
+            <p>A single-file album is split into tracks by its .cue, with previous and next between them; cue sheets embedded in a FLAC, and GBK cue sheets, are read too. A SACD ISO's album page lists its stereo and multichannel tracks, the multichannel ones marked 5.1. Dolby Atmos and DTS albums are marked as such.</p>
             <h3>Covers</h3>
             <p>A picture in the album folder, then the first track's embedded picture, then, with MusicBrainz on, the Cover Art Archive.</p>
             <h3>MusicBrainz</h3>
-            <p>With Look up music on MusicBrainz and the library's Look up online both on, the exact release is found by barcode, a CD rip's track lengths, catalogue number, or album name and artist, and the album page shows the label, catalogue number, conductor, orchestra, soloists and each track's credits. Artists take MusicBrainz's names, so a folder's "Mozart" shows as Wolfgang Amadeus Mozart; a name opens its <a href="#people">artist page</a>. Identify Album on the album page picks a release by hand; see <a href="#review">Identify Album and Identify Book</a>.</p>
+            <p>With Look up music on MusicBrainz and the library's Look up online both on, the exact release is found by barcode, a CD rip's track lengths, catalogue number, or album name and artist, and the album page shows the release date, country, label, catalogue number, barcode, genres, conductor, orchestra, soloists and each track's credits, linked to MusicBrainz. Artists take MusicBrainz's names, so a folder's "Mozart" shows as Wolfgang Amadeus Mozart; a name opens its <a href="#people">artist page</a>. Identify Album on the album page picks a release by hand; see <a href="#review">Identify Album and Identify Book</a>.</p>
             <p>Lyrics (a matching .lrc file, or lyrics in the tags) are shown by the audio player.</p>
           </div>
         </div>
@@ -783,7 +819,7 @@ tv:
               <tr><th scope="row">TMDB, MusicBrainz, Open Library and Bangumi answers</th><td>A file of their own (answers) beside the library database</td><td>3 to 30 days; forgotten after 60 days, and the oldest first above 400 MB. Clear library data keeps them</td><td>With Sync scanned data</td></tr>
               <tr><th scope="row">People's details: biographies and links from Wikipedia, Wikidata and the other sources</th><td>The library database</td><td>30 to 180 days</td><td>With Sync scanned data</td></tr>
               <tr><th scope="row">The anime table</th><td>Cache folder</td><td>Refreshed every 7 days</td><td>No</td></tr>
-              <tr><th scope="row">What other apps sent through the Emby API</th><td>A separate file and photos folder beside the library database</td><td>Always; Clear library data and rescans keep it</td><td>No</td></tr>
+              <tr><th scope="row">People's details sent through the Emby API</th><td>A separate file and photos folder beside the library database</td><td>Always; Clear library data and rescans keep it</td><td>Names, biographies and roles travel with scanned data; uploaded photos are not guaranteed to sync across devices. For Favorites, see the Hearts row above</td></tr>
               <tr><th scope="row">Online info switches and addresses, Lock Again time, parental control, Picture limit, Keep files on this device, Scan again, Listing speed, library covers</th><td>This device's settings</td><td>Always</td><td>No</td></tr>
             </tbody>
           </table>
@@ -793,13 +829,13 @@ tv:
           <div>
             <h3>Reading and updating</h3>
             <ul>
-              <li>On a first scan, titles appear as they are found, without waiting for the whole library.</li>
+              <li>On a first scan, titles appear as they are found, without waiting for the whole library. An album opened while a music library is still being scanned has its tracks read first, so it plays at once.</li>
               <li>A folder that hasn't changed isn't listed again. For how fast folders are listed, see <a href="#avoid-limits">Keep the cloud from limiting your account</a>.</li>
               <li>When files are renamed or moved through this device's CloudDrive2, their identifications move with them.</li>
             </ul>
             <h3>When a library is scanned again</h3>
             <ul>
-              <li>A library scanned completely isn't scanned again by itself. Scan again in the library's settings sets an interval for automatic scans, and Scan now or Scan this folder scans at once.</li>
+              <li>A library scanned completely isn't scanned again by itself. Scan again in the library's settings sets an interval for automatic scans, and Scan now or Scan this folder scans at once. Scan this folder reads the folder and everything under it from the cloud again; Scan this title on a film's or show's page reads only that title's folder. Both find what was changed in the cloud's own app or website.</li>
               <li>A first scan that was stopped goes on from where it stopped at the next start, until it is complete.</li>
             </ul>
           </div>
@@ -867,7 +903,7 @@ tv:
         </div>
         <div class="note">
           <span class="note-title">Adding a device</span>
-          <p>The new device needs to be signed in to the same CloudDrive account and to reach the storage holding CloudDrive2 Sync; then turn on Sync libraries across devices. Library folders are saved as full CloudDrive2 paths, which are the same on every device for storage added through Sync With Cloud. Turning sync off keeps the libraries on the device, and can also delete this device's file from the storage. App Pro is a one-time purchase and doesn't expire; it ends only if the purchase is refunded, and then sync pauses and the files in your storage stay.</p>
+          <p>The new device needs to be signed in to the same CloudDrive account and to reach the storage holding CloudDrive2 Sync; then turn on Sync libraries across devices. Library folders are saved as full CloudDrive2 paths, which are the same on every device for storage added through Sync With Cloud. Turning sync off keeps the libraries on the device, and can also delete this device's file from the storage. Independently purchased permanent App Pro remains valid when the core plan expires; App Pro entitlements from other sources may have an expiry date. If App Pro entitlement becomes invalid, sync pauses and the files in your storage stay.</p>
         </div>
       </div>
     </section>
@@ -1018,7 +1054,7 @@ tv:
         <header class="band-head">
           <p class="eyebrow">Other apps</p>
           <h2 id="emby-api-h">Emby API for other apps</h2>
-          <p>CloudDrive2 on a Mac, iPhone, iPad, Apple TV, Apple Vision Pro, Android phone or TV, or Windows PC can serve an Emby-compatible API, so tools such as MoviePilot connect to your libraries as they would to an Emby server: they read the titles and people, and fill in the cast's names, biographies and photos. Turn it on under Settings → Media Libraries → Advanced → Emby API for other apps; it is off by default. Meta Quest doesn't have it.</p>
+          <p>CloudDrive2 on a Mac, iPhone, iPad, Apple TV, Apple Vision Pro, Android phone or TV, or Windows PC can serve an Emby-compatible API, so tools such as MoviePilot connect to your libraries as they would to an Emby server: they read the titles and people, and fill in the cast's names, biographies and photos. Turn it on under Settings → Media Libraries → Advanced → Emby API for other apps; it is off by default. Meta Quest doesn't have it. The <a href="/en/media-server.html#emby-api">media server</a> on a computer or NAS can serve it too, so no device has to keep the app open.</p>
         </header>
         <div class="split">
           <div>
@@ -1035,7 +1071,8 @@ tv:
             <ul>
               <li>People's names, biographies, photos and roles, and Favorites. People's details show before what the NFO and TMDB say.</li>
               <li>It is kept on this device, never in your media's folders; Clear library data and rescans keep it.</li>
-              <li>With <a href="#sync-data">Sync scanned data across devices</a> on, it travels to your other devices with the photos.</li>
+              <li>With <a href="#sync-data">Sync scanned data across devices</a> on, people's names, biographies and roles travel to your other devices. Photos uploaded through the API are not guaranteed to sync across devices and may remain only on the device they were uploaded to.</li>
+              <li>Favorites travel with <a href="#sync">Sync libraries across devices</a>, independently of the scanned-data sync switch.</li>
               <li>Only people's details and Favorites are taken for now; a title's own details and pictures are not.</li>
             </ul>
             <div class="note">
@@ -1082,9 +1119,16 @@ tv:
         </header>
 
         <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Which plans do media libraries need?</summary>
+          <div class="acc-body">
+            <p>The libraries in the apps, connecting Emby and Jellyfin servers and using a media server are App Pro features, and each device needs App Pro. The <a href="/en/media-server.html">media server</a> itself, whether the core service on a computer or NAS or libraries served by an app, also needs a core plan (monthly, yearly or lifetime; not Lifetime Lite). See <a href="/en/pricing.html">Plans and pricing</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
           <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>My library shows only file names, with no posters or plots</summary>
           <div class="acc-body">
-            <p>Without NFO files and artwork in the folders, titles need online lookup. Turn on Settings → Media Libraries → Identification → Look up titles on TMDB, and check that the library's Look up online is on; private libraries start with it off. Use Test connection to check that TMDB can be reached; in mainland China, keep the default api.tmdb.org. A title with no artwork in its folder and none on TMDB can show a frame of its video: turn on Use a video frame when there's no poster in the library's settings.</p>
+            <p>Without NFO files and artwork in the folders, titles need online lookup. Settings → Media Libraries → Identification → Look up titles on TMDB is now on by default; it used to start off, so on a device whose identification settings were changed before the update it may still be off. Check it, and check that the library's Look up online is on; private libraries start with it off. Once on, titles not identified yet get their info in the background, or press Re-identify in the library's settings. Use Test connection to check that TMDB can be reached; in mainland China, keep the default api.tmdb.org. A title with no artwork in its folder and none on TMDB can show a frame of its video: turn on Use a video frame when there's no poster in the library's settings.</p>
           </div>
         </details>
 
@@ -1147,7 +1191,7 @@ tv:
         <details class="acc">
           <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Does the library change or delete my files?</summary>
           <div class="acc-body">
-            <p>It never deletes them. The library only reads the folders, and deleting a library or removing a folder deletes no files. Recognition words change only the names the library reads; no file is renamed. The only things written are the NFO files and artwork you turn on, the NFO and pictures you save with Edit metadata…, and the sync files. With both Prefer online info and Save info and artwork beside the media on, other apps' .nfo files and pictures are renamed to .bak, never deleted. What other apps send through the Emby API is kept on the device, not in your files.</p>
+            <p>It never deletes them. The library only reads the folders, and deleting a library or removing a folder deletes no files. Recognition words change only the names the library reads; no file is renamed. Files written include the NFO files and artwork you turn on, the NFO and pictures you save with Edit metadata…, AI subtitles you explicitly generate and save beside a video, and the sync files. With both Prefer online info and Save info and artwork beside the media on, other apps' .nfo files and pictures are renamed to .bak, never deleted. What other apps send through the Emby API is kept on the device, not in your files.</p>
           </div>
         </details>
 

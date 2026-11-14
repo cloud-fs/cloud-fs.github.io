@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>网页播放器 — CloudDrive2</title>
+  <meta name="description" content="CloudDrive2 核心服务网页管理界面中的播放器：在浏览器中播放网盘里的视频、音乐、蓝光 ISO、DSD 和 SACD，不需要开启媒体服务器。说明支持的格式、浏览器和电脑的要求、与 App 播放器的对比，以及在 Chrome 和 Edge 中使用硬件解码的方法。">
+  <link rel="canonical" href="https://www.clouddrive2.com/web-player.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/web-player.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/web-player.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/web-player.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="网页播放器 — CloudDrive2">
+  <meta property="og:description" content="在浏览器中播放网盘里的视频和音乐，不需要安装应用，也不需要媒体服务器。">
+  <meta property="og:url" content="https://www.clouddrive2.com/web-player.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    /* a second two-column block after steps, a table or another split needs the same gap */
+    .steps + .split, .split + .split, .table-scroll + .split { margin-top: var(--s7); }
+  </style>
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="主导航">
+      <a class="brand" href="/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/">主页</a></li>
+        <li><a href="/apps/">应用</a></li>
+        <li><a href="/features.html">核心功能</a></li>
+        <li><a href="/pricing.html">会员</a></li>
+        <li><a href="/download.html">下载</a></li>
+        <li><a href="/partners.html">合作伙伴</a></li>
+        <li><a href="/help.html">帮助</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="en" hreflang="en" href="/en/web-player.html">English</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="切换深色/浅色主题">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">核心服务 · 网页管理界面</p>
+        <h1>网页播放器</h1>
+        <p class="release-line">1.2.0 公开 Beta 测试 · 网页播放器</p>
+        <p class="hero-lede">核心服务的网页管理界面自带播放器：在文件管理中点视频、音乐、光盘镜像或 CUE 整轨，就在浏览器里播放，不需要安装应用，也不需要开启媒体服务器。开启<a href="/media-server.html">媒体服务器</a>后，「媒体」页面中的影片和音乐也用它播放。浏览器能直接播放的格式交给浏览器，其他受支持的格式在页面中解封装、解码和渲染，覆盖绝大多数常见音视频格式，服务器不转码。具体格式和输出限制见下文。</p>
+        <ul class="chips">
+          <li><a class="chip chip-video" href="#where">在哪里使用</a></li>
+          <li><a class="chip chip-video" href="#video">视频</a></li>
+          <li><a class="chip chip-video" href="#two-ways">两种播放方式</a></li>
+          <li><a class="chip chip-audio" href="#music">音乐</a></li>
+          <li><a class="chip" href="#web-requirements">浏览器和电脑的要求</a></li>
+          <li><a class="chip chip-cloud" href="#compare">与 App 对比</a></li>
+          <li><a class="chip chip-subs" href="#chrome-secure-origin">在 Chrome 和 Edge 中使用硬件解码</a></li>
+          <li><a class="chip" href="#faq">常见问题</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/download.html">下载核心服务</a>
+          <a class="btn btn-ghost" href="/media-server.html">媒体服务器</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── where ─────────────────────────────────────────────────────── -->
+    <section class="band" id="where" aria-labelledby="where-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">在哪里使用</p>
+          <h2 id="where-h">从文件管理或媒体库打开</h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>文件管理</h3>
+            <p>在网页管理界面的文件管理中点视频、音乐、光盘镜像（.iso）、CUE 整轨，或蓝光文件夹中的 index.bdmv，就在播放器中打开。同一个文件夹中的视频或歌曲依次播放，可以用 N 和 P 键切换。不需要开启媒体服务器。</p>
+            <p>播放位置记在这个浏览器中，下次打开同一个文件时从上次的位置继续。</p>
+          </div>
+          <div>
+            <h3>媒体库</h3>
+            <p>开启<a href="/media-server.html">媒体服务器</a>后，「媒体」页面中的电影、剧集和音乐也用这个播放器播放。播放进度和已看与服务器同步，其他设备和 CloudDrive2 App 都能看到；剧集可以跳过片头片尾，播完自动播放下一集；分成几段的电影依次播放。见<a href="/media-server.html#web">在浏览器中观看</a>。</p>
+          </div>
+        </div>
+        <div class="note">
+          <span class="note-title">会员</span>
+          <p>文件管理中的播放不需要会员。HDR、杜比视界、蓝光 ISO、DSD 和 SACD 需要 App Pro，没有时可以试播 10 秒。「媒体」页面需要媒体服务器，也就是服务器账号同时有核心会员和 App Pro。见<a href="/pricing.html#app-h">会员与价格</a>。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── video ─────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="video" aria-labelledby="video-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">视频</p>
+          <h2 id="video-h">视频播放</h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>格式</h3>
+            <ul>
+              <li><strong>格式</strong>：浏览器能直接播放的由浏览器播放，其他的在页面中解码：MKV、MP4、AVI、TS、M2TS、FLV、MPG、VOB、OGG；H.264、HEVC、AV1、VP9、MPEG-2、MPEG-4；AC-3、E-AC-3、DTS、TrueHD、FLAC、Opus 等声音。两种方式能用的功能不同，见<a href="#two-ways">两种播放方式</a>。</li>
+              <li><strong>蓝光 ISO</strong>：播放正片，包括它的音轨、字幕和章节，由服务器读取光盘。蓝光文件夹在文件管理中打开 index.bdmv。没有光碟菜单。</li>
+              <li><strong>HDR</strong>：浏览器直接播放时，按浏览器和显示器的能力显示 HDR；在页面中解码时可能转为 SDR 显示。</li>
+              <li><strong>杜比视界</strong>：Safari 中 Profile 5 和 8 以杜比视界播放，这时 TrueHD 和 DTS 声音改用同一语言的 AC-3、E-AC-3 或 AAC 音轨。Chrome 和 Edge 中 Profile 5 用 WebGPU 转换为颜色正确的 SDR 画面，其他的显示 HDR10 基础层。</li>
+              <li><strong>声音</strong>：杜比全景声和 DTS:X 播放其基础声道；蓝光中的 DTS-HD MA 播放其核心部分。在页面中解码的声音以立体声输出。</li>
+              <li>没有记录画面显示时间的 MP4 也能平稳播放，不会抖动。</li>
+              <li>不能播放的（DVD、VC-1、RMVB、WMV 等）显示「复制链接」和「下载」，可以用 VLC、IINA、PotPlayer 或 Infuse 播放，也可以用 <a href="/apps/">CloudDrive2 App</a> 播放。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>字幕和控制</h3>
+            <ul>
+              <li><strong>字幕</strong>：SRT、WebVTT 和 PGS，外挂的和文件内的都可以显示。外挂的 ASS/SSA 完整显示特效，文件内的 ASS 以简化的方式显示。视频旁的 .srt、.vtt、.ass、.ssa、.sup 自动列出，不是 UTF-8 的文字字幕按 GB18030 读取。一次显示一条字幕。</li>
+              <li><strong>布局</strong>：控制栏和面板与 App 的播放器相同，手机浏览器中是手机布局。有章节列表、进度条上的章节标记、剧集列表，以及视频信息和影片信息面板。</li>
+              <li><strong>画面</strong>：浏览器直接播放时，可以选择适应、填充或拉伸，有「裁切填满」按钮和画中画，Safari 中还可以 AirPlay；在页面中解码时没有这些。</li>
+              <li><strong>倍速</strong>：浏览器播放时 0.25 至 3 倍，在页面中解码时最高 2 倍。</li>
+              <li><strong>全屏</strong>：双击画面或按 F。手机上全屏时转为横屏；iPhone 上在页面中解码的视频也能全屏。</li>
+              <li><strong>按键</strong>：空格或 K 暂停，← → 快退快进 5 秒（按住 Shift 为 10 秒），↑ ↓ 音量，M 静音，F 全屏，N 和 P 下一个和上一个，A 和 C 切换音轨和字幕，Esc 退出。手机上双击画面左右两侧快退快进 10 秒。</li>
+              <li>进度条末尾的时间可以在总时长和剩余时间之间切换。用 HTTPS 打开的网页，播放时屏幕保持常亮。</li>
+            </ul>
+            <div class="note">
+              <span class="note-title">用 HTTPS 打开</span>
+              <p>网页通过 WebCodecs 使用硬件解码需要安全上下文，例如 HTTPS 或本机的 <code>localhost</code>、<code>127.0.0.1</code>；还要浏览器、设备和视频编码支持。普通 <code>http://局域网地址</code> 不提供这种能力。浏览器自己的播放器仍可能使用硬件解码，前提是它支持视频和声音，但不保证所有 4K、HDR 视频都能流畅播放。见<a href="#chrome-secure-origin">在 Chrome 和 Edge 中使用硬件解码</a>。</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 id="two-ways">两种播放方式</h3>
+        <p>播放器先看浏览器能不能直接播放这个视频：格式、视频和声音的编码都是浏览器支持的（MP4、WebM，Chrome 和 Edge 中还有 MKV），没有选择文件内的字幕，也不是杜比视界，就交给浏览器播放；否则在页面中解码。「视频信息」的「播放方式」显示当前是「浏览器自带播放器」还是「在网页里解码」。播放中选择文件内的字幕，或在 Safari 以外的浏览器中切换音轨，会改为在页面中解码，从同一位置继续。</p>
+        <p>用普通远程 HTTP 地址打开时，网页不能通过 WebCodecs 使用硬件解码，播放器会尝试把 4K 和 HDR 视频的画面交给浏览器自己的播放器；本机的 <code>http://localhost</code> 和 <code>http://127.0.0.1</code> 属于安全上下文，不受这个限制。浏览器的播放器只配合它自己能播的声音：AAC，Safari 和 Edge 中还有 AC-3 和 E-AC-3。声音是 DTS 或 TrueHD 的（例如蓝光 ISO），会改播同一语言的这类音轨并显示提示，这时不能换回原来的音轨；没有这样的音轨时，画面在页面中软件解码，4K 可能跳帧。是否能流畅播放还取决于设备、浏览器、编码和网络。</p>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">浏览器直接播放和在页面中解码时能用的功能</caption>
+            <thead>
+              <tr><th scope="col">功能</th><th scope="col">浏览器直接播放</th><th scope="col">在页面中解码</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">硬件解码</th><td>取决于浏览器、设备和编码</td><td>需要 HTTPS 或本机安全地址，并且浏览器、设备和编码支持</td></tr>
+              <tr><th scope="row">HDR</th><td>按浏览器和显示器的能力</td><td>可能转为 SDR</td></tr>
+              <tr><th scope="row">适应、填充、拉伸，裁切填满</th><td class="yes">✓</td><td class="no">—</td></tr>
+              <tr><th scope="row">画中画</th><td>浏览器支持时</td><td class="no">—</td></tr>
+              <tr><th scope="row">AirPlay</th><td>Safari</td><td class="no">—</td></tr>
+              <tr><th scope="row">倍速</th><td>0.25 至 3 倍</td><td>0.25 至 2 倍</td></tr>
+              <tr><th scope="row">文件内的字幕</th><td>改为在页面中解码</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">切换音轨</th><td>Safari；其他浏览器改为在页面中解码</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">外挂字幕、章节、全屏、按键、视频信息</th><td class="yes">✓</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── music ─────────────────────────────────────────────────────── -->
+    <section class="band" id="music" aria-labelledby="music-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">音乐</p>
+          <h2 id="music-h">音乐播放</h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>格式</h3>
+            <ul>
+              <li>支持 MP3、AAC、FLAC、Apple Lossless（ALAC）和 APE，解码方式见下方「两种播放方式」；WAV、Opus、OGG 通常由浏览器播放，是否支持取决于浏览器。WavPack、TTA 等不能播放。</li>
+              <li><strong>DSD</strong>：DSF 和 DSDIFF（包括 DST 压缩的）在页面中转为 PCM 播放。<strong>SACD ISO</strong> 播放立体声区的音轨，由服务器按音轨切分。</li>
+              <li><strong>CUE 整轨</strong>按音轨播放。DTS-CD 抓轨（WAV 中的 DTS）解码后以立体声播放。</li>
+              <li><strong>杜比全景声</strong>：M4A 中的 E-AC-3 全景声在 Safari 和 Edge 中由系统的杜比解码器播放；其他浏览器播放其 5.1 声床，以立体声输出。</li>
+              <li>高解析度音乐按浏览器的输出采样率播放。</li>
+              <li><strong>两种播放方式</strong>：电脑上的浏览器中，FLAC、MP3、M4A 中的 AAC-LC、Apple Lossless、APE、DSD、SACD、DTS 和 AC-3 在页面中解码，歌曲之间无缝衔接，但不能倍速；HE-AAC、Opus、OGG 和普通 PCM WAV 由浏览器播放，可以倍速，歌曲之间会有短暂停顿。手机和平板上 FLAC、MP3 和 AAC 由浏览器播放，锁屏后可以继续播放，歌曲之间会有短暂停顿，同一个文件中的 CUE 音轨除外。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>播放器</h3>
+            <ul>
+              <li><strong>完整的播放器</strong>：封面、格式角标（DSD、Hi-Res、无损、声道、全景声），以及 MusicBrainz 的演职人员和发行信息。</li>
+              <li><strong>歌词</strong>：歌曲旁的 .lrc 文件，或歌曲自带的歌词；跟着播放高亮，点一行从这里播放。</li>
+              <li><strong>队列</strong>：下一首播放、移到最后、移除、清空；随机播放，列表循环和单曲循环。</li>
+              <li><strong>迷你播放器</strong>：收起后在页面底部，浏览其他页面时继续播放；锁屏和系统的媒体控制可以暂停和切歌。离开网页后停止。</li>
+              <li><strong>睡眠定时</strong>：15、30、45、60 分钟，或本首结束。由浏览器播放的歌曲可以 0.5 至 2 倍速，手机上按住为 2 倍速。</li>
+              <li>媒体库首页的「继续收听」列出最近听过的专辑。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── requirements ──────────────────────────────────────────────── -->
+    <section class="band band-alt" id="web-requirements" aria-labelledby="web-requirements-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">要求</p>
+          <h2 id="web-requirements-h">浏览器和电脑的要求</h2>
+          <p>网页播放器用到浏览器较新的功能。下表是各项功能需要的最低浏览器版本；建议使用最新版的 Chrome、Edge 或 Safari。</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">网页播放器的各项功能需要的最低浏览器版本</caption>
+            <thead>
+              <tr><th scope="col">功能</th><th scope="col">Chrome、Edge</th><th scope="col">Safari（Mac、iPhone、iPad）</th><th scope="col">Firefox</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">浏览器直接播放（MP4、WebM 等）</th><td>当前版本</td><td>当前版本</td><td>当前版本</td></tr>
+              <tr><th scope="row">在页面中解码（MKV、蓝光 ISO、DTS、TrueHD、DSD 等）</th><td>91 及以后</td><td>16.4 及以后（iOS、iPadOS 16.4）</td><td>89 及以后</td></tr>
+              <tr><th scope="row">页面中的硬件解码 *</th><td>94 及以后</td><td>16.4 及以后</td><td>130 及以后</td></tr>
+              <tr><th scope="row">多线程解码 *</th><td>96 及以后</td><td class="no">—</td><td>119 及以后</td></tr>
+              <tr><th scope="row">HEVC 硬件解码</th><td>107 及以后</td><td class="yes">✓</td><td>取决于系统</td></tr>
+              <tr><th scope="row">杜比视界 Profile 5 的正确颜色 *</th><td>113 及以后（WebGPU；Android 上为 121）</td><td>以杜比视界播放</td><td class="no">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">* 需要用 HTTPS 或本机地址打开网页。用 http 地址时，4K 和 HDR 视频交给浏览器自己的播放器，Safari 中多数能流畅播放，见<a href="#chrome-secure-origin">在 Chrome 和 Edge 中使用硬件解码</a>。</p>
+        <div class="split">
+          <div>
+            <h3>电脑和手机</h3>
+            <ul>
+              <li><strong>软件解码</strong>：用 http 局域网地址打开，或显卡不支持这种编码时，由处理器解码。近几年的电脑一般能流畅播放 1080p H.264；4K HEVC 和 AV1 优先使用硬件解码，软件解码能否流畅取决于处理器、视频码率和播放方式。</li>
+              <li><strong>硬件解码 HEVC（含 10-bit）</strong>：Intel 第 7 代酷睿及以后的核显、NVIDIA GTX 10 系列及以后、AMD RX 400 系列及以后，2017 年及以后的 Mac 和所有 Apple 芯片的 Mac。</li>
+              <li><strong>硬件解码 AV1</strong>：Intel 第 11 代酷睿及以后的核显、NVIDIA RTX 30 系列及以后、AMD 的多数 RX 6000 系列及以后，Apple M3 及以后的芯片。</li>
+              <li><strong>Chrome 和 Edge 中的杜比视界 Profile 5</strong>：使用网页软件解码和 WebGPU，将画面转换为颜色正确的 SDR。1.2.0 改进了 Windows 上的 10-bit HEVC 解码和多线程性能，已在实机验证 Profile 5 流畅播放及正确颜色；这不代表所有设备都能流畅播放 4K。需要 WebGPU、多线程支持和安全上下文，性能不足时仍可能退回颜色不正确的兼容播放并显示提示。</li>
+              <li><strong>手机和平板</strong>：依靠硬件解码。iPhone 和 iPad 需要 iOS 或 iPadOS 16.4 及以后。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>网页播放器做不到的</h3>
+            <ul>
+              <li>浏览器不能把杜比、DTS、TrueHD 的源码输出到功放，也不能独占声卡或把 DSD 原样送到解码器；在页面中解码的声音以立体声输出。</li>
+              <li>浏览器不能切换电视或显示器的帧率和 HDR 模式。</li>
+              <li>没有蓝光和 DVD 的光碟菜单，DVD 和 VC-1 编码的视频不能播放（可以「复制链接」用其他播放器打开）。</li>
+              <li>需要这些的，请用 <a href="/apps/">CloudDrive2 App</a>，连接同一个媒体服务器即可。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── the web player next to the apps ───────────────────────────── -->
+    <section class="band" id="compare" aria-labelledby="compare-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">对比</p>
+          <h2 id="compare-h">网页播放器与 App 对比</h2>
+          <p>网页播放器不需要安装，打开网页管理界面就能看；<a href="/apps/">CloudDrive2 App</a> 的播放器能播放的格式更多，能把声音源码输出到功放、切换电视的显示模式，并有光碟菜单和实时 AI 字幕。表中的 Apple 指 Mac、iPhone、iPad、Apple TV 和 Apple Vision Pro，Android 指 Android 手机、平板、电视盒子和 Meta Quest，以 1.2.0 为准。</p>
+        </header>
+        <h3>视频与 HDR</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">视频格式与 HDR：网页播放器与各平台 App 对比</caption>
+            <thead>
+              <tr><th scope="col">功能</th><th scope="col">网页播放器</th><th scope="col">Apple</th><th scope="col">Android</th><th scope="col">Windows</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">格式</th><td>MKV、MP4、TS、AVI、FLV 等；不支持 RMVB、WMV</td><td class="yes">✓ 含 RMVB、WMV</td><td>✓ 不含 RMVB</td><td class="yes">✓ 含 RMVB、WMV</td></tr>
+              <tr><th scope="row">视频编码</th><td>H.264、HEVC、AV1、VP9、MPEG-2；不支持 VC-1</td><td class="yes">✓ 含 VC-1</td><td>取决于设备的解码器</td><td class="yes">✓ 含 VC-1</td></tr>
+              <tr><th scope="row">硬件解码</th><td>需要 HTTPS 或安全地址；http 地址上 4K 和 HDR 交给浏览器的播放器</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">HDR10、HLG</th><td>浏览器直接播放时；在页面中解码时可能转为 SDR</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">杜比视界 Profile 5、8</th><td>Safari 中以杜比视界播放；Chrome、Edge 中 Profile 5 转为 SDR，Profile 8 显示 HDR10</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">杜比视界 Profile 7 完整增强层</th><td>只显示 HDR10 基础层</td><td class="yes">✓</td><td>✓ 电视上以 SDR 显示</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">切换电视的帧率和 HDR 模式</th><td class="no">—</td><td>Apple TV；Mac 只匹配刷新率</td><td>电视盒子</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>光盘与声音</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">光盘与声音输出：网页播放器与各平台 App 对比</caption>
+            <thead>
+              <tr><th scope="col">功能</th><th scope="col">网页播放器</th><th scope="col">Apple</th><th scope="col">Android</th><th scope="col">Windows</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">蓝光 ISO</th><td>只播放正片</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">蓝光文件夹（BDMV）</th><td>文件管理中可以，媒体库中不行</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">蓝光菜单（HDMV）</th><td class="no">—</td><td class="yes">✓</td><td>✓ 64 位设备</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">BD-J 菜单</th><td class="no">—</td><td>Mac 官网下载版</td><td>✓ ARM 设备</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">选择光盘的标题</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">DVD ISO</th><td class="no">—</td><td>正片和标题，没有菜单</td><td>正片，没有菜单</td><td>标题列表</td></tr>
+              <tr><th scope="row">3D 蓝光</th><td class="no">—</td><td>Apple Vision Pro</td><td>Meta Quest</td><td class="no">—</td></tr>
+              <tr><th scope="row">源码输出到功放（杜比、DTS、TrueHD）</th><td class="no">—</td><td>Mac；Apple TV 和 iPhone 为杜比全景声（E-AC-3）</td><td>电视盒子</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">多声道 PCM（5.1、7.1）</th><td>在页面中解码时为立体声</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">声音延迟调整</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>字幕</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">字幕：网页播放器与各平台 App 对比</caption>
+            <thead>
+              <tr><th scope="col">功能</th><th scope="col">网页播放器</th><th scope="col">Apple</th><th scope="col">Android</th><th scope="col">Windows</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">SRT、WebVTT 和外挂字幕</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">ASS 特效字幕</th><td>外挂的完整显示；文件内的效果简化，不使用 MKV 中的字体</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">PGS 图形字幕</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">DVD 字幕（VobSub）</th><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">字幕延迟、大小和位置</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">播放时实时 AI 字幕</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">为影片生成 AI 字幕</th><td>由媒体服务器生成</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">读屏软件朗读字幕</th><td class="no">—</td><td class="yes">✓</td><td>手机、电视</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>播放控制</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">播放控制：网页播放器与各平台 App 对比</caption>
+            <thead>
+              <tr><th scope="col">功能</th><th scope="col">网页播放器</th><th scope="col">Apple</th><th scope="col">Android</th><th scope="col">Windows</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">续播和跨设备同步进度</th><td>媒体库中同步；文件管理中只记在这个浏览器</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">记住音轨和字幕的选择</th><td>记在这个浏览器中</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">章节</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">进度条预览缩略图</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">跳过片头片尾、播放下一集</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">倍速</th><td>0.25 至 3 倍；在页面中解码时最高 2 倍</td><td>0.25 至 8 倍</td><td>0.25 至 2 倍</td><td>0.5 至 2 倍</td></tr>
+              <tr><th scope="row">逐帧</th><td class="no">—</td><td>Mac、iPad（键盘）</td><td class="no">—</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">画面比例和缩放</th><td>适应、填充、拉伸、裁切填满，只在浏览器直接播放时</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">旋转、翻转</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">去隔行</th><td class="no">—</td><td class="yes">✓</td><td>部分格式</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">A-B 循环</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">画中画</th><td>浏览器直接播放时</td><td>iPhone、iPad、Apple TV</td><td>手机、平板</td><td class="no">—</td></tr>
+              <tr><th scope="row">投屏</th><td>Safari 中浏览器直接播放时的 AirPlay</td><td>AirPlay</td><td class="no">—</td><td class="no">—</td></tr>
+              <tr><th scope="row">播放统计</th><td>视频信息</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">VR 和 360 度视频</th><td class="no">—</td><td>Apple Vision Pro</td><td>Meta Quest</td><td class="no">—</td></tr>
+              <tr><th scope="row">播放 Emby、Jellyfin 服务器中的影片</th><td>只能导入媒体库</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">家长控制</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>音乐</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">音乐：网页播放器与各平台 App 对比</caption>
+            <thead>
+              <tr><th scope="col">功能</th><th scope="col">网页播放器</th><th scope="col">Apple</th><th scope="col">Android</th><th scope="col">Windows</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">无损格式</th><td>FLAC、ALAC、APE、WAV；不支持 WavPack、TTA</td><td class="yes">✓ 含 WavPack、TAK、TTA</td><td class="yes">✓ 含 WavPack、TAK、TTA</td><td class="yes">✓ 含 WavPack、TAK、TTA</td></tr>
+              <tr><th scope="row">DSD（DSF、DFF）</th><td>转为 PCM 播放</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">SACD ISO</th><td>只播放立体声区</td><td class="yes">✓ 含多声道</td><td class="yes">✓ 含多声道</td><td class="yes">✓ 含多声道</td></tr>
+              <tr><th scope="row">CUE 整轨</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">原生 DSD、DoP、独占输出</th><td class="no">—</td><td>Mac；iPhone、iPad 通过 USB 解码器 DoP</td><td>USB 解码器直连</td><td>WASAPI 独占、DoP、ASIO 原生 DSD</td></tr>
+              <tr><th scope="row">多声道音乐</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">杜比全景声音乐</th><td>浏览器能用系统的杜比解码器时（Safari、Edge）；其他浏览器为 5.1 声床的立体声</td><td class="yes">✓</td><td>源码输出，或设备的杜比解码器</td><td>源码输出到功放</td></tr>
+              <tr><th scope="row">无缝播放</th><td>电脑上的浏览器中，在页面中解码的格式</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">同步歌词，点一行跳转</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">播放队列、随机、循环</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">迷你播放器和系统媒体控制</th><td class="yes">✓</td><td class="yes">✓</td><td>手机、电视</td><td>系统媒体控制和托盘</td></tr>
+              <tr><th scope="row">睡眠定时</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">网页播放器和 App 的会员规则相同：HDR、杜比视界、蓝光 ISO、DSD 和 SACD 需要 App Pro，没有时可以试播 10 秒；网页的「媒体」页面还需要核心会员的媒体服务器。见<a href="/pricing.html#media-server-h">会员与价格</a>。</p>
+      </div>
+    </section>
+
+    <!-- ── hardware decoding on an http address (the web player's notice links here) ── -->
+    <section class="band band-alt" id="chrome-secure-origin" aria-labelledby="secure-origin-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">浏览器</p>
+          <h2 id="secure-origin-h">在 Chrome 和 Edge 中使用硬件解码</h2>
+          <p>网页的 WebCodecs 解码路径需要安全上下文：HTTPS 地址，或本机地址（<code>localhost</code>、<code>127.0.0.1</code>），并且浏览器、设备和编码要支持。普通 <code>http://局域网地址</code> 不能使用这条硬件解码路径；浏览器自带播放器支持的文件仍可由它播放，其他文件可能需要软件解码，4K HEVC 等视频可能跳帧。这一节说明缺少了什么、有哪些办法，以及怎样让 Chrome 和 Edge 把你的服务器地址当作安全地址。</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>HTTP 页面缺少什么</h3>
+            <div class="table-scroll">
+              <table class="matrix-table">
+                <caption class="sr-only">HTTPS 页面和 HTTP 局域网页面中播放器能使用的功能</caption>
+                <thead>
+                  <tr><th scope="col">功能</th><th scope="col">HTTPS 或本机地址</th><th scope="col">http://局域网地址</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">硬件解码（WebCodecs）</th><td>浏览器、设备和编码支持时可用</td><td>没有：页面中的解码器只能用软件解码</td></tr>
+                  <tr><th scope="row">多线程解码</th><td>Chrome、Edge；还需跨源隔离</td><td>没有：软件解码更慢</td></tr>
+                  <tr><th scope="row">WebGPU</th><td class="yes">✓</td><td>没有：Chrome 和 Edge 中杜比视界 Profile 5 的颜色不对</td></tr>
+                  <tr><th scope="row">播放时屏幕常亮</th><td class="yes">✓</td><td>没有</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>浏览器能直接播放的文件（例如 MP4 中的 H.264）由浏览器自己播放，不受影响。受影响的是在页面中解码的视频：浏览器不能直接播放的格式和声音，例如带 TrueHD 或 DTS 声音的 MKV、蓝光 ISO，以及 Chrome 和 Edge 中的杜比视界。软件解码一般能流畅播放 1080p H.264；4K HEVC 跟不上时，播放器会提示，并显示下面的设置方法。</p>
+            <p>普通远程 HTTP 页面不能通过 WebCodecs 使用硬件解码时，播放器会尝试把 4K 和 HDR 视频的画面交给浏览器自己的播放器；它仍可能使用系统的硬件解码，但取决于浏览器、设备和编码，不能保证流畅播放。这个播放器只配合它自己能播的声音：AAC，Safari 和 Edge 中还有 AC-3 和 E-AC-3。声音是 DTS 或 TrueHD 的（例如蓝光 ISO），会改播同一语言的这类音轨，并显示提示；没有这样的音轨时，画面仍在页面中软件解码，4K 可能跳帧。Safari 在支持的设备上还能直接播放杜比视界，但 HDR、杜比视界和高码率视频的效果仍取决于设备与网络。HTTPS 或本机安全地址是使用网页解码路径的推荐方式。</p>
+          </div>
+          <div>
+            <h3>三种办法</h3>
+            <ul>
+              <li><strong>用 HTTPS 打开</strong>：在网页管理界面的「设置 → Web 服务器」中启用 HTTPS（默认端口 19799）并配置证书。证书要与地址栏中的域名一致，浏览器才不会警告；有自己的域名的，可以使用 Let's Encrypt 等免费证书，或用 Nginx、Caddy、NAS 自带的反向代理提供 HTTPS。核心服务生成的自签名证书只对应 <code>localhost</code> 和 <code>127.0.0.1</code>，用局域网地址打开时浏览器会提示证书不受信任。从外网访问时请一定使用 HTTPS。</li>
+              <li><strong>在服务器本机上打开</strong>：在运行核心服务的电脑上用 <code>http://localhost:19798</code> 打开，本身就是安全地址。只适用于这一台电脑。</li>
+              <li><strong>把局域网地址设为安全地址</strong>：在家庭网络中最简单。Chrome 和 Edge 都有这个设置，见下面的步骤；Android 手机、平板和电视盒子上的 Chrome 也有，步骤相同。</li>
+            </ul>
+            <p>Safari（Mac、iPhone、iPad）没有这个设置；它的自带播放器能播放哪些格式，取决于系统和设备，见「HTTP 页面缺少什么」。需要网页解码或遇到跳帧提示时，请用 HTTPS 打开。iPhone 和 iPad 上的 Chrome 和 Edge 也没有这个设置，请使用 HTTPS；Safari 可作为原生播放的另一选择。Firefox 中请用 HTTPS 打开，或用 CloudDrive2 App 播放。</p>
+          </div>
+        </div>
+
+        <h3>在 Chrome 和 Edge 中设置</h3>
+        <ol class="steps">
+          <li>
+            <h3>记下网页的地址</h3>
+            <p>记下地址栏中网页管理界面的地址，只要开头到端口号的部分，例如 <code>http://192.168.1.20:19798</code>：包括 <code>http://</code> 和端口号，不包括后面的 <code>/?page=…</code>。播放器的提示中显示的就是这个地址。</p>
+          </li>
+          <li>
+            <h3>打开浏览器的设置项</h3>
+            <p>在地址栏中输入下面的地址并回车。网页不能替你打开浏览器自己的设置页，所以要复制后粘贴到地址栏；播放器的提示中有「复制设置地址」按钮。</p>
+            <div class="code-block"><pre><code>chrome://flags/#unsafely-treat-insecure-origin-as-secure</code></pre></div>
+            <div class="code-block"><pre><code>edge://flags/#unsafely-treat-insecure-origin-as-secure</code></pre></div>
+            <p>第一行用于 Chrome，第二行用于 Edge。页面会高亮名为 <strong>Insecure origins treated as secure</strong> 的一项。</p>
+          </li>
+          <li>
+            <h3>填入地址并启用</h3>
+            <p>在这一项的文本框中填入第 1 步的地址。用多个地址访问同一台服务器的（例如 IP 地址和主机名，或另一台服务器），用英文逗号分开：<code>http://192.168.1.20:19798,http://nas.local:19798</code>。然后把右边的选项改为 <strong>Enabled</strong>。</p>
+          </li>
+          <li>
+            <h3>重启浏览器</h3>
+            <p>点页面底部的 <strong>Relaunch</strong>（Edge 中为「重启」）。浏览器会关闭所有窗口后重新打开，之前打开的标签页会恢复。</p>
+          </li>
+          <li>
+            <h3>检查是否生效</h3>
+            <p>重新打开网页管理界面并播放，不再显示「这个网页不是用 HTTPS 打开的」。也可以按 F12 打开开发者工具，在「控制台」中输入 <code>isSecureContext</code> 并回车，显示 <code>true</code> 就是已经生效。</p>
+          </li>
+        </ol>
+
+        <div class="split">
+          <div>
+            <h3>设置后仍然是软件解码</h3>
+            <ul>
+              <li><strong>地址要完全一致</strong>：<code>http</code> 和 <code>https</code>、IP 地址和主机名、端口号，都要与地址栏中的一样。服务器的 IP 地址变了（例如路由器重新分配），要重新添加；可以在路由器上为服务器固定 IP 地址。</li>
+              <li><strong>打开图形加速</strong>：Chrome 在「设置 → 系统」中打开「使用图形加速功能（如果可用）」；Edge 在「设置 → 系统和性能」中打开图形加速。改后要重启浏览器。</li>
+              <li><strong>看浏览器的 GPU 页面</strong>：打开 <code>chrome://gpu</code> 或 <code>edge://gpu</code>，「Video Decode」一行应为 <strong>Hardware accelerated</strong>。</li>
+              <li><strong>HEVC</strong>：Chrome 107 起在 Windows、macOS 和 Android 上用显卡解码 HEVC；Windows 上的 Edge 还需要安装微软商店中的「HEVC 视频扩展」。</li>
+              <li><strong>显卡不支持这种编码</strong>：例如较老的显卡不支持 HEVC 10-bit 或 AV1，这时浏览器仍用软件解码，请用 CloudDrive2 App 播放。</li>
+              <li><strong>公司或学校管理的电脑</strong>：管理员可能禁用了 flags，可以请管理员用下面的策略设置。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>用策略设置（多台电脑）</h3>
+            <p>Chrome 和 Edge 都有策略 <code>OverrideSecurityRestrictionsOnInsecureOrigin</code>，作用与上面的设置相同，适合一次设置多台电脑。设置了策略后，flags 中的这一项不再起作用。Windows 上用管理员身份打开命令提示符：</p>
+            <div class="code-block"><pre><code>reg add "HKLM\SOFTWARE\Policies\Google\Chrome\OverrideSecurityRestrictionsOnInsecureOrigin" /v 1 /t REG_SZ /d "http://192.168.1.20:19798" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\OverrideSecurityRestrictionsOnInsecureOrigin" /v 1 /t REG_SZ /d "http://192.168.1.20:19798" /f</code></pre></div>
+            <p>第二个地址用名称 <code>2</code>，依此类推。Linux 上在 <code>/etc/opt/chrome/policies/managed/</code>（Edge 为 <code>/etc/opt/edge/policies/managed/</code>）中新建一个 JSON 文件：</p>
+            <div class="code-block"><pre><code>{ "OverrideSecurityRestrictionsOnInsecureOrigin": ["http://192.168.1.20:19798"] }</code></pre></div>
+            <p>重启浏览器后，在 <code>chrome://policy</code> 或 <code>edge://policy</code> 中可以看到这条策略。macOS 上的策略需要用配置描述文件安装，个人电脑用上面的 flags 即可。</p>
+          </div>
+        </div>
+
+        <div class="note note-warn">
+          <span class="note-title">这个设置不加密连接</span>
+          <p>它只是让浏览器把这个地址当作安全地址，连接本身仍然是不加密的 HTTP：同一网络中的设备可以看到传输的内容，包括登录信息。只添加你自己家庭网络中的服务器地址，不要添加公共网络或别人的地址；从外网访问请用 HTTPS。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── faq ───────────────────────────────────────────────────────── -->
+    <section class="band" id="faq" aria-labelledby="faq-h">
+      <div class="container container-narrow">
+        <header class="band-head">
+          <p class="eyebrow">常见问题</p>
+          <h2 id="faq-h">常见问题</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>播放时提示「这个网页不是用 HTTPS 打开的」</summary>
+          <div class="acc-body">
+            <p>用 <code>http://局域网地址</code> 打开网页时，浏览器不让网页使用硬件解码，声音不是浏览器自己能播的 4K 视频在页面中解码，跟不上。请用 HTTPS 打开，或让 Chrome 和 Edge 把这个地址当作安全地址，也可以改用 Safari，见<a href="#chrome-secure-origin">在 Chrome 和 Edge 中使用硬件解码</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>有的视频不能播放</summary>
+          <div class="acc-body">
+            <p>DVD、VC-1、RMVB、WMV 等浏览器无法播放，页面会显示「复制链接」和「下载」，可以用 VLC、IINA、PotPlayer 或 Infuse 播放，也可以用 CloudDrive2 App 播放。浏览器版本太旧时，页面中解码也不能使用，见<a href="#web-requirements">浏览器和电脑的要求</a>。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>4K 视频卡顿或跳帧</summary>
+          <div class="acc-body">
+            <p>先确认显卡支持这种编码的硬件解码，并用 HTTPS 或安全地址打开网页（Safari 中多数视频用 http 地址也可以），见<a href="#web-requirements">浏览器和电脑的要求</a>。在页面中解码的杜比视界（Chrome 和 Edge 中的 Profile 5）由处理器解码，4K 需要性能较强的电脑。还要看网盘的速度：视频由核心服务从网盘读取，网盘的下载速度要高于视频的码率。</p>
+            <p>排查网页软件解码卡顿时，请先关闭开发者工具并重新加载页面，再测试播放速度；打开开发者工具可能使解码性能下降。普通局域网 HTTP 地址可按<a href="#chrome-secure-origin">Chrome / Edge 设置说明</a>将指定服务器设为安全来源，外网访问请使用 HTTPS。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>没有声音，或声音是立体声</summary>
+          <div class="acc-body">
+            <p>Safari 要在点击之后才允许网页出声；页面提示声音暂停时，点一下页面即可。在页面中解码的声音以立体声输出，浏览器也不能把杜比、DTS 的源码输出到功放；要输出多声道或源码，请用 CloudDrive2 App。</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>播放进度会同步到其他设备吗？</summary>
+          <div class="acc-body">
+            <p>从媒体库播放时会：进度和已看与媒体服务器同步，其他设备和 CloudDrive2 App 都能看到。从文件管理播放时，位置只记在这个浏览器中。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>反馈问题</h2>
+        <p>发现问题请在 GitHub issues 提交，便于记录和跟踪；也可以在 Telegram 交流群反馈，或发送邮件。</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">在 GitHub 提 issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">发邮件</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>多云盘管理 · 本地挂载 · 影院级影音播放</p>
+        </div>
+        <div class="footer-col">
+          <h2>产品</h2>
+          <ul>
+            <li><a href="/apps/">应用</a></li>
+            <li><a href="/features.html">核心功能</a></li>
+            <li><a href="/pricing.html">会员与价格</a></li>
+            <li><a href="/download.html">下载</a></li>
+            <li><a href="/partners.html">合作伙伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>支持</h2>
+          <ul>
+            <li><a href="/help.html">帮助与安装</a></li>
+            <li><a href="/docker.html">Docker 部署</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API 文档</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram 交流群</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>法律与联系</h2>
+          <ul>
+            <li><a href="/privacy.html">隐私政策</a></li>
+            <li><a href="/eula.html">用户协议</a></li>
+            <li><a href="/account-deletion.html">删除账号</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="en" hreflang="en" href="/en/web-player.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

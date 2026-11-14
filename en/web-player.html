@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Web Player — CloudDrive2</title>
+  <meta name="description" content="The player in the CloudDrive2 core service's web interface: play video, music, Blu-ray ISOs, DSD and SACD from your cloud storage in a browser, with no media server needed. What it plays, what it needs from the browser and the computer, how it compares with the apps' player, and how to use hardware decoding in Chrome and Edge.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/web-player.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/web-player.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/web-player.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/web-player.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Web Player — CloudDrive2">
+  <meta property="og:description" content="Play the video and music in your cloud storage in a browser, with no app to install and no media server needed.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/web-player.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    /* a second two-column block after steps, a table or another split needs the same gap */
+    .steps + .split, .split + .split, .table-scroll + .split { margin-top: var(--s7); }
+  </style>
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/web-player.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Core service · web interface</p>
+        <h1>The web player</h1>
+        <p class="release-line">1.2.0 public beta · Web player</p>
+        <p class="hero-lede">The core service's web interface has a player of its own: click a video, a song, a disc image or a CUE sheet in the file manager and it plays right in the browser, with no app to install and no media server needed. With the <a href="/en/media-server.html">media server</a> on, films and music on the Media pages play in it too. The browser handles formats it can play directly; other supported formats are demuxed, decoded and rendered in the page. This covers most common audio and video formats without server transcoding; supported formats and output limits are detailed below.</p>
+        <ul class="chips">
+          <li><a class="chip chip-video" href="#where">Where it plays</a></li>
+          <li><a class="chip chip-video" href="#video">Video</a></li>
+          <li><a class="chip chip-video" href="#two-ways">Two ways to play</a></li>
+          <li><a class="chip chip-audio" href="#music">Music</a></li>
+          <li><a class="chip" href="#web-requirements">Browser and computer requirements</a></li>
+          <li><a class="chip chip-cloud" href="#compare">Compared with the apps</a></li>
+          <li><a class="chip chip-subs" href="#chrome-secure-origin">Hardware decoding in Chrome and Edge</a></li>
+          <li><a class="chip" href="#faq">Questions</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/download.html">Download the core service</a>
+          <a class="btn btn-ghost" href="/en/media-server.html">Media server</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── where ─────────────────────────────────────────────────────── -->
+    <section class="band" id="where" aria-labelledby="where-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Where it plays</p>
+          <h2 id="where-h">From the file manager or a library</h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>File manager</h3>
+            <p>In the web interface's file manager, click a video, a song, a disc image (.iso), a CUE sheet, or the index.bdmv in a Blu-ray folder, and it opens in the player. The videos or songs in the same folder play one after another; N and P move between them. No media server is needed.</p>
+            <p>The place you stopped is kept in this browser, and the same file picks up there next time.</p>
+          </div>
+          <div>
+            <h3>Media libraries</h3>
+            <p>With the <a href="/en/media-server.html">media server</a> on, films, shows and music on the Media pages play in this player too. Progress and watched marks sync with the server, so your other devices and the CloudDrive2 App see them; a show's intro and ending can be skipped and the next episode plays when one ends; a film in several parts plays them in turn. See <a href="/en/media-server.html#web">watching in a browser</a>.</p>
+          </div>
+        </div>
+        <div class="note">
+          <span class="note-title">Plans</span>
+          <p>Playing from the file manager needs no plan. HDR, Dolby Vision, Blu-ray ISOs, DSD and SACD need App Pro, with a 10-second demo without it. The Media pages need the media server: the server's account must have both a core plan and App Pro. See <a href="/en/pricing.html#app-h">plans and pricing</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── video ─────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="video" aria-labelledby="video-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Video</p>
+          <h2 id="video-h">Playing video</h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Formats</h3>
+            <ul>
+              <li><strong>Formats</strong>: what the browser can play itself goes to the browser, and the rest is decoded in the page: MKV, MP4, AVI, TS, M2TS, FLV, MPG, VOB and OGG; H.264, HEVC, AV1, VP9, MPEG-2 and MPEG-4 pictures; AC-3, E-AC-3, DTS, TrueHD, FLAC, Opus and other sound. The two ways offer different features; see <a href="#two-ways">two ways to play</a>.</li>
+              <li><strong>Blu-ray ISOs</strong> play their main title, with its audio tracks, subtitles and chapters; the server reads the disc. A Blu-ray folder opens from its index.bdmv in the file manager. There are no disc menus.</li>
+              <li><strong>HDR</strong>: when the browser plays the video itself, HDR shows as far as the browser and the display allow; decoded in the page, it may be shown as SDR.</li>
+              <li><strong>Dolby Vision</strong>: Safari plays profiles 5 and 8 as Dolby Vision, switching TrueHD and DTS sound to an AC-3, E-AC-3 or AAC track in the same language. Chrome and Edge turn profile 5 into an SDR picture with the right colours using WebGPU, and show the HDR10 base of the others.</li>
+              <li><strong>Sound</strong>: Dolby Atmos and DTS:X play their base channels, and DTS-HD MA on a Blu-ray plays its core. Sound decoded in the page comes out in stereo.</li>
+              <li>An MP4 whose pictures carry no display times plays smoothly instead of shaking.</li>
+              <li>What it can't play (DVDs, VC-1, RMVB, WMV and so on) shows Copy link and Download, for VLC, IINA, PotPlayer or Infuse, or play it in the <a href="/en/apps/">CloudDrive2 App</a>.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Subtitles and controls</h3>
+            <ul>
+              <li><strong>Subtitles</strong>: SRT, WebVTT and PGS, both beside the video and inside the file. ASS/SSA files beside the video show with all their effects; ASS inside the file is drawn in a simpler way. .srt, .vtt, .ass, .ssa and .sup files beside the video are listed by themselves, and text subtitles that aren't UTF-8 are read as GB18030. One subtitle shows at a time.</li>
+              <li><strong>Layout</strong>: the control bar and panels are the apps' player's, with a phone layout in a phone's browser. There is a chapter list, chapter ticks on the seek bar, an episode list, and Video Info and title panels.</li>
+              <li><strong>Picture</strong>: when the browser plays the video itself you can choose Fit, Fill or Stretch, and there is a Pan &amp; Scan button, picture-in-picture, and AirPlay in Safari; decoded in the page, none of these are there.</li>
+              <li><strong>Speed</strong>: 0.25× to 3× when the browser plays it, up to 2× when decoded in the page.</li>
+              <li><strong>Full screen</strong>: double-click the picture or press F. A phone turns to landscape in full screen, and on iPhone videos decoded in the page go full screen too.</li>
+              <li><strong>Keys</strong>: Space or K to pause, ← → to go back or forward 5 seconds (10 with Shift), ↑ ↓ for volume, M to mute, F for full screen, N and P for next and previous, A and C to cycle audio and subtitles, Esc to leave. On a phone, double-tap the left or right side to go back or forward 10 seconds.</li>
+              <li>The time at the end of the seek bar switches between the length and the time left. On a page opened over HTTPS the screen stays on while a video plays.</li>
+            </ul>
+            <div class="note">
+              <span class="note-title">Open it over HTTPS</span>
+              <p>Hardware decoding through WebCodecs needs a secure context, such as HTTPS or <code>localhost</code> or <code>127.0.0.1</code> on the computer itself, plus support from the browser, device and video codec. Ordinary <code>http://&lt;LAN address&gt;</code> does not provide that ability. The browser's own player may still use hardware decoding if it supports the video and sound, but smooth playback of every 4K or HDR video is not guaranteed. See <a href="#chrome-secure-origin">hardware decoding in Chrome and Edge</a>.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 id="two-ways">Two ways to play</h3>
+        <p>The player first asks whether the browser can play the video itself: if the container and the video and audio codecs are ones the browser supports (MP4, WebM, and MKV in Chrome and Edge), no subtitle inside the file is chosen, and it isn't Dolby Vision, the browser plays it; otherwise it is decoded in the page. "Played by" under Video Info says which: "The browser's player" or "Decoded in the page". Choosing a subtitle inside the file while playing, or switching audio tracks in any browser but Safari, moves playback to the page's decoder, carrying on from the same moment.</p>
+        <p>At an ordinary remote HTTP address, the page cannot use hardware decoding through WebCodecs, so the player tries handing a 4K or HDR picture to the browser's own player. Local <code>http://localhost</code> and <code>http://127.0.0.1</code> are secure contexts and are not subject to that restriction. The browser's player only goes with a sound it plays itself: AAC, plus AC-3 and E-AC-3 in Safari and Edge. When the sound is DTS or TrueHD (a Blu-ray ISO, say), a track of that kind in the same language plays instead, with a notice, and the original can't be switched back to; without such a track the picture is decoded in the page in software, and 4K may skip frames. Smooth playback also depends on the device, browser, codecs and network.</p>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">What works when the browser plays a video and when it is decoded in the page</caption>
+            <thead>
+              <tr><th scope="col">Feature</th><th scope="col">Played by the browser</th><th scope="col">Decoded in the page</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Hardware decoding</th><td>Depends on the browser, device and codec</td><td>Needs HTTPS or a local secure address, plus browser, device and codec support</td></tr>
+              <tr><th scope="row">HDR</th><td>As far as the browser and display allow</td><td>May be shown as SDR</td></tr>
+              <tr><th scope="row">Fit, Fill, Stretch, Pan &amp; Scan</th><td class="yes">✓</td><td class="no">—</td></tr>
+              <tr><th scope="row">Picture-in-picture</th><td>Where the browser supports it</td><td class="no">—</td></tr>
+              <tr><th scope="row">AirPlay</th><td>Safari</td><td class="no">—</td></tr>
+              <tr><th scope="row">Speed</th><td>0.25× to 3×</td><td>0.25× to 2×</td></tr>
+              <tr><th scope="row">Subtitles inside the file</th><td>Moves to decoding in the page</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Switching audio tracks</th><td>Safari; other browsers move to decoding in the page</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Subtitles beside the video, chapters, full screen, keys, Video Info</th><td class="yes">✓</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── music ─────────────────────────────────────────────────────── -->
+    <section class="band" id="music" aria-labelledby="music-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Music</p>
+          <h2 id="music-h">Playing music</h2>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Formats</h3>
+            <ul>
+              <li>MP3, AAC, FLAC, Apple Lossless (ALAC) and APE are supported; see Two ways to play below for the decoding paths. WAV, Opus and OGG usually play through the browser, so support depends on the browser. WavPack, TTA and a few others don't play.</li>
+              <li><strong>DSD</strong>: DSF and DSDIFF files, DST-compressed ones included, are turned into PCM in the page. A <strong>SACD ISO</strong> plays the tracks of its stereo area, cut into tracks by the server.</li>
+              <li><strong>CUE sheets</strong> play track by track. DTS-CD rips (DTS in WAV) are decoded and play in stereo.</li>
+              <li><strong>Dolby Atmos</strong>: E-AC-3 Atmos in M4A plays through the system's Dolby decoder in Safari and Edge; other browsers play its 5.1 bed, folded to stereo.</li>
+              <li>High-resolution music plays at the browser's output sample rate.</li>
+              <li><strong>Two ways to play</strong>: in a browser on a computer, FLAC, MP3, AAC-LC in M4A, Apple Lossless, APE, DSD, SACD, DTS and AC-3 are decoded in the page, so songs join with no gap but the speed can't change; HE-AAC, Opus, OGG and ordinary PCM WAV are played by the browser, so the speed can change but there is a short pause between songs. On phones and tablets FLAC, MP3 and AAC are played by the browser, so they keep playing with the screen locked, with a short pause between songs except for CUE tracks in one file.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>The music player</h3>
+            <ul>
+              <li><strong>A full player</strong>: cover, format badges (DSD, Hi-Res, lossless, channels, Atmos), and MusicBrainz credits and release details.</li>
+              <li><strong>Lyrics</strong>: an .lrc file beside the song, or lyrics in the song's tags; the current line follows the music, and clicking a line plays from there.</li>
+              <li><strong>Queue</strong>: play next, move to the end, remove, clear; shuffle, repeat all and repeat one.</li>
+              <li><strong>Mini player</strong>: collapsed, it sits at the bottom of the page and keeps playing while you browse; the lock screen and the system's media controls can pause and change songs. It stops when you leave the page.</li>
+              <li><strong>Sleep timer</strong>: 15, 30, 45 or 60 minutes, or the end of the song. Songs played by the browser can go from 0.5× to 2×, and holding on a phone plays at 2×.</li>
+              <li>Continue Listening on the library home lists the albums you played lately.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── requirements ──────────────────────────────────────────────── -->
+    <section class="band band-alt" id="web-requirements" aria-labelledby="web-requirements-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Requirements</p>
+          <h2 id="web-requirements-h">Browser and computer requirements</h2>
+          <p>The web player uses newer browser features. The table gives the oldest browser version each one needs; the latest Chrome, Edge or Safari is best.</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">The oldest browser version each web player feature needs</caption>
+            <thead>
+              <tr><th scope="col">Feature</th><th scope="col">Chrome, Edge</th><th scope="col">Safari (Mac, iPhone, iPad)</th><th scope="col">Firefox</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Played by the browser (MP4, WebM…)</th><td>Current versions</td><td>Current versions</td><td>Current versions</td></tr>
+              <tr><th scope="row">Decoded in the page (MKV, Blu-ray ISO, DTS, TrueHD, DSD…)</th><td>91 or later</td><td>16.4 or later (iOS, iPadOS 16.4)</td><td>89 or later</td></tr>
+              <tr><th scope="row">Hardware decoding in the page *</th><td>94 or later</td><td>16.4 or later</td><td>130 or later</td></tr>
+              <tr><th scope="row">Decoding on several threads *</th><td>96 or later</td><td class="no">—</td><td>119 or later</td></tr>
+              <tr><th scope="row">HEVC hardware decoding</th><td>107 or later</td><td class="yes">✓</td><td>Depends on the system</td></tr>
+              <tr><th scope="row">Dolby Vision profile 5 in the right colours *</th><td>113 or later (WebGPU; 121 on Android)</td><td>Plays as Dolby Vision</td><td class="no">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">* Needs the page opened over HTTPS or on the computer itself. At an http address, 4K and HDR pictures go to the browser's own player, and most play smoothly in Safari; see <a href="#chrome-secure-origin">hardware decoding in Chrome and Edge</a>.</p>
+        <div class="split">
+          <div>
+            <h3>Computers and phones</h3>
+            <ul>
+              <li><strong>Software decoding</strong>, at an http LAN address or when the graphics chip lacks the codec, runs on the processor. Recent computers usually play 1080p H.264 smoothly. Hardware decoding is preferred for 4K HEVC and AV1; software-decoding performance depends on the processor, video bitrate and playback path.</li>
+              <li><strong>HEVC in hardware (10-bit included)</strong>: Intel 7th-generation Core graphics or later, NVIDIA GTX 10 series or later, AMD RX 400 series or later, Macs from 2017 on and every Mac with Apple silicon.</li>
+              <li><strong>AV1 in hardware</strong>: Intel 11th-generation Core graphics or later, NVIDIA RTX 30 series or later, most AMD RX 6000 series cards and later, Apple M3 and later.</li>
+              <li><strong>Dolby Vision profile 5 in Chrome and Edge</strong> uses software decoding in the page and WebGPU to produce correctly coloured SDR. Version 1.2.0 improves 10-bit HEVC decoding and threading on Windows; smooth profile 5 playback with correct colours has been verified on a physical PC. This is not a guarantee of smooth 4K playback on every device. WebGPU, multithreading and a secure context are required; insufficient performance can still trigger a warned fallback with incorrect colours.</li>
+              <li><strong>Phones and tablets</strong> rely on hardware decoding. iPhone and iPad need iOS or iPadOS 16.4 or later.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>What a browser can't do</h3>
+            <ul>
+              <li>A browser can't send Dolby, DTS or TrueHD to an AV receiver as a bitstream, take the sound card for itself, or pass DSD to a DAC untouched; sound decoded in the page comes out in stereo.</li>
+              <li>A browser can't switch a TV or display's frame rate or HDR mode.</li>
+              <li>There are no Blu-ray or DVD disc menus, and DVDs and VC-1 video don't play (Copy link opens them in another player).</li>
+              <li>For any of these, use the <a href="/en/apps/">CloudDrive2 App</a>; it connects to the same media server.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── the web player next to the apps ───────────────────────────── -->
+    <section class="band" id="compare" aria-labelledby="compare-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Comparison</p>
+          <h2 id="compare-h">The web player and the apps</h2>
+          <p>The web player needs nothing installed: open the web interface and watch. The <a href="/en/apps/">CloudDrive2 App</a>'s player plays more formats, can bitstream sound to an AV receiver and switch the TV's display mode, and has disc menus and live AI subtitles. Apple here means Mac, iPhone, iPad, Apple TV and Apple Vision Pro; Android means Android phones, tablets, TV boxes and Meta Quest. As of 1.2.0.</p>
+        </header>
+
+        <h3>Video and HDR</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">Video formats and HDR: the web player and the apps</caption>
+            <thead>
+              <tr><th scope="col">Feature</th><th scope="col">Web player</th><th scope="col">Apple</th><th scope="col">Android</th><th scope="col">Windows</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Containers</th><td>MKV, MP4, TS, AVI, FLV and more; not RMVB or WMV</td><td class="yes">✓ incl. RMVB, WMV</td><td>✓ except RMVB</td><td class="yes">✓ incl. RMVB, WMV</td></tr>
+              <tr><th scope="row">Video codecs</th><td>H.264, HEVC, AV1, VP9, MPEG-2; not VC-1</td><td class="yes">✓ incl. VC-1</td><td>The device's decoders</td><td class="yes">✓ incl. VC-1</td></tr>
+              <tr><th scope="row">Hardware decoding</th><td>Needs HTTPS or a secure address; at an http address 4K and HDR go to the browser's player</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">HDR10, HLG</th><td>When the browser plays it; may be SDR when decoded in the page</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Dolby Vision profiles 5 and 8</th><td>Dolby Vision in Safari; in Chrome and Edge, profile 5 as SDR and profile 8 as HDR10</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Dolby Vision profile 7 full enhancement layer</th><td>HDR10 base layer only</td><td class="yes">✓</td><td>✓ as SDR on TVs</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Switch the TV's frame rate and HDR mode</th><td class="no">—</td><td>Apple TV; Mac refresh rate only</td><td>TV boxes</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Discs and sound</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">Discs and sound output: the web player and the apps</caption>
+            <thead>
+              <tr><th scope="col">Feature</th><th scope="col">Web player</th><th scope="col">Apple</th><th scope="col">Android</th><th scope="col">Windows</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Blu-ray ISO</th><td>Main title only</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Blu-ray folder (BDMV)</th><td>From the file manager, not from a library</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Blu-ray menus (HDMV)</th><td class="no">—</td><td class="yes">✓</td><td>✓ 64-bit devices</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">BD-J menus</th><td class="no">—</td><td>Mac, downloaded from this site</td><td>✓ ARM devices</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Choose a disc's title</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">DVD ISO</th><td class="no">—</td><td>Main title and titles, no menus</td><td>Main title, no menus</td><td>Title list</td></tr>
+              <tr><th scope="row">3D Blu-ray</th><td class="no">—</td><td>Apple Vision Pro</td><td>Meta Quest</td><td class="no">—</td></tr>
+              <tr><th scope="row">Bitstream to an AV receiver (Dolby, DTS, TrueHD)</th><td class="no">—</td><td>Mac; Apple TV and iPhone for Dolby Atmos (E-AC-3)</td><td>TV boxes</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Multichannel PCM (5.1, 7.1)</th><td>Stereo when decoded in the page</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Audio delay</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Subtitles</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">Subtitles: the web player and the apps</caption>
+            <thead>
+              <tr><th scope="col">Feature</th><th scope="col">Web player</th><th scope="col">Apple</th><th scope="col">Android</th><th scope="col">Windows</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">SRT, WebVTT, subtitles beside the video</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">ASS with effects</th><td>Full beside the video; simpler inside the file, without the MKV's fonts</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">PGS picture subtitles</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">DVD subtitles (VobSub)</th><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Subtitle delay, size and position</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Live AI subtitles while playing</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Generate AI subtitles for a title</th><td>Made by the media server</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Screen reader reads subtitles</th><td class="no">—</td><td class="yes">✓</td><td>Phone, TV</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Playback controls</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">Playback controls: the web player and the apps</caption>
+            <thead>
+              <tr><th scope="col">Feature</th><th scope="col">Web player</th><th scope="col">Apple</th><th scope="col">Android</th><th scope="col">Windows</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Resume, progress synced across devices</th><td>Synced from a library; kept in this browser from the file manager</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Remembered audio and subtitle choices</th><td>Kept in this browser</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Chapters</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Seek bar preview pictures</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Skip intro and ending, play the next episode</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Speed</th><td>0.25× to 3×; up to 2× when decoded in the page</td><td>0.25× to 8×</td><td>0.25× to 2×</td><td>0.5× to 2×</td></tr>
+              <tr><th scope="row">Frame by frame</th><td class="no">—</td><td>Mac, iPad (keyboard)</td><td class="no">—</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Aspect ratio and zoom</th><td>Fit, Fill, Stretch, Pan &amp; Scan, only when the browser plays it</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Rotate, flip</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Deinterlacing</th><td class="no">—</td><td class="yes">✓</td><td>Some formats</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">A-B repeat</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Picture-in-picture</th><td>When the browser plays it</td><td>iPhone, iPad, Apple TV</td><td>Phone, tablet</td><td class="no">—</td></tr>
+              <tr><th scope="row">Casting</th><td>AirPlay in Safari, when the browser plays it</td><td>AirPlay</td><td class="no">—</td><td class="no">—</td></tr>
+              <tr><th scope="row">Playback statistics</th><td>Video Info</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">VR and 360° video</th><td class="no">—</td><td>Apple Vision Pro</td><td>Meta Quest</td><td class="no">—</td></tr>
+              <tr><th scope="row">Play from an Emby or Jellyfin server</th><td>Import its libraries only</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Parental controls</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Music</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">Music: the web player and the apps</caption>
+            <thead>
+              <tr><th scope="col">Feature</th><th scope="col">Web player</th><th scope="col">Apple</th><th scope="col">Android</th><th scope="col">Windows</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Lossless formats</th><td>FLAC, ALAC, APE, WAV; not WavPack or TTA</td><td class="yes">✓ incl. WavPack, TAK, TTA</td><td class="yes">✓ incl. WavPack, TAK, TTA</td><td class="yes">✓ incl. WavPack, TAK, TTA</td></tr>
+              <tr><th scope="row">DSD (DSF, DFF)</th><td>Played as PCM</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">SACD ISO</th><td>Stereo area only</td><td class="yes">✓ incl. multichannel</td><td class="yes">✓ incl. multichannel</td><td class="yes">✓ incl. multichannel</td></tr>
+              <tr><th scope="row">CUE sheets</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Native DSD, DoP, exclusive output</th><td class="no">—</td><td>Mac; DoP to a USB DAC on iPhone and iPad</td><td>USB DAC driven directly</td><td>WASAPI exclusive, DoP, native DSD over ASIO</td></tr>
+              <tr><th scope="row">Multichannel music</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Dolby Atmos music</th><td>Where the browser has the system's Dolby decoder (Safari, Edge); elsewhere the 5.1 bed in stereo</td><td class="yes">✓</td><td>Bitstream, or the device's Dolby decoder</td><td>Bitstream to an AV receiver</td></tr>
+              <tr><th scope="row">Gapless</th><td>In a browser on a computer, for formats decoded in the page</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Synced lyrics, click a line to play from it</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Queue, shuffle, repeat</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Mini player and system media controls</th><td class="yes">✓</td><td class="yes">✓</td><td>Phone, TV</td><td>System media controls and the tray</td></tr>
+              <tr><th scope="row">Sleep timer</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="chip-note">The web player and the apps follow the same plan rules: HDR, Dolby Vision, Blu-ray ISOs, DSD and SACD need App Pro, with a 10-second demo without it; the web interface's Media pages also need a core plan's media server. See <a href="/en/pricing.html#media-server-h">plans and pricing</a>.</p>
+      </div>
+    </section>
+
+    <!-- ── hardware decoding on an http address (the web player's notice links here) ── -->
+    <section class="band band-alt" id="chrome-secure-origin" aria-labelledby="secure-origin-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Browsers</p>
+          <h2 id="secure-origin-h">Hardware decoding in Chrome and Edge</h2>
+          <p>The page's WebCodecs decoding path needs a secure context: HTTPS, or the computer itself (<code>localhost</code>, <code>127.0.0.1</code>), plus support from the browser, device and codec. Ordinary <code>http://&lt;LAN address&gt;</code> cannot use that hardware decoding path. Files supported by the browser's own player can still play there; others may need software decoding, and 4K HEVC and similar videos may skip frames. This part explains what is missing, the ways around it, and how to have Chrome and Edge treat your server's address as secure.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>What an HTTP page goes without</h3>
+            <div class="table-scroll">
+              <table class="matrix-table">
+                <caption class="sr-only">What the player can use on an HTTPS page and on an HTTP LAN page</caption>
+                <thead>
+                  <tr><th scope="col">Feature</th><th scope="col">HTTPS or the computer itself</th><th scope="col">http://LAN address</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Hardware decoding (WebCodecs)</th><td>Available when the browser, device and codec support it</td><td>None: the page's decoder runs in software</td></tr>
+                  <tr><th scope="row">Decoding on several threads</th><td>Chrome, Edge; also needs cross-origin isolation</td><td>None: software decoding is slower still</td></tr>
+                  <tr><th scope="row">WebGPU</th><td class="yes">✓</td><td>None: Dolby Vision profile 5 shows the wrong colours in Chrome and Edge</td></tr>
+                  <tr><th scope="row">Screen stays on while playing</th><td class="yes">✓</td><td>No</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Files the browser plays by itself (H.264 in MP4, for example) aren't affected. What suffers is video decoded in the page: formats and sound the browser can't play itself, such as MKV with TrueHD or DTS sound, Blu-ray ISOs, and Dolby Vision in Chrome and Edge. Software decoding usually keeps up with 1080p H.264; when 4K HEVC can't, the player says so and shows the steps below.</p>
+            <p>When an ordinary remote HTTP page cannot use hardware decoding through WebCodecs, the player tries handing a 4K or HDR picture to the browser's own player. That player may still use the system's hardware decoding, depending on the browser, device and codec, but smooth playback is not guaranteed. It only goes with a sound it plays itself: AAC, plus AC-3 and E-AC-3 in Safari and Edge. When the sound is DTS or TrueHD (a Blu-ray ISO, say), a track of that kind in the same language plays instead, with a notice; without such a track the picture is still decoded in the page in software, and 4K may skip frames. Safari can also play Dolby Vision directly on supported devices, but HDR, Dolby Vision and high-bitrate playback still depend on the device and network. HTTPS or a local secure address is recommended for the page's decoding path.</p>
+          </div>
+          <div>
+            <h3>Three ways around it</h3>
+            <ul>
+              <li><strong>Open it over HTTPS</strong>: under Settings → Web Server in the web interface, turn on HTTPS (port 19799 by default) and set up a certificate. The certificate must match the name in the address bar or the browser warns; with a domain of your own you can use a free certificate such as Let's Encrypt, or serve HTTPS through Nginx, Caddy or your NAS's reverse proxy. The self-signed certificate the core service makes covers only <code>localhost</code> and <code>127.0.0.1</code>, so at a LAN address the browser warns that it isn't trusted. Always use HTTPS from outside your home.</li>
+              <li><strong>Open it on the server itself</strong>: on the computer running the core service, <code>http://localhost:19798</code> is already a secure address. This only helps on that one computer.</li>
+              <li><strong>Treat the LAN address as secure</strong>: the simplest on a home network. Chrome and Edge both have the setting; the steps are below. Chrome on Android phones, tablets and TV boxes has it too, with the same steps.</li>
+            </ul>
+            <p>Safari (Mac, iPhone, iPad) has no such setting; the formats its own player can play depend on the system and device. See "What an HTTP page goes without". Use HTTPS when the page's decoder is needed or the player says it can't keep up. Chrome and Edge on iPhone and iPad don't have this setting either, so use HTTPS; Safari is another option for native playback. In Firefox, open the page over HTTPS, or play in the CloudDrive2 App.</p>
+          </div>
+        </div>
+
+        <h3>Setting it up in Chrome and Edge</h3>
+        <ol class="steps">
+          <li>
+            <h3>Note the page's address</h3>
+            <p>Note the web interface's address from the address bar, from the start up to the port, for example <code>http://192.168.1.20:19798</code>: with <code>http://</code> and the port, without the <code>/?page=…</code> after it. It's the address the player's notice shows.</p>
+          </li>
+          <li>
+            <h3>Open the browser's setting</h3>
+            <p>Type the address below into the address bar and press Enter. A web page can't open the browser's own settings pages for you, so copy it and paste it into the address bar; the player's notice has a Copy settings address button.</p>
+            <div class="code-block"><pre><code>chrome://flags/#unsafely-treat-insecure-origin-as-secure</code></pre></div>
+            <div class="code-block"><pre><code>edge://flags/#unsafely-treat-insecure-origin-as-secure</code></pre></div>
+            <p>The first is for Chrome, the second for Edge. The page highlights the entry called <strong>Insecure origins treated as secure</strong>.</p>
+          </li>
+          <li>
+            <h3>Add the address and enable it</h3>
+            <p>Enter the address from step 1 in the entry's text box. If you reach the same server at more than one address (its IP address and its host name, say), or have another server, separate them with commas: <code>http://192.168.1.20:19798,http://nas.local:19798</code>. Then set the choice beside it to <strong>Enabled</strong>.</p>
+          </li>
+          <li>
+            <h3>Relaunch the browser</h3>
+            <p>Click <strong>Relaunch</strong> at the bottom of the page. The browser closes every window and opens again, with your tabs restored.</p>
+          </li>
+          <li>
+            <h3>Check that it worked</h3>
+            <p>Open the web interface again and play: the notice that the page isn't open over HTTPS no longer appears. You can also press F12 for the developer tools, type <code>isSecureContext</code> in the Console and press Enter; <code>true</code> means it worked.</p>
+          </li>
+        </ol>
+
+        <div class="split">
+          <div>
+            <h3>Still decoding in software</h3>
+            <ul>
+              <li><strong>The address must match exactly</strong>: <code>http</code> or <code>https</code>, IP address or host name, and the port must all be the same as in the address bar. If the server's IP address changes (the router hands out a new one), add it again; giving the server a fixed address on the router avoids this.</li>
+              <li><strong>Turn on graphics acceleration</strong>: in Chrome, Settings → System → "Use graphics acceleration when available"; in Edge, the graphics acceleration switch under Settings → System and performance. Relaunch the browser afterwards.</li>
+              <li><strong>Check the browser's GPU page</strong>: open <code>chrome://gpu</code> or <code>edge://gpu</code>; the "Video Decode" line should say <strong>Hardware accelerated</strong>.</li>
+              <li><strong>HEVC</strong>: Chrome decodes HEVC on the graphics chip from version 107 on Windows, macOS and Android; Edge on Windows also needs the HEVC Video Extensions from the Microsoft Store.</li>
+              <li><strong>The graphics chip lacks the codec</strong>: older graphics can't decode HEVC 10-bit or AV1, for example, and the browser decodes in software anyway; play it in the CloudDrive2 App.</li>
+              <li><strong>A computer managed by work or school</strong>: an administrator may have turned flags off; ask them to set the policy below.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Setting it by policy (several computers)</h3>
+            <p>Chrome and Edge both have the <code>OverrideSecurityRestrictionsOnInsecureOrigin</code> policy, which does the same as the setting above and suits setting up several computers at once. Once the policy is set, the flag entry no longer takes effect. On Windows, in a Command Prompt run as administrator:</p>
+            <div class="code-block"><pre><code>reg add "HKLM\SOFTWARE\Policies\Google\Chrome\OverrideSecurityRestrictionsOnInsecureOrigin" /v 1 /t REG_SZ /d "http://192.168.1.20:19798" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\OverrideSecurityRestrictionsOnInsecureOrigin" /v 1 /t REG_SZ /d "http://192.168.1.20:19798" /f</code></pre></div>
+            <p>A second address goes under the name <code>2</code>, and so on. On Linux, create a JSON file in <code>/etc/opt/chrome/policies/managed/</code> (for Edge, <code>/etc/opt/edge/policies/managed/</code>):</p>
+            <div class="code-block"><pre><code>{ "OverrideSecurityRestrictionsOnInsecureOrigin": ["http://192.168.1.20:19798"] }</code></pre></div>
+            <p>After relaunching the browser, the policy shows in <code>chrome://policy</code> or <code>edge://policy</code>. On macOS the policy has to be installed with a configuration profile; on a personal Mac, the flag above is simpler.</p>
+          </div>
+        </div>
+
+        <div class="note note-warn">
+          <span class="note-title">This doesn't encrypt the connection</span>
+          <p>It only makes the browser treat the address as secure; the connection is still plain, unencrypted HTTP, and other devices on the same network can see what passes over it, sign-ins included. Add only your own server's address on your home network, never a public network's or someone else's, and use HTTPS from outside your home.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── faq ───────────────────────────────────────────────────────── -->
+    <section class="band" id="faq" aria-labelledby="faq-h">
+      <div class="container container-narrow">
+        <header class="band-head">
+          <p class="eyebrow">Questions</p>
+          <h2 id="faq-h">Common questions</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>The player says the page isn't open over HTTPS</summary>
+          <div class="acc-body">
+            <p>Opened at <code>http://&lt;LAN address&gt;</code>, the browser won't let the page use hardware decoding, and a 4K video whose sound the browser can't play itself is decoded in the page and can't keep up. Open it over HTTPS, have Chrome and Edge treat the address as secure, or use Safari; see <a href="#chrome-secure-origin">hardware decoding in Chrome and Edge</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Some videos won't play</summary>
+          <div class="acc-body">
+            <p>Browsers can't play DVDs, VC-1, RMVB, WMV and a few others; the page shows Copy link and Download, for VLC, IINA, PotPlayer or Infuse, or play them in the CloudDrive2 App. In a browser that is too old, decoding in the page isn't available either; see <a href="#web-requirements">browser and computer requirements</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>4K video stutters or skips frames</summary>
+          <div class="acc-body">
+            <p>First check that the graphics chip decodes this codec in hardware, and that the page is open over HTTPS or at a secure address (in Safari most videos are fine at an http address); see <a href="#web-requirements">browser and computer requirements</a>. Dolby Vision decoded in the page (profile 5 in Chrome and Edge) runs on the processor, so 4K needs a fast computer. The cloud's speed matters too: the core service reads the video from your cloud storage, and the download speed has to stay above the video's bitrate.</p>
+            <p>When checking software-decoding performance, close Developer Tools and reload the page before testing; Developer Tools can slow decoding. For a trusted LAN HTTP address, follow the <a href="#chrome-secure-origin">Chrome / Edge instructions</a> to treat that specific server as a secure origin. Use HTTPS for remote access.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>No sound, or only stereo</summary>
+          <div class="acc-body">
+            <p>Safari lets a page make sound only after a click; when the page says the sound is held, click anywhere on it. Sound decoded in the page comes out in stereo, and a browser can't bitstream Dolby or DTS to an AV receiver; for multichannel or bitstream output, use the CloudDrive2 App.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Does my progress sync to other devices?</summary>
+          <div class="acc-body">
+            <p>From a library, yes: progress and watched marks sync with the media server, and your other devices and the CloudDrive2 App see them. From the file manager, the place is kept in this browser only.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>Report a problem</h2>
+        <p>File problems as GitHub issues, where they are recorded and tracked; you can also report them in the Telegram group or by email.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">File a GitHub issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">Email us</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/web-player.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

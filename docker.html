@@ -72,7 +72,7 @@
         <header class="band-head">
           <p class="eyebrow">镜像</p>
           <h2 id="arch-h">支持的架构</h2>
-          <p>同一个镜像名下有三种架构的 tag，按宿主机的 CPU 选择。</p>
+          <p>同一个镜像名下有三种架构的 tag，按设备和系统支持的架构选择。部分旧版 CoreELEC 使用 aarch64 内核和 ARM32 用户空间，也可能运行 ARM32 容器；仅查看 <code>uname -m</code> 不能判断容器内程序的位数。</p>
         </header>
 
         <div class="table-scroll">
@@ -93,6 +93,24 @@
           <span class="note-title">镜像拉不到最新版本时</span>
           <p>如果遇到 Docker 镜像无法更新到最新版本的情况，请尝试禁止使用 Docker 镜像服务器（加速器），改为直接从官方源拉取。</p>
         </div>
+      </div>
+    </section>
+
+    <section class="band" id="ai-subtitles" aria-labelledby="ai-subtitles-h">
+      <div class="container container-narrow">
+        <header class="band-head">
+          <p class="eyebrow">1.2.0-beta</p>
+          <h2 id="ai-subtitles-h">Docker 中的 AI 字幕</h2>
+        </header>
+        <div class="note note-warn" role="note" aria-labelledby="whisper-low-end-h">
+          <span class="note-title" id="whisper-low-end-h">重要提示：低性能设备强烈建议使用外部语音识别 API</span>
+          <p>电视盒子和部分老旧 ARM32 设备即使启用了 CPU 优化，运行 Whisper Base 模型仍然很慢，生成字幕可能比播放视频耗时更长。Base 模型对影视对白的识别准确度很低，尤其是在有背景音乐或对白不清晰时；速度优化不会提高模型的准确度。</p>
+          <p><strong>在这些设备上，我们强烈建议使用外部语音识别 API，不建议使用本地 Whisper 模型。</strong>见<a href="/ai-translation.html#remote">远程 API 设置</a>。</p>
+        </div>
+        <p>使用包含 1.2.0-beta 标准核心的镜像后，可以通过<a href="/media-server.html#ai-subtitles">媒体服务器</a>在后台生成字幕。本地 Whisper 在容器内运行，首次使用需要下载模型；它不要求识别速度达到实时播放速度。</p>
+        <p>ARM32 Linux 核心会自动检测处理器的 NEON 和 VFPv4 能力，支持时使用优化运算，旧处理器使用兼容实现。ARM32 容器运行在支持 32 位程序的 aarch64 内核上时也能使用这一加速；已在 CoreELEC 19.5 的 S905X3 设备上验证容器内的加速选择。</p>
+        <p><strong>无需为 Whisper 增加 Docker 参数、环境变量、设备映射或权限。</strong>云盘挂载仍按本页的 FUSE 配置运行。若设置了 <code>--cpus</code> 或 <code>--cpuset-cpus</code> 等 CPU 限制，可用算力会减少；保留足够内存供所选模型使用。</p>
+        <p>在「媒体服务器 → AI 字幕」中运行「测试语音识别」，按实际耗时选择模型和线程数。在应用日志中看到 <code>whisper: neon-vfpv4 kernels</code>，表示 ARM32 优化运算已启用。具体速度以设备内的测试为准。</p>
       </div>
     </section>
 

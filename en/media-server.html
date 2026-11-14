@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Media Server — CloudDrive2</title>
+  <meta name="description" content="The CloudDrive2 core service's media server: scan your media libraries once on a computer or NAS and serve them to the CloudDrive2 apps, Infuse, SenPlayer and Emby and Jellyfin players, or watch in a browser. How to turn it on, the management page, how apps and players connect, how titles play, profiles, use away from home, security and privacy.">
+  <link rel="canonical" href="https://www.clouddrive2.com/en/media-server.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/media-server.html">
+  <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/media-server.html">
+  <link rel="alternate" hreflang="x-default" href="https://www.clouddrive2.com/media-server.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CloudDrive2">
+  <meta property="og:title" content="Media Server — CloudDrive2">
+  <meta property="og:description" content="Scan your media libraries once on a computer or NAS and serve them to your CloudDrive2 apps, Emby and Jellyfin players and browsers. Third-party players receive original files relayed by the server, never cloud-provider direct links. No transcoding.">
+  <meta property="og:url" content="https://www.clouddrive2.com/en/media-server.html">
+  <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="stylesheet" href="/fontawesome-free-6.4.0-web/css/all.min.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    /* a second two-column block after steps, a table or another split needs the same gap */
+    .steps + .split, .split + .split, .table-scroll + .split { margin-top: var(--s7); }
+  </style>
+  <script>try{var t=localStorage.getItem("cd2-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="/js/site.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main">
+      <a class="brand" href="/en/"><img class="brand-mark" src="/img/clouddrive-h.svg" alt="CloudDrive2" width="170" height="30"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="170" height="30" aria-hidden="true"></a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/apps/">Apps</a></li>
+        <li><a href="/en/features.html">Core features</a></li>
+        <li><a href="/en/pricing.html">Pricing</a></li>
+        <li><a href="/en/download.html">Download</a></li>
+        <li><a href="/en/partners.html">Partners</a></li>
+        <li><a href="/en/help.html">Help</a></li>
+        <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API</a></li>
+        <li class="nav-sep" aria-hidden="true"></li>
+        <li class="nav-lang"><a lang="zh-CN" hreflang="zh-CN" href="/media-server.html">中文</a></li>
+        <li><button type="button" class="theme-toggle" aria-label="Switch between light and dark theme">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        </button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Core plan + App Pro</p>
+        <h1>Media Server</h1>
+        <p class="release-line">1.2.0 public beta · Media server</p>
+        <p class="hero-lede">The CloudDrive2 core service on a computer or NAS can work as a media server. It scans your <a href="/en/media-library.html">media libraries</a> once, identifies titles, fetches posters and media info, and serves the result to all your devices. A CloudDrive2 app connected to it shows the server's libraries and stops scanning on its own; Infuse, SenPlayer and Emby and Jellyfin players connect to it as they would to a Jellyfin server; and a browser can browse and play too. Third-party players and the Media web page play original files relayed by the server, without receiving cloud-provider direct links. CloudDrive2 apps can still play through their own CloudDrive2 with the same cloud account. The server never transcodes.</p>
+        <ul class="chips">
+          <li><a class="chip chip-video" href="#overview">Overview</a></li>
+          <li><a class="chip" href="#start">Getting started</a></li>
+          <li><a class="chip" href="#manage">The management page</a></li>
+          <li><a class="chip chip-subs" href="#libraries">Libraries and identification</a></li>
+          <li><a class="chip chip-subs" href="#ai-subtitles">AI subtitles</a></li>
+          <li><a class="chip chip-cloud" href="#apps">CloudDrive2 apps</a></li>
+          <li><a class="chip chip-audio" href="#players">Emby and Jellyfin players</a></li>
+          <li><a class="chip chip-subs" href="#emby-api">Emby API</a></li>
+          <li><a class="chip chip-video" href="#web">Watching in a browser</a></li>
+          <li><a class="chip chip-video" href="#playback">How titles play</a></li>
+          <li><a class="chip chip-disc" href="#profiles">Profiles</a></li>
+          <li><a class="chip chip-cloud" href="#away">Away from home</a></li>
+          <li><a class="chip chip-backup" href="#security">Security</a></li>
+          <li><a class="chip" href="#privacy">Privacy</a></li>
+          <li><a class="chip" href="#faq">FAQ</a></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/en/download.html">Download the core service</a>
+          <a class="btn btn-ghost" href="/en/pricing.html">Plans and pricing</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── overview ──────────────────────────────────────────────────── -->
+    <section class="band" id="overview" aria-labelledby="overview-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Overview</p>
+          <h2 id="overview-h">What the media server does</h2>
+          <p>Without a media server, the CloudDrive2 app on each device scans the libraries itself and shares what it scanned through your cloud storage. The media server moves that work onto one computer or NAS that stays on, and lets players other than CloudDrive2 use the same libraries.</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Who uses it</th><th scope="col">What they see</th><th scope="col">How titles play</th><th scope="col">Plan</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">A CloudDrive2 app connected to the server</th><td>The server's libraries. Identify, favorites, skip intro and ending, Detect media info and the rest are done by the server, and every device sees the result</td><td>Through the device's own CloudDrive2, from the cloud</td><td>App Pro on each device</td></tr>
+              <tr><th scope="row">A CloudDrive2 app that scans for itself</th><td>Its own libraries; with Scan on the server turned on, what it scans comes from the server</td><td>The same</td><td>App Pro on each device</td></tr>
+              <tr><th scope="row">Emby and Jellyfin players</th><td>The libraries the signed-in profile sees, private libraries excepted</td><td>Original files relayed by the server; no cloud-provider direct links</td><td>None of their own; the server account's plans cover them</td></tr>
+              <tr><th scope="row">A browser</th><td>The Media page of the core service's web interface</td><td>In the browser; what it can't play can be copied as a link or downloaded</td><td>The server account's plans cover it</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="split">
+          <div>
+            <h3>How it differs from Emby and Jellyfin</h3>
+            <ul>
+              <li><strong>The apps' rules for identifying titles</strong>: NFO files and artwork in the folders come first, and what they leave out is looked up on TMDB, Bangumi, MusicBrainz and Open Library. Recognition words, shelves, private libraries and the rest work exactly as in <a href="/en/media-library.html">the apps' media library</a>.</li>
+              <li><strong>No cloud-provider direct links for third-party players</strong>: Infuse, SenPlayer, Emby and Jellyfin players and the Media web page use authenticated CloudDrive2 playback endpoints. The server relays original files, so playback depends on its network and processing capacity. CloudDrive2 apps playing through their own CloudDrive2 with the same cloud account use no media-server relay bandwidth. See <a href="#playback">How titles play</a>.</li>
+              <li><strong>No transcoding</strong>: every client plays the original file. A client that relies on the server to transcode can't play the formats it doesn't support.</li>
+              <li><strong>The cloud is read once</strong>: players don't scan the cloud themselves. The server reads each library once at the pace you set, so the cloud is less likely to limit your account for too many requests.</li>
+              <li><strong>Shared with the apps</strong>: the libraries' settings, identifications, scanned data and posters are shared with the CloudDrive2 apps through the CloudDrive2 Sync folder in your cloud storage. Change a library in an app and the server follows, and the other way round.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Where it runs</h3>
+            <p>A computer, NAS or Docker container running the CloudDrive2 core service, on x86_64 or ARM64 (aarch64), with ARM32 (ARMv7) builds also provided for Linux and Android. MIPS isn't supported. New standard release packages include the media server and local Whisper; legacy no-media builds omit both. The server is best left on; while it is off, connected apps show what they read before.</p>
+            <p>The CloudDrive2 app on a Mac, a Windows PC, an Android TV box and other devices can also serve its own libraries to your other devices; see <a href="#app-serve">Libraries served by an app</a>.</p>
+            <p>The server reads the clouds and local folders added to its own CloudDrive2, so add the cloud storage your media is on to that CloudDrive2 first. Posters, people's photos and other pictures are kept on the server, with a picture limit of at least 10 GB; leave enough disk space for them.</p>
+            <h3 id="plans">Plans it needs</h3>
+            <p>The CloudDrive account the server is signed in to needs both a core plan (monthly, yearly or lifetime; not Lifetime Lite) and App Pro; without either one, no library is scanned or opened. When the core plan runs out the media server stops serving, and starts again once it is renewed. A CloudDrive2 app that connects to the server needs App Pro on its own device. Emby and Jellyfin players and browsers are covered by the server account's plans and need nothing of their own. See <a href="/en/pricing.html">Plans and pricing</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── start ─────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="start" aria-labelledby="start-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Getting started</p>
+          <h2 id="start-h">Turning on the media server</h2>
+        </header>
+        <ol class="steps">
+          <li>
+            <h3>Sign in and add your clouds</h3>
+            <p>In the core service's web interface, sign in to a CloudDrive account that has both a core plan and App Pro, and add the cloud storage your media is on. The signed-in account owns the libraries.</p>
+          </li>
+          <li>
+            <h3>Set up the Sync folder</h3>
+            <p>The server exchanges libraries and scanned data with the apps through the CloudDrive2 Sync folder. In the CloudDrive2 app on any device, turn on <a href="/en/progress-sync.html">Sync progress</a> and choose where to keep it; that cloud must also be added to the server's CloudDrive2. If no app has set it up yet, turn the switch on first, then choose a storage under the Libraries tab and the page makes the folder there.</p>
+          </li>
+          <li>
+            <h3>Turn it on</h3>
+            <p>Click Media in the web interface's sidebar, then the Media Server button on that page, and turn on the Media Server switch under Overview.</p>
+          </li>
+          <li>
+            <h3>Add libraries</h3>
+            <p>Libraries already made in the apps appear by themselves. You can also add them under Libraries. The server starts scanning, and its progress shows under Overview and Libraries.</p>
+          </li>
+          <li>
+            <h3>Connect your devices</h3>
+            <p>Choose the server in a CloudDrive2 app (see <a href="#apps">CloudDrive2 apps</a>), add it in a player (see <a href="#players">Emby and Jellyfin players</a>), or open the Media page in a browser (see <a href="#web">Watching in a browser</a>).</p>
+          </li>
+        </ol>
+        <div class="split">
+          <div>
+            <div class="note">
+              <span class="note-title">Messages on the page</span>
+              <ul>
+                <li>"This CloudDrive doesn't include the media server.": update the core service.</li>
+                <li>"The Media Server needs both a core plan (monthly, yearly or lifetime) and App Pro.": when the account lacks either one, the page shows only this notice and a link to the plans.</li>
+                <li>"The signed-in account doesn't have App Pro, so no library is scanned or opened.": the Media Server needs App Pro besides the core plan.</li>
+                <li>"The signed-in account has no core plan with the Media Server, so no library is scanned or opened.": it needs a monthly, yearly or lifetime plan; Lifetime Lite doesn't include the media server.</li>
+                <li>"Couldn't check the plan online": check the server's internet connection.</li>
+                <li>"No storage holds this account's CloudDrive2 Sync folder.": make it under the Libraries tab, or see step 2 above.</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div class="note">
+              <span class="note-title">The media interface</span>
+              <p>Once it's on, Media Interface at the foot of the web interface's sidebar switches to the apps' layout: a sidebar with Home, Favorites, Search, each library, Titles to Confirm, Files, Tasks, Media Server and Settings. File Manager switches back. In a phone's browser, the media interface has a tab bar at the bottom, and Media Server is in the menu at the top right of the media pages.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── manage ────────────────────────────────────────────────────── -->
+    <section class="band" id="manage" aria-labelledby="manage-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Management</p>
+          <h2 id="manage-h">The Media Server page</h2>
+          <p>Only the core service's administrator can open this page. While the server is off, it shows Overview alone.</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Tab</th><th scope="col">What it holds</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Overview</th><td>The Media Server switch, its status, the account, the Sync folder, the version, and a summary of the libraries, identification and the pictures' space.</td></tr>
+              <tr><th scope="row">Libraries</th><td>Add, edit, reorder and delete libraries; each library's titles, scan progress and Scan now; Import from Emby or Jellyfin…; Export Libraries… and Import Libraries…; Resume and watched (minimum and maximum resume percentage). See <a href="#libraries">Libraries and identification</a>.</td></tr>
+              <tr><th scope="row">Identification</th><td>Look up titles on TMDB (on by default), TMDB's API and image addresses, Test; Look up anime on Bangumi too (on by default); Look up music on MusicBrainz and Look up books on Open Library (on by default); AI identification and its model calls a day; each library's identified and to-confirm counts.</td></tr>
+              <tr><th scope="row">Users &amp; devices</th><td>Profiles, paired devices and pairing codes, Emby and Jellyfin players' sign-in, Quick Connect, Emby API for other apps, Away from home. See <a href="#apps">apps</a>, <a href="#players">players</a>, <a href="#profiles">profiles</a>, <a href="#emby-api">Emby API</a> and <a href="#away">away from home</a>.</td></tr>
+              <tr><th scope="row">Scanning &amp; storage</th><td>Scan on the server; how scanned data and pictures are shared with the apps; the space taken by library data and pictures, Picture limit (10 GB, 50 GB, 100 GB or none), Clear library data.</td></tr>
+              <tr><th scope="row">AI subtitles</th><td>The AI subtitles switch, the speech recognition and translation services and their keys, the whisper models on the server, the subtitle delay, Test recognition and Test translation. See <a href="#ai-subtitles">AI subtitles</a>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── libraries ─────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="libraries" aria-labelledby="libraries-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Libraries</p>
+          <h2 id="libraries-h">Libraries and identification</h2>
+          <p>The 1.2.0 public beta reads <code>season.nfo</code> in season folders, including season names, overviews, air dates, ratings and artwork references. It also supports root-level artwork such as <code>season01-poster.jpg</code>. Show pages display the season posters together, keeping a season poster separate from the show poster even for a single-season show.</p>
+          <p>The server's libraries are this CloudDrive account's libraries: add or change one on the web page and every device gets it; change one in an app and the server follows. Titles are identified and organized by the apps' rules; see <a href="/en/media-library.html#video">How videos are recognized</a>, <a href="/en/media-library.html#scraper">Scraping and matching</a>, <a href="/en/media-library.html#words">Recognition words</a> and <a href="/en/media-library.html#shelves">Shelves</a>.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Editing a library</h3>
+            <ul>
+              <li>The editor has the apps' library settings: name, type, folders, private library, look up online, information language, prefer online information, detect media info while identifying, video frames when there is no poster, save info and artwork beside the media, recognition words, shelves, and Scan this library on this server. Folders are chosen from this CloudDrive2 with the web interface's folder picker.</li>
+              <li>The listing speed (1 to 10 a second or no limit; 2 a second by default) and Scan again are the server's own settings and don't change your devices. The cover and caching files on a device are set in the apps only.</li>
+              <li>Private libraries show only after the PIN is entered on the page. Once unlocked, they also show in the sidebar and on Home of the Media pages, in this browser only, until you click Lock; they lock by themselves about 10 minutes after the last CloudDrive page in this browser is closed. The PIN can also be set, changed or removed on this page, and set right there when a library is made private.</li>
+              <li>The server scans one library at a time. Scan now reads that library's folders again at once.</li>
+            </ul>
+            <h3>Scan on the server</h3>
+            <p>Scan on the server, under Scanning &amp; storage, is off by default. When it is on, the server scans every library, and phones, tablets and TVs that keep their own libraries instead of connecting to the server wait for its results rather than scanning themselves. A library you later set to scan on a particular device keeps that device. The devices need Sync libraries across devices and Sync scanned data across devices turned on; see <a href="/en/media-library.html#one-scanner">One device scans a library</a>.</p>
+            <p>The server can also scan just some libraries: turn on Scan this library on this server in a library's editor, as Scan this library on this device works in the apps. The row says which device scans the library now; while Scan on the server is on, the switch stays on and can't be changed. Scan now always has the server scan the library at once.</p>
+            <h3 id="resume">Resume and watched</h3>
+            <p>Minimum resume percentage (5% by default) and Maximum resume percentage (95% by default), under Libraries, are for Emby and Jellyfin players and the web player. A video stopped before the minimum keeps no place to resume from, and the place it had is removed; stopped after the maximum, it is marked watched. A watched video played again keeps its mark, and gets a place to resume from when stopped part way; seeking back to the start and closing clears the place. CloudDrive2 apps use the percentages in their own <a href="/en/media-library.html#resume">media library settings</a>.</p>
+            <h3 id="ai-subtitles">AI subtitles</h3>
+            <div class="note note-warn" role="note" aria-labelledby="whisper-low-end-h">
+              <span class="note-title" id="whisper-low-end-h">Important: use external speech-recognition APIs on low-end devices</span>
+              <p>On low-end TV boxes and some older ARM32 devices, even Whisper Base remains slow with CPU optimizations enabled; generating subtitles can take longer than playing the video. Base also has very low recognition accuracy for film and TV dialogue, especially with background music or unclear speech. Faster processing does not improve the model’s accuracy.</p>
+              <p><strong>For these devices, we strongly recommend external speech-recognition APIs instead of local Whisper models.</strong> See <a href="/en/ai-translation.html#remote">remote API setup</a>.</p>
+            </div>
+            <p>The media server generates subtitles for library videos in the background, without playing them. It recognises the speech in a video, or reads the subtitles the video carries, translates them and saves the subtitle file beside the video for your devices and players to use. The server does not provide live subtitles during playback. The formats and options are the apps'; see <a href="/en/ai-translation.html">AI subtitle translation</a>.</p>
+            <ul>
+              <li>Turn it on under Media Server → AI subtitles and choose the speech recognition and translation services. Recognition can use a remote service or run on the server with Whisper. The standard 1.2.0-beta core packages include local Whisper, including ARM32 Linux and Android builds; download a model before first use. Legacy no-media builds do not provide this feature. The keys are kept on the server.</li>
+              <li>Click Generate AI subtitles on a title's page, or select several titles in a library and add them. Videos added from a CloudDrive2 app connected to the server are made by the server too, with the server's own services and keys.</li>
+              <li>Progress is under AI subtitles on the Tasks page: change the order, pause or cancel a video, and see how long each took. A film in several parts gets subtitles for every part.</li>
+              <li>The ARM32 Linux and Android cores use optimized Whisper CPU operations. Linux automatically enables acceleration when the processor supports NEON and VFPv4, with a compatible implementation for older CPUs. This also works automatically in Docker, with no extra acceleration options; see <a href="/en/docker.html#ai-subtitles">AI subtitles in Docker</a>.</li>
+              <li>Run Test recognition first to see how long 25 seconds of audio takes, the speed relative to playback, the thread count and whether the CPU or GPU was used. A speed below 1× means generation takes longer than playback, but still works for background jobs. Speed depends on the processor, model, thread count and available resources; compare thread settings using the test before choosing one.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Identification</h3>
+            <ul>
+              <li><strong>TMDB</strong>: on by default on the server, with no API key of your own needed. The API address is api.tmdb.org by default, which can be reached from mainland China; api.themoviedb.org or your own proxy address can be chosen instead. The server fetches TMDB's pictures and hands them to your devices and players, so they never need to reach TMDB themselves.</li>
+              <li><strong>Titles to Confirm</strong>: titles the automatic match can't settle can be confirmed on the web interface's Titles to Confirm page or in the apps. Once you choose, the server fetches the title's information at once, and every device sees it.</li>
+              <li><strong>Identify…, Edit Metadata… and Detect media info</strong>: done and written by the server when used in a browser; identifying a title and detecting media info in a connected app are done by the server too.</li>
+              <li><strong>AI identification</strong>: off by default. Choose the service, the model, the API key, and the libraries the model reads (never a private library, nor one with lookup off). Model calls a day can be chosen from a list, typed as a number, or set to no limit; 1,000 by default. See <a href="/en/media-library.html#ai">AI identification</a>.</li>
+            </ul>
+            <h3>Importing from Emby or Jellyfin</h3>
+            <p>Under Libraries, click Import from Emby or Jellyfin… and sign in to your server. Its libraries whose folders are on this CloudDrive2's cloud storage become libraries here, read from that server: its titles, their text and pictures, what you played there, and its people. Nothing on that server is changed. See <a href="/en/media-library.html#import">Import from Emby or Jellyfin</a>.</p>
+            <h3>Clear library data</h3>
+            <p>Deletes the titles, details and pictures the server has read, then reads the libraries again. The libraries, identifications and watch progress are kept.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── apps ──────────────────────────────────────────────────────── -->
+    <section class="band" id="apps" aria-labelledby="apps-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Apps</p>
+          <h2 id="apps-h">Connecting the CloudDrive2 apps</h2>
+          <p>The CloudDrive2 apps on Mac, iPhone, iPad, Apple TV, Apple Vision Pro, Android phones, tablets and TVs, Meta Quest and Windows PCs can connect to the media server. The setting is Use a media server under Settings → Media Libraries → Sync, and it needs App Pro on the device.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Finding the server</h3>
+            <ul>
+              <li><strong>The same CloudDrive account</strong>: the server writes its addresses into the Sync folder, so a device signed in to the same account finds it by itself and shows "Found in the Sync folder". Tap Use; no pairing code is needed.</li>
+              <li><strong>A pairing code</strong>: a device without the Sync folder, or signed in to another account, taps Pair with a code…. The dialog lists the servers on this network, or you type the server's address on your home network, such as 192.168.1.20. Make the code on the web page under Users &amp; devices → Paired devices → New pairing code; it works once and for a limited time.</li>
+            </ul>
+            <h3>While using the server</h3>
+            <ul>
+              <li>The device shows the server's libraries and stops scanning on its own. What it scanned is kept, ready for when you switch back to This device.</li>
+              <li>Identify, Keep This Match, look up again, Detect media info, library edits, favorites, marking watched and skip intro and ending times are done and kept by the server, and every device sees them. The audio track and subtitle chosen for a title follow it to your other devices too.</li>
+              <li>A library whose metadata language is Follow interface shows titles and plots in each device's own interface language: a phone in Chinese and a TV in English on the same server each see their own. After an interface language switch, the libraries show the new language at once, and the server looks up what it lacks in that language first.</li>
+              <li>To play, the device reads the video from the cloud through its own CloudDrive2; see <a href="#playback">How titles play</a>.</li>
+              <li>When the server has profiles, the app asks "Who's watching?"; see <a href="#profiles">Profiles</a>.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>When the server can't be reached</h3>
+            <p>The app says "Can't reach the server. Showing what was read before; trying again every 30 seconds." Pages opened before can still be browsed, and the app reconnects when the server is back. Away from home, devices try the outside addresses the server wrote into the Sync folder; see <a href="#away">Away from home</a>.</p>
+            <h3>Removing a device</h3>
+            <p>Paired devices on the web page shows each device's platform, how it paired and when it was last seen; after Remove it has to pair again to connect. Forget in an app removes the server from that device, which can then pair with it again only with a new code.</p>
+            <div class="note">
+              <span class="note-title">Versions</span>
+              <p>When the server needs a newer app, the app says "The server needs a newer CloudDrive app." Keep the server and the apps up to date.</p>
+            </div>
+            <h3 id="app-serve">Libraries served by an app</h3>
+            <p>Without a computer or NAS that is always on, a CloudDrive2 app can serve the libraries its own device scans to your other devices: turn on Serve these libraries to other devices under Settings → Media Server. The account needs both App Pro and a core plan with the Media Server.</p>
+            <ul>
+              <li>Your other devices find it through the Sync folder and use it as they would a server; Emby and Jellyfin players can connect to its address on port 29798. The pairing code and the paired devices are on that page too.</li>
+              <li>A Mac and a Windows PC serve while the app runs, in the background and from the menu bar or tray as well. An Android phone, a TV box and a Meta Quest serve while the app's service runs; a TV box suits this best. An iPhone, iPad, Apple TV and Apple Vision Pro serve only while the app is open.</li>
+              <li>A device that is using a media server can't serve at the same time: only the libraries a device scans itself can be served.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── players ───────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="players" aria-labelledby="players-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Other players</p>
+          <h2 id="players-h">Emby and Jellyfin players</h2>
+          <p>Infuse, SenPlayer and Jellyfin and Emby players can connect to the media server as they would to a Jellyfin server. Players need no plan of their own; the server account's plans cover them.</p>
+        </header>
+        <ol class="steps">
+          <li>
+            <h3>Add the server</h3>
+            <p>Add a Jellyfin server in the player, with the address of the core service's web interface, such as <code>http://192.168.1.20:19798</code>. In an Emby player, add an Emby server at the same address.</p>
+          </li>
+          <li>
+            <h3>Sign in</h3>
+            <p>Use the user name shown under Users &amp; devices → Emby and Jellyfin players on the web page with the media password set there, or a <a href="#profiles">profile</a>'s name with its player password. The media password is at least 6 characters, is used only by players, and isn't the core service's administrator password.</p>
+          </li>
+          <li>
+            <h3>Or use Quick Connect</h3>
+            <p>Choose Quick Connect in a Jellyfin player and it shows a 6-digit code. Allow it under Quick Connect on the web page, or type the code there. A code works for 10 minutes. Without a media password, this is the only way a player can sign in.</p>
+          </li>
+        </ol>
+        <div class="split">
+          <div>
+            <h3>What players can do</h3>
+            <ul>
+              <li>Browse the libraries the signed-in profile sees, private libraries excepted: films, shows with their seasons and episodes, collections, albums and artists, books, shelves, people, search and filters.</li>
+              <li>Play the original files, with subtitle files beside them. The server never transcodes and doesn't cap bitrates.</li>
+              <li>Keep progress, watched state and favorites per signed-in profile, to carry on in other players and devices.</li>
+              <li>Skip intros and endings in Jellyfin players that support media segments, at the times set in the apps.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Things to know</h3>
+            <ul>
+              <li>Clients that rely on the server to transcode (some official TV apps, for example) can't play the formats they don't support.</li>
+              <li>To protect cloud links, the server relays files from every cloud provider to third-party players and never gives them provider-direct URLs. Away from home, turn on Relay video for clients outside the home network. See <a href="#playback">How titles play</a>.</li>
+              <li>From outside, Infuse and other players refuse a self-signed certificate: use a certificate for your own domain or a reverse proxy. See <a href="#away">Away from home</a>.</li>
+              <li>On your home network, a player's sign-in page lists who can sign in: the owner once a media password is set, and the profiles with a player password.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── emby-compatible api ───────────────────────────────────────── -->
+    <section class="band" id="emby-api" aria-labelledby="emby-api-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Other tools</p>
+          <h2 id="emby-api-h">Emby API for other apps</h2>
+          <p>Tools such as MoviePilot can connect to the media server as they would to an Emby server: they read the libraries' titles and people, and fill in the cast's names, biographies and photos. It is under Users &amp; devices → Emby API for other apps, off by default, and answers while the media server is on. It is the apps' <a href="/en/media-library.html#emby-api">Emby API</a>, served by a server that stays on.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Connecting a tool</h3>
+            <ol>
+              <li>Turn on Serve the Emby API.</li>
+              <li>Press New key… to make a key for each tool that connects, and choose the libraries it reads and writes (All video libraries, or some of them); with Private libraries too, private libraries are included. The key is shown only once: copy it then.</li>
+              <li>In the tool, choose Emby as the server type, then enter one of the server addresses listed on the page (the core service's addresses) and the key. For a tool that also signs a user in, the user name is the owner's name or admin, and the password is the <a href="#players">media password</a>.</li>
+            </ol>
+            <p>Each key shows when it was made and last used, and its libraries can be changed or the key removed. Recent requests lists what tools asked lately and what the server answered, to check a connection.</p>
+          </div>
+          <div>
+            <h3>What other apps send</h3>
+            <ul>
+              <li>People's names, biographies, photos and roles, and favorites. What tools send about people shows ahead of NFO files and TMDB, on every device.</li>
+              <li>It is kept on the server, not written into the media folders. Forget What Other Apps Sent removes it; the keys stay.</li>
+              <li><strong>Follow links in a person's text</strong>: when what a tool wrote for a person is only links to TMDB, IMDb or Wikipedia, the biography, dates and photo are read from there. The ids in those links are sent to TMDB or Wikipedia.</li>
+            </ul>
+            <div class="note">
+              <span class="note-title">Security</span>
+              <p>Keys travel in the address a tool calls, so keep them private. Through this API, tools reach the chosen libraries' titles and people only, never your files or accounts. Five wrong keys from one address within a minute make it wait a minute before the next try.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── web ───────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="web" aria-labelledby="web-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Browser</p>
+          <h2 id="web-h">Watching in a browser</h2>
+          <p>The Media page in the core service's web interface is the server's own media client, laid out like the apps' media screens: the wide layout on a computer and the phone layout on a phone. It browses as the owner, and its progress and favorites are the server's.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Pages</h3>
+            <ul>
+              <li><strong>Home</strong>: the featured carousel, the libraries, Continue Watching, Next Up, Continue Listening, Continue Reading, and the newest of each library.</li>
+              <li><strong>A library</strong>: posters, thumbnails, banners or a list; picture size; sorting; filters (play state, favorites, resolution, HDR, sound, video codec, file format, audio and subtitle languages, genres, tags, studios, status, rating, years; see <a href="/en/media-library.html#filters">Filters</a>); folders; shelves and collections; selecting several; Go to Page. A music library browses by albums, artists and folders, a book library by books, authors, series and folders.</li>
+              <li><strong>A title</strong>: Play or Resume, the trailer, watched, favorite; the version, video, audio and subtitle; seasons and episodes; the cast; collection and links; media info. Identify…, Edit Metadata… (posters, backdrops, logos and actors' photos included), Detect media info, Generate AI subtitles, Go to Library (opens the library at this title) and Show in Files (opens the folder that holds the file, with the file selected and scrolled into view; a show and an album folder open their own folder).</li>
+              <li><strong>Live updates</strong>: titles a scan finds, identifications, pictures fetched later, favorites and watched marks appear on the open page without a reload.</li>
+              <li><strong>Search, Favorites and History</strong>, and pages for people, albums, artists, books, authors and series. A search from a library's page looks in that library first, with a switch to all libraries; History also lists the albums of songs played to the end. A person's page has Identify and Edit…, and an actor's titles sort and filter as a library's do.</li>
+              <li><strong>Music</strong> plays in a full player with the cover, lyrics, the queue, format badges and MusicBrainz credits; closed, it becomes a mini player at the bottom that carries on as you browse. <strong>Books</strong> open in the web interface's reader (EPUB, MOBI, AZW3, CBZ, CBR), PDF and text in the browser; the reading place is shared with the apps.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>The player</h3>
+            <p>Films and music on the Media pages play in the core service's <a href="/en/web-player.html">web player</a>. The web player is a feature of its own: videos, music, disc images and CUE sheets in the file manager open in it too, with no media server needed. For what it plays, what it needs from the browser and the computer, and how it compares with the apps' player, see <a href="/en/web-player.html">the web player</a>.</p>
+            <p>Played from a library, progress and watched marks sync with the server, so your other devices and the CloudDrive2 App see them; a show's intro and ending can be skipped, and the next episode plays when one ends.</p>
+            <div class="note" id="chrome-secure-origin">
+              <span class="note-title">Open it over HTTPS</span>
+              <p>With default browser settings, WebCodecs hardware decoding requires a secure context such as HTTPS or localhost. At <code>http://&lt;LAN address&gt;</code>, 4K HEVC and similar videos with audio unsupported by native browser playback may fall back to software decoding, causing dropped frames or stuttering. Safari supports more audio formats natively and is usually unaffected by this limitation. HTTPS is recommended; alternatively, configure Chrome or Edge to treat a specific trusted LAN address as secure so these browser capabilities work over HTTP. See <a href="/en/web-player.html#chrome-secure-origin">hardware decoding in Chrome and Edge</a>.</p>
+            </div>
+          </div>
+        </div>
+        <div class="split">
+          <div>
+            <h3>Parental control</h3>
+            <p>The media interface can have a parental control code, kept in this browser. While it's locked, the code is asked for before Files, the file manager, Tasks, Settings, Identify, Edit Metadata and the media settings; Show in Files is hidden, and only titles within the highest rating show. It locks when the page is hidden and after the auto-lock time. See <a href="/en/media-library.html#parental">Parental control</a>.</p>
+          </div>
+          <div>
+            <h3>The browser's settings</h3>
+            <p>Settings on the Media page are kept in this browser only: titles on a page (50 to 1,000, or all as you scroll), the picture size in grids and lists, and the quality badges on posters. A library's settings button opens that library's editor on the Media Server page.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── playback ──────────────────────────────────────────────────── -->
+    <section class="band" id="playback" aria-labelledby="playback-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Playback</p>
+          <h2 id="playback-h">How titles play</h2>
+          <p>Third-party players and the Media web page receive authenticated CloudDrive2 playback URLs, not cloud-provider direct links. CloudDrive2 apps can play through their own CloudDrive2 with the same cloud account. Only trusted devices authenticated as the owner or paired through the Sync folder can receive a cloud-provider link from the server.</p>
+        </header>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <thead>
+              <tr><th scope="col">Way</th><th scope="col">When it is used</th><th scope="col">Through the server</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">The device's own CloudDrive2</th><td>A CloudDrive2 app whose CloudDrive2 has the same cloud account. Exactly as when it plays its own library.</td><td>No</td></tr>
+              <tr><th scope="row">A cloud link for the owner's trusted device</th><td>Only trusted CloudDrive2 devices authenticated as the owner or paired through the Sync folder, when the cloud permits direct playback. Never third-party players, media logins or devices paired with a code.</td><td>No</td></tr>
+              <tr><th scope="row">Relayed by the server</th><td>Always used by Infuse, SenPlayer, Emby and Jellyfin players and the Media web page, whether or not the cloud supports direct links. Also available to CloudDrive2 apps that need the server to read the file.</td><td>Yes. Away from home, only with Relay video for clients outside the home network turned on</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="split">
+          <div>
+            <h3>The home network</h3>
+            <p>Connections from private addresses (192.168.x.x, 10.x.x.x and the like) and local IPv6 addresses count as the home network. Connections through a carrier's shared address, through Tailscale and similar networks, or from a public address count as outside it.</p>
+          </div>
+          <div>
+            <h3>What relaying costs</h3>
+            <p>Relay video for clients outside the home network is off by default. Files played by third-party players and the Media web page always pass through the server; away from home, they cannot play while this switch is off. When it is on, the server's upload speed has to exceed the title's bitrate for smooth playback. CloudDrive2 apps playing through their own CloudDrive2 with the same cloud account, or a cloud link available to the owner's trusted device, do not need relay.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── profiles ──────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="profiles" aria-labelledby="profiles-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Family</p>
+          <h2 id="profiles-h">Profiles</h2>
+          <p>Under Users &amp; devices → Profiles, add a profile for each family member and child who shares these libraries. Each profile has its own progress and favorites and sees only the libraries chosen for it. The CloudDrive account itself is the owner, and the owner's code is the libraries' PIN. Up to 32 profiles.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>A profile's settings</h3>
+            <ul>
+              <li><strong>Name, colour or picture</strong>: the picture can be a JPEG or PNG of up to 2 MB.</li>
+              <li><strong>Libraries</strong>: the libraries it sees, or All libraries (those added later too).</li>
+              <li><strong>Private libraries open with the PIN</strong>: without it, the profile can't open private libraries.</li>
+              <li><strong>Highest rating</strong>: no limit, G, PG, PG-13 or R, and whether to Show titles without a rating. When a device's own parental control sets a rating too, the stricter one applies.</li>
+              <li><strong>Code</strong>: 4 digits, optional, asked for before a device picks the profile. After 5 wrong tries, wait 5 minutes.</li>
+              <li><strong>Player password</strong>: optional, at least 6 characters. Emby and Jellyfin players sign in with the profile's name and this password.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Which profile a device uses</h3>
+            <ul>
+              <li>Under Paired devices, set each device to the owner, a profile, or Ask who is watching. A new pairing code can also be made for a profile, which the device paired with it then uses.</li>
+              <li>A device set to ask shows "Who's watching?" when it opens the libraries and shows nothing until one is picked; it asks again after the server restarts.</li>
+              <li>Quick Connect chooses which profile the player signs in as.</li>
+            </ul>
+            <h3>Progress and favorites</h3>
+            <p>A profile's progress, watched state and favorites are kept on the server, apart from the owner's, and never go into the owner's Sync progress. Removing a profile removes its progress, favorites and picture, and the devices that used it ask again.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── away ──────────────────────────────────────────────────────── -->
+    <section class="band" id="away" aria-labelledby="away-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Away</p>
+          <h2 id="away-h">Away from home</h2>
+          <p>Away from home, your devices reach the server at the addresses it writes into the Sync folder. The settings are under Users &amp; devices → Away from home.</p>
+        </header>
+        <div class="split">
+          <div>
+            <h3>Making the server reachable from outside</h3>
+            <ul>
+              <li><strong>Router mapping</strong>: forward port 19799 (HTTPS) on your router, or use the core service's UPnP port mapping (when the router supports UPnP or PCP). The page shows the current mapping.</li>
+              <li><strong>Addresses from outside</strong>: domain names or IPv6 addresses that reach this server from outside, with the scheme and port, such as <code>https://nas.example.com:19799</code>; up to 8.</li>
+              <li><strong>Addresses devices try</strong>: the page lists the addresses devices try away from home.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Certificates</h3>
+            <p>The CloudDrive2 apps note the server's certificate when they pair, so they connect securely even with the core service's own certificate. Infuse and other players accept only a trusted certificate: set one up for your domain, or use a reverse proxy.</p>
+            <h3>Relay video for clients outside the home network</h3>
+            <p>Off by default. Third-party players and the Media web page require it for playback away from home, for every cloud provider. See <a href="#playback">How titles play</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── security ──────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="security" aria-labelledby="security-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Security</p>
+          <h2 id="security-h">Security</h2>
+          <p>The media server and the file service share one port. This is how they are kept apart.</p>
+        </header>
+        <div class="split">
+          <div>
+            <ul>
+              <li><strong>Devices and players reach the libraries only</strong>: what a paired device or a signed-in player is given reads the libraries and nothing else. It opens no files, no WebDAV and no download links, and can't manage the core service.</li>
+              <li><strong>The media password isn't the administrator password</strong>: the media password and player passwords are only for players. Only the core service's administrator can open the Media Server page.</li>
+              <li><strong>The PIN is checked on the server</strong>: the private libraries' PIN is never sent to other devices, and wrong tries lock that device for a while.</li>
+              <li><strong>Pairing</strong>: a pairing code works once, and 5 wrong codes in a row cancel every unused code. Removing a device also stops the links it was given.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="note note-warn">
+              <span class="note-title">When it can be reached from outside</span>
+              <p>The page warns when the server can be reached from outside while file downloads (/static) answer without a signed link. Turn on Require signed download links in the core service's settings, and give the administrator account a strong password and two-factor sign-in. The media server, your devices and signed download links aren't affected by that setting.</p>
+            </div>
+            <p>The Sync folder holds the server's addresses and pairing details, which your devices use to pair by themselves. Anyone who can open that cloud storage can read them too. To revoke them, click Change the pairing key under Paired devices and remove any device you don't recognise.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── privacy ───────────────────────────────────────────────────── -->
+    <section class="band" id="privacy" aria-labelledby="privacy-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">Privacy</p>
+          <h2 id="privacy-h">What leaves the server</h2>
+        </header>
+        <div class="split">
+          <div>
+            <ul>
+              <li><strong>CloudDrive's servers</strong>: receive nothing from your libraries; only the account's plans are checked.</li>
+              <li><strong>TMDB and Bangumi</strong>: with lookup on, titles' names and years.</li>
+              <li><strong>MusicBrainz</strong>: when on, albums' names, artists, barcodes and catalogue numbers, and a CD rip's track lengths.</li>
+              <li><strong>Open Library</strong>: when on, for book libraries with online lookup, books' titles, authors and ISBNs.</li>
+              <li><strong>The AI service you choose</strong>: only with AI identification on, the path below the library folder and the file names of unidentified items in the chosen libraries, and the tags, CUE sheets, SACD text or OPF read from their files. Nothing from private libraries is sent. Some services may train models on what is sent under a free plan; DeepSeek stores data in mainland China.</li>
+              <li><strong>Your Emby or Jellyfin server</strong>: only while importing, read with your sign-in: its libraries, titles, people, pictures and what you played. Nothing is written to it.</li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li><strong>MoviePilot and similar tools</strong>: only with the Emby API on, a tool holding a key reads and writes the titles and people of the libraries chosen for it.</li>
+              <li><strong>The speech recognition and translation services you choose</strong>: only while AI subtitles are made. A remote recognition service is sent the video's sound, and a translation service the recognised text or the video's own subtitles. With whisper on the server, the sound never leaves the server.</li>
+              <li><strong>Your cloud storage</strong>: the Sync folder holds the libraries' settings, scanned data, picture packs, and the server's addresses and pairing details. With Save info and artwork beside the media on, or after Edit Metadata…, NFO files and pictures are written into the titles' folders; subtitle files made by AI subtitles are saved beside the videos.</li>
+              <li><strong>Your devices and players</strong>: see the libraries chosen for their profile, the titles' information and pictures, and the file paths and authenticated playback URLs needed to play. Third-party players never receive cloud-provider direct links.</li>
+            </ul>
+            <p>No file is ever deleted. The server only reads the libraries' folders; it writes only what you turned on with Save info and artwork beside the media, what you save with Edit Metadata…, the subtitle files AI subtitles make, and the files in the Sync folder.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── faq ───────────────────────────────────────────────────────── -->
+    <section class="band band-alt" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h">Frequently asked questions</h2>
+        </header>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Which plans does the media server need?</summary>
+          <div class="acc-body">
+            <p>The CloudDrive account the server is signed in to needs both a core plan (monthly, yearly or lifetime; not Lifetime Lite) and App Pro; with only one of them the media server can't be used. Each device whose CloudDrive2 app connects to the server needs App Pro of its own. Infuse, SenPlayer, Emby and Jellyfin players and browsers need nothing of their own. When the core plan runs out the media server stops serving, and starts again once it is renewed.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>I have no NAS. Can a TV box or a computer be the server?</summary>
+          <div class="acc-body">
+            <p>Yes. In the CloudDrive2 app on that device, turn on Settings → Media Server → Serve these libraries to other devices, and your other devices and Emby and Jellyfin players can read the libraries it scans. A computer and a TV box serve whenever the app runs; an iPhone, iPad, Apple TV and Apple Vision Pro serve only while the app is open. See <a href="#app-serve">Libraries served by an app</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>The app doesn't find the server</summary>
+          <div class="acc-body">
+            <p>To find it by itself, both sides must be signed in to the same CloudDrive account, and the device must have Sync progress on and reach the cloud that holds CloudDrive2 Sync. Otherwise, tap Pair with a code… under Settings → Media Libraries → Sync → Use a media server, make a code under Paired devices on the web page, and pick the server the dialog lists or type its address. The device must be able to reach the core service's port (19798 by default).</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Once connected, does each device still scan?</summary>
+          <div class="acc-body">
+            <p>No. A connected device shows the server's libraries; it neither scans nor looks anything up online. Devices that keep their own libraries can take the server's results instead of scanning once Scan on the server is turned on.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>A player signs in, but titles on 115 won't play</summary>
+          <div class="acc-body">
+            <p>Third-party playback is always relayed by the server, for 115 and every other cloud provider; provider-direct links are never given to the player. Away from home, turn on Relay video for clients outside the home network under Away from home. Connecting through Tailscale or a similar network counts as away from home. On the home network, check that the server itself can read the file and that the player supports its format.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Infuse can't connect from outside</summary>
+          <div class="acc-body">
+            <p>Infuse and similar players refuse self-signed certificates. Set up a trusted certificate for your domain, or a reverse proxy, and use that https address in the player. The CloudDrive2 apps aren't affected.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Does the server transcode?</summary>
+          <div class="acc-body">
+            <p>No. Every client plays the original file, decoded by the player and its device. Third-party players always receive original files relayed by the server, so playback depends on its network and processing capacity. CloudDrive2 apps playing through their own CloudDrive2 with the same cloud account use no media-server relay bandwidth. For a format your player can't play, use one that can, such as Infuse, SenPlayer or the CloudDrive2 apps.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Some titles won't play in the browser, or stutter</summary>
+          <div class="acc-body">
+            <p>With default browser settings, open the web interface over HTTPS or localhost to enable WebCodecs hardware decoding; otherwise some 4K HEVC videos may drop frames when decoded in software (in Safari most videos are fine over HTTP). On a home network you can instead configure Chrome or Edge to treat a specific trusted HTTP LAN address as secure: see <a href="/en/web-player.html#chrome-secure-origin">how</a>. Browsers can't play DVDs, VC-1 and some other formats: click Copy link and play it in VLC, IINA, PotPlayer or Infuse, click Download, or play it in the CloudDrive2 App. What each browser needs is on <a href="/en/web-player.html#web-requirements">the web player page</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>I already have an Emby or Jellyfin server</summary>
+          <div class="acc-body">
+            <p>When the media is in your cloud storage, click Import from Emby or Jellyfin… under Libraries to use what that server has already organized: information, pictures and what you played, with no new scan.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Can MoviePilot connect to the media server?</summary>
+          <div class="acc-body">
+            <p>Yes. Turn on the API under Users &amp; devices → Emby API for other apps, make a key for MoviePilot, and in MoviePilot choose Emby as the server type and enter a server address listed on the page and the key. See <a href="#emby-api">Emby API for other apps</a>.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>What happens while the server is off?</summary>
+          <div class="acc-body">
+            <p>Connected apps show what they read before, try again every 30 seconds, and reconnect when the server is back. Players and browsers can't be used while it's off. You can also switch an app back to This device under Settings → Media Libraries → Sync → Use a media server at any time, and let the device organize the libraries itself.</p>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary><i class="fa-solid fa-circle-question" aria-hidden="true"></i>Can the children see everything?</summary>
+          <div class="acc-body">
+            <p>Add a profile for them with only the suitable libraries, a highest rating and a code, then set their devices to that profile, or to Ask who is watching. See <a href="#profiles">Profiles</a>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="band cta-band">
+      <div class="container">
+        <h2>Report a problem</h2>
+        <p>File problems as GitHub issues, where they are recorded and tracked; you can also report them in the Telegram group or by email.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">File a GitHub issue</a>
+          <a class="btn btn-ghost" href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a>
+          <a class="btn btn-ghost" href="mailto:waytechcloudfs@gmail.com">Email us</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="brand-mark" src="/img/clouddrive-h.svg" alt="" width="147" height="26"><img class="brand-mark brand-mark-dark" src="/img/clouddrive-h-dark.svg" alt="" width="147" height="26" aria-hidden="true">
+          <p>Multi-cloud management · local mounting · cinema-grade playback</p>
+        </div>
+        <div class="footer-col">
+          <h2>Product</h2>
+          <ul>
+            <li><a href="/en/apps/">Apps</a></li>
+            <li><a href="/en/features.html">Core features</a></li>
+            <li><a href="/en/pricing.html">Plans and pricing</a></li>
+            <li><a href="/en/download.html">Download</a></li>
+            <li><a href="/en/partners.html">Partners</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Support</h2>
+          <ul>
+            <li><a href="/en/help.html">Help and setup</a></li>
+            <li><a href="/en/docker.html">Docker deployment</a></li>
+            <li><a href="/api/CloudDrive2_gRPC_API_Guide.html">API guide</a></li>
+            <li><a href="https://t.me/cloudnaschat" rel="noopener">Telegram group</a></li>
+            <li><a href="https://github.com/cloud-fs/cloud-fs.github.io/issues" rel="noopener">GitHub Issues</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h2>Legal and contact</h2>
+          <ul>
+            <li><a href="/privacy.html">Privacy policy</a></li>
+            <li><a href="/eula.html">User agreement</a></li>
+            <li><a href="/account-deletion.html">Delete your account</a></li>
+            <li><a href="mailto:waytechcloudfs@gmail.com">waytechcloudfs@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CloudDrive2</p>
+        <p><a lang="zh-CN" hreflang="zh-CN" href="/media-server.html">中文</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

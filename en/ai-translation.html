@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AI subtitle translation — CloudDrive2</title>
-  <meta name="description" content="AI subtitle translation in the CloudDrive2 apps: translate a video's existing subtitle track, or transcribe its audio and translate that; on-device models and remote APIs on each platform, output formats and dual-language subtitles, saving and reuse, the Emby / Jellyfin media client, whole-folder generation, and common questions.">
+  <meta name="description" content="CloudDrive2 AI subtitles: translation during app playback, local batch jobs, and media-server background generation. Server setup, queues, models and APIs, saved subtitles, format limits, and advice for low-end devices.">
   <link rel="canonical" href="https://www.clouddrive2.com/en/ai-translation.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/ai-translation.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/ai-translation.html">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CloudDrive2">
   <meta property="og:title" content="AI subtitle translation — CloudDrive2">
-  <meta property="og:description" content="Generate translated subtitles that play in sync: translate an existing subtitle track, or transcribe the audio and translate it. Use on-device models or your own API.">
+  <meta property="og:description" content="Translate subtitles in the apps or generate saved subtitle files in the background on your media server. Local models and your own APIs; external speech-recognition APIs are strongly recommended for low-end devices.">
   <meta property="og:url" content="https://www.clouddrive2.com/en/ai-translation.html">
   <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -57,7 +57,8 @@
       <div class="container">
         <p class="eyebrow">An App Pro feature</p>
         <h1>AI subtitle translation</h1>
-        <p class="hero-lede">Generate translated subtitles for a video and have them play in sync with the picture. When the video has a subtitle track, that track is translated; when it has none, the audio is transcribed first and then translated. The subtitles are saved in the video's own folder, so any other device that opens the same video loads them directly.</p>
+        <p class="release-line">New in the 1.2.0 public beta: media-server background subtitle generation. Live subtitles in the apps remain available on supported platforms.</p>
+        <p class="hero-lede">Translate subtitles while playing in a CloudDrive2 app, or generate them ahead of time on your device or media server. Translate existing subtitle text, or transcribe audio and then translate it. Subtitle files saved beside the video can be used by other devices and players. The media server generates subtitles in the background; it does not provide live subtitles during playback.</p>
         <ul class="chips">
           <li><a class="chip chip-subs" href="#source">Translate from</a></li>
           <li><a class="chip" href="#platforms">Models by platform</a></li>
@@ -66,7 +67,8 @@
           <li><a class="chip" href="#output">SRT and dual-language ASS</a></li>
           <li><a class="chip" href="#reuse">Saving and reuse</a></li>
           <li><a class="chip" href="#media-client">Emby / Jellyfin</a></li>
-          <li><a class="chip" href="#batch">Whole folders</a></li>
+          <li><a class="chip" href="#batch">App batch jobs</a></li>
+          <li><a class="chip" href="#server-background">Server background jobs</a></li>
           <li><a class="chip" href="#privacy">Privacy</a></li>
           <li><a class="chip" href="#faq">FAQ</a></li>
         </ul>
@@ -82,17 +84,18 @@
         <div class="port-card">
           <div>
             <p class="eyebrow">Where it works</p>
-            <h2 id="scope-h">Which apps have it</h2>
+            <h2 id="scope-h">Apps and the media server</h2>
           </div>
           <div>
             <p>The CloudDrive2 apps for iPhone, iPad, Mac, Apple TV, Apple Vision Pro, Windows, Android phones and TVs, and Meta Quest. AI subtitle translation is part of <strong>App Pro</strong>: buy it once, and every device signed in to the same CloudDrive account has it.</p>
+            <p>The standard 1.2.0-beta core also provides <a href="#server-background">media-server background subtitle jobs</a>, submitted from the web interface or a connected app. The server account needs both App Pro and an eligible core plan (monthly, yearly or Lifetime; Lifetime Lite is excluded). See <a href="/en/media-server.html#plans">media-server plan requirements</a>.</p>
             <p>AI translation may not be fully accurate; quality depends on the model you use.</p>
           </div>
         </div>
 
         <div class="note">
           <span class="note-title">CloudDrive2 does not provide a transcription or translation service</span>
-          <p>Transcription and translation are done in one of two ways: by the models built into your device, or by external APIs you configure yourself. CloudDrive2 runs no transcription or translation servers and does not call such services on your behalf. To use an external API, you get the API key from the provider yourself, and that provider is responsible for the charges and for how it handles the data.</p>
+          <p>Transcription and translation run through models on your device, your own media server, or external APIs you configure. CloudDrive2 does not operate a hosted transcription or translation service or proxy these requests. Get external API keys from the provider; that provider handles billing and data processing.</p>
         </div>
       </div>
     </section>
@@ -123,6 +126,8 @@
           </div></li>
         </ul>
 
+        <p class="chip-note">The choices above describe the apps. Server Automatic mode prefers an embedded text track matching the spoken language; the server does not OCR picture subtitles such as PGS. See <a href="#server-formats">server source and format limits</a>.</p>
+
         <p class="chip-note">The <strong>Spoken Language</strong> is the language spoken in the video; the <strong>Target Language</strong> is the subtitle language to generate. Both have defaults in Settings and can be changed for each video. Picking the actual spoken language gives more accurate transcription.</p>
       </div>
     </section>
@@ -132,7 +137,7 @@
         <header class="band-head">
           <p class="eyebrow">Models</p>
           <h2 id="platforms-h">Transcription and translation on each platform</h2>
-          <p>Transcription and translation are separate steps, and each can run on the device or through a remote API. On-device models are free, and the audio and subtitle text stay on the device.</p>
+          <p>Transcription and translation are separate steps. Apps can use the on-device models or remote APIs below. The server uses its own Whisper model or an external transcription API, with translation configured separately. A step that runs locally does not send its audio or text to an external provider.</p>
         </header>
 
         <div class="table-scroll">
@@ -148,6 +153,7 @@
               <tr><th scope="row"><i class="fa-brands fa-windows" aria-hidden="true"></i>Windows</th><td>On-device (Whisper, model downloaded to the PC), or a remote API</td><td>A remote API. Translation into English can be done on the PC by Whisper itself</td></tr>
               <tr><th scope="row"><i class="fa-brands fa-android" aria-hidden="true"></i>Android phones, tablets and TVs</th><td>On-device (Whisper, with GPU acceleration), or a remote API</td><td>On-device (ML Kit), or a remote API</td></tr>
               <tr><th scope="row"><i class="fa-brands fa-meta" aria-hidden="true"></i>Meta Quest</th><td>On-device (Whisper), or a remote API</td><td>A remote API is recommended</td></tr>
+              <tr><th scope="row"><a href="#server-background">Media server (background jobs)</a></th><td>Whisper on the server, or an external API</td><td>An OpenAI-compatible translation API, self-hosted MTranServer, or None (keep the spoken lines)</td></tr>
             </tbody>
           </table>
         </div>
@@ -192,9 +198,11 @@
         <p class="chip-note">qwen-audio-3.0-asr-flash, qwen-audio-3.1-asr-flash and fun-asr-flash can be used from app 1.1.0; see <a href="#remote">remote APIs</a> below.</p>
 
 
-        <div class="note note-warn">
-          <span class="note-title">About on-device Whisper recognition</span>
-          <p>On Windows, Android and Quest, the smaller models that can keep up (Tiny, Base, Small) often mishear dialogue, especially under background music and in languages other than English, and may repeat a phrase or invent lines during music. Turbo is more accurate, but too slow on most phones and TV boxes to keep up with playback, and on a computer it needs a capable graphics card to keep up. Medium is just as slow, and in the test above it was no more accurate than Small.</p>
+        <div class="note note-warn" id="whisper-low-end" role="note" aria-labelledby="whisper-low-end-h">
+          <span class="note-title" id="whisper-low-end-h">Important: use external speech-recognition APIs on low-end devices</span>
+          <p>On low-end TV boxes and some older ARM32 devices, even Whisper Base remains slow with CPU optimizations enabled; generating subtitles can take longer than playing the video. Base also has very low recognition accuracy for film and TV dialogue, especially with background music or unclear speech. Faster processing does not improve the model’s accuracy.</p>
+          <p><strong>For these devices, we strongly recommend external speech-recognition APIs instead of local Whisper models.</strong> See <a href="/en/ai-translation.html#remote">remote API setup</a>.</p>
+          <p>On Windows, Android and Quest, the smaller models (Tiny, Base, Small) often mishear dialogue, especially under background music and in languages other than English, and may repeat a phrase or invent lines during music. Turbo is more accurate, but too slow on most phones and TV boxes to keep up with playback, and on a computer it needs a capable graphics card to keep up. Medium is just as slow, and in the test above it was no more accurate than Small.</p>
           <p>For accurate subtitles, use a remote speech recognition API, or generate the subtitles with Apple on-device recognition on an iPhone, iPad or Mac, save them next to the video, and watch on the other device.</p>
         </div>
       </div>
@@ -272,7 +280,7 @@
         </div>
 
         <p>Once it is filled in, use <strong>Test transcription</strong> and <strong>Test translation</strong> to check the endpoint works. Subtitle lines are short and requests are frequent, so the lighter models near the top of each list are faster and cheaper, and usually a better fit than large reasoning models.</p>
-        <p class="chip-note">API keys are stored on the device only. Charges for a remote service are billed by that provider, not by CloudDrive2. The preset providers and models change with app updates; the app shows the current list.</p>
+        <p class="chip-note">Local app jobs keep API keys on that device. Server jobs use keys stored and configured separately on the server. The provider bills its own charges, independently of CloudDrive2. Use the current preset list in the app or server web interface.</p>
       </div>
     </section>
 
@@ -280,7 +288,7 @@
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Getting started</p>
-          <h2 id="start-h">Start translating in the player</h2>
+          <h2 id="start-h">Start translating in the app player</h2>
           <p>Turn on <strong>Live AI Subtitles</strong> under <strong>Live Translation</strong> in Settings, then play a video.</p>
         </header>
 
@@ -312,14 +320,14 @@
         <header class="band-head">
           <p class="eyebrow">Output</p>
           <h2 id="output-h">SRT or ASS</h2>
-          <p>Choose for the current video in the wizard's third step, <strong>Output format</strong>, or set the default under <strong>Output Format</strong> in the <strong>Live Translation</strong> settings.</p>
+          <p>In an app, choose the output in its setup wizard or Live Translation settings. On the server, set defaults under Media Server → AI subtitles → Output, or choose them when adding jobs.</p>
         </header>
 
         <ul class="card-grid card-grid-2">
           <li><div class="card">
             <i class="fa-solid fa-file-lines card-icon" aria-hidden="true"></i>
             <h3>SRT</h3>
-            <p>Plain-text subtitles with the translation only. Almost every player and TV can read them, so choose SRT if you also want to use the file in other players.</p>
+            <p>Plain-text subtitles containing the translation, or the original lines when server translation is set to None. Almost every player and TV can read them, so choose SRT to share the file with other players.</p>
           </div></li>
           <li><div class="card">
             <i class="fa-solid fa-palette card-icon" aria-hidden="true"></i>
@@ -339,7 +347,7 @@
             </thead>
             <tbody>
               <tr><th scope="row">Wrap long lines / Max characters per line</th><td>Splits an over-long subtitle line into several</td></tr>
-              <tr><th scope="row">Subtitle delay</th><td>Shows AI subtitles later, or earlier with a negative value. Increase it if subtitles appear a little before the voice. On-device and remote transcription each have their own value</td></tr>
+              <tr><th scope="row">Subtitle delay</th><td>Shows AI subtitles later, or earlier with a negative value. Increase it if subtitles appear a little before the voice. Each recognition model has its own delay; server delays are configured in the server’s AI subtitle settings</td></tr>
             </tbody>
           </table>
         </div>
@@ -355,6 +363,8 @@
           <h2 id="reuse-h">Saving and reuse</h2>
           <p>With <strong>Save subtitles next to video</strong> on, the subtitle file is written to the video's cloud folder, with the same name as the video.</p>
         </header>
+
+        <p class="chip-note">A server job automatically writes its subtitle beside the video when complete. The app player’s Save next to video switch does not control server jobs. The server needs write access to that folder; see <a href="#server-output">server output and working copies</a>.</p>
 
         <div class="split">
           <div>
@@ -400,7 +410,7 @@
       <div class="container">
         <header class="band-head">
           <p class="eyebrow">Whole folders</p>
-          <h2 id="batch-h">Generating subtitles for a whole folder</h2>
+          <h2 id="batch-h">Generating subtitles for a whole folder in an app</h2>
           <p>Choose <strong>Generate AI Subtitles</strong> from a folder's or a video's menu. Subtitles are generated one by one in the background, without playing the videos, and saved next to each one.</p>
         </header>
 
@@ -415,6 +425,58 @@
       </div>
     </section>
 
+    <section class="band" id="server-background" aria-labelledby="server-background-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">1.2.0-beta · Media server</p>
+          <h2 id="server-background-h">Generate subtitles in the background on the server</h2>
+          <p>The web interface and connected CloudDrive2 apps can add films, shows or multiple selected titles to the server’s subtitle queue. Jobs use the server’s resources, settings and API keys. You can close the browser or client after submitting them; generation continues while the server runs. The server does not stream newly generated live subtitles to a player.</p>
+        </header>
+        <div class="note note-warn" role="note" aria-labelledby="server-api-advice-h">
+          <span class="note-title" id="server-api-advice-h">Low-end devices: external speech-recognition APIs strongly recommended</span>
+          <p>Even with CPU optimizations, Whisper Base remains slow on low-end TV boxes and some older ARM32 devices, with very low accuracy for film and TV dialogue. Acceleration does not improve accuracy. We strongly recommend external speech-recognition APIs instead of local Whisper on these devices; see the <a href="#whisper-low-end">important notice</a> and <a href="#remote">API setup</a>.</p>
+        </div>
+
+        <h3 id="server-setup">Set up and add jobs</h3>
+        <ol class="steps">
+          <li><h3>Prepare the media server</h3><p>Use the standard 1.2.0-beta core and follow the <a href="/en/media-server.html">media-server guide</a> to enable the service and prepare libraries. The server account needs App Pro and an eligible core plan. Legacy no-media builds do not include this feature.</p></li>
+          <li><h3>Enable AI subtitles and configure services</h3><p>Open Media Server → AI subtitles in the web interface, turn it on, and choose spoken language, target language and source. Transcription uses an external API or Whisper on the server. Translation uses an OpenAI-compatible service, self-hosted MTranServer, or None (keep the spoken lines). Enter the server’s endpoint addresses, models and keys here; the app player’s settings do not automatically replace them.</p></li>
+          <li><h3>Test recognition and translation</h3><p>Use Test recognition and Test translation to check the services. Download a model first if using Whisper; its test reports the time for 25 seconds of audio, thread count and CPU / GPU. Speeds below 1× still work for background jobs, with a longer wait. GPU availability depends on the server build and drivers. ARM32 CPU acceleration is automatic on supported processors, with <a href="/en/docker.html#ai-subtitles">no extra acceleration options for Docker</a>.</p></li>
+          <li><h3>Add videos from the library</h3><p>Choose Generate AI subtitles on a film or show page, or select several titles and use the action. Confirm languages, source, services and output format before adding them. Shows and seasons expand into episodes; multipart films get subtitles for each part. Jobs added here from a connected app run on the server, not on the phone or TV.</p></li>
+        </ol>
+        <p class="chip-note">The endpoint must be reachable from the server. In Docker, <code>localhost</code> refers to the container’s network environment. For Ollama, LM Studio, Speaches or MTranServer on another device, use an address the server can reach. External providers bill their own API charges.</p>
+
+        <h3 id="server-formats">Sources and format limits</h3>
+        <div class="table-scroll">
+          <table class="matrix-table">
+            <caption class="sr-only">Supported sources and limits for media-server background subtitle jobs</caption>
+            <thead><tr><th scope="col">Option</th><th scope="col">Server behavior</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Automatic</th><td>Prefers an embedded, non-forced text subtitle matching the spoken language, otherwise transcribes audio. Set the actual spoken language explicitly when possible.</td></tr>
+              <tr><th scope="row">An existing subtitle</th><td>Translates an embedded text track. If none is usable, the job is skipped instead of switching to speech recognition. The server does not OCR picture subtitles such as PGS, or use external subtitle files beside the video as translation input.</td></tr>
+              <tr><th scope="row">Audio (speech recognition)</th><td>Prefers a decodable track matching the spoken language, then the default or first usable track. Dialogue channel only is available for 5.1 / 7.1 audio.</td></tr>
+              <tr><th scope="row">Videos and discs</th><td>MKV / WebM, MP4 / MOV, TS / M2TS with decodable audio, plus the main title of Blu-ray ISOs and BDMV folders. Server background generation does not support DVDs. Unsupported files or tracks show a reason in the queue.</td></tr>
+              <tr><th scope="row">Skip videos that already have subtitles</th><td>Checks for matching subtitle files beside the video. An embedded subtitle alone does not trigger this option and can still be translated.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Whisper on the server performs transcription; it does not use Apple or ML Kit models on your phone. Local Whisper does not make the translation step local: translation uses its separately configured service. Choose None to keep the original transcribed or extracted lines.</p>
+
+        <h3 id="server-queue">Manage jobs and performance</h3>
+        <ul>
+          <li>Tasks → AI subtitles in the web interface shows running, paused, waiting and finished jobs, with progress, elapsed time, recognition speed, reading and translation times, downloaded data and failure reasons.</li>
+          <li>Pause or resume the whole queue, or pause one job while others continue. Cancel, retry or remove jobs, clear finished records, and move waiting jobs up, down, to the top or to the bottom.</li>
+          <li>Videos at once defaults to 1, with a maximum of 4. Jobs using external recognition services and reading different files can run together; a local Whisper job always runs alone. Low priority reduces CPU threads to leave resources for other server work.</li>
+          <li>Pausing keeps completed work, which can be reused on resume when the working copy matches the job’s settings. Turning AI subtitles off on the server stops the queue and prevents new jobs. Closing the submitting browser does not pause the server.</li>
+          <li>The server administrator and owner devices manage the queue and service keys. Devices connected with a pairing code or viewer profile can add jobs for visible media, but cannot manage the whole queue.</li>
+        </ul>
+
+        <h3 id="server-output">Output, saving and working copies</h3>
+        <p>Choose SRT or ASS, with original and translated lines together in ASS. A finished job automatically writes <code>video-name.target-language.ai.srt</code> or <code>.ai.ass</code> beside the video; Blu-ray output is saved beside the ISO or Blu-ray folder. The location must be writable, and save failures appear in the queue. An existing generated file with the same name is replaced; enable Skip videos that already have subtitles to avoid generating again.</p>
+        <p>The server keeps working copies for unfinished jobs, downloaded Whisper models, and a subtitle delay for each recognition model. Under Media Server → AI subtitles → Storage, clear working copies or delete models. Clearing working copies loses the affected jobs’ saved progress but leaves subtitles already saved beside videos intact. Models can be downloaded again when needed.</p>
+      </div>
+    </section>
+
     <section class="band" id="privacy" aria-labelledby="privacy-h">
       <div class="container">
         <header class="band-head">
@@ -422,6 +484,7 @@
           <h2 id="privacy-h">Where the data goes</h2>
         </header>
         <p>When transcription and translation both run on the device, the audio and subtitle text never leave it.</p>
+        <p>For server background jobs, your media server reads the video. Whisper running there keeps audio away from external transcription services, but an external translation API still receives subtitle text. The server stores its keys, models and unfinished-job working copies in its data directory; preserve that directory when using Docker.</p>
         <p>With a remote API, audio segments or subtitle text are sent to the service you configured and handled under that service's own privacy policy. We neither receive nor proxy this data. See the <a href="/privacy.html">privacy policy</a>.</p>
       </div>
     </section>
@@ -436,14 +499,14 @@
         <details class="acc">
           <summary><i class="fa-solid fa-crown" aria-hidden="true"></i>What do I need to buy?</summary>
           <div class="acc-body">
-            <p>AI subtitle translation is part of App Pro. App Pro is tied to your CloudDrive account: buy it once and it works on every platform where you sign in with that account. Prices are on the <a href="/en/pricing.html#app-h">pricing page</a>. A remote API's own charges are billed separately by that provider.</p>
+            <p>AI subtitle translation is part of App Pro. App Pro is tied to your CloudDrive account: buy it once and it works on every platform where you sign in with that account. Prices are on the <a href="/en/pricing.html#app-h">pricing page</a>. Server background generation also requires an eligible core plan on the server account; see <a href="/en/media-server.html#plans">server plan requirements</a>. A remote API's own charges are billed separately by that provider.</p>
           </div>
         </details>
 
         <details class="acc">
           <summary><i class="fa-solid fa-clock" aria-hidden="true"></i>Subtitles appear before or after the voice</summary>
           <div class="acc-body">
-            <p>Adjust <strong>Subtitle delay</strong> under <strong>Live Translation</strong> in Settings. If subtitles come before the voice, increase it; if they come after, lower it or set a negative value. On-device and remote transcription each have their own value.</p>
+            <p>Adjust <strong>Subtitle delay</strong> under <strong>Live Translation</strong> in Settings. If subtitles come before the voice, increase it; if they come after, lower it or set a negative value. Each recognition model has its own delay. For server jobs, set the recognition model’s delay under Media Server → AI subtitles; it is saved separately from the app player’s settings.</p>
           </div>
         </details>
 
@@ -464,7 +527,7 @@
         <details class="acc">
           <summary><i class="fa-solid fa-bolt" aria-hidden="true"></i>Translation cannot keep up with playback</summary>
           <div class="acc-body">
-            <p>Transcribing audio is much slower than translating a subtitle track. If the video has subtitles, set <strong>Translate From</strong> to Auto (prefer subtitle) or Subtitle track. When transcribing, try a smaller Whisper model, turn on GPU acceleration on Android, or use a remote transcription service. You can also <a href="#batch">generate the subtitles in the background</a> first and watch afterwards.</p>
+            <p>Transcribing audio is much slower than translating a subtitle track. Prefer a usable text subtitle when available. For low-end TV boxes and older ARM32 devices, we strongly recommend external speech-recognition APIs: even the smaller Whisper Base model can be slow and has very low accuracy. Use <a href="#batch">app batch generation</a> or <a href="#server-background">server background jobs</a> to finish subtitles before watching. Server background generation does not have to keep up with playback.</p>
           </div>
         </details>
 

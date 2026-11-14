@@ -71,15 +71,17 @@
         <div>
           <p class="eyebrow">Multi-cloud · Media · Every platform</p>
           <h1>All your clouds. One app. Every screen.</h1>
+          <p class="release-line"><strong>1.2.0 public beta:</strong> the media server and web player are now in public beta testing.</p>
           <p class="hero-lede">
-            CloudDrive2 mounts every cloud drive you own as a local disk — then streams what's
-            on them, in cinema quality, to your phone, Mac, TV and headset. No downloading first.
+            Manage and mount your cloud drives, and play on phones, computers, TVs and headsets. New in 1.2.0: a media server that organizes libraries on your computer or NAS, and a web player that decodes a wide range of audio and video in your browser, without plugins or server transcoding.
           </p>
           <div class="btn-row">
             <a class="btn btn-primary" href="/en/download.html">Download CloudDrive2</a>
             <a class="btn btn-ghost" href="/en/apps/">See the apps</a>
           </div>
           <ul class="chips">
+            <li><a class="chip chip-cloud" href="/en/media-server.html">Media server · Public beta</a></li>
+            <li><a class="chip chip-video" href="/en/web-player.html">Web player · Public beta</a></li>
             <li><span class="chip chip-video">Media library</span></li>
             <li><span class="chip chip-video">True Dolby Vision P7 FEL</span></li>
             <li><span class="chip chip-disc">Blu-ray disc menus</span></li>
@@ -123,14 +125,38 @@
       <div class="container">
         <header class="band-head">
           <p class="pill"><i class="fa-solid fa-star" aria-hidden="true"></i>New</p>
-          <h2 id="new-h">Recent major features</h2>
-          <p>Added in core 1.1.0 to 1.1.2 and app 1.1.0 to 1.1.3. For what changed in each core release, see the <a href="/en/download.html#changelog">release notes</a>.</p>
+          <h2 id="new-h">1.2.0 public beta and recent updates</h2>
+          <p>The media server, web player and server-side background AI subtitles are in public beta in 1.2.0. Earlier released features are also listed below. For changes in each core release, see the <a href="/en/download.html#changelog">release notes</a>.</p>
         </header>
         <div class="note">
-          <span class="note-title">New: the media library</span>
-          <p>App 1.1.3 adds the <a href="/en/media-library.html">media library</a>: choose folders in your cloud storage, and the app turns the films, shows, music and books in them into a library with posters, plots and cast, with no Emby, Jellyfin or Plex server to set up. The media library is an App Pro feature. On Apple platforms, 1.1.3 is in App Store review and will update there once approved; until then it can be installed through <a href="https://testflight.apple.com/join/SzcsXXSp" rel="noopener">TestFlight</a>.</p>
+          <span class="note-title">Public beta: media server and web player</span>
+          <p>Core and app 1.2.0 add the <a href="/en/media-server.html">media server</a>: the core service on a computer or NAS scans your <a href="/en/media-library.html">media libraries</a> once and hands them to the CloudDrive2 App on each of your devices, and to Infuse, SenPlayer and the Emby and Jellyfin players; you can browse and play them in a browser too. Third-party players and the Media pages receive the original file through the server, without transcoding. The independent <a href="/en/web-player.html">web player</a> decodes almost all audio and video formats in your browser, without server-side transcoding or enabling the media server; open files directly from Files. Format support and performance depend on your browser and device; see the player guide for details. Serving needs an eligible core plan and App Pro; see <a href="/en/pricing.html#media-server-h">plans and pricing</a>.</p>
         </div>
         <ul class="card-grid">
+          <li><a class="card" href="/en/media-server.html">
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>Media server</h3>
+            <p>The core service on a NAS scans and identifies your libraries once, and the CloudDrive2 App on each device shows them as soon as it connects, with no scanning of its own; the Emby and Jellyfin players can connect too. The App on a computer or TV box can also serve its own libraries to your other devices.</p>
+            <p class="card-foot">1.2.0 public beta · Core plan + App Pro</p>
+          </a></li>
+          <li><a class="card" href="/en/web-player.html">
+            <i class="fa-solid fa-display card-icon" aria-hidden="true"></i>
+            <h3>Independent web player: no server transcoding</h3>
+            <p>Native browser playback and in-page decoding cover almost all audio and video formats, including MKV, HEVC, DTS, TrueHD, lossless music, DSD and SACD. Play from Files or a media library without plugins or server transcoding; HDR, Dolby Vision and performance depend on your browser and device.</p>
+            <p class="card-foot">1.2.0 public beta · Basic playback free; advanced features need App Pro</p>
+          </a></li>
+          <li><a class="card" href="/en/media-library.html#ai-subtitles">
+            <i class="fa-solid fa-closed-captioning card-icon" aria-hidden="true"></i>
+            <h3>AI subtitles for a whole title</h3>
+            <p>Choose Generate AI subtitles on a title's page, or for several selected titles: the dialogue is transcribed, or the video's own subtitles are translated, and the subtitle file is saved next to the video for every device to use. With a media server, the server makes them, and Tasks shows the progress.</p>
+            <p class="card-foot">1.2.0 public beta · Server background jobs</p>
+          </a></li>
+          <li><a class="card" href="/en/media-library.html">
+            <i class="fa-solid fa-photo-film card-icon" aria-hidden="true"></i>
+            <h3>Media library</h3>
+            <p>Choose folders in your cloud storage, and the App turns the films, shows, music and books in them into a library with posters, plots and cast, with no Emby, Jellyfin or Plex server to set up.</p>
+            <p class="card-foot">App 1.1.3 · App Pro feature</p>
+          </a></li>
           <li><div class="card">
             <i class="fa-solid fa-book-open card-icon" aria-hidden="true"></i>
             <h3>Read e-books</h3>
@@ -312,6 +338,12 @@
             <h3>Archive folders</h3>
             <p>Open ISO, zip, 7z, RAR and tar archives in cloud storage as read-only folders, without downloading or extracting them; a SACD ISO shows as DSF audio files.</p>
           </a></li>
+          <li><a class="card" href="/en/media-server.html">
+            <span class="badge-pro">PRO</span>
+            <i class="fa-solid fa-server card-icon" aria-hidden="true"></i>
+            <h3>Media server</h3>
+            <p>The core service on a computer or NAS scans your libraries once and serves them to the CloudDrive2 App on each device, to the Emby and Jellyfin players, and to a browser. Browsers and third-party players receive original files through the server, without transcoding. In public beta in 1.2.0; needs an eligible core plan and App Pro.</p>
+          </a></li>
           <li><a class="card" href="/en/apps/desktop.html">
             <i class="fa-solid fa-globe card-icon" aria-hidden="true"></i>
             <h3>Runs on nearly anything</h3>
@@ -336,11 +368,13 @@
             <h3>A media library with no server to run</h3>
             <p>Choose folders in your cloud storage, and the CloudDrive2 App turns the films, shows, music and books in them into a library with posters, plots and cast, with no Emby, Jellyfin or Plex server to set up. NFO files and artwork already in your folders come first; what's missing comes from TMDB, Bangumi, MusicBrainz and Open Library.</p>
             <p>Each device builds its libraries itself, and the libraries, favorites, identifications and scanned data sync through your own cloud storage: a library one device has scanned is ready on the others. If you already run Emby or Jellyfin, you can import its libraries instead. The media library arrived in app 1.1.3 and is an App Pro feature.</p>
+            <p>If you have a computer or NAS that stays on, the core service on it can be your <a href="/en/media-server.html">media server</a>: it does the scanning, the App on each device simply connects, and the Emby and Jellyfin players and a browser can watch too. The media server is in public beta in 1.2.0 and needs an eligible core plan and App Pro.</p>
             <ul class="chips">
               <li><span class="chip chip-video">Films · shows · music · books</span></li>
               <li><span class="chip">NFO first</span></li>
               <li><span class="chip chip-cloud">Sync across devices</span></li>
               <li><span class="chip chip-cloud">Import from Emby / Jellyfin</span></li>
+              <li><a class="chip chip-cloud" href="/en/media-server.html">Media server</a></li>
             </ul>
             <a class="arrow-link" href="/en/media-library.html">Everything about the media library</a>
           </div>
@@ -423,8 +457,11 @@
           <div class="feature-text">
             <h3>AI subtitle translation, on your device</h3>
             <p>Transcribe a film that has no subtitles and translate it into your language, or translate an
-               existing foreign-language track in full. Both steps run locally — no audio is sent to any
-               server. Generated subtitles are saved next to the video, so another device can reuse them.</p>
+               existing foreign-language track in full. Both steps can run entirely on the device, with no
+               audio sent to any server, or you can point them at online services you set up yourself.
+               Generated subtitles are saved next to the video, so another device can reuse them. A title in
+               your media library can get subtitles for the whole film, made on the device or by your
+               <a href="/en/media-server.html#ai-subtitles">media server</a>.</p>
             <ul class="chips">
               <li><span class="chip chip-subs">On-device transcription</span></li>
               <li><span class="chip chip-subs">Whole-track translation</span></li>

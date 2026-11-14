@@ -75,7 +75,7 @@
         <header class="band-head">
           <p class="eyebrow">Image</p>
           <h2 id="arch-h">Supported architectures</h2>
-          <p>Three architectures under the same image name. Pick the tag that matches the host CPU.</p>
+          <p>Three architectures under the same image name. Choose an architecture supported by your hardware and system. Some older CoreELEC installations use an aarch64 kernel with ARM32 userspace and may run ARM32 containers; <code>uname -m</code> alone does not tell you whether the program inside a container is 32-bit or 64-bit.</p>
         </header>
 
         <div class="table-scroll">
@@ -97,6 +97,24 @@
           <p>When Docker refuses to pull the newest version of the image, try disabling your Docker
              registry mirror and pulling from the official source directly.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="band" id="ai-subtitles" aria-labelledby="ai-subtitles-h">
+      <div class="container container-narrow">
+        <header class="band-head">
+          <p class="eyebrow">1.2.0-beta</p>
+          <h2 id="ai-subtitles-h">AI subtitles in Docker</h2>
+        </header>
+        <div class="note note-warn" role="note" aria-labelledby="whisper-low-end-h">
+          <span class="note-title" id="whisper-low-end-h">Important: use external speech-recognition APIs on low-end devices</span>
+          <p>On low-end TV boxes and some older ARM32 devices, even Whisper Base remains slow with CPU optimizations enabled; generating subtitles can take longer than playing the video. Base also has very low recognition accuracy for film and TV dialogue, especially with background music or unclear speech. Faster processing does not improve the model’s accuracy.</p>
+          <p><strong>For these devices, we strongly recommend external speech-recognition APIs instead of local Whisper models.</strong> See <a href="/en/ai-translation.html#remote">remote API setup</a>.</p>
+        </div>
+        <p>An image containing the standard 1.2.0-beta core can generate subtitles in the background through the <a href="/en/media-server.html#ai-subtitles">media server</a>. Local Whisper runs inside the container and needs a model downloaded before first use. Recognition does not have to keep up with playback for background generation.</p>
+        <p>The ARM32 Linux core detects NEON and VFPv4 support automatically, using optimized operations when available and a compatible implementation on older CPUs. An ARM32 container also gets this acceleration on an aarch64 kernel that supports 32-bit programs. Selection of the optimized kernels inside Docker has been verified on an S905X3 device running CoreELEC 19.5.</p>
+        <p><strong>Whisper needs no additional Docker options, environment variables, device mappings or permissions.</strong> Cloud mounting still uses the FUSE configuration on this page. CPU limits such as <code>--cpus</code> or <code>--cpuset-cpus</code> reduce the processing resources available; allow enough memory for the selected model.</p>
+        <p>Run Test recognition under Media Server → AI subtitles to choose a model and thread count based on measured time. The application log entry <code>whisper: neon-vfpv4 kernels</code> confirms that the ARM32 optimized operations are selected. Measure speed on your own device.</p>
       </div>
     </section>
 
