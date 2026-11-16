@@ -417,6 +417,7 @@
             <div class="note" id="chrome-secure-origin">
               <span class="note-title">Open it over HTTPS</span>
               <p>With default browser settings, WebCodecs hardware decoding requires a secure context such as HTTPS or localhost. At <code>http://&lt;LAN address&gt;</code>, 4K HEVC and similar videos with audio unsupported by native browser playback may fall back to software decoding, causing dropped frames or stuttering. Safari supports more audio formats natively and is usually unaffected by this limitation. HTTPS is recommended; alternatively, configure Chrome or Edge to treat a specific trusted LAN address as secure so these browser capabilities work over HTTP. See <a href="/en/web-player.html#chrome-secure-origin">hardware decoding in Chrome and Edge</a>.</p>
+              <p>We recommend <a href="/en/web-player.html#builtin-https">enabling CloudDrive2’s built-in HTTPS server</a> first: configure a certificate or generate a self-signed one in Web Server Settings, then open the HTTPS port (19799 by default). See the guide for certificate trust and port mapping.</p>
             </div>
           </div>
         </div>

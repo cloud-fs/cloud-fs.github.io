@@ -417,6 +417,7 @@
             <div class="note" id="chrome-secure-origin">
               <span class="note-title">用 HTTPS 打开</span>
               <p>在浏览器默认设置下，网页使用 WebCodecs 硬件解码需要 HTTPS 或本机 localhost 等安全上下文。用 <code>http://局域网地址</code> 打开时，如果音轨不受浏览器原生播放支持，4K HEVC 等视频可能改用软件解码，出现跳帧或播放不流畅；Safari 原生支持的音频格式较多，通常不受这一限制影响。建议使用 HTTPS；也可在 Chrome 和 Edge 中将指定的可信局域网地址设置为安全来源，让该 HTTP 地址使用这些浏览器能力，见<a href="/web-player.html#chrome-secure-origin">在 Chrome 和 Edge 中使用硬件解码</a>。</p>
+              <p>推荐优先<a href="/web-player.html#builtin-https">启用 CloudDrive2 自带的 HTTPS 服务</a>：在 Web 服务器设置中配置证书，或生成自签名证书，再用 HTTPS 端口（默认 19799）打开网页；证书信任与端口映射的步骤见指南。</p>
             </div>
           </div>
         </div>

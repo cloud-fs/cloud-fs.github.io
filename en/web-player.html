@@ -407,15 +407,29 @@
           <div>
             <h3>Three ways around it</h3>
             <ul>
-              <li><strong>Open it over HTTPS</strong>: under Settings → Web Server in the web interface, turn on HTTPS (port 19799 by default) and set up a certificate. The certificate must match the name in the address bar or the browser warns; with a domain of your own you can use a free certificate such as Let's Encrypt, or serve HTTPS through Nginx, Caddy or your NAS's reverse proxy. The self-signed certificate the core service makes covers only <code>localhost</code> and <code>127.0.0.1</code>, so at a LAN address the browser warns that it isn't trusted. Always use HTTPS from outside your home.</li>
+              <li><strong><a href="#builtin-https">Enable CloudDrive2’s built-in HTTPS (recommended)</a></strong>: under Settings → Web Server in the web interface, turn on HTTPS (port 19799 by default) and set up a certificate. The certificate must match the name in the address bar or the browser warns; with a domain of your own you can use a free certificate such as Let's Encrypt, or serve HTTPS through Nginx, Caddy or your NAS's reverse proxy. The self-signed certificate the core service makes covers only <code>localhost</code>, <code>127.0.0.1</code> and <code>::1</code>, so at a LAN address the browser warns that it isn't trusted. Always use HTTPS from outside your home.</li>
               <li><strong>Open it on the server itself</strong>: on the computer running the core service, <code>http://localhost:19798</code> is already a secure address. This only helps on that one computer.</li>
-              <li><strong>Treat the LAN address as secure</strong>: the simplest on a home network. Chrome and Edge both have the setting; the steps are below. Chrome on Android phones, tablets and TV boxes has it too, with the same steps.</li>
+              <li><strong>Treat the LAN address as secure</strong>: a fallback when HTTPS is unavailable. This experimental setting does not encrypt HTTP traffic. Chrome and Edge both have the setting; the steps are below. Chrome on Android phones, tablets and TV boxes has it too, with the same steps.</li>
             </ul>
             <p>Safari (Mac, iPhone, iPad) has no such setting; the formats its own player can play depend on the system and device. See "What an HTTP page goes without". Use HTTPS when the page's decoder is needed or the player says it can't keep up. Chrome and Edge on iPhone and iPad don't have this setting either, so use HTTPS; Safari is another option for native playback. In Firefox, open the page over HTTPS, or play in the CloudDrive2 App.</p>
           </div>
         </div>
 
-        <h3>Setting it up in Chrome and Edge</h3>
+        <h3 id="builtin-https">Enable CloudDrive2’s built-in HTTPS server</h3>
+        <p>Prefer the core service’s own HTTPS server: no experimental browser flags or separate reverse proxy are needed. On your own home network, you can start with a generated self-signed certificate if you do not have a trusted one. Confirm the server’s identity, proceed as your browser permits, and check that a secure context is available. HTTPS encrypts the connection; bypassing a certificate warning does not make the certificate trusted by the operating system. The same HTTPS address can provide the secure connection needed when restoring browser batch-upload tasks.</p>
+        <ol class="steps">
+          <li><h3>Open Web Server Settings</h3><p>In the web interface, open Settings → Web Server Settings and turn on Enable HTTPS. The default HTTPS port is <strong>19799</strong>; HTTP port 19798 and HTTPS port 19799 are separate listeners.</p></li>
+          <li><h3>Choose a certificate option</h3><p>Enter the <strong>certificate and private-key file paths</strong> on the machine running the core, or paste their <strong>PEM contents</strong>. For an existing certificate, use one that matches the domain or IP address you visit and is trusted by the client browser, then click Apply.</p><p>For a home-network trial, you can also click <strong>Generate Self-Signed Certificate</strong>. The core generates the certificate, enables HTTPS and restarts its web listeners automatically; the current page connection may briefly disconnect. If you change the port afterward, click Apply to save it.</p></li>
+          <li><h3>Open the new HTTPS address</h3><p>Use the HTTPS address shown in settings, for example <code>https://192.168.1.20:19799</code>; do not just replace http with https while keeping port 19798. Allow the HTTPS port through the server firewall. With Docker bridge networking, also publish the port, for example <code>19799:19799</code>. If the mapped host port differs, use that host port in the address.</p></li>
+          <li><h3>Check browser capabilities</h3><p>Sign in again at the HTTPS address and open the player. To check, enter <code>window.isSecureContext</code> in the browser console: it should return <code>true</code>. For WebCodecs, also check <code>typeof VideoDecoder !== 'undefined'</code>. API availability does not guarantee hardware decoding; that still depends on the device, browser and codec.</p></li>
+        </ol>
+        <div class="note">
+          <span class="note-title">Self-signed certificates and browser warnings</span>
+          <p>The built-in generator includes only <code>localhost</code>, <code>127.0.0.1</code> and <code>::1</code>. It does not add your LAN IP or domain, or automatically gain browser trust, so a LAN address will normally produce a certificate warning. After confirming it is your own server, handle certificate trust or proceed as your browser permits, then check the secure context as above. Being able to open an HTTPS page alone does not confirm every browser capability is enabled. For ongoing or remote access, use a trusted certificate matching the address, or keep using an existing HTTPS reverse proxy.</p>
+          <p>Switching from HTTP to HTTPS changes the website origin. You may need to sign in again and reselect local files or folders for upload recovery. Upload recovery also depends on the browser’s file-access API support.</p>
+        </div>
+
+        <h3>Fallback: enable the experimental Chrome / Edge flag</h3>
         <ol class="steps">
           <li>
             <h3>Note the page's address</h3>

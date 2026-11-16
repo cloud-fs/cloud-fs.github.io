@@ -99,6 +99,7 @@
         <p>Tasks now includes cloud API request rates, showing each account’s requests per second. When adding an older SFTP server, the optional Allow legacy algorithms setting can improve compatibility; it is off by default.</p>
         <h3>Playback or connection problems</h3>
         <p>With default browser settings, an ordinary HTTP address may lack WebCodecs and WebGPU acceleration, causing 4K HEVC to stutter. Prefer HTTPS or localhost; Chrome and Edge also support a trusted-address workaround described in the guide. <a href="/en/web-player.html#chrome-secure-origin">Browser setup</a>.</p>
+              <p>We recommend <a href="/en/web-player.html#builtin-https">enabling CloudDrive2’s built-in HTTPS server</a> first: configure a certificate or generate a self-signed one in Web Server Settings, then open the HTTPS port (19799 by default). See the guide for certificate trust and port mapping.</p>
         <p>If a library cannot connect, check that the serving device is running, Media Server is enabled, both required memberships are active and the address is reachable from this device. Report the app/core versions, device and OS, steps to reproduce, and relevant logs. For playback, include the video/audio format and browser or audio output device.</p>
         <p><a href="/en/media-server.html">Detailed media-server guide</a> · <a href="/en/ai-translation.html#server-background">Background AI subtitles</a> · <a href="/en/download.html#beta">Beta channels</a></p>
       </div>

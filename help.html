@@ -97,6 +97,7 @@
         <p>「任务」新增网盘请求频率统计，可查看每个账号每秒发送的请求数。添加旧版 SFTP 服务器时，可按需开启「允许旧算法」以兼容旧服务器，此选项默认关闭。</p>
         <h3>播放或连接异常时</h3>
         <p>在浏览器默认设置下，普通 HTTP 地址可能无法使用 WebCodecs、WebGPU 等加速，导致 4K HEVC 卡顿。建议使用 HTTPS 或 localhost；Chrome 和 Edge 也可按指南对可信地址设置例外。 <a href="/web-player.html#chrome-secure-origin">浏览器设置方法</a>。</p>
+              <p>推荐优先<a href="/web-player.html#builtin-https">启用 CloudDrive2 自带的 HTTPS 服务</a>：在 Web 服务器设置中配置证书，或生成自签名证书，再用 HTTPS 端口（默认 19799）打开网页；证书信任与端口映射的步骤见指南。</p>
         <p>媒体库无法连接时，先确认服务器仍在运行、媒体服务器开关已开启、两项会员有效，且当前设备可以访问服务器地址。反馈时请提供应用和核心版本、设备与系统、复现步骤及相关日志；播放问题请同时说明音视频格式、浏览器或音频输出设备。</p>
         <p><a href="/media-server.html">媒体服务器完整指南</a> · <a href="/ai-translation.html#server-background">后台 AI 字幕说明</a> · <a href="/download.html#beta">测试渠道</a></p>
       </div>

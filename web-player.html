@@ -406,15 +406,29 @@
           <div>
             <h3>三种办法</h3>
             <ul>
-              <li><strong>用 HTTPS 打开</strong>：在网页管理界面的「设置 → Web 服务器」中启用 HTTPS（默认端口 19799）并配置证书。证书要与地址栏中的域名一致，浏览器才不会警告；有自己的域名的，可以使用 Let's Encrypt 等免费证书，或用 Nginx、Caddy、NAS 自带的反向代理提供 HTTPS。核心服务生成的自签名证书只对应 <code>localhost</code> 和 <code>127.0.0.1</code>，用局域网地址打开时浏览器会提示证书不受信任。从外网访问时请一定使用 HTTPS。</li>
+              <li><strong><a href="#builtin-https">启用 CloudDrive2 自带的 HTTPS（推荐）</a></strong>：在网页管理界面的「设置 → Web 服务器」中启用 HTTPS（默认端口 19799）并配置证书。证书要与地址栏中的域名一致，浏览器才不会警告；有自己的域名的，可以使用 Let's Encrypt 等免费证书，或用 Nginx、Caddy、NAS 自带的反向代理提供 HTTPS。核心服务生成的自签名证书只对应 <code>localhost</code>、<code>127.0.0.1</code> 和 <code>::1</code>，用局域网地址打开时浏览器会提示证书不受信任。从外网访问时请一定使用 HTTPS。</li>
               <li><strong>在服务器本机上打开</strong>：在运行核心服务的电脑上用 <code>http://localhost:19798</code> 打开，本身就是安全地址。只适用于这一台电脑。</li>
-              <li><strong>把局域网地址设为安全地址</strong>：在家庭网络中最简单。Chrome 和 Edge 都有这个设置，见下面的步骤；Android 手机、平板和电视盒子上的 Chrome 也有，步骤相同。</li>
+              <li><strong>把局域网地址设为安全地址</strong>：无法使用 HTTPS 时的备用方案。这个实验性设置不会加密 HTTP 连接。Chrome 和 Edge 都有这个设置，见下面的步骤；Android 手机、平板和电视盒子上的 Chrome 也有，步骤相同。</li>
             </ul>
             <p>Safari（Mac、iPhone、iPad）没有这个设置；它的自带播放器能播放哪些格式，取决于系统和设备，见「HTTP 页面缺少什么」。需要网页解码或遇到跳帧提示时，请用 HTTPS 打开。iPhone 和 iPad 上的 Chrome 和 Edge 也没有这个设置，请使用 HTTPS；Safari 可作为原生播放的另一选择。Firefox 中请用 HTTPS 打开，或用 CloudDrive2 App 播放。</p>
           </div>
         </div>
 
-        <h3>在 Chrome 和 Edge 中设置</h3>
+        <h3 id="builtin-https">启用 CloudDrive2 自带的 HTTPS 服务</h3>
+        <p>推荐优先使用核心服务自带的 HTTPS，不必修改浏览器实验性 flags，也不必另外部署反向代理。在自己的家庭网络中，没有受信任证书时也可以先生成自签名证书，确认服务器身份后按浏览器提示继续访问，并检查安全上下文是否可用。HTTPS 会加密传输；仅放行证书警告并不等于证书已获得系统信任。网页批量上传恢复任务时所需的安全连接，也可以使用这个 HTTPS 地址。</p>
+        <ol class="steps">
+          <li><h3>打开 Web 服务器设置</h3><p>进入网页管理界面的「设置 → Web 服务器设置」，打开「启用 HTTPS」。默认 HTTPS 端口为 <strong>19799</strong>；HTTP 的 19798 和 HTTPS 的 19799 是不同端口。</p></li>
+          <li><h3>选择一种证书方式</h3><p>可以填写核心服务所在机器上的<strong>证书文件路径和私钥文件路径</strong>，也可以粘贴<strong>PEM 格式的证书内容和私钥内容</strong>。已有证书时，请使用与访问域名或 IP 地址匹配、且客户端浏览器信任的证书，然后点「应用」。</p><p>家庭网络试用还可以点<strong>「生成自签名证书」</strong>：核心服务会生成证书、自动启用 HTTPS 并重启 Web 服务使其生效，当前网页连接可能短暂中断。之后如需修改端口，再点「应用」保存。</p></li>
+          <li><h3>用新的 HTTPS 地址打开</h3><p>使用设置页显示的 HTTPS 地址，例如 <code>https://192.168.1.20:19799</code>；不要只把原来的 19798 地址改成 https。放行服务器防火墙中的 HTTPS 端口；Docker 使用桥接网络时，还要映射该端口，例如 <code>19799:19799</code>。如果宿主机映射了不同端口，地址栏应使用宿主机端口。</p></li>
+          <li><h3>确认浏览器能力可用</h3><p>重新登录新的 HTTPS 地址并打开播放器。需要检查时，在浏览器控制台输入 <code>window.isSecureContext</code>，结果应为 <code>true</code>；WebCodecs 还可检查 <code>typeof VideoDecoder !== 'undefined'</code>。这表示浏览器接口可用，能否硬件解码仍取决于设备、浏览器和视频编码。</p></li>
+        </ol>
+        <div class="note">
+          <span class="note-title">自签名证书与浏览器提示</span>
+          <p>内置生成器的证书只包含 <code>localhost</code>、<code>127.0.0.1</code> 和 <code>::1</code>，不会自动加入你的局域网 IP 或域名，也不会自动获得浏览器信任，因此用局域网地址访问通常会有证书警告。确认地址确实属于自己的服务器后，可按浏览器允许的方式处理证书信任或继续访问，并以上面的安全上下文检查为准；不要把“能打开 HTTPS 页面”当作所有浏览器能力都已启用。长期使用或外网访问，建议配置名称匹配且受信任的证书，也可继续使用已有的 HTTPS 反向代理。</p>
+          <p>从 HTTP 切换到 HTTPS 属于切换网站来源：可能需要重新登录，并重新选择待续传的本地文件或目录；上传恢复能力还取决于浏览器对文件访问接口的支持。</p>
+        </div>
+
+        <h3>备用方案：在 Chrome 和 Edge 中设置实验性 flag</h3>
         <ol class="steps">
           <li>
             <h3>记下网页的地址</h3>
