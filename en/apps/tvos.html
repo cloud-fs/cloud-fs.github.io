@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CloudDrive2 for Apple TV — your cloud media center</title>
-  <meta name="description" content="CloudDrive2 on Apple TV: connect every cloud and stream movies, shows and music to the big screen. Blu-ray ISOs with HDMV menus, true Dolby Vision, Dolby Atmos, DSD up to DSD1024 and an Emby/Jellyfin client with Direct Stream.">
+  <meta name="description" content="CloudDrive2 on Apple TV renders TrueHD Atmos to 7.1.4 PCM with four height channels and no lossy re-encoding. Stream from your clouds with Blu-ray HDMV menus, Dolby Vision, DSD1024 and Emby/Jellyfin.">
   <link rel="canonical" href="https://www.clouddrive2.com/en/apps/tvos.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/tvos.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/tvos.html">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CloudDrive2">
   <meta property="og:title" content="CloudDrive2 for Apple TV">
-  <meta property="og:description" content="Your cloud media center on Apple TV. Blu-ray ISOs with HDMV menus, Dolby Vision and Atmos, music up to DSD1024, plus Emby/Jellyfin Direct Stream.">
+  <meta property="og:description" content="TrueHD Atmos → 7.1.4 PCM with four height channels and no lossy re-encoding. Plus Blu-ray HDMV menus, Dolby Vision, DSD1024 and Emby/Jellyfin Direct Stream.">
   <meta property="og:url" content="https://www.clouddrive2.com/en/apps/tvos.html">
   <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -31,7 +31,7 @@
     "operatingSystem": "tvOS",
     "url": "https://www.clouddrive2.com/en/apps/tvos.html",
     "image": "https://www.clouddrive2.com/img/og-cover.jpg",
-    "description": "A cloud media center on Apple TV: stream movies, shows and lossless music straight from your clouds.",
+    "description": "A cloud media center on Apple TV: render TrueHD Atmos to 7.1.4 PCM with four height channels. Stream movies, shows and lossless music straight from your clouds.",
     "offers": {
       "@type": "Offer",
       "name": "App Pro",
@@ -78,7 +78,7 @@
           <h1>Your cloud media center on Apple TV</h1>
           <p class="hero-lede">
             Connect every cloud and stream movies, shows and music straight to the big screen:
-            Blu-ray ISOs with HDMV menus, Dolby Vision and Dolby Atmos, and lossless music up to DSD1024.
+            Blu-ray ISOs with HDMV menus, Dolby Vision, TrueHD Atmos rendered to 7.1.4 PCM with four height channels, and lossless music up to DSD1024.
             No downloads, no NAS required.
           </p>
           <div class="btn-row">
@@ -88,7 +88,7 @@
           <ul class="chips">
             <li><span class="chip chip-video">True Dolby Vision P7 FEL</span></li>
             <li><span class="chip chip-disc">HDMV disc menus</span></li>
-            <li><span class="chip chip-audio">Dolby Atmos</span></li>
+            <li><a class="chip chip-audio" href="#truehd-atmos">TrueHD Atmos → 7.1.4 PCM</a></li>
             <li><span class="chip chip-audio">DSD1024 · SACD ISO</span></li>
             <li><span class="chip chip-cloud">Direct Stream</span></li>
           </ul>
@@ -97,6 +97,36 @@
           <img class="hero-shot" src="/img/shots/tvos-dashboard.webp" width="1600" height="660" decoding="async"
                alt="The CloudDrive2 dashboard on Apple TV, with a storage card, quick-access tiles for files and clouds, and CPU, memory and throughput gauges.">
         </div>
+      </div>
+    </section>
+
+    <section class="band band-dark" id="truehd-atmos" aria-labelledby="truehd-atmos-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">TrueHD Atmos → 7.1.4 PCM</p>
+          <h2 id="truehd-atmos-h">TrueHD Atmos, height channels included</h2>
+          <p>CloudDrive2 decodes TrueHD Atmos objects and their positions on Apple TV, then renders them to 7.1.4 PCM with four height channels. A compatible HDMI audio chain carries the rendered sound to the corresponding speakers.</p>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <h3>Four height channels</h3>
+            <p>7.1.4 carries seven ear-level channels, one low-frequency effects channel and four height channels at the front and rear.</p>
+          </div></li>
+          <li><div class="card">
+            <h3>Spatial information from the source</h3>
+            <p>The height channels are rendered from the TrueHD Atmos track’s objects and position data, preserving the source’s height and movement information.</p>
+          </div></li>
+          <li><div class="card">
+            <h3>No lossy re-encoding</h3>
+            <p>Apple TV decodes the objects and renders the speaker channels, then outputs uncompressed PCM. This path needs no further lossy encoding.</p>
+          </div></li>
+        </ul>
+        <div class="note">
+          <h3 class="note-title">PCM on your receiver can still include heights</h3>
+          <p>Your receiver may show “PCM” or “Multichannel PCM”. When the same 7.1.4 channels reach the correct speakers, an additional “Dolby Atmos” indicator does not itself add audio detail, height channels or positional information. Check that each channel plays correctly; the format label alone cannot establish that.</p>
+          <p>CD2 renders the objects in the player and outputs 7.1.4 channel audio. It does not bitstream the original TrueHD Atmos track to the receiver.</p>
+        </div>
+        <p class="chip-note">For 48 kHz TrueHD Atmos tracks using the VideoToolbox playback engine, including direct title playback from Blu-ray ISO / BDMV sources. Object rendering is currently disabled while an interactive Blu-ray menu session remains active, including movie playback within that session. If playback leaves the menu session and switches to direct title playback, the same eligibility conditions apply. AVPlayer mode does not currently support this path. Your AVR or soundbar and the entire HDMI audio chain must support the corresponding multichannel output. Check CD2’s “ATMOS 7.1.4” badge and the audio output in playback statistics to confirm that object rendering is active.</p>
       </div>
     </section>
 
@@ -181,15 +211,17 @@
             <p>A full audio player on your Apple TV: FLAC, WAV, ALAC, APE, DSD up to DSD1024 and SACD ISO
                playback. Album artwork, gapless playback and background audio — music keeps playing while you
                browse, with Now Playing controls on your remote.</p>
-            <p>Dolby Atmos (Dolby Digital Plus) bitstreams straight to your AVR or soundbar over HDMI.
-               TrueHD, DTS-HD Master Audio and DTS decode in full and go out as 5.1 or 7.1 PCM when supported by the active HDMI route. Multichannel DSD does the same: 5.1 SACD ISO, .dsf and .dff play in true
+            <p><a href="#truehd-atmos">TrueHD Atmos can be decoded and rendered to 7.1.4 PCM with height channels</a>.
+               Dolby Digital Plus Atmos (DD+ Atmos) uses tvOS’s Atmos audio output over HDMI to a compatible AVR or soundbar.
+               Standard TrueHD, DTS-HD Master Audio and DTS use 5.1 or 7.1 PCM on the decoding path, according to the active HDMI route. Multichannel DSD does the same: 5.1 SACD ISO, .dsf and .dff play in true
                surround through your receiver. With supported devices, AirPods Pro and
                Max get head-tracked spatial audio and stereo setups get a proper ITU-R BS.775 downmix.</p>
             <p class="chip-note">DSD64 through DSD1024 files are supported and converted to PCM for this platform’s audio output. This does not provide native USB DSD or DoP output.</p>
             <ul class="chips">
               <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
               <li><span class="chip chip-audio">SACD ISO</span></li>
-              <li><span class="chip chip-audio">Atmos bitstream</span></li>
+              <li><span class="chip chip-audio">TrueHD Atmos · 7.1.4 PCM</span></li>
+              <li><span class="chip chip-audio">DD+ Atmos</span></li>
               <li><span class="chip chip-audio">Background playback</span></li>
             </ul>
           </div>

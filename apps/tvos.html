@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Apple TV 版 CloudDrive2 — 客厅里的云端影音中心</title>
-  <meta name="description" content="Apple TV 上的 CloudDrive2：连接所有云盘，把电影、剧集与音乐直接串流到大屏幕。蓝光原盘 HDMV 菜单、真·杜比视界、杜比全景声、最高 DSD1024，还有支持直连串流的 Emby / Jellyfin 客户端。">
+  <meta name="description" content="Apple TV 上的 CloudDrive2：TrueHD Atmos 对象解码为 7.1.4 PCM，保留四个高度声道，无需有损转码。直接从云盘播放电影、剧集与音乐，支持蓝光 HDMV 菜单、杜比视界、DSD1024 与 Emby / Jellyfin。">
   <link rel="canonical" href="https://www.clouddrive2.com/apps/tvos.html">
   <link rel="alternate" hreflang="zh-CN" href="https://www.clouddrive2.com/apps/tvos.html">
   <link rel="alternate" hreflang="en" href="https://www.clouddrive2.com/en/apps/tvos.html">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CloudDrive2">
   <meta property="og:title" content="Apple TV 版 CloudDrive2">
-  <meta property="og:description" content="客厅里的云端影音中心。蓝光原盘 HDMV 菜单、杜比视界与全景声、最高 DSD1024 无损音乐，还有支持直连串流的 Emby / Jellyfin 客户端。">
+  <meta property="og:description" content="TrueHD Atmos → 7.1.4 PCM，包含四个高度声道，无需有损转码。还有蓝光原盘 HDMV 菜单、杜比视界、DSD1024 与 Emby / Jellyfin 直连串流。">
   <meta property="og:url" content="https://www.clouddrive2.com/apps/tvos.html">
   <meta property="og:image" content="https://www.clouddrive2.com/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -31,7 +31,7 @@
     "operatingSystem": "tvOS",
     "url": "https://www.clouddrive2.com/apps/tvos.html",
     "image": "https://www.clouddrive2.com/img/og-cover.jpg",
-    "description": "Apple TV 上的云端影音中心：直接从云盘串流电影、剧集与无损音乐。",
+    "description": "Apple TV 上的云端影音中心：TrueHD Atmos 对象解码为 7.1.4 PCM，包含四个高度声道。直接从云盘串流电影、剧集与无损音乐。",
     "offers": {
       "@type": "Offer",
       "name": "App Pro",
@@ -77,7 +77,7 @@
           <p class="eyebrow">Apple TV</p>
           <h1>客厅里的云端影音中心</h1>
           <p class="hero-lede">
-            连接所有云盘，把电影、剧集与音乐直接串流到大屏幕：蓝光原盘 HDMV 菜单、杜比视界与杜比全景声、最高 DSD1024 的无损音乐。无需下载，也不需要 NAS。
+            连接所有云盘，把电影、剧集与音乐直接串流到大屏幕：蓝光原盘 HDMV 菜单、杜比视界、包含四个高度声道的 TrueHD Atmos → 7.1.4 PCM，以及最高 DSD1024 的无损音乐。无需下载，也不需要 NAS。
           </p>
           <div class="btn-row">
             <a class="btn btn-primary" href="/download.html">获取应用</a>
@@ -86,7 +86,7 @@
           <ul class="chips">
             <li><span class="chip chip-video">真·杜比视界 P7 FEL</span></li>
             <li><span class="chip chip-disc">HDMV 原盘菜单</span></li>
-            <li><span class="chip chip-audio">杜比全景声</span></li>
+            <li><a class="chip chip-audio" href="#truehd-atmos">TrueHD Atmos → 7.1.4 PCM</a></li>
             <li><span class="chip chip-audio">DSD1024 · SACD ISO</span></li>
             <li><span class="chip chip-cloud">直连串流</span></li>
           </ul>
@@ -95,6 +95,36 @@
           <img class="hero-shot" src="/img/shots/tvos-dashboard.webp" width="1600" height="660" decoding="async"
                alt="Apple TV 上的 CloudDrive2 仪表盘：容量卡片、文件与云存储等快捷入口，以及 CPU、内存和吞吐量仪表。">
         </div>
+      </div>
+    </section>
+
+    <section class="band band-dark" id="truehd-atmos" aria-labelledby="truehd-atmos-h">
+      <div class="container">
+        <header class="band-head">
+          <p class="eyebrow">TrueHD Atmos → 7.1.4 PCM</p>
+          <h2 id="truehd-atmos-h">TrueHD Atmos，高度声道也保留</h2>
+          <p>CloudDrive2 在 Apple TV 上解析 TrueHD Atmos 的音频对象和空间位置，渲染为包含四个高度声道的 7.1.4 PCM。通过兼容的 HDMI 音频链路，让片源中的高度信息在对应的扬声器上播放。</p>
+        </header>
+        <ul class="card-grid">
+          <li><div class="card">
+            <h3>四个高度声道</h3>
+            <p>7.1.4 包含 7 个平面声道、1 个低频效果声道，以及前方和后方共 4 个高度声道。</p>
+          </div></li>
+          <li><div class="card">
+            <h3>来自片源的空间信息</h3>
+            <p>高度声道由 TrueHD Atmos 音轨中的对象及位置数据渲染生成，保留片源中的声音高度与移动信息。</p>
+          </div></li>
+          <li><div class="card">
+            <h3>无需有损转码</h3>
+            <p>在 Apple TV 上完成对象解码和声道渲染，再输出未压缩的 PCM 音频，这条路径无需再次进行有损编码。</p>
+          </div></li>
+        </ul>
+        <div class="note">
+          <h3 class="note-title">功放显示 PCM，不代表高度声道丢失</h3>
+          <p>功放可能显示「PCM」或「Multichannel PCM」。在正确输出同一套 7.1.4 声道的前提下，额外显示「Dolby Atmos」标识本身不会增加声音细节、高度声道或定位信息。应以各声道是否正确播放来判断，不能只看功放的格式标识。</p>
+          <p>CD2 已在播放器端完成对象渲染，输出的是 7.1.4 声道音频，并非将原始 TrueHD Atmos 码流直通功放。</p>
+        </div>
+        <p class="chip-note">适用于使用 VideoToolbox 播放引擎的 48 kHz TrueHD Atmos 音轨，包括直接播放蓝光 ISO / BDMV 正片。保留交互式蓝光菜单会话时（包括在该会话内播放正片），目前不启用这条对象渲染路径；退出菜单会话并转为直接播放后，可按相同条件启用。AVPlayer 模式暂不支持。功放或回音壁及整条 HDMI 音频链路需支持相应的多声道输出。播放时可查看 CD2 的「ATMOS 7.1.4」标识和播放统计中的音频输出信息，确认对象渲染是否启用。</p>
       </div>
     </section>
 
@@ -171,14 +201,15 @@
           <div class="feature-text">
             <h3>无损音乐、杜比全景声与多声道环绕</h3>
             <p>Apple TV 上的完整音频播放器：FLAC、WAV、ALAC、APE，DSD 最高支持 DSD1024，还支持 SACD ISO 播放。专辑封面、无缝播放和后台播放——浏览文件时音乐不间断，遥控器上可用「正在播放」控制。</p>
-            <p>杜比全景声（杜比数字+）通过 HDMI 以比特流直通输出到功放或回音壁。TrueHD、
-               DTS-HD Master Audio 和 DTS 音轨完整解码，在当前 HDMI 输出路由支持时，以 5.1 或 7.1 多声道 PCM 输出。多声道 DSD 同样如此：5.1 声道的 SACD ISO、.dsf 与 .dff
+            <p><a href="#truehd-atmos">TrueHD Atmos 可解码并渲染为包含高度声道的 7.1.4 PCM</a>。杜比数字+全景声（DD+ Atmos）由 tvOS 的全景声音频输出通过 HDMI 交给兼容的功放或回音壁。普通 TrueHD、
+               DTS-HD Master Audio 和 DTS 音轨在解码路径下，根据当前 HDMI 输出路由以 5.1 或 7.1 多声道 PCM 输出。多声道 DSD 同样如此：5.1 声道的 SACD ISO、.dsf 与 .dff
                通过功放以真正的环绕声播放。在支持的设备上， AirPods Pro / Max 可享受带头部追踪的空间音频，立体声设备则采用标准 ITU-R BS.775 下混。</p>
             <p class="chip-note">支持 DSD64 至 DSD1024 文件，转换为 PCM 后交由本平台的音频输出播放，不提供 USB 原生 DSD 或 DoP 输出。</p>
             <ul class="chips">
               <li><span class="chip chip-audio">DSD64 → DSD1024</span></li>
               <li><span class="chip chip-audio">SACD ISO</span></li>
-              <li><span class="chip chip-audio">杜比全景声比特流</span></li>
+              <li><span class="chip chip-audio">TrueHD Atmos · 7.1.4 PCM</span></li>
+              <li><span class="chip chip-audio">DD+ Atmos</span></li>
               <li><span class="chip chip-audio">后台播放</span></li>
             </ul>
           </div>
