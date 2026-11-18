@@ -11,7 +11,7 @@ import "google/protobuf/descriptor.proto";
 // Define a custom option for versioning.
 extend google.protobuf.FileOptions { string version = 50001; }
 
-option (version) = "1.1.2";
+option (version) = "1.2.0-beta";
 
 service CloudDriveFileSrv {
   // public methods, no authorization is required
